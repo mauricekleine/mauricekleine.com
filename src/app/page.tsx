@@ -22,6 +22,16 @@ export default function Page() {
           <p>Why wait? Reach out - today!</p>
 
           <ContactButtons />
+
+          <div className="mt-4">
+            <p className="text-sm">
+              Reach out now and get a free consultation!
+            </p>
+
+            <p className="animate-pulse text-sm uppercase">
+              You won&apos;t believe your eyes!
+            </p>
+          </div>
         </div>
       </div>
 
