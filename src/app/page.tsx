@@ -1,6 +1,7 @@
 import { ContactButtons } from "~/components/contact-buttons";
 import { LogoGrid } from "~/components/logos/logo-grid";
 import { PortfolioSection } from "~/components/portfolio/portfolio-section";
+import { TestimonialSection } from "~/components/testimonials/testimonial-section";
 import { StarBurst } from "~/components/ui/starburst";
 import { H1, H2, H3 } from "~/components/ui/typography";
 
@@ -54,8 +55,8 @@ export default function Page() {
             expertise in hands-on coding and a passion for coaching and
             mentoring, he ensures fast iteration and top-notch results. Elevate
             your software products today with unparalleled skills and
-            dedication. Don’t wait—act now and watch your ideas transform into
-            amazing applications!
+            dedication. Don&apos;t wait—act now and watch your ideas transform
+            into amazing applications!
           </p>
         </div>
       </div>
@@ -66,9 +67,9 @@ export default function Page() {
       >
         <H2>Don&apos;t just take our word for it!</H2>
 
-        <StarBurst className="hidden size-24 rotate-12 md:absolute md:-top-14 md:right-24 md:flex">
-          Call now!
-        </StarBurst>
+        <TestimonialSection />
+
+        <div className="h-1 w-full border-b-4 border-dashed border-black" />
 
         <LogoGrid />
       </div>

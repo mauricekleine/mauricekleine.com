@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { Button } from "~/components/ui/button";
 
 import { AeonLogo } from "./aeon";
+import { BluetrailLogo } from "./bluetrail";
 import { DistriversLogo } from "./distrivers";
 import { GenerativeAIStrategyLogo } from "./generative-ai-strategy";
 import { GoodUpLogo } from "./good-up";
@@ -18,6 +19,11 @@ import { VacanceSelectLogo } from "./vacance-select";
 
 const logos = [
   { href: "https://www.oio.studio/", label: "oio", Logo: OioLogo },
+  {
+    href: "https://www.bluetrail.nl/",
+    label: "Bluetrail",
+    Logo: BluetrailLogo,
+  },
   {
     href: "https://www.generativeaistrategy.com/",
     label: "Generative AI Strategy",
