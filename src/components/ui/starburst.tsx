@@ -11,7 +11,7 @@ export function StarBurst({ children, className }: Props) {
     <div
       className={clsx(
         className,
-        "flex items-center justify-center bg-red-600 p-4 text-center text-lg font-black uppercase leading-none text-yellow-300 transition-transform clip-path-starburst hover:scale-110",
+        "clip-path-starburst flex items-center justify-center bg-red-600 p-4 text-center text-lg leading-none font-black text-yellow-300 uppercase transition-transform hover:scale-110",
       )}
     >
       {children}

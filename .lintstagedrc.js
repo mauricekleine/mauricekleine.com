@@ -1,4 +1,5 @@
-const path = require("path");
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const path = require("node:path");
 
 const buildEslintCommand = (filenames) =>
   `next lint --fix --file ${filenames
@@ -7,7 +8,7 @@ const buildEslintCommand = (filenames) =>
 
 /** @type {import('lint-staged').Config} */
 module.exports = {
-  "*.{js,jsx,ts,tsx}": [buildEslintCommand],
   "*.{js,json,jsx,md,mdx,ts,tsx}": ["prettier --write"],
-  "**/package.json": ["sort-package-json"],
+  "*.{js,jsx,ts,tsx}": [buildEslintCommand],
+  "./package.json": ["sort-package-json"],
 };

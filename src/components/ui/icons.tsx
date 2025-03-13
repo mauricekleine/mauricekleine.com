@@ -1,7 +1,8 @@
 "use client";
 
 export {
-  LinkedinLogo,
   GithubLogo,
+  LinkedinLogo,
   PaperPlaneTilt,
+  TwitterLogo,
 } from "@phosphor-icons/react";

@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { Grandstander } from "next/font/google";
+import Image from "next/image";
+import Link from "next/link";
 import { ReactNode } from "react";
 
-import { Button } from "~/ui/button";
-import { GithubLogo, LinkedinLogo, PaperPlaneTilt } from "~/ui/icons";
-import { MailtoLink } from "~/ui/mailto-link";
-import { H2 } from "~/ui/typography";
+import { ContactButtons } from "~/components/contact-buttons";
+import { H2 } from "~/components/ui/typography";
 
 import "./globals.css";
 
 const sans = Grandstander({
+  display: "swap",
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -41,28 +42,44 @@ type Props = {
 
 export default function RootLayout({ children }: Readonly<Props>) {
   return (
-    <html lang="en">
+    <html className="scroll-smooth" lang="en">
       <body
-        className={`relative overflow-x-hidden text-balance bg-white bg-[url(./noise.svg)] font-sans text-xl leading-7 tracking-wide text-black ${sans.variable}`}
+        className={`relative overflow-x-hidden bg-white bg-[url(./noise.svg)] font-sans text-xl leading-7 tracking-wide text-balance text-black ${sans.variable}`}
       >
-        {/* <header className="sticky top-4 z-50">
-          <nav className="shadow-brutal-sm border-black border-2 hover:shadow-brutal-xs transition-all w-fit mx-auto rounded-md hover:bg-white/90 bg-white/70 backdrop-blur-md py-1 px-1 flex items-center text-base justify-between">
+        <header className="sticky top-4 z-50">
+          <nav className="shadow-brutal-sm hover:shadow-brutal-xs mx-auto flex w-fit items-center justify-between rounded-md border-2 border-black bg-white/70 px-1 py-1 text-base backdrop-blur-md transition-all hover:bg-white/90">
             <Link href="/">
-              <Image className="size-10 md:size-12" src="/logo-inverted.svg" alt="Maurice Kleine" width={48} height={48} />
+              <Image
+                alt="Maurice Kleine"
+                className="size-10 md:size-12"
+                height={48}
+                src="/logo-inverted.svg"
+                width={48}
+              />
             </Link>
 
-            <div className="flex divide-x divide-black items-center">
-              <Link className="px-2 md:px-4 hover:underline" href="#portfolio">Portfolio</Link>
-              <Link className="px-2 md:px-4 hover:underline" href="#services">Services</Link>
-              <Link className="px-2 md:px-4 hover:underline" href="#pricing">Pricing</Link>
-              <Link className="px-2 md:px-4 hover:underline" href="#contact">Contact</Link>
+            <div className="flex items-center divide-x divide-black">
+              <a className="px-2 hover:underline md:px-4" href="#portfolio">
+                Portfolio
+              </a>
+
+              <a className="px-2 hover:underline md:px-4" href="#clients">
+                Clients
+              </a>
+
+              <a className="px-2 hover:underline md:px-4" href="#contact">
+                Contact
+              </a>
             </div>
           </nav>
-        </header> */}
+        </header>
 
         <main className="my-16">{children}</main>
 
-        <footer className="space-y-16 border-t-4 border-dashed border-black bg-red-600 p-8 text-center text-yellow-300 md:p-12">
+        <footer
+          className="mt-48 space-y-16 border-t-4 border-dashed border-black bg-red-600 p-8 text-center text-yellow-300 md:p-12"
+          id="contact"
+        >
           <div className="mx-auto max-w-4xl space-y-8">
             <H2>You won&apos;t regret it!</H2>
 
@@ -72,46 +89,7 @@ export default function RootLayout({ children }: Readonly<Props>) {
               how we can help you transform your ideas into reality!
             </p>
 
-            <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
-              <Button
-                as="a"
-                href="https://www.linkedin.com/in/mauricekleine/"
-                leadingIcon={
-                  <LinkedinLogo
-                    className="size-5 transition-transform duration-200"
-                    weight="bold"
-                  />
-                }
-                target="_blank"
-              >
-                LinkedIn
-              </Button>
-
-              <Button
-                as="a"
-                href="https://github.com/mauricekleine/"
-                leadingIcon={
-                  <GithubLogo
-                    className="size-5 transition-transform duration-200"
-                    weight="bold"
-                  />
-                }
-                target="_blank"
-              >
-                Github
-              </Button>
-
-              <MailtoLink
-                leadingIcon={
-                  <PaperPlaneTilt
-                    className="size-5 transition-transform duration-200"
-                    weight="bold"
-                  />
-                }
-              >
-                Email
-              </MailtoLink>
-            </div>
+            <ContactButtons />
           </div>
 
           <div className="text-base">

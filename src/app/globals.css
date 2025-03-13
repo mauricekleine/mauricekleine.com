@@ -1,3 +1,165 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@plugin 'tailwindcss-animate';
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --shadow-brutal: 4px 4px 0px theme(colors.gray.800);
+  --shadow-brutal-2xl: 16px 16px 0px theme(colors.gray.800);
+  --shadow-brutal-lg: 6px 6px 0px theme(colors.gray.800);
+  --shadow-brutal-sm: 3px 3px 0px theme(colors.gray.800);
+  --shadow-brutal-xl: 8px 8px 0px theme(colors.gray.800);
+  --shadow-brutal-xs: 1px 1px 0px theme(colors.gray.800);
+
+  --clip-path-starburst: polygon(
+    100% 50%,
+    calc(99.76% - 7.96px) calc(54.9% - 0.78px),
+    99.04% 59.75%,
+    calc(97.85% - 7.66px) calc(64.51% - 2.32px),
+    96.19% 69.13%,
+    calc(94.1% - 7.06px) calc(73.57% - 3.77px),
+    91.57% 77.78%,
+    calc(88.65% - 6.18px) calc(81.72% - 5.08px),
+    85.36% 85.36%,
+    calc(81.72% - 5.08px) calc(88.65% - 6.18px),
+    77.78% 91.57%,
+    calc(73.57% - 3.77px) calc(94.1% - 7.06px),
+    69.13% 96.19%,
+    calc(64.51% - 2.32px) calc(97.85% - 7.66px),
+    59.75% 99.04%,
+    calc(54.9% - 0.78px) calc(99.76% - 7.96px),
+    50% 100%,
+    calc(45.1% - -0.78px) calc(99.76% - 7.96px),
+    40.25% 99.04%,
+    calc(35.49% - -2.32px) calc(97.85% - 7.66px),
+    30.87% 96.19%,
+    calc(26.43% - -3.77px) calc(94.1% - 7.06px),
+    22.22% 91.57%,
+    calc(18.28% - -5.08px) calc(88.65% - 6.18px),
+    14.64% 85.36%,
+    calc(11.35% - -6.18px) calc(81.72% - 5.08px),
+    8.43% 77.78%,
+    calc(5.9% - -7.06px) calc(73.57% - 3.77px),
+    3.81% 69.13%,
+    calc(2.15% - -7.66px) calc(64.51% - 2.32px),
+    0.96% 59.75%,
+    calc(0.24% - -7.96px) calc(54.9% - 0.78px),
+    0% 50%,
+    calc(0.24% - -7.96px) calc(45.1% - -0.78px),
+    0.96% 40.25%,
+    calc(2.15% - -7.66px) calc(35.49% - -2.32px),
+    3.81% 30.87%,
+    calc(5.9% - -7.06px) calc(26.43% - -3.77px),
+    8.43% 22.22%,
+    calc(11.35% - -6.18px) calc(18.28% - -5.08px),
+    14.64% 14.64%,
+    calc(18.28% - -5.08px) calc(11.35% - -6.18px),
+    22.22% 8.43%,
+    calc(26.43% - -3.77px) calc(5.9% - -7.06px),
+    30.87% 3.81%,
+    calc(35.49% - -2.32px) calc(2.15% - -7.66px),
+    40.25% 0.96%,
+    calc(45.1% - -0.78px) calc(0.24% - -7.96px),
+    50% 0%,
+    calc(54.9% - 0.78px) calc(0.24% - -7.96px),
+    59.75% 0.96%,
+    calc(64.51% - 2.32px) calc(2.15% - -7.66px),
+    69.13% 3.81%,
+    calc(73.57% - 3.77px) calc(5.9% - -7.06px),
+    77.78% 8.43%,
+    calc(81.72% - 5.08px) calc(11.35% - -6.18px),
+    85.36% 14.64%,
+    calc(88.65% - 6.18px) calc(18.28% - -5.08px),
+    91.57% 22.22%,
+    calc(94.1% - 7.06px) calc(26.43% - -3.77px),
+    96.19% 30.87%,
+    calc(97.85% - 7.66px) calc(35.49% - -2.32px),
+    99.04% 40.25%,
+    calc(99.76% - 7.96px) calc(45.1% - -0.78px)
+  );
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  .clip-path-starburst {
+    clip-path: var(--clip-path-starburst);
+  }
+}

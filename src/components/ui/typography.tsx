@@ -4,7 +4,7 @@ export function H1(props: ComponentProps<"h1">) {
   return (
     <h1
       {...props}
-      className="font-sans text-7xl font-black uppercase tracking-tight md:text-8xl"
+      className="font-sans text-7xl font-black tracking-tight uppercase md:text-8xl"
     />
   );
 }
@@ -13,7 +13,7 @@ export function H2(props: ComponentProps<"h1">) {
   return (
     <h2
       {...props}
-      className="font-sans text-4xl font-black uppercase tracking-normal md:text-6xl"
+      className="font-sans text-4xl font-black tracking-normal uppercase md:text-6xl"
     />
   );
 }
