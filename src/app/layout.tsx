@@ -47,27 +47,36 @@ export default function RootLayout({ children }: Readonly<Props>) {
         className={`relative overflow-x-hidden bg-white bg-[url(./noise.svg)] font-sans text-xl leading-7 tracking-wide text-balance text-black ${sans.variable}`}
       >
         <header className="sticky top-4 z-50">
-          <nav className="shadow-brutal-sm hover:shadow-brutal-xs mx-auto flex w-fit items-center justify-between rounded-md border-2 border-black bg-white/70 px-1 py-1 text-base backdrop-blur-md transition-all hover:bg-white/90">
+          <nav className="shadow-brutal-sm hover:shadow-brutal-xs mx-auto flex w-fit items-center justify-between gap-4 rounded-md border-2 border-black bg-white px-8 py-2 text-lg transition-all">
             <Link href="/">
               <Image
                 alt="Maurice Kleine"
-                className="size-10 md:size-12"
+                className="size-12"
                 height={48}
                 src="/logo-inverted.svg"
                 width={48}
               />
             </Link>
 
-            <div className="flex items-center divide-x divide-black">
-              <a className="px-2 hover:underline md:px-4" href="#portfolio">
+            <div className="flex items-center divide-x-2 divide-black">
+              <a
+                className="px-2 py-1 font-medium hover:underline md:px-4"
+                href="#portfolio"
+              >
                 Portfolio
               </a>
 
-              <a className="px-2 hover:underline md:px-4" href="#clients">
+              <a
+                className="px-2 py-1 font-medium hover:underline md:px-4"
+                href="#clients"
+              >
                 Clients
               </a>
 
-              <a className="px-2 hover:underline md:px-4" href="#contact">
+              <a
+                className="px-2 py-1 font-medium hover:underline md:px-4"
+                href="#contact"
+              >
                 Contact
               </a>
             </div>
