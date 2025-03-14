@@ -53,7 +53,7 @@ export function PortfolioCard({
       <Card className="shadow-brutal hover:shadow-brutal-lg flex h-full w-full flex-col overflow-hidden border-2 border-black bg-white transition-all duration-300">
         {burstText && (
           <motion.div
-            className="absolute -top-12 -right-12 z-10"
+            className="absolute -top-4 -right-4 z-10 md:-top-12 md:-right-12"
             initial={{ rotate: 12 }}
             whileHover={{
               rotate: 25,

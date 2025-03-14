@@ -44,10 +44,10 @@ export default function RootLayout({ children }: Readonly<Props>) {
   return (
     <html className="scroll-smooth" lang="en">
       <body
-        className={`relative overflow-x-hidden bg-white bg-[url(./noise.svg)] font-sans text-xl leading-7 tracking-wide text-balance text-black ${sans.variable}`}
+        className={`relative bg-white bg-[url(./noise.svg)] font-sans text-xl leading-7 tracking-wide text-balance text-black ${sans.variable}`}
       >
-        <header className="sticky top-4 z-50">
-          <nav className="shadow-brutal-sm hover:shadow-brutal-xs mx-auto flex w-fit items-center justify-between gap-4 rounded-md border-2 border-black bg-white px-8 py-2 text-lg transition-all">
+        <header className="fixed top-4 z-50 mx-auto w-full px-4">
+          <nav className="shadow-brutal-sm hover:shadow-brutal-xs mx-auto flex max-w-fit items-center justify-between gap-4 rounded-md border-2 border-black bg-white px-2 py-2 transition-all sm:px-8">
             <Link href="/">
               <Image
                 alt="Maurice Kleine"
@@ -60,21 +60,21 @@ export default function RootLayout({ children }: Readonly<Props>) {
 
             <div className="flex items-center divide-x-2 divide-black">
               <a
-                className="px-2 py-1 font-medium hover:underline md:px-4"
+                className="px-2 py-1 text-base font-medium hover:underline md:px-4 md:text-lg"
                 href="#portfolio"
               >
                 Portfolio
               </a>
 
               <a
-                className="px-2 py-1 font-medium hover:underline md:px-4"
+                className="px-2 py-1 text-base font-medium hover:underline md:px-4 md:text-lg"
                 href="#clients"
               >
                 Clients
               </a>
 
               <a
-                className="px-2 py-1 font-medium hover:underline md:px-4"
+                className="px-2 py-1 text-base font-medium hover:underline md:px-4 md:text-lg"
                 href="#contact"
               >
                 Contact
@@ -83,7 +83,7 @@ export default function RootLayout({ children }: Readonly<Props>) {
           </nav>
         </header>
 
-        <main className="my-16">{children}</main>
+        <main className="mx-4 my-16 md:mx-12 lg:mx-0">{children}</main>
 
         <footer
           className="mt-48 space-y-16 border-t-4 border-dashed border-black bg-red-600 p-8 text-center text-yellow-300 md:p-12"

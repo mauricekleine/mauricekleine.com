@@ -36,36 +36,42 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="relative mx-auto max-w-4xl space-y-16 px-4 text-center md:px-0">
+      <div className="relative mx-auto max-w-4xl">
         <PortfolioSection />
       </div>
 
-      <div className="-mx-8 -rotate-3 border-t-4 border-b-4 border-dashed border-black bg-white p-8 md:p-12">
-        <div className="relative mx-auto max-w-2xl space-y-4 px-8 sm:px-0">
-          <StarBurst className="absolute -top-4 -ml-28 hidden size-24 -rotate-12 text-lg md:flex">
-            Not sold in stores!
-          </StarBurst>
+      <div className="relative mx-auto w-full px-4 md:px-8">
+        <div className="-mx-12 -rotate-3 border-t-4 border-b-4 border-dashed border-black bg-white p-8 md:-mx-24 md:p-12">
+          <div className="relative mx-auto max-w-2xl space-y-4 px-4 sm:px-0">
+            <StarBurst className="absolute -top-4 -ml-28 hidden size-24 -rotate-12 text-lg md:flex">
+              Not sold in stores!
+            </StarBurst>
 
-          <H2>Transform Today!</H2>
+            <H2>Transform Today!</H2>
 
-          <p>
-            Do you need a software engineer who can take your ideas and turn
-            them into reality? Look no further! Maurice excels at building
-            applications from scratch, bringing your vision to life. With
-            expertise in hands-on coding and a passion for coaching and
-            mentoring, he ensures fast iteration and top-notch results. Elevate
-            your software products today with unparalleled skills and
-            dedication. Don&apos;t wait—act now and watch your ideas transform
-            into amazing applications!
-          </p>
+            <p>
+              Do you need a software engineer who can take your ideas and turn
+              them into reality? Look no further! Maurice excels at building
+              applications from scratch, bringing your vision to life. With
+              expertise in hands-on coding and a passion for coaching and
+              mentoring, he ensures fast iteration and top-notch results.
+              Elevate your software products today with unparalleled skills and
+              dedication. Don&apos;t wait—act now and watch your ideas transform
+              into amazing applications!
+            </p>
+          </div>
         </div>
       </div>
 
       <div
-        className="relative mx-auto max-w-4xl space-y-16 px-4 text-center md:px-0"
+        className="relative mx-auto max-w-4xl space-y-16 text-center"
         id="clients"
       >
-        <H2>Don&apos;t just take our word for it!</H2>
+        <H2>What our clients say</H2>
+
+        <StarBurst className="z-10 hidden size-24 rotate-12 md:absolute md:-top-6 md:right-0 md:flex">
+          Real reviews!
+        </StarBurst>
 
         <TestimonialSection />
 

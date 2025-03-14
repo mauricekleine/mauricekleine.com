@@ -157,6 +157,14 @@
   }
   body {
     @apply bg-background text-foreground;
+    width: 100%;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  html {
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   .clip-path-starburst {

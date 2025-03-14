@@ -24,10 +24,7 @@ const item = {
 
 export function PortfolioSection() {
   return (
-    <div
-      className="relative mx-auto max-w-4xl space-y-8 px-4 text-center lg:px-0"
-      id="portfolio"
-    >
+    <div className="relative space-y-8 text-center" id="portfolio">
       <motion.div
         animate={{ opacity: 1, y: 0 }}
         className="relative"
