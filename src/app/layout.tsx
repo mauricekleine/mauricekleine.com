@@ -53,7 +53,7 @@ export default function RootLayout({ children }: Readonly<Props>) {
                 alt="Maurice Kleine"
                 className="size-12"
                 height={48}
-                src="/logo-inverted.svg"
+                src="/mk-inverted-round.svg"
                 width={48}
               />
             </Link>
