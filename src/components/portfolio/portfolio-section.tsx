@@ -85,12 +85,22 @@ export function PortfolioSection() {
         </motion.div>
 
         {/* DayStack */}
-        <motion.div variants={item}>
+        <motion.div className="md:col-span-2" variants={item}>
           <PortfolioCard
             description="A habit and supplement tracker for health focused individuals. Built in React Native, available on iOS."
             link="https://www.daystack.co/"
             technologies={["React Native", "iOS", "Health"]}
             title="DayStack"
+          />
+        </motion.div>
+
+        {/* Nanta */}
+        <motion.div variants={item}>
+          <PortfolioCard
+            description="Not Another Note Taking App - A modern note-taking application combining the best of Notion's flexibility, Bear's interface, and Apple Notes' simplicity with full markdown support, customizable themes, and AI writing tools."
+            link="https://notanothernotetakingapp.com/"
+            technologies={["Next.js", "React", "Writing Tools"]}
+            title="Nanta"
           />
         </motion.div>
 
