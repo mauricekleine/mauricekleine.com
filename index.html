@@ -41,7 +41,13 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- OASIS Connection Bar -->
+    <!-- Three.js Space Canvas -->
+    <canvas id="space-canvas"></canvas>
+
+    <!-- Cockpit Glass Reflection Overlay -->
+    <div class="cockpit-glass" aria-hidden="true"></div>
+
+    <!-- HUD Connection Bar -->
     <div class="connection-bar" aria-hidden="true">
       <div class="connection-status">
         <span class="status-dot"></span>
@@ -74,337 +80,170 @@
         }
         document.getElementById("space-coords").textContent = randomCoord();
       </script>
-      <div class="player-info">PLAYER_ONE :: MAURICE.EXE</div>
+      <div class="player-info">PILOT :: MAURICE.EXE</div>
     </div>
 
-    <!-- Decorative symbols: 宇宙 (universe) and ∞ (infinity) -->
-    <div class="kanji-deco" aria-hidden="true">宇</div>
-    <div class="kanji-deco" aria-hidden="true">∞</div>
-
-    <!-- Matrix rain - code, katakana, and physics -->
-    <div class="matrix-rain" aria-hidden="true">
-      <div
-        class="rain-column"
-        style="left: 5%; animation-duration: 12s; animation-delay: 0s"
-      >
-        アイウエオカキクケコサシスセソ
-      </div>
-      <div
-        class="rain-column"
-        style="left: 15%; animation-duration: 22s; animation-delay: 2s"
-      >
-        E=mc²∇·B=0∂ψ/∂t=Hψ
-      </div>
-      <div
-        class="rain-column"
-        style="left: 28%; animation-duration: 15s; animation-delay: 1s"
-      >
-        01001101011000010111
-      </div>
-      <div
-        class="rain-column"
-        style="left: 40%; animation-duration: 18s; animation-delay: 3s"
-      >
-        タチツテトナニヌネノ
-      </div>
-      <div
-        class="rain-column"
-        style="left: 52%; animation-duration: 25s; animation-delay: 0s"
-      >
-        ΣF=ma∮E·dl=-dΦ/dt
-      </div>
-      <div
-        class="rain-column"
-        style="left: 65%; animation-duration: 14s; animation-delay: 4s"
-      >
-        10110101001011010100
-      </div>
-      <div
-        class="rain-column"
-        style="left: 78%; animation-duration: 20s; animation-delay: 2s"
-      >
-        ハヒフヘホマミムメモ
-      </div>
-      <div
-        class="rain-column"
-        style="left: 88%; animation-duration: 19s; animation-delay: 1s"
-      >
-        S=klogW λ=h/p c²=a²+b²
-      </div>
-      <div
-        class="rain-column"
-        style="left: 95%; animation-duration: 16s; animation-delay: 5s"
-      >
-        01100011011110010110
-      </div>
+    <!-- Cockpit Frame Overlay -->
+    <div class="cockpit-frame" aria-hidden="true">
+      <div class="frame-top"></div>
+      <div class="frame-bottom"></div>
+      <div class="frame-left"></div>
+      <div class="frame-right"></div>
+      <div class="frame-corner frame-corner-tl"></div>
+      <div class="frame-corner frame-corner-tr"></div>
+      <div class="frame-corner frame-corner-bl"></div>
+      <div class="frame-corner frame-corner-br"></div>
     </div>
 
-    <!-- Perspective grid -->
-    <div class="grid-overlay" aria-hidden="true"></div>
-
-    <!-- Starfield -->
-    <div class="stars" aria-hidden="true">
-      <div class="star" style="top: 3%; left: 8%; animation-delay: 0s"></div>
-      <div class="star" style="top: 8%; left: 15%; animation-delay: 0.3s"></div>
-      <div class="star" style="top: 5%; left: 32%; animation-delay: 1.1s"></div>
-      <div class="star" style="top: 12%; left: 45%; animation-delay: 1s"></div>
-      <div class="star" style="top: 7%; left: 58%; animation-delay: 2.3s"></div>
-      <div class="star" style="top: 5%; left: 70%; animation-delay: 0.5s"></div>
-      <div
-        class="star"
-        style="top: 10%; left: 82%; animation-delay: 1.7s"
-      ></div>
-      <div class="star" style="top: 3%; left: 93%; animation-delay: 0.9s"></div>
-      <div class="star" style="top: 18%; left: 5%; animation-delay: 2.1s"></div>
-      <div
-        class="star"
-        style="top: 20%; left: 25%; animation-delay: 1.5s"
-      ></div>
-      <div
-        class="star"
-        style="top: 15%; left: 40%; animation-delay: 0.4s"
-      ></div>
-      <div
-        class="star"
-        style="top: 22%; left: 52%; animation-delay: 2.8s"
-      ></div>
-      <div
-        class="star"
-        style="top: 17%; left: 68%; animation-delay: 1.2s"
-      ></div>
-      <div
-        class="star"
-        style="top: 15%; left: 85%; animation-delay: 0.8s"
-      ></div>
-      <div
-        class="star"
-        style="top: 25%; left: 12%; animation-delay: 3.1s"
-      ></div>
-      <div
-        class="star"
-        style="top: 28%; left: 35%; animation-delay: 0.6s"
-      ></div>
-      <div class="star" style="top: 25%; left: 55%; animation-delay: 2s"></div>
-      <div
-        class="star"
-        style="top: 30%; left: 78%; animation-delay: 1.4s"
-      ></div>
-      <div
-        class="star"
-        style="top: 30%; left: 10%; animation-delay: 0.3s"
-      ></div>
-      <div
-        class="star"
-        style="top: 35%; left: 22%; animation-delay: 2.5s"
-      ></div>
-      <div
-        class="star"
-        style="top: 32%; left: 48%; animation-delay: 0.7s"
-      ></div>
-      <div
-        class="star"
-        style="top: 38%; left: 65%; animation-delay: 1.9s"
-      ></div>
-      <div
-        class="star"
-        style="top: 35%; left: 90%; animation-delay: 1.2s"
-      ></div>
-      <div class="star" style="top: 42%; left: 3%; animation-delay: 2.7s"></div>
-      <div class="star" style="top: 45%; left: 5%; animation-delay: 0.7s"></div>
-      <div
-        class="star"
-        style="top: 48%; left: 30%; animation-delay: 1.6s"
-      ></div>
-      <div
-        class="star"
-        style="top: 50%; left: 55%; animation-delay: 0.2s"
-      ></div>
-      <div
-        class="star"
-        style="top: 50%; left: 75%; animation-delay: 1.8s"
-      ></div>
-      <div class="star" style="top: 45%; left: 92%; animation-delay: 3s"></div>
-      <div
-        class="star"
-        style="top: 55%; left: 18%; animation-delay: 0.9s"
-      ></div>
-      <div
-        class="star"
-        style="top: 58%; left: 42%; animation-delay: 2.4s"
-      ></div>
-      <div
-        class="star"
-        style="top: 60%; left: 35%; animation-delay: 0.4s"
-      ></div>
-      <div
-        class="star"
-        style="top: 62%; left: 88%; animation-delay: 1.3s"
-      ></div>
-      <div class="star" style="top: 68%; left: 8%; animation-delay: 2s"></div>
-      <div
-        class="star"
-        style="top: 70%; left: 28%; animation-delay: 0.5s"
-      ></div>
-      <div
-        class="star"
-        style="top: 72%; left: 60%; animation-delay: 1.7s"
-      ></div>
-      <div
-        class="star"
-        style="top: 70%; left: 95%; animation-delay: 2.2s"
-      ></div>
-      <div
-        class="star"
-        style="top: 78%; left: 15%; animation-delay: 0.8s"
-      ></div>
-      <div
-        class="star"
-        style="top: 82%; left: 45%; animation-delay: 2.6s"
-      ></div>
-      <div
-        class="star"
-        style="top: 85%; left: 72%; animation-delay: 1.1s"
-      ></div>
-      <div class="star" style="top: 88%; left: 5%; animation-delay: 1.9s"></div>
-      <div
-        class="star"
-        style="top: 90%; left: 38%; animation-delay: 0.3s"
-      ></div>
-      <div
-        class="star"
-        style="top: 92%; left: 82%; animation-delay: 2.9s"
-      ></div>
-      <div
-        class="star"
-        style="top: 95%; left: 55%; animation-delay: 1.5s"
-      ></div>
-    </div>
-
-    <main class="container" role="main">
-      <!-- Profile Window -->
-      <div class="window">
-        <div class="window-title">
-          <span class="window-title-text">
-            <span>☠</span>
-            PLAYER.exe
-          </span>
-          <div class="window-buttons">
-            <button class="window-btn" aria-label="Minimize">_</button>
-            <button class="window-btn" aria-label="Maximize">□</button>
-            <button class="window-btn" aria-label="Close">×</button>
+    <!-- Dashboard Container -->
+    <main class="dashboard" role="main">
+      <!-- Profile Panel - Center Top -->
+      <div class="panel panel-profile">
+        <div class="panel-header">
+          <div class="panel-indicator"></div>
+          <span class="panel-title">PILOT_PROFILE.sys</span>
+          <div class="panel-controls">
+            <span class="panel-btn">−</span>
+            <span class="panel-btn">□</span>
+            <span class="panel-btn">×</span>
           </div>
         </div>
-        <div class="window-content profile-window">
+        <div class="panel-content">
           <div class="profile-photo-wrapper">
+            <div class="photo-scanline"></div>
             <img
               src="./maurice.png"
               alt="Maurice Kleine"
               class="profile-photo"
             />
+            <div class="photo-ring"></div>
           </div>
           <div class="hero">
-            <h1 class="wordart" data-text="MAURICE KLEINE">MAURICE KLEINE</h1>
+            <h1
+              class="pilot-name"
+              id="hyperdrive-trigger"
+              data-text="MAURICE KLEINE"
+              title="Click to engage hyperdrive!"
+            >
+              MAURICE KLEINE
+            </h1>
           </div>
           <p class="tagline-jp">宇宙の探検家</p>
           <p class="tagline">Builder of small internet things</p>
         </div>
+        <div class="panel-glow"></div>
       </div>
 
-      <!-- About Window -->
-      <div class="window">
-        <div class="window-title">
-          <span class="window-title-text">
-            <span>⚠</span>
-            ECHO_LOG.txt
-          </span>
-          <div class="window-buttons">
-            <button class="window-btn" aria-label="Minimize">_</button>
-            <button class="window-btn" aria-label="Maximize">□</button>
-            <button class="window-btn" aria-label="Close">×</button>
+      <!-- Mission Log Panel - Right Top -->
+      <div class="panel panel-log">
+        <div class="panel-header">
+          <div class="panel-indicator indicator-warning"></div>
+          <span class="panel-title">MISSION_LOG.dat</span>
+          <div class="panel-controls">
+            <span class="panel-btn">−</span>
+            <span class="panel-btn">□</span>
+            <span class="panel-btn">×</span>
           </div>
         </div>
-        <div class="window-content about-content">
-          <p>I build small internet products, AI workflows, and communities.</p>
-          <p>
-            Shipping fast, learning in public, and stacking tiny wins. Creator
-            of <strong>Mockly</strong>, <strong>ONESIXTYEIGHT</strong>,
-            <strong>Hackadam</strong>— and always building the next experiment.
-          </p>
+        <div class="panel-content log-content">
+          <div class="log-entry">
+            <span class="log-prefix">&gt;</span>
+            <p>
+              I build small internet products, AI workflows, and communities.
+            </p>
+          </div>
+          <div class="log-entry">
+            <span class="log-prefix">&gt;</span>
+            <p>
+              Shipping fast, learning in public, and stacking tiny wins. Creator
+              of <strong>Mockly</strong>, <strong>ONESIXTYEIGHT</strong>,
+              <strong>Hackadam</strong>— and always building the next
+              experiment.
+            </p>
+          </div>
+          <div class="log-cursor">_</div>
         </div>
+        <div class="panel-glow"></div>
       </div>
 
-      <!-- Projects Window -->
-      <div class="window">
-        <div class="window-title">
-          <span class="window-title-text">
-            <span>◆</span>
-            LOOT_CHEST.exe
-          </span>
-          <div class="window-buttons">
-            <button class="window-btn" aria-label="Minimize">_</button>
-            <button class="window-btn" aria-label="Maximize">□</button>
-            <button class="window-btn" aria-label="Close">×</button>
+      <!-- Inventory Panel - Left Bottom -->
+      <div class="panel panel-inventory">
+        <div class="panel-header">
+          <div class="panel-indicator indicator-active"></div>
+          <span class="panel-title">CARGO_MANIFEST.exe</span>
+          <div class="panel-controls">
+            <span class="panel-btn">−</span>
+            <span class="panel-btn">□</span>
+            <span class="panel-btn">×</span>
           </div>
         </div>
-        <section id="projects" aria-label="Projects" class="projects-grid">
+        <section class="panel-content projects-grid" aria-label="Projects">
           <a
             href="https://getmockly.com"
             target="_blank"
             rel="noopener noreferrer"
-            class="project-link"
+            class="cargo-item"
           >
-            <span class="project-emoji">💬</span>
-            <div class="project-name">Mockly</div>
-            <div class="project-description">Mock chat apps</div>
+            <div class="cargo-icon">💬</div>
+            <div class="cargo-info">
+              <div class="cargo-name">Mockly</div>
+              <div class="cargo-desc">Mock chat apps</div>
+            </div>
+            <div class="cargo-status">ACTIVE</div>
           </a>
 
           <a
             href="https://onesixtyeight.life"
             target="_blank"
             rel="noopener noreferrer"
-            class="project-link"
+            class="cargo-item"
           >
-            <span class="project-emoji">🍄</span>
-            <div class="project-name">OneSixtyEight</div>
-            <div class="project-description">Coffee alternative</div>
+            <div class="cargo-icon">🍄</div>
+            <div class="cargo-info">
+              <div class="cargo-name">OneSixtyEight</div>
+              <div class="cargo-desc">Coffee alternative</div>
+            </div>
+            <div class="cargo-status">ACTIVE</div>
           </a>
 
           <a
             href="https://hackadam.nl"
             target="_blank"
             rel="noopener noreferrer"
-            class="project-link"
+            class="cargo-item"
           >
-            <span class="project-emoji">🌍</span>
-            <div class="project-name">Hackadam</div>
-            <div class="project-description">Hacker meetup in AMS</div>
+            <div class="cargo-icon">🌍</div>
+            <div class="cargo-info">
+              <div class="cargo-name">Hackadam</div>
+              <div class="cargo-desc">Hacker meetup in AMS</div>
+            </div>
+            <div class="cargo-status">ACTIVE</div>
           </a>
         </section>
-        <div class="status-bar">
-          <span class="status-item">▶ 3 ARTIFACTS LOADED</span>
-          <span class="status-item power-level">戦闘力: 9001</span>
+        <div class="panel-footer">
+          <span class="footer-stat">▶ 3 ITEMS LOADED</span>
+          <span class="footer-stat power-level">戦闘力: 9001</span>
         </div>
+        <div class="panel-glow"></div>
       </div>
 
-      <!-- Social Links Window -->
-      <div class="window">
-        <div class="window-title">
-          <span class="window-title-text">
-            <span>◎</span>
-            FAST_TRAVEL.exe
-          </span>
-          <div class="window-buttons">
-            <button class="window-btn" aria-label="Minimize">_</button>
-            <button class="window-btn" aria-label="Maximize">□</button>
-            <button class="window-btn" aria-label="Close">×</button>
+      <!-- Navigation Panel - Right Bottom -->
+      <div class="panel panel-nav">
+        <div class="panel-header">
+          <div class="panel-indicator indicator-nav"></div>
+          <span class="panel-title">HYPERJUMP.nav</span>
+          <div class="panel-controls">
+            <span class="panel-btn">−</span>
+            <span class="panel-btn">□</span>
+            <span class="panel-btn">×</span>
           </div>
         </div>
-        <nav class="social-links" aria-label="Social links">
+        <nav class="panel-content nav-links" aria-label="Social links">
           <a
             href="https://www.linkedin.com/in/mauricekleine/"
             target="_blank"
             rel="noopener noreferrer"
-            class="social-link"
+            class="nav-link nav-linkedin"
             aria-label="LinkedIn"
           >
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -413,13 +252,14 @@
               />
             </svg>
             <span>LinkedIn</span>
+            <div class="nav-arrow">→</div>
           </a>
 
           <a
             href="https://github.com/mauricekleine/"
             target="_blank"
             rel="noopener noreferrer"
-            class="social-link"
+            class="nav-link nav-github"
             aria-label="GitHub"
           >
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -428,13 +268,14 @@
               />
             </svg>
             <span>GitHub</span>
+            <div class="nav-arrow">→</div>
           </a>
 
           <a
             href="https://x.com/maurice_kleine"
             target="_blank"
             rel="noopener noreferrer"
-            class="social-link"
+            class="nav-link nav-twitter"
             aria-label="Twitter/X"
           >
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -443,9 +284,44 @@
               />
             </svg>
             <span>Twitter</span>
+            <div class="nav-arrow">→</div>
           </a>
         </nav>
+        <div class="panel-glow"></div>
       </div>
     </main>
+
+    <!-- Radar/Scanner Widget -->
+    <div class="radar-widget" aria-hidden="true">
+      <div class="radar-sweep"></div>
+      <div class="radar-grid"></div>
+      <div class="radar-blips" id="radar-blips"></div>
+      <div class="radar-center"></div>
+    </div>
+
+    <!-- Speed/Velocity Indicator -->
+    <div class="velocity-widget" aria-hidden="true">
+      <div class="velocity-label">VELOCITY</div>
+      <div class="velocity-bar">
+        <div class="velocity-fill" id="velocity-fill"></div>
+      </div>
+      <div class="velocity-value" id="velocity-value">0.7c</div>
+    </div>
+
+    <!-- Toggle HUD Button -->
+    <button class="hud-toggle" id="hud-toggle" aria-label="Toggle HUD panels">
+      <span class="hud-toggle-icon">◱</span>
+      <span class="hud-toggle-text">HIDE HUD</span>
+    </button>
+
+    <!-- Three.js Module -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+        }
+      }
+    </script>
+    <script type="module" src="main.js"></script>
   </body>
 </html>

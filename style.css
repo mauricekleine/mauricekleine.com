@@ -1,4 +1,4 @@
-/* Reset */
+/* ============ RESET & FONTS ============ */
 *,
 *::before,
 *::after {
@@ -8,51 +8,44 @@
 }
 
 @font-face {
-  font-family: "W95FA";
-  src: url("https://cdn.jsdelivr.net/gh/nicholastay/W95FontPack@master/W95FA.woff2")
+  font-family: "Orbitron";
+  src: url("https://fonts.gstatic.com/s/orbitron/v31/yMJRMIlzdpvBhQQL_Qq7dy0.woff2")
+    format("woff2");
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Share Tech Mono";
+  src: url("https://fonts.gstatic.com/s/sharetechmono/v15/J7aHnp1uDWRBEqV98dVQztYldFcLowEF.woff2")
     format("woff2");
   font-display: swap;
 }
 
 :root {
-  /* ULTIMATE CROSSOVER PALETTE */
-  --matrix-green: #00ff41;
-  --neon-cyan: #00f0ff;
-  --neon-magenta: #ff00ff;
-  --ki-orange: #ff6b00;
-  --saiyan-gold: #ffd700;
-  --trunks-purple: #9d4edd;
-  --trunks-lavender: #c77dff;
-  --void-black: #050508;
+  /* Cockpit color palette */
+  --hud-cyan: #00f0ff;
+  --hud-blue: #4a90d9;
+  --hud-orange: #ff7849;
+  --hud-gold: #e8c547;
+  --hud-green: #00ff41;
+  --hud-red: #ff3333;
+  --hud-purple: #9d4edd;
+  --hud-magenta: #ff00ff;
 
-  /* Star Wars colors */
-  --saber-blue: #4a90d9;
-  --saber-red: #ff3333;
-  --rebel-orange: #ff7849;
-  --empire-gray: #8e9aaf;
-  --hyperspace-blue: #1a3a5c;
-  --crawl-gold: #e8c547;
+  /* Panel colors */
+  --panel-bg: rgba(8, 12, 20, 0.85);
+  --panel-border: rgba(74, 144, 217, 0.4);
+  --panel-glow: rgba(0, 240, 255, 0.15);
 
-  /* Cel-shaded (toned down) */
-  --bl-ink: #1a1a1a;
-  --bl-outline: #000;
+  /* Frame colors */
+  --frame-dark: #0a0a0f;
+  --frame-metal: #1a1a25;
+  --frame-accent: #2a2a3a;
 
-  /* Cosmic colors - Three Body / Dune / Foundation */
-  --cosmic-blue: #1a1a4e;
-  --nebula-purple: #4a1a6b;
-  --spice-orange: #c2701a;
-  --dark-forest: #0d1f0d;
-  --starlight: #e8e8ff;
-
-  /* Holographic gradient */
-  --holo-gradient: linear-gradient(
-    135deg,
-    var(--saber-blue) 0%,
-    var(--neon-cyan) 25%,
-    var(--neon-magenta) 50%,
-    var(--trunks-purple) 75%,
-    var(--saber-red) 100%
-  );
+  /* Text */
+  --text-primary: #e8e8ff;
+  --text-dim: rgba(255, 255, 255, 0.5);
 }
 
 html {
@@ -65,149 +58,192 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 40px 20px;
   overflow-x: hidden;
-  font-family: "W95FA", "Tahoma", "MS Sans Serif", sans-serif;
-  color: #fff;
-  background: var(--void-black);
-  /* Nebula clouds */
-  background-image:
+  overflow-y: auto;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  color: var(--text-primary);
+  background: #030308;
+}
+
+/* ============ THREE.JS CANVAS ============ */
+#space-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============ COCKPIT GLASS OVERLAY ============ */
+.cockpit-glass {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* Subtle reflection streaks */
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.02) 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.01) 75%,
+      transparent 100%
+    ), /* Edge vignette */
     radial-gradient(
-      ellipse at 20% 20%,
-      rgba(74, 26, 107, 0.15) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      ellipse at 80% 80%,
-      rgba(26, 26, 78, 0.2) 0%,
-      transparent 45%
-    ), /* Spice glow (Dune) */
-    radial-gradient(
-      ellipse at 90% 10%,
-      rgba(194, 112, 26, 0.08) 0%,
-      transparent 35%
-    ), /* Dark forest void (Three Body) */
-    radial-gradient(
-      ellipse at 10% 90%,
-      rgba(13, 31, 13, 0.3) 0%,
-      transparent 40%
-    ), /* Existing accents */
-    radial-gradient(
-      ellipse at 50% 0%,
-      rgba(244, 208, 63, 0.06) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      ellipse at 100% 50%,
-      rgba(0, 240, 255, 0.04) 0%,
-      transparent 40%
+      ellipse at center,
+      transparent 50%,
+      rgba(0, 0, 0, 0.4) 100%
     );
-  background-attachment: fixed;
 }
 
-/* VHS tracking lines - static */
-body::before {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10001;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  content: "";
-  background: linear-gradient(
-    transparent 0%,
-    rgba(255, 255, 255, 0.015) 50%,
-    transparent 100%
-  );
-  background-size: 100% 4px;
-}
-
-/* Scanlines */
-body::after {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10000;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+/* Scanlines on glass */
+.cockpit-glass::after {
+  position: absolute;
+  inset: 0;
   content: "";
   background: repeating-linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.15) 0px,
-    rgba(0, 0, 0, 0.15) 1px,
-    transparent 1px,
-    transparent 3px
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 240, 255, 0.01) 2px,
+    rgba(0, 240, 255, 0.01) 4px
   );
+  animation: scanline-drift 8s linear infinite;
 }
 
-/* Matrix rain - multi-colored */
-.matrix-rain {
+@keyframes scanline-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 100px;
+  }
+}
+
+/* ============ COCKPIT FRAME ============ */
+.cockpit-frame {
   position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.frame-top {
+  position: absolute;
   top: 0;
   left: 0;
-  z-index: -1;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
+  height: 50px;
+  background: linear-gradient(
+    180deg,
+    var(--frame-dark) 0%,
+    var(--frame-metal) 60%,
+    transparent 100%
+  );
+  border-bottom: 2px solid var(--hud-blue);
+  box-shadow:
+    0 2px 20px rgba(74, 144, 217, 0.3),
+    inset 0 -10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.rain-column {
+.frame-bottom {
   position: absolute;
-  top: -100%;
-  font-family: "MS Gothic", monospace;
-  font-size: 14px;
-  line-height: 1.2;
-  color: var(--matrix-green);
-  white-space: nowrap;
-  opacity: 0.15;
-  writing-mode: vertical-rl;
-  animation: rain-fall linear infinite;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: linear-gradient(
+    0deg,
+    var(--frame-dark) 0%,
+    var(--frame-metal) 70%,
+    transparent 100%
+  );
+  border-top: 2px solid var(--hud-cyan);
+  box-shadow:
+    0 -2px 20px rgba(0, 240, 255, 0.3),
+    inset 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.rain-column:nth-child(2) {
-  color: var(--neon-cyan);
-}
-.rain-column:nth-child(3) {
-  color: var(--saber-blue);
-}
-.rain-column:nth-child(4) {
-  color: var(--neon-magenta);
-}
-.rain-column:nth-child(5) {
-  color: var(--matrix-green);
-}
-.rain-column:nth-child(6) {
-  color: var(--saber-red);
-}
-
-/* Decorative kanji */
-.kanji-deco {
-  position: fixed;
-  z-index: -1;
-  font-family: "MS Gothic", "Yu Gothic", sans-serif;
-  font-size: 180px;
-  font-weight: bold;
-  line-height: 1;
-  color: var(--saiyan-gold);
-  pointer-events: none;
-  opacity: 0.04;
+.frame-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--frame-dark) 0%,
+    var(--frame-metal) 60%,
+    transparent 100%
+  );
+  border-right: 1px solid rgba(74, 144, 217, 0.2);
 }
 
-.kanji-deco:nth-child(1) {
-  top: 5%;
-  left: 2%;
+.frame-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 100%;
+  background: linear-gradient(
+    270deg,
+    var(--frame-dark) 0%,
+    var(--frame-metal) 60%,
+    transparent 100%
+  );
+  border-left: 1px solid rgba(74, 144, 217, 0.2);
 }
 
-.kanji-deco:nth-child(2) {
-  top: 50%;
-  right: 2%;
-  color: var(--trunks-purple);
+/* Corner accents */
+.frame-corner {
+  position: absolute;
+  width: 100px;
+  height: 100px;
 }
 
-/* Connection status bar - STAR WARS HUD */
+.frame-corner-tl {
+  top: 50px;
+  left: 60px;
+  border-top: 2px solid var(--hud-cyan);
+  border-left: 2px solid var(--hud-cyan);
+  box-shadow:
+    inset 5px 5px 15px rgba(0, 240, 255, 0.1),
+    -2px -2px 10px rgba(0, 240, 255, 0.2);
+}
+
+.frame-corner-tr {
+  top: 50px;
+  right: 60px;
+  border-top: 2px solid var(--hud-cyan);
+  border-right: 2px solid var(--hud-cyan);
+  box-shadow:
+    inset -5px 5px 15px rgba(0, 240, 255, 0.1),
+    2px -2px 10px rgba(0, 240, 255, 0.2);
+}
+
+.frame-corner-bl {
+  bottom: 80px;
+  left: 60px;
+  border-bottom: 2px solid var(--hud-orange);
+  border-left: 2px solid var(--hud-orange);
+  box-shadow:
+    inset 5px -5px 15px rgba(255, 120, 73, 0.1),
+    -2px 2px 10px rgba(255, 120, 73, 0.2);
+}
+
+.frame-corner-br {
+  right: 60px;
+  bottom: 80px;
+  border-right: 2px solid var(--hud-orange);
+  border-bottom: 2px solid var(--hud-orange);
+  box-shadow:
+    inset -5px -5px 15px rgba(255, 120, 73, 0.1),
+    2px 2px 10px rgba(255, 120, 73, 0.2);
+}
+
+/* ============ HUD CONNECTION BAR ============ */
 .connection-bar {
   position: fixed;
   top: 0;
@@ -218,756 +254,1012 @@ body::after {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 10px 20px;
+  padding: 12px 80px;
+  font-family: "Orbitron", sans-serif;
   font-size: 11px;
-  font-weight: bold;
-  color: var(--crawl-gold);
+  font-weight: 600;
+  color: var(--hud-gold);
   text-transform: uppercase;
-  letter-spacing: 2px;
-  background: linear-gradient(
-    180deg,
-    rgba(26, 58, 92, 0.9) 0%,
-    rgba(5, 5, 8, 0.95) 100%
-  );
-  border-bottom: 2px solid var(--saber-blue);
-  box-shadow: 0 0 20px rgba(74, 144, 217, 0.3);
+  letter-spacing: 3px;
+  background: transparent;
 }
 
 .connection-status {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
 }
 
 .status-dot {
   width: 8px;
   height: 8px;
-  background: var(--matrix-green);
+  background: var(--hud-green);
   border-radius: 50%;
-  box-shadow: 0 0 8px var(--matrix-green);
+  box-shadow:
+    0 0 10px var(--hud-green),
+    0 0 20px var(--hud-green);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow:
+      0 0 10px var(--hud-green),
+      0 0 20px var(--hud-green);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow:
+      0 0 5px var(--hud-green),
+      0 0 10px var(--hud-green);
+  }
 }
 
 .player-info {
-  color: var(--rebel-orange);
+  color: var(--hud-orange);
+  text-shadow: 0 0 10px rgba(255, 120, 73, 0.5);
 }
 
 .time-coords {
-  font-family: monospace;
-  color: var(--saber-blue);
-  letter-spacing: 1px;
-  text-shadow: 0 0 10px rgba(74, 144, 217, 0.5);
+  color: var(--hud-cyan);
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
 }
 
-.container {
+/* ============ DASHBOARD CONTAINER ============ */
+.dashboard {
+  position: relative;
+  z-index: 10;
   display: grid;
-  grid-template-rows: auto auto;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  width: 100%;
-  max-width: 1200px;
-  margin-top: 30px;
-  text-align: center;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  width: calc(100% - 240px);
+  max-width: 1400px;
+  height: calc(100vh - 200px);
+  margin: 80px auto 100px;
+  perspective: 1000px;
 }
 
-/* Staggered load-in */
-.window:nth-child(1) {
-  animation: jack-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-}
-.window:nth-child(2) {
-  animation: jack-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
-}
-.window:nth-child(3) {
-  animation: jack-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
-}
-.window:nth-child(4) {
-  animation: jack-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.65s both;
-}
-
-/* Windows - BORDERLANDS CEL-SHADED STYLE */
-.window {
+/* ============ HOLOGRAPHIC PANELS ============ */
+.panel {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(20, 20, 25, 0.95) 0%,
-    rgba(10, 10, 15, 0.98) 100%
-  );
-  border: 3px solid var(--bl-ink);
-  box-shadow:
-    6px 6px 0 var(--bl-outline),
-    inset 0 0 30px rgba(244, 208, 63, 0.05);
-  transition: all 200ms;
+  background: rgba(8, 12, 20, 0.75);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(8px);
+  transform-style: preserve-3d;
+  animation: panel-appear 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
-/* Sketch lines overlay */
-.window::before {
+.panel::before {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
   content: "";
-  background:
-    repeating-linear-gradient(
-      45deg,
-      transparent 0px,
-      transparent 2px,
-      rgba(255, 255, 255, 0.01) 2px,
-      rgba(255, 255, 255, 0.01) 4px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      transparent 0px,
-      transparent 2px,
-      rgba(255, 255, 255, 0.01) 2px,
-      rgba(255, 255, 255, 0.01) 4px
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(0, 240, 255, 0.05) 0%,
+    transparent 50%,
+    rgba(74, 144, 217, 0.03) 100%
+  );
 }
 
-.window:hover {
-  border-color: var(--saber-blue);
+/* Panel glow effect */
+.panel-glow {
+  position: absolute;
+  inset: -2px;
+  z-index: -2;
+  background: linear-gradient(
+    135deg,
+    var(--hud-cyan) 0%,
+    var(--hud-blue) 50%,
+    var(--hud-purple) 100%
+  );
+  opacity: 0;
+  filter: blur(15px);
+  transition: opacity 0.3s ease;
+}
+
+.panel:hover .panel-glow {
+  opacity: 0.15;
+}
+
+/* Staggered animations - panels angle outward */
+.panel-profile {
+  transform: rotateY(3deg) rotateX(-1deg);
+  animation-delay: 0.1s;
+}
+
+.panel-log {
+  transform: rotateY(-3deg) rotateX(-1deg);
+  animation-delay: 0.2s;
+}
+
+.panel-inventory {
+  transform: rotateY(3deg) rotateX(1deg);
+  animation-delay: 0.3s;
+}
+
+.panel-nav {
+  transform: rotateY(-3deg) rotateX(1deg);
+  animation-delay: 0.4s;
+}
+
+@keyframes panel-appear {
+  0% {
+    opacity: 0;
+    filter: blur(20px) brightness(2);
+    transform: scale(0.9) translateZ(-50px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0) brightness(1);
+  }
+}
+
+/* Panel hover effects */
+.panel:hover {
+  border-color: var(--hud-cyan);
   box-shadow:
-    8px 8px 0 var(--bl-outline),
-    0 0 30px rgba(74, 144, 217, 0.25),
-    inset 0 0 40px rgba(74, 144, 217, 0.05);
-  transform: translate(-2px, -2px);
+    0 0 30px rgba(0, 240, 255, 0.2),
+    inset 0 0 30px rgba(0, 240, 255, 0.05);
 }
 
-.window-title {
-  position: relative;
-  z-index: 1;
+/* ============ PANEL HEADER ============ */
+.panel-header {
   display: flex;
+  gap: 12px;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  font-size: 13px;
-  font-weight: bold;
-  color: var(--crawl-gold);
+  padding: 10px 15px;
+  font-family: "Orbitron", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--hud-gold);
   text-transform: uppercase;
-  letter-spacing: 3px;
-  text-shadow: 1px 1px 0 var(--bl-outline);
-  user-select: none;
+  letter-spacing: 2px;
   background: linear-gradient(
     90deg,
-    rgba(74, 144, 217, 0.08) 0%,
-    rgba(26, 58, 92, 0.12) 50%,
-    rgba(74, 144, 217, 0.08) 100%
+    rgba(74, 144, 217, 0.1) 0%,
+    transparent 100%
   );
-  border-bottom: 2px solid var(--bl-ink);
+  border-bottom: 1px solid var(--panel-border);
 }
 
-.window-title-text {
+.panel-indicator {
+  width: 8px;
+  height: 8px;
+  background: var(--hud-cyan);
+  border-radius: 2px;
+  box-shadow: 0 0 8px var(--hud-cyan);
+}
+
+.indicator-warning {
+  background: var(--hud-orange);
+  box-shadow: 0 0 8px var(--hud-orange);
+  animation: blink-warning 1.5s ease-in-out infinite;
+}
+
+.indicator-active {
+  background: var(--hud-green);
+  box-shadow: 0 0 8px var(--hud-green);
+}
+
+.indicator-nav {
+  background: var(--hud-purple);
+  box-shadow: 0 0 8px var(--hud-purple);
+}
+
+@keyframes blink-warning {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.panel-title {
+  flex: 1;
+}
+
+.panel-controls {
   display: flex;
-  gap: 10px;
-  align-items: center;
+  gap: 8px;
 }
 
-.window-buttons {
-  display: flex;
-  gap: 6px;
-}
-
-.window-btn {
+.panel-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
+  width: 18px;
   height: 18px;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: bold;
-  line-height: 1;
-  color: var(--empire-gray);
+  font-size: 12px;
+  color: var(--text-dim);
   cursor: pointer;
-  background: var(--bl-ink);
-  border: 1px solid var(--empire-gray);
-  box-shadow: 2px 2px 0 var(--bl-outline);
-  transition: all 100ms;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.15s ease;
 }
 
-.window-btn:hover {
-  color: var(--bl-ink);
-  background: var(--saber-blue);
-  border-color: var(--saber-blue);
-  box-shadow: 3px 3px 0 var(--bl-outline);
-  transform: translate(-1px, -1px);
+.panel-btn:hover {
+  color: var(--hud-cyan);
+  border-color: var(--hud-cyan);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
 }
 
-.window-content {
-  position: relative;
-  z-index: 1;
+/* ============ PANEL CONTENT ============ */
+.panel-content {
   display: flex;
   flex: 1;
   flex-direction: column;
-  justify-content: center;
-  padding: 24px;
+  padding: 20px;
+  overflow: hidden;
 }
 
-/* Profile section */
-.profile-window {
+/* ============ PROFILE PANEL ============ */
+.panel-profile .panel-content {
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
 .profile-photo-wrapper {
   position: relative;
-  display: inline-block;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
-/* Avatar - BORDERLANDS STYLE */
 .profile-photo {
-  position: relative;
-  z-index: 1;
-  width: 130px;
-  height: 130px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
-  border: 4px solid var(--bl-ink);
+  border: 2px solid var(--hud-cyan);
   border-radius: 50%;
   box-shadow:
-    6px 6px 0 var(--bl-outline),
-    0 0 0 2px var(--bl-yellow);
-  filter: saturate(1.2) contrast(1.15);
-  transition: all 200ms;
+    0 0 20px rgba(0, 240, 255, 0.3),
+    0 0 40px rgba(0, 240, 255, 0.1);
+  filter: saturate(1.1);
+  transition: all 0.3s ease;
 }
 
 .profile-photo:hover {
+  border-color: var(--hud-gold);
   box-shadow:
-    8px 8px 0 var(--bl-outline),
-    0 0 0 3px var(--bl-yellow),
-    0 0 30px rgba(244, 208, 63, 0.5);
-  transform: translate(-2px, -2px);
+    0 0 30px rgba(232, 197, 71, 0.4),
+    0 0 60px rgba(232, 197, 71, 0.2);
+  transform: scale(1.05);
 }
 
-.hero {
-  margin-bottom: 12px;
+/* Rotating ring around photo */
+.photo-ring {
+  position: absolute;
+  inset: -10px;
+  border: 1px dashed var(--hud-cyan);
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: rotate-ring 20s linear infinite;
 }
 
-/* Name - STAR WARS CRAWL STYLE */
-.wordart {
-  position: relative;
-  display: inline-block;
-  font-size: 2.6rem;
-  font-weight: bold;
-  line-height: 1.2;
-  color: var(--crawl-gold);
+@keyframes rotate-ring {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scanline over photo */
+.photo-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.photo-scanline::after {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  content: "";
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(0, 240, 255, 0.3),
+    transparent
+  );
+  animation: photo-scan 3s linear infinite;
+}
+
+@keyframes photo-scan {
+  0% {
+    top: -10%;
+  }
+  100% {
+    top: 110%;
+  }
+}
+
+.pilot-name {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--hud-gold);
   letter-spacing: 4px;
   text-shadow:
-    2px 2px 0 var(--bl-outline),
-    -1px -1px 0 var(--bl-outline),
-    1px -1px 0 var(--bl-outline),
-    -1px 1px 0 var(--bl-outline),
-    0 0 30px rgba(232, 197, 71, 0.4);
+    0 0 20px rgba(232, 197, 71, 0.5),
+    0 0 40px rgba(232, 197, 71, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* Japanese subtitle */
+.pilot-name:hover {
+  color: var(--hud-cyan);
+  text-shadow:
+    0 0 30px rgba(0, 240, 255, 0.8),
+    0 0 60px rgba(0, 240, 255, 0.4);
+  transform: scale(1.02);
+}
+
+/* Hyperdrive active state */
+body.hyperdrive .pilot-name {
+  color: #fff;
+  text-shadow:
+    0 0 40px rgba(255, 255, 255, 1),
+    0 0 80px rgba(0, 240, 255, 0.8),
+    0 0 120px rgba(0, 240, 255, 0.6);
+  animation: hyperdrive-text 0.1s ease-in-out infinite;
+}
+
+@keyframes hyperdrive-text {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+/* Hyperdrive screen effects */
+body.hyperdrive .cockpit-glass {
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(0, 240, 255, 0.05) 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.03) 75%,
+      transparent 100%
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 30%,
+      rgba(0, 100, 255, 0.15) 100%
+    );
+}
+
+body.hyperdrive .panel {
+  box-shadow:
+    0 0 40px rgba(0, 240, 255, 0.3),
+    inset 0 0 30px rgba(0, 240, 255, 0.1);
+}
+
 .tagline-jp {
   margin-top: 10px;
   font-family: "MS Gothic", "Yu Gothic", sans-serif;
-  font-size: 14px;
-  color: var(--neon-magenta);
-  letter-spacing: 8px;
-  text-shadow: 1px 1px 0 var(--bl-outline);
+  font-size: 13px;
+  color: var(--hud-magenta);
+  letter-spacing: 6px;
+  text-shadow: 0 0 10px rgba(255, 0, 255, 0.4);
 }
 
 .tagline {
   margin-top: 8px;
   font-size: 11px;
-  color: var(--empire-gray);
+  color: var(--text-dim);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
 }
 
-/* About section - HOLOCRON */
-.about-content {
-  position: relative;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
+/* ============ LOG PANEL ============ */
+.log-content {
   justify-content: center;
-  padding: 24px;
-  overflow: hidden;
   font-size: 13px;
-  line-height: 1.9;
-  color: rgba(255, 255, 255, 0.95);
-  text-align: left;
-  background: rgba(26, 58, 92, 0.15);
-  border: 1px solid rgba(74, 144, 217, 0.2);
+  line-height: 1.8;
 }
 
-/* Sword slash effect on hover */
-.about-content::before {
-  position: absolute;
-  top: -100%;
-  left: -100%;
-  width: 300%;
-  height: 2px;
-  content: "";
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--trunks-lavender) 50%,
-    transparent 100%
-  );
-  opacity: 0;
-  transform: rotate(-45deg);
-  transform-origin: center;
-  transition: opacity 0.1s;
-}
-
-.about-content:hover::before {
-  opacity: 1;
-  animation: sword-slash 0.5s ease-out;
-}
-
-.about-content p {
-  margin-bottom: 14px;
-}
-
-.about-content p:last-child {
-  margin-bottom: 0;
-}
-
-.about-content strong {
-  color: var(--crawl-gold);
-  text-shadow: 0 0 8px rgba(232, 197, 71, 0.3);
-  transition: all 150ms;
-}
-
-.about-content strong:hover {
-  color: var(--saber-blue);
-  text-shadow: 0 0 12px rgba(74, 144, 217, 0.5);
-}
-
-/* Projects grid */
-.projects-grid {
-  display: grid;
-  flex: 1;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  padding: 14px;
-}
-
-.project-link {
-  position: relative;
+.log-entry {
   display: flex;
-  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.log-prefix {
+  flex-shrink: 0;
+  color: var(--hud-green);
+  text-shadow: 0 0 5px var(--hud-green);
+}
+
+.log-entry p {
+  color: var(--text-primary);
+}
+
+.log-entry strong {
+  color: var(--hud-gold);
+  text-shadow: 0 0 8px rgba(232, 197, 71, 0.3);
+}
+
+.log-cursor {
+  display: inline-block;
+  margin-left: 20px;
+  font-size: 16px;
+  color: var(--hud-cyan);
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ============ INVENTORY PANEL ============ */
+.projects-grid {
+  gap: 10px;
+}
+
+.cargo-item {
+  display: flex;
+  gap: 15px;
   align-items: center;
-  padding: 16px 14px;
-  overflow: hidden;
-  color: #fff;
+  padding: 12px 15px;
+  color: var(--text-primary);
   text-decoration: none;
-  cursor: pointer;
-  background: rgba(26, 26, 26, 0.8);
-  border: 2px solid rgba(244, 208, 63, 0.3);
-  box-shadow: 3px 3px 0 var(--bl-outline);
-  transition: all 150ms;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(74, 144, 217, 0.2);
+  transition: all 0.2s ease;
 }
 
-.project-link:hover {
-  border-color: var(--saber-blue);
-  box-shadow: 5px 5px 0 var(--bl-outline);
-  transform: translate(-2px, -2px);
+.cargo-item:hover {
+  background: rgba(0, 240, 255, 0.05);
+  border-color: var(--hud-cyan);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+  transform: translateX(5px);
 }
 
-/* Lightsaber edge */
-.project-link::after {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  content: "";
-  background: var(--saber-blue);
-  box-shadow: 0 0 8px var(--saber-blue);
-  opacity: 0;
-  transition: opacity 150ms;
+.cargo-icon {
+  font-size: 28px;
+  transition: transform 0.2s ease;
 }
 
-.project-link:hover::after {
-  opacity: 1;
-}
-
-.project-emoji {
-  position: relative;
-  z-index: 1;
-  margin-bottom: 8px;
-  font-size: 32px;
-  transition: all 200ms;
-}
-
-.project-link:hover .project-emoji {
-  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+.cargo-item:hover .cargo-icon {
   transform: scale(1.15);
 }
 
-.project-name {
-  position: relative;
-  z-index: 1;
-  margin-bottom: 4px;
+.cargo-info {
+  flex: 1;
+}
+
+.cargo-name {
+  font-family: "Orbitron", sans-serif;
   font-size: 12px;
-  font-weight: bold;
-  color: var(--crawl-gold);
+  font-weight: 600;
+  color: var(--hud-gold);
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 1px 1px 0 var(--bl-outline);
 }
 
-.project-description {
-  position: relative;
-  z-index: 1;
+.cargo-desc {
+  margin-top: 3px;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-dim);
 }
 
-/* Social links - arcade buttons */
-.social-links {
+.cargo-status {
+  padding: 4px 10px;
+  font-family: "Orbitron", sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--hud-green);
+  letter-spacing: 1px;
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid var(--hud-green);
+}
+
+/* Panel footer */
+.panel-footer {
   display: flex;
-  flex: 1;
-  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 15px;
+  font-family: "Orbitron", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid var(--panel-border);
+}
+
+.footer-stat {
+  color: var(--text-dim);
+}
+
+.power-level {
+  color: var(--hud-red);
+  text-shadow: 0 0 8px rgba(255, 51, 51, 0.5);
+}
+
+/* ============ NAVIGATION PANEL ============ */
+.nav-links {
   gap: 12px;
   justify-content: center;
-  padding: 20px;
 }
 
-.social-link {
-  position: relative;
+.nav-link {
   display: flex;
-  gap: 12px;
+  gap: 15px;
   align-items: center;
-  justify-content: center;
-  padding: 14px 24px;
-  overflow: hidden;
-  font-size: 14px;
-  font-weight: bold;
-  color: var(--saber-blue);
+  padding: 14px 20px;
+  font-family: "Orbitron", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--hud-cyan);
   text-transform: uppercase;
   letter-spacing: 3px;
   text-decoration: none;
-  text-shadow: 1px 1px 0 var(--bl-outline);
-  cursor: pointer;
-  background: var(--bl-ink);
-  border: 2px solid var(--saber-blue);
-  box-shadow: 4px 4px 0 var(--bl-outline);
-  transition: all 150ms;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--hud-cyan);
+  transition: all 0.2s ease;
 }
 
-.social-link:nth-child(1) {
-  color: var(--saber-blue);
-  border-color: var(--saber-blue);
-}
-
-.social-link:nth-child(2) {
-  color: var(--trunks-lavender);
-  border-color: var(--trunks-lavender);
-}
-
-.social-link:nth-child(3) {
-  color: var(--rebel-orange);
-  border-color: var(--rebel-orange);
-}
-
-.social-link:hover {
-  box-shadow:
-    6px 6px 0 var(--bl-outline),
-    0 0 15px currentColor;
-  transform: translate(-2px, -2px);
-}
-
-.social-link:nth-child(1):hover {
-  color: var(--bl-ink);
-  background: var(--saber-blue);
-}
-
-.social-link:nth-child(2):hover {
-  color: var(--bl-ink);
-  background: var(--trunks-lavender);
-}
-
-.social-link:nth-child(3):hover {
-  color: var(--bl-ink);
-  background: var(--rebel-orange);
-}
-
-.social-link svg {
+.nav-link svg {
   width: 20px;
   height: 20px;
   fill: currentColor;
 }
 
-/* Status bar - STAR WARS HUD */
-.status-bar {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 14px;
-  font-size: 11px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  background: rgba(26, 58, 92, 0.4);
-  border-top: 1px solid var(--saber-blue);
+.nav-link span {
+  flex: 1;
 }
 
-.status-item {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  color: var(--empire-gray);
+.nav-arrow {
+  font-size: 16px;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.2s ease;
 }
 
-.power-level {
-  color: var(--saber-red);
-  text-shadow: 0 0 8px rgba(255, 51, 51, 0.5);
+.nav-link:hover .nav-arrow {
+  opacity: 1;
+  transform: translateX(0);
 }
 
-.status-item:first-child::after {
-  display: inline-block;
-  width: 6px;
-  height: 12px;
-  margin-left: 4px;
-  content: "";
-  background: var(--saber-blue);
-  animation: blink 1s step-end infinite;
+/* Different link colors */
+.nav-linkedin {
+  color: var(--hud-blue);
+  border-color: var(--hud-blue);
 }
 
-/* Particles - mixed energy */
-.stars {
+.nav-linkedin:hover {
+  color: var(--frame-dark);
+  background: var(--hud-blue);
+  box-shadow: 0 0 30px rgba(74, 144, 217, 0.5);
+}
+
+.nav-github {
+  color: var(--hud-purple);
+  border-color: var(--hud-purple);
+}
+
+.nav-github:hover {
+  color: var(--frame-dark);
+  background: var(--hud-purple);
+  box-shadow: 0 0 30px rgba(157, 78, 221, 0.5);
+}
+
+.nav-twitter {
+  color: var(--hud-orange);
+  border-color: var(--hud-orange);
+}
+
+.nav-twitter:hover {
+  color: var(--frame-dark);
+  background: var(--hud-orange);
+  box-shadow: 0 0 30px rgba(255, 120, 73, 0.5);
+}
+
+/* ============ RADAR WIDGET ============ */
+.radar-widget {
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -2;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.star {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  background: var(--starlight);
+  right: 80px;
+  bottom: 100px;
+  z-index: 50;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--hud-cyan);
   border-radius: 50%;
-  opacity: 0.6;
-  animation: twinkle 4s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(0, 240, 255, 0.2),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
-.star:nth-child(odd) {
-  width: 2px;
-  height: 2px;
-  background: var(--starlight);
-  opacity: 0.8;
-  animation-duration: 6s;
-}
-
-.star:nth-child(3n) {
-  width: 3px;
-  height: 3px;
-  background: var(--neon-cyan);
-  box-shadow: 0 0 4px var(--neon-cyan);
-  opacity: 0.5;
-  animation-duration: 5s;
-}
-
-.star:nth-child(5n) {
-  background: var(--spice-orange);
-  box-shadow: 0 0 3px var(--spice-orange);
-  opacity: 0.7;
-  animation-duration: 7s;
-}
-
-.star:nth-child(7n) {
-  width: 2px;
-  height: 2px;
-  background: var(--bl-yellow);
-  opacity: 0.6;
-  animation-duration: 8s;
-}
-
-/* Grid overlay - VAPORWAVE / TRON / HYPERSPACE */
-.grid-overlay {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-  width: 100%;
-  height: 50%;
-  pointer-events: none;
+.radar-grid {
+  position: absolute;
+  inset: 0;
   background:
-    linear-gradient(to bottom, transparent 0%, rgba(74, 144, 217, 0.08) 100%),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px,
-      transparent 59px,
-      rgba(74, 144, 217, 0.25) 59px,
-      rgba(74, 144, 217, 0.25) 60px
+    radial-gradient(
+      circle,
+      transparent 30%,
+      rgba(0, 240, 255, 0.1) 31%,
+      transparent 32%
     ),
-    repeating-linear-gradient(
+    radial-gradient(
+      circle,
+      transparent 60%,
+      rgba(0, 240, 255, 0.1) 61%,
+      transparent 62%
+    ),
+    linear-gradient(
       0deg,
-      transparent 0px,
-      transparent 59px,
-      rgba(255, 0, 255, 0.15) 59px,
-      rgba(255, 0, 255, 0.15) 60px
+      transparent 49%,
+      rgba(0, 240, 255, 0.1) 50%,
+      transparent 51%
+    ),
+    linear-gradient(
+      90deg,
+      transparent 49%,
+      rgba(0, 240, 255, 0.1) 50%,
+      transparent 51%
     );
-  opacity: 0.7;
-  transform: perspective(500px) rotateX(60deg);
-  transform-origin: bottom;
 }
 
-/* Focus styles - LIGHTSABER */
+.radar-sweep {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--hud-cyan), transparent);
+  box-shadow: 0 0 10px var(--hud-cyan);
+  transform-origin: left center;
+  animation: radar-rotate 3s linear infinite;
+}
+
+@keyframes radar-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.radar-blips {
+  position: absolute;
+  inset: 0;
+}
+
+.radar-blip {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--hud-green);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--hud-green);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.radar-blip.active {
+  opacity: 1;
+  animation: blip-pulse 1.5s ease-out forwards;
+}
+
+.radar-blip.hostile {
+  background: var(--hud-red);
+  box-shadow: 0 0 6px var(--hud-red);
+}
+
+.radar-blip.friendly {
+  background: var(--hud-cyan);
+  box-shadow: 0 0 6px var(--hud-cyan);
+}
+
+.radar-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--hud-gold);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--hud-gold);
+  transform: translate(-50%, -50%);
+}
+
+@keyframes blip-pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+/* ============ VELOCITY WIDGET ============ */
+.velocity-widget {
+  position: fixed;
+  bottom: 100px;
+  left: 80px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 15px;
+  font-family: "Orbitron", sans-serif;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--hud-orange);
+  box-shadow: 0 0 20px rgba(255, 120, 73, 0.2);
+}
+
+.velocity-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--hud-orange);
+  letter-spacing: 2px;
+}
+
+.velocity-bar {
+  width: 80px;
+  height: 6px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.velocity-fill {
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--hud-green), var(--hud-cyan));
+  box-shadow: 0 0 10px var(--hud-cyan);
+  animation: velocity-pulse 2s ease-in-out infinite;
+}
+
+@keyframes velocity-pulse {
+  0%,
+  100% {
+    width: 65%;
+  }
+  50% {
+    width: 75%;
+  }
+}
+
+.velocity-value {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--hud-cyan);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.velocity-value.hyperspeed {
+  color: #fff;
+  text-shadow:
+    0 0 15px rgba(255, 255, 255, 0.8),
+    0 0 30px rgba(0, 240, 255, 0.6);
+}
+
+/* ============ HUD TOGGLE BUTTON ============ */
+.hud-toggle {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  z-index: 100;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 18px;
+  font-family: "Orbitron", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--hud-cyan);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--hud-cyan);
+  transform: translateX(-50%);
+  transition: all 0.2s ease;
+}
+
+.hud-toggle:hover {
+  color: var(--frame-dark);
+  background: var(--hud-cyan);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+.hud-toggle-icon {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.hud-toggle.hidden .hud-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Hidden HUD state */
+body.hud-hidden .dashboard {
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+body.hud-hidden .cockpit-frame {
+  opacity: 0.3;
+}
+
+body.hud-hidden .radar-widget,
+body.hud-hidden .velocity-widget {
+  opacity: 0.5;
+}
+
+.dashboard {
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+/* ============ FOCUS STYLES ============ */
 a:focus-visible {
-  outline: 2px solid var(--saber-blue);
+  outline: 2px solid var(--hud-cyan);
   outline-offset: 4px;
 }
 
 ::selection {
-  color: var(--void-black);
-  background: var(--saber-blue);
+  color: var(--frame-dark);
+  background: var(--hud-cyan);
 }
 
-/* ============ ANIMATIONS ============ */
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1100px) {
+  body {
+    display: block;
+    overflow-y: auto;
+  }
 
-@keyframes jack-in {
-  0% {
-    opacity: 0;
-    filter: blur(20px) brightness(3);
-    transform: scale(0.8) translateY(40px);
-  }
-  50% {
-    filter: blur(0) brightness(1.5);
-  }
-  100% {
-    opacity: 1;
-    filter: blur(0) brightness(1);
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes holo-bar {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
-@keyframes rain-fall {
-  to {
-    transform: translateY(200vh);
-  }
-}
-
-@keyframes float-particle {
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: translateY(0);
-  }
-  50% {
-    opacity: 0.2;
-    transform: translateY(-30px);
-  }
-}
-
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
-
-@keyframes sword-slash {
-  0% {
-    top: -100%;
-    left: -100%;
-    opacity: 1;
-  }
-  100% {
-    top: 200%;
-    left: 200%;
-    opacity: 0;
-  }
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .container {
+  .dashboard {
+    grid-template-rows: auto auto auto auto;
     grid-template-columns: 1fr;
-    max-width: 600px;
+    gap: 30px;
+    width: calc(100% - 80px);
+    height: auto;
+    min-height: auto;
+    padding-bottom: 20px;
+    margin: 70px auto 80px;
   }
 
-  .wordart {
-    font-size: 1.8rem;
-    letter-spacing: 3px;
+  .panel {
+    min-height: 200px;
+    transform: none;
   }
 
-  .kanji-deco {
-    font-size: 120px;
+  .pilot-name {
+    font-size: 1.4rem;
   }
 
-  .social-link {
-    padding: 14px 20px;
-    font-size: 13px;
+  .radar-widget,
+  .velocity-widget,
+  .hud-toggle {
+    display: none;
+  }
+
+  .frame-left,
+  .frame-right {
+    width: 30px;
+  }
+
+  .frame-bottom {
+    position: relative;
+    height: 60px;
+    margin-top: auto;
   }
 
   .connection-bar {
-    padding: 6px 12px;
-    font-size: 9px;
+    padding: 10px 40px;
   }
 }
 
-@media (max-width: 600px) {
-  .container {
-    gap: 16px;
-    margin-top: 40px;
+@media (max-width: 700px) {
+  body {
+    display: block;
+    overflow-y: auto;
   }
 
-  .wordart {
-    font-size: 1.4rem;
+  .dashboard {
+    gap: 20px;
+    width: calc(100% - 30px);
+    margin: 55px auto 60px;
+  }
+
+  .panel {
+    min-height: 180px;
+  }
+
+  .panel-content {
+    padding: 15px;
+  }
+
+  .pilot-name {
+    font-size: 1.1rem;
     letter-spacing: 2px;
   }
 
   .profile-photo {
-    width: 110px;
-    height: 110px;
-  }
-
-  .social-link {
-    padding: 12px 16px;
-    font-size: 12px;
-  }
-
-  .social-link span {
-    display: none;
-  }
-
-  .kanji-deco {
-    display: none;
+    width: 90px;
+    height: 90px;
   }
 
   .connection-bar {
+    position: sticky;
+    top: 0;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
+    padding: 8px 20px;
+    font-size: 9px;
     text-align: center;
+  }
+
+  .frame-top {
+    height: 35px;
+  }
+
+  .frame-bottom {
+    position: relative;
+    height: 50px;
+  }
+
+  .frame-left,
+  .frame-right {
+    display: none;
+  }
+
+  .frame-corner {
+    display: none;
+  }
+
+  .nav-link span {
+    display: none;
+  }
+
+  .nav-link {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .cargo-status {
+    display: none;
   }
 }
 
-/* Prefer reduced motion */
+/* ============ REDUCED MOTION ============ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
