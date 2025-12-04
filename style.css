@@ -1,0 +1,978 @@
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+@font-face {
+  font-family: "W95FA";
+  src: url("https://cdn.jsdelivr.net/gh/nicholastay/W95FontPack@master/W95FA.woff2")
+    format("woff2");
+  font-display: swap;
+}
+
+:root {
+  /* ULTIMATE CROSSOVER PALETTE */
+  --matrix-green: #00ff41;
+  --neon-cyan: #00f0ff;
+  --neon-magenta: #ff00ff;
+  --ki-orange: #ff6b00;
+  --saiyan-gold: #ffd700;
+  --trunks-purple: #9d4edd;
+  --trunks-lavender: #c77dff;
+  --void-black: #050508;
+
+  /* Star Wars colors */
+  --saber-blue: #4a90d9;
+  --saber-red: #ff3333;
+  --rebel-orange: #ff7849;
+  --empire-gray: #8e9aaf;
+  --hyperspace-blue: #1a3a5c;
+  --crawl-gold: #e8c547;
+
+  /* Cel-shaded (toned down) */
+  --bl-ink: #1a1a1a;
+  --bl-outline: #000;
+
+  /* Cosmic colors - Three Body / Dune / Foundation */
+  --cosmic-blue: #1a1a4e;
+  --nebula-purple: #4a1a6b;
+  --spice-orange: #c2701a;
+  --dark-forest: #0d1f0d;
+  --starlight: #e8e8ff;
+
+  /* Holographic gradient */
+  --holo-gradient: linear-gradient(
+    135deg,
+    var(--saber-blue) 0%,
+    var(--neon-cyan) 25%,
+    var(--neon-magenta) 50%,
+    var(--trunks-purple) 75%,
+    var(--saber-red) 100%
+  );
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  overflow-x: hidden;
+  font-family: "W95FA", "Tahoma", "MS Sans Serif", sans-serif;
+  color: #fff;
+  background: var(--void-black);
+  /* Nebula clouds */
+  background-image:
+    radial-gradient(
+      ellipse at 20% 20%,
+      rgba(74, 26, 107, 0.15) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 80%,
+      rgba(26, 26, 78, 0.2) 0%,
+      transparent 45%
+    ), /* Spice glow (Dune) */
+    radial-gradient(
+      ellipse at 90% 10%,
+      rgba(194, 112, 26, 0.08) 0%,
+      transparent 35%
+    ), /* Dark forest void (Three Body) */
+    radial-gradient(
+      ellipse at 10% 90%,
+      rgba(13, 31, 13, 0.3) 0%,
+      transparent 40%
+    ), /* Existing accents */
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(244, 208, 63, 0.06) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 100% 50%,
+      rgba(0, 240, 255, 0.04) 0%,
+      transparent 40%
+    );
+  background-attachment: fixed;
+}
+
+/* VHS tracking lines - static */
+body::before {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10001;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  content: "";
+  background: linear-gradient(
+    transparent 0%,
+    rgba(255, 255, 255, 0.015) 50%,
+    transparent 100%
+  );
+  background-size: 100% 4px;
+}
+
+/* Scanlines */
+body::after {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  content: "";
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* Matrix rain - multi-colored */
+.matrix-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.rain-column {
+  position: absolute;
+  top: -100%;
+  font-family: "MS Gothic", monospace;
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--matrix-green);
+  white-space: nowrap;
+  opacity: 0.15;
+  writing-mode: vertical-rl;
+  animation: rain-fall linear infinite;
+}
+
+.rain-column:nth-child(2) {
+  color: var(--neon-cyan);
+}
+.rain-column:nth-child(3) {
+  color: var(--saber-blue);
+}
+.rain-column:nth-child(4) {
+  color: var(--neon-magenta);
+}
+.rain-column:nth-child(5) {
+  color: var(--matrix-green);
+}
+.rain-column:nth-child(6) {
+  color: var(--saber-red);
+}
+
+/* Decorative kanji */
+.kanji-deco {
+  position: fixed;
+  z-index: -1;
+  font-family: "MS Gothic", "Yu Gothic", sans-serif;
+  font-size: 180px;
+  font-weight: bold;
+  line-height: 1;
+  color: var(--saiyan-gold);
+  pointer-events: none;
+  opacity: 0.04;
+}
+
+.kanji-deco:nth-child(1) {
+  top: 5%;
+  left: 2%;
+}
+
+.kanji-deco:nth-child(2) {
+  top: 50%;
+  right: 2%;
+  color: var(--trunks-purple);
+}
+
+/* Connection status bar - STAR WARS HUD */
+.connection-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 20px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--crawl-gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(26, 58, 92, 0.9) 0%,
+    rgba(5, 5, 8, 0.95) 100%
+  );
+  border-bottom: 2px solid var(--saber-blue);
+  box-shadow: 0 0 20px rgba(74, 144, 217, 0.3);
+}
+
+.connection-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--matrix-green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--matrix-green);
+}
+
+.player-info {
+  color: var(--rebel-orange);
+}
+
+.time-coords {
+  font-family: monospace;
+  color: var(--saber-blue);
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(74, 144, 217, 0.5);
+}
+
+.container {
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 30px;
+  text-align: center;
+}
+
+/* Staggered load-in */
+.window:nth-child(1) {
+  animation: jack-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+.window:nth-child(2) {
+  animation: jack-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+.window:nth-child(3) {
+  animation: jack-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+.window:nth-child(4) {
+  animation: jack-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.65s both;
+}
+
+/* Windows - BORDERLANDS CEL-SHADED STYLE */
+.window {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 20, 25, 0.95) 0%,
+    rgba(10, 10, 15, 0.98) 100%
+  );
+  border: 3px solid var(--bl-ink);
+  box-shadow:
+    6px 6px 0 var(--bl-outline),
+    inset 0 0 30px rgba(244, 208, 63, 0.05);
+  transition: all 200ms;
+}
+
+/* Sketch lines overlay */
+.window::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.01) 2px,
+      rgba(255, 255, 255, 0.01) 4px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.01) 2px,
+      rgba(255, 255, 255, 0.01) 4px
+    );
+}
+
+.window:hover {
+  border-color: var(--saber-blue);
+  box-shadow:
+    8px 8px 0 var(--bl-outline),
+    0 0 30px rgba(74, 144, 217, 0.25),
+    inset 0 0 40px rgba(74, 144, 217, 0.05);
+  transform: translate(-2px, -2px);
+}
+
+.window-title {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--crawl-gold);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 1px 1px 0 var(--bl-outline);
+  user-select: none;
+  background: linear-gradient(
+    90deg,
+    rgba(74, 144, 217, 0.08) 0%,
+    rgba(26, 58, 92, 0.12) 50%,
+    rgba(74, 144, 217, 0.08) 100%
+  );
+  border-bottom: 2px solid var(--bl-ink);
+}
+
+.window-title-text {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.window-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.window-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 18px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 1;
+  color: var(--empire-gray);
+  cursor: pointer;
+  background: var(--bl-ink);
+  border: 1px solid var(--empire-gray);
+  box-shadow: 2px 2px 0 var(--bl-outline);
+  transition: all 100ms;
+}
+
+.window-btn:hover {
+  color: var(--bl-ink);
+  background: var(--saber-blue);
+  border-color: var(--saber-blue);
+  box-shadow: 3px 3px 0 var(--bl-outline);
+  transform: translate(-1px, -1px);
+}
+
+.window-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* Profile section */
+.profile-window {
+  text-align: center;
+}
+
+.profile-photo-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+/* Avatar - BORDERLANDS STYLE */
+.profile-photo {
+  position: relative;
+  z-index: 1;
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border: 4px solid var(--bl-ink);
+  border-radius: 50%;
+  box-shadow:
+    6px 6px 0 var(--bl-outline),
+    0 0 0 2px var(--bl-yellow);
+  filter: saturate(1.2) contrast(1.15);
+  transition: all 200ms;
+}
+
+.profile-photo:hover {
+  box-shadow:
+    8px 8px 0 var(--bl-outline),
+    0 0 0 3px var(--bl-yellow),
+    0 0 30px rgba(244, 208, 63, 0.5);
+  transform: translate(-2px, -2px);
+}
+
+.hero {
+  margin-bottom: 12px;
+}
+
+/* Name - STAR WARS CRAWL STYLE */
+.wordart {
+  position: relative;
+  display: inline-block;
+  font-size: 2.6rem;
+  font-weight: bold;
+  line-height: 1.2;
+  color: var(--crawl-gold);
+  letter-spacing: 4px;
+  text-shadow:
+    2px 2px 0 var(--bl-outline),
+    -1px -1px 0 var(--bl-outline),
+    1px -1px 0 var(--bl-outline),
+    -1px 1px 0 var(--bl-outline),
+    0 0 30px rgba(232, 197, 71, 0.4);
+}
+
+/* Japanese subtitle */
+.tagline-jp {
+  margin-top: 10px;
+  font-family: "MS Gothic", "Yu Gothic", sans-serif;
+  font-size: 14px;
+  color: var(--neon-magenta);
+  letter-spacing: 8px;
+  text-shadow: 1px 1px 0 var(--bl-outline);
+}
+
+.tagline {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--empire-gray);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* About section - HOLOCRON */
+.about-content {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.95);
+  text-align: left;
+  background: rgba(26, 58, 92, 0.15);
+  border: 1px solid rgba(74, 144, 217, 0.2);
+}
+
+/* Sword slash effect on hover */
+.about-content::before {
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 2px;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--trunks-lavender) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transform: rotate(-45deg);
+  transform-origin: center;
+  transition: opacity 0.1s;
+}
+
+.about-content:hover::before {
+  opacity: 1;
+  animation: sword-slash 0.5s ease-out;
+}
+
+.about-content p {
+  margin-bottom: 14px;
+}
+
+.about-content p:last-child {
+  margin-bottom: 0;
+}
+
+.about-content strong {
+  color: var(--crawl-gold);
+  text-shadow: 0 0 8px rgba(232, 197, 71, 0.3);
+  transition: all 150ms;
+}
+
+.about-content strong:hover {
+  color: var(--saber-blue);
+  text-shadow: 0 0 12px rgba(74, 144, 217, 0.5);
+}
+
+/* Projects grid */
+.projects-grid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 14px;
+}
+
+.project-link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 14px;
+  overflow: hidden;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  background: rgba(26, 26, 26, 0.8);
+  border: 2px solid rgba(244, 208, 63, 0.3);
+  box-shadow: 3px 3px 0 var(--bl-outline);
+  transition: all 150ms;
+}
+
+.project-link:hover {
+  border-color: var(--saber-blue);
+  box-shadow: 5px 5px 0 var(--bl-outline);
+  transform: translate(-2px, -2px);
+}
+
+/* Lightsaber edge */
+.project-link::after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  content: "";
+  background: var(--saber-blue);
+  box-shadow: 0 0 8px var(--saber-blue);
+  opacity: 0;
+  transition: opacity 150ms;
+}
+
+.project-link:hover::after {
+  opacity: 1;
+}
+
+.project-emoji {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 8px;
+  font-size: 32px;
+  transition: all 200ms;
+}
+
+.project-link:hover .project-emoji {
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+  transform: scale(1.15);
+}
+
+.project-name {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--crawl-gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 0 var(--bl-outline);
+}
+
+.project-description {
+  position: relative;
+  z-index: 1;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Social links - arcade buttons */
+.social-links {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.social-link {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--saber-blue);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0 var(--bl-outline);
+  cursor: pointer;
+  background: var(--bl-ink);
+  border: 2px solid var(--saber-blue);
+  box-shadow: 4px 4px 0 var(--bl-outline);
+  transition: all 150ms;
+}
+
+.social-link:nth-child(1) {
+  color: var(--saber-blue);
+  border-color: var(--saber-blue);
+}
+
+.social-link:nth-child(2) {
+  color: var(--trunks-lavender);
+  border-color: var(--trunks-lavender);
+}
+
+.social-link:nth-child(3) {
+  color: var(--rebel-orange);
+  border-color: var(--rebel-orange);
+}
+
+.social-link:hover {
+  box-shadow:
+    6px 6px 0 var(--bl-outline),
+    0 0 15px currentColor;
+  transform: translate(-2px, -2px);
+}
+
+.social-link:nth-child(1):hover {
+  color: var(--bl-ink);
+  background: var(--saber-blue);
+}
+
+.social-link:nth-child(2):hover {
+  color: var(--bl-ink);
+  background: var(--trunks-lavender);
+}
+
+.social-link:nth-child(3):hover {
+  color: var(--bl-ink);
+  background: var(--rebel-orange);
+}
+
+.social-link svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Status bar - STAR WARS HUD */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: rgba(26, 58, 92, 0.4);
+  border-top: 1px solid var(--saber-blue);
+}
+
+.status-item {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--empire-gray);
+}
+
+.power-level {
+  color: var(--saber-red);
+  text-shadow: 0 0 8px rgba(255, 51, 51, 0.5);
+}
+
+.status-item:first-child::after {
+  display: inline-block;
+  width: 6px;
+  height: 12px;
+  margin-left: 4px;
+  content: "";
+  background: var(--saber-blue);
+  animation: blink 1s step-end infinite;
+}
+
+/* Particles - mixed energy */
+.stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  background: var(--starlight);
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+.star:nth-child(odd) {
+  width: 2px;
+  height: 2px;
+  background: var(--starlight);
+  opacity: 0.8;
+  animation-duration: 6s;
+}
+
+.star:nth-child(3n) {
+  width: 3px;
+  height: 3px;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 4px var(--neon-cyan);
+  opacity: 0.5;
+  animation-duration: 5s;
+}
+
+.star:nth-child(5n) {
+  background: var(--spice-orange);
+  box-shadow: 0 0 3px var(--spice-orange);
+  opacity: 0.7;
+  animation-duration: 7s;
+}
+
+.star:nth-child(7n) {
+  width: 2px;
+  height: 2px;
+  background: var(--bl-yellow);
+  opacity: 0.6;
+  animation-duration: 8s;
+}
+
+/* Grid overlay - VAPORWAVE / TRON / HYPERSPACE */
+.grid-overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 50%;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, transparent 0%, rgba(74, 144, 217, 0.08) 100%),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 59px,
+      rgba(74, 144, 217, 0.25) 59px,
+      rgba(74, 144, 217, 0.25) 60px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 59px,
+      rgba(255, 0, 255, 0.15) 59px,
+      rgba(255, 0, 255, 0.15) 60px
+    );
+  opacity: 0.7;
+  transform: perspective(500px) rotateX(60deg);
+  transform-origin: bottom;
+}
+
+/* Focus styles - LIGHTSABER */
+a:focus-visible {
+  outline: 2px solid var(--saber-blue);
+  outline-offset: 4px;
+}
+
+::selection {
+  color: var(--void-black);
+  background: var(--saber-blue);
+}
+
+/* ============ ANIMATIONS ============ */
+
+@keyframes jack-in {
+  0% {
+    opacity: 0;
+    filter: blur(20px) brightness(3);
+    transform: scale(0.8) translateY(40px);
+  }
+  50% {
+    filter: blur(0) brightness(1.5);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0) brightness(1);
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes holo-bar {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes rain-fall {
+  to {
+    transform: translateY(200vh);
+  }
+}
+
+@keyframes float-particle {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.2;
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes sword-slash {
+  0% {
+    top: -100%;
+    left: -100%;
+    opacity: 1;
+  }
+  100% {
+    top: 200%;
+    left: 200%;
+    opacity: 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+
+  .wordart {
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+  }
+
+  .kanji-deco {
+    font-size: 120px;
+  }
+
+  .social-link {
+    padding: 14px 20px;
+    font-size: 13px;
+  }
+
+  .connection-bar {
+    padding: 6px 12px;
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .wordart {
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+  }
+
+  .profile-photo {
+    width: 110px;
+    height: 110px;
+  }
+
+  .social-link {
+    padding: 12px 16px;
+    font-size: 12px;
+  }
+
+  .social-link span {
+    display: none;
+  }
+
+  .kanji-deco {
+    display: none;
+  }
+
+  .connection-bar {
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+  }
+}
+
+/* Prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
