@@ -1,4 +1,4 @@
-// biome-ignore lint/performance/noNamespaceImport: <explanation>
+// biome-ignore lint/performance/noNamespaceImport: Three.js requires namespace import
 import * as THREE from "three";
 
 // ============ SCENE SETUP ============
@@ -551,7 +551,282 @@ let hyperdriveActive = false;
 let hyperdriveMultiplier = 1;
 let targetMultiplier = 1;
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
+// Ship controls state
+const shipControls = {
+  throttle: 1, // Base speed multiplier (0.5 to 2)
+  targetThrottle: 1,
+  rotationX: 0, // Pitch (up/down look)
+  rotationY: 0, // Yaw (left/right turn)
+  targetRotationX: 0,
+  targetRotationY: 0,
+  keys: {
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+  },
+};
+
+// Keyboard controls
+document.addEventListener("keydown", (e) => {
+  switch (e.code) {
+    case "ArrowUp":
+      shipControls.keys.up = true;
+      e.preventDefault();
+      break;
+    case "ArrowDown":
+      shipControls.keys.down = true;
+      e.preventDefault();
+      break;
+    case "ArrowLeft":
+      shipControls.keys.left = true;
+      e.preventDefault();
+      break;
+    case "ArrowRight":
+      shipControls.keys.right = true;
+      e.preventDefault();
+      break;
+    case "Space":
+      fireLaser();
+      e.preventDefault();
+      break;
+    default:
+      break;
+  }
+});
+
+document.addEventListener("keyup", (e) => {
+  switch (e.code) {
+    case "ArrowUp":
+      shipControls.keys.up = false;
+      break;
+    case "ArrowDown":
+      shipControls.keys.down = false;
+      break;
+    case "ArrowLeft":
+      shipControls.keys.left = false;
+      break;
+    case "ArrowRight":
+      shipControls.keys.right = false;
+      break;
+    default:
+      break;
+  }
+});
+
+// Laser system
+const lasers = [];
+let lastLaserTime = 0;
+const laserCooldown = 0.15; // seconds between shots
+
+function fireLaser() {
+  const now = clock.getElapsedTime();
+  if (now - lastLaserTime < laserCooldown) {
+    return;
+  }
+  lastLaserTime = now;
+
+  // Create laser bolt - longer and more visible
+  const laserGeo = new THREE.CylinderGeometry(0.1, 0.1, 20, 8);
+  const laserMat = new THREE.MeshBasicMaterial({
+    color: 0x00_ff_00,
+    transparent: true,
+    opacity: 1,
+  });
+  const laser = new THREE.Mesh(laserGeo, laserMat);
+
+  // Position at ship front, slightly offset based on alternating sides
+  const side = lasers.length % 2 === 0 ? -1 : 1;
+  laser.position.set(side * 1.5, -1, -15);
+  laser.rotation.x = Math.PI / 2;
+
+  // Add outer glow
+  const glowGeo = new THREE.CylinderGeometry(0.25, 0.25, 20, 8);
+  const glowMat = new THREE.MeshBasicMaterial({
+    color: 0x00_ff_00,
+    transparent: true,
+    opacity: 0.4,
+  });
+  const glow = new THREE.Mesh(glowGeo, glowMat);
+  laser.add(glow);
+
+  // Add bright core
+  const coreGeo = new THREE.CylinderGeometry(0.05, 0.05, 20, 8);
+  const coreMat = new THREE.MeshBasicMaterial({
+    color: 0xff_ff_ff,
+    transparent: true,
+    opacity: 0.8,
+  });
+  const core = new THREE.Mesh(coreGeo, coreMat);
+  laser.add(core);
+
+  // Add point light for illumination
+  const laserLight = new THREE.PointLight(0x00_ff_00, 2, 30);
+  laser.add(laserLight);
+
+  // Store velocity - slower so you can see it fly away
+  laser.userData.velocity = new THREE.Vector3(
+    shipControls.rotationY * -3,
+    shipControls.rotationX * 3,
+    -12
+  );
+
+  scene.add(laser);
+  lasers.push(laser);
+
+  // Screen flash effect
+  createLaserFlash();
+
+  // Play sound effect visually (muzzle flash)
+  createMuzzleFlash(side);
+}
+
+function createLaserFlash() {
+  const flash = document.createElement("div");
+  flash.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 80%, rgba(0, 255, 0, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 9997;
+    animation: laser-flash 0.1s ease-out forwards;
+  `;
+  document.body.appendChild(flash);
+  setTimeout(() => flash.remove(), 100);
+}
+
+function createMuzzleFlash(side) {
+  const flashGeo = new THREE.SphereGeometry(0.5, 8, 8);
+  const flashMat = new THREE.MeshBasicMaterial({
+    color: 0x00_ff_00,
+    transparent: true,
+    opacity: 0.8,
+  });
+  const flash = new THREE.Mesh(flashGeo, flashMat);
+  flash.position.set(side * 1.5, -1, -12);
+  scene.add(flash);
+
+  // Animate muzzle flash
+  let frame = 0;
+  function animateFlash() {
+    frame += 1;
+    flash.scale.multiplyScalar(1.2);
+    flash.material.opacity *= 0.7;
+    if (frame < 8) {
+      requestAnimationFrame(animateFlash);
+    } else {
+      scene.remove(flash);
+    }
+  }
+  animateFlash();
+}
+
+function updateLasers() {
+  for (let i = lasers.length - 1; i >= 0; i--) {
+    const laser = lasers[i];
+    laser.position.add(laser.userData.velocity);
+
+    // Remove if too far
+    if (laser.position.z < -1000) {
+      scene.remove(laser);
+      lasers.splice(i, 1);
+      continue;
+    }
+
+    // Check collision with asteroids
+    for (let j = asteroids.length - 1; j >= 0; j--) {
+      const asteroid = asteroids[j];
+      const distance = laser.position.distanceTo(asteroid.position);
+      if (distance < asteroid.scale.x * 3) {
+        // Hit! Create explosion
+        createExplosion(asteroid.position);
+        scene.remove(asteroid);
+        asteroids.splice(j, 1);
+        scene.remove(laser);
+        lasers.splice(i, 1);
+        break;
+      }
+    }
+
+    // Check collision with colliding asteroids
+    for (let j = collidingAsteroids.length - 1; j >= 0; j--) {
+      const asteroid = collidingAsteroids[j];
+      const distance = laser.position.distanceTo(asteroid.position);
+      if (distance < asteroid.scale.x * 3) {
+        createExplosion(asteroid.position);
+        scene.remove(asteroid);
+        collidingAsteroids.splice(j, 1);
+        scene.remove(laser);
+        lasers.splice(i, 1);
+        break;
+      }
+    }
+  }
+}
+
+function updateShipControls() {
+  // Update throttle based on up/down arrows
+  if (shipControls.keys.up) {
+    shipControls.targetThrottle = Math.min(
+      shipControls.targetThrottle + 0.02,
+      2.5
+    );
+  } else if (shipControls.keys.down) {
+    shipControls.targetThrottle = Math.max(
+      shipControls.targetThrottle - 0.02,
+      0.3
+    );
+  } else {
+    // Slowly return to base speed
+    shipControls.targetThrottle += (1 - shipControls.targetThrottle) * 0.01;
+  }
+
+  // Update rotation based on left/right arrows
+  if (shipControls.keys.left) {
+    shipControls.targetRotationY = Math.min(
+      shipControls.targetRotationY + 0.003,
+      0.15
+    );
+  } else if (shipControls.keys.right) {
+    shipControls.targetRotationY = Math.max(
+      shipControls.targetRotationY - 0.003,
+      -0.15
+    );
+  } else {
+    // Return to center
+    shipControls.targetRotationY *= 0.95;
+  }
+
+  // Smooth interpolation
+  shipControls.throttle +=
+    (shipControls.targetThrottle - shipControls.throttle) * 0.1;
+  shipControls.rotationY +=
+    (shipControls.targetRotationY - shipControls.rotationY) * 0.1;
+}
+
+// Add laser flash animation
+const laserStyle = document.createElement("style");
+laserStyle.textContent = `
+  @keyframes laser-flash {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+`;
+document.head.appendChild(laserStyle);
+
+// Controls hint dismiss
+const controlsHint = document.getElementById("controls-hint");
+function dismissControlsHint() {
+  if (controlsHint) {
+    controlsHint.classList.add("hidden");
+  }
+}
+
+// Dismiss on click anywhere or any key press
+document.addEventListener("click", dismissControlsHint);
+document.addEventListener("keydown", dismissControlsHint, { once: true });
+
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: main animation loop needs to update many systems
 function animate() {
   requestAnimationFrame(animate);
 
@@ -559,23 +834,31 @@ function animate() {
   clock.getDelta();
   const elapsed = clock.getElapsedTime();
 
+  // Update ship controls
+  updateShipControls();
+
   // Smoothly interpolate hyperdrive multiplier
   hyperdriveMultiplier += (targetMultiplier - hyperdriveMultiplier) * 0.05;
 
-  // Camera effects based on hyperdrive
+  // Combined speed multiplier (hyperdrive * throttle)
+  const totalSpeedMultiplier = hyperdriveMultiplier * shipControls.throttle;
+
+  // Camera effects based on hyperdrive and ship controls
   const shake = hyperdriveActive ? 0.3 : 0.15;
   const shakeSpeed = hyperdriveActive ? 2 : 0.3;
-  camera.position.x = Math.sin(elapsed * shakeSpeed) * shake;
+  camera.position.x =
+    Math.sin(elapsed * shakeSpeed) * shake + shipControls.rotationY * 5;
   camera.position.y = Math.cos(elapsed * shakeSpeed * 0.7) * shake * 0.7;
   camera.rotation.z =
     Math.sin(elapsed * shakeSpeed * 0.5) * (hyperdriveActive ? 0.02 : 0.005);
+  camera.rotation.y = shipControls.rotationY;
 
   // Warp streak length changes with speed
   const streakLength = 15 + (hyperdriveMultiplier - 1) * 20;
 
   // Update stars (move towards camera)
   const positions = stars.geometry.attributes.position.array;
-  const starSpeed = 1.5 * hyperdriveMultiplier;
+  const starSpeed = 1.5 * totalSpeedMultiplier;
   for (let i = 0; i < starCount; i++) {
     const i3 = i * 3;
     positions[i3 + 2] += starSpeed;
@@ -594,7 +877,7 @@ function animate() {
   const warpPositionsArray = warpLines.geometry.attributes.position.array;
   for (const streak of warpStreaks) {
     const i6 = streak.index * 6;
-    streak.z += streak.speed * hyperdriveMultiplier;
+    streak.z += streak.speed * totalSpeedMultiplier;
 
     if (streak.z > 50) {
       streak.z = -500;
@@ -618,10 +901,10 @@ function animate() {
 
   // Update asteroids
   asteroids.forEach((asteroid, index) => {
-    asteroid.position.z += asteroid.userData.speed * hyperdriveMultiplier;
-    asteroid.rotation.x += asteroid.userData.rotSpeed.x * hyperdriveMultiplier;
-    asteroid.rotation.y += asteroid.userData.rotSpeed.y * hyperdriveMultiplier;
-    asteroid.rotation.z += asteroid.userData.rotSpeed.z * hyperdriveMultiplier;
+    asteroid.position.z += asteroid.userData.speed * totalSpeedMultiplier;
+    asteroid.rotation.x += asteroid.userData.rotSpeed.x * totalSpeedMultiplier;
+    asteroid.rotation.y += asteroid.userData.rotSpeed.y * totalSpeedMultiplier;
+    asteroid.rotation.z += asteroid.userData.rotSpeed.z * totalSpeedMultiplier;
 
     if (asteroid.position.z > 50) {
       scene.remove(asteroid);
@@ -639,7 +922,7 @@ function animate() {
   alienShips.forEach((ship, index) => {
     const velocity = ship.userData.velocity
       .clone()
-      .multiplyScalar(hyperdriveMultiplier);
+      .multiplyScalar(totalSpeedMultiplier);
     ship.position.add(velocity);
 
     if (ship.position.z > 100 || Math.abs(ship.position.x) > 400) {
@@ -659,9 +942,9 @@ function animate() {
 
   // Update planets
   planets.forEach((planet, index) => {
-    planet.position.z += planet.userData.speed * hyperdriveMultiplier;
+    planet.position.z += planet.userData.speed * totalSpeedMultiplier;
     planet.children[0].rotation.y +=
-      planet.userData.rotSpeed * hyperdriveMultiplier;
+      planet.userData.rotSpeed * totalSpeedMultiplier;
 
     if (planet.position.z > 200) {
       scene.remove(planet);
@@ -680,7 +963,7 @@ function animate() {
 
   // Update nebulae (slow drift)
   for (const nebula of nebulae.children) {
-    nebula.position.z += 0.02 * hyperdriveMultiplier;
+    nebula.position.z += 0.02 * totalSpeedMultiplier;
     if (nebula.position.z > 0) {
       nebula.position.z = -2000;
     }
@@ -691,8 +974,11 @@ function animate() {
   warningLight.intensity = 0.15 + Math.sin(elapsed * 3) * 0.05;
 
   // Update colliding asteroids
-  updateCollidingAsteroids();
+  updateCollidingAsteroids(totalSpeedMultiplier);
   checkCollisionSpawn(elapsed);
+
+  // Update lasers
+  updateLasers();
 
   renderer.render(scene, camera);
 }
@@ -817,7 +1103,7 @@ const velocityValue = document.getElementById("velocity-value");
 
 function updateVelocityDisplay() {
   const baseSpeed = 0.7;
-  const currentSpeed = baseSpeed * hyperdriveMultiplier;
+  const currentSpeed = baseSpeed * hyperdriveMultiplier * shipControls.throttle;
   const displaySpeed = currentSpeed.toFixed(1);
 
   if (velocityValue) {
@@ -1011,10 +1297,10 @@ explosionStyle.textContent = `
 document.head.appendChild(explosionStyle);
 
 // Update colliding asteroids in animation loop - add this function
-function updateCollidingAsteroids() {
+function updateCollidingAsteroids(speedMultiplier) {
   for (let i = collidingAsteroids.length - 1; i >= 0; i--) {
     const asteroid = collidingAsteroids[i];
-    asteroid.position.z += asteroid.userData.speed * hyperdriveMultiplier;
+    asteroid.position.z += asteroid.userData.speed * speedMultiplier;
     asteroid.rotation.x += asteroid.userData.rotSpeed.x;
     asteroid.rotation.y += asteroid.userData.rotSpeed.y;
     asteroid.rotation.z += asteroid.userData.rotSpeed.z;

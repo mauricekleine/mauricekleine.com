@@ -91,11 +91,7 @@ body {
       rgba(255, 255, 255, 0.01) 75%,
       transparent 100%
     ), /* Edge vignette */
-    radial-gradient(
-      ellipse at center,
-      transparent 50%,
-      rgba(0, 0, 0, 0.4) 100%
-    );
+    radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
 }
 
 /* Scanlines on glass */
@@ -1127,6 +1123,186 @@ body.hud-hidden .velocity-widget {
     transform 0.5s ease;
 }
 
+/* ============ CONTROLS HINT ============ */
+.controls-hint {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 200;
+  padding: 25px 35px;
+  font-family: "Orbitron", sans-serif;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid var(--hud-cyan);
+  box-shadow:
+    0 0 40px rgba(0, 240, 255, 0.3),
+    inset 0 0 20px rgba(0, 240, 255, 0.1);
+  transform: translate(-50%, -50%);
+  animation: hint-appear 0.5s ease-out;
+}
+
+.controls-hint.hidden {
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+  transition: all 0.3s ease;
+}
+
+@keyframes hint-appear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.controls-title {
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hud-gold);
+  letter-spacing: 4px;
+  text-shadow: 0 0 10px rgba(232, 197, 71, 0.5);
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 30px;
+}
+
+.control-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.control-item:last-child {
+  grid-column: span 2;
+  justify-content: center;
+}
+
+.control-key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 45px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--hud-cyan);
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid var(--hud-cyan);
+}
+
+.control-action {
+  font-size: 11px;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+}
+
+.controls-dismiss {
+  margin-top: 20px;
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  animation: blink-dim 2s ease-in-out infinite;
+}
+
+@keyframes blink-dim {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ============ CONTROLS HINT ============ */
+.controls-hint {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  padding: 25px 35px;
+  font-family: "Orbitron", sans-serif;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid var(--hud-cyan);
+  box-shadow:
+    0 0 40px rgba(0, 240, 255, 0.3),
+    inset 0 0 30px rgba(0, 240, 255, 0.1);
+  transform: translate(-50%, -50%);
+  animation: hint-appear 0.5s ease-out;
+}
+
+.controls-hint.hidden {
+  display: none;
+}
+
+@keyframes hint-appear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.controls-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hud-gold);
+  letter-spacing: 3px;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 15px;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+}
+
+.controls-grid .key {
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--hud-cyan);
+  text-align: center;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid var(--hud-cyan);
+}
+
+.controls-dismiss {
+  margin-top: 5px;
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  animation: blink-slow 2s ease-in-out infinite;
+}
+
+@keyframes blink-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 /* ============ FOCUS STYLES ============ */
 a:focus-visible {
   outline: 2px solid var(--hud-cyan);
@@ -1167,7 +1343,8 @@ a:focus-visible {
 
   .radar-widget,
   .velocity-widget,
-  .hud-toggle {
+  .hud-toggle,
+  .controls-hint {
     display: none;
   }
 
