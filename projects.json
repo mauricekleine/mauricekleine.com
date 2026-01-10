@@ -1,0 +1,146 @@
+{
+  "projects": [
+    {
+      "name": "Mockly",
+      "url": "https://getmockly.com",
+      "tagline": "Message Conversation Mockup Tool",
+      "description": "Mockly empowers marketing teams, social media teams, creators, and filmmakers to create realistic mockups of popular messaging apps. Easily generate one-on-one or group chat conversations for platforms like WhatsApp, Facebook Messenger, Instagram, iMessage, Telegram, Slack, Signal, Snapchat, Reddit, TikTok, Tinder, WeChat, X (Twitter), and more.",
+      "features": [
+        "Create realistic chat mockups for 15+ messaging platforms",
+        "Support for one-on-one and group chat conversations",
+        "Customizable message appearance, timestamps, and profile pictures",
+        "Download mockups as images",
+        "API available for programmatic mockup generation"
+      ],
+      "useCases": [
+        "Marketing campaigns",
+        "Social media content creation",
+        "Film and video production",
+        "Storytelling and creative projects",
+        "Design prototyping"
+      ],
+      "supportedPlatforms": [
+        "WhatsApp",
+        "Discord",
+        "iMessage",
+        "Instagram",
+        "LINE",
+        "LinkedIn",
+        "Messenger",
+        "Microsoft Teams",
+        "Reddit",
+        "Signal",
+        "Slack",
+        "Snapchat",
+        "Telegram",
+        "TikTok",
+        "Tinder",
+        "WeChat",
+        "X (Twitter)"
+      ],
+      "status": "active"
+    },
+    {
+      "name": "ONESIXTYEIGHT",
+      "url": "https://onesixtyeight.life",
+      "tagline": "Upgrade Your Everyday",
+      "description": "ONESIXTYEIGHT is here to help you get more out of your 168 hours each week. The first product is a functional mushroom blend designed to sharpen focus, without the crash. Backed by research and crafted for daily rituals, it's the first step in a growing range of products built to support a clear mind and balanced body.",
+      "features": [
+        "Functional mushroom blend for focus",
+        "Coffee alternative without the crash",
+        "Research-backed formulation",
+        "Designed for daily rituals"
+      ],
+      "mission": "Help people optimize their 168 hours each week through products that support clear thinking and balanced living",
+      "status": "launching-soon"
+    },
+    {
+      "name": "Hackadam",
+      "url": "https://hackadam.nl",
+      "tagline": "Part of HACKA* NETWORK",
+      "description": "A community-run group of indie makers, coders, designers, and hardware hackers who build their own independent apps and startups, meeting up monthly in Amsterdam, The Netherlands.",
+      "schedule": {
+        "frequency": "Monthly",
+        "location": "Amsterdam, The Netherlands",
+        "agenda": [
+          "10:30am - Intros (a little about yourself + what you're working on)",
+          "12:00pm - Lunch together somewhere",
+          "04:30pm - Demos (share what you made today, or just watch)",
+          "05:00pm - Hangout!"
+        ]
+      },
+      "audience": [
+        "Indie makers",
+        "Coders",
+        "Designers",
+        "Hardware hackers",
+        "Startup founders"
+      ],
+      "status": "active"
+    },
+    {
+      "name": "NonoBench",
+      "url": "https://nonobench.com",
+      "tagline": "LLM Nonogram Puzzle Solving Benchmark",
+      "description": "Evaluate and compare how well large language models solve Nonogram (Picross) puzzles. Interactive benchmark results, visualizations, and leaderboards for AI reasoning capabilities.",
+      "methodology": {
+        "puzzleSizes": ["5x5", "10x10", "15x15"],
+        "totalPuzzles": 30,
+        "modelsEvaluated": 36,
+        "totalRuns": 1080,
+        "metrics": ["Accuracy", "Speed (time)", "Cost"]
+      },
+      "features": [
+        "Interactive benchmark results",
+        "Filter by reasoning vs non-reasoning models",
+        "Detailed statistics by model and grid size",
+        "Downloadable results",
+        "Puzzle explorer"
+      ],
+      "keyFindings": {
+        "bestOverallModel": "claude-4.5-opus-high (56.7% accuracy)",
+        "5x5Accuracy": "55.0% average",
+        "10x10Accuracy": "11.9% average",
+        "15x15Accuracy": "3.9% average"
+      },
+      "status": "active"
+    },
+    {
+      "name": "Chief",
+      "url": "https://github.com/mauricekleine/chief",
+      "tagline": "AI Coding Agent CLI Tool",
+      "description": "Chief is a CLI tool that orchestrates autonomous AI coding agents using the 'Ralph Wiggum methodology.' It leverages Claude Code to plan and execute development tasks within isolated git worktrees, automatically committing progress throughout the workflow.",
+      "features": [
+        "Isolated git worktrees for clean project separation",
+        "Autonomous task execution using Claude Code",
+        "Verification integration (linting, type-checking, tests)",
+        "Structured task management with discrete, traceable tasks",
+        "PR automation - pushes completed work and generates pull requests"
+      ],
+      "ralphWiggumMethodology": {
+        "description": "A five-phase approach to AI-assisted development",
+        "phases": [
+          "Plan - Interactive AI conversation to develop detailed implementation strategy",
+          "Break Down - Convert planning into structured, measurable tasks",
+          "Execute - Autonomous AI execution of individual tasks in sequence",
+          "Verify - Automated validation using configured verification steps",
+          "Ship - Push changes and create pull requests for review"
+        ]
+      },
+      "requirements": [
+        "Bun runtime",
+        "Claude Code CLI (authenticated)",
+        "GitHub CLI for PR creation",
+        "Git"
+      ],
+      "commands": [
+        "chief new - Initialize project with planning and task generation",
+        "chief run - Execute tasks autonomously or interactively",
+        "chief tasks list/create - Manage task workflows",
+        "chief worktrees - View or clean up project worktrees"
+      ],
+      "license": "MIT",
+      "status": "active"
+    }
+  ]
+}
