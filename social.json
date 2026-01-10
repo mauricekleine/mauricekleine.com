@@ -1,0 +1,188 @@
+{
+  "github": {
+    "url": "https://github.com/mauricekleine",
+    "name": "Maurice Kleine",
+    "username": "mauricekleine",
+    "bio": "at the gym",
+    "location": "Amsterdam, The Netherlands",
+    "email": "hey@mauricekleine.com",
+    "website": "https://mauricekleine.com",
+    "linkedIn": "in/mauricekleine",
+    "twitter": "@maurice_kleine",
+    "followers": 32,
+    "following": 69,
+    "repositories": 41,
+    "stars": 159,
+    "contributionsLastYear": 1590,
+    "organizations": ["@subthread-io", "@Generative-AI-Strategy", "@oio"],
+    "activityBreakdown": {
+      "commits": "90%",
+      "codeReview": "3%",
+      "issues": "2%",
+      "pullRequests": "5%"
+    },
+    "pinnedRepos": [
+      {
+        "name": "mauricekleine.com",
+        "language": "HTML",
+        "stars": 23,
+        "forks": 1
+      },
+      {
+        "name": "seds",
+        "language": "TypeScript",
+        "description": "The Social Education and Development Society (SEDS) is a Non-Governmental Organisation that has been actively involved in socially transforming initiatives and rural development for over 38 years"
+      }
+    ],
+    "recentContributions": [
+      "mauricekleine/mockly",
+      "subthread-io/bluetrail-ai",
+      "mauricekleine/nonogra.ms",
+      "and 38 other repositories"
+    ]
+  },
+  "linkedin": {
+    "url": "https://linkedin.com/in/mauricekleine",
+    "name": "Maurice Kleine",
+    "headline": "AI Workflow Automation Consultant | Helping SMEs Save Time & Cut Costs | 14+ Years Building Software",
+    "location": "Amsterdam, North Holland, Netherlands",
+    "website": "https://www.mauricekleine.com",
+    "followers": 1492,
+    "connections": "500+",
+    "education": "University of Groningen",
+    "currentCompany": "Generative AI Strategy",
+    "about": {
+      "summary": "I help SMEs unlock time and efficiency by building AI-powered automations that streamline internal workflows and processes.",
+      "background": "My background isn't a straight line. I started out studying psychology, but switched to technology when I realized I wanted something more concrete and impactful. What began as a late start in coding quickly turned into a passion for building systems that make life and business run smoother.",
+      "earlyCareer": "While at university, I built a logistics system out of frustration with how data was handled at my part-time job. Six years later, I sold it, my first (small but proud) exit.",
+      "experience": "From there, I worked across startups and scale-ups, wearing many hats: frontend engineer, backend engineer, product owner, and eventually engineering manager leading teams of developers.",
+      "philosophy": "Along the way, I learned one core truth: the real value of technology lies in solving everyday problems for real people.",
+      "recentWork": "In 2023, I founded Subthread, where we built dozens of AI-powered products ranging from chatbots to recruitment pipelines to consumer apps. That experience opened my eyes to just how powerful AI can be for businesses of all sizes, not just tech companies.",
+      "callToAction": "Curious about how AI could work in your business? Feel free to send me a DM, I'd love to explore ideas with you."
+    },
+    "experience": [
+      {
+        "title": "AI Implementation Engineer",
+        "company": "Generative AI Strategy",
+        "type": "Part-time",
+        "period": "Oct 2025 - Present",
+        "duration": "4 mos",
+        "location": "Amsterdam, North Holland, Netherlands"
+      },
+      {
+        "title": "Founder",
+        "company": "ONESIXTYEIGHT",
+        "period": "Apr 2025 - Present",
+        "duration": "10 mos",
+        "location": "Amsterdam, North Holland, Netherlands",
+        "description": "ONESIXTYEIGHT is here to help you get more out of your 168 hours each week."
+      },
+      {
+        "title": "Freelance AI Engineer",
+        "company": "Maurice Kleine",
+        "type": "Freelance",
+        "period": "Aug 2013 - Present",
+        "duration": "12 yrs 6 mos",
+        "location": "Amsterdam, North Holland, Netherlands",
+        "description": "A selection of the companies I've worked with..."
+      },
+      {
+        "title": "Co-Founder",
+        "company": "Subthread",
+        "type": "Full-time",
+        "period": "Oct 2023 - Oct 2025",
+        "duration": "2 yrs 1 mo",
+        "location": "Amsterdam, North Holland, Netherlands",
+        "description": "We love building software for the web - with over a decade of experience in building software, we have backgrounds in software engineering, product management and technical leadership."
+      },
+      {
+        "title": "Senior Software Engineer",
+        "company": "uButler",
+        "duration": "1 yr 1 mo",
+        "location": "Amsterdam, North Holland, Netherlands"
+      }
+    ],
+    "skills": ["Large Language Models (LLM)", "LangChain", "+17 skills"],
+    "featuredPosts": [
+      "I went viral on X: from 105 followers to getting featured on...",
+      "We reached 1.000.000+ people in one week across X and Redd...",
+      "My sister suffered for 9 months. ChatGPT diagnosed her in 5..."
+    ]
+  },
+  "twitter": {
+    "url": "https://x.com/maurice_kleine",
+    "displayName": "Maurice Kleine",
+    "handle": "@maurice_kleine",
+    "verified": true,
+    "posts": 2310,
+    "following": 402,
+    "followers": 1714,
+    "location": "Amsterdam",
+    "website": "mauricekleine.com",
+    "joined": "August 2024",
+    "bio": "build it till you make it",
+    "bioLinks": [
+      "getmockly.com",
+      "hackadam.nl",
+      "onesixtyeight.life",
+      "nonobench.com",
+      "chief.mauricekleine.com"
+    ],
+    "recentTweets": [
+      {
+        "content": "i can't believe this is legal",
+        "context": "About Mockly - pinned tweet",
+        "engagement": {
+          "likes": "2.5K",
+          "retweets": 175,
+          "views": "477K"
+        }
+      },
+      {
+        "content": "i am so shadowbanned for this",
+        "context": "Reposting own viral content"
+      },
+      {
+        "content": "i'm an idiot - someone else posted about the platform i built and it hit 1M (!) views... people kept asking for the link, so i replied with it...",
+        "context": "Self-deprecating about missing viral opportunity"
+      },
+      {
+        "content": "y'all didn't know about this?",
+        "context": "Sharing X settings tip about swipe gestures"
+      },
+      {
+        "content": "been non-stop ralphing this past week so i built a small CLI called `chief`",
+        "context": "Introducing Chief CLI tool with Ralph Wiggum methodology"
+      },
+      {
+        "content": "it made Claude-coding way less chaotic for me, might be useful to others",
+        "context": "Sharing Chief GitHub repo"
+      },
+      {
+        "content": "mockly now has an official API! it support all features from the ui and returns a base 64 image",
+        "context": "Product update for Mockly"
+      }
+    ],
+    "voiceAndStyle": {
+      "tone": "Casual, lowercase, conversational",
+      "humor": "Self-deprecating ('i'm an idiot')",
+      "emojiUsage": "Sparingly used",
+      "focus": "Product-focused but playful",
+      "technical": "Technical but accessible",
+      "activity": "Active builder - shares what he's working on",
+      "characteristics": [
+        "Uses lowercase for casual feel",
+        "Short, punchy statements",
+        "Celebrates wins without being boastful",
+        "Shares failures and learnings openly",
+        "Engages with community",
+        "Promotes own products naturally through use cases"
+      ]
+    }
+  },
+  "reddit": {
+    "url": "https://reddit.com/user/mauricekleine",
+    "status": "Unable to access - site blocked by browser automation restrictions",
+    "note": "Reddit profile data could not be gathered due to access restrictions"
+  }
+}
