@@ -6,19 +6,11 @@
   "lint-staged": {
     "package.json": [
       "bun x sort-package-json"
-    ],
-    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
-      "bun x ultracite fix"
     ]
   },
-  "dependencies": {
-    "three": "^0.181.2"
-  },
   "devDependencies": {
-    "@biomejs/biome": "~2.3.8",
     "husky": "~9.1.7",
     "lint-staged": "~16.2.7",
-    "sort-package-json": "~3.5.0",
-    "ultracite": "~6.3.8"
+    "sort-package-json": "~3.5.0"
   }
 }
