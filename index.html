@@ -1,327 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maurice Kleine</title>
     <meta
       name="description"
-      content="I build small internet products, AI workflows, and communities. Creator of Mockly, ONESIXTYEIGHT, Hackadam — and always building the next experiment."
-    />
-    <meta name="theme-color" content="#030305" />
-    <meta name="robots" content="index,follow" />
-    <meta name="color-scheme" content="dark" />
-    <link rel="canonical" href="https://mauricekleine.com/" />
+      content="I build small internet products, AI workflows, and communities."
+    >
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://mauricekleine.com/">
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Maurice Kleine" />
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Maurice Kleine">
     <meta
       property="og:description"
-      content="I build small internet products, AI workflows, and communities. Shipping fast, learning in public, and stacking tiny wins."
-    />
-    <meta property="og:image" content="/maurice.png" />
-    <meta property="og:image:alt" content="Portrait of Maurice Kleine" />
-    <meta property="og:url" content="https://mauricekleine.com/" />
+      content="I build small internet products, AI workflows, and communities."
+    >
+    <meta property="og:image" content="/maurice.png">
+    <meta property="og:image:alt" content="Portrait of Maurice Kleine">
+    <meta property="og:url" content="https://mauricekleine.com/">
 
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Maurice Kleine" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Maurice Kleine">
     <meta
       name="twitter:description"
-      content="I build small internet products, AI workflows, and communities. Shipping fast, learning in public, and stacking tiny wins."
-    />
-    <meta name="twitter:image" content="/maurice.png" />
+      content="I build small internet products, AI workflows, and communities."
+    >
+    <meta name="twitter:image" content="/maurice.png">
 
-    <!-- Icons & preloads -->
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="apple-touch-icon" href="/maurice.png" />
-    <link rel="preload" as="image" href="/maurice.png" fetchpriority="high" />
+    <!-- Icons -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="/maurice.png">
 
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <!-- Three.js Space Canvas -->
-    <canvas id="space-canvas"></canvas>
+    <main>
+      <h1>Maurice Kleine</h1>
+      <p>I build small internet products, AI workflows, and communities.</p>
 
-    <!-- Cockpit Glass Reflection Overlay -->
-    <div class="cockpit-glass" aria-hidden="true"></div>
+      <h2>Projects</h2>
+      <ul>
+        <li>
+          <a href="https://github.com/mauricekleine/chief">Chief</a> -
+          AI-powered autonomous coding agent
+        </li>
+        <li><a href="https://getmockly.com">Mockly</a> - Mock chat apps</li>
+        <li>
+          <a href="https://onesixtyeight.life">OneSixtyEight</a> - Coffee
+          alternative
+        </li>
+        <li>
+          <a href="https://hackadam.nl">Hackadam</a> - Hacker meetup in
+          Amsterdam
+        </li>
+      </ul>
 
-    <!-- HUD Connection Bar -->
-    <div class="connection-bar" aria-hidden="true">
-      <div class="connection-status">
-        <span class="status-dot"></span>
-        <span>OASIS CONNECTION ESTABLISHED</span>
-      </div>
-      <div class="time-coords" id="space-coords"></div>
-      <script>
-        "use strict";
-        function randomTimeline() {
-          const letters = "αβγδεζηθικλμνξοπρστυφχψω";
-          const letter = letters[Math.floor(Math.random() * letters.length)];
-          const num = Math.floor(Math.random() * 990) + 10;
-          return `${letter}-${num}`;
-        }
-        function randomLocation() {
-          const locations = [
-            "TERMINUS",
-            "TRANTOR",
-            "ARRAKIS",
-            "TRISOLARIS",
-            "CALADAN",
-            "GIEDI PRIME",
-            "SELDON PRIME",
-          ];
-          return locations[Math.floor(Math.random() * locations.length)];
-        }
-        function randomCoord() {
-          const ly = Math.floor(Math.random() * 9000 + 1000);
-          return `${randomLocation()} // ${ly} LY // TIMELINE: ${randomTimeline()}`;
-        }
-        document.getElementById("space-coords").textContent = randomCoord();
-      </script>
-      <div class="player-info">PILOT :: MAURICE.EXE</div>
-    </div>
-
-    <!-- Cockpit Frame Overlay -->
-    <div class="cockpit-frame" aria-hidden="true">
-      <div class="frame-top"></div>
-      <div class="frame-bottom"></div>
-      <div class="frame-left"></div>
-      <div class="frame-right"></div>
-      <div class="frame-corner frame-corner-tl"></div>
-      <div class="frame-corner frame-corner-tr"></div>
-      <div class="frame-corner frame-corner-bl"></div>
-      <div class="frame-corner frame-corner-br"></div>
-    </div>
-
-    <!-- Dashboard Container -->
-    <main class="dashboard" role="main">
-      <!-- Profile Panel - Center Top -->
-      <div class="panel panel-profile">
-        <div class="panel-header">
-          <div class="panel-indicator"></div>
-          <span class="panel-title">PILOT_PROFILE.sys</span>
-          <div class="panel-controls">
-            <span class="panel-btn">−</span>
-            <span class="panel-btn">□</span>
-            <span class="panel-btn">×</span>
-          </div>
-        </div>
-        <div class="panel-content">
-          <div class="profile-photo-wrapper">
-            <div class="photo-scanline"></div>
-            <img
-              src="./maurice.png"
-              alt="Maurice Kleine"
-              class="profile-photo"
-            />
-            <div class="photo-ring"></div>
-          </div>
-          <div class="hero">
-            <h1
-              class="pilot-name"
-              id="hyperdrive-trigger"
-              data-text="MAURICE KLEINE"
-              title="Click to engage hyperdrive!"
-            >
-              MAURICE KLEINE
-            </h1>
-          </div>
-          <p class="tagline-jp">宇宙の探検家</p>
-          <p class="tagline">Builder of small internet things</p>
-        </div>
-        <div class="panel-glow"></div>
-      </div>
-
-      <!-- Mission Log Panel - Right Top -->
-      <div class="panel panel-log">
-        <div class="panel-header">
-          <div class="panel-indicator indicator-warning"></div>
-          <span class="panel-title">MISSION_LOG.dat</span>
-          <div class="panel-controls">
-            <span class="panel-btn">−</span>
-            <span class="panel-btn">□</span>
-            <span class="panel-btn">×</span>
-          </div>
-        </div>
-        <div class="panel-content log-content">
-          <div class="log-entry">
-            <span class="log-prefix">&gt;</span>
-            <p>
-              I build small internet products, AI workflows, and communities.
-            </p>
-          </div>
-          <div class="log-entry">
-            <span class="log-prefix">&gt;</span>
-            <p>
-              Shipping fast, learning in public, and stacking tiny wins. Creator
-              of <strong>Mockly</strong>, <strong>ONESIXTYEIGHT</strong>,
-              <strong>Hackadam</strong>— and always building the next
-              experiment.
-            </p>
-          </div>
-          <div class="log-cursor">_</div>
-        </div>
-        <div class="panel-glow"></div>
-      </div>
-
-      <!-- Inventory Panel - Left Bottom -->
-      <div class="panel panel-inventory">
-        <div class="panel-header">
-          <div class="panel-indicator indicator-active"></div>
-          <span class="panel-title">CARGO_MANIFEST.exe</span>
-          <div class="panel-controls">
-            <span class="panel-btn">−</span>
-            <span class="panel-btn">□</span>
-            <span class="panel-btn">×</span>
-          </div>
-        </div>
-        <section class="panel-content projects-grid" aria-label="Projects">
-          <a
-            href="https://getmockly.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="cargo-item"
-          >
-            <div class="cargo-icon">💬</div>
-            <div class="cargo-info">
-              <div class="cargo-name">Mockly</div>
-              <div class="cargo-desc">Mock chat apps</div>
-            </div>
-            <div class="cargo-status">ACTIVE</div>
-          </a>
-
-          <a
-            href="https://onesixtyeight.life"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="cargo-item"
-          >
-            <div class="cargo-icon">🍄</div>
-            <div class="cargo-info">
-              <div class="cargo-name">OneSixtyEight</div>
-              <div class="cargo-desc">Coffee alternative</div>
-            </div>
-            <div class="cargo-status">ACTIVE</div>
-          </a>
-
-          <a
-            href="https://hackadam.nl"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="cargo-item"
-          >
-            <div class="cargo-icon">🌍</div>
-            <div class="cargo-info">
-              <div class="cargo-name">Hackadam</div>
-              <div class="cargo-desc">Hacker meetup in AMS</div>
-            </div>
-            <div class="cargo-status">ACTIVE</div>
-          </a>
-        </section>
-        <div class="panel-footer">
-          <span class="footer-stat">▶ 3 ITEMS LOADED</span>
-          <span class="footer-stat power-level">戦闘力: 9001</span>
-        </div>
-        <div class="panel-glow"></div>
-      </div>
-
-      <!-- Navigation Panel - Right Bottom -->
-      <div class="panel panel-nav">
-        <div class="panel-header">
-          <div class="panel-indicator indicator-nav"></div>
-          <span class="panel-title">HYPERJUMP.nav</span>
-          <div class="panel-controls">
-            <span class="panel-btn">−</span>
-            <span class="panel-btn">□</span>
-            <span class="panel-btn">×</span>
-          </div>
-        </div>
-        <nav class="panel-content nav-links" aria-label="Social links">
-          <a
-            href="https://www.linkedin.com/in/mauricekleine/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="nav-link nav-linkedin"
-            aria-label="LinkedIn"
-          >
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
-              />
-            </svg>
-            <span>LinkedIn</span>
-            <div class="nav-arrow">→</div>
-          </a>
-
-          <a
-            href="https://github.com/mauricekleine/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="nav-link nav-github"
-            aria-label="GitHub"
-          >
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
-              />
-            </svg>
-            <span>GitHub</span>
-            <div class="nav-arrow">→</div>
-          </a>
-
-          <a
-            href="https://x.com/maurice_kleine"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="nav-link nav-twitter"
-            aria-label="Twitter/X"
-          >
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-              />
-            </svg>
-            <span>Twitter</span>
-            <div class="nav-arrow">→</div>
-          </a>
-        </nav>
-        <div class="panel-glow"></div>
-      </div>
+      <h2>Links</h2>
+      <ul>
+        <li><a href="https://github.com/mauricekleine">GitHub</a></li>
+        <li>
+          <a href="https://www.linkedin.com/in/mauricekleine/">LinkedIn</a>
+        </li>
+        <li><a href="https://x.com/maurice_kleine">Twitter/X</a></li>
+        <li><a href="https://www.reddit.com/user/mauricekleine/">Reddit</a></li>
+      </ul>
     </main>
-
-    <!-- Radar/Scanner Widget -->
-    <div class="radar-widget" aria-hidden="true">
-      <div class="radar-sweep"></div>
-      <div class="radar-grid"></div>
-      <div class="radar-blips" id="radar-blips"></div>
-      <div class="radar-center"></div>
-    </div>
-
-    <!-- Speed/Velocity Indicator -->
-    <div class="velocity-widget" aria-hidden="true">
-      <div class="velocity-label">VELOCITY</div>
-      <div class="velocity-bar">
-        <div class="velocity-fill" id="velocity-fill"></div>
-      </div>
-      <div class="velocity-value" id="velocity-value">0.7c</div>
-    </div>
-
-    <!-- Toggle HUD Button -->
-    <button class="hud-toggle" id="hud-toggle" aria-label="Toggle HUD panels">
-      <span class="hud-toggle-icon">◱</span>
-      <span class="hud-toggle-text">HIDE HUD</span>
-    </button>
-
-    <!-- Three.js Module -->
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
-        }
-      }
-    </script>
-    <script type="module" src="main.js"></script>
   </body>
 </html>
