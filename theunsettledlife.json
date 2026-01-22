@@ -1,0 +1,93 @@
+{
+  "source": "theunsettledlife.com",
+  "blog_name": "The Unsettled Life",
+  "author": "Maurice Kleine",
+  "tagline": "Travel philosophy and living abroad",
+  "origin": "Netherlands (Dutch)",
+  "lived_in": ["Netherlands", "India (travel)", "Czech Republic (Prague)", "Balkans (travel)"],
+  "philosophy": {
+    "core_mission": "To have the biggest comfort zone possible by continuously pushing boundaries",
+    "key_beliefs": [
+      "Learning develops new perspectives, not just new information",
+      "Life is a series of experiments - even difficult ones are worth the effort if you keep learning",
+      "Travel extends your comfort zone and changes your subjective reality",
+      "Observe without judging - extract what aligns with your values",
+      "Growth comes from challenging your own boundaries",
+      "Perspective changes how you perceive things",
+      "Becoming a better person tomorrow through experiences today"
+    ],
+    "on_comfort_zones": "Comfort zone is both physical and mental space where you feel comfortable. Extending it requires stepping outside, but being outside too long without returning can be mentally taxing.",
+    "on_experiments": "Any experiment is worth the effort as long as you keep learning. Just because an experiment didn't result in a happier life doesn't mean it failed."
+  },
+  "lifestyle": {
+    "type": "Digital nomad / expat lifestyle",
+    "approach": "Treating life as a series of experiments",
+    "values": [
+      "Continuous learning and growth",
+      "Family and friends importance",
+      "Honesty and authenticity",
+      "Mental health awareness",
+      "Sustainable living (waste-free living mentioned)"
+    ],
+    "experiences": [
+      "Lived abroad in Prague, Czech Republic",
+      "Travelled to India for extended trip (volunteered with SEDS)",
+      "Travelled to Canada, Australia, Balkans",
+      "Originally from Netherlands"
+    ]
+  },
+  "writing_style": {
+    "tone": [
+      "Honest and vulnerable",
+      "Reflective and introspective",
+      "Conversational and personal",
+      "Self-deprecating humor (e.g., 'PADAM TSS' joke, 'still here b*tches!')",
+      "Direct and unpretentious"
+    ],
+    "characteristics": [
+      "Uses personal anecdotes to illustrate points",
+      "Acknowledges struggles openly (anxiety, panic attacks)",
+      "Balances serious topics with lighthearted moments",
+      "Avoids judging others or situations",
+      "Philosophical but accessible",
+      "First-person narrative",
+      "Encourages readers at the end of posts"
+    ],
+    "vocabulary": "Casual, accessible, avoids jargon, uses phrases like 'What-ifs', 'downward spiralling', 'milestone thinker'",
+    "structure": "Long-form personal essays, introspective, builds narrative around personal experiences"
+  },
+  "mental_health": {
+    "openly_discusses": true,
+    "topics": [
+      "Anxiety",
+      "Panic attacks",
+      "Mental health challenges of living abroad",
+      "Importance of mental safe spaces"
+    ],
+    "perspective": "Accepts anxiety as part of who he is, sees it as a challenge that has taught him valuable lessons about himself, Buddhism, humility, and helping others"
+  },
+  "articles_reviewed": [
+    {
+      "title": "Why I travel",
+      "date": "15 April 2019",
+      "theme": "Travel as a means to extend comfort zone and gain new perspectives"
+    },
+    {
+      "title": "On Comfort Zones",
+      "date": "23 July 2019",
+      "theme": "Deep reflection on comfort zones, mental health while living abroad in Prague"
+    },
+    {
+      "title": "The one where I open up about my anxiety",
+      "date": "14 March 2019",
+      "theme": "Honest discussion of anxiety and panic attacks, wanting to paint a more complete picture"
+    }
+  ],
+  "key_quotes_paraphrased": [
+    "My main goal in life is to have the biggest comfort zone possible",
+    "Life is a series of experiments",
+    "Observe and extract what aligns closest with my values",
+    "I've accepted anxiety as part of the person I am",
+    "As long as I keep learning, any experiment is worth the effort"
+  ]
+}
