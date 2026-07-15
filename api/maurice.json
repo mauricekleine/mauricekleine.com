@@ -1,0 +1,33 @@
+{
+  "name": "Maurice Kleine",
+  "handle": "mauricekleine",
+  "tagline": "i build small internet things and sometimes they work",
+  "motto": "build it till you make it",
+  "location": "Amsterdam, NL",
+  "timezone": "Europe/Amsterdam",
+  "role": "lead ai engineer",
+  "company": {
+    "name": "Waimakers",
+    "url": "https://waimakers.com"
+  },
+  "years_building_software": "14+",
+  "background": [
+    "started in psychology, switched to tech",
+    "frontend, backend, product, engineering management",
+    "co-founded subthread (2023-2025), an ai product studio",
+    "runs hackadam, a monthly indie maker meetup in amsterdam"
+  ],
+  "email": "hey@mauricekleine.com",
+  "links": {
+    "website": "https://www.mauricekleine.com",
+    "github": "https://github.com/mauricekleine",
+    "linkedin": "https://www.linkedin.com/in/mauricekleine/",
+    "x": "https://x.com/mauricekleine",
+    "reddit": "https://www.reddit.com/user/mauricekleine/"
+  },
+  "markdown_mirrors": [
+    "https://www.mauricekleine.com/index.md",
+    "https://www.mauricekleine.com/about.md"
+  ],
+  "note": "yes, a personal site with an api. it's static json, but so is most of the internet if you squint"
+}
