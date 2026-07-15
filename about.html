@@ -51,13 +51,16 @@
 
     <main>
       <header class="hero">
-        <img
-          class="portrait"
-          src="maurice.png"
-          alt="Portrait of Maurice Kleine"
-          width="96"
-          height="96"
-        />
+        <span class="portrait-wrap">
+          <img
+            class="portrait"
+            src="maurice.png"
+            alt="Portrait of Maurice Kleine"
+            width="96"
+            height="96"
+          />
+          <span class="moon" aria-hidden="true"></span>
+        </span>
         <h1>maurice kleine</h1>
         <p class="tagline">build it till you make it</p>
         <p class="hero-meta"><a href="/">← back to home</a></p>
@@ -95,7 +98,7 @@
         </p>
         <p>current side quests:</p>
         <ul class="waypoints">
-          <li>
+          <li data-constellation="mockly">
             <span class="glyph" aria-hidden="true">✦</span>
             <div>
               <a href="https://getmockly.com">mockly</a>
@@ -105,7 +108,7 @@
               </p>
             </div>
           </li>
-          <li>
+          <li data-constellation="fluncle">
             <span class="glyph" aria-hidden="true">✦</span>
             <div>
               <a href="https://www.fluncle.com">fluncle</a>
@@ -115,7 +118,7 @@
               </p>
             </div>
           </li>
-          <li>
+          <li data-constellation="hackadam">
             <span class="glyph" aria-hidden="true">✦</span>
             <div>
               <a href="https://hackadam.nl">hackadam</a>
@@ -125,7 +128,7 @@
               </p>
             </div>
           </li>
-          <li>
+          <li data-constellation="nonobench">
             <span class="glyph" aria-hidden="true">✦</span>
             <div>
               <a href="https://nonobench.com">nonobench</a>
