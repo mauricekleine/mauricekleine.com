@@ -455,7 +455,7 @@
       "hand-written html, css, and one canvas. no build step, no framework.\n" +
       'secrets: type "dnb" · click the sky · click the portrait · hover a side quest\n' +
       "source: https://github.com/mauricekleine/mauricekleine.com\n" +
-      "for robots: https://mauricekleine.com/llms.txt\n",
+      "for robots: https://www.mauricekleine.com/llms.txt\n",
     CONSOLE_EMBER,
     CONSOLE_DIM
   );

@@ -42,6 +42,19 @@ Single centered column, max-width 42rem, generous vertical rhythm (clamp-based s
 - `prefers-reduced-motion: reduce`: canvas renders one static frame, no animation, no parallax.
 - Content: single soft fade-up on load for the hero only; sections are visible by default (no scroll-gated reveals).
 
+## Delight systems
+
+Deliberately overengineered details, all reduced-motion safe and zero-dependency:
+
+- **Constellations**: each side quest owns a shape in the side sky (mockly: chat bubble, fluncle: waveform, hackadam: clubhouse, nonobench: nonogram grid). Idle at alpha 0.14; hover/focus on a `[data-constellation]` waypoint reveals lines + a Fragment Mono label. Auto-disabled when the side margin is under ~150px.
+- **Wish mechanic**: clicking empty sky spawns a meteor from the click point; first wish logs to console.
+- **Portrait eclipse**: clicking the portrait runs a 1.5s moon transit + corona flare (`.portrait-wrap.eclipsing`).
+- **Graveyard afterlife**: dead ✧ glyphs reignite ember on hover; an ambient supernova flares a random glyph every 14–32s (skipped when tab hidden).
+- **"dnb" easter egg**: typing it pulses all stars at 174bpm (fluncle's tempo) for 16 beats.
+- **Console + view-source easter eggs**: styled ASCII star map, secrets list, llms.txt pointer; HTML comment greets view-source readers.
+- **Footer status line**: blinking ember dot + `status: operational · sleep: degraded · ideas: backlogged`.
+- **404.html**: "lost in space" page on the same system, noindex.
+
 ## Assets
 
 - `maurice.png` portrait, `favicon.ico` (keep).
