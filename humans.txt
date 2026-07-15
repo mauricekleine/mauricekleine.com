@@ -1,0 +1,20 @@
+/* TEAM */
+  builder: maurice kleine
+  role: lead ai engineer at waimakers by day, indie hacker after dinner
+  contact: hey@mauricekleine.com
+  github: @mauricekleine
+  x: @mauricekleine
+  location: amsterdam, nl
+
+/* THANKS */
+  everyone who shows up to hackadam
+  the 2022 version of me who had the star field idea. only took four years
+
+/* SITE */
+  last update: 2026/07/15
+  language: english (lowercase)
+  doctype: html5
+  standards: hand-written html, css, and js. no framework, no build step
+  components: phosphor icons (inline svg), bricolage grotesque + fragment mono
+  software: a text editor and stubbornness
+  note: agents get their own files too. see /llms.txt and /api/

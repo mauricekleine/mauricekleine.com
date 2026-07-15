@@ -1,0 +1,23 @@
+# cloudflare pages headers. if hosting ignores this file, it's harmless.
+
+/
+  Link: </.well-known/api-catalog>; rel="api-catalog"
+  Link: </llms.txt>; rel="llms-txt"
+  Link: </index.md>; rel="alternate"; type="text/markdown"
+
+/index.html
+  Link: </.well-known/api-catalog>; rel="api-catalog"
+  Link: </llms.txt>; rel="llms-txt"
+  Link: </index.md>; rel="alternate"; type="text/markdown"
+
+/about.html
+  Link: </about.md>; rel="alternate"; type="text/markdown"
+
+/.well-known/api-catalog
+  Content-Type: application/linkset+json
+
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
