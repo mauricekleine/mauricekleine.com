@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>og</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Fragment+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1200px; height: 630px; overflow: hidden; }
+      body {
+        position: relative;
+        font-family: "Bricolage Grotesque", sans-serif;
+        color: oklch(94% 0.01 85);
+        background-color: oklch(16% 0.035 275);
+        background-image:
+          radial-gradient(ellipse 70% 60% at 12% -8%, oklch(45% 0.09 300 / 0.16), transparent 60%),
+          radial-gradient(ellipse 55% 50% at 92% 15%, oklch(55% 0.11 55 / 0.09), transparent 65%),
+          linear-gradient(to bottom, oklch(17% 0.035 275), oklch(13% 0.03 280));
+      }
+      canvas { position: absolute; inset: 0; }
+      .content {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 0;
+      }
+      .portrait {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        filter: grayscale(15%);
+        box-shadow:
+          0 0 0 2px oklch(75% 0.13 55 / 0.45),
+          0 0 0 9px oklch(75% 0.13 55 / 0.09),
+          0 0 70px oklch(75% 0.13 55 / 0.22);
+        margin-bottom: 34px;
+      }
+      h1 {
+        font-size: 84px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1;
+        margin-bottom: 22px;
+      }
+      .tagline {
+        font-size: 33px;
+        font-weight: 400;
+        color: oklch(78% 0.02 275);
+        line-height: 1.42;
+      }
+      .meta {
+        font-family: "Fragment Mono", monospace;
+        font-size: 19px;
+        color: oklch(66% 0.015 275);
+        letter-spacing: 0.05em;
+        margin-top: 30px;
+      }
+      .meta .dot { color: oklch(75% 0.13 55); }
+    </style>
+  </head>
+  <body>
+    <canvas id="sky" width="1200" height="630"></canvas>
+    <div class="content">
+      <img class="portrait" src="maurice.png" alt="" />
+      <h1>maurice kleine</h1>
+      <p class="tagline">i build small internet things<br />and sometimes they work</p>
+      <p class="meta">amsterdam, nl <span class="dot">&middot;</span> mauricekleine.com</p>
+    </div>
+    <script>
+      document.fonts.ready.then(() => {
+      const ctx = document.getElementById("sky").getContext("2d");
+      const W = 1200, H = 630;
+      // seeded prng so renders are reproducible
+      let s = 20260716;
+      const rnd = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
+
+      const EMBER = "242, 178, 118";
+      const EMBER_BRIGHT = "247, 205, 160";
+
+      // stars
+      for (let i = 0; i < 190; i++) {
+        const x = rnd() * W, y = rnd() * H;
+        // keep the very center a bit clearer for the text
+        const cx = Math.abs(x - 600) / 600, cy = Math.abs(y - 340) / 340;
+        if (cx < 0.45 && cy < 0.55 && rnd() < 0.65) continue;
+        const r = 0.5 + Math.pow(rnd(), 2) * 1.5;
+        const a = 0.25 + rnd() * 0.6;
+        const c = rnd();
+        const col = c < 0.8 ? "236,236,246" : c < 0.93 ? EMBER : "170,190,255";
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${col}, ${a})`;
+        ctx.fill();
+        if (r > 1.3) {
+          ctx.beginPath();
+          ctx.arc(x, y, r * 3, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${col}, ${a * 0.09})`;
+          ctx.fill();
+        }
+      }
+
+      // constellations from the site: fluncle waveform (right), mockly bubble (left)
+      function constellation(pts, lines, ox, oy, alpha, label, lx, ly) {
+        ctx.strokeStyle = `rgba(${EMBER}, ${alpha * 0.5})`;
+        ctx.lineWidth = 1.1;
+        for (const [a, b] of lines) {
+          ctx.beginPath();
+          ctx.moveTo(ox + pts[a][0], oy + pts[a][1]);
+          ctx.lineTo(ox + pts[b][0], oy + pts[b][1]);
+          ctx.stroke();
+        }
+        for (const [px, py] of pts) {
+          ctx.beginPath();
+          ctx.arc(ox + px, oy + py, 2.1, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${EMBER_BRIGHT}, ${alpha})`;
+          ctx.fill();
+        }
+        if (label) {
+          ctx.font = '15px "Fragment Mono", monospace';
+          ctx.textAlign = "center";
+          ctx.fillStyle = `rgba(${EMBER_BRIGHT}, ${alpha * 0.85})`;
+          ctx.fillText(label, ox + lx, oy + ly);
+        }
+      }
+      const wave = { pts: [[0,42],[30,11],[52,56],[77,0],[99,48],[126,20]], lines: [[0,1],[1,2],[2,3],[3,4],[4,5]] };
+      const bubble = { pts: [[0,0],[86,7],[79,55],[36,50],[19,74],[5,48]], lines: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,0]] };
+      const house = { pts: [[0,44],[0,17],[29,0],[58,17],[58,44]], lines: [[0,1],[1,2],[2,3],[3,4],[4,0]] };
+      const grid = { pts: [[0,0],[26,0],[52,0],[52,26],[52,52],[26,52],[0,52],[0,26]], lines: [[0,2],[2,4],[4,6],[6,0],[1,5],[7,3]] };
+      constellation(wave.pts, wave.lines, 985, 110, 0.75, "fluncle", 63, 90);
+      constellation(bubble.pts, bubble.lines, 95, 400, 0.75, "mockly", 43, 112);
+      constellation(house.pts, house.lines, 130, 105, 0.5, null);
+      constellation(grid.pts, grid.lines, 1010, 430, 0.5, null);
+
+      // one meteor, top left, heading down-left
+      const mx = 420, my = 78;
+      const grad = ctx.createLinearGradient(mx + 130, my - 46, mx, my);
+      grad.addColorStop(0, "rgba(242,178,118,0)");
+      grad.addColorStop(1, "rgba(247,205,160,0.7)");
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(mx + 130, my - 46);
+      ctx.lineTo(mx, my);
+      ctx.stroke();
+      document.title = "og-ready";
+      });
+    </script>
+  </body>
+</html>
