@@ -327,6 +327,14 @@
     2
   );
 
+  // nano-banana renders (gemini image gen, fluncle-style workflow).
+  // the hand-drawn pixels above stay as the fallback while these load.
+  const UFO_IMG = new Image();
+  UFO_IMG.src = "/sprites/ufo.png";
+  const ISS_IMG = new Image();
+  ISS_IMG.src = "/sprites/iss.png";
+  const spriteReady = (img) => img.complete && img.naturalWidth > 0;
+
   let flyby = null;
   let nextTrafficAt = 0;
   const trafficSeen = { starlink: false, iss: false, ufo: false };
@@ -421,10 +429,11 @@
         ctx.fillStyle = `rgba(242, 200, 150, ${glint * 0.12})`;
         ctx.fill();
       }
+      const spr = spriteReady(ISS_IMG) ? ISS_IMG : ISS_SPRITE;
       ctx.drawImage(
-        ISS_SPRITE,
-        Math.round(x - ISS_SPRITE.width / 2),
-        Math.round(y - ISS_SPRITE.height / 2)
+        spr,
+        Math.round(x - spr.width / 2),
+        Math.round(y - spr.height / 2)
       );
       ctx.globalAlpha = 1;
     } else {
@@ -446,13 +455,23 @@
         x = f.xHover + (W * 0.6 + 80) * e;
         y = f.yBase + bob - (H * 0.5 + 80) * e;
       }
-      const spr = Math.floor(t / 280) % 2 ? UFO_ON : UFO_OFF;
+      const png = spriteReady(UFO_IMG);
+      const blink = Math.floor(t / 280) % 2;
+      const spr = png ? UFO_IMG : blink ? UFO_ON : UFO_OFF;
       ctx.globalAlpha = Math.min(p / 0.05, 1);
       ctx.drawImage(
         spr,
         Math.round(x - spr.width / 2),
         Math.round(y - spr.height / 2)
       );
+      if (png) {
+        // blinking rim lights over the render
+        ctx.fillStyle = "rgba(242, 178, 118, 0.9)";
+        for (let i = -2; i <= 2; i++) {
+          if ((i + 2) % 2 !== blink) continue;
+          ctx.fillRect(Math.round(x + i * 9 - 1), Math.round(y + 2), 2, 2);
+        }
+      }
       ctx.globalAlpha = 1;
     }
   }
