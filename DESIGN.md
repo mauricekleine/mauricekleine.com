@@ -42,6 +42,13 @@ Single centered column, max-width 42rem, generous vertical rhythm (clamp-based s
 - `prefers-reduced-motion: reduce`: canvas renders one static frame, no animation, no parallax.
 - Content: single soft fade-up on load for the hero only; sections are visible by default (no scroll-gated reveals).
 
+## Texture
+
+Paper.design-inspired, hand-written (a nod to fluncle's video pipeline):
+
+- **Dithered neuro nebula** (`texture.js`): a single WebGL fragment shader behind the stars — domain-warped fbm ridges quantized through a Bayer 4 matrix (ordered dither), tinted nebula-violet drifting into ember. Rendered at ~quarter res with `image-rendering: pixelated` so the dither stays chunky. 30fps cap, additive blend at alpha ≤0.16, intensity dimmed in the reading column, paused when hidden, single static frame under reduced motion, skipped entirely without WebGL.
+- **Film grain** (`style.css` `body::after`): SVG feTurbulence tile at 4.5% opacity, `mix-blend-mode: overlay`, jittered with a `steps(6)` animation; static under reduced motion. Also baked into og.png via og-template.html.
+
 ## Delight systems
 
 Deliberately overengineered details, all reduced-motion safe and zero-dependency:

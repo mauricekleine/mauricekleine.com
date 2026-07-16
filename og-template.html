@@ -65,6 +65,14 @@
         margin-top: 30px;
       }
       .meta .dot { color: oklch(75% 0.13 55); }
+      .grain {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.06;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
     </style>
   </head>
   <body>
@@ -75,6 +83,7 @@
       <p class="tagline">i build small internet things<br />and sometimes they work</p>
       <p class="meta">amsterdam, nl <span class="dot">&middot;</span> mauricekleine.com</p>
     </div>
+    <div class="grain"></div>
     <script>
       document.fonts.ready.then(() => {
       const ctx = document.getElementById("sky").getContext("2d");

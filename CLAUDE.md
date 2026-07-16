@@ -14,6 +14,7 @@ bun dev   # bunx serve -p 3000
 - `about.html` — longer-form about page, same visual system
 - `style.css` — all styling; design tokens as OKLCH custom properties in `:root`
 - `stars.js` — the night-sky canvas (star drift, twinkle, cursor parallax, occasional meteor; static frame under prefers-reduced-motion)
+- `texture.js` — dithered neuro-noise nebula (hand-written WebGL shader, no library); film grain lives in style.css as `body::after`
 - `PRODUCT.md` / `DESIGN.md` — strategy and visual system; read before design changes
 - `og.png` — social share card (1200×630); regenerate by opening `og-template.html` at a 1200×630 viewport and screenshotting (it draws the night sky + constellations on a canvas)
 - `projects.json`, `social.json`, `theunsettledlife.json` — research/context data about Maurice, not used by the site at runtime
