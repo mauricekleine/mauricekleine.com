@@ -12,9 +12,11 @@
     "html_handling": "auto-trailing-slash",
     // missing routes get the "lost in space" page
     "not_found_handling": "404-page",
-    // only these paths pay the worker toll; everything else is pure assets
-    "run_worker_first": ["/", "/about", "/mcp"]
+    // the worker fronts everything: apex redirect needs to see every path
+    "run_worker_first": true
   },
+  // custom domains only; no workers.dev duplicate
+  "workers_dev": false,
   "routes": [
     { "pattern": "www.mauricekleine.com", "custom_domain": true },
     // apex is also served by the worker; _redirects sends it to www

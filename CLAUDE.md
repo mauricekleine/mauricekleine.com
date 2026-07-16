@@ -9,7 +9,7 @@ bun dev             # bunx serve -p 3000
 bun run deploy      # bunx wrangler deploy (Cloudflare Worker, static assets)
 ```
 
-Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore` keeps repo infra out of the served site). `html_handling: auto-trailing-slash` means clean URLs: canonical is `/about`, and `/about.html` redirects there. `_headers` is honored natively (`_redirects` only supports relative URLs on Workers; apex→www is a zone redirect rule). Pushing to main auto-deploys via Workers Builds.
+Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore` keeps repo infra out of the served site). `html_handling: auto-trailing-slash` means clean URLs: canonical is `/about`, and `/about.html` redirects there. `_headers` is honored natively (`_redirects` only supports relative URLs on Workers; apex→www is a 301 in worker.js). Pushing to main auto-deploys via Workers Builds.
 
 `worker.js` (run first only on `/`, `/about`, `/mcp`) adds markdown content negotiation (`Accept: text/markdown` returns the `.md` mirrors) and a hand-written MCP server at `/mcp` (tools: about_maurice, list_projects, get_uptime, make_a_wish; card at `/.well-known/mcp/server-card.json`). `webmcp.js` exposes in-page tools to browser agents, including `summon_sky_traffic`. If you edit `.well-known/agent-skills/about-maurice/SKILL.md`, recompute its sha256 digest in `.well-known/agent-skills/index.json`.
 
@@ -22,7 +22,7 @@ Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore`
 - `texture.js` — dithered neuro-noise nebula (hand-written WebGL shader, no library); film grain lives in style.css as `body::after`
 - `PRODUCT.md` / `DESIGN.md` — strategy and visual system; read before design changes
 - `og.png` — social share card (1200×630); regenerate by opening `og-template.html` at a 1200×630 viewport and screenshotting (it draws the night sky + constellations on a canvas)
-- `projects.json`, `social.json`, `theunsettledlife.json` — research/context data about Maurice, not used by the site at runtime
+- `projects.json`, `social.json`, `theunsettledlife.json` — research/context data about Maurice, not used by the site at runtime (snapshots from before the July 2026 redesign; some facts are stale, e.g. ONESIXTYEIGHT is discontinued, X handle is @mauricekleine)
 
 ## Voice
 

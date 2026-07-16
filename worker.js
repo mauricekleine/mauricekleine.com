@@ -149,6 +149,12 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // apex to www, handled here so the redirect lives in the repo
+    if (url.hostname === "mauricekleine.com") {
+      url.hostname = "www.mauricekleine.com";
+      return Response.redirect(url.toString(), 301);
+    }
+
     if (url.pathname === "/mcp") {
       return handleMcp(request, env, url.origin);
     }
