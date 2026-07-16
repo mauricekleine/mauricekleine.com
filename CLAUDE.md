@@ -22,7 +22,6 @@ Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore`
 - `texture.js` — dithered neuro-noise nebula (hand-written WebGL shader, no library); film grain lives in style.css as `body::after`
 - `PRODUCT.md` / `DESIGN.md` — strategy and visual system; read before design changes
 - `og.png` — social share card (1200×630); regenerate by opening `og-template.html` at a 1200×630 viewport and screenshotting (it draws the night sky + constellations on a canvas)
-- `projects.json`, `social.json`, `theunsettledlife.json` — research/context data about Maurice, not used by the site at runtime (snapshots from before the July 2026 redesign; some facts are stale, e.g. ONESIXTYEIGHT is discontinued, X handle is @mauricekleine)
 
 ## Voice
 

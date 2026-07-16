@@ -13,8 +13,5 @@ package.json
 bun.lock
 wrangler.jsonc
 og-template.html
-projects.json
-social.json
-theunsettledlife.json
 .wrangler
 worker.js
