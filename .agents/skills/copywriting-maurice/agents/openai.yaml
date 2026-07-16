@@ -1,0 +1,4 @@
+interface:
+  display_name: "Copywriting Maurice"
+  short_description: "Write copy in Maurice's personal founder voice"
+  default_prompt: "Use $copywriting-maurice to draft a LinkedIn post, X thread, landing page, or blog post in Maurice's voice."

@@ -1,2 +1,8 @@
 .chief
 node_modules
+
+# local agent state, never committed
+.claude/worktrees/
+.claude/settings.local.json
+.impeccable/config.local.json
+.impeccable/live/sessions/

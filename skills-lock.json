@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-orchestration": {
+      "source": "/Users/maurice/Projects/os/skills/agent-orchestration",
+      "sourceType": "local",
+      "computedHash": "58646ad05ac1b714b52b3f7347cef7c4b5893fa1a233127f8f069afcbb11a80a"
+    },
+    "copywriting-maurice": {
+      "source": "/Users/maurice/Projects/os/skills/copywriting-maurice",
+      "sourceType": "local",
+      "computedHash": "bd67bafc73fce47c92836c68678d4e48395d00102fb8e02dcb1564085a6518c1"
+    },
+    "improve": {
+      "source": "shadcn/improve",
+      "sourceType": "github",
+      "skillPath": "skills/improve/SKILL.md",
+      "computedHash": "39a9358732dcff385e9e4d3e60b4547856f834e54a58b35e455aa9bd49928c13"
+    },
+    "seo-audit": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/seo-audit/SKILL.md",
+      "computedHash": "f2dc52130189068981f21e1c0bdc4471ac7cd9b08d8a1320604411aa0f950385"
+    },
+    "taste": {
+      "source": "/Users/maurice/Projects/os/skills/taste",
+      "sourceType": "local",
+      "computedHash": "5f5843ddbf100be24ad706491b9ec54e29e6ad7f373c364849f830eb5f8a11c2"
+    }
+  }
+}
