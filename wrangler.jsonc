@@ -3,12 +3,17 @@
   // deploy with: bun run deploy (bunx wrangler deploy)
   "name": "mauricekleine-com",
   "compatibility_date": "2026-07-16",
+  // markdown negotiation + the mcp server live here
+  "main": "worker.js",
   "assets": {
     "directory": ".",
+    "binding": "ASSETS",
     // /about serves about.html; /about.html redirects to /about
     "html_handling": "auto-trailing-slash",
     // missing routes get the "lost in space" page
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    // only these paths pay the worker toll; everything else is pure assets
+    "run_worker_first": ["/", "/about", "/mcp"]
   },
   "routes": [
     { "pattern": "www.mauricekleine.com", "custom_domain": true },

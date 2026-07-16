@@ -1,0 +1,17 @@
+{
+  "serverInfo": {
+    "name": "mauricekleine",
+    "title": "maurice kleine's personal site",
+    "version": "1.0.0"
+  },
+  "description": "read-only mcp server for maurice kleine's personal site: bio, side quests, the graveyard of ended experiments, operational status, and a wish endpoint. no auth, everything is public.",
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://www.mauricekleine.com/mcp"
+  },
+  "protocolVersion": "2025-06-18",
+  "capabilities": {
+    "tools": { "listChanged": false }
+  },
+  "documentation": "https://www.mauricekleine.com/llms.txt"
+}

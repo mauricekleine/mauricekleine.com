@@ -9,7 +9,9 @@ bun dev             # bunx serve -p 3000
 bun run deploy      # bunx wrangler deploy (Cloudflare Worker, static assets)
 ```
 
-Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore` keeps repo infra out of the served site). `html_handling: auto-trailing-slash` means clean URLs: canonical is `/about`, and `/about.html` redirects there. `_headers` and `_redirects` are honored natively.
+Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore` keeps repo infra out of the served site). `html_handling: auto-trailing-slash` means clean URLs: canonical is `/about`, and `/about.html` redirects there. `_headers` is honored natively (`_redirects` only supports relative URLs on Workers; apex→www is a zone redirect rule). Pushing to main auto-deploys via Workers Builds.
+
+`worker.js` (run first only on `/`, `/about`, `/mcp`) adds markdown content negotiation (`Accept: text/markdown` returns the `.md` mirrors) and a hand-written MCP server at `/mcp` (tools: about_maurice, list_projects, get_uptime, make_a_wish; card at `/.well-known/mcp/server-card.json`). `webmcp.js` exposes in-page tools to browser agents, including `summon_sky_traffic`. If you edit `.well-known/agent-skills/about-maurice/SKILL.md`, recompute its sha256 digest in `.well-known/agent-skills/index.json`.
 
 ## Files
 

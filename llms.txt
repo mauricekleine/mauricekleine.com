@@ -16,6 +16,13 @@ the whole site is hand-written html with no framework and no build step. markdow
 - [hackadam](https://hackadam.nl): monthly meetup in amsterdam for indie makers building their own stuff
 - [nonobench](https://nonobench.com): benchmark for how well llms solve nonogram puzzles
 
+## mcp
+
+- [mcp server](https://www.mauricekleine.com/mcp): streamable http, no auth. tools: about_maurice, list_projects, get_uptime, make_a_wish
+- [server card](https://www.mauricekleine.com/.well-known/mcp/server-card.json): discovery metadata
+- [agent skills](https://www.mauricekleine.com/.well-known/agent-skills/index.json): skills discovery index
+- markdown negotiation: send `Accept: text/markdown` to `/` or `/about` and get the mirror back
+
 ## api
 
 - [api catalog](https://www.mauricekleine.com/.well-known/api-catalog): rfc 9727 linkset describing the endpoints below

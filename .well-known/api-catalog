@@ -17,6 +17,11 @@
           "href": "https://www.mauricekleine.com/api/uptime.json",
           "type": "application/json",
           "title": "uptime: operational status of maurice himself"
+        },
+        {
+          "href": "https://www.mauricekleine.com/mcp",
+          "type": "application/json",
+          "title": "mcp server: streamable http, tools for bio, projects, uptime, and wishes"
         }
       ]
     },

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "about-maurice",
+      "type": "skill-md",
+      "description": "Learn who Maurice Kleine is and read his site the agent-friendly way: markdown mirrors, a static json api, and an mcp server.",
+      "url": "/.well-known/agent-skills/about-maurice/SKILL.md",
+      "digest": "sha256:fec5bc5f583ee171ff15ea5002aba123d1f762902bf65e5ca7ce1677d5653c8c"
+    }
+  ]
+}

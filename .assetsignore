@@ -17,3 +17,4 @@ projects.json
 social.json
 theunsettledlife.json
 .wrangler
+worker.js
