@@ -40,6 +40,9 @@ body::before {
   z-index: 0;
   pointer-events: none;
   background-image:
+    /* top vignette: the viewport's first pixels match the html
+       overscroll color, so rubber-banding has no seam */
+    linear-gradient(to bottom, var(--night-deep), oklch(13% 0.03 280 / 0) 90px),
     radial-gradient(
       ellipse 90% 55% at 15% -5%,
       oklch(45% 0.09 300 / 0.14),
