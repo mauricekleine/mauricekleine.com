@@ -269,6 +269,194 @@
     ctx.stroke();
   }
 
+  // --- sky traffic: starlink trains, the iss, unidentified visitors --------
+  function makeSprite(rows, palette, scale) {
+    const h = rows.length;
+    const w = rows[0].length;
+    const c = document.createElement("canvas");
+    c.width = w * scale;
+    c.height = h * scale;
+    const g = c.getContext("2d");
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const col = palette[rows[y][x]];
+        if (!col) continue;
+        g.fillStyle = col;
+        g.fillRect(x * scale, y * scale, scale, scale);
+      }
+    }
+    return c;
+  }
+
+  const UFO_PALETTE = {
+    c: "#cfd9f2",
+    d: "#8d96b8",
+    s: "#5b6280",
+    e: "#f2b276",
+  };
+  const UFO_ROWS_ON = [
+    "......ccc......",
+    ".....cdddc.....",
+    "..ddddddddddd..",
+    ".ddddddddddddd.",
+    "sssssssssssssss",
+    "..e...e...e....",
+  ];
+  const UFO_ROWS_OFF = [
+    "......ccc......",
+    ".....cdddc.....",
+    "..ddddddddddd..",
+    ".ddddddddddddd.",
+    "sssssssssssssss",
+    "....e...e...e..",
+  ];
+  const UFO_ON = makeSprite(UFO_ROWS_ON, UFO_PALETTE, 2);
+  const UFO_OFF = makeSprite(UFO_ROWS_OFF, UFO_PALETTE, 2);
+
+  const ISS_SPRITE = makeSprite(
+    [
+      "gg.gg.........gg.gg",
+      "gg.gg.........gg.gg",
+      "gg.gg....w....gg.gg",
+      "gg.ggtttwwwtttgg.gg",
+      "gg.gg....w....gg.gg",
+      "gg.gg.........gg.gg",
+      "gg.gg.........gg.gg",
+    ],
+    { g: "#d9a05a", t: "#9aa0b8", w: "#ece9e0" },
+    2
+  );
+
+  let flyby = null;
+  let nextTrafficAt = 0;
+  const trafficSeen = { starlink: false, iss: false, ufo: false };
+  const TRAFFIC_LOGS = {
+    starlink: "starlink train overhead. one wish per satellite.",
+    iss: "the iss just passed by. it comes around every 92 minutes.",
+    ufo: "you saw nothing.",
+  };
+
+  function pickTrafficType() {
+    const r = Math.random();
+    if (r < 0.45) return "iss";
+    if (r < 0.8) return "starlink";
+    return "ufo";
+  }
+
+  function spawnTraffic(t, forceType) {
+    const type =
+      forceType || (!trafficSeen.starlink ? "starlink" : pickTrafficType());
+    const dir = Math.random() < 0.5 ? 1 : -1;
+    if (type === "starlink") {
+      flyby = {
+        type,
+        start: t,
+        duration: 34000,
+        dir,
+        y0: H * (0.1 + Math.random() * 0.25),
+        slope: (Math.random() - 0.5) * 0.16,
+        count: 24 + Math.floor(Math.random() * 10),
+        spacing: 15,
+      };
+    } else if (type === "iss") {
+      flyby = {
+        type,
+        start: t,
+        duration: 19000,
+        dir,
+        y0: H * (0.12 + Math.random() * 0.3),
+        slope: (Math.random() - 0.5) * 0.2,
+      };
+    } else {
+      flyby = {
+        type,
+        start: t,
+        duration: 13000,
+        yBase: H * (0.16 + Math.random() * 0.28),
+        xHover: W * (0.4 + Math.random() * 0.3),
+      };
+    }
+    if (!trafficSeen[type]) {
+      trafficSeen[type] = true;
+      console.log("%c" + TRAFFIC_LOGS[type], CONSOLE_EMBER);
+    }
+  }
+
+  function drawTraffic(t) {
+    const f = flyby;
+    const p = (t - f.start) / f.duration;
+    if (p >= 1) {
+      flyby = null;
+      nextTrafficAt = t + 150000 + Math.random() * 210000;
+      return;
+    }
+
+    if (f.type === "starlink") {
+      const span = W + 240 + f.count * f.spacing;
+      const headX = f.dir > 0 ? -120 + span * p : W + 120 - span * p;
+      for (let i = 0; i < f.count; i++) {
+        const x = headX - f.dir * i * (f.spacing + (i % 3));
+        const q = x / W;
+        if (q < -0.02 || q > 1.02) continue;
+        const qc = Math.min(Math.max(q, 0), 1);
+        const y =
+          f.y0 + f.slope * (x - W / 2) - Math.sin(Math.PI * qc) * 22;
+        const a =
+          0.85 * Math.min(Math.max(Math.min(q, 1 - q) / 0.12, 0), 1);
+        if (a <= 0) continue;
+        ctx.beginPath();
+        ctx.arc(x, y, i === 0 ? 1.3 : 1, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(240, 243, 252, ${a})`;
+        ctx.fill();
+      }
+    } else if (f.type === "iss") {
+      const x = f.dir > 0 ? -30 + (W + 60) * p : W + 30 - (W + 60) * p;
+      const y = f.y0 + f.slope * (x - W / 2);
+      const glint = Math.exp(-Math.pow((p - 0.5) / 0.07, 2));
+      const a = Math.min(p / 0.06, (1 - p) / 0.06, 1);
+      ctx.globalAlpha = a * 0.95;
+      if (glint > 0.05) {
+        ctx.beginPath();
+        ctx.arc(x, y, 10 + glint * 14, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(242, 200, 150, ${glint * 0.12})`;
+        ctx.fill();
+      }
+      ctx.drawImage(
+        ISS_SPRITE,
+        Math.round(x - ISS_SPRITE.width / 2),
+        Math.round(y - ISS_SPRITE.height / 2)
+      );
+      ctx.globalAlpha = 1;
+    } else {
+      // ufo: drifts in, hovers, thinks about it, leaves very fast
+      const bob = Math.sin(t / 260) * 5;
+      let x;
+      let y;
+      if (p < 0.35) {
+        const q = p / 0.35;
+        const e = 1 - Math.pow(1 - q, 3);
+        x = -40 + (f.xHover + 40) * e;
+        y = f.yBase + bob;
+      } else if (p < 0.68) {
+        x = f.xHover + Math.sin(t / 500) * 6;
+        y = f.yBase + bob;
+      } else {
+        const q = (p - 0.68) / 0.32;
+        const e = q * q * q;
+        x = f.xHover + (W * 0.6 + 80) * e;
+        y = f.yBase + bob - (H * 0.5 + 80) * e;
+      }
+      const spr = Math.floor(t / 280) % 2 ? UFO_ON : UFO_OFF;
+      ctx.globalAlpha = Math.min(p / 0.05, 1);
+      ctx.drawImage(
+        spr,
+        Math.round(x - spr.width / 2),
+        Math.round(y - spr.height / 2)
+      );
+      ctx.globalAlpha = 1;
+    }
+  }
+
   // --- frame -------------------------------------------------------------------
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -277,6 +465,7 @@
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.imageSmoothingEnabled = false; // sprites stay chunky
     makeStars();
     makeConstellations();
     if (reduced.matches) drawFrame(0);
@@ -334,6 +523,8 @@
     if (animate) {
       if (!meteor && t > nextMeteorAt) spawnMeteor(t);
       drawMeteor(t);
+      if (!flyby && nextTrafficAt > 0 && t > nextTrafficAt) spawnTraffic(t);
+      if (flyby) drawTraffic(t);
     }
   }
 
@@ -349,6 +540,10 @@
       return;
     }
     nextMeteorAt = performance.now() + 4000 + Math.random() * 8000;
+    if (nextTrafficAt === 0) {
+      // first pass is always a starlink train, fairly soon. worth the wait
+      nextTrafficAt = performance.now() + 45000 + Math.random() * 45000;
+    }
     rafId = requestAnimationFrame(loop);
   }
 
@@ -454,11 +649,24 @@
       "%c\n" +
       "hand-written html, css, and one canvas. no build step, no framework.\n" +
       'secrets: type "dnb" · click the sky · click the portrait · hover a side quest\n' +
+      "impatient? window.sky.traffic('starlink' | 'iss' | 'ufo')\n" +
       "source: https://github.com/mauricekleine/mauricekleine.com\n" +
       "for robots: https://www.mauricekleine.com/llms.txt\n",
     CONSOLE_EMBER,
     CONSOLE_DIM
   );
+
+  // for the impatient (and for testing): summon sky traffic yourself
+  window.sky = {
+    traffic(type) {
+      if (reduced.matches) return "reduced motion is on. the sky stays still.";
+      if (!["starlink", "iss", "ufo"].includes(type)) {
+        return "options: 'starlink', 'iss', 'ufo'";
+      }
+      spawnTraffic(performance.now(), type);
+      return "look up.";
+    },
+  };
 
   resize();
   start();

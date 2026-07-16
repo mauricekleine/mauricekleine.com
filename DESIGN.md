@@ -61,6 +61,7 @@ Deliberately overengineered details, all reduced-motion safe and zero-dependency
 - **Console + view-source easter eggs**: styled ASCII star map, secrets list, llms.txt pointer; HTML comment greets view-source readers.
 - **Footer status line**: blinking ember dot + `status: operational · sleep: degraded · ideas: backlogged`.
 - **404.html**: "lost in space" page on the same system, noindex.
+- **Sky traffic** (`stars.js`): rare ambient flybys, one at a time, none under reduced motion. A starlink train (procedural dot chain on a shallow arc, always the first visitor, 45–90s in), the ISS (code-drawn pixel sprite with a solar glint mid-pass), and a UFO (pixel sprite that drifts in, hovers with blinking ember lights, then bolts). Each logs a one-liner to the console on first appearance; `window.sky.traffic('starlink' | 'iss' | 'ufo')` summons them. Sprites are procedural pixel art via `makeSprite()`; Nano-Banana-rendered PNGs can replace them later (see fluncle's `docs/galaxy-sprites.md` workflow: pixel-art prompt → quantize → transparent PNG → pixelated upscale).
 
 ## Assets
 
