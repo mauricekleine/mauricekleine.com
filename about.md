@@ -49,4 +49,4 @@ it's incredibly coincidental that we're here. we need to leverage that. propel t
 
 ---
 
-amsterdam. 168 hours a week.
+amsterdam.

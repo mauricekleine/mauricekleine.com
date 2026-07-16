@@ -37,7 +37,3 @@ life is a series of experiments. some of them end, and that's fine, as long as y
 - [email](mailto:hey@mauricekleine.com)
 
 [more about me](https://www.mauricekleine.com/about.md)
-
----
-
-168 hours a week. hand-written html, no framework. the stars were an idea from 2022, only took four years.
