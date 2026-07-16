@@ -2,7 +2,7 @@
 
 > build it till you make it
 
-this is the markdown mirror of [mauricekleine.com/about.html](https://www.mauricekleine.com/about.html). back to [home](https://www.mauricekleine.com/index.md).
+this is the markdown mirror of [mauricekleine.com/about](https://www.mauricekleine.com/about). back to [home](https://www.mauricekleine.com/index.md).
 
 ## about
 

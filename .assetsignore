@@ -1,0 +1,18 @@
+# repo infrastructure, not site content
+.git
+.gitignore
+.claude
+.agents
+.impeccable
+node_modules
+CLAUDE.md
+PRODUCT.md
+DESIGN.md
+skills-lock.json
+package.json
+bun.lock
+wrangler.jsonc
+og-template.html
+projects.json
+social.json
+theunsettledlife.json

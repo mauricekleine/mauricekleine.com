@@ -10,7 +10,7 @@
   Link: </llms.txt>; rel="llms-txt"
   Link: </index.md>; rel="alternate"; type="text/markdown"
 
-/about.html
+/about
   Link: </about.md>; rel="alternate"; type="text/markdown"
 
 /.well-known/api-catalog

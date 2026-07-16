@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "deploy": "bunx wrangler deploy",
     "dev": "bunx serve -p 3000",
     "prepare": "husky"
   },

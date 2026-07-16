@@ -2,11 +2,14 @@
 
 Maurice's personal one-pager. Hand-written HTML/CSS/JS, no framework, no build step. That's deliberate: it's a "small internet thing" and the craft is the flex. Don't introduce frameworks, bundlers, or dependencies without asking.
 
-## Run
+## Run & deploy
 
 ```sh
-bun dev   # bunx serve -p 3000
+bun dev             # bunx serve -p 3000
+bun run deploy      # bunx wrangler deploy (Cloudflare Worker, static assets)
 ```
+
+Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore` keeps repo infra out of the served site). `html_handling: auto-trailing-slash` means clean URLs: canonical is `/about`, and `/about.html` redirects there. `_headers` and `_redirects` are honored natively.
 
 ## Files
 

@@ -1,0 +1,15 @@
+{
+  // mauricekleine.com as a cloudflare worker: static assets, no worker script.
+  // deploy with: bun run deploy (bunx wrangler deploy)
+  "name": "mauricekleine-com",
+  "compatibility_date": "2026-07-16",
+  "assets": {
+    "directory": ".",
+    // /about serves about.html; /about.html redirects to /about
+    "html_handling": "auto-trailing-slash",
+    // missing routes get the "lost in space" page
+    "not_found_handling": "404-page"
+  }
+  // custom domain is attached after the workers.dev preview checks out:
+  // "routes": [{ "pattern": "www.mauricekleine.com", "custom_domain": true }]
+}
