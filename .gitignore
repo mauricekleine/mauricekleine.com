@@ -6,3 +6,6 @@ node_modules
 .claude/settings.local.json
 .impeccable/config.local.json
 .impeccable/live/sessions/
+
+# wrangler local state
+.wrangler/
