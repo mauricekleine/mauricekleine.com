@@ -17,6 +17,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* overscroll rubber-band shows this instead of a seam */
+  background: var(--night-deep);
 }
 
 body {
@@ -24,7 +26,19 @@ body {
   font-size: 1.0625rem;
   line-height: 1.65;
   color: var(--starlight);
-  background-color: var(--night);
+  background: var(--night);
+  min-height: 100dvh;
+  text-wrap: pretty;
+}
+
+/* nebula gradients live on a viewport-fixed layer so they can't
+   tile or tear at the page edges during fast scroll */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background-image:
     radial-gradient(
       ellipse 90% 55% at 15% -5%,
@@ -36,10 +50,7 @@ body {
       oklch(55% 0.11 55 / 0.07),
       transparent 65%
     ),
-    linear-gradient(to bottom, var(--night), var(--night-deep));
-  background-attachment: fixed;
-  min-height: 100dvh;
-  text-wrap: pretty;
+    linear-gradient(to bottom, oklch(17% 0.035 275 / 0), var(--night-deep));
 }
 
 #nebula {
