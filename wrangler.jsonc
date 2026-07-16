@@ -9,7 +9,10 @@
     "html_handling": "auto-trailing-slash",
     // missing routes get the "lost in space" page
     "not_found_handling": "404-page"
-  }
-  // custom domain is attached after the workers.dev preview checks out:
-  // "routes": [{ "pattern": "www.mauricekleine.com", "custom_domain": true }]
+  },
+  "routes": [
+    { "pattern": "www.mauricekleine.com", "custom_domain": true },
+    // apex is also served by the worker; _redirects sends it to www
+    { "pattern": "mauricekleine.com", "custom_domain": true }
+  ]
 }
