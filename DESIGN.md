@@ -11,8 +11,8 @@ OKLCH throughout. Strategy: Committed dark, one warm accent.
 - `--night`: oklch(17% 0.035 275) — page background, deep space indigo (not pure black)
 - `--night-deep`: oklch(13% 0.03 280) — gradient floor
 - `--starlight`: oklch(94% 0.01 85) — primary text, warm off-white
-- `--muted`: oklch(74% 0.02 275) — secondary text
-- `--dim`: oklch(64% 0.015 275) — meta/labels only (large or bold)
+- `--muted`: oklch(76% 0.02 275) — secondary text
+- `--dim`: oklch(66% 0.015 275) — meta/labels only (large or bold)
 - `--ember`: oklch(75% 0.13 55) — links, accents; the old site's #c65d07 orange, brightened for dark bg
 - `--ember-bright`: oklch(84% 0.12 65) — link hover, star glints
 - `--nebula`: oklch(45% 0.09 300) — violet glow tints, low alpha only
@@ -34,7 +34,7 @@ Contrast: body text on --night ≥ 10:1; --muted ≥ 6:1; --dim reserved for ≥
 
 ## Layout
 
-Single centered column, max-width 42rem, generous vertical rhythm (clamp-based section spacing). Star canvas is `position: fixed`, z-index below content, pointer-events none. One-pager: hero → currently → side quests → graveyard → links → footer.
+Single centered column, max-width 40rem, generous vertical rhythm (clamp-based section spacing). Star canvas is `position: fixed`, z-index below content, pointer-events none. One-pager: hero → currently → side quests → graveyard → links → footer.
 
 ## Motion
 
