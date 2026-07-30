@@ -171,4 +171,8 @@
 
   resize();
   start();
+
+  // handle for currents.js: the texture-era stack retires this nebula on
+  // capable devices. exposed instead of removed so weak devices keep it.
+  window.nightNebula = { start, stop };
 })();

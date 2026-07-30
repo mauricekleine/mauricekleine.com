@@ -22,7 +22,7 @@ html {
 }
 
 body {
-  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-family: "Supreme", system-ui, sans-serif;
   font-size: 1.0625rem;
   line-height: 1.65;
   color: var(--starlight);
@@ -209,7 +209,9 @@ main {
 }
 
 h1 {
-  font-size: clamp(2.1rem, 4.5vw + 1rem, 3.1rem);
+  /* panchang runs wide: clamp tuned so "maurice kleine" fits one line at 390px */
+  font-family: "Panchang", system-ui, sans-serif;
+  font-size: clamp(1.85rem, 4.5vw + 0.85rem, 2.9rem);
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -239,6 +241,7 @@ section {
 }
 
 h2 {
+  font-family: "Panchang", system-ui, sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -328,7 +331,8 @@ a:hover {
 }
 
 .waypoints a {
-  font-weight: 600;
+  /* supreme ships 400/500; 500 is its emphasis weight */
+  font-weight: 500;
   font-size: 1.05em;
 }
 
@@ -384,7 +388,7 @@ a:hover {
 }
 
 .grave-title .name {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--starlight);
 }
 

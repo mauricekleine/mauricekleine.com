@@ -20,6 +20,7 @@ Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore`
 - `style.css` — all styling; design tokens as OKLCH custom properties in `:root`
 - `stars.js` — the night-sky canvas (star drift, twinkle, cursor parallax, occasional meteor; static frame under prefers-reduced-motion)
 - `texture.js` — dithered neuro-noise nebula (hand-written WebGL shader, no library); film grain lives in style.css as `body::after`
+- `currents.js` + `vendor/paper-shaders/` — the texture-era shader stack (warp + neuro-noise + grain-gradient, ember palette); retires the texture.js nebula on capable devices, bails out entirely on weak ones
 - `PRODUCT.md` / `DESIGN.md` — strategy and visual system; read before design changes
 - `og.png` — social share card (1200×630); regenerate by opening `og-template.html` at a 1200×630 viewport and screenshotting (it draws the night sky + constellations on a canvas)
 
@@ -37,6 +38,6 @@ All copy is lowercase, builder-to-builder, understated. Canonical voice guide: `
 ## Conventions
 
 - Phosphor icons, vendored as inline SVG (no icon font, no CDN)
-- Fonts: Bricolage Grotesque + Fragment Mono via Google Fonts
+- Fonts: Panchang (display) + Supreme (body) via Fontshare, Fragment Mono via Google Fonts
 - Keep the Simple Analytics script (`https://api.mauricekleine.com/latest.js`) at the end of body
 - Preserve WCAG AA contrast and the reduced-motion fallback in any visual change

@@ -21,9 +21,11 @@ Contrast: body text on --night ≥ 10:1; --muted ≥ 6:1; --dim reserved for ≥
 
 ## Typography
 
-- Display + body: **Bricolage Grotesque** (Google Fonts, variable). Quirky humanist grotesque with ink traps; homemade-planetarium-booklet warmth. Weights: 800 display, 600 headings, 400 body.
-- Mono accent: **Fragment Mono** — log IDs, status stamps, footer meta. Small doses only.
-- Headings lowercase (brand voice). Scale ratio ≥1.3, fluid clamp() on the display line, `text-wrap: balance` on headings.
+- Display: **Panchang** (Fontshare). Squared, techy, in-your-face — the fleet's display voice per the superthread type stack (ratified 2026-07-30). Weights: 800 for the h1 wordmark, 600 for section headings.
+- Body: **Supreme** (Fontshare). Warm, round, legible; reports to Panchang without competing. Weights: 400 body, 500 emphasis (waypoint names, grave titles).
+- Mono accent: **Fragment Mono** (Google Fonts) — log IDs, status stamps, footer meta. Small doses only.
+- **Bricolage Grotesque is retired** (texture-era refresh, 2026-07-30). It survives only in og.png until that's regenerated.
+- Headings lowercase (brand voice). Scale ratio ≥1.3, fluid clamp() on the display line (clamp tuned so the Panchang h1 stays one line at 390px), `text-wrap: balance` on headings.
 
 ## Components
 
@@ -44,9 +46,10 @@ Single centered column, max-width 40rem, generous vertical rhythm (clamp-based s
 
 ## Texture
 
-Paper.design-inspired, hand-written (a nod to fluncle's video pipeline):
+Texture-era stack (superthread texture lab, ratified 2026-07-30) plus the original hand-written grain:
 
-- **Dithered neuro nebula** (`texture.js`): a single WebGL fragment shader behind the stars — domain-warped fbm ridges quantized through a Bayer 4 matrix (ordered dither), tinted nebula-violet drifting into ember. Rendered at ~quarter res with `image-rendering: pixelated` so the dither stays chunky. 30fps cap, additive blend at alpha ≤0.16, intensity dimmed in the reading column, paused when hidden, single static frame under reduced motion, skipped entirely without WebGL.
+- **Deep currents** (`currents.js` + `vendor/paper-shaders/`): three vendored Paper Shaders (Apache-2.0) layers below both canvases, the bridge's dial-11 recipe with the violet swapped for ember. Bottom to top: warp "deep water" (`#11131f`/`#191c2c` with a dark ember undertone `#4a2f1d`), neuro-noise "dark energy" masked to the bottom-left corner (dim ember `#b06a3a` veins, opacity 0.55 — bottom-left so it never fights the constellations or the sky traffic entering top), and a grain-gradient ember aurora wave (`#f2b276`/`#ffba73`/`#2b2233`, intensity 0.6, noise 0.75, softness 0.82, opacity 0.85). Frames anchor to the fleet epoch (stardate time: a refresh resumes mid-wave); reduced motion gets speed 0 on a fixed frame. Performance: `minPixelRatio` 1, ≤2.5e6 pixels per layer, and the whole stack is skipped when `hardwareConcurrency` ≤ 4 or WebGL2 is unavailable — weak devices keep the pre-currents sky.
+- **Dithered neuro nebula** (`texture.js`): a single WebGL fragment shader behind the stars — domain-warped fbm ridges quantized through a Bayer 4 matrix (ordered dither), tinted nebula-violet drifting into ember. Rendered at ~quarter res with `image-rendering: pixelated` so the dither stays chunky. 30fps cap, additive blend at alpha ≤0.16, intensity dimmed in the reading column, paused when hidden, single static frame under reduced motion, skipped entirely without WebGL. Since the texture era it's the fallback sky: `currents.js` retires it (`RETIRE_LEGACY_NEBULA`) on devices that run the shader stack, and it carries on alone on the bail-out path.
 - **Film grain** (`style.css` `body::after`): SVG feTurbulence tile at 4.5% opacity, `mix-blend-mode: overlay`, jittered with a `steps(6)` animation; static under reduced motion. Also baked into og.png via og-template.html.
 
 ## Delight systems
