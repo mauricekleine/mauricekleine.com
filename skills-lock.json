@@ -1,11 +1,6 @@
 {
   "version": 1,
   "skills": {
-    "agent-orchestration": {
-      "source": "/Users/maurice/Projects/os/skills/agent-orchestration",
-      "sourceType": "local",
-      "computedHash": "58646ad05ac1b714b52b3f7347cef7c4b5893fa1a233127f8f069afcbb11a80a"
-    },
     "copywriting-maurice": {
       "source": "/Users/maurice/Projects/os/skills/copywriting-maurice",
       "sourceType": "local",
