@@ -30,7 +30,7 @@ All copy is lowercase, builder-to-builder, understated. Canonical voice guide: `
 
 ## Adding an essay
 
-Essays are X articles mirrored here, images included. `tools/import-x-article.py <status-url> <slug> --summary "one lowercase line"` reads the article via api.fxtwitter.com and writes `essays/<slug>.html`, `essays/<slug>.md` and `essays/<slug>/NN.jpg` (cover first). It keeps headings, lists, bold, italic, links, blockquotes, dividers, tables and code blocks; the body keeps the author's casing, the h1 is lowercased. Then add the entry to `essays.html`, `essays.md`, `llms.txt`, `sitemap.xml`, and put the newest one on the home page (`index.html` + `index.md`). Re-running the importer overwrites the page but skips images already on disk.
+Essays are X articles mirrored here, images included. `tools/import-x-article.py <status-url> <slug> --summary "one lowercase line"` reads the article via api.fxtwitter.com and writes `essays/<slug>.html`, `essays/<slug>.md` and `essays/<slug>/NN.jpg` (cover first). It keeps headings, lists, bold, italic, links, blockquotes, dividers, tables and code blocks; the body keeps the author's casing, the h1 is lowercased. Then add the entry (cover thumbnail + title + summary + date) to `essays.html`, `essays.md`, `llms.txt`, `sitemap.xml`, and put the newest one on the home page (`index.html` + `index.md`). Re-running the importer overwrites the page but skips images already on disk.
 
 ## Facts that go stale
 

@@ -547,7 +547,30 @@ footer p {
 }
 
 .essay-list > li {
-  margin-bottom: 2rem;
+  margin-bottom: 2.75rem;
+}
+
+/* index covers: same crop for every essay so the list reads as one column */
+.essay-cover {
+  display: block;
+  margin-bottom: 0.9rem;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid oklch(66% 0.015 275 / 0.18);
+}
+
+.essay-cover img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 5 / 2;
+  object-fit: cover;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.essay-list > li:hover .essay-cover img,
+.essay-list > li:focus-within .essay-cover img {
+  opacity: 1;
 }
 
 .essay-list > li:last-child {
