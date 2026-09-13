@@ -22,9 +22,9 @@ Interesting to see the focus on _human life _and _the human environment_ here.
 
 Tools helped us understand our environment better, which led to knowledge, which led to new tools. It's a self-improving, compounding loop; a loop that has led us to where we are today.
 
-![](https://www.mauricekleine.com/essays/ride-the-floor-up/02.webp)
+![a red-lit robot with a human skull-like face.](https://www.mauricekleine.com/essays/ride-the-floor-up/02.webp)
 
-## Humans define(d) the frontier 
+## Humans define(d) the frontier
 
 This compounding loop was possible because humans have unique abilities that set us apart from the rest of life on earth. Creativity, planning, hypothesizing, making connections. We didn't just invent one stone tool and were like "_okay, we're done_". No, we applied that tool and in the process discovered and invented other use cases for it. We shaped, defined, experimented, validated, and iterated until we produced something new.
 
@@ -54,7 +54,7 @@ Historically, throughout many domains, jobs and tasks, the floor has fully consu
 
 Rather than a historical process, this is also a continuous process; right now, in some domains, the floor keeps inching closer to the ceiling while the ceiling is barely moving.
 
-![](https://www.mauricekleine.com/essays/ride-the-floor-up/03.webp)
+![diagram showing the frontier, ceiling, and floor.](https://www.mauricekleine.com/essays/ride-the-floor-up/03.webp)
 
 ## The floor is rising faster than ever
 
@@ -64,7 +64,7 @@ The nature of our tasks has changed significantly over the last 50 years; many n
 
 Software has helped us to push the frontier at an astounding rate; through faster communication, more advanced and complex calculations, incredibly realistic real-world modeling and forecasting, and artificial intelligence. It has helped humanity pool their knowledge, combine research effort and resources, and reduce or remove physical bottlenecks or obstacles, while packaging it all in an easy to reproduce format.
 
-![](https://www.mauricekleine.com/essays/ride-the-floor-up/04.webp)
+![chart of compounding technological growth from stone tools to ai.](https://www.mauricekleine.com/essays/ride-the-floor-up/04.webp)
 
 Software has allowed us to offload more and more work to technology across many domains, and the floors in those domains have been rapidly rising as a result. Simultaneously, the ceilings of many domains have been pushed up as well.
 
@@ -91,9 +91,9 @@ So we need to learn how to keep zooming out.
 
 Software engineers are already very, painfully aware of this. We started with 0s and 1s, then invented a large amount of programming languages, started sharing code and then used that open source code so we didn't have to re-invent the wheel. Instead, we were able to focus on our use cases and build them faster, at higher quality, and at bigger scales. We kept zooming out, building more things on top of more and more layers of abstraction.
 
-Now AI is here and we can zoom out more than ever, by describing in natural language what we want to build. Not only has that made software building much more accessible to everyone else, it is forcing us to reconnect with what a software engineer truly is - I wrote about this in [The Journey No Longer Matters](https://x.com/mauricekleine/status/2097607946398040331).
+Now AI is here and we can zoom out more than ever, by describing in natural language what we want to build. Not only has that made software building much more accessible to everyone else, it is forcing us to reconnect with what a software engineer truly is - I wrote about this in [The Journey No Longer Matters](https://www.mauricekleine.com/essays/the-journey-no-longer-matters.md).
 
-![](https://www.mauricekleine.com/essays/ride-the-floor-up/05.webp)
+![a person viewing a kitchen, house, street, neighbourhood, and city at increasing scale.](https://www.mauricekleine.com/essays/ride-the-floor-up/05.webp)
 
 ## Jobs are fluid now
 
@@ -119,7 +119,7 @@ Because whether you like it or not, we are all system architects now, and we nee
 
 There is so much happening in the AI-space right now, from AI agents [escaping their sandboxes](https://openai.com/index/hugging-face-incident-and-the-road-ahead/), to calls for [pacing the frontier](https://darioamodei.com/post/we-must-pace-the-frontier). It seems like Recursive Self-Improvement is on the horizon, and it could set off the situation below. 
 
-![](https://www.mauricekleine.com/essays/ride-the-floor-up/06.webp)
+![chart showing ai as a tipping point from human-led to technology-led progress.](https://www.mauricekleine.com/essays/ride-the-floor-up/06.webp)
 
 At the same time, AI leaders are taking responsibility by wanting to pace the frontier, though incentives are unclear and the stakes are incredibly high.
 

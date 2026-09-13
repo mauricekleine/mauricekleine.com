@@ -46,6 +46,7 @@ it's incredibly coincidental that we're here. we need to leverage that. propel t
 - [x](https://x.com/mauricekleine)
 - [reddit](https://www.reddit.com/user/mauricekleine/)
 - [email](mailto:hey@mauricekleine.com)
+- [essays](https://www.mauricekleine.com/essays.md)
 
 ---
 
