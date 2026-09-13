@@ -10,6 +10,36 @@ function markdownMirror(pathname) {
   return null;
 }
 
+// the html page a .md twin mirrors, for the canonical link
+function htmlForMirror(pathname) {
+  if (pathname === "/index.md") return "/";
+  const m = /^\/(about|essays|essays\/[a-z0-9-]+)\.md$/.exec(pathname);
+  return m ? `/${m[1]}` : null;
+}
+
+// true only when the client prefers markdown over html, q-values included.
+// googlebot sends */* (or text/html first) and gets html; agents that ask
+// for text/markdown outright get the twin.
+function prefersMarkdown(accept) {
+  let md = 0;
+  let html = 0;
+  for (const part of accept.split(",")) {
+    const [type, ...params] = part.trim().split(";");
+    const qParam = params.map((p) => p.trim()).find((p) => p.startsWith("q="));
+    const q = qParam ? parseFloat(qParam.slice(2)) : 1;
+    if (Number.isNaN(q)) continue;
+    if (type.trim() === "text/markdown") md = Math.max(md, q);
+    if (type.trim() === "text/html") html = Math.max(html, q);
+  }
+  return md > 0 && md > html;
+}
+
+function withHeaders(res, extra) {
+  const out = new Response(res.body, res);
+  for (const [k, v] of Object.entries(extra)) out.headers.set(k, v);
+  return out;
+}
+
 const MCP_PROTOCOL = "2025-06-18";
 
 const SERVER_INFO = {
@@ -164,18 +194,33 @@ export default {
     // markdown for agents, the hand-written edition
     const mirror = markdownMirror(url.pathname);
     const accept = request.headers.get("accept") || "";
-    if (mirror && accept.includes("text/markdown")) {
+    if (mirror && prefersMarkdown(accept)) {
       const res = await env.ASSETS.fetch(new URL(mirror, url.origin));
-      const body = await res.text();
-      return new Response(body, {
-        headers: {
-          "content-type": "text/markdown; charset=utf-8",
-          "x-markdown-tokens": String(Math.ceil(body.length / 4)),
-          vary: "accept",
-        },
-      });
+      if (res.ok) {
+        const body = await res.text();
+        return new Response(body, {
+          headers: {
+            "content-type": "text/markdown; charset=utf-8",
+            "x-markdown-tokens": String(Math.ceil(body.length / 4)),
+            link: `<${url.origin}${url.pathname}>; rel="canonical"`,
+            "cache-control": "public, max-age=300",
+            vary: "accept",
+          },
+        });
+      }
+      // no twin: fall through so a missing essay is a real 404
     }
 
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+
+    // the .md twins are readable duplicates of the html; say which page is canonical
+    const canonical = htmlForMirror(url.pathname);
+    if (canonical && res.ok) {
+      return withHeaders(res, { link: `<${url.origin}${canonical}>; rel="canonical"` });
+    }
+    if (mirror) {
+      return withHeaders(res, { vary: "accept" });
+    }
+    return res;
   },
 };

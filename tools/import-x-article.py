@@ -276,17 +276,25 @@ def main():
 
     title_lc = title.lower()
     desc = summary or (art.get("preview_text") or "").replace("\n", " ").strip()[:155]
-    fonts = """    <!-- Fonts: Panchang + Supreme via Fontshare, Fragment Mono via Google -->
+    fonts = """    <!-- Fonts: Panchang + Supreme self-hosted (style.css), Fragment Mono via Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://api.fontshare.com" />
-    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fragment+Mono&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/panchang-800.woff2"
+      crossorigin
     />
     <link
-      href="https://api.fontshare.com/v2/css?f[]=panchang@400,600,800&f[]=supreme@400,500&display=swap"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/supreme-400.woff2"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fragment+Mono&display=swap"
       rel="stylesheet"
     />
 """

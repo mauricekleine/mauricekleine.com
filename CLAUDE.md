@@ -9,9 +9,9 @@ bun dev             # bunx serve -p 3000
 bun run deploy      # bunx wrangler deploy (Cloudflare Worker, static assets)
 ```
 
-Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore` keeps repo infra out of the served site). `html_handling: auto-trailing-slash` means clean URLs: canonical is `/about`, and `/about.html` redirects there. `_headers` is honored natively (`_redirects` only supports relative URLs on Workers; apex→www is a 301 in worker.js). Pushing to main auto-deploys via Workers Builds.
+Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore` keeps repo infra out of the served site). `html_handling: auto-trailing-slash` means clean URLs: canonical is `/about`, and `/about.html` redirects there. `_headers` is honored natively (HSTS, nosniff, referrer policy, long-lived caching for `/essays/*/*`, `/sprites/*`, `/fonts/*`) (`_redirects` only supports relative URLs on Workers; apex→www is a 301 in worker.js). Pushing to main auto-deploys via Workers Builds.
 
-`worker.js` (runs first on every path) adds markdown content negotiation (`Accept: text/markdown` on `/`, `/about`, `/essays` or an essay returns the `.md` twin) and a hand-written MCP server at `/mcp` (tools: about_maurice, list_projects, get_uptime, make_a_wish; card at `/.well-known/mcp/server-card.json`). `webmcp.js` exposes in-page tools to browser agents, including `summon_sky_traffic`. If you edit `.well-known/agent-skills/about-maurice/SKILL.md`, recompute its sha256 digest in `.well-known/agent-skills/index.json`.
+`worker.js` (runs first on every path) adds markdown content negotiation (`Accept` preferring `text/markdown` over `text/html` on `/`, `/about`, `/essays` or an essay returns the `.md` twin with a canonical `Link` to the html; the `.md` files themselves get the same header; a missing twin falls through to the real 404) and a hand-written MCP server at `/mcp` (tools: about_maurice, list_projects, get_uptime, make_a_wish; card at `/.well-known/mcp/server-card.json`). `webmcp.js` exposes in-page tools to browser agents, including `summon_sky_traffic`. If you edit `.well-known/agent-skills/about-maurice/SKILL.md`, recompute its sha256 digest in `.well-known/agent-skills/index.json`.
 
 ## Files
 
@@ -42,6 +42,6 @@ Essays are X articles mirrored here, images included. `tools/import-x-article.py
 ## Conventions
 
 - Phosphor icons, vendored as inline SVG (no icon font, no CDN)
-- Fonts: Panchang (display) + Supreme (body) via Fontshare, Fragment Mono via Google Fonts
+- Fonts: Panchang (display) + Supreme (body) self-hosted as woff2 under `fonts/` (`@font-face` at the top of style.css; Fontshare's CSS API silently dropped Supreme), Fragment Mono via Google Fonts
 - Keep the Simple Analytics script (`https://api.mauricekleine.com/latest.js`) at the end of body
 - Preserve WCAG AA contrast and the reduced-motion fallback in any visual change
