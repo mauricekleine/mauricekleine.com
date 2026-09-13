@@ -11,22 +11,28 @@ bun run deploy      # bunx wrangler deploy (Cloudflare Worker, static assets)
 
 Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore` keeps repo infra out of the served site). `html_handling: auto-trailing-slash` means clean URLs: canonical is `/about`, and `/about.html` redirects there. `_headers` is honored natively (`_redirects` only supports relative URLs on Workers; apex→www is a 301 in worker.js). Pushing to main auto-deploys via Workers Builds.
 
-`worker.js` (run first only on `/`, `/about`, `/mcp`) adds markdown content negotiation (`Accept: text/markdown` returns the `.md` mirrors) and a hand-written MCP server at `/mcp` (tools: about_maurice, list_projects, get_uptime, make_a_wish; card at `/.well-known/mcp/server-card.json`). `webmcp.js` exposes in-page tools to browser agents, including `summon_sky_traffic`. If you edit `.well-known/agent-skills/about-maurice/SKILL.md`, recompute its sha256 digest in `.well-known/agent-skills/index.json`.
+`worker.js` (runs first on every path) adds markdown content negotiation (`Accept: text/markdown` on `/`, `/about`, `/essays` or an essay returns the `.md` twin) and a hand-written MCP server at `/mcp` (tools: about_maurice, list_projects, get_uptime, make_a_wish; card at `/.well-known/mcp/server-card.json`). `webmcp.js` exposes in-page tools to browser agents, including `summon_sky_traffic`. If you edit `.well-known/agent-skills/about-maurice/SKILL.md`, recompute its sha256 digest in `.well-known/agent-skills/index.json`.
 
 ## Files
 
 - `index.html` — the one-pager (hero → currently → side quests → the graveyard → elsewhere → footer)
 - `about.html` — longer-form about page, same visual system
+- `essays.html` + `essays/<slug>.html` — the essays index and one page per essay; each has a `.md` twin next to it (`essays.md`, `essays/<slug>.md`). Essay bodies keep the author's original casing; page chrome stays lowercase
 - `style.css` — all styling; design tokens as OKLCH custom properties in `:root`
 - `stars.js` — the night-sky canvas (star drift, twinkle, cursor parallax, occasional meteor; static frame under prefers-reduced-motion)
-- `texture.js` — dithered neuro-noise nebula (hand-written WebGL shader, no library); film grain lives in style.css as `body::after`
-- `currents.js` + `vendor/paper-shaders/` — the texture-era shader stack (warp + neuro-noise + grain-gradient, ember palette); retires the texture.js nebula on capable devices, bails out entirely on weak ones
+- `texture.js` — dithered neuro-noise nebula (hand-written WebGL shader, no library), kept faint; film grain lives in style.css as `body::after`
 - `PRODUCT.md` / `DESIGN.md` — strategy and visual system; read before design changes
 - `og.png` — social share card (1200×630); regenerate by opening `og-template.html` at a 1200×630 viewport and screenshotting (it draws the night sky + constellations on a canvas)
 
 ## Voice
 
 All copy is lowercase, builder-to-builder, understated. Canonical voice guide: `../os/brand/voice.md`. Hard rules: no em dashes, no marketing buzzwords, no "X isn't just Y. It's Z" constructions, proof over hype.
+
+## Adding an essay
+
+1. Copy `essays/coding-is-solved.html` to `essays/<slug>.html`; replace title, description, canonical, dates, source link, JSON-LD, and the `<article>` body (`<p>`, `<h2>`, `<ul>`, `<blockquote>` only).
+2. Write the `essays/<slug>.md` twin.
+3. Add the entry to `essays.html`, `essays.md`, `llms.txt`, `sitemap.xml`; put the newest one on the home page (`index.html` + `index.md`, one entry).
 
 ## Facts that go stale
 

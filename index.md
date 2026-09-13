@@ -28,6 +28,12 @@ life is a series of experiments. some of them end, and that's fine, as long as y
 - **onesixtyeight** (discontinued, 2025-2026) - functional mushroom blend for focus. turns out atoms are harder than bits
 - **spinup** (spun down, 2025-2026) - cloud agent runtime on firecracker microvms. joining waimakers was part of the deal, so it counts as an exit. probably
 
+## essays
+
+- [coding is solved](https://www.mauricekleine.com/essays/coding-is-solved.md) (2026-08-25) - my agents merged hundreds of prs i never read. what changed, and why planning and validation are the job now
+
+[all essays](https://www.mauricekleine.com/essays.md)
+
 ## elsewhere
 
 - [github](https://github.com/mauricekleine)

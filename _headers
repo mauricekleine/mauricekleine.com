@@ -13,6 +13,9 @@
 /about
   Link: </about.md>; rel="alternate"; type="text/markdown"
 
+/essays
+  Link: </essays.md>; rel="alternate"; type="text/markdown"
+
 /.well-known/api-catalog
   Content-Type: application/linkset+json
 

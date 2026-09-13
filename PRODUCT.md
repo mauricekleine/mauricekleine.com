@@ -10,7 +10,7 @@ People who land here from X, LinkedIn, GitHub, Hackadam, or a project footer and
 
 ## Product Purpose
 
-Maurice's personal one-pager: the hub of his indie-hacker identity. It routes to his side quests (Mockly, Fluncle, Hackadam, NonoBench), states his day job (Lead AI Engineer at Waimakers), owns his ended experiments (the graveyard), and links his public profiles. Success = a visitor immediately gets his vibe ("i build small internet things and sometimes they work") and clicks onward.
+Maurice's personal one-pager: the hub of his indie-hacker identity. It routes to his side quests (Mockly, Fluncle, Hackadam, NonoBench), states his day job (Lead AI Engineer at Waimakers), owns his ended experiments (the graveyard), mirrors his essays from X and LinkedIn at `/essays`, and links his public profiles. Success = a visitor immediately gets his vibe ("i build small internet things and sometimes they work") and clicks onward.
 
 ## Brand Personality
 
@@ -27,7 +27,7 @@ Playful, honest, understated. A builder talking to builders: lowercase, short li
 
 1. **The night sky is the personality.** One committed scene (canvas star field, the 2022 idea finally shipped) instead of decoration sprinkled on a plain page.
 2. **Ended experiments are shown, not hidden.** The graveyard is a first-class section; outcomes stated plainly.
-3. **One page, one scroll, every word earns its place.** Copy in Maurice's voice is the content; nothing padded.
+3. **One page, one scroll, every word earns its place.** Copy in Maurice's voice is the content; nothing padded. Essays get their own pages so the one-pager stays one page.
 4. **Small internet thing.** Hand-written HTML/CSS/JS, no framework, no build step. The craft is the flex.
 5. **Route outward.** Every project and profile is one obvious click away.
 

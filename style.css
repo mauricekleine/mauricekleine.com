@@ -45,12 +45,12 @@ body::before {
     linear-gradient(to bottom, var(--night-deep), oklch(13% 0.03 280 / 0) 90px),
     radial-gradient(
       ellipse 90% 55% at 15% -5%,
-      oklch(45% 0.09 300 / 0.14),
+      oklch(45% 0.09 300 / 0.10),
       transparent 60%
     ),
     radial-gradient(
       ellipse 70% 45% at 90% 20%,
-      oklch(55% 0.11 55 / 0.07),
+      oklch(55% 0.11 55 / 0.04),
       transparent 65%
     ),
     linear-gradient(to bottom, oklch(17% 0.035 275 / 0), var(--night-deep));
@@ -82,7 +82,7 @@ body::after {
   inset: -32px;
   z-index: 6;
   pointer-events: none;
-  opacity: 0.045;
+  opacity: 0.03;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
@@ -246,17 +246,6 @@ h2 {
   font-weight: 600;
   margin-bottom: 1rem;
   text-wrap: balance;
-}
-
-h2::before {
-  content: "✦ ";
-  color: var(--ember);
-  font-size: 0.85em;
-}
-
-#graveyard-heading::before {
-  content: "✧ ";
-  color: var(--dim);
 }
 
 p {
@@ -516,6 +505,100 @@ footer p {
 
 .back-link {
   margin-bottom: 2.5rem;
+}
+
+/* essays */
+
+.page-hero .hero-meta {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.page-hero .tagline {
+  color: var(--muted);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.essay-meta {
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--dim);
+  letter-spacing: 0.04em;
+}
+
+.essay-meta a {
+  color: var(--dim);
+}
+
+.page-hero .essay-meta {
+  margin-top: 0.75rem;
+}
+
+.essay-list {
+  list-style: none;
+}
+
+.essay-list > li {
+  margin-bottom: 2rem;
+}
+
+.essay-list > li:last-child {
+  margin-bottom: 0;
+}
+
+.essay-list a {
+  font-weight: 500;
+  font-size: 1.1em;
+}
+
+.essay-list p {
+  color: var(--muted);
+  margin: 0.25rem 0 0;
+}
+
+/* the essay body keeps the author's own casing; only the chrome is lowercase */
+.essay {
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.essay h2 {
+  margin-top: 2.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.essay p,
+.essay ul {
+  margin-bottom: 1.1rem;
+}
+
+.essay ul {
+  padding-left: 1.25rem;
+  color: var(--starlight);
+}
+
+.essay li {
+  margin-bottom: 0.3rem;
+}
+
+.essay blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.1rem;
+  border-left: 2px solid oklch(75% 0.13 55 / 0.5);
+  color: var(--muted);
+}
+
+.essay blockquote p:last-child {
+  margin-bottom: 0;
 }
 
 @media (max-width: 600px) {
