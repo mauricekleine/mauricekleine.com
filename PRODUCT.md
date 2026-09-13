@@ -14,7 +14,7 @@ Maurice's personal one-pager: the hub of his indie-hacker identity. It routes to
 
 ## Brand Personality
 
-Playful, honest, understated. A builder talking to builders: lowercase, short lines, proof over hype, self-deprecating but never insecure. Core philosophy woven in: life is a series of experiments, even the ended ones count; 168 hours a week; the biggest comfort zone possible. Voice rules live in ../os/brand/voice.md (no em dashes, no "X isn't just Y. It's Z", no buzzwords).
+Playful, honest, understated. A builder talking to builders: lowercase, short lines, proof over hype, self-deprecating but never insecure. Core philosophy woven in: life is a series of experiments, even the ended ones count; 168 hours a week; the biggest comfort zone possible. Voice rules live in ../soliton/brand/voice.md (no em dashes, no "X isn't just Y. It's Z", no buzzwords).
 
 ## Anti-references
 
