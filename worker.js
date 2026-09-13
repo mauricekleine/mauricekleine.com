@@ -1,12 +1,14 @@
 // the worker: static assets plus two hand-written niceties.
-// 1. markdown content negotiation: Accept: text/markdown on / and /about
+// 1. markdown content negotiation: Accept: text/markdown on /, /about, /essays and /essays/*
 // 2. a tiny mcp server at /mcp. yes, a personal site with an mcp server.
 // no sdk, no framework. it's json-rpc over http, we can type that by hand.
 
-const MARKDOWN_MIRRORS = {
-  "/": "/index.md",
-  "/about": "/about.md",
-};
+// every html page has a hand-written .md twin next to it
+function markdownMirror(pathname) {
+  if (pathname === "/") return "/index.md";
+  if (/^\/(about|essays|essays\/[a-z0-9-]+)$/.test(pathname)) return `${pathname}.md`;
+  return null;
+}
 
 const MCP_PROTOCOL = "2025-06-18";
 
@@ -104,7 +106,7 @@ async function handleMcp(request, env, origin) {
         capabilities: { tools: { listChanged: false } },
         serverInfo: SERVER_INFO,
         instructions:
-          "read-only tools about maurice kleine. everything here is public; no auth, no state, no tricks. markdown mirrors at /index.md and /about.md if you'd rather just read.",
+          "read-only tools about maurice kleine. everything here is public; no auth, no state, no tricks. markdown mirrors at /index.md, /about.md and /essays.md if you'd rather just read.",
       });
 
     case "ping":
@@ -160,7 +162,7 @@ export default {
     }
 
     // markdown for agents, the hand-written edition
-    const mirror = MARKDOWN_MIRRORS[url.pathname];
+    const mirror = markdownMirror(url.pathname);
     const accept = request.headers.get("accept") || "";
     if (mirror && accept.includes("text/markdown")) {
       const res = await env.ASSETS.fetch(new URL(mirror, url.origin));

@@ -2,7 +2,7 @@
 # humans and agents both welcome. this site is built in public:
 # read it, quote it, feed it to your model, train on it.
 #
-# markdown mirrors: /index.md and /about.md
+# markdown mirrors: /index.md, /about.md, /essays.md and /essays/<slug>.md
 # machine-readable pointers: /llms.txt and /.well-known/api-catalog
 
 User-agent: *

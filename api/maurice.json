@@ -27,7 +27,8 @@
   },
   "markdown_mirrors": [
     "https://www.mauricekleine.com/index.md",
-    "https://www.mauricekleine.com/about.md"
+    "https://www.mauricekleine.com/about.md",
+    "https://www.mauricekleine.com/essays.md"
   ],
   "note": "yes, a personal site with an api. it's static json, but so is most of the internet if you squint"
 }

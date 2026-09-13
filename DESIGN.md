@@ -25,7 +25,8 @@ Contrast: body text on --night ≥ 10:1; --muted ≥ 6:1; --dim reserved for ≥
 - Body: **Supreme** (Fontshare). Warm, round, legible; reports to Panchang without competing. Weights: 400 body, 500 emphasis (waypoint names, grave titles).
 - Mono accent: **Fragment Mono** (Google Fonts) — log IDs, status stamps, footer meta. Small doses only.
 - **Bricolage Grotesque is retired** (texture-era refresh, 2026-07-30). It survives only in og.png until that's regenerated.
-- Headings lowercase (brand voice). Scale ratio ≥1.3, fluid clamp() on the display line (clamp tuned so the Panchang h1 stays one line at 390px), `text-wrap: balance` on headings.
+- Section headings carry no glyph prefix; the waypoint glyphs are the only stars in the column.
+- Headings lowercase (brand voice). Essay bodies are the exception: they keep the casing they were published with. Scale ratio ≥1.3, fluid clamp() on the display line (clamp tuned so the Panchang h1 stays one line at 390px), `text-wrap: balance` on headings.
 
 ## Components
 
@@ -36,7 +37,9 @@ Contrast: body text on --night ≥ 10:1; --muted ≥ 6:1; --dim reserved for ≥
 
 ## Layout
 
-Single centered column, max-width 40rem, generous vertical rhythm (clamp-based section spacing). Star canvas is `position: fixed`, z-index below content, pointer-events none. One-pager: hero → currently → side quests → graveyard → links → footer.
+Single centered column, max-width 40rem, generous vertical rhythm (clamp-based section spacing). Star canvas is `position: fixed`, z-index below content, pointer-events none. One-pager: hero → currently → side quests → graveyard → essays → links → footer.
+
+**Essays** (`/essays`, `/essays/<slug>`): same column and sky. Index is a reversed list (cover thumbnail cropped 5:2 at 85% opacity, title link, one-line summary, mono date). Essay pages use a compact page hero (back link, smaller `.essay-title` h1 because X titles run long, mono meta line) and an `.essay` article at 1.125rem/1.7: plain `h2`/`h3`, `ul`, ember-rule `blockquote`, full-width `figure` images with a hairline border (cover image first), a short centered `hr` for dividers, hairline tables with mono headers, and a dark `pre` for code. No cards, no reading-time badges, no share buttons.
 
 ## Motion
 
@@ -46,11 +49,11 @@ Single centered column, max-width 40rem, generous vertical rhythm (clamp-based s
 
 ## Texture
 
-Texture-era stack (superthread texture lab, ratified 2026-07-30) plus the original hand-written grain:
+Quiet by design (2026-09-13: the texture-era shader stack was retired to cut visual noise; the sky is stars, a faint dithered nebula, and grain). Words beat weather.
 
-- **Deep currents** (`currents.js` + `vendor/paper-shaders/`): three vendored Paper Shaders (Apache-2.0) layers below both canvases, the bridge's dial-11 recipe with the violet swapped for ember. Bottom to top: warp "deep water" (`#11131f`/`#191c2c` with a dark ember undertone `#4a2f1d`), neuro-noise "dark energy" masked to the bottom-left corner (dim ember `#b06a3a` veins, opacity 0.55 — bottom-left so it never fights the constellations or the sky traffic entering top), and a grain-gradient ember aurora wave (`#f2b276`/`#ffba73`/`#2b2233`, intensity 0.6, noise 0.75, softness 0.82, opacity 0.85). Frames anchor to the fleet epoch (stardate time: a refresh resumes mid-wave); reduced motion gets speed 0 on a fixed frame. Performance: `minPixelRatio` 1, ≤2.5e6 pixels per layer, and the whole stack is skipped when `hardwareConcurrency` ≤ 4 or WebGL2 is unavailable — weak devices keep the pre-currents sky.
-- **Dithered neuro nebula** (`texture.js`): a single WebGL fragment shader behind the stars — domain-warped fbm ridges quantized through a Bayer 4 matrix (ordered dither), tinted nebula-violet drifting into ember. Rendered at ~quarter res with `image-rendering: pixelated` so the dither stays chunky. 30fps cap, additive blend at alpha ≤0.16, intensity dimmed in the reading column, paused when hidden, single static frame under reduced motion, skipped entirely without WebGL. Since the texture era it's the fallback sky: `currents.js` retires it (`RETIRE_LEGACY_NEBULA`) on devices that run the shader stack, and it carries on alone on the bail-out path.
-- **Film grain** (`style.css` `body::after`): SVG feTurbulence tile at 4.5% opacity, `mix-blend-mode: overlay`, jittered with a `steps(6)` animation; static under reduced motion. Also baked into og.png via og-template.html.
+- **Deep currents (retired)** (`currents.js` + `vendor/paper-shaders/`): the warp + neuro-noise + grain-gradient aurora stack lived in `currents.js` + `vendor/paper-shaders/` until 2026-09-13. It is in git history (commit 9ac5ffa) if the sky ever wants weather again.
+- **Dithered neuro nebula** (`texture.js`): a single WebGL fragment shader behind the stars — domain-warped fbm ridges quantized through a Bayer 4 matrix (ordered dither), tinted nebula-violet drifting into ember. Rendered at ~quarter res with `image-rendering: pixelated` so the dither stays chunky. 30fps cap, additive blend at alpha ≤0.11, intensity dimmed in the reading column, paused when hidden, single static frame under reduced motion, skipped entirely without WebGL.
+- **Film grain** (`style.css` `body::after`): SVG feTurbulence tile at 3% opacity, `mix-blend-mode: overlay`, jittered with a `steps(6)` animation; static under reduced motion. Also baked into og.png via og-template.html.
 
 ## Delight systems
 

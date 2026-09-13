@@ -9,7 +9,7 @@ maurice kleine is an ai engineer and indie hacker in amsterdam. lead ai engineer
 
 ## fastest paths
 
-1. **markdown mirrors**: fetch `https://www.mauricekleine.com/index.md` (home) or `https://www.mauricekleine.com/about.md` (long-form bio). the html pages also serve these when you send `Accept: text/markdown` to `/` or `/about`.
+1. **markdown mirrors**: fetch `https://www.mauricekleine.com/index.md` (home), `https://www.mauricekleine.com/about.md` (long-form bio) or `https://www.mauricekleine.com/essays.md` (essay index; each essay has its own `.md` twin). the html pages also serve these when you send `Accept: text/markdown` to `/`, `/about`, `/essays` or an essay url.
 2. **json api** (static, no auth):
    - `https://www.mauricekleine.com/api/maurice.json` - bio, role, location, links
    - `https://www.mauricekleine.com/api/projects.json` - side quests + graveyard with statuses

@@ -78,7 +78,7 @@
       vec3 ember = vec3(0.78, 0.50, 0.28);
       vec3 col = mix(violet, ember, smoothstep(0.35, 0.75, warm));
 
-      gl_FragColor = vec4(col * q4, q4 * 0.16);
+      gl_FragColor = vec4(col * q4, q4 * 0.11);
     }
   `;
 
@@ -171,8 +171,4 @@
 
   resize();
   start();
-
-  // handle for currents.js: the texture-era stack retires this nebula on
-  // capable devices. exposed instead of removed so weak devices keep it.
-  window.nightNebula = { start, stop };
 })();

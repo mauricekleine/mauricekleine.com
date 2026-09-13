@@ -28,6 +28,12 @@ life is a series of experiments. some of them end, and that's fine, as long as y
 - **onesixtyeight** (discontinued, 2025-2026) - functional mushroom blend for focus. turns out atoms are harder than bits
 - **spinup** (spun down, 2025-2026) - cloud agent runtime on firecracker microvms. joining waimakers was part of the deal, so it counts as an exit. probably
 
+## essays
+
+- [ride the floor up](https://www.mauricekleine.com/essays/ride-the-floor-up.md) (2026-09-13) - ai raises the floor of what technology does for us. how to keep raising your own ceiling while it does
+
+[all essays](https://www.mauricekleine.com/essays.md)
+
 ## elsewhere
 
 - [github](https://github.com/mauricekleine)
