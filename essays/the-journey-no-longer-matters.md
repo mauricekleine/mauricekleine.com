@@ -1,6 +1,6 @@
 # The Journey No Longer Matters
 
-2026-09-09 · first posted on [x](https://x.com/mauricekleine/status/2097607946398040331)
+2026-09-09 · first posted on [x](https://x.com/mauricekleine/status/2097607946398040331) and [linkedin](https://www.linkedin.com/pulse/journey-longer-matters-maurice-kleine-rxgie/)
 
 ![](https://www.mauricekleine.com/essays/the-journey-no-longer-matters/01.jpg)
 

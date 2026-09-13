@@ -1,6 +1,6 @@
 # My agents merged 468 PRs in 23 days. I didn't read a single one of them.
 
-2026-08-25 · first posted on [x](https://x.com/mauricekleine/status/2092245356872429910)
+2026-08-25 · first posted on [x](https://x.com/mauricekleine/status/2092245356872429910) and [linkedin](https://www.linkedin.com/pulse/my-agents-merged-468-prs-23-days-i-didnt-read-single-one-kleine-76lge/)
 
 ![](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/01.jpg)
 
