@@ -21,8 +21,8 @@ Contrast: body text on --night ≥ 10:1; --muted ≥ 6:1; --dim reserved for ≥
 
 ## Typography
 
-- Display: **Panchang** (Fontshare). Squared, techy, in-your-face — the fleet's display voice per the superthread type stack (ratified 2026-07-30). Weights: 800 for the h1 wordmark, 600 for section headings.
-- Body: **Supreme** (Fontshare). Warm, round, legible; reports to Panchang without competing. Weights: 400 body, 500 emphasis (waypoint names, grave titles).
+- Display: **Panchang** (Fontshare, self-hosted woff2 under `fonts/`). Squared, techy, in-your-face — the fleet's display voice per the superthread type stack (ratified 2026-07-30). Weights: 800 for the h1 wordmark, 600 for section headings.
+- Body: **Supreme** (Fontshare, self-hosted; the CSS API dropped it silently, so the site ran on system-ui until 2026-09-13). Warm, round, legible; reports to Panchang without competing. Weights: 400 body, 500 emphasis (waypoint names, grave titles).
 - Mono accent: **Fragment Mono** (Google Fonts) — log IDs, status stamps, footer meta. Small doses only.
 - **Bricolage Grotesque is retired** (texture-era refresh, 2026-07-30). It survives only in og.png until that's regenerated.
 - Section headings carry no glyph prefix; the waypoint glyphs are the only stars in the column.

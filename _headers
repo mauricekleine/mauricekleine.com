@@ -1,4 +1,26 @@
-# cloudflare pages headers. if hosting ignores this file, it's harmless.
+# workers static assets honor this file (cloudflare pages syntax).
+
+/*
+  Strict-Transport-Security: max-age=31536000
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# essay images and sprites never change in place (a new essay is a new folder);
+# fonts are versioned by filename. html stays revalidate-always.
+/essays/:slug/*
+  Cache-Control: public, max-age=31536000, immutable
+/sprites/*
+  Cache-Control: public, max-age=31536000, immutable
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/maurice.png
+  Cache-Control: public, max-age=604800
+/og.png
+  Cache-Control: public, max-age=604800
+/*.css
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/*.js
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
 /
   Link: </.well-known/api-catalog>; rel="api-catalog"

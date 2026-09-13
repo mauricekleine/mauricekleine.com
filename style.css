@@ -1,3 +1,41 @@
+/* fonts, self-hosted (fontshare ships them under its free license; google's
+   fragment mono still comes from google, which cloudflare fonts inlines) */
+@font-face {
+  font-family: "Panchang";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/panchang-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Panchang";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/panchang-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Panchang";
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/panchang-800.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Supreme";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/supreme-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Supreme";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/supreme-500.woff2") format("woff2");
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
