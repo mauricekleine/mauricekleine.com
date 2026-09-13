@@ -213,6 +213,27 @@ export default {
 
     const res = await env.ASSETS.fetch(request);
 
+    // The immutable image-path rule must not cache a missing page for a year.
+    if (res.status === 404) {
+      return withHeaders(res, {
+        "cache-control": "public, max-age=0, must-revalidate",
+        ...(mirror ? { vary: "accept" } : {}),
+      });
+    }
+
+    // Static assets verifies that a page exists before normalizing its URL.
+    // Make only those HTML aliases permanent; leave other redirects alone.
+    const location = res.headers.get("location");
+    if ((request.method === "GET" || request.method === "HEAD") && res.status === 307 && location) {
+      const target = new URL(location, url);
+      const alias = target.pathname === "/"
+        ? url.pathname === "/index.html" || url.pathname === "/index"
+        : url.pathname === `${target.pathname}.html` || url.pathname === `${target.pathname}/`;
+      if (alias && markdownMirror(target.pathname) && target.origin === url.origin && target.search === url.search) {
+        return new Response(res.body, { status: 308, headers: res.headers });
+      }
+    }
+
     // the .md twins are readable duplicates of the html; say which page is canonical
     const canonical = htmlForMirror(url.pathname);
     if (canonical && res.ok) {

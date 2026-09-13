@@ -2,13 +2,17 @@
 """import an x article into essays/<slug>.html + essays/<slug>.md + essays/<slug>/01.jpg + NN.webp
 
 usage: tools/import-x-article.py <status-url-or-id> <slug> [--summary "one line for the index"] [--linkedin <pulse-url>]
+       [--seo-title "short search title, without the author suffix"]
 
 after importing, run tools/link-essays.py to refresh the older/newer footer nav on every essay.
 
 reads the article through api.fxtwitter.com (draft.js blocks + media), keeps
 headings, lists, bold, italic, links, blockquotes, dividers, tables, code
 blocks and every image. images are optimized with ffmpeg when available: the
-cover is JPEG and body images are WebP, all at no more than 1200px wide. if
+cover is JPEG and body images are WebP, all at no more than 1200px wide.
+When cwebp is available, the cover also gets responsive WebP copies for HTML;
+the JPEG stays in social metadata and Markdown. Existing search titles survive
+re-imports unless --seo-title is supplied. If
 ffmpeg is unavailable, the original image format is kept with a warning. the
 essay body keeps the author's casing; the page chrome is lowercase. no Python
 dependencies beyond the standard library.
@@ -24,6 +28,9 @@ import sys
 import tempfile
 import urllib.request
 from datetime import datetime, timezone
+from pathlib import Path
+
+from optimize_images import COVER_SIZES, cover_variants
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.mauricekleine.com"
@@ -219,6 +226,11 @@ def slugify_check(slug):
 
 def main():
     args = sys.argv[1:]
+    seo_title = ""
+    if "--seo-title" in args:
+        i = args.index("--seo-title")
+        seo_title = args[i + 1]
+        del args[i : i + 2]
     summary = ""
     if "--summary" in args:
         i = args.index("--summary")
@@ -284,10 +296,19 @@ def main():
 
     def figure(info, alt, cover=False):
         src, w, h = save_image(info, alt, cover=cover)
+        display_src = src
+        responsive = ""
+        if cover:
+            variants = cover_variants(Path(ROOT) / src.lstrip("/"), w)
+            if variants:
+                candidates = [("/" + path.relative_to(ROOT).as_posix(), size) for path, size in variants]
+                display_src = next((url for url, size in candidates if size >= 800), candidates[-1][0])
+                srcset = ", ".join(f"{url} {size}w" for url, size in candidates)
+                responsive = f' srcset="{srcset}" sizes="{COVER_SIZES}"'
         dims = f' width="{w}" height="{h}"' if w and h else ""
         attrs = ' fetchpriority="high"' if cover else ' loading="lazy" decoding="async"'
         return (
-            f'<figure><img src="{src}" alt="{html.escape(alt, quote=True)}"{dims}{attrs} /></figure>',
+            f'<figure><img src="{display_src}"{responsive} alt="{html.escape(alt, quote=True)}"{dims}{attrs} /></figure>',
             f"![{alt}]({SITE}{src})",
             src,
             (w, h),
@@ -364,6 +385,12 @@ def main():
         i += 1
 
     title_lc = title.lower()
+    page_title = f"{seo_title.lower() or title_lc} - maurice kleine"
+    existing_page = Path(ROOT) / "essays" / f"{slug}.html"
+    if not seo_title and existing_page.exists():
+        existing_title = re.search(r"<title>(.*?)</title>", existing_page.read_text())
+        if existing_title:
+            page_title = html.unescape(existing_title[1])
     desc = summary or (art.get("preview_text") or "").replace("\n", " ").strip()[:155]
     fonts = """    <!-- Fonts: Panchang + Supreme self-hosted (style.css), Fragment Mono via Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -397,7 +424,7 @@ def main():
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{html.escape(title_lc)} - Maurice Kleine</title>
+    <title>{html.escape(page_title)}</title>
     <meta name="description" content="{html.escape(desc, quote=True)}" />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="{SITE}/essays/{slug}" />
@@ -429,7 +456,7 @@ def main():
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/maurice.png" />
 
-{fonts}    <link rel="stylesheet" href="/style.css" />
+{fonts}    <link rel="stylesheet" href="/style.css?v=20260913-seo" />
 
     <script type="application/ld+json">
       {{
@@ -483,7 +510,7 @@ def main():
     md = f"# {title}\n\n{iso} · first posted on [x]({source})" + (f" and [linkedin]({linkedin})" if linkedin else "") + "\n\n" + "\n\n".join(body_md) + "\n"
     open(os.path.join(ROOT, "essays", f"{slug}.md"), "w").write(md)
     print(json.dumps({"slug": slug, "title": title, "date": iso, "human": human, "images": counter[0], "summary": desc}))
-    print("reminder: add the new entry's cover <img> with width/height to essays.html")
+    print("reminder: copy the article's cover <img> to essays.html, including width/height and srcset/sizes")
 
 
 if __name__ == "__main__":
