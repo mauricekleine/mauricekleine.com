@@ -15,3 +15,4 @@ wrangler.jsonc
 og-template.html
 .wrangler
 worker.js
+tools

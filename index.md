@@ -30,7 +30,7 @@ life is a series of experiments. some of them end, and that's fine, as long as y
 
 ## essays
 
-- [coding is solved](https://www.mauricekleine.com/essays/coding-is-solved.md) (2026-08-25) - my agents merged hundreds of prs i never read. what changed, and why planning and validation are the job now
+- [ride the floor up](https://www.mauricekleine.com/essays/ride-the-floor-up.md) (2026-09-13) - ai raises the floor of what technology does for us. how to keep raising your own ceiling while it does
 
 [all essays](https://www.mauricekleine.com/essays.md)
 

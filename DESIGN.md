@@ -39,7 +39,7 @@ Contrast: body text on --night ≥ 10:1; --muted ≥ 6:1; --dim reserved for ≥
 
 Single centered column, max-width 40rem, generous vertical rhythm (clamp-based section spacing). Star canvas is `position: fixed`, z-index below content, pointer-events none. One-pager: hero → currently → side quests → graveyard → essays → links → footer.
 
-**Essays** (`/essays`, `/essays/<slug>`): same column and sky. Index is a reversed list (title link, one-line summary, mono date). Essay pages use a compact page hero (back link, h1, mono meta line) and an `.essay` article at 1.125rem/1.7 with plain `h2`, `ul`, and an ember-rule `blockquote`. No cards, no reading-time badges, no share buttons.
+**Essays** (`/essays`, `/essays/<slug>`): same column and sky. Index is a reversed list (title link, one-line summary, mono date). Essay pages use a compact page hero (back link, smaller `.essay-title` h1 because X titles run long, mono meta line) and an `.essay` article at 1.125rem/1.7: plain `h2`/`h3`, `ul`, ember-rule `blockquote`, full-width `figure` images with a hairline border (cover image first), a short centered `hr` for dividers, hairline tables with mono headers, and a dark `pre` for code. No cards, no reading-time badges, no share buttons.
 
 ## Motion
 

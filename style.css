@@ -601,6 +601,86 @@ footer p {
   margin-bottom: 0;
 }
 
+/* long titles (x articles run long) get a smaller display size */
+.essay-title {
+  font-size: clamp(1.5rem, 2.6vw + 0.8rem, 2.2rem);
+  line-height: 1.2;
+}
+
+.essay figure {
+  margin: 1.75rem 0;
+}
+
+.essay figure.cover {
+  margin-top: 0;
+  margin-bottom: 2.5rem;
+}
+
+.essay img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid oklch(66% 0.015 275 / 0.18);
+}
+
+.essay hr {
+  border: 0;
+  height: 1px;
+  margin: 2.25rem auto;
+  width: 4rem;
+  background: oklch(66% 0.015 275 / 0.35);
+}
+
+.essay h3 {
+  font-family: "Panchang", system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.essay table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95em;
+}
+
+.essay th,
+.essay td {
+  text-align: left;
+  padding: 0.45rem 0.75rem 0.45rem 0;
+  border-bottom: 1px solid oklch(66% 0.015 275 / 0.25);
+  vertical-align: top;
+}
+
+.essay th {
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--dim);
+}
+
+.essay pre {
+  margin: 1.5rem 0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--muted);
+  background: oklch(13% 0.03 280 / 0.7);
+  border: 1px solid oklch(66% 0.015 275 / 0.18);
+  border-radius: 6px;
+  white-space: pre-wrap;
+}
+
+.essay code {
+  font-family: "Fragment Mono", monospace;
+}
+
 @media (max-width: 600px) {
   body {
     font-size: 1rem;
