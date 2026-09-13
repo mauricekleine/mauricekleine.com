@@ -32,6 +32,14 @@ All copy is lowercase, builder-to-builder, understated. Canonical voice guide: `
 
 Essays are X articles mirrored here, images included. `tools/import-x-article.py <status-url> <slug> --summary "one lowercase line" [--linkedin <pulse-url>]` reads the article via api.fxtwitter.com and writes `essays/<slug>.html`, `essays/<slug>.md` and `essays/<slug>/NN.jpg` (cover first). It keeps headings, lists, bold, italic, links, blockquotes, dividers, tables and code blocks; the body keeps the author's casing, the h1 is lowercased. Then add the entry (cover thumbnail + title + summary + date) to `essays.html`, `essays.md`, `llms.txt`, `sitemap.xml`, and put the newest one on the home page (`index.html` + `index.md`). Finish with `tools/link-essays.py`, which rewrites the older/newer footer nav on every essay from the order in `essays.html`. Re-running the importer overwrites the page but skips images already on disk. If the LinkedIn version goes out later, add `--linkedin` and re-import (or edit the meta line, `sameAs`, and the `.md` twin by hand).
 
+## SEO assets and aliases
+
+- `tools/optimize_images.py` uses the system `cwebp` binary to create responsive portrait and cover WebP copies. No runtime dependency or site build is needed. Derivatives are immutable; use a new basename when replacing an image. Keep original JPEG/PNG URLs for social cards, schema, icons and Markdown.
+- Copy the cover `srcset` and `sizes` from the imported article into the essays index. Keep only the first index cover eager with `fetchpriority="high"`; lazy-load the others. `.essay-cover img` needs `height: auto` so intrinsic dimensions do not override the 5:2 crop.
+- `--seo-title` on the importer sets a concise search title without changing the original H1 or social headline. Existing title tags survive re-imports.
+- The Worker upgrades verified static-asset HTML alias redirects from 307 to 308; missing routes stay 404. Run `node tools/test-worker.mjs` for routing and Markdown regression checks.
+- HTML references a versioned stylesheet query; bump it when changing cached CSS.
+
 ## Facts that go stale
 
 - Day job: Lead AI Engineer at Waimakers (since mid-2026)
