@@ -2,7 +2,7 @@
   "version": 1,
   "skills": {
     "copywriting-maurice": {
-      "source": "/Users/maurice/Projects/os/skills/copywriting-maurice",
+      "source": "../../../../Users/maurice/Projects/os/skills/copywriting-maurice",
       "sourceType": "local",
       "computedHash": "bd67bafc73fce47c92836c68678d4e48395d00102fb8e02dcb1564085a6518c1"
     },
@@ -16,10 +16,10 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/seo-audit/SKILL.md",
-      "computedHash": "f2dc52130189068981f21e1c0bdc4471ac7cd9b08d8a1320604411aa0f950385"
+      "computedHash": "01f9f8a3feb3ea69c6c212d61189c610f96ef2cc363adc27fd314d78254bf6ae"
     },
     "taste": {
-      "source": "/Users/maurice/Projects/os/skills/taste",
+      "source": "../../../../Users/maurice/Projects/os/skills/taste",
       "sourceType": "local",
       "computedHash": "5f5843ddbf100be24ad706491b9ec54e29e6ad7f373c364849f830eb5f8a11c2"
     }
