@@ -19,6 +19,7 @@
     <meta property="og:image" content="https://www.mauricekleine.com/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="maurice kleine, amsterdam. a night sky with project constellations." />
     <meta property="og:url" content="https://www.mauricekleine.com/essays" />
 
     <!-- Twitter -->
@@ -53,7 +54,16 @@
         "@type": "CollectionPage",
         "name": "essays",
         "url": "https://www.mauricekleine.com/essays",
-        "author": { "@id": "https://www.mauricekleine.com/#maurice" }
+        "author": { "@type": "Person", "@id": "https://www.mauricekleine.com/#maurice", "name": "Maurice Kleine", "url": "https://www.mauricekleine.com/" },
+        "mainEntity": {
+          "@type": "ItemList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "url": "https://www.mauricekleine.com/essays/ride-the-floor-up", "name": "ride the floor up" },
+            { "@type": "ListItem", "position": 2, "url": "https://www.mauricekleine.com/essays/the-journey-no-longer-matters", "name": "the journey no longer matters" },
+            { "@type": "ListItem", "position": 3, "url": "https://www.mauricekleine.com/essays/my-agents-merged-468-prs", "name": "my agents merged 468 prs in 23 days. i didn't read a single one of them." },
+            { "@type": "ListItem", "position": 4, "url": "https://www.mauricekleine.com/essays/dude-where-is-the-roi", "name": "dude, where is the roi?" }
+          ]
+        }
       }
     </script>
   </head>

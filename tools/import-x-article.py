@@ -290,12 +290,14 @@ def main():
             f'<figure><img src="{src}" alt="{html.escape(alt, quote=True)}"{dims}{attrs} /></figure>',
             f"![{alt}]({SITE}{src})",
             src,
+            (w, h),
         )
 
     body_html, body_md = [], []
     cover_src = None
+    cover_dims = (1200, 630)
     if art.get("cover_media"):
-        fh, fm, cover_src = figure(
+        fh, fm, cover_src, cover_dims = figure(
             art["cover_media"]["media_info"],
             art["cover_media"]["media_info"].get("alt_text") or "",
             cover=True,
@@ -326,7 +328,7 @@ def main():
                     for item in e["data"]["mediaItems"]:
                         info = media.get(item["mediaId"])
                         if info:
-                            fh, fm, _ = figure(info, info.get("alt_text") or "")
+                            fh, fm, _src, _dims = figure(info, info.get("alt_text") or "")
                             body_html.append(fh)
                             body_md.append(fm)
                 elif e["type"] == "DIVIDER":
@@ -377,7 +379,10 @@ def main():
       rel="stylesheet"
     />
 """
+    cover_info = (art.get("cover_media") or {}).get("media_info", {})
     og_image = f"{SITE}{cover_src}" if cover_src else f"{SITE}/og.png"
+    og_width, og_height = (cover_dims if cover_src else (1200, 630))
+    og_alt = cover_info.get("alt_text") or f"cover image for {title_lc}"
     article = "\n".join("          " + line for line in body_html)
     page = f"""<!DOCTYPE html>
 <html lang="en">
@@ -392,6 +397,7 @@ def main():
     <link rel="alternate" type="text/markdown" href="/essays/{slug}.md" title="markdown version" />
     <link rel="author" href="/humans.txt" />
     <meta property="article:published_time" content="{iso}" />
+    <meta property="article:author" content="{SITE}/about" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="article" />
@@ -399,6 +405,9 @@ def main():
     <meta property="og:title" content="{html.escape(title_lc, quote=True)}" />
     <meta property="og:description" content="{html.escape(desc, quote=True)}" />
     <meta property="og:image" content="{og_image}" />
+    <meta property="og:image:width" content="{og_width}" />
+    <meta property="og:image:height" content="{og_height}" />
+    <meta property="og:image:alt" content="{html.escape(og_alt, quote=True)}" />
     <meta property="og:url" content="{SITE}/essays/{slug}" />
 
     <!-- Twitter -->
@@ -406,6 +415,7 @@ def main():
     <meta name="twitter:title" content="{html.escape(title_lc, quote=True)}" />
     <meta name="twitter:description" content="{html.escape(desc, quote=True)}" />
     <meta name="twitter:image" content="{og_image}" />
+    <meta name="twitter:image:alt" content="{html.escape(og_alt, quote=True)}" />
 
     <!-- Icons -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -418,10 +428,13 @@ def main():
         "@context": "https://schema.org",
         "@type": "Article",
         "headline": {json.dumps(title)},
+        "description": {json.dumps(desc)},
         "datePublished": "{iso}",
+        "dateModified": "{iso}",
         "url": "{SITE}/essays/{slug}",
+        "mainEntityOfPage": "{SITE}/essays/{slug}",
         "image": "{og_image}",
-        "author": {{ "@id": "{SITE}/#maurice" }},
+        "author": {{ "@type": "Person", "@id": "{SITE}/#maurice", "name": "Maurice Kleine", "url": "{SITE}/" }},
         "sameAs": {json.dumps([source, linkedin] if linkedin else source)}
       }}
     </script>
@@ -435,7 +448,7 @@ def main():
         <p class="hero-meta"><a href="/essays">← essays</a></p>
         <h1 class="essay-title">{html.escape(title_lc)}</h1>
         <p class="essay-meta">
-          <time datetime="{iso}">{human}</time> ·
+          by <a href="/about">maurice kleine</a> · <time datetime="{iso}">{human}</time> ·
           first posted on <a href="{source}">x</a>{f' and <a href="{linkedin}">linkedin</a>' if linkedin else ''}
         </p>
       </header>
