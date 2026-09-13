@@ -22,7 +22,7 @@ Interesting to see the focus on _human life _and _the human environment_ here.
 
 Tools helped us understand our environment better, which led to knowledge, which led to new tools. It's a self-improving, compounding loop; a loop that has led us to where we are today.
 
-![](https://www.mauricekleine.com/essays/ride-the-floor-up/02.jpg)
+![](https://www.mauricekleine.com/essays/ride-the-floor-up/02.webp)
 
 ## Humans define(d) the frontier 
 
@@ -54,7 +54,7 @@ Historically, throughout many domains, jobs and tasks, the floor has fully consu
 
 Rather than a historical process, this is also a continuous process; right now, in some domains, the floor keeps inching closer to the ceiling while the ceiling is barely moving.
 
-![](https://www.mauricekleine.com/essays/ride-the-floor-up/03.jpg)
+![](https://www.mauricekleine.com/essays/ride-the-floor-up/03.webp)
 
 ## The floor is rising faster than ever
 
@@ -64,7 +64,7 @@ The nature of our tasks has changed significantly over the last 50 years; many n
 
 Software has helped us to push the frontier at an astounding rate; through faster communication, more advanced and complex calculations, incredibly realistic real-world modeling and forecasting, and artificial intelligence. It has helped humanity pool their knowledge, combine research effort and resources, and reduce or remove physical bottlenecks or obstacles, while packaging it all in an easy to reproduce format.
 
-![](https://www.mauricekleine.com/essays/ride-the-floor-up/04.jpg)
+![](https://www.mauricekleine.com/essays/ride-the-floor-up/04.webp)
 
 Software has allowed us to offload more and more work to technology across many domains, and the floors in those domains have been rapidly rising as a result. Simultaneously, the ceilings of many domains have been pushed up as well.
 
@@ -93,7 +93,7 @@ Software engineers are already very, painfully aware of this. We started with 0s
 
 Now AI is here and we can zoom out more than ever, by describing in natural language what we want to build. Not only has that made software building much more accessible to everyone else, it is forcing us to reconnect with what a software engineer truly is - I wrote about this in [The Journey No Longer Matters](https://x.com/mauricekleine/status/2097607946398040331).
 
-![](https://www.mauricekleine.com/essays/ride-the-floor-up/05.jpg)
+![](https://www.mauricekleine.com/essays/ride-the-floor-up/05.webp)
 
 ## Jobs are fluid now
 
@@ -119,7 +119,7 @@ Because whether you like it or not, we are all system architects now, and we nee
 
 There is so much happening in the AI-space right now, from AI agents [escaping their sandboxes](https://openai.com/index/hugging-face-incident-and-the-road-ahead/), to calls for [pacing the frontier](https://darioamodei.com/post/we-must-pace-the-frontier). It seems like Recursive Self-Improvement is on the horizon, and it could set off the situation below. 
 
-![](https://www.mauricekleine.com/essays/ride-the-floor-up/06.jpg)
+![](https://www.mauricekleine.com/essays/ride-the-floor-up/06.webp)
 
 At the same time, AI leaders are taking responsibility by wanting to pace the frontier, though incentives are unclear and the stakes are incredibly high.
 

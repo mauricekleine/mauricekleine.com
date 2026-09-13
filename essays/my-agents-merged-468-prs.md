@@ -10,7 +10,7 @@ Most days I only saw PR titles, maybe a description, and comments if an AI revie
 
 They also completed 537 successful tickets and burned through 36.2 billion tokens.
 
-![Hyperspeed usage dashboard after 23 days, showing 36,246,791,518 tokens used since August 2 at an average of 65,215 tokens per second. The record is 181,878 tokens per second.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/02.jpg)
+![Hyperspeed usage dashboard after 23 days, showing 36,246,791,518 tokens used since August 2 at an average of 65,215 tokens per second. The record is 181,878 tokens per second.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/02.webp)
 
 ## I was already using agents wrong
 
@@ -28,13 +28,13 @@ If I forgot to run caffeinate, the machine slept. If I closed the lid, the facto
 
 At one point I put my open MacBook on the passenger seat before a 45-minute drive to a client because apparently that was my idea of autonomous coding.
 
-![An open MacBook running several coding-agent sessions on the passenger seat of my car, plugged into a power cable before a 45-minute drive to a client.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/03.jpg)
+![An open MacBook running several coding-agent sessions on the passenger seat of my car, plugged into a power cable before a 45-minute drive to a client.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/03.webp)
 
 ## Coding is solved
 
 A few days ago, Anthropic's @bcherny said:
 
-![X post by Anthropic engineer Boris Cherny reading: “Coding is solved, bugs are not yet solved. Fix incoming.” Posted August 21, 2026, with 1.8 million views.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/04.jpg)
+![X post by Anthropic engineer Boris Cherny reading: “Coding is solved, bugs are not yet solved. Fix incoming.” Posted August 21, 2026, with 1.8 million views.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/04.webp)
 
 I think he's right.
 
@@ -82,7 +82,7 @@ Discovered work returns to the inbox for my approval instead of quietly expandin
 
 When the fleet needs a real decision, I get a Telegram message.
 
-![Diagram of Hyperspeed. Plans enter a git-backed queue from T3 Code. Chiefs route tickets by account and model to isolated Claude, Codex and local workers. Pull requests pass through CI, focused AI review, merge and deployment. Telegram handles decisions, while a dashboard tracks outcomes.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/05.jpg)
+![Diagram of Hyperspeed. Plans enter a git-backed queue from T3 Code. Chiefs route tickets by account and model to isolated Claude, Codex and local workers. Pull requests pass through CI, focused AI review, merge and deployment. Telegram handles decisions, while a dashboard tracks outcomes.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/05.webp)
 
 The chiefs wake up every few minutes and keep the queue moving.
 
@@ -98,7 +98,7 @@ Hyperspeed routed the backend work to Codex and the interface work to Claude. Th
 
 The final PR merged at 23:33. About seven hours from committed plan to a complete owner dashboard while I did other work.
 
-![Wide Hyperspeed queue showing many tickets moving in parallel through Inbox, Ready, Claimed, Review, Approved, Blocked and Done. Tickets belong to several projects, including Hyperspeed, Waimakers OS, Soliton, Pact and Fluncle.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/06.jpg)
+![Wide Hyperspeed queue showing many tickets moving in parallel through Inbox, Ready, Claimed, Review, Approved, Blocked and Done. Tickets belong to several projects, including Hyperspeed, Waimakers OS, Soliton, Pact and Fluncle.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/06.webp)
 
 The plan had already made the decisions. Dependencies were explicit. Each ticket had commands for checking the result.
 
@@ -131,7 +131,7 @@ I currently run six paid accounts on Soliton:
 
 Four accounts route to individual projects. One Claude and one Codex account provide fallback capacity.
 
-![Hyperspeed account-routing dashboard showing primary accounts assigned to individual projects and two reserve accounts. Usage bars show session, weekly and model-specific capacity, including temporarily drained accounts alongside available fallbacks.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/07.jpg)
+![Hyperspeed account-routing dashboard showing primary accounts assigned to individual projects and two reserve accounts. Usage bars show session, weekly and model-specific capacity, including temporarily drained accounts alongside available fallbacks.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/07.webp)
 
 Each ticket names its repository. Hyperspeed uses that to select the project's primary account. If the account is temporarily drained, it falls back to a compatible account with availability.
 
@@ -147,11 +147,11 @@ Running Claude and Codex side by side also gives me data I could never get from 
 
 I see which models finish, which PRs merge cleanly, where reviews pile up and what outcomes cost.
 
-![First-pass merge rates by model and reasoning effort. Luna xhigh scores 96 percent across 26 runs, Sol high 91 percent across 23, and Opus high 88 percent across 25. Several smaller samples score 100 percent.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/08.jpg)
+![First-pass merge rates by model and reasoning effort. Luna xhigh scores 96 percent across 26 runs, Sol high 91 percent across 23, and Opus high 88 percent across 25. Several smaller samples score 100 percent.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/08.webp)
 
 The usage view below is a 24-hour slice, not lifetime usage.
 
-![Hyperspeed token usage by model over the previous 24 hours. GPT-5.6 Sol High leads with 1.2 billion tokens and 51 percent of usage, followed by Claude Opus 5 High with 538.8 million and GPT-5.6 Terra High with 264.7 million.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/09.jpg)
+![Hyperspeed token usage by model over the previous 24 hours. GPT-5.6 Sol High leads with 1.2 billion tokens and 51 percent of usage, followed by Claude Opus 5 High with 538.8 million and GPT-5.6 Terra High with 264.7 million.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/09.webp)
 
 Planning and difficult architecture go to expensive Claude models like Opus or Fable. Straightforward, well-specified execution can go to cheaper Codex models like Terra and Luna.
 
@@ -199,7 +199,7 @@ I only want the exceptions.
 
 Hyperspeed sends critical notifications to Telegram when a ticket is blocked, a check fails or the fleet needs a decision. Draft tickets also arrive here for one-tap approval.
 
-![Telegram notification for a Hyperspeed ticket titled “Restore the nightly auditor by moving it off subscription auth onto an Anthropic API key.” The ticket is ready, with buttons to approve or cancel it.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/10.jpg)
+![Telegram notification for a Hyperspeed ticket titled “Restore the nightly auditor by moving it off subscription auth onto an Anthropic API key.” The ticket is ready, with buttons to approve or cancel it.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/10.webp)
 
 If work is blocked, I can answer from my phone, confirm the proposed answer, and the chief continues.
 
@@ -286,7 +286,7 @@ What I can give you is the useful bit:
 
 Start with one repository, two accounts and a modest server. Put Claude, Codex and OpenCode on it. Create a queue and wake a supervisor agent every ten minutes. Let coding agents open PRs and review green CI. Merge automatically when there are no material findings.
 
-![GitHub contributions chart from May through August. Activity becomes almost continuously dark green during the final four weeks, with a slightly calmer last week.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/11.png)
+![GitHub contributions chart from May through August. Activity becomes almost continuously dark green during the final four weeks, with a slightly calmer last week.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs/11.webp)
 
 ## Give this article to your coding agent
 

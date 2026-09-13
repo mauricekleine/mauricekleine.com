@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""import an x article into essays/<slug>.html + essays/<slug>.md + essays/<slug>/*.jpg
+"""import an x article into essays/<slug>.html + essays/<slug>.md + essays/<slug>/01.jpg + NN.webp
 
 usage: tools/import-x-article.py <status-url-or-id> <slug> [--summary "one line for the index"] [--linkedin <pulse-url>]
 
@@ -7,15 +7,21 @@ after importing, run tools/link-essays.py to refresh the older/newer footer nav 
 
 reads the article through api.fxtwitter.com (draft.js blocks + media), keeps
 headings, lists, bold, italic, links, blockquotes, dividers, tables, code
-blocks and every image. the essay body keeps the author's casing; the page
-chrome is lowercase. no dependencies beyond the standard library.
+blocks and every image. images are optimized with ffmpeg when available: the
+cover is JPEG and body images are WebP, all at no more than 1200px wide. if
+ffmpeg is unavailable, the original image format is kept with a warning. the
+essay body keeps the author's casing; the page chrome is lowercase. no Python
+dependencies beyond the standard library.
 """
 
 import html
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 import urllib.request
 from datetime import datetime, timezone
 
@@ -37,6 +43,57 @@ def to_units(s):
 
 def from_units(b):
     return b.decode("utf-16-le", errors="ignore")
+
+
+def image_dimensions(path):
+    data = open(path, "rb").read()
+    if data[:2] == b"\xff\xd8":
+        sof_markers = {
+            0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7,
+            0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF,
+        }
+        i = 2
+        while i + 4 <= len(data):
+            if data[i] != 0xFF:
+                i += 1
+                continue
+            while i < len(data) and data[i] == 0xFF:
+                i += 1
+            if i >= len(data):
+                break
+            marker = data[i]
+            i += 1
+            if marker in (0xD8, 0xD9):
+                continue
+            if i + 2 > len(data):
+                break
+            length = int.from_bytes(data[i : i + 2], "big")
+            if length < 2 or i + length > len(data):
+                break
+            if marker in sof_markers and length >= 7:
+                height = int.from_bytes(data[i + 3 : i + 5], "big")
+                width = int.from_bytes(data[i + 5 : i + 7], "big")
+                return width, height
+            i += length
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        i = 12
+        while i + 8 <= len(data):
+            chunk_type = data[i : i + 4]
+            size = int.from_bytes(data[i + 4 : i + 8], "little")
+            chunk = data[i + 8 : i + 8 + size]
+            if chunk_type == b"VP8 " and len(chunk) >= 10 and chunk[3:6] == b"\x9d\x01\x2a":
+                width = int.from_bytes(chunk[6:8], "little") & 0x3FFF
+                height = int.from_bytes(chunk[8:10], "little") & 0x3FFF
+                return width, height
+            if chunk_type == b"VP8L" and len(chunk) >= 5:
+                bits = int.from_bytes(chunk[1:5], "little")
+                return (bits & 0x3FFF) + 1, ((bits >> 14) & 0x3FFF) + 1
+            if chunk_type == b"VP8X" and len(chunk) >= 10:
+                width = int.from_bytes(chunk[4:7] + b"\x00", "little") + 1
+                height = int.from_bytes(chunk[7:10] + b"\x00", "little") + 1
+                return width, height
+            i += 8 + size + (size & 1)
+    raise ValueError(f"unsupported or invalid image: {path}")
 
 
 def inline_html(block, entities):
@@ -190,30 +247,60 @@ def main():
     img_dir = os.path.join(ROOT, "essays", slug)
     os.makedirs(img_dir, exist_ok=True)
     counter = [0]
+    ffmpeg = shutil.which("ffmpeg")
 
-    def save_image(info, alt):
+    def save_image(info, alt, cover=False):
         counter[0] += 1
         url = info["original_img_url"]
-        ext = os.path.splitext(url.split("?")[0])[1] or ".jpg"
-        name = f"{counter[0]:02d}{ext}"
+        source_ext = os.path.splitext(url.split("?")[0])[1].lower() or ".jpg"
+        output_ext = ".jpg" if cover and ffmpeg else ".webp" if not cover and ffmpeg else source_ext
+        name = f"{counter[0]:02d}{output_ext}"
         path = os.path.join(img_dir, name)
         if not os.path.exists(path):
-            open(path, "wb").write(fetch(url + ("&" if "?" in url else "?") + "name=orig", binary=True))
-        w, h = info.get("original_img_width"), info.get("original_img_height")
+            image = fetch(url + ("&" if "?" in url else "?") + "name=orig", binary=True)
+            if ffmpeg:
+                source_fd, source_path = tempfile.mkstemp(prefix=".source-", suffix=source_ext, dir=img_dir)
+                try:
+                    with os.fdopen(source_fd, "wb") as source:
+                        source.write(image)
+                    command = [
+                        "ffmpeg", "-y", "-i", source_path,
+                        "-vf", "scale='min(1200,iw)':-2",
+                    ]
+                    if cover:
+                        command += ["-q:v", "3"]
+                    else:
+                        command += ["-c:v", "libwebp", "-quality", "80"]
+                    command += ["-frames:v", "1", path]
+                    subprocess.run(command, check=True)
+                finally:
+                    os.unlink(source_path)
+            else:
+                with open(path, "wb") as output:
+                    output.write(image)
+                print(f"warning: ffmpeg not found; kept original image at {path}")
+        w, h = image_dimensions(path)
         return f"/essays/{slug}/{name}", w, h
 
-    def figure(info, alt):
-        src, w, h = save_image(info, alt)
+    def figure(info, alt, cover=False):
+        src, w, h = save_image(info, alt, cover=cover)
         dims = f' width="{w}" height="{h}"' if w and h else ""
+        attrs = ' fetchpriority="high"' if cover else ' loading="lazy" decoding="async"'
         return (
-            f'<figure><img src="{src}" alt="{html.escape(alt, quote=True)}"{dims} loading="lazy" /></figure>',
+            f'<figure><img src="{src}" alt="{html.escape(alt, quote=True)}"{dims}{attrs} /></figure>',
             f"![{alt}]({SITE}{src})",
+            src,
         )
 
     body_html, body_md = [], []
+    cover_src = None
     if art.get("cover_media"):
-        fh, fm = figure(art["cover_media"]["media_info"], art["cover_media"]["media_info"].get("alt_text") or "")
-        body_html.append(fh.replace("<figure>", '<figure class="cover">').replace(' loading="lazy"', ""))
+        fh, fm, cover_src = figure(
+            art["cover_media"]["media_info"],
+            art["cover_media"]["media_info"].get("alt_text") or "",
+            cover=True,
+        )
+        body_html.append(fh.replace("<figure>", '<figure class="cover">'))
         body_md.append(fm)
 
     blocks = art["content"]["blocks"]
@@ -239,7 +326,7 @@ def main():
                     for item in e["data"]["mediaItems"]:
                         info = media.get(item["mediaId"])
                         if info:
-                            fh, fm = figure(info, info.get("alt_text") or "")
+                            fh, fm, _ = figure(info, info.get("alt_text") or "")
                             body_html.append(fh)
                             body_md.append(fm)
                 elif e["type"] == "DIVIDER":
@@ -290,7 +377,7 @@ def main():
       rel="stylesheet"
     />
 """
-    og_image = f"{SITE}/essays/{slug}/01.jpg" if art.get("cover_media") else f"{SITE}/og.png"
+    og_image = f"{SITE}{cover_src}" if cover_src else f"{SITE}/og.png"
     article = "\n".join("          " + line for line in body_html)
     page = f"""<!DOCTYPE html>
 <html lang="en">
@@ -375,6 +462,7 @@ def main():
     md = f"# {title}\n\n{iso} · first posted on [x]({source})" + (f" and [linkedin]({linkedin})" if linkedin else "") + "\n\n" + "\n\n".join(body_md) + "\n"
     open(os.path.join(ROOT, "essays", f"{slug}.md"), "w").write(md)
     print(json.dumps({"slug": slug, "title": title, "date": iso, "human": human, "images": counter[0], "summary": desc}))
+    print("reminder: add the new entry's cover <img> with width/height to essays.html")
 
 
 if __name__ == "__main__":
