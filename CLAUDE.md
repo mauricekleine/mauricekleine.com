@@ -26,7 +26,7 @@ Hosting: Cloudflare Worker with static assets (`wrangler.jsonc`; `.assetsignore`
 
 ## Voice
 
-All copy is lowercase, builder-to-builder, understated. Canonical voice guide: `../os/brand/voice.md`. Hard rules: no em dashes, no marketing buzzwords, no "X isn't just Y. It's Z" constructions, proof over hype.
+All copy is lowercase, builder-to-builder, understated. Canonical voice guide: `../soliton/brand/voice.md`. Hard rules: no em dashes, no marketing buzzwords, no "X isn't just Y. It's Z" constructions, proof over hype.
 
 ## Adding an essay
 
@@ -37,7 +37,7 @@ Essays are X articles mirrored here, images included. `tools/import-x-article.py
 - Day job: Lead AI Engineer at Waimakers (since mid-2026)
 - Active side quests: Mockly, Fluncle, Hackadam, NonoBench
 - The graveyard (ended, shown on purpose): logistics system (sold), Subthread (dissolved), ONESIXTYEIGHT (discontinued), Spinup (spun down into the Waimakers deal)
-- Source of truth for bio/brand/projects: the `../os` repo (`index.md` is the entry point)
+- Source of truth for bio/brand/projects: the `../soliton` repo (`index.md` is the entry point)
 
 ## Conventions
 
