@@ -562,6 +562,103 @@ footer p {
   color: var(--muted);
 }
 
+/* essay signup */
+
+.subscribe {
+  border-top: 1px solid oklch(66% 0.015 275 / 0.25);
+  padding-top: clamp(2rem, 5vh, 3rem);
+}
+
+.subscribe .section-intro {
+  margin-bottom: 1.25rem;
+}
+
+.subscribe-form {
+  max-width: 28rem;
+}
+
+.subscribe-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.subscribe-field label {
+  flex-basis: 100%;
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--dim);
+}
+
+.subscribe-field input[type="email"] {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: 0.6rem 0.8rem;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--starlight);
+  background: var(--night-deep);
+  border: 1px solid oklch(66% 0.015 275 / 0.35);
+  border-radius: 6px;
+}
+
+.subscribe-field input[type="email"]::placeholder {
+  color: var(--dim);
+}
+
+.subscribe-field button {
+  flex: 0 0 auto;
+  padding: 0.6rem 1.1rem;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--night-deep);
+  background: var(--ember);
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.subscribe-field button:hover {
+  background: var(--ember-bright);
+}
+
+.subscribe-field button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.cf-turnstile {
+  margin-top: 0.9rem;
+}
+
+.subscribe-note {
+  margin-top: 0.9rem;
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.7rem;
+  line-height: 1.6;
+  color: var(--dim);
+}
+
+.subscribe-status {
+  margin-top: 0.6rem;
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.subscribe-status.error {
+  color: var(--ember);
+}
+
+@media (max-width: 600px) {
+  .subscribe-field input[type="email"] {
+    flex-basis: 100%;
+  }
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
