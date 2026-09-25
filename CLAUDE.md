@@ -30,7 +30,7 @@ All copy is lowercase, builder-to-builder, understated. Canonical voice guide: `
 
 ## Adding an essay
 
-Essays are X articles mirrored here, images included. `tools/import-x-article.py <status-url> <slug> --summary "one lowercase line" [--linkedin <pulse-url>]` reads the article via api.fxtwitter.com and writes `essays/<slug>.html`, `essays/<slug>.md` and `essays/<slug>/NN.jpg` (cover first). It keeps headings, lists, bold, italic, links, blockquotes, dividers, tables and code blocks; the body keeps the author's casing, the h1 is lowercased. Then add the entry (cover thumbnail + title + summary + date) to `essays.html`, `essays.md`, `llms.txt`, `sitemap.xml`, and put the newest one on the home page (`index.html` + `index.md`). Finish with `tools/link-essays.py`, which rewrites the older/newer footer nav on every essay from the order in `essays.html`. Re-running the importer overwrites the page but skips images already on disk. If the LinkedIn version goes out later, add `--linkedin` and re-import (or edit the meta line, `sameAs`, and the `.md` twin by hand).
+Essays are X articles mirrored here, images included. `tools/import-x-article.py <status-url> <slug> --summary "one lowercase line" [--linkedin <pulse-url>]` reads the article via api.fxtwitter.com and writes `essays/<slug>.html`, `essays/<slug>.md` and `essays/<slug>/NN.jpg` (cover first). It keeps headings, lists, bold, italic, links, blockquotes, dividers, tables and code blocks; the body keeps the author's casing, the h1 is lowercased. Then add the entry (cover thumbnail + title + summary + date) to `essays.html`, `essays.md`, `llms.txt`, `sitemap.xml`, `feed.xml` (newest entry first, bump the feed `<updated>`), and put the newest one on the home page (`index.html` + `index.md`). Finish with `tools/link-essays.py`, which rewrites the older/newer footer nav on every essay from the order in `essays.html`. Re-running the importer overwrites the page but skips images already on disk. If the LinkedIn version goes out later, add `--linkedin` and re-import (or edit the meta line, `sameAs`, and the `.md` twin by hand).
 
 ## SEO assets and aliases
 
@@ -42,8 +42,8 @@ Essays are X articles mirrored here, images included. `tools/import-x-article.py
 
 ## Facts that go stale
 
-- Day job: Lead AI Engineer at Waimakers (since mid-2026)
-- Active side quests: Mockly, Fluncle, Hackadam, NonoBench
+- Day job: AI Engineering Lead at Waimakers (since Aug 2026; contract title Senior Manager and AI Engineering Lead). Use "AI Engineering Lead" in all public copy
+- Active side quests: Mockly (built solo, run with Jasper de Boer), Fluncle, Hackadam (co-organized with Abner van den Hout), Nonobench (lowercase b)
 - The graveyard (ended, shown on purpose): logistics system (sold), Subthread (dissolved), ONESIXTYEIGHT (discontinued), Spinup (spun down into the Waimakers deal)
 - Source of truth for bio/brand/projects: the `../soliton` repo (`index.md` is the entry point)
 

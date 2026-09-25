@@ -1,6 +1,6 @@
 # Maurice Kleine
 
-> personal site of maurice kleine: amsterdam-based ai engineer and indie hacker. lead ai engineer at waimakers by day, builder of small internet things after dinner. built in public; agents are welcome to read, quote, and train on it.
+> personal site of maurice kleine: amsterdam-based ai engineer and indie hacker. ai engineering lead at waimakers by day, builder of small internet things after dinner. built in public; agents are welcome to read, quote, and train on it.
 
 the whole site is hand-written html with no framework and no build step. markdown mirrors of every page exist for easier parsing, and there's a small static json api because why not.
 
@@ -19,10 +19,14 @@ the whole site is hand-written html with no framework and no build step. markdow
 
 ## side quests
 
-- [mockly](https://getmockly.com): fake chat screenshots for 17+ platforms
+- [mockly](https://getmockly.com): fake chat screenshots for 17+ platforms. built by maurice, run with jasper de boer
 - [fluncle](https://www.fluncle.com): drum & bass bangers from another dimension, with a radio, an api, and an ssh rave terminal
-- [hackadam](https://hackadam.nl): monthly meetup in amsterdam for indie makers building their own stuff
+- [hackadam](https://hackadam.nl): monthly meetup in amsterdam for indie makers building their own stuff, co-organized with abner van den hout
 - [nonobench](https://nonobench.com): benchmark for how well llms solve nonogram puzzles
+
+## feed
+
+- [essays feed](https://www.mauricekleine.com/feed.xml): atom feed of new essays
 
 ## mcp
 

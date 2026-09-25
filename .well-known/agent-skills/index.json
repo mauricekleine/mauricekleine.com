@@ -6,7 +6,7 @@
       "type": "skill-md",
       "description": "Learn who Maurice Kleine is and read his site the agent-friendly way: markdown mirrors, a static json api, and an mcp server.",
       "url": "/.well-known/agent-skills/about-maurice/SKILL.md",
-      "digest": "sha256:3abe6fa3a8640ebe106eef417ec6657b6d16124a364f6fb9052f972d62fe3712"
+      "digest": "sha256:3248fd3e5375e5bab639cf4e6c1b6e824a2567b1d6e871dc7e889c39832b3c41"
     }
   ]
 }

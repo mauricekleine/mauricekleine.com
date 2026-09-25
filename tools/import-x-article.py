@@ -456,7 +456,7 @@ def main():
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/maurice.png" />
 
-{fonts}    <link rel="stylesheet" href="/style.css?v=20260913-seo" />
+{fonts}    <link rel="stylesheet" href="/style.css?v=20260925-profile" />
 
     <script type="application/ld+json">
       {{

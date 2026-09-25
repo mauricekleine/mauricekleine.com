@@ -8,16 +8,16 @@ this is the markdown mirror of [mauricekleine.com](https://www.mauricekleine.com
 
 ## currently
 
-lead ai engineer at [waimakers](https://waimakers.com), helping organizations put ai to work. before that: 14+ years of building software as an engineer, product owner, engineering manager, and founder.
+ai engineering lead at [waimakers](https://waimakers.com), helping organizations put ai to work. before that: 14+ years of building software as an engineer, product owner, engineering manager, and founder.
 
-that's the day job. everything below happens after dinner.
+that's the day job. everything below happens after dinner, and these days a fleet of coding agents does most of the typing. [468 prs in 23 days](https://www.mauricekleine.com/essays/my-agents-merged-468-prs.md), and i didn't read a single one.
 
 ## side quests
 
-- [mockly](https://getmockly.com) - fake chat screenshots for 17+ platforms. i can't believe this is legal
+- [mockly](https://getmockly.com) - fake chat screenshots for 17+ platforms. built it in a weekend, [techcrunch](https://techcrunch.com/2025/07/10/mockly-made-a-fake-dm-generator-thats-actually-user-friendly/) wrote about it, 10k people use it. now i run it with [jasper](https://x.com/jasperdeboer). i still can't believe this is legal
 - [fluncle](https://www.fluncle.com) - drum & bass bangers from another dimension. it has a radio, an api, and an ssh rave terminal
-- [hackadam](https://hackadam.nl) - monthly meetup in amsterdam for indie makers building their own stuff
-- [nonobench](https://nonobench.com) - benchmark for how well llms solve nonogram puzzles. spoiler: not great
+- [hackadam](https://hackadam.nl) - monthly meetup in amsterdam for indie makers building their own stuff. co-organized with [abner](https://x.com/AbnerHout)
+- [nonobench](https://nonobench.com) - benchmark for how well llms solve nonogram puzzles. the top score went from 63% in february to 93% in september
 
 ## the graveyard
 
@@ -44,5 +44,7 @@ life is a series of experiments. some of them end, and that's fine, as long as y
 - [x](https://x.com/mauricekleine)
 - [reddit](https://www.reddit.com/user/mauricekleine/)
 - [email](mailto:hey@mauricekleine.com)
+
+said out loud: [ai tinkerers amsterdam](https://amsterdam.aitinkerers.org/profile/client_kBU1ebRuvug) · [ai, je nieuwe collega](https://open.spotify.com/show/6qrTPgmddsRwlreYeKu7Ki) (dutch) · [demystifying ai](https://www.youtube.com/watch?v=RDPkCs7foXs) · [startremote](https://startremote.webflow.io/interviews/maurice-kleine) (2020)
 
 [more about me](https://www.mauricekleine.com/about.md)
