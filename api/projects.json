@@ -5,7 +5,11 @@
       "name": "mockly",
       "url": "https://getmockly.com",
       "status": "active",
-      "description": "fake chat screenshots for 17+ platforms. i can't believe this is legal"
+      "description": "fake chat screenshots for 17+ platforms. built it in a weekend, techcrunch wrote about it, 10k people use it. i can't believe this is legal",
+      "team": [
+        "maurice kleine",
+        "jasper de boer"
+      ]
     },
     {
       "name": "fluncle",
@@ -17,13 +21,17 @@
       "name": "hackadam",
       "url": "https://hackadam.nl",
       "status": "active",
-      "description": "monthly meetup in amsterdam for indie makers building their own stuff"
+      "description": "monthly meetup in amsterdam for indie makers building their own stuff",
+      "team": [
+        "maurice kleine",
+        "abner van den hout"
+      ]
     },
     {
       "name": "nonobench",
       "url": "https://nonobench.com",
       "status": "active",
-      "description": "benchmark for how well llms solve nonogram puzzles. spoiler: not great"
+      "description": "benchmark for how well llms solve nonogram puzzles. the top score went from 63% in february to 93% in september"
     }
   ],
   "graveyard": [

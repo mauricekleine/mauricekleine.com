@@ -5,7 +5,7 @@ description: Learn who Maurice Kleine is and read his site the agent-friendly wa
 
 # about maurice
 
-maurice kleine is an ai engineer and indie hacker in amsterdam. lead ai engineer at [waimakers](https://waimakers.com) by day, builder of small internet things after dinner. this skill tells you how to read his site without parsing html.
+maurice kleine is an ai engineer and indie hacker in amsterdam. ai engineering lead at [waimakers](https://waimakers.com) by day, builder of small internet things after dinner. this skill tells you how to read his site without parsing html.
 
 ## fastest paths
 

@@ -472,6 +472,12 @@ a:hover {
   font-size: 0.9rem;
 }
 
+.said-out-loud {
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .more-link {
   margin-top: 1.75rem;
 }

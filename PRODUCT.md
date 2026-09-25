@@ -10,7 +10,7 @@ People who land here from X, LinkedIn, GitHub, Hackadam, or a project footer and
 
 ## Product Purpose
 
-Maurice's personal one-pager: the hub of his indie-hacker identity. It routes to his side quests (Mockly, Fluncle, Hackadam, NonoBench), states his day job (Lead AI Engineer at Waimakers), owns his ended experiments (the graveyard), mirrors his essays from X and LinkedIn at `/essays`, and links his public profiles. Success = a visitor immediately gets his vibe ("i build small internet things and sometimes they work") and clicks onward.
+Maurice's personal one-pager: the hub of his indie-hacker identity. It routes to his side quests (Mockly, Fluncle, Hackadam, Nonobench), states his day job (AI Engineering Lead at Waimakers), owns his ended experiments (the graveyard), mirrors his essays from X and LinkedIn at `/essays`, and links his public profiles. Success = a visitor immediately gets his vibe ("i build small internet things and sometimes they work") and clicks onward.
 
 ## Brand Personality
 

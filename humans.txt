@@ -1,6 +1,6 @@
 /* TEAM */
   builder: maurice kleine
-  role: lead ai engineer at waimakers by day, indie hacker after dinner
+  role: ai engineering lead at waimakers by day, indie hacker after dinner
   contact: hey@mauricekleine.com
   github: @mauricekleine
   x: @mauricekleine
