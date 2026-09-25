@@ -30,7 +30,7 @@ the whole site is hand-written html with no framework and no build step. markdow
 
 ## mcp
 
-- [mcp server](https://www.mauricekleine.com/mcp): streamable http, no auth. tools: about_maurice, list_projects, get_uptime, make_a_wish
+- [mcp server](https://www.mauricekleine.com/mcp): streamable http, no auth. tools: about_maurice, list_projects, list_essays, get_essay, get_uptime, make_a_wish
 - [server card](https://www.mauricekleine.com/.well-known/mcp/server-card.json): discovery metadata
 - [agent skills](https://www.mauricekleine.com/.well-known/agent-skills/index.json): skills discovery index
 - markdown negotiation: send `Accept: text/markdown` to `/`, `/about`, `/essays` or any essay and get the mirror back

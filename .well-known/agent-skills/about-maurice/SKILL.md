@@ -14,7 +14,7 @@ maurice kleine is an ai engineer and indie hacker in amsterdam. ai engineering l
    - `https://www.mauricekleine.com/api/maurice.json` - bio, role, location, links
    - `https://www.mauricekleine.com/api/projects.json` - side quests + graveyard with statuses
    - `https://www.mauricekleine.com/api/uptime.json` - operational status of maurice himself
-3. **mcp**: streamable http server at `https://www.mauricekleine.com/mcp` with tools `about_maurice`, `list_projects`, `get_uptime`, and `make_a_wish`. server card at `/.well-known/mcp/server-card.json`.
+3. **mcp**: streamable http server at `https://www.mauricekleine.com/mcp` with tools `about_maurice`, `list_projects`, `list_essays`, `get_essay`, `get_uptime`, and `make_a_wish`. server card at `/.well-known/mcp/server-card.json`.
 
 ## things worth knowing
 
