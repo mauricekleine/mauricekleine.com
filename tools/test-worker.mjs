@@ -232,10 +232,42 @@ test("POST /subscribe surfaces a failed turnstile check", async () => {
   }
 });
 
+test("POST /subscribe leaves an existing contact's subscription alone", async () => {
+  const stub = stubFetch((url, init) => {
+    if (url.startsWith("https://challenges.cloudflare.com/turnstile/v0/siteverify")) {
+      return new Response(JSON.stringify({ success: true }), { headers: { "content-type": "application/json" } });
+    }
+    if (url === "https://api.resend.com/contacts/reader%40example.com") {
+      return new Response(JSON.stringify({ id: "contact-2", unsubscribed: false }), { headers: { "content-type": "application/json" } });
+    }
+    if (url === "https://api.resend.com/emails") {
+      return new Response(JSON.stringify({ id: "email-2" }), { headers: { "content-type": "application/json" } });
+    }
+    throw new Error(`unexpected fetch: ${init?.method || "GET"} ${url}`);
+  });
+  try {
+    const res = await worker.fetch(
+      new Request(origin + "/subscribe", {
+        method: "POST",
+        headers: { accept: "application/json", "content-type": "application/json" },
+        body: JSON.stringify({ email: "reader@example.com", "cf-turnstile-response": "good-token" }),
+      }),
+      subscribeSecrets
+    );
+    assert.equal(res.status, 200);
+    assert.ok(!stub.calls.some((c) => c.url === "https://api.resend.com/contacts"), "must not re-create an existing contact");
+  } finally {
+    stub.restore();
+  }
+});
+
 test("POST /subscribe happy path verifies turnstile, upserts the contact and emails a confirmation link", async () => {
   const stub = stubFetch((url) => {
     if (url.startsWith("https://challenges.cloudflare.com/turnstile/v0/siteverify")) {
       return new Response(JSON.stringify({ success: true }), { headers: { "content-type": "application/json" } });
+    }
+    if (url === "https://api.resend.com/contacts/person%40example.com") {
+      return new Response(JSON.stringify({ message: "not found" }), { status: 404, headers: { "content-type": "application/json" } });
     }
     if (url === "https://api.resend.com/contacts") {
       return new Response(JSON.stringify({ id: "contact-1" }), { status: 201, headers: { "content-type": "application/json" } });
@@ -257,16 +289,17 @@ test("POST /subscribe happy path verifies turnstile, upserts the contact and ema
     assert.equal(res.status, 200);
     assert.deepEqual(await res.json(), { ok: true });
 
-    assert.equal(stub.calls.length, 3);
+    assert.equal(stub.calls.length, 4);
     assert.match(stub.calls[0].url, /^https:\/\/challenges\.cloudflare\.com\/turnstile\/v0\/siteverify/);
 
-    assert.equal(stub.calls[1].url, "https://api.resend.com/contacts");
-    assert.equal(stub.calls[1].init.method, "POST");
-    assert.equal(stub.calls[1].init.headers.authorization, "Bearer resend-key");
-    assert.deepEqual(JSON.parse(stub.calls[1].init.body), { email: "person@example.com", unsubscribed: true });
+    assert.equal(stub.calls[1].url, "https://api.resend.com/contacts/person%40example.com");
+    assert.equal(stub.calls[2].url, "https://api.resend.com/contacts");
+    assert.equal(stub.calls[2].init.method, "POST");
+    assert.equal(stub.calls[2].init.headers.authorization, "Bearer resend-key");
+    assert.deepEqual(JSON.parse(stub.calls[2].init.body), { email: "person@example.com", unsubscribed: true });
 
-    assert.equal(stub.calls[2].url, "https://api.resend.com/emails");
-    const emailBody = JSON.parse(stub.calls[2].init.body);
+    assert.equal(stub.calls[3].url, "https://api.resend.com/emails");
+    const emailBody = JSON.parse(stub.calls[3].init.body);
     assert.equal(emailBody.from, "maurice kleine <hey@mauricekleine.com>");
     assert.equal(emailBody.to, "person@example.com");
     assert.equal(emailBody.subject, "confirm: new essays from maurice");

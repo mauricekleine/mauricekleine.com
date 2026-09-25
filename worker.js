@@ -361,16 +361,24 @@ async function verifyTurnstile(secret, token, remoteip) {
   return Boolean(data.success);
 }
 
+// resend's create is an upsert: re-creating an existing contact overwrites
+// `unsubscribed`, so only create when the lookup 404s. a confirmed reader who
+// fills in the form again stays subscribed and just gets another link.
 async function resendCreateContact(env, email) {
+  const headers = { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" };
+  const existing = await fetch(`https://api.resend.com/contacts/${encodeURIComponent(email)}`, { headers });
+  if (existing.ok) return true;
+  if (existing.status !== 404) {
+    console.error("subscribe: resend contact lookup failed", existing.status, await existing.text().catch(() => ""));
+    return false;
+  }
   const res = await fetch("https://api.resend.com/contacts", {
     method: "POST",
-    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
+    headers,
     body: JSON.stringify({ email, unsubscribed: true }),
   });
   if (res.ok) return true;
-  const text = await res.text().catch(() => "");
-  if (/already exists/i.test(text)) return true; // fine, keep going
-  console.error("subscribe: resend contact create failed", res.status, text);
+  console.error("subscribe: resend contact create failed", res.status, await res.text().catch(() => ""));
   return false;
 }
 

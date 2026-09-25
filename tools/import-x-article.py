@@ -37,7 +37,7 @@ from optimize_images import COVER_SIZES, cover_variants
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.mauricekleine.com"
 STYLE_VERSION = "20260925-subscribe"
-TURNSTILE_SITE_KEY = "TURNSTILE_SITE_KEY_PLACEHOLDER"
+TURNSTILE_SITE_KEY = "0x4AAAAAAABLi4eHqaf6akyS"
 
 
 def fetch(url, binary=False):
@@ -501,7 +501,7 @@ def main():
 
       <section class="subscribe" aria-labelledby="subscribe-heading">
         <h2 id="subscribe-heading">new essays by email</h2>
-        <p class="section-intro">no spam, just the next essay when it lands.</p>
+        <p class="section-intro">the next essay, when it lands. nothing else.</p>
         <form class="subscribe-form" method="post" action="/subscribe" data-subscribe>
           <div class="subscribe-field">
             <label for="subscribe-email">email</label>
