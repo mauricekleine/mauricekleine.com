@@ -508,7 +508,7 @@ def main():
             <input id="subscribe-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
             <button type="submit">subscribe</button>
           </div>
-          <div class="cf-turnstile" data-sitekey="{TURNSTILE_SITE_KEY}"></div>
+          <div class="cf-turnstile" data-theme="dark" data-sitekey="{TURNSTILE_SITE_KEY}"></div>
           <p class="subscribe-note">new essays only. unsubscribe anytime. your email is stored at resend; cloudflare checks you're human.</p>
           <p class="subscribe-status" data-subscribe-status role="status" aria-live="polite"></p>
         </form>
