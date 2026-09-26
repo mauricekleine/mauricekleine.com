@@ -1,0 +1,440 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "superthread",
+  "homepage": "https://www.mauricekleine.com/superthread",
+  "items": [
+    {
+      "name": "superthread",
+      "type": "registry:style",
+      "title": "superthread",
+      "description": "one thread, two modes. import the installed superthread.css once in your Tailwind v4 app.",
+      "dependencies": [
+        "clsx@~2.1.1",
+        "tailwind-merge@~3.7.0",
+        "tailwindcss@~4.3.3"
+      ],
+      "files": [
+        {
+          "path": "packages/superthread/dist/tokens.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/tokens.css"
+        },
+        {
+          "path": "packages/superthread/dist/theme.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/theme.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/fonts.md",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/fonts.md"
+        },
+        {
+          "path": "packages/superthread/registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/utils.ts"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "button",
+      "dependencies": [
+        "clsx@~2.1.1",
+        "tailwind-merge@~3.7.0",
+        "tailwindcss@~4.3.3",
+        "@base-ui/react@~1.8.0",
+        "class-variance-authority@~0.7.1"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/superthread/dist/tokens.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/tokens.css"
+        },
+        {
+          "path": "packages/superthread/dist/theme.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/theme.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/fonts.md",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/fonts.md"
+        },
+        {
+          "path": "packages/superthread/registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/utils.ts"
+        },
+        {
+          "path": "packages/superthread/registry/ui/button.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "input",
+      "dependencies": [
+        "clsx@~2.1.1",
+        "tailwind-merge@~3.7.0",
+        "tailwindcss@~4.3.3",
+        "@base-ui/react@~1.8.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/superthread/dist/tokens.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/tokens.css"
+        },
+        {
+          "path": "packages/superthread/dist/theme.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/theme.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/fonts.md",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/fonts.md"
+        },
+        {
+          "path": "packages/superthread/registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/utils.ts"
+        },
+        {
+          "path": "packages/superthread/registry/ui/input.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/input.tsx"
+        }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "card",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/superthread/dist/tokens.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/tokens.css"
+        },
+        {
+          "path": "packages/superthread/dist/theme.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/theme.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/fonts.md",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/fonts.md"
+        },
+        {
+          "path": "packages/superthread/registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/utils.ts"
+        },
+        {
+          "path": "packages/superthread/registry/ui/card.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/card.tsx"
+        }
+      ],
+      "dependencies": [
+        "clsx@~2.1.1",
+        "tailwind-merge@~3.7.0",
+        "tailwindcss@~4.3.3"
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "state pill",
+      "dependencies": [
+        "clsx@~2.1.1",
+        "tailwind-merge@~3.7.0",
+        "tailwindcss@~4.3.3",
+        "class-variance-authority@~0.7.1"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/superthread/dist/tokens.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/tokens.css"
+        },
+        {
+          "path": "packages/superthread/dist/theme.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/theme.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/fonts.md",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/fonts.md"
+        },
+        {
+          "path": "packages/superthread/registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/utils.ts"
+        },
+        {
+          "path": "packages/superthread/registry/ui/badge.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/badge.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chip",
+      "type": "registry:ui",
+      "title": "data chip",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/superthread/dist/tokens.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/tokens.css"
+        },
+        {
+          "path": "packages/superthread/dist/theme.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/theme.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/fonts.md",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/fonts.md"
+        },
+        {
+          "path": "packages/superthread/registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/utils.ts"
+        },
+        {
+          "path": "packages/superthread/registry/ui/chip.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/chip.tsx"
+        }
+      ],
+      "dependencies": [
+        "clsx@~2.1.1",
+        "tailwind-merge@~3.7.0",
+        "tailwindcss@~4.3.3"
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "dialog",
+      "dependencies": [
+        "clsx@~2.1.1",
+        "tailwind-merge@~3.7.0",
+        "tailwindcss@~4.3.3",
+        "@base-ui/react@~1.8.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/superthread/dist/tokens.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/tokens.css"
+        },
+        {
+          "path": "packages/superthread/dist/theme.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/theme.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/fonts.md",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/fonts.md"
+        },
+        {
+          "path": "packages/superthread/registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/utils.ts"
+        },
+        {
+          "path": "packages/superthread/registry/ui/dialog.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/dialog.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "tooltip",
+      "dependencies": [
+        "clsx@~2.1.1",
+        "tailwind-merge@~3.7.0",
+        "tailwindcss@~4.3.3",
+        "@base-ui/react@~1.8.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/superthread/dist/tokens.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/tokens.css"
+        },
+        {
+          "path": "packages/superthread/dist/theme.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/theme.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/fonts.md",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/fonts.md"
+        },
+        {
+          "path": "packages/superthread/registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/utils.ts"
+        },
+        {
+          "path": "packages/superthread/registry/ui/tooltip.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/tooltip.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "tabs",
+      "dependencies": [
+        "clsx@~2.1.1",
+        "tailwind-merge@~3.7.0",
+        "tailwindcss@~4.3.3",
+        "@base-ui/react@~1.8.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/superthread/dist/tokens.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/tokens.css"
+        },
+        {
+          "path": "packages/superthread/dist/theme.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/theme.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/fonts.md",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/fonts.md"
+        },
+        {
+          "path": "packages/superthread/registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/utils.ts"
+        },
+        {
+          "path": "packages/superthread/registry/ui/tabs.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/tabs.tsx"
+        }
+      ]
+    },
+    {
+      "name": "app-switcher",
+      "type": "registry:ui",
+      "title": "app switcher",
+      "dependencies": [
+        "clsx@~2.1.1",
+        "tailwind-merge@~3.7.0",
+        "tailwindcss@~4.3.3",
+        "@base-ui/react@~1.8.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/superthread/dist/tokens.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/tokens.css"
+        },
+        {
+          "path": "packages/superthread/dist/theme.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/theme.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        },
+        {
+          "path": "packages/superthread/registry/styles/fonts.md",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/fonts.md"
+        },
+        {
+          "path": "packages/superthread/registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/utils.ts"
+        },
+        {
+          "path": "packages/superthread/registry/ui/app-switcher.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/app-switcher.tsx"
+        }
+      ]
+    }
+  ]
+}

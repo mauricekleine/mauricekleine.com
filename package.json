@@ -5,11 +5,13 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "bun run --filter @mauricekleine/web build && node apps/web/tools/link-deploy-config.mjs",
+    "build": "bun run registry && bun run specimen:css && bun run --filter @mauricekleine/web build && node apps/web/tools/link-deploy-config.mjs",
     "deploy": "bunx wrangler deploy",
     "dev": "bun run --filter @mauricekleine/web dev",
     "prepare": "husky",
-    "test": "node apps/web/tools/test-worker.mjs"
+    "registry": "bun run --cwd packages/superthread build && shadcn build packages/superthread/registry.json --output apps/web/public/r",
+    "specimen:css": "tailwindcss -i apps/web/src/styles/superthread-specimen.css -o apps/web/public/superthread/specimen.css --minify",
+    "test": "bun run --cwd packages/superthread test && node apps/web/tools/test-worker.mjs"
   },
   "lint-staged": {
     "package.json": [
@@ -17,8 +19,10 @@
     ]
   },
   "devDependencies": {
+    "@tailwindcss/cli": "~4.3.3",
     "husky": "~9.1.7",
     "lint-staged": "~16.2.7",
+    "shadcn": "~4.21.0",
     "sort-package-json": "~3.5.0"
   },
   "packageManager": "bun@1.4.2"

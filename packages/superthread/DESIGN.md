@@ -9,7 +9,7 @@ colors:
   void-ground-deep: "oklch(13% 0.03 280)" # night-deep. gradient floor, html background
   void-surface: "oklch(20% 0.035 278)" # panel. instrument surfaces: cards, inputs
   void-line: "oklch(30% 0.03 278)" # hairline borders
-  void-line-strong: "oklch(40% 0.03 278)" # chip and hairline borders that must clear 3:1
+  void-line-strong: "oklch(50% 0.03 278)" # chip and hairline borders; raised to clear 3:1 against panel
   void-ink: "oklch(94% 0.01 85)" # starlight. primary text, warm, not white
   void-ink-muted: "oklch(76% 0.02 275)" # muted. secondary text
   void-ink-dim: "oklch(66% 0.015 275)" # dim. meta and labels on prose surfaces
@@ -27,7 +27,7 @@ colors:
   paper-ground-deep: "#fbfaf7" # same as ground: paper has no gradient floor, so gradients stay flat
   paper-surface: "#f4f2ed" # PROPOSED 2026-09-26, not yet ratified: raised surfaces on paper
   paper-line: "#d9d5cc" # rule (from quanta)
-  paper-line-strong: "#bdb7aa" # PROPOSED 2026-09-26, not yet ratified: chip borders that must clear 3:1
+  paper-line-strong: "#898276" # PROPOSED 2026-09-26, not yet ratified: chip borders that clear 3:1 against paper surface
   paper-ink: "#1a1a1a" # ink. near-black, never #000
   paper-ink-muted: "#55524c" # ink-muted (quanta ink-soft)
   paper-ink-dim: "#6f6a62" # PROPOSED 2026-09-26, not yet ratified: meta and labels on paper
@@ -36,7 +36,7 @@ colors:
   paper-thread-bright: "oklch(48% 0.14 52)" # PROPOSED 2026-09-26, not yet ratified: hover and focus on paper (darker, not lighter)
   paper-thread-soft: "oklch(94% 0.035 60)" # accent-soft (from quanta). tinted backgrounds
   paper-thread-ink: "#fbfaf7" # text on an ember fill
-  paper-danger: "#8e7a76" # wrong (from quanta). muted, stays in gray-ink territory
+  paper-danger: "#735853" # wrong (from quanta), darkened for AA on wrong-soft; stays in gray-ink territory
   paper-danger-soft: "#efe9e7" # wrong-soft (from quanta)
   # ship atmospheres: which color lights the room. never on primary actions
   atmosphere-soliton: "oklch(55% 0.11 300)" # nebula violet

@@ -1,6 +1,7 @@
 import { cloudflare } from '@cloudflare/vite-plugin'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
 import { readdirSync } from 'node:fs'
 
@@ -23,9 +24,11 @@ export default defineConfig({
         { path: '/about', prerender: { enabled: true } },
         { path: '/essays', prerender: { enabled: true } },
         { path: '/404', prerender: { enabled: true } },
+        { path: '/superthread', prerender: { enabled: true } },
         ...essayPaths.map((path) => ({ path, prerender: { enabled: true } })),
       ],
     }),
     react(),
+    tailwindcss(),
   ],
 })
