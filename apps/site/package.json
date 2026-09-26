@@ -1,0 +1,8 @@
+{
+  "name": "@mauricekleine/site",
+  "private": true,
+  "scripts": {
+    "dev": "bunx serve -p 3000",
+    "test": "node tools/test-worker.mjs"
+  }
+}

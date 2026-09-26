@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate responsive WebP copies with the system cwebp tool; no site build step.
 
-Run after adding covers: python3 tools/optimize_images.py
+Run from the repo root after adding covers: python3 apps/site/tools/optimize_images.py
 Original JPEGs stay available for social previews, schema and Markdown.
 Existing derivatives are never overwritten: use a new basename for changed art.
 """

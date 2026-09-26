@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """import an x article into essays/<slug>.html + essays/<slug>.md + essays/<slug>/01.jpg + NN.webp
 
-usage: tools/import-x-article.py <status-url-or-id> <slug> [--summary "one line for the index"] [--linkedin <pulse-url>]
+usage from repo root: python3 apps/site/tools/import-x-article.py <status-url-or-id> <slug> [--summary "one line for the index"] [--linkedin <pulse-url>]
        [--seo-title "short search title, without the author suffix"]
 
-after importing, run tools/link-essays.py to refresh the older/newer footer nav on every essay.
+after importing, run python3 apps/site/tools/link-essays.py to refresh the older/newer footer nav on every essay.
 
 reads the article through api.fxtwitter.com (draft.js blocks + media), keeps
 headings, lists, bold, italic, links, blockquotes, dividers, tables, code

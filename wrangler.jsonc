@@ -4,9 +4,9 @@
   "name": "mauricekleine-com",
   "compatibility_date": "2026-07-16",
   // markdown negotiation + the mcp server live here
-  "main": "worker.js",
+  "main": "apps/site/worker.js",
   "assets": {
-    "directory": ".",
+    "directory": "./apps/site",
     "binding": "ASSETS",
     // /about serves about.html; /about.html redirects to /about
     "html_handling": "auto-trailing-slash",
