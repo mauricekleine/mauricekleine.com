@@ -9,3 +9,8 @@ node_modules
 
 # wrangler local state
 .wrangler/
+
+# TanStack Start build output
+apps/web/dist/
+apps/web/.wrangler/
+apps/web/tools/__pycache__/

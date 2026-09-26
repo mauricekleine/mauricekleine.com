@@ -1,0 +1,6 @@
+Contact: mailto:hey@mauricekleine.com
+Expires: 2027-07-15T00:00:00.000Z
+Preferred-Languages: en, nl
+Canonical: https://www.mauricekleine.com/.well-known/security.txt
+
+# it's a static site, but if you find something anyway, i want to know

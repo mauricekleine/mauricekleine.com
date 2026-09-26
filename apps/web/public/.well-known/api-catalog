@@ -1,0 +1,49 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://www.mauricekleine.com/.well-known/api-catalog",
+      "item": [
+        {
+          "href": "https://www.mauricekleine.com/api/maurice.json",
+          "type": "application/json",
+          "title": "maurice: bio, location, role, links"
+        },
+        {
+          "href": "https://www.mauricekleine.com/api/projects.json",
+          "type": "application/json",
+          "title": "projects: side quests and the graveyard, with statuses"
+        },
+        {
+          "href": "https://www.mauricekleine.com/api/uptime.json",
+          "type": "application/json",
+          "title": "uptime: operational status of maurice himself"
+        },
+        {
+          "href": "https://www.mauricekleine.com/mcp",
+          "type": "application/json",
+          "title": "mcp server: streamable http, tools for bio, projects, uptime, and wishes"
+        }
+      ]
+    },
+    {
+      "anchor": "https://www.mauricekleine.com/",
+      "alternate": [
+        {
+          "href": "https://www.mauricekleine.com/index.md",
+          "type": "text/markdown",
+          "title": "markdown mirror of the homepage"
+        }
+      ]
+    },
+    {
+      "anchor": "https://www.mauricekleine.com/about",
+      "alternate": [
+        {
+          "href": "https://www.mauricekleine.com/about.md",
+          "type": "text/markdown",
+          "title": "markdown mirror of the about page"
+        }
+      ]
+    }
+  ]
+}
