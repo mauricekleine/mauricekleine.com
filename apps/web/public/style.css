@@ -1,0 +1,908 @@
+/* fonts, self-hosted (fontshare ships them under its free license; google's
+   fragment mono still comes from google, which cloudflare fonts inlines) */
+@font-face {
+  font-family: "Panchang";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/panchang-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Panchang";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/panchang-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Panchang";
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/panchang-800.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Supreme";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/supreme-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Supreme";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/supreme-500.woff2") format("woff2");
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --night: oklch(17% 0.035 275);
+  --night-deep: oklch(13% 0.03 280);
+  --starlight: oklch(94% 0.01 85);
+  --muted: oklch(76% 0.02 275);
+  --dim: oklch(66% 0.015 275);
+  --ember: oklch(75% 0.13 55);
+  --ember-bright: oklch(84% 0.12 65);
+  --nebula: oklch(45% 0.09 300);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* overscroll rubber-band shows this instead of a seam */
+  background: var(--night-deep);
+}
+
+body {
+  font-family: "Supreme", system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--starlight);
+  background: var(--night);
+  min-height: 100dvh;
+  text-wrap: pretty;
+}
+
+/* nebula gradients live on a viewport-fixed layer so they can't
+   tile or tear at the page edges during fast scroll */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    /* top vignette: the viewport's first pixels match the html
+       overscroll color, so rubber-banding has no seam */
+    linear-gradient(to bottom, var(--night-deep), oklch(13% 0.03 280 / 0) 90px),
+    radial-gradient(
+      ellipse 90% 55% at 15% -5%,
+      oklch(45% 0.09 300 / 0.10),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 70% 45% at 90% 20%,
+      oklch(55% 0.11 55 / 0.04),
+      transparent 65%
+    ),
+    linear-gradient(to bottom, oklch(17% 0.035 275 / 0), var(--night-deep));
+}
+
+#nebula {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  image-rendering: pixelated; /* the dither is the point */
+}
+
+#stars {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* film grain: the whole page is printed on very dark paper */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -32px;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body::after {
+    animation: grain 0.9s steps(6) infinite;
+  }
+
+  @keyframes grain {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    16.6% {
+      transform: translate(-14px, 9px);
+    }
+    33.3% {
+      transform: translate(10px, -16px);
+    }
+    50% {
+      transform: translate(-8px, -11px);
+    }
+    66.6% {
+      transform: translate(15px, 7px);
+    }
+    83.3% {
+      transform: translate(-5px, 14px);
+    }
+  }
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: clamp(3rem, 8vh, 5.5rem) 1.5rem clamp(2.5rem, 6vh, 4rem);
+}
+
+/* hero */
+
+.hero {
+  text-align: center;
+  margin-bottom: clamp(4rem, 10vh, 6.5rem);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero {
+    animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+}
+
+.portrait-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.portrait {
+  display: block;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  filter: grayscale(15%);
+  box-shadow:
+    0 0 0 1px oklch(75% 0.13 55 / 0.4),
+    0 0 0 5px oklch(75% 0.13 55 / 0.08),
+    0 0 48px oklch(75% 0.13 55 / 0.18);
+}
+
+/* the moon that transits the portrait when clicked */
+.portrait-wrap .moon {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.portrait-wrap .moon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--night-deep);
+  transform: translateX(-115%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .portrait-wrap.eclipsing .moon::before {
+    animation: eclipse 1.5s cubic-bezier(0.45, 0, 0.55, 1) both;
+  }
+
+  .portrait-wrap.eclipsing .portrait {
+    animation: corona 1.5s ease-in-out both;
+  }
+
+  @keyframes eclipse {
+    to {
+      transform: translateX(115%);
+    }
+  }
+
+  @keyframes corona {
+    40%,
+    60% {
+      box-shadow:
+        0 0 0 1px oklch(75% 0.13 55 / 0.8),
+        0 0 0 6px oklch(75% 0.13 55 / 0.25),
+        0 0 72px oklch(84% 0.12 65 / 0.55);
+    }
+  }
+}
+
+h1 {
+  /* panchang runs wide: clamp tuned so "maurice kleine" fits one line at 390px */
+  font-family: "Panchang", system-ui, sans-serif;
+  font-size: clamp(1.85rem, 4.5vw + 0.85rem, 2.9rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.tagline {
+  font-size: clamp(1.1rem, 1.5vw + 0.75rem, 1.3rem);
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 0.75rem;
+  line-height: 1.5;
+}
+
+.hero-meta {
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.8rem;
+  color: var(--dim);
+  margin-top: 1.25rem;
+  letter-spacing: 0.04em;
+}
+
+/* sections */
+
+section {
+  margin-bottom: clamp(3rem, 7vh, 4.5rem);
+}
+
+h2 {
+  font-family: "Panchang", system-ui, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-wrap: balance;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+.section-intro {
+  color: var(--muted);
+}
+
+/* links */
+
+a {
+  color: var(--ember);
+  text-decoration: underline;
+  text-decoration-color: oklch(75% 0.13 55 / 0.35);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition:
+    color 0.15s ease,
+    text-decoration-color 0.15s ease;
+  border-radius: 2px;
+}
+
+a:hover {
+  color: var(--ember-bright);
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ember-bright);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--ember);
+  color: var(--night-deep);
+}
+
+/* waypoint lists */
+
+.waypoints {
+  list-style: none;
+}
+
+.waypoints > li {
+  display: flex;
+  gap: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.waypoints > li:last-child {
+  margin-bottom: 0;
+}
+
+.waypoints .glyph {
+  color: var(--ember);
+  flex-shrink: 0;
+  line-height: 1.65;
+  font-size: 0.9em;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.waypoints > li:hover .glyph,
+.waypoints > li:focus-within .glyph {
+  transform: scale(1.35) rotate(-14deg);
+  color: var(--ember-bright);
+}
+
+.waypoints a {
+  /* supreme ships 400/500; 500 is its emphasis weight */
+  font-weight: 500;
+  font-size: 1.05em;
+}
+
+.waypoints p {
+  color: var(--muted);
+  margin-bottom: 0;
+}
+
+/* graveyard */
+
+.graveyard .glyph {
+  color: var(--dim);
+  transition:
+    color 0.5s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* dead stars flicker back when you look at them */
+.graveyard > li:hover .glyph {
+  color: var(--ember);
+  transform: none;
+  text-shadow: 0 0 12px oklch(75% 0.13 55 / 0.5);
+}
+
+/* and once in a while one goes supernova on its own */
+@media (prefers-reduced-motion: no-preference) {
+  .glyph.supernova {
+    animation: supernova 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes supernova {
+    0% {
+      transform: scale(1);
+    }
+    18% {
+      transform: scale(2.1);
+      color: oklch(90% 0.12 65);
+      text-shadow:
+        0 0 14px oklch(84% 0.12 65 / 0.9),
+        0 0 36px oklch(75% 0.13 55 / 0.6);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
+
+.grave-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.grave-title .name {
+  font-weight: 500;
+  color: var(--starlight);
+}
+
+.stamp {
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--dim);
+  border: 1px solid oklch(66% 0.015 275 / 0.45);
+  border-radius: 999px;
+  padding: 0.05rem 0.55rem;
+  white-space: nowrap;
+}
+
+.stamp-exit {
+  color: var(--ember);
+  border-color: oklch(75% 0.13 55 / 0.5);
+}
+
+.grave-title .years {
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--dim);
+}
+
+/* icon row */
+
+.icons {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+}
+
+.icons a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.25rem 0;
+}
+
+.icons a:hover {
+  color: var(--ember-bright);
+}
+
+.icons svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.icons span {
+  font-size: 0.9rem;
+}
+
+.said-out-loud {
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.more-link {
+  margin-top: 1.75rem;
+}
+
+/* footer */
+
+footer {
+  border-top: 1px solid oklch(66% 0.015 275 / 0.25);
+  padding-top: 1.5rem;
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--dim);
+  line-height: 1.9;
+}
+
+footer p {
+  margin-bottom: 0;
+}
+
+/* status line, fluncle-style but personal */
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ember);
+  box-shadow: 0 0 8px oklch(75% 0.13 55 / 0.9);
+  margin-right: 0.45rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .status-dot {
+    animation: blink 2.8s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0.35;
+    }
+  }
+}
+
+/* 404: lost in space */
+.lost {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.lost .hero {
+  margin-bottom: 2.5rem;
+}
+
+.lost section {
+  margin-bottom: 0;
+}
+
+.err-code {
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  color: var(--dim);
+  margin-bottom: 1.25rem;
+}
+
+/* about page */
+
+.back-link {
+  margin-bottom: 2.5rem;
+}
+
+/* essays */
+
+.page-hero .hero-meta {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.page-hero .tagline {
+  color: var(--muted);
+}
+
+/* essay signup */
+
+.subscribe {
+  border-top: 1px solid oklch(66% 0.015 275 / 0.25);
+  padding-top: clamp(2rem, 5vh, 3rem);
+}
+
+.subscribe .section-intro {
+  margin-bottom: 1.25rem;
+}
+
+.subscribe-form {
+  max-width: 28rem;
+}
+
+.subscribe-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.subscribe-field label {
+  flex-basis: 100%;
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--dim);
+}
+
+.subscribe-field input[type="email"] {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: 0.6rem 0.8rem;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--starlight);
+  background: var(--night-deep);
+  border: 1px solid oklch(66% 0.015 275 / 0.35);
+  border-radius: 6px;
+}
+
+.subscribe-field input[type="email"]::placeholder {
+  color: var(--dim);
+}
+
+.subscribe-field button {
+  flex: 0 0 auto;
+  padding: 0.6rem 1.1rem;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--night-deep);
+  background: var(--ember);
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.subscribe-field button:hover {
+  background: var(--ember-bright);
+}
+
+.subscribe-field button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.cf-turnstile {
+  margin-top: 0.9rem;
+}
+
+.subscribe-note {
+  margin-top: 0.9rem;
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.7rem;
+  line-height: 1.6;
+  color: var(--dim);
+}
+
+.subscribe-status {
+  margin-top: 0.6rem;
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.subscribe-status.error {
+  color: var(--ember);
+}
+
+@media (max-width: 600px) {
+  .subscribe-field input[type="email"] {
+    flex-basis: 100%;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.essay-meta {
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--dim);
+  letter-spacing: 0.04em;
+}
+
+.essay-meta a {
+  color: var(--dim);
+}
+
+.page-hero .essay-meta {
+  margin-top: 0.75rem;
+}
+
+.essay-list {
+  list-style: none;
+}
+
+.essay-list > li {
+  margin-bottom: 2.75rem;
+}
+
+/* index covers: same crop for every essay so the list reads as one column */
+.essay-cover {
+  display: block;
+  margin-bottom: 0.9rem;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid oklch(66% 0.015 275 / 0.18);
+}
+
+.essay-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 2;
+  object-fit: cover;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.essay-list > li:hover .essay-cover img,
+.essay-list > li:focus-within .essay-cover img {
+  opacity: 1;
+}
+
+.essay-list > li:last-child {
+  margin-bottom: 0;
+}
+
+.essay-list a {
+  font-weight: 500;
+  font-size: 1.1em;
+}
+
+.essay-list p {
+  color: var(--muted);
+  margin: 0.25rem 0 0;
+}
+
+/* the essay body keeps the author's own casing; only the chrome is lowercase */
+.essay {
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.essay h2 {
+  margin-top: 2.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.essay p,
+.essay ul {
+  margin-bottom: 1.1rem;
+}
+
+.essay ul {
+  padding-left: 1.25rem;
+  color: var(--starlight);
+}
+
+.essay li {
+  margin-bottom: 0.3rem;
+}
+
+.essay blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.1rem;
+  border-left: 2px solid oklch(75% 0.13 55 / 0.5);
+  color: var(--muted);
+}
+
+.essay blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* long titles (x articles run long) get a smaller display size */
+.essay-title {
+  font-size: clamp(1.5rem, 2.6vw + 0.8rem, 2.2rem);
+  line-height: 1.2;
+}
+
+.essay figure {
+  margin: 1.75rem 0;
+}
+
+.essay figure.cover {
+  margin-top: 0;
+  margin-bottom: 2.5rem;
+}
+
+.essay img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid oklch(66% 0.015 275 / 0.18);
+}
+
+.essay hr {
+  border: 0;
+  height: 1px;
+  margin: 2.25rem auto;
+  width: 4rem;
+  background: oklch(66% 0.015 275 / 0.35);
+}
+
+.essay h3 {
+  font-family: "Panchang", system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.essay table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95em;
+}
+
+.essay th,
+.essay td {
+  text-align: left;
+  padding: 0.45rem 0.75rem 0.45rem 0;
+  border-bottom: 1px solid oklch(66% 0.015 275 / 0.25);
+  vertical-align: top;
+}
+
+.essay th {
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--dim);
+}
+
+.essay pre {
+  margin: 1.5rem 0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--muted);
+  background: oklch(13% 0.03 280 / 0.7);
+  border: 1px solid oklch(66% 0.015 275 / 0.18);
+  border-radius: 6px;
+  white-space: pre-wrap;
+}
+
+.essay code {
+  font-family: "Fragment Mono", monospace;
+}
+
+/* older / newer, generated by tools/link-essays.py */
+.essay-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-family: "Supreme", system-ui, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.essay-nav a {
+  display: block;
+  max-width: 48%;
+  text-decoration: none;
+  color: var(--starlight);
+}
+
+.essay-nav a:hover {
+  color: var(--ember-bright);
+}
+
+.essay-nav .newer {
+  margin-left: auto;
+  text-align: right;
+}
+
+.essay-nav .label {
+  display: block;
+  font-family: "Fragment Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--dim);
+  margin-bottom: 0.2rem;
+}
+
+@media (max-width: 600px) {
+  .essay-nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .essay-nav a,
+  .essay-nav .newer {
+    max-width: none;
+    margin-left: 0;
+    text-align: left;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 1rem;
+  }
+
+  main {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}

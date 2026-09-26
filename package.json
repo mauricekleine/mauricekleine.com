@@ -5,10 +5,11 @@
     "packages/*"
   ],
   "scripts": {
+    "build": "bun run --filter @mauricekleine/web build && node apps/web/tools/link-deploy-config.mjs",
     "deploy": "bunx wrangler deploy",
-    "dev": "bun run --filter @mauricekleine/site dev",
+    "dev": "bun run --filter @mauricekleine/web dev",
     "prepare": "husky",
-    "test": "node apps/site/tools/test-worker.mjs"
+    "test": "node apps/web/tools/test-worker.mjs"
   },
   "lint-staged": {
     "package.json": [

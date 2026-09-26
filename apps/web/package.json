@@ -1,0 +1,28 @@
+{
+  "name": "@mauricekleine/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --port 3000",
+    "build": "python3 tools/sync-essays.py && vite build && tsc --noEmit",
+    "preview": "vite preview",
+    "test": "node tools/test-worker.mjs"
+  },
+  "dependencies": {
+    "@tanstack/react-router": "latest",
+    "@tanstack/react-start": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "yaml": "latest"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "latest",
+    "typescript": "latest",
+    "vite": "latest",
+    "wrangler": "latest"
+  }
+}

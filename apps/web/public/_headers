@@ -1,0 +1,50 @@
+# workers static assets honor this file (cloudflare pages syntax).
+
+/*
+  Strict-Transport-Security: max-age=31536000
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# essay images and sprites never change in place (a new essay is a new folder);
+# fonts are versioned by filename. html stays revalidate-always.
+/essays/:slug/*
+  Cache-Control: public, max-age=31536000, immutable
+/sprites/*
+  Cache-Control: public, max-age=31536000, immutable
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/maurice.png
+  Cache-Control: public, max-age=604800
+/maurice-:size.webp
+  Cache-Control: public, max-age=31536000, immutable
+/og.png
+  Cache-Control: public, max-age=604800
+/*.css
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/*.js
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/
+  Link: </.well-known/api-catalog>; rel="api-catalog"
+  Link: </llms.txt>; rel="llms-txt"
+  Link: </index.md>; rel="alternate"; type="text/markdown"
+
+/index.html
+  Link: </.well-known/api-catalog>; rel="api-catalog"
+  Link: </llms.txt>; rel="llms-txt"
+  Link: </index.md>; rel="alternate"; type="text/markdown"
+
+/about
+  Link: </about.md>; rel="alternate"; type="text/markdown"
+
+/essays
+  Link: </essays.md>; rel="alternate"; type="text/markdown"
+
+/.well-known/api-catalog
+  Content-Type: application/linkset+json
+
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
