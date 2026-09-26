@@ -46,6 +46,7 @@ type PageSeo = {
   published?: string
   turnstile?: boolean
   relativeStylesheet?: boolean
+  siteStylesheet?: boolean
   jsonLd?: StructuredData
 }
 
@@ -107,8 +108,8 @@ function buildHead(page: PageSeo): { meta: Meta[]; links: Link[]; scripts: Scrip
     { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/panchang-800.woff2', crossOrigin: '' },
     { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/supreme-400.woff2', crossOrigin: '' },
     { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Fragment+Mono&display=swap' },
-    { rel: 'stylesheet', href: `${page.relativeStylesheet ? '' : '/'}style.css?v=20260925-subscribe` },
   )
+  if (page.siteStylesheet !== false) links.push({ rel: 'stylesheet', href: `${page.relativeStylesheet ? '' : '/'}style.css?v=20260925-subscribe` })
 
   const scripts: Script[] = []
   if (page.turnstile) scripts.push({ src: 'https://challenges.cloudflare.com/turnstile/v0/api.js', async: true, defer: true })
@@ -205,6 +206,18 @@ export function notFoundHead() {
     description: 'this page drifted out of orbit',
     robots: 'noindex',
   })
+}
+
+export function superthreadHead() {
+  const head = buildHead({
+    path: '/superthread',
+    title: 'superthread | maurice kleine',
+    description: 'one thread through the things maurice builds. tokens, type, components, and two modes.',
+    ogType: 'website',
+    siteStylesheet: false,
+  })
+  head.links.push({ rel: 'stylesheet', href: '/superthread/specimen.css' })
+  return head
 }
 
 export function essayHead(essay: Essay) {

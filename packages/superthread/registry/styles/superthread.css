@@ -1,0 +1,3 @@
+/* Import this stylesheet once in a Tailwind v4 app. Keep preflight local to your app. */
+@import "./tokens.css";
+@import "./theme.css";

@@ -7,7 +7,7 @@
   --ground-deep: oklch(13% 0.03 280);
   --surface: oklch(20% 0.035 278);
   --line: oklch(30% 0.03 278);
-  --line-strong: oklch(40% 0.03 278);
+  --line-strong: oklch(50% 0.03 278);
   --ink: oklch(94% 0.01 85);
   --ink-muted: oklch(76% 0.02 275);
   --ink-dim: oklch(66% 0.015 275);
@@ -83,7 +83,7 @@
   --ground-deep: #fbfaf7;
   --surface: #f4f2ed;
   --line: #d9d5cc;
-  --line-strong: #bdb7aa;
+  --line-strong: #898276;
   --ink: #1a1a1a;
   --ink-muted: #55524c;
   --ink-dim: #6f6a62;
@@ -92,6 +92,6 @@
   --thread-bright: oklch(48% 0.14 52);
   --thread-soft: oklch(94% 0.035 60);
   --thread-ink: #fbfaf7;
-  --danger: #8e7a76;
+  --danger: #735853;
   --danger-soft: #efe9e7;
 }

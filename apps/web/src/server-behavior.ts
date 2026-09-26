@@ -648,7 +648,7 @@ export async function handleSiteRequest(
       const pagePath = url.pathname.endsWith("/") && url.pathname !== "/"
         ? url.pathname.slice(0, -1)
         : url.pathname;
-      if ((markdownMirror(pagePath) || pagePath === "/404") && renderPage && (request.method === "GET" || request.method === "HEAD")) {
+      if ((markdownMirror(pagePath) || pagePath === "/404" || pagePath === "/superthread") && renderPage && (request.method === "GET" || request.method === "HEAD")) {
         const renderUrl = new URL(request.url);
         renderUrl.pathname = pagePath;
         const rendered = await renderPage(new Request(renderUrl, request));

@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as R404RouteImport } from './routes/404'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as EssaysRouteImport } from './routes/essays'
+import { Route as SuperthreadRouteImport } from './routes/superthread'
 import { Route as EssaysSlugRouteImport } from './routes/essays_.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const EssaysRoute = EssaysRouteImport.update({
   path: '/essays',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SuperthreadRoute = SuperthreadRouteImport.update({
+  id: '/superthread',
+  path: '/superthread',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EssaysSlugRoute = EssaysSlugRouteImport.update({
   id: '/essays_/$slug',
   path: '/essays/$slug',
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/404': typeof R404Route
   '/about': typeof AboutRoute
   '/essays': typeof EssaysRoute
+  '/superthread': typeof SuperthreadRoute
   '/essays/$slug': typeof EssaysSlugRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/404': typeof R404Route
   '/about': typeof AboutRoute
   '/essays': typeof EssaysRoute
+  '/superthread': typeof SuperthreadRoute
   '/essays/$slug': typeof EssaysSlugRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,23 @@ export interface FileRoutesById {
   '/404': typeof R404Route
   '/about': typeof AboutRoute
   '/essays': typeof EssaysRoute
+  '/superthread': typeof SuperthreadRoute
   '/essays_/$slug': typeof EssaysSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/404' | '/about' | '/essays' | '/essays/$slug'
+  fullPaths:
+    '/' | '/404' | '/about' | '/essays' | '/superthread' | '/essays/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/404' | '/about' | '/essays' | '/essays/$slug'
-  id: '__root__' | '/' | '/404' | '/about' | '/essays' | '/essays_/$slug'
+  to: '/' | '/404' | '/about' | '/essays' | '/superthread' | '/essays/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/404'
+    | '/about'
+    | '/essays'
+    | '/superthread'
+    | '/essays_/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +93,7 @@ export interface RootRouteChildren {
   R404Route: typeof R404Route
   AboutRoute: typeof AboutRoute
   EssaysRoute: typeof EssaysRoute
+  SuperthreadRoute: typeof SuperthreadRoute
   EssaysSlugRoute: typeof EssaysSlugRoute
 }
 
@@ -109,6 +127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EssaysRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/superthread': {
+      id: '/superthread'
+      path: '/superthread'
+      fullPath: '/superthread'
+      preLoaderRoute: typeof SuperthreadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/essays_/$slug': {
       id: '/essays_/$slug'
       path: '/essays/$slug'
@@ -124,6 +149,7 @@ const rootRouteChildren: RootRouteChildren = {
   R404Route: R404Route,
   AboutRoute: AboutRoute,
   EssaysRoute: EssaysRoute,
+  SuperthreadRoute: SuperthreadRoute,
   EssaysSlugRoute: EssaysSlugRoute,
 }
 export const routeTree = rootRouteImport

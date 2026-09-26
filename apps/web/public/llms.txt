@@ -9,6 +9,7 @@ the whole site is hand-written html with no framework and no build step. markdow
 - [home](https://www.mauricekleine.com/index.md): who maurice is, what he's building now, and the graveyard of ended experiments
 - [about](https://www.mauricekleine.com/about.md): the longer story, community work, and philosophy
 - [essays](https://www.mauricekleine.com/essays.md): longer thoughts first posted on x and linkedin, each with its own .md twin
+- [superthread](https://www.mauricekleine.com/superthread): design tokens, components, and the public specimen for maurice's fleet
 
 ## essays
 
