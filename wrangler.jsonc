@@ -1,12 +1,12 @@
 {
-  // mauricekleine.com as a cloudflare worker: static assets, no worker script.
+  // mauricekleine.com as a TanStack Start worker with static assets.
   // deploy with: bun run deploy (bunx wrangler deploy)
   "name": "mauricekleine-com",
   "compatibility_date": "2026-07-16",
-  // markdown negotiation + the mcp server live here
-  "main": "apps/site/worker.js",
+  "compatibility_flags": ["nodejs_compat"],
+  // the custom server entry handles the existing HTTP behavior
+  "main": "apps/web/src/server.ts",
   "assets": {
-    "directory": "./apps/site",
     "binding": "ASSETS",
     // /about serves about.html; /about.html redirects to /about
     "html_handling": "auto-trailing-slash",
@@ -19,7 +19,7 @@
   "workers_dev": false,
   "routes": [
     { "pattern": "www.mauricekleine.com", "custom_domain": true },
-    // apex is also served by the worker; _redirects sends it to www
+    // apex is also served by the worker; the custom server sends it to www
     { "pattern": "mauricekleine.com", "custom_domain": true }
   ]
 }
