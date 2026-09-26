@@ -1,0 +1,15 @@
+{
+  "name": "@mauricekleine/superthread",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./tokens.css": "./dist/tokens.css",
+    "./theme.css": "./dist/theme.css",
+    "./tokens.json": "./dist/tokens.json"
+  },
+  "scripts": {
+    "build": "bun scripts/generate.ts",
+    "lint": "bunx @google/design.md lint DESIGN.md",
+    "test": "bun test"
+  }
+}
