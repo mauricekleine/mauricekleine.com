@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { LegacyPage, legacyHead } from '../legacy-page'
-import { staticPages } from '../static-pages'
-import { essaysBody } from '../essay-lists'
+import { essays } from '../essay-content'
+import { EssaysPage } from '../pages/essays'
+import { essaysHead } from '../seo'
 
 export const Route = createFileRoute('/essays')({
-  head: () => legacyHead(staticPages.essays.head),
-  component: () => <LegacyPage body={essaysBody()} />,
+  head: () => essaysHead(essays),
+  component: EssaysPage,
 })

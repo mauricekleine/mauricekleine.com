@@ -1,26 +1,14 @@
 #!/usr/bin/env python3
-"""import an x article into content/essays/<slug>.md + public/essays/<slug>/ images
+"""Import an X article as data frontmatter, Markdown, and local images.
 
-usage from repo root: python3 apps/web/tools/import-x-article.py <status-url-or-id> <slug> [--summary "one line for the index"] [--linkedin <pulse-url>]
-       [--seo-title "short search title, without the author suffix"]
+Usage: python3 apps/web/tools/import-x-article.py <status-url-or-id> <slug>
+       [--summary "one line"] [--linkedin <pulse-url>] [--seo-title "search title"]
 
-after importing, run link-essays.py, then sync-essays.py. The home and essays
-index page snapshots need a matching entry until they become content driven.
-
-reads the article through api.fxtwitter.com (draft.js blocks + media), keeps
-headings, lists, bold, italic, links, blockquotes, dividers, tables, code
-blocks and every image. images are optimized with ffmpeg when available: the
-cover is JPEG and body images are WebP, all at no more than 1200px wide.
-When cwebp is available, the cover also gets responsive WebP copies for HTML;
-the JPEG stays in social metadata and Markdown. Existing search titles survive
-re-imports unless --seo-title is supplied. If
-ffmpeg is unavailable, the original image format is kept with a warning. the
-essay body keeps the author's casing; the page chrome is lowercase. every page
-also gets the essay signup form and the current style.css version. no
-Python dependencies beyond the standard library.
+Run sync-essays.py after import. The React pages and older/newer navigation read
+content directly. The body keeps the author's casing; the display title is
+lowercase. Re-importing preserves the existing SEO title unless overridden.
 """
 
-import html
 import json
 import os
 import re
@@ -32,14 +20,8 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from essay_content import CONTENT, PUBLIC, SITE, read_content, write_content
 from optimize_images import COVER_SIZES, cover_variants
-from essay_content import CONTENT, metadata_from_html, read_content, write_content
-
-ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "public")
-SITE = "https://www.mauricekleine.com"
-STYLE_VERSION = "20260925-subscribe"
-TURNSTILE_SITE_KEY = "0x4AAAAAAABLi4eHqaf6akyS"
-
 
 def fetch(url, binary=False):
     req = urllib.request.Request(url, headers={"user-agent": "mauricekleine.com essay importer"})
@@ -108,59 +90,6 @@ def image_dimensions(path):
     raise ValueError(f"unsupported or invalid image: {path}")
 
 
-def inline_html(block, entities):
-    # escape text first, then place tags by walking again on the escaped units.
-    # simpler: render with placeholder tags, escaping the text characters.
-    text = block["text"]
-    units = to_units(text)
-    n = len(units) // 2
-    opens, closes = {}, {}
-    for r in block["inlineStyleRanges"]:
-        if block["type"] == "header-two" and r["style"] == "Bold":
-            continue
-        tag = {"Bold": "strong", "Italic": "em"}.get(r["style"])
-        if tag:
-            opens.setdefault(r["offset"], []).append((tag, None))
-            closes.setdefault(r["offset"] + r["length"], []).append(tag)
-    for r in block["entityRanges"]:
-        e = entities.get(str(r["key"]))
-        if e and e["type"] == "LINK":
-            opens.setdefault(r["offset"], []).append(("a", e["data"]["url"]))
-            closes.setdefault(r["offset"] + r["length"], []).append("a")
-    out, stack, buf = [], [], b""
-
-    def flush():
-        nonlocal buf
-        if buf:
-            out.append(html.escape(from_units(buf), quote=False))
-            buf = b""
-
-    for i in range(n + 1):
-        if i in closes:
-            flush()
-            for tag in closes[i]:
-                while stack:
-                    t, _ = stack.pop()
-                    out.append(f"</{t}>")
-                    if t == tag:
-                        break
-        if i in opens:
-            flush()
-            for tag, href in opens[i]:
-                stack.append((tag, href))
-                out.append(f'<a href="{html.escape(href, quote=True)}">' if tag == "a" else f"<{tag}>")
-        if i < n:
-            buf += units[2 * i : 2 * i + 2]
-    flush()
-    while stack:
-        t, _ = stack.pop()
-        out.append(f"</{t}>")
-    s = "".join(out)
-    # @handles that are not already inside a link
-    s = re.sub(r"(?<![\w/\"])@([A-Za-z0-9_]{1,15})\b", r'<a href="https://x.com/\1">@\1</a>', s)
-    return s.replace("\n", "<br />\n")
-
-
 def inline_md(block, entities):
     text = block["text"]
     units = to_units(text)
@@ -209,48 +138,35 @@ def inline_md(block, entities):
     return "".join(out)
 
 
-def markdown_entity_html(mdtext):
-    mdtext = mdtext.strip("\n")
-    fence = re.match(r"^```(\w*)\n(.*?)\n```$", mdtext, re.S)
-    if fence:
-        return f"<pre><code>{html.escape(fence.group(2))}</code></pre>"
-    if mdtext.startswith("|"):
-        rows = [[c.strip() for c in line.strip().strip("|").split("|")] for line in mdtext.splitlines() if line.strip()]
-        rows = [r for r in rows if not all(re.fullmatch(r"-+", c) for c in r)]
-        head, body = rows[0], rows[1:]
-        th = "".join(f"<th>{html.escape(c)}</th>" for c in head)
-        trs = "".join("<tr>" + "".join(f"<td>{html.escape(c)}</td>" for c in r) + "</tr>" for r in body)
-        return f"<table><thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table>"
-    return f"<p>{html.escape(mdtext)}</p>"
-
-
 def slugify_check(slug):
     if not re.fullmatch(r"[a-z0-9-]+", slug):
         sys.exit("slug must be lowercase letters, digits and dashes")
 
 
+def take_option(args, flag):
+    if flag not in args:
+        return ""
+    i = args.index(flag)
+    if i + 1 >= len(args):
+        sys.exit(f"missing value for {flag}")
+    value = args[i + 1]
+    del args[i:i + 2]
+    return value
+
+
 def main():
     args = sys.argv[1:]
-    seo_title = ""
-    if "--seo-title" in args:
-        i = args.index("--seo-title")
-        seo_title = args[i + 1]
-        del args[i : i + 2]
-    summary = ""
-    if "--summary" in args:
-        i = args.index("--summary")
-        summary = args[i + 1]
-        del args[i : i + 2]
-    linkedin = ""
-    if "--linkedin" in args:
-        i = args.index("--linkedin")
-        linkedin = args[i + 1].split("?")[0]
-        del args[i : i + 2]
+    seo_title = take_option(args, "--seo-title")
+    summary = take_option(args, "--summary")
+    linkedin = take_option(args, "--linkedin").split("?")[0]
     if len(args) != 2:
         sys.exit(__doc__)
     ref, slug = args
     slugify_check(slug)
-    status_id = re.search(r"(\d{15,})", ref).group(1)
+    match = re.search(r"(\d{15,})", ref)
+    if not match:
+        sys.exit("expected an X status URL or status ID")
+    status_id = match.group(1)
     tweet = json.loads(fetch(f"https://api.fxtwitter.com/mauricekleine/status/{status_id}"))["tweet"]
     art = tweet["article"]
     title = art["title"].strip()
@@ -261,281 +177,134 @@ def main():
     entities = {e["key"]: e["value"] for e in art["content"]["entityMap"]}
     media = {m["media_id"]: m["media_info"] for m in art.get("media_entities") or []}
 
-    img_dir = os.path.join(ROOT, "essays", slug)
-    os.makedirs(img_dir, exist_ok=True)
-    counter = [0]
+    image_dir = PUBLIC / "essays" / slug
+    image_dir.mkdir(parents=True, exist_ok=True)
+    counter = 0
     ffmpeg = shutil.which("ffmpeg")
+    images = {}
 
-    def save_image(info, alt, cover=False):
-        counter[0] += 1
+    def save_image(info, cover=False):
+        nonlocal counter
+        counter += 1
         url = info["original_img_url"]
         source_ext = os.path.splitext(url.split("?")[0])[1].lower() or ".jpg"
         output_ext = ".jpg" if cover and ffmpeg else ".webp" if not cover and ffmpeg else source_ext
-        name = f"{counter[0]:02d}{output_ext}"
-        path = os.path.join(img_dir, name)
-        if not os.path.exists(path):
+        name = f"{counter:02d}{output_ext}"
+        path = image_dir / name
+        if not path.exists():
             image = fetch(url + ("&" if "?" in url else "?") + "name=orig", binary=True)
             if ffmpeg:
-                source_fd, source_path = tempfile.mkstemp(prefix=".source-", suffix=source_ext, dir=img_dir)
+                source_fd, source_path = tempfile.mkstemp(prefix=".source-", suffix=source_ext, dir=image_dir)
                 try:
-                    with os.fdopen(source_fd, "wb") as source:
-                        source.write(image)
-                    command = [
-                        "ffmpeg", "-y", "-i", source_path,
-                        "-vf", "scale='min(1200,iw)':-2",
-                    ]
-                    if cover:
-                        command += ["-q:v", "3"]
-                    else:
-                        command += ["-c:v", "libwebp", "-quality", "80"]
-                    command += ["-frames:v", "1", path]
-                    subprocess.run(command, check=True)
+                    with os.fdopen(source_fd, "wb") as output:
+                        output.write(image)
+                    command = ["ffmpeg", "-y", "-i", source_path, "-vf", "scale='min(1200,iw)':-2"]
+                    command += ["-q:v", "3"] if cover else ["-c:v", "libwebp", "-quality", "80"]
+                    subprocess.run(command + ["-frames:v", "1", str(path)], check=True)
                 finally:
                     os.unlink(source_path)
             else:
-                with open(path, "wb") as output:
-                    output.write(image)
+                path.write_bytes(image)
                 print(f"warning: ffmpeg not found; kept original image at {path}")
-        w, h = image_dimensions(path)
-        return f"/essays/{slug}/{name}", w, h
+        width, height = image_dimensions(path)
+        return f"/essays/{slug}/{name}", width, height
 
-    def figure(info, alt, cover=False):
-        src, w, h = save_image(info, alt, cover=cover)
-        display_src = src
-        responsive = ""
-        if cover:
-            variants = cover_variants(Path(ROOT) / src.lstrip("/"), w)
-            if variants:
-                candidates = [("/" + path.relative_to(ROOT).as_posix(), size) for path, size in variants]
-                display_src = next((url for url, size in candidates if size >= 800), candidates[-1][0])
-                srcset = ", ".join(f"{url} {size}w" for url, size in candidates)
-                responsive = f' srcset="{srcset}" sizes="{COVER_SIZES}"'
-        dims = f' width="{w}" height="{h}"' if w and h else ""
-        attrs = ' fetchpriority="high"' if cover else ' loading="lazy" decoding="async"'
-        return (
-            f'<figure><img src="{display_src}"{responsive} alt="{html.escape(alt, quote=True)}"{dims}{attrs} /></figure>',
-            f"![{alt}]({SITE}{src})",
-            src,
-            (w, h),
-        )
-
-    body_html, body_md = [], []
-    cover_src = None
-    cover_dims = (1200, 630)
+    body = []
+    cover = cover_original = cover_srcset = cover_sizes = cover_alt = ""
+    cover_width, cover_height = 1200, 630
     if art.get("cover_media"):
-        fh, fm, cover_src, cover_dims = figure(
-            art["cover_media"]["media_info"],
-            art["cover_media"]["media_info"].get("alt_text") or "",
-            cover=True,
-        )
-        body_html.append(fh.replace("<figure>", '<figure class="cover">'))
-        body_md.append(fm)
+        info = art["cover_media"]["media_info"]
+        cover_alt = info.get("alt_text") or ""
+        cover_original, cover_width, cover_height = save_image(info, cover=True)
+        cover = cover_original
+        variants = cover_variants(PUBLIC / cover_original.lstrip("/"), cover_width)
+        if variants:
+            candidates = [("/" + path.relative_to(PUBLIC).as_posix(), size) for path, size in variants]
+            cover = next((url for url, size in candidates if size >= 800), candidates[-1][0])
+            cover_srcset = ", ".join(f"{url} {size}w" for url, size in candidates)
+            cover_sizes = COVER_SIZES
+        body.append(f"![{cover_alt}]({SITE}{cover_original})")
 
     blocks = art["content"]["blocks"]
     i = 0
     while i < len(blocks):
-        b = blocks[i]
-        t = b["type"]
-        if t == "unordered-list-item" or t == "ordered-list-item":
-            tag = "ul" if t == "unordered-list-item" else "ol"
+        block = blocks[i]
+        kind = block["type"]
+        if kind in ("unordered-list-item", "ordered-list-item"):
+            prefix = "- " if kind == "unordered-list-item" else None
             items = []
-            while i < len(blocks) and blocks[i]["type"] == t:
+            while i < len(blocks) and blocks[i]["type"] == kind:
                 items.append(blocks[i])
                 i += 1
-            body_html.append(f"<{tag}>" + "".join(f"<li>{inline_html(x, entities)}</li>" for x in items) + f"</{tag}>")
-            body_md.append("\n".join(("- " if tag == "ul" else f"{k + 1}. ") + inline_md(x, entities) for k, x in enumerate(items)))
+            body.append("\n".join((prefix or f"{n + 1}. ") + inline_md(item, entities) for n, item in enumerate(items)))
             continue
-        if t == "atomic":
-            for r in b["entityRanges"]:
-                e = entities.get(str(r["key"]))
-                if not e:
+        if kind == "atomic":
+            for reference in block["entityRanges"]:
+                entity = entities.get(str(reference["key"]))
+                if not entity:
                     continue
-                if e["type"] == "MEDIA":
-                    for item in e["data"]["mediaItems"]:
+                if entity["type"] == "MEDIA":
+                    for item in entity["data"]["mediaItems"]:
                         info = media.get(item["mediaId"])
                         if info:
-                            fh, fm, _src, _dims = figure(info, info.get("alt_text") or "")
-                            body_html.append(fh)
-                            body_md.append(fm)
-                elif e["type"] == "DIVIDER":
-                    # x inserts a divider under every heading; the heading already separates
-                    if body_html and body_html[-1].startswith("<h2>"):
-                        continue
-                    body_html.append("<hr />")
-                    body_md.append("---")
-                elif e["type"] == "MARKDOWN":
-                    body_html.append(markdown_entity_html(e["data"]["markdown"]))
-                    body_md.append(e["data"]["markdown"].strip("\n"))
-                elif e["type"] == "TWEET":
-                    url = e["data"].get("url") or e["data"].get("tweetUrl") or ""
-                    body_html.append(f'<p><a href="{html.escape(url, quote=True)}">{html.escape(url)}</a></p>')
-                    body_md.append(url)
+                            alt = info.get("alt_text") or ""
+                            src, width, height = save_image(info)
+                            images[Path(src).name] = {"width": width, "height": height, "alt": alt}
+                            body.append(f"![{alt}]({SITE}{src})")
+                elif entity["type"] == "DIVIDER":
+                    if not body or not body[-1].startswith("## "):
+                        body.append("---")
+                elif entity["type"] == "MARKDOWN":
+                    body.append(entity["data"]["markdown"].strip("\n"))
+                elif entity["type"] == "TWEET":
+                    body.append(entity["data"].get("url") or entity["data"].get("tweetUrl") or "")
             i += 1
             continue
-        if not b["text"].strip():
+        if not block["text"].strip():
             i += 1
             continue
-        if t == "header-two":
-            body_html.append(f"<h2>{inline_html(b, entities)}</h2>")
-            body_md.append(f"## {inline_md(b, entities)}")
-        elif t == "header-three":
-            body_html.append(f"<h3>{inline_html(b, entities)}</h3>")
-            body_md.append(f"### {inline_md(b, entities)}")
-        elif t == "blockquote":
-            body_html.append(f"<blockquote><p>{inline_html(b, entities)}</p></blockquote>")
-            body_md.append("> " + inline_md(b, entities).replace("\n", "\n> "))
+        text = inline_md(block, entities)
+        if kind == "header-two":
+            body.append("## " + text)
+        elif kind == "header-three":
+            body.append("### " + text)
+        elif kind == "blockquote":
+            body.append("> " + text.replace("\n", "\n> "))
         else:
-            body_html.append(f"<p>{inline_html(b, entities)}</p>")
-            body_md.append(inline_md(b, entities).replace("\n", "  \n"))
+            body.append(text.replace("\n", "  \n"))
         i += 1
 
-    title_lc = title.lower()
-    page_title = f"{seo_title.lower() or title_lc} - maurice kleine"
-    existing_content = CONTENT / f"{slug}.md"
-    previous = read_content(existing_content)[0] if existing_content.exists() else None
-    if not seo_title and previous:
-        page_title = previous["seoTitle"]
-    desc = summary or (art.get("preview_text") or "").replace("\n", " ").strip()[:155]
-    fonts = """    <!-- Fonts: Panchang + Supreme self-hosted (style.css), Fragment Mono via Google -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/panchang-800.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/supreme-400.woff2"
-      crossorigin
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fragment+Mono&display=swap"
-      rel="stylesheet"
-    />
-"""
-    cover_info = (art.get("cover_media") or {}).get("media_info", {})
-    og_image = f"{SITE}{cover_src}" if cover_src else f"{SITE}/og.png"
-    og_width, og_height = (cover_dims if cover_src else (1200, 630))
-    og_alt = cover_info.get("alt_text") or f"cover image for {title_lc}"
-    article = "\n".join("          " + line for line in body_html)
-    page = f"""<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{html.escape(page_title)}</title>
-    <meta name="description" content="{html.escape(desc, quote=True)}" />
-    <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="{SITE}/essays/{slug}" />
-    <meta name="theme-color" content="#11131f" />
-    <link rel="alternate" type="text/markdown" href="/essays/{slug}.md" title="markdown version" />
-    <link rel="author" href="/humans.txt" />
-    <meta property="article:published_time" content="{iso}" />
-    <meta property="article:author" content="{SITE}/about" />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="article" />
-    <meta property="og:site_name" content="Maurice Kleine" />
-    <meta property="og:title" content="{html.escape(title_lc, quote=True)}" />
-    <meta property="og:description" content="{html.escape(desc, quote=True)}" />
-    <meta property="og:image" content="{og_image}" />
-    <meta property="og:image:width" content="{og_width}" />
-    <meta property="og:image:height" content="{og_height}" />
-    <meta property="og:image:alt" content="{html.escape(og_alt, quote=True)}" />
-    <meta property="og:url" content="{SITE}/essays/{slug}" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{html.escape(title_lc, quote=True)}" />
-    <meta name="twitter:description" content="{html.escape(desc, quote=True)}" />
-    <meta name="twitter:image" content="{og_image}" />
-    <meta name="twitter:image:alt" content="{html.escape(og_alt, quote=True)}" />
-
-    <!-- Icons -->
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="apple-touch-icon" href="/maurice.png" />
-
-{fonts}    <link rel="stylesheet" href="/style.css?v={STYLE_VERSION}" />
-
-    <!-- cloudflare turnstile: only loaded on pages with the subscribe form -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-
-    <script type="application/ld+json">
-      {{
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": {json.dumps(title)},
-        "description": {json.dumps(desc)},
-        "datePublished": "{iso}",
-        "dateModified": "{iso}",
-        "url": "{SITE}/essays/{slug}",
-        "mainEntityOfPage": "{SITE}/essays/{slug}",
-        "image": "{og_image}",
-        "author": {{ "@type": "Person", "@id": "{SITE}/#maurice", "name": "Maurice Kleine", "url": "{SITE}/" }},
-        "sameAs": {json.dumps([source, linkedin] if linkedin else source)}
-      }}
-    </script>
-  </head>
-  <body>
-    <canvas id="nebula" aria-hidden="true"></canvas>
-    <canvas id="stars" aria-hidden="true"></canvas>
-
-    <main>
-      <header class="hero page-hero">
-        <p class="hero-meta"><a href="/essays">← essays</a></p>
-        <h1 class="essay-title">{html.escape(title_lc)}</h1>
-        <p class="essay-meta">
-          by <a href="/about">maurice kleine</a> · <time datetime="{iso}">{human}</time> ·
-          first posted on <a href="{source}">x</a>{f' and <a href="{linkedin}">linkedin</a>' if linkedin else ''}
-        </p>
-      </header>
-
-      <article class="essay">
-{article}
-      </article>
-
-      <section class="subscribe" aria-labelledby="subscribe-heading">
-        <h2 id="subscribe-heading">new essays by email</h2>
-        <p class="section-intro">the next essay, when it lands. nothing else.</p>
-        <form class="subscribe-form" method="post" action="/subscribe" data-subscribe>
-          <div class="subscribe-field">
-            <label for="subscribe-email">email</label>
-            <input id="subscribe-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
-            <button type="submit">subscribe</button>
-          </div>
-          <div class="cf-turnstile" data-theme="dark" data-sitekey="{TURNSTILE_SITE_KEY}"></div>
-          <p class="subscribe-note">new essays only. unsubscribe anytime. your email is stored at resend; cloudflare checks you're human.</p>
-          <p class="subscribe-status" data-subscribe-status role="status" aria-live="polite"></p>
-        </form>
-      </section>
-
-      <footer>
-        <!-- essay-nav: generated by tools/link-essays.py -->
-        <!-- /essay-nav -->
-        <p><a href="/essays">← all essays</a></p>
-      </footer>
-    </main>
-
-    <script src="/texture.js"></script>
-    <script src="/stars.js"></script>
-    <script src="/webmcp.js"></script>
-    <script src="/subscribe.js"></script>
-    <script async src="https://api.mauricekleine.com/latest.js"></script>
-  </body>
-</html>
-"""
-    md = f"# {title}\n\n{iso} · first posted on [x]({source})" + (f" and [linkedin]({linkedin})" if linkedin else "") + "\n\n" + "\n\n".join(body_md) + "\n"
-    order = previous["order"] if previous else 0
-    metadata = metadata_from_html(slug, page, order=order, older=previous["older"] if previous else "", newer=previous["newer"] if previous else "")
-    write_content(slug, metadata, md.encode())
-    print(json.dumps({"slug": slug, "title": title, "date": iso, "human": human, "images": counter[0], "summary": desc}))
-    print("run python3 apps/web/tools/link-essays.py, then python3 apps/web/tools/sync-essays.py")
-    print("update home and essays index page snapshots with the new essay cover, title, summary and date")
+    existing = CONTENT / f"{slug}.md"
+    previous = read_content(existing)[0] if existing.exists() else None
+    title_lower = title.lower()
+    metadata = {
+        "slug": slug,
+        "title": title_lower,
+        "seoTitle": f"{seo_title.lower() or title_lower} - maurice kleine" if seo_title or not previous else previous["seoTitle"],
+        "summary": summary or (art.get("preview_text") or "").replace("\n", " ").strip()[:155],
+        "date": iso,
+        "dateDisplay": human,
+        "cover": cover,
+        "coverOriginal": cover_original,
+        "coverSrcset": cover_srcset,
+        "coverSizes": cover_sizes,
+        "coverWidth": cover_width,
+        "coverHeight": cover_height,
+        "coverAlt": cover_alt,
+        "x": source,
+        "linkedin": linkedin,
+        "images": images,
+    }
+    if previous and previous.get("inlineLinks"):
+        metadata["inlineLinks"] = previous["inlineLinks"]
+    markdown = (
+        f"# {title}\n\n{iso} · first posted on [x]({source})"
+        + (f" and [linkedin]({linkedin})" if linkedin else "")
+        + "\n\n" + "\n\n".join(body) + "\n"
+    ).encode()
+    write_content(slug, metadata, markdown)
+    print(json.dumps({"slug": slug, "title": title, "date": iso, "images": counter}))
+    print("run python3 apps/web/tools/sync-essays.py")
 
 
 if __name__ == "__main__":

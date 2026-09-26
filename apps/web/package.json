@@ -13,7 +13,9 @@
     "@tanstack/react-start": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "yaml": "latest"
+    "yaml": "latest",
+    "react-markdown": "latest",
+    "remark-gfm": "latest"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "latest",
@@ -23,6 +25,7 @@
     "@vitejs/plugin-react": "latest",
     "typescript": "latest",
     "vite": "latest",
-    "wrangler": "latest"
+    "wrangler": "latest",
+    "parse5": "latest"
   }
 }

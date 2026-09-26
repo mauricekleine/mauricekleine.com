@@ -1,23 +1,29 @@
 import YAML from 'yaml'
 
-type Essay = {
+export type EssayImage = {
+  width: number
+  height: number
+  alt: string
+}
+
+export type Essay = {
   slug: string
   title: string
   seoTitle: string
   summary: string
   date: string
-  order: number
   dateDisplay: string
   cover: string
+  coverOriginal: string
   coverSrcset: string
   coverSizes: string
-  coverAlt: string
   coverWidth: number
   coverHeight: number
-  headHtml: string
-  beforeArticleHtml: string
-  articleHtml: string
-  afterArticleHtml: string
+  coverAlt: string
+  x: string
+  linkedin: string
+  images: Record<string, EssayImage>
+  inlineLinks?: Record<string, string>
   markdown: string
 }
 
@@ -30,9 +36,33 @@ function parseEssay(source: string): Essay {
   return { ...metadata, markdown: source.slice(match[0].length) }
 }
 
-export const essays = Object.values(sources).map(parseEssay).sort((a, b) => a.order - b.order)
-export const essaysBySlug = Object.fromEntries(essays.map((essay) => [essay.slug, essay]))
+export const essays = Object.values(sources)
+  .map(parseEssay)
+  .sort((a, b) => b.date.localeCompare(a.date) || b.slug.localeCompare(a.slug))
 
-export function essayBody(essay: Essay) {
-  return `${essay.beforeArticleHtml}<article class="essay">\n${essay.articleHtml}\n      </article>${essay.afterArticleHtml}`
+export const essaysBySlug: Record<string, Essay> = Object.fromEntries(essays.map((essay) => [essay.slug, essay]))
+
+export function essayNeighbors(essay: Essay) {
+  const index = essays.findIndex((entry) => entry.slug === essay.slug)
+  return { newer: essays[index - 1], older: essays[index + 1] }
+}
+
+export function articleMarkdown(essay: Essay) {
+  const firstBreak = essay.markdown.indexOf('\n\n')
+  const secondBreak = essay.markdown.indexOf('\n\n', firstBreak + 2)
+  if (firstBreak < 0 || secondBreak < 0) throw new Error(`missing essay introduction: ${essay.slug}`)
+  let markdown = essay.markdown.slice(secondBreak + 2)
+  for (const [label, href] of Object.entries(essay.inlineLinks ?? {})) {
+    markdown = markdown.replaceAll(label, `[${label}](${href})`)
+  }
+  // The legacy twin puts a space before closing emphasis markers. Move the
+  // space outside the marker so CommonMark renders the emphasis.
+  markdown = markdown.replace(/_([^_\n]+) _/g, '_$1_ ')
+  const blocks = markdown.split('\n\n')
+  for (let index = 1; index < blocks.length; index++) {
+    const priorListHasFootnote = blocks[index - 1].startsWith('- ') && /^- .*\*$/m.test(blocks[index - 1])
+    if (priorListHasFootnote && blocks[index].startsWith('* ')) blocks[index] = `\\${blocks[index]}`
+  }
+  markdown = blocks.join('\n\n')
+  return markdown
 }

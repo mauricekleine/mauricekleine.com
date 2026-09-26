@@ -8,7 +8,11 @@ from essay_content import CONTENT, PUBLIC, SITE, read_content
 
 
 def main():
-    records = sorted((read_content(path) for path in CONTENT.glob("*.md")), key=lambda pair: pair[0]["order"])
+    records = sorted(
+        (read_content(path) for path in CONTENT.glob("*.md")),
+        key=lambda pair: (pair[0]["date"], pair[0]["slug"]),
+        reverse=True,
+    )
     essays = [metadata for metadata, _ in records]
     for metadata, markdown in records:
         target = PUBLIC / "essays" / f'{metadata["slug"]}.md'
