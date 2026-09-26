@@ -2,9 +2,9 @@
   "version": 1,
   "skills": {
     "copywriting-maurice": {
-      "source": "../../../../Users/maurice/Projects/soliton/skills/copywriting-maurice",
+      "source": "./skills/copywriting-maurice",
       "sourceType": "local",
-      "computedHash": "bd67bafc73fce47c92836c68678d4e48395d00102fb8e02dcb1564085a6518c1"
+      "computedHash": "0f2bb9cf0b173475bcbbfa117ad6233eec7300d7cf0ff6f4665f1fbb715c1611"
     },
     "improve": {
       "source": "shadcn/improve",
@@ -18,8 +18,13 @@
       "skillPath": "skills/seo-audit/SKILL.md",
       "computedHash": "01f9f8a3feb3ea69c6c212d61189c610f96ef2cc363adc27fd314d78254bf6ae"
     },
+    "superthread-design": {
+      "source": "./skills/superthread-design",
+      "sourceType": "local",
+      "computedHash": "5d35f7d87c4b07190b798696a62c204beae061ae624b25493a3f2a5ab4f38476"
+    },
     "taste": {
-      "source": "../../../../Users/maurice/Projects/soliton/skills/taste",
+      "source": "../soliton/skills/taste",
       "sourceType": "local",
       "computedHash": "5f5843ddbf100be24ad706491b9ec54e29e6ad7f373c364849f830eb5f8a11c2"
     }
