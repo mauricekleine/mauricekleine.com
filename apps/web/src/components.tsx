@@ -84,7 +84,7 @@ export function Subscribe() {
       <Section className="subscribe" aria-labelledby="subscribe-heading">
         <h2 id="subscribe-heading">new essays by email</h2>
         <p className="section-intro">the next essay, when it lands. nothing else.</p>
-        <form className="subscribe-form" method="post" action="/subscribe" data-subscribe={true}>
+        <form className="subscribe-form" method="post" action="/subscribe" data-subscribe="">
           <div className="subscribe-field">
             <label htmlFor="subscribe-email">email</label>{' '}
             <input id="subscribe-email" name="email" type="email" autoComplete="email" required={true} placeholder="you@example.com" />{' '}
@@ -92,7 +92,7 @@ export function Subscribe() {
           </div>
           <div className="cf-turnstile" data-theme="dark" data-sitekey="0x4AAAAAAABLi4eHqaf6akyS"></div>
           <p className="subscribe-note">new essays only. unsubscribe anytime. your email is stored at resend; cloudflare checks you're human.</p>
-          <p className="subscribe-status" data-subscribe-status={true} role="status" aria-live="polite"></p>
+          <p className="subscribe-status" data-subscribe-status="" role="status" aria-live="polite"></p>
         </form>
       </Section>
   )

@@ -219,6 +219,19 @@ function mainStructure(document) {
   return sequence;
 }
 
+function mainAttributes(document) {
+  const main = findElement(document, "main");
+  if (!main) return [];
+  const sequence = [];
+  function visit(node) {
+    if (!node.tagName) return;
+    sequence.push(Object.entries(attributesOf(node)).sort(([left], [right]) => left.localeCompare(right)));
+    for (const child of childrenOf(node)) visit(child);
+  }
+  visit(main);
+  return sequence;
+}
+
 function pageData(html) {
   const document = parse(html);
   const links = [...new Set(elements(document, "a")
@@ -237,6 +250,7 @@ function pageData(html) {
     jsonLd: jsonLdData(document),
     scripts,
     mainStructure: mainStructure(document),
+    mainAttributes: mainAttributes(document),
   };
 }
 
@@ -305,6 +319,11 @@ function comparePages(outputDir, pages) {
     }
     const mainDifference = structureDifference(old.mainStructure, current.mainStructure);
     if (mainDifference) differences.push("main DOM structure");
+    const attributeDifference = old.mainAttributes.findIndex((attributes, index) =>
+      JSON.stringify(attributes) !== JSON.stringify(current.mainAttributes[index]));
+    if (attributeDifference >= 0 || old.mainAttributes.length !== current.mainAttributes.length) {
+      differences.push("main DOM attributes");
+    }
     for (const field of Object.keys(old.head)) {
       if (JSON.stringify(old.head[field]) !== JSON.stringify(current.head[field])) {
         differences.push(`head.${field}`);
@@ -315,6 +334,7 @@ function comparePages(outputDir, pages) {
       differences,
       mainNodeCount: current.mainStructure.length,
       mainDifference,
+      attributeDifference,
       scripts: current.scripts,
     });
   }
@@ -339,6 +359,7 @@ function compareStatic(outputDir, files) {
 function createReport(outputDir, pages, pageResults, staticResults) {
   const pageFailures = pageResults.filter((result) => result.differences.length > 0);
   const structureFailures = pageResults.filter((result) => result.mainDifference);
+  const attributeFailures = pageResults.filter((result) => result.differences.includes("main DOM attributes"));
   const staticFailures = staticResults.filter((result) => result.status !== "identical");
   const generatedScripts = new Set();
   for (const result of pageResults) {
@@ -364,6 +385,7 @@ function createReport(outputDir, pages, pageResults, staticResults) {
     `Pages checked: ${pages.length}`,
     `HTML parity failures: ${pageFailures.length}`,
     `Main DOM structure differences: ${structureFailures.length}`,
+    `Main DOM attribute differences: ${attributeFailures.length}`,
     `Static files byte-checked: ${staticCount}`,
     `Markdown files byte-checked: ${markdownCount}`,
     `Static byte differences: ${staticFailures.length}`,
@@ -374,7 +396,7 @@ function createReport(outputDir, pages, pageResults, staticResults) {
     ...pageResults.map((result) => {
       const summary = result.differences.length
         ? `DIFFERENT (${result.differences.join(", ")})`
-        : `identical visible text, links, title/description/canonical/og/twitter/alternate tags, parsed JSON-LD, and <main> tag/class sequence (${result.mainNodeCount} elements)`;
+        : `identical visible text, links, title/description/canonical/og/twitter/alternate tags, parsed JSON-LD, and <main> tag/class/attribute sequence (${result.mainNodeCount} elements)`;
       const structure = result.mainDifference
         ? `; <main> first difference at element ${result.mainDifference.index}: old ${result.mainDifference.old}, new ${result.mainDifference.current} (lengths ${result.mainDifference.oldLength}/${result.mainDifference.currentLength})`
         : "";
@@ -386,6 +408,9 @@ function createReport(outputDir, pages, pageResults, staticResults) {
     ...(structureFailures.length
       ? structureFailures.map((result) => `- ${result.route}: first differing element ${result.mainDifference.index}, old ${result.mainDifference.old}, new ${result.mainDifference.current}; sequence lengths ${result.mainDifference.oldLength} old and ${result.mainDifference.currentLength} new.`)
       : [`All ${pageResults.length} pages have identical <main> tag and class sequences.`]),
+    ...(attributeFailures.length
+      ? attributeFailures.map((result) => `- ${result.route}: first differing attribute set at element ${result.attributeDifference}.`)
+      : [`All ${pageResults.length} pages have identical <main> attribute sequences.`]),
     "",
     "## Static file results",
     "",
