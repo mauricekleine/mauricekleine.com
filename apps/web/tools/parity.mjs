@@ -10,6 +10,7 @@ import {
 } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { parse } from "parse5";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const siteRoot = path.join(repoRoot, "apps/site");
@@ -88,62 +89,57 @@ function outputHtmlPath(outputDir, route) {
   return found ? path.join(outputDir, found) : null;
 }
 
-function parseAttributes(tag) {
-  const attributes = {};
-  const prefix = /^<[^\s/>]+\s*/.exec(tag)?.[0] ?? tag;
-  const content = tag.slice(prefix.length, tag.length - 1);
-  const re = /([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
-  let match;
-  while ((match = re.exec(content))) {
-    const key = match[1].toLowerCase();
-    const value = match[2] ?? match[3] ?? match[4] ?? "";
-    attributes[key] = decodeEntities(value);
+const textBoundaryTags = new Set([
+  "address", "article", "aside", "blockquote", "br", "dd", "div", "dl", "dt",
+  "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2", "h3", "h4",
+  "h5", "h6", "header", "hr", "li", "main", "nav", "ol", "p", "section",
+  "table", "tbody", "td", "th", "tr", "ul",
+]);
+const ignoredTextTags = new Set(["script", "style", "template", "svg"]);
+
+function childrenOf(node) {
+  return node.childNodes ?? [];
+}
+
+function attributesOf(node) {
+  return Object.fromEntries((node.attrs ?? []).map(({ name, value }) => [name, value]));
+}
+
+function findElement(node, tagName) {
+  if (node.tagName === tagName) return node;
+  for (const child of childrenOf(node)) {
+    const found = findElement(child, tagName);
+    if (found) return found;
   }
-  return attributes;
+  return undefined;
 }
 
-function decodeEntities(value) {
-  const named = {
-    amp: "&",
-    apos: "'",
-    gt: ">",
-    hellip: "…",
-    ldquo: "“",
-    lsquo: "‘",
-    lt: "<",
-    mdash: String.fromCodePoint(0x2014),
-    middot: "·",
-    nbsp: "\u00a0",
-    ndash: "–",
-    quot: '"',
-    rdquo: "”",
-    rsquo: "’",
-  };
-  return value.replace(/&(#x[\da-f]+|#\d+|[a-z][\da-z]+);/gi, (entity, code) => {
-    if (code[0] === "#") {
-      const number = code[1]?.toLowerCase() === "x"
-        ? Number.parseInt(code.slice(2), 16)
-        : Number.parseInt(code.slice(1), 10);
-      return Number.isFinite(number) ? String.fromCodePoint(number) : entity;
+function elements(node, tagName, result = []) {
+  if (node.tagName === tagName) result.push(node);
+  for (const child of childrenOf(node)) elements(child, tagName, result);
+  return result;
+}
+
+function textContent(node) {
+  if (node.nodeName === "#text") return node.value ?? "";
+  return childrenOf(node).map(textContent).join("");
+}
+
+function normalizedText(document) {
+  const body = findElement(document, "body") ?? document;
+  const parts = [];
+  function visit(node) {
+    if (node.nodeName === "#text") {
+      parts.push(node.value ?? "");
+      return;
     }
-    return named[code.toLowerCase()] ?? entity;
-  });
-}
-
-function normalizedText(html) {
-  let body = /<body\b[^>]*>([\s\S]*?)<\/body\s*>/i.exec(html)?.[1] ?? html;
-  body = body
-    .replace(/<!--[\s\S]*?-->/g, " ")
-    .replace(/<(script|style|template|svg)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, " ")
-    .replace(/<\/(?:address|article|aside|blockquote|br|dd|div|dl|dt|fieldset|figcaption|figure|footer|form|h[1-6]|header|hr|li|main|nav|ol|p|section|table|tbody|td|th|tr|ul)\s*>/gi, " ")
-    .replace(/<br\b[^>]*>/gi, " ")
-    .replace(/<[^>]*>/g, " ");
-  return decodeEntities(body).replace(/[\s\u00a0]+/g, " ").trim();
-}
-
-function tags(html, name) {
-  const re = new RegExp(`<${name}\\b[^>]*>`, "gi");
-  return [...html.matchAll(re)].map((match) => match[0]);
+    if (ignoredTextTags.has(node.tagName)) return;
+    if (textBoundaryTags.has(node.tagName)) parts.push(" ");
+    for (const child of childrenOf(node)) visit(child);
+    if (textBoundaryTags.has(node.tagName)) parts.push(" ");
+  }
+  visit(body);
+  return parts.join("").replace(/[\s\u00a0]+/g, " ").trim();
 }
 
 function stable(value) {
@@ -154,13 +150,15 @@ function stable(value) {
   return value;
 }
 
-function headData(html) {
-  const head = /<head\b[^>]*>([\s\S]*?)<\/head\s*>/i.exec(html)?.[1] ?? "";
-  const title = /<title\b[^>]*>([\s\S]*?)<\/title\s*>/i.exec(head)?.[1] ?? "";
+function headData(document) {
+  const head = findElement(document, "head");
+  if (!head) return { title: "", description: [], canonical: [], social: [], alternates: [] };
+  const titleElement = findElement(head, "title");
+  const title = titleElement ? textContent(titleElement) : "";
   const description = [];
   const social = [];
-  for (const tag of tags(head, "meta")) {
-    const attributes = parseAttributes(tag);
+  for (const meta of elements(head, "meta")) {
+    const attributes = attributesOf(meta);
     if (attributes.name?.toLowerCase() === "description") {
       description.push(attributes.content ?? "");
     }
@@ -171,8 +169,8 @@ function headData(html) {
   }
   const canonicals = [];
   const alternates = [];
-  for (const tag of tags(head, "link")) {
-    const attributes = parseAttributes(tag);
+  for (const link of elements(head, "link")) {
+    const attributes = attributesOf(link);
     const rel = (attributes.rel ?? "").toLowerCase().split(/\s+/);
     if (rel.includes("canonical")) canonicals.push(attributes.href ?? "");
     if (rel.includes("alternate")) {
@@ -185,7 +183,7 @@ function headData(html) {
     }
   }
   return {
-    title: decodeEntities(title.replace(/<[^>]*>/g, "")).replace(/[\s\u00a0]+/g, " ").trim(),
+    title: title.replace(/[\s\u00a0]+/g, " ").trim(),
     description: description.sort(),
     canonical: canonicals.sort(),
     social: social.sort(([a, b], [c, d]) => a.localeCompare(c) || b.localeCompare(d)),
@@ -193,29 +191,72 @@ function headData(html) {
   };
 }
 
-function jsonLdData(html) {
-  const head = /<head\b[^>]*>([\s\S]*?)<\/head\s*>/i.exec(html)?.[1] ?? "";
-  return stable([...head.matchAll(/<script\b([^>]*type\s*=\s*(?:"application\/ld\+json"|'application\/ld\+json')[^>]*)>([\s\S]*?)<\/script\s*>/gi)]
-    .map((match) => {
+function jsonLdData(document) {
+  const head = findElement(document, "head");
+  if (!head) return [];
+  return stable(elements(head, "script")
+    .filter((script) => attributesOf(script).type?.toLowerCase() === "application/ld+json")
+    .map((script) => {
       try {
-        return JSON.parse(match[2].trim());
+        return JSON.parse(textContent(script).trim());
       } catch (error) {
         throw new Error(`invalid JSON-LD: ${error.message}`);
       }
     }));
 }
 
+function mainStructure(document) {
+  const main = findElement(document, "main");
+  if (!main) return [];
+  const sequence = [];
+  function visit(node, depth) {
+    if (!node.tagName) return;
+    const classes = (attributesOf(node).class ?? "").trim().split(/\s+/).filter(Boolean);
+    sequence.push({ tag: node.tagName, classes, depth });
+    for (const child of childrenOf(node)) visit(child, depth + 1);
+  }
+  visit(main, 0);
+  return sequence;
+}
+
 function pageData(html) {
-  const links = [...new Set([...html.matchAll(/<a\b[^>]*>/gi)]
-    .map((match) => parseAttributes(match[0]).href)
+  const document = parse(html);
+  const links = [...new Set(elements(document, "a")
+    .map((anchor) => attributesOf(anchor).href)
     .filter((href) => href !== undefined)
     .map((href) => href.trim())
     .sort())];
-  const scripts = [...html.matchAll(/<script\b[^>]*>/gi)]
-    .map((match) => parseAttributes(match[0]).src)
+  const scripts = elements(document, "script")
+    .map((script) => attributesOf(script).src)
     .filter(Boolean)
     .sort();
-  return { text: normalizedText(html), links, head: headData(html), jsonLd: jsonLdData(html), scripts };
+  return {
+    text: normalizedText(document),
+    links,
+    head: headData(document),
+    jsonLd: jsonLdData(document),
+    scripts,
+    mainStructure: mainStructure(document),
+  };
+}
+
+function structureDifference(oldStructure, newStructure) {
+  const length = Math.max(oldStructure.length, newStructure.length);
+  let index = 0;
+  while (index < length && JSON.stringify(oldStructure[index]) === JSON.stringify(newStructure[index])) {
+    index += 1;
+  }
+  if (index === length) return undefined;
+  const describe = (node) => node
+    ? `depth ${node.depth} <${node.tag}${node.classes.length ? ` class="${node.classes.join(" ")}"` : ""}>`
+    : "<end>";
+  return {
+    index,
+    old: describe(oldStructure[index]),
+    current: describe(newStructure[index]),
+    oldLength: oldStructure.length,
+    currentLength: newStructure.length,
+  };
 }
 
 function ignoredByAssetsIgnore(relativePath, entries) {
@@ -246,7 +287,14 @@ function comparePages(outputDir, pages) {
     const oldPath = path.join(siteRoot, page.source);
     const newPath = outputHtmlPath(outputDir, page.route);
     if (!newPath) {
-      results.push({ route: page.route, differences: [`missing prerendered HTML for ${page.route}`] });
+      const old = pageData(readFileSync(oldPath, "utf8"));
+      const mainDifference = structureDifference(old.mainStructure, []);
+      results.push({
+        route: page.route,
+        differences: [`missing prerendered HTML for ${page.route}`, "main DOM structure"],
+        mainNodeCount: 0,
+        mainDifference,
+      });
       continue;
     }
     const old = pageData(readFileSync(oldPath, "utf8"));
@@ -255,12 +303,20 @@ function comparePages(outputDir, pages) {
     for (const field of ["text", "links", "jsonLd"]) {
       if (JSON.stringify(old[field]) !== JSON.stringify(current[field])) differences.push(field);
     }
+    const mainDifference = structureDifference(old.mainStructure, current.mainStructure);
+    if (mainDifference) differences.push("main DOM structure");
     for (const field of Object.keys(old.head)) {
       if (JSON.stringify(old.head[field]) !== JSON.stringify(current.head[field])) {
         differences.push(`head.${field}`);
       }
     }
-    results.push({ route: page.route, differences, scripts: current.scripts });
+    results.push({
+      route: page.route,
+      differences,
+      mainNodeCount: current.mainStructure.length,
+      mainDifference,
+      scripts: current.scripts,
+    });
   }
   return results;
 }
@@ -282,6 +338,7 @@ function compareStatic(outputDir, files) {
 
 function createReport(outputDir, pages, pageResults, staticResults) {
   const pageFailures = pageResults.filter((result) => result.differences.length > 0);
+  const structureFailures = pageResults.filter((result) => result.mainDifference);
   const staticFailures = staticResults.filter((result) => result.status !== "identical");
   const generatedScripts = new Set();
   for (const result of pageResults) {
@@ -306,6 +363,7 @@ function createReport(outputDir, pages, pageResults, staticResults) {
     "",
     `Pages checked: ${pages.length}`,
     `HTML parity failures: ${pageFailures.length}`,
+    `Main DOM structure differences: ${structureFailures.length}`,
     `Static files byte-checked: ${staticCount}`,
     `Markdown files byte-checked: ${markdownCount}`,
     `Static byte differences: ${staticFailures.length}`,
@@ -313,7 +371,21 @@ function createReport(outputDir, pages, pageResults, staticResults) {
     "",
     "## Page results",
     "",
-    ...pageResults.map((result) => `- ${result.route}: ${result.differences.length ? `DIFFERENT (${result.differences.join(", ")})` : "identical visible text, links, title/description/canonical/og/twitter/alternate tags, and parsed JSON-LD"}`),
+    ...pageResults.map((result) => {
+      const summary = result.differences.length
+        ? `DIFFERENT (${result.differences.join(", ")})`
+        : `identical visible text, links, title/description/canonical/og/twitter/alternate tags, parsed JSON-LD, and <main> tag/class sequence (${result.mainNodeCount} elements)`;
+      const structure = result.mainDifference
+        ? `; <main> first difference at element ${result.mainDifference.index}: old ${result.mainDifference.old}, new ${result.mainDifference.current} (lengths ${result.mainDifference.oldLength}/${result.mainDifference.currentLength})`
+        : "";
+      return `- ${result.route}: ${summary}${structure}`;
+    }),
+    "",
+    "## Main DOM structure",
+    "",
+    ...(structureFailures.length
+      ? structureFailures.map((result) => `- ${result.route}: first differing element ${result.mainDifference.index}, old ${result.mainDifference.old}, new ${result.mainDifference.current}; sequence lengths ${result.mainDifference.oldLength} old and ${result.mainDifference.currentLength} new.`)
+      : [`All ${pageResults.length} pages have identical <main> tag and class sequences.`]),
     "",
     "## Static file results",
     "",
