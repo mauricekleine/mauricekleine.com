@@ -9,9 +9,6 @@
         "sort-package-json": "~3.5.0",
       },
     },
-    "apps/site": {
-      "name": "@mauricekleine/site",
-    },
     "apps/web": {
       "name": "@mauricekleine/web",
       "dependencies": {
@@ -207,8 +204,6 @@
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.6.0", "", {}, "sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw=="],
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.9", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.0.3", "@jridgewell/sourcemap-codec": "^1.4.10" } }, "sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ=="],
-
-    "@mauricekleine/site": ["@mauricekleine/site@workspace:apps/site"],
 
     "@mauricekleine/superthread": ["@mauricekleine/superthread@workspace:packages/superthread"],
 
