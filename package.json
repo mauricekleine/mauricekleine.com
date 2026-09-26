@@ -1,8 +1,14 @@
 {
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "deploy": "bunx wrangler deploy",
-    "dev": "bunx serve -p 3000",
-    "prepare": "husky"
+    "dev": "bun run --filter @mauricekleine/site dev",
+    "prepare": "husky",
+    "test": "node apps/site/tools/test-worker.mjs"
   },
   "lint-staged": {
     "package.json": [

@@ -157,7 +157,7 @@ const SCANNABLE_EXT = new Set([
 ]);
 // Where UI source typically lives. The detector walks these and skips
 // node_modules / dist / build / .next / .nuxt automatically.
-const SOURCE_DIRS = ['src', 'app', 'components', 'pages', 'public'];
+const SOURCE_DIRS = ['src', 'app', 'components', 'pages', 'public', 'apps/site'];
 
 /**
  * Local paths the agent should point the bundled detector at — never a URL.

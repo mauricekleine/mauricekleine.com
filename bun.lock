@@ -9,8 +9,13 @@
         "sort-package-json": "~3.5.0",
       },
     },
+    "apps/site": {
+      "name": "@mauricekleine/site",
+    },
   },
   "packages": {
+    "@mauricekleine/site": ["@mauricekleine/site@workspace:apps/site"],
+
     "ansi-escapes": ["ansi-escapes@7.2.0", "", { "dependencies": { "environment": "^1.0.0" } }, "sha512-g6LhBsl+GBPRWGWsBtutpzBYuIIdBkLEvad5C/va/74Db018+5TZiyA26cZJAr3Rft5lprVqOIPxf5Vid6tqAw=="],
 
     "ansi-regex": ["ansi-regex@6.2.2", "", {}, "sha512-Bq3SmSpyFHaWjPk8If9yc6svM8c56dB5BAtW4Qbw5jHTwwXXcTLoRMkpDJp6VL0XzlWaCHTXrkFURMYmD0sLqg=="],

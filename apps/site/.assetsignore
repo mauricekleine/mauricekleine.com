@@ -1,4 +1,4 @@
-# repo infrastructure, not site content
+# site source and repository infrastructure, not public assets
 .git
 .gitignore
 .claude
@@ -15,6 +15,6 @@ wrangler.jsonc
 og-template.html
 .wrangler
 worker.js
-tools
+tools/
 .vscode
 .husky
