@@ -12,9 +12,14 @@
     "apps/site": {
       "name": "@mauricekleine/site",
     },
+    "packages/superthread": {
+      "name": "@mauricekleine/superthread",
+    },
   },
   "packages": {
     "@mauricekleine/site": ["@mauricekleine/site@workspace:apps/site"],
+
+    "@mauricekleine/superthread": ["@mauricekleine/superthread@workspace:packages/superthread"],
 
     "ansi-escapes": ["ansi-escapes@7.2.0", "", { "dependencies": { "environment": "^1.0.0" } }, "sha512-g6LhBsl+GBPRWGWsBtutpzBYuIIdBkLEvad5C/va/74Db018+5TZiyA26cZJAr3Rft5lprVqOIPxf5Vid6tqAw=="],
 
