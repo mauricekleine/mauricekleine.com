@@ -13,7 +13,7 @@
 
 /* This file is built separately and linked only by /superthread. */
 .st-specimen { min-height: 100vh; margin: 0; background: var(--ground); color: var(--ink); font-family: var(--font-body); font-size: var(--text-body); line-height: var(--leading-body); }
-.st-specimen :where(button) { cursor: pointer; }
+.st-specimen :where(button:not(:disabled)) { cursor: pointer; }
 .st-specimen :where(a) { color: var(--thread); }
 .st-specimen :where(a:hover) { color: var(--thread-bright); }
 .st-specimen :where(a,button,input):focus-visible { outline: 2px solid var(--thread-bright); outline-offset: 3px; }

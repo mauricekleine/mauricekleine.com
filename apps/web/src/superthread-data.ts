@@ -2,10 +2,21 @@ import tokens from '../../../packages/superthread/dist/tokens.json'
 
 type Mode = 'void' | 'paper'
 const names: Record<string, string> = {
-  ground: 'night / paper', 'ground-deep': 'night-deep / paper', surface: 'panel', line: 'line', 'line-strong': 'strong line',
-  ink: 'starlight / ink', 'ink-muted': 'muted', 'ink-dim': 'dim', 'ink-dim-ui': 'dim ui',
-  thread: 'ember', 'thread-bright': 'ember-bright', 'thread-ink': 'thread ink', 'thread-soft': 'ember tint',
-  'atmosphere-wash': 'nebula wash', atmosphere: 'nebula', danger: 'overdue', 'danger-soft': 'overdue tint',
+  'atmosphere-wash': 'nebula wash', atmosphere: 'nebula',
+}
+const modeNames: Record<Mode, Record<string, string>> = {
+  void: {
+    ground: 'night', 'ground-deep': 'night-deep', surface: 'panel', line: 'line', 'line-strong': 'strong line',
+    ink: 'starlight', 'ink-muted': 'muted', 'ink-dim': 'dim', 'ink-dim-ui': 'dim ui',
+    thread: 'ember', 'thread-bright': 'ember-bright', 'thread-ink': 'night-deep', 'thread-soft': 'ember tint',
+    danger: 'overdue', 'danger-soft': 'overdue tint',
+  },
+  paper: {
+    ground: 'paper', 'ground-deep': 'paper', surface: 'raised paper', line: 'rule', 'line-strong': 'strong rule',
+    ink: 'ink', 'ink-muted': 'ink-muted', 'ink-dim': 'ink-dim', 'ink-dim-ui': 'ink-dim-ui',
+    thread: 'ember-paper', 'thread-bright': 'ember-paper hover', 'thread-ink': 'paper', 'thread-soft': 'accent-soft',
+    danger: 'wrong', 'danger-soft': 'wrong-soft',
+  },
 }
 const proposed = new Set(['surface', 'line-strong', 'ink-dim', 'ink-dim-ui', 'thread-bright'])
 
@@ -46,7 +57,7 @@ export const colorModes = (['void', 'paper'] as const).map((mode: Mode) => {
   const ground = tokens.colors[`${mode}-ground`]
   return { mode, colors: Object.entries(tokens.colors).filter(([key]) => key.startsWith(`${mode}-`)).map(([key, value]) => {
     const role = key.slice(mode.length + 1)
-    return { role, name: names[role] ?? role, value, contrast: contrast(value, ground).toFixed(1), proposed: mode === 'paper' && proposed.has(role) }
+    return { role, name: modeNames[mode][role] ?? names[role] ?? role, value, contrast: contrast(value, ground).toFixed(1), proposed: mode === 'paper' && proposed.has(role) }
   }) }
 })
 export const scales = { typography: tokens.typography, spacing: tokens.spacing, rounded: tokens.rounded }
