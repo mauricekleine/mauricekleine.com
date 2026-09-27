@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { AppSwitcher } from '@/components/superthread/ui/app-switcher'
 import { FleetRail } from '@/components/superthread/ui/fleet-rail'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 
@@ -50,8 +49,6 @@ function SuperthreadPage() {
         <div className="st-rail-preview">
           <FleetRail current="orbit"><div className="st-rail-stage"><SidebarTrigger className="md:hidden" /><p>orbit</p><span>the app keeps its own navigation.</span></div></FleetRail>
         </div>
-        <p>the current app switcher stays available during the transition.</p>
-        <nav className="st-nav" aria-label="specimen navigation"><a href="/">home</a><a href="/about">about</a><a href="/essays">essays</a><AppSwitcher /></nav>
       </section>
 
       <section aria-labelledby="type"><h2 id="type">type</h2>

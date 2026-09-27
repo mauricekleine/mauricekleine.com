@@ -9,5 +9,5 @@ Run commands from the repo root. `bun run dev` starts the web app on port 3000, 
 Keep Maurice's voice lowercase and understated. No em dashes in new copy.
 
 Superthread is a shadcn theme in `packages/superthread/`. `bun run registry`
-regenerates its public theme and app-switcher items in `apps/web/public/r/`.
+regenerates its public theme and fleet-rail items in `apps/web/public/r/`.
 Keep theme values in `packages/superthread/DESIGN.md`.
