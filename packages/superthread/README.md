@@ -1,6 +1,6 @@
 # superthread
 
-A shadcn theme for Maurice's fleet. `DESIGN.md` owns the colors, fonts and radius. `bun run registry` at the repo root builds the CSS and registry items.
+A shadcn theme for Maurice's fleet. `DESIGN.md` owns the shared roles, fonts, radius and design rules. `bun run registry` at the repo root builds the CSS and registry items. The generated CSS starts with the theme version and content hash.
 
 ## Install
 

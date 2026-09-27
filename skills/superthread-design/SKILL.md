@@ -15,9 +15,11 @@ The mother dialect is mauricekleine.com's "Night Garden" (the site's own design 
 product brief live in `apps/web/DESIGN.md` + `apps/web/PRODUCT.md` in the
 mauricekleine.com repo); this skill is the canon for the whole fleet.
 
-**Theme source:** `packages/superthread/DESIGN.md` in the mauricekleine.com repo.
-`bun run registry` generates `dist/superthread.css`: paper at `:root`, void at
-`.dark`, with shadcn color roles and Tailwind font keys. Install stock shadcn
+**Theme source and rules:** `packages/superthread/DESIGN.md` in the mauricekleine.com repo.
+Read it for type, density, spacing, shape, accent, focus, motion and elevation.
+`bun run registry` generates versioned `dist/superthread.css`: paper at `:root`, void at
+`.dark`, with shadcn color roles, Tailwind font keys and radius. Keep scene colors
+in each app's stylesheet. Install stock shadcn
 Base UI components and import the generated CSS. Never copy theme values into
 an app or edit a stock component to apply the brand.
 
@@ -34,7 +36,7 @@ This skill owns the tokens, the moods, and the marks.
 - **Fixed type roles.** Panchang for display, Supreme for body, Fragment Mono for
   meta, labels, stamps, coordinates. No other face on void surfaces. (Paper-mode
   long-form body in Erode is the one sanctioned exception, below.)
-- **Lowercase headings.** Everywhere. It's the voice in type form.
+- **Lowercase chrome headings.** Authored essays and chapters keep their casing.
 - **Glyph grammar:** `✦` marks the living (active projects, section markers),
   `✧` the dormant (graveyard, archived). Sparkles are punctuation, not decoration:
   one per heading, not confetti.
@@ -88,7 +90,7 @@ ink `#1a1a1a` (never `#000`), and the thread darkened to ember-paper
   the sanctioned reading serif, same foundry as Panchang/Supreme, earned by
   read-in-bed legibility. Wordmarks and headings use Panchang; meta stays
   Fragment Mono.
-- Layout: one column, 40-42rem measure, ≥18px body, generous line-height (~1.65).
+- Layout: one column, 66ch measure, 18px body, 1.65 line-height.
 - Illustrations carry the hand-drawn energy (see insignia/art pipeline); the
   typography stays disciplined. Feels like a well-typeset zine, not a SaaS app.
 - Quiz/correct states and links use `--primary`; wrong/muted states stay in
@@ -99,17 +101,17 @@ ink `#1a1a1a` (never `#000`), and the thread darkened to ember-paper
 Ratified 2026-07-30 in the bridge font lab (texture-era refresh; supersedes the
 Bricolage-era stack — migrate each surface on next touch, see Drift ledger):
 
-- **Panchang** — display: wordmarks, h1/h2, ship names. 800 on brand surfaces,
+- **Panchang:** display for wordmarks, short headings and ship names. 800 on brand surfaces,
   600 in dense UI. Squared, techy, in-your-face; the voice of the fleet.
   Self-hosted on mauricekleine.com.
 - **Supreme** — body. 400 (500 for emphasis). Warm, round, legible; reports to
   Panchang without competing.
   Self-hosted on mauricekleine.com.
-- **Fragment Mono** — meta, labels, stamps, coordinates (unchanged). On
-  instruments: 11px, uppercase, `letter-spacing: 0.14em`, `--muted-foreground`.
+- **Fragment Mono:** meta, labels, stamps, coordinates (unchanged). On
+  instruments: 12px, uppercase, `letter-spacing: 0.14em`, `--muted-foreground`.
   Self-hosted on mauricekleine.com. Mono is seasoning: small doses, never paragraphs.
-- Display sizing: `clamp()` fluid, tight letter-spacing (-0.02em),
-  `text-wrap: balance`. Body ≥17px, line-height ~1.65-1.7.
+- Display sizing follows `DESIGN.md`; use tight letter-spacing (-0.02em) and
+  `text-wrap: balance`.
 - Paper-mode long-form body: **Erode** (Fontshare, 400/500) — the ITF reading serif completing the family. The quanta exception, now with a name.
 - Bricolage Grotesque is RETIRED from new work; it survives only on surfaces
   not yet migrated (listed in the Drift ledger).
@@ -118,8 +120,8 @@ Bricolage-era stack — migrate each surface on next touch, see Drift ledger):
 
 - `cubic-bezier(0.16, 1, 0.3, 1)` — ambient/brand surfaces
   (rises, reveals, celestial events).
-- `cubic-bezier(0.22, 1, 0.36, 1)` — instruments (cards, toasts,
-  dialogs), durations 0.12-0.34s.
+- `cubic-bezier(0.22, 1, 0.36, 1)` for app-authored instruments;
+  use the 120/180/240ms limits in `DESIGN.md`.
 - One hero entrance maximum; no scroll-gated reveal choreography.
 - Delight moments (supernovas, eclipses, meteor wishes) belong to brand
   surfaces and are always interruptible, rare, and reduced-motion-safe.

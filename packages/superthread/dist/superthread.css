@@ -1,3 +1,4 @@
+/* superthread alpha sha256:d6c3a38f3c96 */
 @font-face {
   font-family: "Supreme";
   src: url("https://www.mauricekleine.com/fonts/supreme-400.woff2") format("woff2");
@@ -155,11 +156,6 @@
   --sidebar-accent-foreground: oklch(94% 0.01 85);
   --sidebar-border: oklch(30% 0.03 278);
   --sidebar-ring: oklch(84% 0.12 65);
-  --floor: oklch(13% 0.03 280);
-  --dim: oklch(66% 0.015 275);
-  --nebula: oklch(45% 0.09 300);
-  --ember-wash: oklch(55% 0.11 55);
-  --glint: oklch(90% 0.12 65);
 }
 
 @layer base {

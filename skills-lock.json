@@ -22,7 +22,7 @@
     "superthread-design": {
       "source": "./skills/superthread-design",
       "sourceType": "local",
-      "computedHash": "776e7e5f0a8f9e5c165a89d94e309b8769c69827a81c79b71b5052b332e50ebb"
+      "computedHash": "1e2e5f4147b840d2e07ffcabaf2b89bc37bd2d4518e2a6e7ce75b85e389dd7e8"
     },
     "taste": {
       "source": "mauricekleine/nucleus",

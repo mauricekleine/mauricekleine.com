@@ -55,11 +55,6 @@ colors:
   void-sidebar-accent-foreground: "oklch(94% 0.01 85)"
   void-sidebar-border: "oklch(30% 0.03 278)"
   void-sidebar-ring: "oklch(84% 0.12 65)"
-  void-floor: "oklch(13% 0.03 280)"
-  void-dim: "oklch(66% 0.015 275)"
-  void-nebula: "oklch(45% 0.09 300)"
-  void-ember-wash: "oklch(55% 0.11 55)"
-  void-glint: "oklch(90% 0.12 65)"
 fonts:
   sans: Supreme
   serif: Erode
@@ -79,3 +74,23 @@ Supreme is sans, Erode is serif, Fragment Mono is mono and Panchang is display. 
 Use shadcn's components and variants as installed. Change this file and regenerate the CSS when the shared theme changes.
 
 The sidebar roles reuse card for the rail surface, foreground for labels, primary for actions, accent for the active and hover surface, border for the edge, and ring for focus in each mode.
+
+## Type and density
+
+- Paper reading: Erode `text-lg` (18px) at 1.65 line-height, 66ch measure. Controls use Supreme `text-sm` (14px) at 1.45. Use Panchang for the app wordmark and short section or display lines.
+- Void instruments: Supreme `text-sm` (14px) at 1.4 for row titles; Fragment Mono 12px at 1.45 for IDs, times and counts. Use Panchang for the destination title or brand at 17–24px. Keep operational metadata at least 12px.
+- Size ladder at 16px root: 12px metadata, 14px instrument body, 16px normal UI, 18px reading, 24px section, 32px page, 48px short hero, 64px exceptional display. Use `text-sm` for 14px, `text-base` for 16px, `text-lg` for 18px and `text-2xl` for 24px. On phones, cap ordinary page titles at 40px; use 28–32px for long titles. Panchang line-height is 1.05–1.15; body line-height is 1.4–1.65.
+- Read density: 18px prose and 48–56px list rows. Operate density: 14px titles, 12px meta and 44–48px pressable rows. Labels start at 12px, or 14px when they carry a choice. A 24px badge can sit inside a 44×44px pressable wrapper.
+- Keep chrome headings lowercase. Preserve the casing of authored essays and chapters.
+
+## Layout and shape
+
+- Use Tailwind's 4px spacing grid: 8px within a fact pair (`gap-2`), 12px between peer controls (`gap-3`), 16px within a row or card (`gap-4`), 24px between groups (`gap-6`), 32px between sections (`gap-8`) and 48px between major reading sections (`gap-12`). Gutters are 16px on phones (`px-4`) and 24px on tablet and desktop (`px-6`). On operating screens, show one primary action or the first data row by 320px vertical position unless a deliberate setup state intervenes.
+- Keep `--radius: 8px`. Use `rounded-sm` (~5px) for compact controls, `rounded-md` (~6px) for inputs and buttons, `rounded-lg` (8px) for cards and menus, and `rounded-xl` (~11px) for large overlays. Use stock Badge or a genuine status chip for pills.
+- Background is the base; card and popover are raised by their theme colors and border. Paper: `#fbfaf7` / `#f4f2ed` / `#d9d5cc`. Void: `oklch(17% 0.035 275)` / `oklch(20% 0.035 278)` / `oklch(30% 0.03 278)`. Use a border or rule for inline rows. Keep stock overlay shadows.
+
+## Interaction
+
+- Use `primary` ember for the current or next action and selection, `destructive` for errors, and `muted-foreground` for settled or neutral states. Use words with status color. App identity colors belong in atmosphere, charts, progress data and marks, never as another focus or action color.
+- Keep stock shadcn focus untouched. Give app-authored links, rows and canvases a 2px solid `--ring` outline with 2px offset on keyboard focus. Add text or shape change to keyboard-selected data.
+- Keep stock component motion. For app-authored effects use 120ms for hover or pressed color, 180ms for menus and disclosures, and at most 240ms for sheets and dialog travel, with `cubic-bezier(0.22, 1, 0.36, 1)`. Keep data lists in place during state changes. Under reduced motion, remove travel and repeating atmosphere while showing an immediate color, border or text change.
