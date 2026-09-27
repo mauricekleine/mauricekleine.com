@@ -451,7 +451,7 @@ async function sendConfirmationEmail(env: WorkerEnv, email: string, token: strin
 // small, self-contained page in the site's visual system, for the no-js path
 function subscribePage({ title, description, heading, message, back }: SubscribePage): string {
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -461,12 +461,7 @@ function subscribePage({ title, description, heading, message, back }: Subscribe
     <meta name="theme-color" content="#11131f" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/maurice.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/panchang-800.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/supreme-400.woff2" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/style.css?v=20260925-subscribe" />
+    <link rel="stylesheet" href="/style.css?v=20260927-theme" />
   </head>
   <body>
     <canvas id="nebula" aria-hidden="true"></canvas>

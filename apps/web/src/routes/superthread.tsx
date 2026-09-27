@@ -16,7 +16,6 @@ function SuperthreadPage() {
   const [mode, setMode] = useState<'paper' | 'void'>('paper')
   useEffect(() => {
     document.documentElement.classList.toggle('dark', mode === 'void')
-    return () => document.documentElement.classList.remove('dark')
   }, [mode])
 
   return <TooltipProvider><div className="st-specimen">

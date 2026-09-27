@@ -5,11 +5,12 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "bun run registry && bun run specimen:css && bun run --filter @mauricekleine/web build && node apps/web/tools/link-deploy-config.mjs",
+    "build": "bun run registry && bun run site:css && bun run specimen:css && bun run --filter @mauricekleine/web build && node apps/web/tools/link-deploy-config.mjs",
     "deploy": "bunx wrangler deploy",
-    "dev": "bun run --filter @mauricekleine/web dev",
+    "dev": "bun run --cwd packages/superthread build && bun run site:css && bun run --filter @mauricekleine/web dev",
     "prepare": "husky",
     "registry": "bun run --cwd packages/superthread build && shadcn build packages/superthread/registry.json --output apps/web/public/r",
+    "site:css": "tailwindcss -i apps/web/src/styles/site.css -o apps/web/public/style.css --minify",
     "specimen:css": "tailwindcss -i apps/web/src/styles/superthread-specimen.css -o apps/web/public/superthread/specimen.css --minify",
     "test": "bun run --cwd packages/superthread test && node apps/web/tools/test-worker.mjs"
   },

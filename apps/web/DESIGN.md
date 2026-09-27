@@ -6,18 +6,7 @@
 
 ## Colors
 
-OKLCH throughout. Strategy: Committed dark, one warm accent.
-
-- `--night`: oklch(17% 0.035 275) — page background, deep space indigo (not pure black)
-- `--night-deep`: oklch(13% 0.03 280) — gradient floor
-- `--starlight`: oklch(94% 0.01 85) — primary text, warm off-white
-- `--muted`: oklch(76% 0.02 275) — secondary text
-- `--dim`: oklch(66% 0.015 275) — meta/labels only (large or bold)
-- `--ember`: oklch(75% 0.13 55) — links, accents; the old site's #c65d07 orange, brightened for dark bg
-- `--ember-bright`: oklch(84% 0.12 65) — link hover, star glints
-- `--nebula`: oklch(45% 0.09 300) — violet glow tints, low alpha only
-
-Contrast: body text on --night ≥ 10:1; --muted ≥ 6:1; --dim reserved for ≥bold/large meta.
+The site's void colors come from `packages/superthread/DESIGN.md`. `background` is the night sky, `foreground` is starlight, `muted-foreground` is secondary text, `primary` is ember and `ring` is its bright hover. The extra `floor`, `dim`, `nebula`, `ember-wash` and `glint` variables serve the page effects and meta text.
 
 ## Typography
 
@@ -32,7 +21,7 @@ Contrast: body text on --night ≥ 10:1; --muted ≥ 6:1; --dim reserved for ≥
 
 - **Waypoint list** (side quests): star glyph + project name (link) + one-liner in Maurice's voice. No cards. Hover: glyph glints ember.
 - **Graveyard entries**: dimmed waypoints with a mono status stamp (`sold`, `dissolved`, `discontinued`, `spun down`) and years. Slightly reduced opacity, never illegible.
-- **Icon row**: Phosphor icons (inline SVG) for GitHub, LinkedIn, X, Reddit, email. 1.5rem, --muted, hover --ember-bright.
+- **Icon row**: Phosphor icons (inline SVG) for GitHub, LinkedIn, X, Reddit, email. 1.5rem, secondary text, bright ember on hover.
 - **Portrait**: existing maurice.png, circular, faint ember glow ring.
 
 ## Layout

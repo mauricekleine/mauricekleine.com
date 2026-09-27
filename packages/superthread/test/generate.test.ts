@@ -3,9 +3,10 @@ import { readTokens, themeCss } from '../scripts/generate'
 
 const tokens = await readTokens()
 
-test('paper and void supply the same color roles', () => {
-  const roles = (mode: string) => Object.keys(tokens.colors).filter((name) => name.startsWith(`${mode}-`)).map((name) => name.slice(mode.length + 1)).sort()
-  expect(roles('paper')).toEqual(roles('void'))
+test('every paper color role has a void value', () => {
+  for (const name of Object.keys(tokens.colors).filter((name) => name.startsWith('paper-'))) {
+    expect(tokens.colors[`void-${name.slice(6)}`]).toBeDefined()
+  }
 })
 
 test('dist/superthread.css is regenerated from DESIGN.md', async () => {
