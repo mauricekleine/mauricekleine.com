@@ -21,6 +21,14 @@ colors:
   paper-border: "#d9d5cc"
   paper-input: "#898276"
   paper-ring: "oklch(48% 0.14 52)"
+  paper-sidebar: "#f4f2ed"
+  paper-sidebar-foreground: "#1a1a1a"
+  paper-sidebar-primary: "oklch(55% 0.13 55)"
+  paper-sidebar-primary-foreground: "#fbfaf7"
+  paper-sidebar-accent: "oklch(94% 0.035 60)"
+  paper-sidebar-accent-foreground: "#1a1a1a"
+  paper-sidebar-border: "#d9d5cc"
+  paper-sidebar-ring: "oklch(48% 0.14 52)"
   void-background: "oklch(17% 0.035 275)"
   void-foreground: "oklch(94% 0.01 85)"
   void-card: "oklch(20% 0.035 278)"
@@ -39,6 +47,14 @@ colors:
   void-border: "oklch(30% 0.03 278)"
   void-input: "oklch(50% 0.03 278)"
   void-ring: "oklch(84% 0.12 65)"
+  void-sidebar: "oklch(20% 0.035 278)"
+  void-sidebar-foreground: "oklch(94% 0.01 85)"
+  void-sidebar-primary: "oklch(75% 0.13 55)"
+  void-sidebar-primary-foreground: "oklch(13% 0.03 280)"
+  void-sidebar-accent: "oklch(75% 0.13 55 / 0.13)"
+  void-sidebar-accent-foreground: "oklch(94% 0.01 85)"
+  void-sidebar-border: "oklch(30% 0.03 278)"
+  void-sidebar-ring: "oklch(84% 0.12 65)"
   void-floor: "oklch(13% 0.03 280)"
   void-dim: "oklch(66% 0.015 275)"
   void-nebula: "oklch(45% 0.09 300)"
@@ -61,3 +77,5 @@ Paper is the light theme on `:root`. Void is `.dark`. Ember is `primary` in both
 Supreme is sans, Erode is serif, Fragment Mono is mono and Panchang is display. The fourth font key is the only addition to Tailwind's standard font keys. Keep headings lowercase. Brand surfaces can add grain and stars in their own layout; neither changes component source.
 
 Use shadcn's components and variants as installed. Change this file and regenerate the CSS when the shared theme changes.
+
+The sidebar roles reuse card for the rail surface, foreground for labels, primary for actions, accent for the active and hover surface, border for the edge, and ring for focus in each mode.

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Nonobench mark: a solved 3x3 nonogram in the grid-size colours. -->
+  <rect width="32" height="32" rx="7" fill="#16171A"/>
+  <g>
+    <rect x="4.5" y="4.5" width="6" height="6" rx="1.5" fill="#70B8FF"/>
+    <rect x="13" y="4.5" width="6" height="6" rx="1.5" fill="#70B8FF"/>
+    <rect x="21.5" y="4.5" width="6" height="6" rx="1.5" fill="#2A2B2E"/>
+    <rect x="4.5" y="13" width="6" height="6" rx="1.5" fill="#2A2B2E"/>
+    <rect x="13" y="13" width="6" height="6" rx="1.5" fill="#46FEA5"/>
+    <rect x="21.5" y="13" width="6" height="6" rx="1.5" fill="#46FEA5"/>
+    <rect x="4.5" y="21.5" width="6" height="6" rx="1.5" fill="#FFCA16"/>
+    <rect x="13" y="21.5" width="6" height="6" rx="1.5" fill="#2A2B2E"/>
+    <rect x="21.5" y="21.5" width="6" height="6" rx="1.5" fill="#FFCA16"/>
+  </g>
+</svg>

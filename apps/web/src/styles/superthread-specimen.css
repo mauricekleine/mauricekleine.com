@@ -18,6 +18,10 @@
 .st-row > input { max-width: 16rem; }
 .st-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
 .st-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; }
+.st-rail-preview { position: relative; height: 30rem; margin-bottom: 2rem; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius); transform: translateZ(0); }
+.st-rail-stage { flex: 1; padding: 1.5rem; }
+.st-rail-stage p { font: 600 1.5rem var(--font-display); }
+.st-rail-stage span { color: var(--muted-foreground); }
 .st-nav a, .st-shell footer a { color: var(--primary); }
 .st-sans, .st-serif, .st-mono, .st-display { font-size: 1.5rem; }
 .st-serif { font-family: var(--font-serif); }

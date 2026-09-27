@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <title>Trisys</title>
+  <g fill="currentColor" color="#898276" stroke="currentColor" stroke-width="4" stroke-linejoin="round">
+    <polygon points="400.00,80.00 268.20,308.29 400.00,343.60 531.80,308.29"/>
+    <polygon points="236.20,363.71 400.00,407.60 563.80,363.71 642.65,500.29 400.00,565.31 157.35,500.29"/>
+    <polygon points="125.35,555.71 400.00,629.31 674.65,555.71 769.50,720.00 30.50,720.00"/>
+  </g>
+</svg>

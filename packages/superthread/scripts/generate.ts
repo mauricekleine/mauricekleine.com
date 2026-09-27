@@ -9,6 +9,7 @@ type Tokens = {
 
 const root = join(import.meta.dir, '..')
 const roles = ['background', 'foreground', 'card', 'card-foreground', 'popover', 'popover-foreground', 'primary', 'primary-foreground', 'secondary', 'secondary-foreground', 'muted', 'muted-foreground', 'accent', 'accent-foreground', 'destructive', 'border', 'input', 'ring']
+const sidebarRoles = ['sidebar', 'sidebar-foreground', 'sidebar-primary', 'sidebar-primary-foreground', 'sidebar-accent', 'sidebar-accent-foreground', 'sidebar-border', 'sidebar-ring']
 
 export async function readTokens(): Promise<Tokens> {
   const source = await readFile(join(root, 'DESIGN.md'), 'utf8')
@@ -16,8 +17,8 @@ export async function readTokens(): Promise<Tokens> {
 }
 
 export function themeCss(tokens: Tokens) {
-  const colors = (mode: 'paper' | 'void') => roles.map((role) => `  --${role}: ${tokens.colors[`${mode}-${role}`]};`).join('\n')
-  const voidExtras = Object.entries(tokens.colors).filter(([name]) => name.startsWith('void-') && !roles.includes(name.slice(5))).map(([name, value]) => `  --${name.slice(5)}: ${value};`).join('\n')
+  const colors = (mode: 'paper' | 'void') => [...roles, ...sidebarRoles].map((role) => `  --${role}: ${tokens.colors[`${mode}-${role}`]};`).join('\n')
+  const voidExtras = Object.entries(tokens.colors).filter(([name]) => name.startsWith('void-') && ![...roles, ...sidebarRoles].includes(name.slice(5))).map(([name, value]) => `  --${name.slice(5)}: ${value};`).join('\n')
   const face = (family: string, file: string, weight: number) => `@font-face {\n  font-family: "${family}";\n  src: url("https://www.mauricekleine.com/fonts/${file}.woff2") format("woff2");\n  font-weight: ${weight};\n  font-display: swap;\n}`
   return `${[['Supreme', 'supreme-400', 400], ['Supreme', 'supreme-500', 500], ['Erode', 'erode-400', 400], ['Erode', 'erode-500', 500], ['Fragment Mono', 'fragment-mono-400', 400], ['Panchang', 'panchang-400', 400], ['Panchang', 'panchang-600', 600], ['Panchang', 'panchang-800', 800]].map(([family, file, weight]) => face(String(family), String(file), Number(weight))).join('\n\n')}
 
@@ -25,6 +26,7 @@ export function themeCss(tokens: Tokens) {
 
 @theme inline {
 ${roles.map((role) => `  --color-${role}: var(--${role});`).join('\n')}
+${sidebarRoles.map((role) => `  --color-${role}: var(--${role});`).join('\n')}
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
