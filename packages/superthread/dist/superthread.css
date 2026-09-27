@@ -1,4 +1,4 @@
-/* superthread alpha sha256:d6c3a38f3c96 */
+/* superthread alpha sha256:e6b56667b6c5 */
 @font-face {
   font-family: "Supreme";
   src: url("https://www.mauricekleine.com/fonts/supreme-400.woff2") format("woff2");
@@ -110,7 +110,7 @@
   --primary-foreground: #fbfaf7;
   --secondary: #f4f2ed;
   --secondary-foreground: #1a1a1a;
-  --muted: #f4f2ed;
+  --muted: #e8e3da;
   --muted-foreground: #55524c;
   --accent: oklch(94% 0.035 60);
   --accent-foreground: #1a1a1a;
@@ -140,7 +140,7 @@
   --primary-foreground: oklch(13% 0.03 280);
   --secondary: oklch(20% 0.035 278);
   --secondary-foreground: oklch(94% 0.01 85);
-  --muted: oklch(20% 0.035 278);
+  --muted: oklch(26% 0.03 278);
   --muted-foreground: oklch(76% 0.02 275);
   --accent: oklch(75% 0.13 55 / 0.13);
   --accent-foreground: oklch(94% 0.01 85);
