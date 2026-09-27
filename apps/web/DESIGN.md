@@ -6,7 +6,7 @@
 
 ## Colors
 
-The site's void colors come from `packages/superthread/DESIGN.md`. `background` is the night sky, `foreground` is starlight, `muted-foreground` is secondary text, `primary` is ember and `ring` is its bright hover. The extra `floor`, `dim`, `nebula`, `ember-wash` and `glint` variables serve the page effects and meta text.
+The site's void colors come from `packages/superthread/DESIGN.md`. `background` is the night sky, `foreground` is starlight, `muted-foreground` is secondary text, `primary` is ember and `ring` is its bright hover. `site.css` owns `floor`, `dim`, `nebula`, `ember-wash` and `glint` for page effects and meta text.
 
 ## Typography
 

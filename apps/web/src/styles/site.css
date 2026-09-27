@@ -1,5 +1,13 @@
 @import "../../../../packages/superthread/dist/superthread.css";
 
+.dark {
+  --floor: oklch(13% 0.03 280);
+  --dim: oklch(66% 0.015 275);
+  --nebula: oklch(45% 0.09 300);
+  --ember-wash: oklch(55% 0.11 55);
+  --glint: oklch(90% 0.12 65);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
