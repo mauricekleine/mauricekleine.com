@@ -15,15 +15,11 @@ The mother dialect is mauricekleine.com's "Night Garden" (the site's own design 
 product brief live in `apps/web/DESIGN.md` + `apps/web/PRODUCT.md` in the
 mauricekleine.com repo); this skill is the canon for the whole fleet.
 
-**Tokens have one source:** `packages/superthread/DESIGN.md` in the
-mauricekleine.com repo (the [DESIGN.md format](https://github.com/google-labs-code/design.md)).
-Colors are named by role with a mode prefix (`void-ground`, `paper-ink`, ...);
-`bun run build` in that package generates `dist/tokens.css` (void on `:root`, paper
-under `[data-mode="paper"]`, mode-agnostic variables like `--ground`, `--ink`,
-`--thread`) and `dist/theme.css` (a Tailwind v4 `@theme`). Never copy token values
-into an app; import the generated CSS. The values quoted in this skill are for
-reasoning, not for pasting. When this file and a surface disagree, this file wins; fix the surface
-when you're next in it (see Drift ledger).
+**Theme source:** `packages/superthread/DESIGN.md` in the mauricekleine.com repo.
+`bun run registry` generates `dist/superthread.css`: paper at `:root`, void at
+`.dark`, with shadcn color roles and Tailwind font keys. Install stock shadcn
+Base UI components and import the generated CSS. Never copy theme values into
+an app or edit a stock component to apply the brand.
 
 Division of labor: **impeccable** owns design method (critique, hierarchy, polish
 passes) — load it for any serious UI work. **copywriting-maurice** owns every word.
@@ -31,8 +27,8 @@ This skill owns the tokens, the moods, and the marks.
 
 ## The thread (invariant across modes)
 
-- **One accent: ember.** The orange thread is the brand. Void: `--ember`
-  `oklch(75% 0.13 55)`. Paper: `--ember-paper` `oklch(55% 0.13 55)` (same hue,
+- **One accent: ember.** The orange thread is the brand. Void: `--primary`
+  `oklch(75% 0.13 55)`. Paper: `--primary` `oklch(55% 0.13 55)` (same hue,
   darkened for light ground). Nothing else gets accent duty; if a second accent
   feels needed, the hierarchy is wrong (impeccable will agree).
 - **Fixed type roles.** Panchang for display, Supreme for body, Fragment Mono for
@@ -72,83 +68,30 @@ texture lab:
 
 Icon renderings take the ship's atmosphere as tint (see insignia pipeline).
 
-## Void mode (dark surfaces: site, orbit, launchpad, ops UIs)
+## Void mode
 
-Roles (generated variable, brand name, job):
+Void uses `.dark`. The shadcn roles carry the brand: `background` is night,
+`foreground` is starlight, `card` and `popover` are panel, `primary` is ember,
+and `ring` is ember-bright. `accent` is a quiet ember tint for hover surfaces.
+Stock shadcn components own their sizes, variants and focus behavior.
 
-| variable | brand name | job |
-| --- | --- | --- |
-| `--ground` / `--ground-deep` | night / night-deep | page background, never pure black; gradient floor |
-| `--surface` | panel | instrument surfaces: cards, inputs |
-| `--line` / `--line-strong` | line | hairlines; strong clears 3:1 for chips |
-| `--ink` / `--ink-muted` / `--ink-dim` / `--ink-dim-ui` | starlight / muted / dim | primary, secondary, meta; `dim-ui` stays AA at 10-11px |
-| `--thread` / `--thread-bright` | ember / ember-bright | links, accents, primary actions; hover, glints, focus |
-| `--atmosphere-wash` / `--atmosphere` | nebula | violet glow for backgrounds; violet as a foreground accent |
-| `--danger` | overdue | urgency and errors |
-
-Rules that keep void surfaces feeling like one sky:
-
-- Backgrounds may gradient `--night → --night-deep`; nothing sits on pure black.
-- Primary buttons: ember fill, `--night-deep` text, weight 600.
-- Focus: 2px `--ember-bright` outline, offset 2-3px. Selection: ember bg,
-  night-deep text.
-- Film grain: the `feTurbulence` inline-SVG data-URI recipe from
-  mauricekleine.com's `style.css` (copy it verbatim, don't reimplement),
-  opacity 0.045-0.05, `mix-blend-mode: overlay`. Animate it only on
-  brand/ambient surfaces, never on instruments.
-- Starfield: only where the delight budget allows (brand surfaces, the
-  launchpad). Fixed canvas, `pointer-events: none`, DPR-aware, paused when
-  hidden, single static frame under reduced motion. Steal
-  mauricekleine.com's `stars.js` wholesale rather than reimplementing.
-- Instrument UIs (orbit-class) may use px sizing, tighter radii (6-12px scale),
-  and `--dim-ui`; brand surfaces use rem/clamp fluid scale and no cards at all.
-
-## Instrument grammar (shared vocabulary for orbit-class boards)
-
-Ratified 2026-08-03 after orbit and the hyperspeed board drifted apart. The
-FUNCTIONAL vocabulary is identical across instruments; only the ATMOSPHERE
-(which color lights the room) differs per ship. Ember stays the sole
-act-now/interactive accent everywhere.
-
-- **Header anatomy:** ship mark (28-30px, radius 6) + lowercase Panchang 600
-  wordmark in `--starlight` (never ember; the name is not an accent) + Fragment
-  Mono context left, Fragment Mono facts/stats right.
-- **Columns are open, not boxed.** Lane/column head: an `h2`, Fragment Mono
-  11px uppercase `0.14em` in `--dim-ui`, count right-aligned
-  (`justify-content: space-between`) in the ship's ATMOSPHERE color. Emphasis
-  lanes (blocked-class) recolor the head ember; ghost lanes drop to ~0.75
-  opacity with dashed card borders. No lane boxes, no lane backgrounds.
-- **The card:** `--panel` bg, 1px `--line` border, radius 8, padding ~11-13px;
-  hover = border `oklch(40% 0.03 278)` + `translateY(-2px)` + deep soft shadow;
-  title 15px / 600 / `-0.015em` / lh ~1.3; meta row Fragment Mono 11px
-  `--dim-ui`. Focus: 2px `--ember-bright` outline, offset 2px (everywhere).
-- **State pill** (due dates, leases, anything with a temperature): radius 20,
-  leading 5px dot, Fragment Mono 11px, tinted background at ~0.13 alpha.
-  Neutral = `--muted`/`--dim-ui`, needs-attention = ember, exceeded =
-  `--overdue`. Same component in orbit (due) and hyperspeed (lease).
-- **Data chip** (ids, budgets, owners — facts without temperature): Fragment
-  Mono 11px, 1px `--line-strong` border, radius 6, padding 2px 8px.
-- **Atmosphere placement:** lane counts, ambient glow, micro-meters. Never on
-  primary actions, never on the word "blocked"-class alerts (those are ember).
-
-When a new instrument ships, it copies this grammar wholesale and picks only
-its atmosphere from the ship table.
+Starfields, grain and ship atmospheres belong to the surrounding brand surface,
+not to shared component source.
 
 ## Paper mode (light surfaces: quanta, future reading surfaces)
 
 Same roles, warm light values: paper `#fbfaf7` ground (never clinical white), near-black
 ink `#1a1a1a` (never `#000`), and the thread darkened to ember-paper
-`oklch(55% 0.13 55)` so it holds on a light ground. Apply with `data-mode="paper"` on
-any ancestor. A few paper roles are marked PROPOSED in DESIGN.md until ratified.
+`oklch(55% 0.13 55)` so it holds on a light ground. Paper is `:root` by default.
 
-- Long-form body text on paper uses **Erode** (Fontshare, Charter/Georgia fallback) —
+- Long-form body text on paper uses **Erode** (Fontshare) —
   the sanctioned reading serif, same foundry as Panchang/Supreme, earned by
-  read-in-bed legibility. Wordmarks and UI chrome use Panchang; meta stays
+  read-in-bed legibility. Wordmarks and headings use Panchang; meta stays
   Fragment Mono.
 - Layout: one column, 40-42rem measure, ≥18px body, generous line-height (~1.65).
 - Illustrations carry the hand-drawn energy (see insignia/art pipeline); the
   typography stays disciplined. Feels like a well-typeset zine, not a SaaS app.
-- Quiz/correct states and links use `--ember-paper`; wrong/muted states stay in
+- Quiz/correct states and links use `--primary`; wrong/muted states stay in
   gray-ink territory. Same one-accent law as void.
 
 ## Type roles (both modes)
@@ -158,24 +101,24 @@ Bricolage-era stack — migrate each surface on next touch, see Drift ledger):
 
 - **Panchang** — display: wordmarks, h1/h2, ship names. 800 on brand surfaces,
   600 in dense UI. Squared, techy, in-your-face; the voice of the fleet.
-  Fontshare: `https://api.fontshare.com/v2/css?f[]=panchang@400,600,800&display=swap`
+  Self-hosted on mauricekleine.com.
 - **Supreme** — body. 400 (500 for emphasis). Warm, round, legible; reports to
   Panchang without competing.
-  Fontshare: `https://api.fontshare.com/v2/css?f[]=supreme@400,500&display=swap`
+  Self-hosted on mauricekleine.com.
 - **Fragment Mono** — meta, labels, stamps, coordinates (unchanged). On
-  instruments: 11px, uppercase, `letter-spacing: 0.14em`, `--dim`/`--dim-ui`.
-  Google Fonts. Mono is seasoning: small doses, never paragraphs.
+  instruments: 11px, uppercase, `letter-spacing: 0.14em`, `--muted-foreground`.
+  Self-hosted on mauricekleine.com. Mono is seasoning: small doses, never paragraphs.
 - Display sizing: `clamp()` fluid, tight letter-spacing (-0.02em),
   `text-wrap: balance`. Body ≥17px, line-height ~1.65-1.7.
-- Paper-mode long-form body: **Erode** (Fontshare, 400/500; Charter/Georgia fallback) — the ITF reading serif completing the family. The quanta exception, now with a name.
+- Paper-mode long-form body: **Erode** (Fontshare, 400/500) — the ITF reading serif completing the family. The quanta exception, now with a name.
 - Bricolage Grotesque is RETIRED from new work; it survives only on surfaces
   not yet migrated (listed in the Drift ledger).
 
 ## Motion
 
-- `--ease-drift: cubic-bezier(0.16, 1, 0.3, 1)` — ambient/brand surfaces
+- `cubic-bezier(0.16, 1, 0.3, 1)` — ambient/brand surfaces
   (rises, reveals, celestial events).
-- `--ease-snap: cubic-bezier(0.22, 1, 0.36, 1)` — instruments (cards, toasts,
+- `cubic-bezier(0.22, 1, 0.36, 1)` — instruments (cards, toasts,
   dialogs), durations 0.12-0.34s.
 - One hero entrance maximum; no scroll-gated reveal choreography.
 - Delight moments (supernovas, eclipses, meteor wishes) belong to brand
@@ -255,8 +198,8 @@ Registry (update when a mark ships):
   logo (wordmark only). Its `apps/web/DESIGN.md`/`PRODUCT.md` remain authoritative
   for site-specific components; this skill governs where they'd conflict.
 - **orbit** — instrument panel. Dense, px-scale, panel/line surfaces, mono
-  labels, `--ease-snap`, static grain, zero easter eggs: it's for working. Its
-  violet due-pills are the canonical `--nebula-bright` use.
+  labels, swift easing, static grain, zero easter eggs: it's for working. Its
+  violet due states use orbit-specific atmosphere outside the shared theme.
 - **quanta** — paper zine. Reading serif body, ink illustrations, ember-paper
   accents, no grain, no starfield. The hand-drawn art IS its texture.
 - **the launchpad/bridge** (future) — void mode at high delight: the fleet's
@@ -273,8 +216,5 @@ As of 2026-09-26:
   from IBM Plex + Inter.
 - quanta: move the accent `#C0392B`-family to ember-paper (same hue as the fleet
   thread).
-- Every surface: replace hand-copied token values with the generated
-  `dist/tokens.css` from `packages/superthread`.
-- Paper mode: five roles in DESIGN.md are PROPOSED (surface, line-strong,
-  ink-dim, ink-dim-ui, thread-bright); ratify them on the specimen page before
-  any app relies on them.
+- Every surface: replace hand-copied component values with the generated
+  `dist/superthread.css` from `packages/superthread` and stock shadcn components.

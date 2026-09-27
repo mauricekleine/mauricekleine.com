@@ -1,6 +1,6 @@
 ---
 name: taste
-description: "Evaluate and improve the taste and design quality of code, architecture, APIs, UI, writing, or any creative work using Paul Graham's principles from 'Taste for Makers.' Use when the user asks to review something for taste, elegance, beauty, or design quality. Also use when the user says 'taste check,' 'taste review,' 'is this elegant,' 'make this beautiful,' 'review for taste,' 'does this have good taste,' or wants to improve the aesthetic quality of their work beyond mere correctness."
+description: "Evaluate and improve the taste and design quality of code, architecture, APIs, UI, writing, or any creative work using Paul Graham's principles from 'Taste for Makers.' Use when the user asks for a taste check or a review of elegance, beauty, or design quality, or wants to improve the aesthetic quality of their work beyond mere correctness."
 ---
 
 # Taste for Makers
