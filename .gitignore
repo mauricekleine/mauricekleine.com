@@ -14,3 +14,5 @@ node_modules
 apps/web/dist/
 apps/web/.wrangler/
 apps/web/tools/__pycache__/
+
+.shots/

@@ -1,0 +1,143 @@
+@font-face {
+  font-family: "Supreme";
+  src: url("https://www.mauricekleine.com/fonts/supreme-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Supreme";
+  src: url("https://www.mauricekleine.com/fonts/supreme-500.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Erode";
+  src: url("https://www.mauricekleine.com/fonts/erode-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Erode";
+  src: url("https://www.mauricekleine.com/fonts/erode-500.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fragment Mono";
+  src: url("https://www.mauricekleine.com/fonts/fragment-mono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Panchang";
+  src: url("https://www.mauricekleine.com/fonts/panchang-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Panchang";
+  src: url("https://www.mauricekleine.com/fonts/panchang-600.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Panchang";
+  src: url("https://www.mauricekleine.com/fonts/panchang-800.woff2") format("woff2");
+  font-weight: 800;
+  font-display: swap;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --font-sans: "Supreme", sans-serif;
+  --font-serif: "Erode", serif;
+  --font-mono: "Fragment Mono", monospace;
+  --font-display: "Panchang", sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  --radius: 8px;
+  --background: #fbfaf7;
+  --foreground: #1a1a1a;
+  --card: #f4f2ed;
+  --card-foreground: #1a1a1a;
+  --popover: #f4f2ed;
+  --popover-foreground: #1a1a1a;
+  --primary: oklch(55% 0.13 55);
+  --primary-foreground: #fbfaf7;
+  --secondary: #f4f2ed;
+  --secondary-foreground: #1a1a1a;
+  --muted: #f4f2ed;
+  --muted-foreground: #55524c;
+  --accent: oklch(94% 0.035 60);
+  --accent-foreground: #1a1a1a;
+  --destructive: #735853;
+  --border: #d9d5cc;
+  --input: #898276;
+  --ring: oklch(48% 0.14 52);
+}
+
+.dark {
+  color-scheme: dark;
+  --background: oklch(17% 0.035 275);
+  --foreground: oklch(94% 0.01 85);
+  --card: oklch(20% 0.035 278);
+  --card-foreground: oklch(94% 0.01 85);
+  --popover: oklch(20% 0.035 278);
+  --popover-foreground: oklch(94% 0.01 85);
+  --primary: oklch(75% 0.13 55);
+  --primary-foreground: oklch(13% 0.03 280);
+  --secondary: oklch(20% 0.035 278);
+  --secondary-foreground: oklch(94% 0.01 85);
+  --muted: oklch(20% 0.035 278);
+  --muted-foreground: oklch(76% 0.02 275);
+  --accent: oklch(75% 0.13 55 / 0.13);
+  --accent-foreground: oklch(94% 0.01 85);
+  --destructive: oklch(64% 0.19 25);
+  --border: oklch(30% 0.03 278);
+  --input: oklch(50% 0.03 278);
+  --ring: oklch(84% 0.12 65);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

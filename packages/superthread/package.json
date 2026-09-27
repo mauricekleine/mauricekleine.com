@@ -3,9 +3,7 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./tokens.css": "./dist/tokens.css",
-    "./theme.css": "./dist/theme.css",
-    "./tokens.json": "./dist/tokens.json"
+    "./theme.css": "./dist/superthread.css"
   },
   "scripts": {
     "build": "bun scripts/generate.ts",

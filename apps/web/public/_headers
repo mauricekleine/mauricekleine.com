@@ -12,6 +12,7 @@
 /sprites/*
   Cache-Control: public, max-age=31536000, immutable
 /fonts/*
+  Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=31536000, immutable
 /maurice.png
   Cache-Control: public, max-age=604800
