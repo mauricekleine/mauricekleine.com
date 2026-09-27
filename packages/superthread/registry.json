@@ -27,6 +27,19 @@
           "target": "@components/superthread/ui/app-switcher.tsx"
         }
       ]
+    },
+    {
+      "name": "fleet-rail",
+      "type": "registry:ui",
+      "title": "fleet rail",
+      "registryDependencies": ["sidebar", "tooltip"],
+      "files": [
+        {
+          "path": "packages/superthread/registry/ui/fleet-rail.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/fleet-rail.tsx"
+        }
+      ]
     }
   ]
 }

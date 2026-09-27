@@ -1,6 +1,6 @@
 # superthread
 
-A shadcn theme for Maurice's fleet. `DESIGN.md` owns the colors, fonts and radius. `bun run registry` at the repo root builds the CSS and the two registry items.
+A shadcn theme for Maurice's fleet. `DESIGN.md` owns the colors, fonts and radius. `bun run registry` at the repo root builds the CSS and registry items.
 
 ## Install
 
@@ -20,3 +20,5 @@ npx shadcn@latest add https://www.mauricekleine.com/r/superthread.json
 Paper is `:root`; add `.dark` to the document for void. Fonts load from `https://www.mauricekleine.com/fonts/`.
 
 For the fleet menu, run `npx shadcn@latest add https://www.mauricekleine.com/r/app-switcher.json`. The registry declares stock shadcn `button` and `dropdown-menu` as dependencies. All other components come directly from shadcn.
+
+For the icon rail, run `npx shadcn@latest add https://www.mauricekleine.com/r/fleet-rail.json`. It installs stock shadcn `sidebar` and `tooltip`; default marks load from mauricekleine.com.

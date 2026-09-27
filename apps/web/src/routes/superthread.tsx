@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AppSwitcher } from '@/components/superthread/ui/app-switcher'
+import { FleetRail } from '@/components/superthread/ui/fleet-rail'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 
 export const Route = createFileRoute('/superthread')({ head: superthreadHead, component: SuperthreadPage })
 
@@ -44,7 +46,16 @@ function SuperthreadPage() {
         </div>
       </section>
 
-      <section aria-labelledby="fleet"><h2 id="fleet">fleet</h2><p>the switcher sits with plain text navigation.</p>
+      <section aria-labelledby="fleet"><h2 id="fleet">fleet</h2><p>one mark per app. choose a rail for the fleet.</p>
+        <div className="st-rail-grid">
+          <div><h3>a / docked</h3><div className="st-rail-preview">
+            <FleetRail current="orbit"><div className="st-rail-stage"><SidebarTrigger className="md:hidden" /><p>orbit</p><span>the app keeps its own navigation.</span></div></FleetRail>
+          </div></div>
+          <div><h3>b / floating</h3><div className="st-rail-preview">
+            <FleetRail current="orbit" variant="floating"><div className="st-rail-stage"><SidebarTrigger className="md:hidden" /><p>orbit</p><span>the app keeps its own navigation.</span></div></FleetRail>
+          </div></div>
+        </div>
+        <p>the current app switcher stays available during the transition.</p>
         <nav className="st-nav" aria-label="specimen navigation"><a href="/">home</a><a href="/about">about</a><a href="/essays">essays</a><AppSwitcher /></nav>
       </section>
 
