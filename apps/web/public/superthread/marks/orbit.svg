@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>orbit</title>
+  <circle cx="15" cy="17" r="10" fill="none" stroke="#5c80bc" stroke-width="2.8"/>
+  <circle cx="24" cy="8" r="2.6" fill="#5c80bc"/>
+</svg>

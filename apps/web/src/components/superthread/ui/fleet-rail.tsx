@@ -6,12 +6,12 @@ export type FleetApp = { name: string; href: string; mark: string }
 export const defaultApps: FleetApp[] = [
   { name: 'mauricekleine.com', href: 'https://www.mauricekleine.com', mark: 'https://www.mauricekleine.com/favicon.ico' },
   { name: 'nonobench.com', href: 'https://nonobench.com', mark: 'https://www.mauricekleine.com/superthread/nonobench-mark.svg' },
-  { name: 'orbit', href: 'https://orbit.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/orbit-mark.png' },
-  { name: 'quanta', href: 'https://quanta.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/quanta-mark-void.png' },
-  { name: 'hyperspeed', href: 'https://hyperspeed.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/hyperspeed-mark.png' },
-  { name: 'trisys', href: 'https://trisys.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/trisys-mark.svg' },
-  { name: 'constellation', href: 'https://constellation.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/constellation-mark.svg' },
-  { name: 'soliton', href: 'https://soliton.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/soliton-mark.png' },
+  { name: 'orbit', href: 'https://orbit.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/orbit.svg' },
+  { name: 'quanta', href: 'https://quanta.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/quanta.svg' },
+  { name: 'hyperspeed', href: 'https://hyperspeed.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/hyperspeed.svg' },
+  { name: 'trisys', href: 'https://trisys.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/trisys.svg' },
+  { name: 'constellation', href: 'https://constellation.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/constellation.svg' },
+  { name: 'soliton', href: 'https://soliton.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/soliton.svg' },
 ]
 
 export function FleetRail({ apps = defaultApps, current, children }: { apps?: readonly FleetApp[]; current: string; children?: ReactNode }) {
