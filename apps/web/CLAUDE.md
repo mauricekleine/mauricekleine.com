@@ -23,7 +23,7 @@ Workers Builds uses `bun install && bun run --if-present build` as its build com
 
 `content/essays/<slug>.md` is the single essay source. Frontmatter contains data such as title, dates, social URLs, cover and image dimensions, and the five historical inline link targets that the public Markdown twin leaves unlinked. The body is the canonical public Markdown, byte for byte. `src/essay-markdown.tsx` renders it with React Markdown and GFM. `src/essay-content.ts` derives essay order from date and applies narrow render-only fixes for legacy Markdown syntax. The same source produces each public essay `.md` twin.
 
-`public/` contains static files at their original URLs, including `_headers`. `tools/sync-essays.py` writes the essay Markdown twins and updates the feed, sitemap, `llms.txt`, and essays index Markdown. `public/index.md` and `public/about.md` remain byte-identical static files. The original `public/style.css` and browser scripts remain in use. `/superthread` is a prerendered, route-scoped specimen that imports the generated design tokens and the registry components. Its Tailwind CSS must never load on the existing pages.
+`public/` contains static files at their original URLs, including `_headers`. `tools/sync-essays.py` writes the essay Markdown twins and updates the feed, sitemap, `llms.txt`, and essays index Markdown. `public/index.md` and `public/about.md` remain byte-identical static files. The original `public/style.css` and browser scripts remain in use. `/superthread` is a prerendered, route-scoped specimen that uses the generated shadcn theme and stock Base UI components. Its Tailwind CSS must never load on the existing pages.
 
 ## Adding an essay
 

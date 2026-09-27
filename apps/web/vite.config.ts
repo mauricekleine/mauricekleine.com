@@ -4,12 +4,14 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
 import { readdirSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 
 const essayPaths = readdirSync(new URL('./content/essays/', import.meta.url))
   .filter((name) => name.endsWith('.md'))
   .map((name) => `/essays/${name.slice(0, -3)}`)
 
 export default defineConfig({
+  resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   plugins: [
     cloudflare({ configPath: '../../wrangler.jsonc', viteEnvironment: { name: 'ssr' } }),
     tanstackStart({
