@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>constellation</title>
+  <path d="m6 9 10 13L26 8" fill="none" stroke="#c16e2d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#c16e2d"><circle cx="6" cy="9" r="2.6"/><circle cx="16" cy="22" r="2.6"/><circle cx="26" cy="8" r="2.6"/></g>
+</svg>

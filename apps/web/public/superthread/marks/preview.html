@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>fleet marks</title>
+  <link rel="stylesheet" href="../specimen.css">
+  <style>
+    body { background: #fbfaf7; color: #1a1a1a; }
+    main { width: min(100% - 32px, 1300px); margin: 48px auto 80px; }
+    h1 { font: 600 clamp(28px, 4vw, 44px)/1.1 var(--font-display); }
+    header p { margin: 12px 0 36px; }
+    .grounds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .ground { padding: 24px; border: 1px solid #d9d5cc; border-radius: 8px; overflow-x: auto; }
+    .paper { background: #fbfaf7; color: #1a1a1a; }
+    .void { background: oklch(17% 0.035 275); color: oklch(94% 0.01 85); border-color: oklch(30% 0.03 278); }
+    h2 { margin-bottom: 20px; font: 600 20px var(--font-display); }
+    .head, .row { display: grid; grid-template-columns: 120px 36px 44px 76px 190px; gap: 10px; align-items: center; min-width: 510px; }
+    .head { font-size: 12px; opacity: .7; }
+    .head span:not(:first-child), .sample { text-align: center; }
+    .row { min-height: 190px; border-top: 1px solid currentColor; border-color: color-mix(in srgb, currentColor 20%, transparent); }
+    .name { font-weight: 500; }
+    .sample img { display: inline-block; max-width: none; }
+    .rail-wrap { margin-top: 28px; }
+    .rail { display: flex; flex-direction: column; gap: 4px; width: 40px; padding: 6px; border: 1px solid currentColor; border-radius: 8px; }
+    .rail img { width: 16px; height: 16px; margin: 5px; }
+    @media (max-width: 1100px) { .grounds { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header><h1>fleet marks</h1><p>single strokes / 16, 32, 64, 180 / paper and void</p><p id="fonts">fonts loading</p></header>
+    <div class="grounds" id="grounds"></div>
+  </main>
+  <script>
+    Promise.all(['Supreme', 'Panchang'].map(async family => {
+      const faces = await document.fonts.load(`600 16px "${family}"`);
+      return `${family}: ${faces.map(face => face.status).join(', ')}`;
+    })).then(status => document.querySelector('#fonts').textContent = status.join(' / '));
+    const apps = ['orbit', 'quanta', 'trisys', 'hyperspeed', 'soliton', 'constellation'];
+    document.querySelector('#grounds').innerHTML = ['paper', 'void'].map(ground => `
+      <section class="ground ${ground}">
+        <h2>${ground}</h2>
+        <div class="head"><span>mark</span><span>16</span><span>32</span><span>64</span><span>180</span></div>
+        ${apps.map(app => `<div class="row"><span class="name">${app}</span>${[16, 32, 64, 180].map(size => `<div class="sample"><img src="${app}.svg" alt="" width="${size}" height="${size}"></div>`).join('')}</div>`).join('')}
+        <div class="rail-wrap"><p>mock fleet rail / 16px</p><div class="rail">${apps.map(app => `<img src="${app}.svg" alt="${app}">`).join('')}</div></div>
+      </section>`).join('');
+  </script>
+</body>
+</html>
