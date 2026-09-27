@@ -1,120 +1,62 @@
-// builds css variables and the tailwind v4 theme from DESIGN.md.
-// DESIGN.md is the only source; everything under dist/ is generated.
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
-
-type Typography = {
-  fontFamily: string;
-  fontSize: string;
-  fontWeight: number;
-  lineHeight: number | string;
-  letterSpacing?: string;
-};
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
 type Tokens = {
-  colors: Record<string, string>;
-  typography: Record<string, Typography>;
-  rounded: Record<string, string>;
-  spacing: Record<string, string>;
-};
-
-const root = join(import.meta.dir, "..");
-const MODES = ["void", "paper"] as const;
-
-// display sizes are fluid; DESIGN.md holds the max, the clamp lives here
-const FLUID: Record<string, string> = {
-  "display-xl": "clamp(1.85rem, 4.5vw + 0.85rem, 2.9rem)",
-};
-
-const STACKS: Record<string, string> = {
-  Panchang: '"Panchang", ui-sans-serif, system-ui, sans-serif',
-  Supreme: '"Supreme", ui-sans-serif, system-ui, sans-serif',
-  Erode: '"Erode", Charter, "Iowan Old Style", Georgia, serif',
-  "Fragment Mono": '"Fragment Mono", ui-monospace, "SF Mono", Menlo, monospace',
-};
-
-export async function readTokens(path = join(root, "DESIGN.md")): Promise<Tokens> {
-  const source = await readFile(path, "utf8");
-  const match = source.match(/^---\n([\s\S]*?)\n---/);
-  if (!match) throw new Error("DESIGN.md has no front matter");
-  return Bun.YAML.parse(match[1]) as Tokens;
+  colors: Record<string, string>
+  fonts: Record<string, string>
+  radius: string
 }
 
-// void-ground -> ground; the mode prefix becomes a selector instead
-function roles(colors: Tokens["colors"], mode: string) {
-  return Object.entries(colors)
-    .filter(([name]) => name.startsWith(`${mode}-`))
-    .map(([name, value]) => [name.slice(mode.length + 1), value] as const);
+const root = join(import.meta.dir, '..')
+const roles = ['background', 'foreground', 'card', 'card-foreground', 'popover', 'popover-foreground', 'primary', 'primary-foreground', 'secondary', 'secondary-foreground', 'muted', 'muted-foreground', 'accent', 'accent-foreground', 'destructive', 'border', 'input', 'ring']
+
+export async function readTokens(): Promise<Tokens> {
+  const source = await readFile(join(root, 'DESIGN.md'), 'utf8')
+  return Bun.YAML.parse(source.match(/^---\n([\s\S]*?)\n---/)![1]) as Tokens
 }
 
-export function tokensCss(tokens: Tokens) {
-  const shared = Object.entries(tokens.colors).filter(
-    ([name]) => !MODES.some((mode) => name.startsWith(`${mode}-`)) && name !== "primary",
-  );
-  const block = (pairs: ReadonlyArray<readonly [string, string]>) =>
-    pairs.map(([name, value]) => `  --${name}: ${value};`).join("\n");
-
-  const type = Object.entries(tokens.typography).flatMap(([name, t]) => [
-    `  --font-${name}: ${STACKS[t.fontFamily] ?? `"${t.fontFamily}"`};`,
-    `  --text-${name}: ${FLUID[name] ?? t.fontSize};`,
-    `  --weight-${name}: ${t.fontWeight};`,
-    `  --leading-${name}: ${t.lineHeight};`,
-    ...(t.letterSpacing ? [`  --tracking-${name}: ${t.letterSpacing};`] : []),
-  ]);
-
-  return `/* generated from DESIGN.md by scripts/generate.ts. do not edit. */
-
-/* void is the default mode */
-:root {
-  color-scheme: dark;
-${block(roles(tokens.colors, "void"))}
-${block(shared)}
-${block(Object.entries(tokens.rounded).map(([k, v]) => [`radius-${k}`, v] as const))}
-${block(Object.entries(tokens.spacing).map(([k, v]) => [`space-${k}`, String(v)] as const))}
-${type.join("\n")}
-  --ease-drift: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-[data-mode="paper"] {
-  color-scheme: light;
-${block(roles(tokens.colors, "paper"))}
-}
-`;
-}
-
-// tailwind v4 reads theme variables from @theme; `inline` keeps them pointing
-// at the mode-aware custom properties, so utilities follow data-mode
 export function themeCss(tokens: Tokens) {
-  const colorNames = roles(tokens.colors, "void").map(([name]) => name);
-  const shared = Object.keys(tokens.colors).filter(
-    (name) => !MODES.some((mode) => name.startsWith(`${mode}-`)) && name !== "primary",
-  );
-  const lines = [
-    ...[...colorNames, ...shared].map((name) => `  --color-${name}: var(--${name});`),
-    ...Object.keys(tokens.rounded).map((k) => `  --radius-${k}: var(--radius-${k});`),
-    ...Object.keys(tokens.spacing).map((k) => `  --spacing-${k}: var(--space-${k});`),
-    ...Object.keys(tokens.typography).map((k) => `  --font-${k}: var(--font-${k});`),
-    ...Object.keys(tokens.typography).map((k) => `  --text-${k}: var(--text-${k});`),
-    "  --ease-drift: var(--ease-drift);",
-    "  --ease-snap: var(--ease-snap);",
-  ];
-  return `/* generated from DESIGN.md by scripts/generate.ts. do not edit. */
+  const colors = (mode: 'paper' | 'void') => roles.map((role) => `  --${role}: ${tokens.colors[`${mode}-${role}`]};`).join('\n')
+  const face = (family: string, file: string, weight: number) => `@font-face {\n  font-family: "${family}";\n  src: url("https://www.mauricekleine.com/fonts/${file}.woff2") format("woff2");\n  font-weight: ${weight};\n  font-display: swap;\n}`
+  return `${[['Supreme', 'supreme-400', 400], ['Supreme', 'supreme-500', 500], ['Erode', 'erode-400', 400], ['Erode', 'erode-500', 500], ['Fragment Mono', 'fragment-mono-400', 400], ['Panchang', 'panchang-400', 400], ['Panchang', 'panchang-600', 600], ['Panchang', 'panchang-800', 800]].map(([family, file, weight]) => face(String(family), String(file), Number(weight))).join('\n\n')}
+
+@custom-variant dark (&:is(.dark *));
+
 @theme inline {
-${lines.join("\n")}
+${roles.map((role) => `  --color-${role}: var(--${role});`).join('\n')}
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+${Object.entries(tokens.fonts).map(([key, family]) => `  --font-${key}: "${family}", ${key === 'mono' ? 'monospace' : key === 'serif' ? 'serif' : 'sans-serif'};`).join('\n')}
 }
-`;
+
+:root {
+  color-scheme: light;
+  --radius: ${tokens.radius};
+${colors('paper')}
+}
+
+.dark {
+  color-scheme: dark;
+${colors('void')}
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+`
 }
 
 if (import.meta.main) {
-  const tokens = await readTokens();
-  const out = join(root, "dist");
-  await mkdir(out, { recursive: true });
-  await writeFile(join(out, "tokens.css"), tokensCss(tokens));
-  await writeFile(join(out, "theme.css"), themeCss(tokens));
-  await writeFile(
-    join(out, "tokens.json"),
-    `${JSON.stringify(tokens, null, 2)}\n`,
-  );
-  console.log(`wrote ${join(dirname(out), "dist")}/{tokens.css,theme.css,tokens.json}`);
+  await mkdir(join(root, 'dist'), { recursive: true })
+  await writeFile(join(root, 'dist/superthread.css'), themeCss(await readTokens()))
 }
