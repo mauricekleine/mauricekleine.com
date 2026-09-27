@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { Sidebar, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from '@/components/ui/sidebar'
 
 export type FleetApp = { name: string; href: string; mark: string }
@@ -14,21 +14,26 @@ export const defaultApps: FleetApp[] = [
   { name: 'soliton', href: 'https://soliton.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/soliton.svg' },
 ]
 
-export function FleetRail({ apps = defaultApps, current, children }: { apps?: readonly FleetApp[]; current: string; children?: ReactNode }) {
-  return <SidebarProvider defaultOpen={false}>
-    <Sidebar collapsible="icon">
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarMenu>
-            {apps.map((app) => <SidebarMenuItem key={app.href}>
-              <SidebarMenuButton render={<a href={app.href} aria-current={current === app.name ? 'page' : undefined} />} isActive={current === app.name} tooltip={app.name}>
-                <img src={app.mark} alt="" width="16" height="16" />
-                <span>{app.name}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>)}
-          </SidebarMenu>
-        </SidebarGroup>
-      </SidebarContent>
+export function FleetRail({ apps = defaultApps, current, sidebar, children }: { apps?: readonly FleetApp[]; current: string; sidebar?: ReactNode; children?: ReactNode }) {
+  const rail = <SidebarContent>
+    <SidebarGroup>
+      <SidebarMenu>
+        {apps.map((app) => <SidebarMenuItem key={app.href}>
+          <SidebarMenuButton render={<a href={app.href} aria-current={current === app.name ? 'page' : undefined} />} isActive={current === app.name} tooltip={app.name}>
+            <img src={app.mark} alt="" width="16" height="16" />
+            <span>{app.name}</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>)}
+      </SidebarMenu>
+    </SidebarGroup>
+  </SidebarContent>
+
+  return <SidebarProvider defaultOpen={!!sidebar} style={sidebar ? { '--sidebar-width': '350px' } as CSSProperties : undefined}>
+    <Sidebar collapsible="icon" className={sidebar ? 'overflow-hidden *:data-[sidebar=sidebar]:flex-row' : undefined}>
+      {sidebar ? <>
+        <Sidebar collapsible="none" className="w-[calc(var(--sidebar-width-icon)+1px)]! border-r max-md:h-auto">{rail}</Sidebar>
+        <Sidebar collapsible="none" className="flex-1">{sidebar}</Sidebar>
+      </> : rail}
     </Sidebar>
     {children}
   </SidebarProvider>

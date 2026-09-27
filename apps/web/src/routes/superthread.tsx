@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FleetRail } from '@/components/superthread/ui/fleet-rail'
-import { SidebarTrigger } from '@/components/ui/sidebar'
+import { SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger } from '@/components/ui/sidebar'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 export const Route = createFileRoute('/superthread')({ head: superthreadHead, component: SuperthreadPage })
@@ -51,6 +51,17 @@ function SuperthreadPage() {
       <section aria-labelledby="fleet"><h2 id="fleet">fleet</h2><p>one mark per app, docked to the left edge.</p>
         <div className="st-rail-preview">
           <FleetRail current="orbit"><div className="st-rail-stage"><SidebarTrigger className="md:hidden" /><p>orbit</p><span>the app keeps its own navigation.</span></div></FleetRail>
+        </div>
+        <p>fleet rail with app navigation.</p>
+        <div className="st-rail-preview">
+          <FleetRail current="hyperspeed" sidebar={<>
+            <SidebarHeader>hyperspeed</SidebarHeader>
+            <SidebarContent><SidebarGroup><SidebarGroupLabel>workspace</SidebarGroupLabel><SidebarMenu>
+              {['board', 'needs you', 'goals', 'usage'].map((item) => <SidebarMenuItem key={item}>
+                <SidebarMenuButton isActive={item === 'board'}>{item}</SidebarMenuButton>
+              </SidebarMenuItem>)}
+            </SidebarMenu></SidebarGroup></SidebarContent>
+          </>}><div className="st-rail-stage"><SidebarTrigger /><p>board</p><span>app navigation inside the shared sidebar.</span></div></FleetRail>
         </div>
       </section>
 
