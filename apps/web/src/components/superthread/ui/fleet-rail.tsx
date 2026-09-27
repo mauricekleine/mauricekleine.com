@@ -13,9 +13,9 @@ export const defaultApps: FleetApp[] = [
   { name: 'soliton', href: 'https://soliton.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/soliton-mark.png' },
 ]
 
-export function FleetRail({ apps = defaultApps, current, variant = 'sidebar', children }: { apps?: readonly FleetApp[]; current: string; variant?: 'sidebar' | 'floating'; children?: ReactNode }) {
+export function FleetRail({ apps = defaultApps, current, children }: { apps?: readonly FleetApp[]; current: string; children?: ReactNode }) {
   return <SidebarProvider defaultOpen={false}>
-    <Sidebar collapsible="icon" variant={variant}>
+    <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>

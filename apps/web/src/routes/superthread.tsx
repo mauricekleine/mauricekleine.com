@@ -46,14 +46,9 @@ function SuperthreadPage() {
         </div>
       </section>
 
-      <section aria-labelledby="fleet"><h2 id="fleet">fleet</h2><p>one mark per app. choose a rail for the fleet.</p>
-        <div className="st-rail-grid">
-          <div><h3>a / docked</h3><div className="st-rail-preview">
-            <FleetRail current="orbit"><div className="st-rail-stage"><SidebarTrigger className="md:hidden" /><p>orbit</p><span>the app keeps its own navigation.</span></div></FleetRail>
-          </div></div>
-          <div><h3>b / floating</h3><div className="st-rail-preview">
-            <FleetRail current="orbit" variant="floating"><div className="st-rail-stage"><SidebarTrigger className="md:hidden" /><p>orbit</p><span>the app keeps its own navigation.</span></div></FleetRail>
-          </div></div>
+      <section aria-labelledby="fleet"><h2 id="fleet">fleet</h2><p>one mark per app, docked to the left edge.</p>
+        <div className="st-rail-preview">
+          <FleetRail current="orbit"><div className="st-rail-stage"><SidebarTrigger className="md:hidden" /><p>orbit</p><span>the app keeps its own navigation.</span></div></FleetRail>
         </div>
         <p>the current app switcher stays available during the transition.</p>
         <nav className="st-nav" aria-label="specimen navigation"><a href="/">home</a><a href="/about">about</a><a href="/essays">essays</a><AppSwitcher /></nav>
