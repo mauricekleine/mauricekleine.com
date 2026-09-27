@@ -1,4 +1,15 @@
+@import "tailwindcss/theme";
+@import "tailwindcss/utilities" source(none);
+@import "shadcn/tailwind.css";
 @import "../../../../packages/superthread/dist/superthread.css";
+@source "../components.tsx";
+@source "../components/ui/field.tsx";
+@source "../components/ui/input-group.tsx";
+@source "../components/ui/input.tsx";
+@source "../components/ui/button.tsx";
+@source "../components/ui/label.tsx";
+@source "../components/ui/textarea.tsx";
+@source "../components/ui/separator.tsx";
 
 .dark {
   --floor: oklch(13% 0.03 280);
@@ -8,10 +19,12 @@
   --glint: oklch(90% 0.12 65);
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 html {
@@ -538,60 +551,7 @@ footer p {
   max-width: 28rem;
 }
 
-.subscribe-field {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.subscribe-field label {
-  flex-basis: 100%;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
-  color: var(--dim);
-}
-
-.subscribe-field input[type="email"] {
-  flex: 1 1 12rem;
-  min-width: 0;
-  padding: 0.6rem 0.8rem;
-  font: inherit;
-  font-size: 0.95rem;
-  color: var(--foreground);
-  background: var(--floor);
-  border: 1px solid oklch(from var(--dim) l c h / 0.35);
-  border-radius: calc(var(--radius) * 0.75);
-}
-
-.subscribe-field input[type="email"]::placeholder {
-  color: var(--dim);
-}
-
-.subscribe-field button {
-  flex: 0 0 auto;
-  padding: 0.6rem 1.1rem;
-  font: inherit;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--floor);
-  background: var(--primary);
-  border: 0;
-  border-radius: calc(var(--radius) * 0.75);
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.subscribe-field button:hover {
-  background: var(--ring);
-}
-
-.subscribe-field button:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
-.cf-turnstile {
+#subscribe-turnstile {
   margin-top: 0.9rem;
 }
 
@@ -612,12 +572,6 @@ footer p {
 
 .subscribe-status.error {
   color: var(--primary);
-}
-
-@media (max-width: 600px) {
-  .subscribe-field input[type="email"] {
-    flex-basis: 100%;
-  }
 }
 
 .visually-hidden {

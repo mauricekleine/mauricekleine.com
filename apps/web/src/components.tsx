@@ -1,6 +1,8 @@
-import type { ComponentProps } from 'react'
+import { useEffect, type ComponentProps } from 'react'
 import type { Essay } from './essay-content'
 import { essays } from './essay-content'
+import { Field, FieldLabel } from '@/components/ui/field'
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group'
 
 export function EssayList({ variant }: { variant: 'home' | 'index' }) {
   const cover = variant === 'index'
@@ -80,17 +82,33 @@ export function ElsewhereLinks() {
 }
 
 export function Subscribe() {
+  useEffect(() => {
+    type Turnstile = { render: (target: string, options: { sitekey: string; theme: 'dark' }) => string; remove: (id: string) => void }
+    const api = () => (window as Window & { turnstile?: Turnstile }).turnstile
+    const script = document.querySelector<HTMLScriptElement>('script[src*="turnstile/v0/api.js"]')
+    let widgetId: string | undefined
+    const render = () => { widgetId = api()?.render('#subscribe-turnstile', { sitekey: '0x4AAAAAAABLi4eHqaf6akyS', theme: 'dark' }) }
+    if (api()) render()
+    else script?.addEventListener('load', render)
+    return () => {
+      script?.removeEventListener('load', render)
+      if (widgetId) api()?.remove(widgetId)
+    }
+  }, [])
+
   return (
       <Section className="subscribe" aria-labelledby="subscribe-heading">
         <h2 id="subscribe-heading">new essays by email</h2>
         <p className="section-intro">the next essay, when it lands. nothing else.</p>
         <form className="subscribe-form" method="post" action="/subscribe" data-subscribe="">
-          <div className="subscribe-field">
-            <label htmlFor="subscribe-email">email</label>{' '}
-            <input id="subscribe-email" name="email" type="email" autoComplete="email" required={true} placeholder="you@example.com" />{' '}
-            <button type="submit">subscribe</button>
-          </div>
-          <div className="cf-turnstile" data-theme="dark" data-sitekey="0x4AAAAAAABLi4eHqaf6akyS"></div>
+          <Field>
+            <FieldLabel htmlFor="subscribe-email">email</FieldLabel>
+            <InputGroup>
+              <InputGroupInput id="subscribe-email" name="email" type="email" autoComplete="email" required placeholder="you@example.com" />
+              <InputGroupAddon align="inline-end"><InputGroupButton type="submit" variant="default" size="sm">subscribe</InputGroupButton></InputGroupAddon>
+            </InputGroup>
+          </Field>
+          <div id="subscribe-turnstile"></div>
           <p className="subscribe-note">new essays only. unsubscribe anytime. your email is stored at resend; cloudflare checks you're human.</p>
           <p className="subscribe-status" data-subscribe-status="" role="status" aria-live="polite"></p>
         </form>

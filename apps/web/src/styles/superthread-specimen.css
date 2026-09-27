@@ -11,7 +11,8 @@
 .st-hero h1 { font: 800 clamp(2.5rem, 9vw, 6rem)/1 var(--font-display); }
 .st-hero p:not(.st-meta) { max-width: 44rem; margin-top: 1.5rem; font-size: 1.25rem; }
 .st-meta { font-family: var(--font-mono); color: var(--muted-foreground); }
-.st-mode-picker, .st-row { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: 1.5rem; }
+.st-mode-picker { margin-top: 1.5rem; }
+.st-row { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: 1.5rem; }
 .st-shell section { border-top: 1px solid var(--border); padding-block: 3rem; }
 .st-shell h2 { margin-bottom: .5rem; font: 600 1.5rem var(--font-display); }
 .st-shell section > p { margin-bottom: 1.5rem; color: var(--muted-foreground); }

@@ -106,10 +106,10 @@ function buildHead(page: PageSeo): { meta: Meta[]; links: Link[]; scripts: Scrip
     { rel: 'preload', as: 'font', type: 'font/woff2', href: 'https://www.mauricekleine.com/fonts/panchang-800.woff2', crossOrigin: '' },
     { rel: 'preload', as: 'font', type: 'font/woff2', href: 'https://www.mauricekleine.com/fonts/supreme-400.woff2', crossOrigin: '' },
   )
-  if (page.siteStylesheet !== false) links.push({ rel: 'stylesheet', href: `${page.relativeStylesheet ? '' : '/'}style.css?v=20260927-theme` })
+  if (page.siteStylesheet !== false) links.push({ rel: 'stylesheet', href: `${page.relativeStylesheet ? '' : '/'}style.css?v=20260927-stock` })
 
   const scripts: Script[] = []
-  if (page.turnstile) scripts.push({ src: 'https://challenges.cloudflare.com/turnstile/v0/api.js', async: true, defer: true })
+  if (page.turnstile) scripts.push({ src: 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit', async: true, defer: true })
   if (page.jsonLd) scripts.push({ type: 'application/ld+json', children: JSON.stringify(page.jsonLd) })
   return { meta, links, scripts }
 }
