@@ -107,7 +107,7 @@
   --accent-foreground: #1a1a1a;
   --destructive: #735853;
   --border: #d9d5cc;
-  --input: #d9d5cc;
+  --input: #898276;
   --ring: oklch(48% 0.14 52);
 }
 
@@ -129,7 +129,7 @@
   --accent-foreground: oklch(94% 0.01 85);
   --destructive: oklch(64% 0.19 25);
   --border: oklch(30% 0.03 278);
-  --input: oklch(30% 0.03 278);
+  --input: oklch(50% 0.03 278);
   --ring: oklch(84% 0.12 65);
 }
 

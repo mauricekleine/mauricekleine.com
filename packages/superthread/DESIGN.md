@@ -19,7 +19,7 @@ colors:
   paper-accent-foreground: "#1a1a1a"
   paper-destructive: "#735853"
   paper-border: "#d9d5cc"
-  paper-input: "#d9d5cc"
+  paper-input: "#898276"
   paper-ring: "oklch(48% 0.14 52)"
   void-background: "oklch(17% 0.035 275)"
   void-foreground: "oklch(94% 0.01 85)"
@@ -37,7 +37,7 @@ colors:
   void-accent-foreground: "oklch(94% 0.01 85)"
   void-destructive: "oklch(64% 0.19 25)"
   void-border: "oklch(30% 0.03 278)"
-  void-input: "oklch(30% 0.03 278)"
+  void-input: "oklch(50% 0.03 278)"
   void-ring: "oklch(84% 0.12 65)"
 fonts:
   sans: Supreme
