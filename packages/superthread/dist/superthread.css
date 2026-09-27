@@ -131,6 +131,11 @@
   --border: oklch(30% 0.03 278);
   --input: oklch(50% 0.03 278);
   --ring: oklch(84% 0.12 65);
+  --floor: oklch(13% 0.03 280);
+  --dim: oklch(66% 0.015 275);
+  --nebula: oklch(45% 0.09 300);
+  --ember-wash: oklch(55% 0.11 55);
+  --glint: oklch(90% 0.12 65);
 }
 
 @layer base {

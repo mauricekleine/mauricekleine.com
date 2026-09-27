@@ -9,7 +9,7 @@ function RootDocument() {
   const essayPage = pathname === '/essays' || pathname.startsWith('/essays/')
   const lost = pathname === '/404'
   const specimen = pathname === '/superthread'
-  return <html lang="en">
+  return <html lang="en" className={specimen ? undefined : 'dark'}>
     <head><HeadContent /></head>
     <body>
       {!specimen && <canvas id="nebula" aria-hidden="true" />}

@@ -103,13 +103,10 @@ function buildHead(page: PageSeo): { meta: Meta[]; links: Link[]; scripts: Scrip
   links.push(
     { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
     { rel: 'apple-touch-icon', href: '/maurice.png' },
-    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: '' },
-    { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/panchang-800.woff2', crossOrigin: '' },
-    { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/supreme-400.woff2', crossOrigin: '' },
-    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Fragment+Mono&display=swap' },
+    { rel: 'preload', as: 'font', type: 'font/woff2', href: 'https://www.mauricekleine.com/fonts/panchang-800.woff2', crossOrigin: '' },
+    { rel: 'preload', as: 'font', type: 'font/woff2', href: 'https://www.mauricekleine.com/fonts/supreme-400.woff2', crossOrigin: '' },
   )
-  if (page.siteStylesheet !== false) links.push({ rel: 'stylesheet', href: `${page.relativeStylesheet ? '' : '/'}style.css?v=20260925-subscribe` })
+  if (page.siteStylesheet !== false) links.push({ rel: 'stylesheet', href: `${page.relativeStylesheet ? '' : '/'}style.css?v=20260927-theme` })
 
   const scripts: Script[] = []
   if (page.turnstile) scripts.push({ src: 'https://challenges.cloudflare.com/turnstile/v0/api.js', async: true, defer: true })

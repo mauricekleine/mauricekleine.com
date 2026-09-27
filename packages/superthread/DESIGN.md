@@ -39,6 +39,11 @@ colors:
   void-border: "oklch(30% 0.03 278)"
   void-input: "oklch(50% 0.03 278)"
   void-ring: "oklch(84% 0.12 65)"
+  void-floor: "oklch(13% 0.03 280)"
+  void-dim: "oklch(66% 0.015 275)"
+  void-nebula: "oklch(45% 0.09 300)"
+  void-ember-wash: "oklch(55% 0.11 55)"
+  void-glint: "oklch(90% 0.12 65)"
 fonts:
   sans: Supreme
   serif: Erode
