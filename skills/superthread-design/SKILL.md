@@ -1,6 +1,6 @@
 ---
 name: superthread-design
-description: The Superthread design system - the shared visual foundation for Maurice's fleet of surfaces (mauricekleine.com, orbit, quanta, the soliton launchpad, and every future ship). Use this whenever designing, building, restyling, or critiquing UI for any fleet surface, creating logos/insignia/icons/avatars for a ship or service, picking colors/fonts/motion for anything Maurice-branded, or bootstrapping a brand-new surface. Pairs with impeccable (method) and copywriting-maurice (words); this skill owns the brand facts. Not for fluncle (own brand) or client work (Waimakers etc.).
+description: The Superthread design system - the shared visual foundation for Maurice's fleet of surfaces (mauricekleine.com, orbit, quanta, hyperspeed, trisys, constellation, and every future ship). Use this whenever designing, building, restyling, or critiquing UI for any fleet surface, creating logos/insignia/icons/avatars for a ship or service, picking colors/fonts/motion for anything Maurice-branded, or bootstrapping a brand-new surface. Pairs with impeccable (method) and copywriting-maurice (words); this skill owns the brand facts. Not for fluncle (own brand) or client work (Waimakers etc.).
 ---
 
 # superthread-design
@@ -8,7 +8,7 @@ description: The Superthread design system - the shared visual foundation for Ma
 Superthread is the thread that runs through every surface Maurice ships under his own
 name. The name is the holding company's, repurposed: above the strings. One thread,
 two papers: surfaces live either in the **void** (dark, night-sky: the website, orbit,
-the launchpad) or on **paper** (warm light, for long reading: quanta). The thread
+the hyperspeed board) or on **paper** (warm light, for long reading: quanta). The thread
 itself never changes.
 
 The mother dialect is mauricekleine.com's "Night Garden" (the site's own design and
@@ -45,7 +45,7 @@ This skill owns the tokens, the moods, and the marks.
   Panchang 800. See Marks below.
 - **Space vocabulary,** used precisely: the fleet (all surfaces), the mothership
   (Soliton), ships (services), waypoints (projects), the graveyard (ended things),
-  droids (coding agents), the bridge/launchpad (the future front door). Don't
+  droids (coding agents), the fleet rail (the way between ships). Don't
   invent synonyms; a metaphor is a namespace.
 - **Texture over flatness:** void surfaces carry film grain and (where the delight
   budget allows) the starfield. Paper surfaces are honest paper: no grain overlay,
@@ -98,7 +98,7 @@ ink `#1a1a1a` (never `#000`), and the thread darkened to ember-paper
 
 ## Type roles (both modes)
 
-Ratified 2026-07-30 in the bridge font lab (texture-era refresh; supersedes the
+Ratified 2026-07-30 (texture-era refresh; supersedes the
 Bricolage-era stack — migrate each surface on next touch, see Drift ledger):
 
 - **Panchang:** display for wordmarks, short headings and ship names. 800 on brand surfaces,
@@ -161,9 +161,6 @@ their own brand icons.
   violet due states use orbit-specific atmosphere outside the shared theme.
 - **quanta** — paper zine. Reading serif body, ink illustrations, ember-paper
   accents, no grain, no starfield. The hand-drawn art IS its texture.
-- **the launchpad/bridge** (future) — void mode at high delight: the fleet's
-  front door. Starfield yes; each ship listed with its mark + a Fragment Mono status line. Design it with impeccable when
-  phase 3 opens.
 
 ## Drift ledger (fix on next touch, don't crusade)
 

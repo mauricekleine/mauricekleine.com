@@ -12,7 +12,7 @@ const publicApps: FleetApp[] = [
   { name: 'nonobench.com', href: 'https://nonobench.com', mark: 'https://www.mauricekleine.com/superthread/nonobench-mark.svg' },
 ]
 
-const privateApps: FleetApp[] = ['orbit', 'quanta', 'hyperspeed', 'trisys', 'constellation', 'soliton'].map((name) => ({ name, href: `https://${name}.mauricekleine.com`, mark: `${marks}/${name}.svg` }))
+const privateApps: FleetApp[] = ['orbit', 'quanta', 'hyperspeed', 'trisys', 'constellation'].map((name) => ({ name, href: `https://${name}.mauricekleine.com`, mark: `${marks}/${name}.svg` }))
 
 export function FleetRail({ current, sidebar, children }: { current: string; sidebar?: ReactNode; children?: ReactNode }) {
   const group = (apps: FleetApp[], external: boolean) => <SidebarGroup>
