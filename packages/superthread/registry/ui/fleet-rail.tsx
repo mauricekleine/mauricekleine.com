@@ -1,31 +1,34 @@
 import type { ReactNode } from 'react'
-import { Sidebar, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from '@/components/ui/sidebar'
+import { Sidebar, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarSeparator } from '@/components/ui/sidebar'
 
-export type FleetApp = { name: string; href: string; mark: string }
+type FleetApp = { name: string; href: string; mark: string }
 
-export const defaultApps: FleetApp[] = [
+const marks = 'https://www.mauricekleine.com/superthread/marks'
+
+// Public apps open in a new tab: they have no rail to come back through.
+const publicApps: FleetApp[] = [
   { name: 'mauricekleine.com', href: 'https://www.mauricekleine.com', mark: 'https://www.mauricekleine.com/favicon.ico' },
+  { name: 'fluncle.com', href: 'https://fluncle.com', mark: `${marks}/fluncle.png` },
   { name: 'nonobench.com', href: 'https://nonobench.com', mark: 'https://www.mauricekleine.com/superthread/nonobench-mark.svg' },
-  { name: 'orbit', href: 'https://orbit.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/orbit.svg' },
-  { name: 'quanta', href: 'https://quanta.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/quanta.svg' },
-  { name: 'hyperspeed', href: 'https://hyperspeed.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/hyperspeed.svg' },
-  { name: 'trisys', href: 'https://trisys.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/trisys.svg' },
-  { name: 'constellation', href: 'https://constellation.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/constellation.svg' },
-  { name: 'soliton', href: 'https://soliton.mauricekleine.com', mark: 'https://www.mauricekleine.com/superthread/marks/soliton.svg' },
 ]
 
-export function FleetRail({ apps = defaultApps, current, sidebar, children }: { apps?: readonly FleetApp[]; current: string; sidebar?: ReactNode; children?: ReactNode }) {
+const privateApps: FleetApp[] = ['orbit', 'quanta', 'hyperspeed', 'trisys', 'constellation', 'soliton'].map((name) => ({ name, href: `https://${name}.mauricekleine.com`, mark: `${marks}/${name}.svg` }))
+
+export function FleetRail({ current, sidebar, children }: { current: string; sidebar?: ReactNode; children?: ReactNode }) {
+  const group = (apps: FleetApp[], external: boolean) => <SidebarGroup>
+    <SidebarMenu>
+      {apps.map((app) => <SidebarMenuItem key={app.href}>
+        <SidebarMenuButton render={<a href={app.href} aria-current={current === app.name ? 'page' : undefined} {...(external && { target: '_blank', rel: 'noopener' })} />} isActive={current === app.name} tooltip={app.name}>
+          <img src={app.mark} alt="" width="16" height="16" />
+          <span>{app.name}</span>
+        </SidebarMenuButton>
+      </SidebarMenuItem>)}
+    </SidebarMenu>
+  </SidebarGroup>
   const rail = <SidebarContent>
-    <SidebarGroup>
-      <SidebarMenu>
-        {apps.map((app) => <SidebarMenuItem key={app.href}>
-          <SidebarMenuButton render={<a href={app.href} aria-current={current === app.name ? 'page' : undefined} />} isActive={current === app.name} tooltip={app.name}>
-            <img src={app.mark} alt="" width="16" height="16" />
-            <span>{app.name}</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>)}
-      </SidebarMenu>
-    </SidebarGroup>
+    {group(publicApps, true)}
+    <SidebarSeparator />
+    {group(privateApps, false)}
   </SidebarContent>
 
   return <SidebarProvider defaultOpen={!!sidebar}>
