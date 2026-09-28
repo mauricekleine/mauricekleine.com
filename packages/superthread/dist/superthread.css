@@ -1,4 +1,4 @@
-/* superthread alpha sha256:7f4eacd0d03e */
+/* superthread alpha sha256:6e78ab9b15c8 */
 @font-face {
   font-family: "Supreme";
   src: url("https://www.mauricekleine.com/fonts/supreme-400.woff2") format("woff2");
@@ -35,22 +35,22 @@
 }
 
 @font-face {
-  font-family: "Panchang";
-  src: url("https://www.mauricekleine.com/fonts/panchang-400.woff2") format("woff2");
+  font-family: "Unbounded";
+  src: url("https://www.mauricekleine.com/fonts/unbounded-400.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Panchang";
-  src: url("https://www.mauricekleine.com/fonts/panchang-600.woff2") format("woff2");
+  font-family: "Unbounded";
+  src: url("https://www.mauricekleine.com/fonts/unbounded-600.woff2") format("woff2");
   font-weight: 600;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Panchang";
-  src: url("https://www.mauricekleine.com/fonts/panchang-800.woff2") format("woff2");
+  font-family: "Unbounded";
+  src: url("https://www.mauricekleine.com/fonts/unbounded-800.woff2") format("woff2");
   font-weight: 800;
   font-display: swap;
 }
@@ -94,7 +94,7 @@
   --font-sans: "Supreme", sans-serif;
   --font-serif: "Erode", serif;
   --font-mono: "Fragment Mono", monospace;
-  --font-display: "Panchang", sans-serif;
+  --font-display: "Unbounded", sans-serif;
 }
 
 :root {

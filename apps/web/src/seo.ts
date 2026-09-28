@@ -103,7 +103,7 @@ function buildHead(page: PageSeo): { meta: Meta[]; links: Link[]; scripts: Scrip
   links.push(
     { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
     { rel: 'apple-touch-icon', href: '/maurice.png' },
-    { rel: 'preload', as: 'font', type: 'font/woff2', href: 'https://www.mauricekleine.com/fonts/panchang-800.woff2', crossOrigin: '' },
+    { rel: 'preload', as: 'font', type: 'font/woff2', href: 'https://www.mauricekleine.com/fonts/unbounded-800.woff2', crossOrigin: '' },
     { rel: 'preload', as: 'font', type: 'font/woff2', href: 'https://www.mauricekleine.com/fonts/supreme-400.woff2', crossOrigin: '' },
   )
   if (page.siteStylesheet !== false) links.push({ rel: 'stylesheet', href: `${page.relativeStylesheet ? '' : '/'}style.css?v=20260927-stock` })
