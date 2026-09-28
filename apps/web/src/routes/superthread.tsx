@@ -10,6 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FleetRail } from '@/components/superthread/ui/fleet-rail'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 export const Route = createFileRoute('/superthread')({ head: superthreadHead, component: SuperthreadPage })
 
@@ -25,9 +26,11 @@ function SuperthreadPage() {
         <p className="st-meta">maurice kleine / design system</p>
         <h1>superthread</h1>
         <p>one thread through the things i build. stock shadcn components, in the void and on paper.</p>
-        <div className="st-mode-picker" aria-label="theme mode">
-          <Button variant={mode === 'paper' ? 'default' : 'outline'} onClick={() => setMode('paper')}>paper</Button>
-          <Button variant={mode === 'void' ? 'default' : 'outline'} onClick={() => setMode('void')}>void</Button>
+        <div className="st-mode-picker">
+          <ToggleGroup aria-label="theme mode" value={[mode]} onValueChange={(value) => value[0] && setMode(value[0] as 'paper' | 'void')}>
+            <ToggleGroupItem value="paper">paper</ToggleGroupItem>
+            <ToggleGroupItem value="void">void</ToggleGroupItem>
+          </ToggleGroup>
         </div>
       </header>
 
