@@ -33,7 +33,7 @@ This skill owns the tokens, the moods, and the marks.
   `oklch(75% 0.13 55)`. Paper: `--primary` `oklch(55% 0.13 55)` (same hue,
   darkened for light ground). Nothing else gets accent duty; if a second accent
   feels needed, the hierarchy is wrong (impeccable will agree).
-- **Fixed type roles.** Panchang for display, Supreme for body, Fragment Mono for
+- **Fixed type roles.** Unbounded for display, Supreme for body, Fragment Mono for
   meta, labels, stamps, coordinates. No other face on void surfaces. (Paper-mode
   long-form body in Erode is the one sanctioned exception, below.)
 - **Lowercase chrome headings.** Authored essays and chapters keep their casing.
@@ -42,7 +42,7 @@ This skill owns the tokens, the moods, and the marks.
   one per heading, not confetti.
 - **Ships get marks; people get wordmarks.** Each fleet app has one
   single-stroke mark; Maurice himself is only ever the wordmark in
-  Panchang 800. See Marks below.
+  Unbounded 800. See Marks below.
 - **Space vocabulary,** used precisely: the fleet (all surfaces), the mothership
   (Soliton), ships (services), waypoints (projects), the graveyard (ended things),
   droids (coding agents), the fleet rail (the way between ships). Don't
@@ -83,12 +83,12 @@ not to shared component source.
 ## Paper mode (light surfaces: quanta, future reading surfaces)
 
 Same roles, warm light values: paper `#fbfaf7` ground (never clinical white), near-black
-ink `#1a1a1a` (never `#000`), and the thread darkened to ember-paper
+ink `#0a0a0a` (never `#000`), and the thread darkened to ember-paper
 `oklch(55% 0.13 55)` so it holds on a light ground. Paper is `:root` by default.
 
 - Long-form body text on paper uses **Erode** (Fontshare) —
-  the sanctioned reading serif, same foundry as Panchang/Supreme, earned by
-  read-in-bed legibility. Wordmarks and headings use Panchang; meta stays
+  the sanctioned reading serif, same foundry as Supreme, earned by
+  read-in-bed legibility. Wordmarks and headings use Unbounded; meta stays
   Fragment Mono.
 - Layout: one column, 66ch measure, 18px body, 1.65 line-height.
 - Illustrations carry the hand-drawn energy; the
@@ -101,11 +101,11 @@ ink `#1a1a1a` (never `#000`), and the thread darkened to ember-paper
 Ratified 2026-07-30 (texture-era refresh; supersedes the
 Bricolage-era stack — migrate each surface on next touch, see Drift ledger):
 
-- **Panchang:** display for wordmarks, short headings and ship names. 800 on brand surfaces,
-  600 in dense UI. Squared, techy, in-your-face; the voice of the fleet.
+- **Unbounded:** display for wordmarks, short headings and ship names. 800 on brand surfaces,
+  600 in dense UI. Wide and rounded; the voice of the fleet.
   Self-hosted on mauricekleine.com.
 - **Supreme** — body. 400 (500 for emphasis). Warm, round, legible; reports to
-  Panchang without competing.
+  Unbounded without competing.
   Self-hosted on mauricekleine.com.
 - **Fragment Mono:** meta, labels, stamps, coordinates (unchanged). On
   instruments: 12px, uppercase, `letter-spacing: 0.14em`, `--muted-foreground`.
@@ -166,9 +166,8 @@ their own brand icons.
 
 As of 2026-09-26:
 
-- Type: mauricekleine.com, hyperspeed, orbit and quanta are on Panchang +
-  Supreme. trisys is still on Bricolage + Literata; nonobench is mid-migration
-  from IBM Plex + Inter.
+- Type: every fleet app takes its faces from the superthread theme; nonobench
+  is mid-migration.
 - quanta: move the accent `#C0392B`-family to ember-paper (same hue as the fleet
   thread).
 - Every surface: replace hand-copied component values with the generated

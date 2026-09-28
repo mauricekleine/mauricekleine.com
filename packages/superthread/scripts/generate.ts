@@ -21,7 +21,7 @@ export async function readTokens(): Promise<Tokens> {
 export function themeCss(tokens: Tokens) {
   const colors = (mode: 'paper' | 'void') => [...roles, ...sidebarRoles].map((role) => `  --${role}: ${tokens.colors[`${mode}-${role}`]};`).join('\n')
   const face = (family: string, file: string, weight: number) => `@font-face {\n  font-family: "${family}";\n  src: url("https://www.mauricekleine.com/fonts/${file}.woff2") format("woff2");\n  font-weight: ${weight};\n  font-display: swap;\n}`
-  const css = `${[['Supreme', 'supreme-400', 400], ['Supreme', 'supreme-500', 500], ['Erode', 'erode-400', 400], ['Erode', 'erode-500', 500], ['Fragment Mono', 'fragment-mono-400', 400], ['Panchang', 'panchang-400', 400], ['Panchang', 'panchang-600', 600], ['Panchang', 'panchang-800', 800]].map(([family, file, weight]) => face(String(family), String(file), Number(weight))).join('\n\n')}
+  const css = `${[['Supreme', 'supreme-400', 400], ['Supreme', 'supreme-500', 500], ['Erode', 'erode-400', 400], ['Erode', 'erode-500', 500], ['Fragment Mono', 'fragment-mono-400', 400], ['Unbounded', 'unbounded-400', 400], ['Unbounded', 'unbounded-600', 600], ['Unbounded', 'unbounded-800', 800]].map(([family, file, weight]) => face(String(family), String(file), Number(weight))).join('\n\n')}
 
 @custom-variant dark (&:is(.dark *));
 

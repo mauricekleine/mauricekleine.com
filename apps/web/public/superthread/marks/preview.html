@@ -33,7 +33,7 @@
     <div class="grounds" id="grounds"></div>
   </main>
   <script>
-    Promise.all(['Supreme', 'Panchang'].map(async family => {
+    Promise.all(['Supreme', 'Unbounded'].map(async family => {
       const faces = await document.fonts.load(`600 16px "${family}"`);
       return `${family}: ${faces.map(face => face.status).join(', ')}`;
     })).then(status => document.querySelector('#fonts').textContent = status.join(' / '));

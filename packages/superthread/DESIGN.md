@@ -59,7 +59,7 @@ fonts:
   sans: Supreme
   serif: Erode
   mono: Fragment Mono
-  display: Panchang
+  display: Unbounded
 radius: 8px
 ---
 
@@ -69,7 +69,7 @@ One thread through Maurice's surfaces. This file defines the colors, fonts and r
 
 Paper is the light theme on `:root`. Void is `.dark`. Ember is `primary` in both modes. The paper shade is darker so it stays legible on light ground. `accent` is the quiet interactive surface used by ghost buttons and menus. The remaining colors map existing brand values onto shadcn's roles.
 
-Supreme is sans, Erode is serif, Fragment Mono is mono and Panchang is display. The fourth font key is the only addition to Tailwind's standard font keys. Keep headings lowercase. Brand surfaces can add grain and stars in their own layout; neither changes component source.
+Supreme is sans, Erode is serif, Fragment Mono is mono and Unbounded is display. The fourth font key is the only addition to Tailwind's standard font keys. Keep headings lowercase. Brand surfaces can add grain and stars in their own layout; neither changes component source.
 
 Use shadcn's components and variants as installed. Change this file and regenerate the CSS when the shared theme changes.
 
@@ -77,9 +77,9 @@ The sidebar roles reuse card for the rail surface, foreground for labels, primar
 
 ## Type and density
 
-- Paper reading: Erode `text-lg` (18px) at 1.65 line-height, 66ch measure. Controls use Supreme `text-sm` (14px) at 1.45. Use Panchang for the app wordmark and short section or display lines.
-- Void instruments: Supreme `text-sm` (14px) at 1.4 for row titles; Fragment Mono 12px at 1.45 for IDs, times and counts. Use Panchang for the destination title or brand at 17–24px. Keep operational metadata at least 12px.
-- Size ladder at 16px root: 12px metadata, 14px instrument body, 16px normal UI, 18px reading, 24px section, 32px page, 48px short hero, 64px exceptional display. Use `text-sm` for 14px, `text-base` for 16px, `text-lg` for 18px and `text-2xl` for 24px. On phones, cap ordinary page titles at 40px; use 28–32px for long titles. Panchang line-height is 1.05–1.15; body line-height is 1.4–1.65.
+- Paper reading: Erode `text-lg` (18px) at 1.65 line-height, 66ch measure. Controls use Supreme `text-sm` (14px) at 1.45. Use Unbounded for the app wordmark and short section or display lines.
+- Void instruments: Supreme `text-sm` (14px) at 1.4 for row titles; Fragment Mono 12px at 1.45 for IDs, times and counts. Use Unbounded for the destination title or brand at 17–24px. Keep operational metadata at least 12px.
+- Size ladder at 16px root: 12px metadata, 14px instrument body, 16px normal UI, 18px reading, 24px section, 32px page, 48px short hero, 64px exceptional display. Use `text-sm` for 14px, `text-base` for 16px, `text-lg` for 18px and `text-2xl` for 24px. On phones, cap ordinary page titles at 40px; use 28–32px for long titles. Unbounded line-height is 1.05–1.15; body line-height is 1.4–1.65.
 - Read density: 18px prose and 48–56px list rows. Operate density: 14px titles, 12px meta and 44–48px pressable rows. Labels start at 12px, or 14px when they carry a choice. A 24px badge can sit inside a 44×44px pressable wrapper.
 - Keep chrome headings lowercase. Preserve the casing of authored essays and chapters.
 

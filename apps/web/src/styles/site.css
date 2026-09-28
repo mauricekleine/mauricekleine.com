@@ -221,7 +221,7 @@ main {
 }
 
 h1 {
-  /* panchang runs wide: clamp tuned so "maurice kleine" fits one line at 390px */
+  /* unbounded runs wide: clamp tuned so "maurice kleine" fits one line at 390px */
   font-family: var(--font-display);
   font-size: clamp(1.85rem, 4.5vw + 0.85rem, 2.9rem);
   font-weight: 800;
