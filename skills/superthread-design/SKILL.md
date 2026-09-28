@@ -40,9 +40,9 @@ This skill owns the tokens, the moods, and the marks.
 - **Glyph grammar:** `✦` marks the living (active projects, section markers),
   `✧` the dormant (graveyard, archived). Sparkles are punctuation, not decoration:
   one per heading, not confetti.
-- **Ships get ink marks; people get wordmarks.** Hand-drawn insignia for services
-  (soliton, quanta, orbit); Maurice himself is only ever the wordmark in
-  Panchang 800. Full pipeline below.
+- **Ships get marks; people get wordmarks.** Each fleet app has one
+  single-stroke mark; Maurice himself is only ever the wordmark in
+  Panchang 800. See Marks below.
 - **Space vocabulary,** used precisely: the fleet (all surfaces), the mothership
   (Soliton), ships (services), waypoints (projects), the graveyard (ended things),
   droids (coding agents), the bridge/launchpad (the future front door). Don't
@@ -68,7 +68,7 @@ texture lab:
 | mauricekleine.com | ember-forward Night Garden | the classic; atmosphere IS the thread |
 | hyperspeed | tachyon teal (ratified 2026-08-02) | `oklch(65% 0.10 200)` family (`#4aa5ad` mid) — faster than light, cooler than comet blue |
 
-Icon renderings take the ship's atmosphere as tint (see insignia pipeline).
+A ship's mark takes its atmosphere as its colour (see Marks).
 
 ## Void mode
 
@@ -91,7 +91,7 @@ ink `#1a1a1a` (never `#000`), and the thread darkened to ember-paper
   read-in-bed legibility. Wordmarks and headings use Panchang; meta stays
   Fragment Mono.
 - Layout: one column, 66ch measure, 18px body, 1.65 line-height.
-- Illustrations carry the hand-drawn energy (see insignia/art pipeline); the
+- Illustrations carry the hand-drawn energy; the
   typography stays disciplined. Feels like a well-typeset zine, not a SaaS app.
 - Quiz/correct states and links use `--primary`; wrong/muted states stay in
   gray-ink territory. Same one-accent law as void.
@@ -126,72 +126,29 @@ Bricolage-era stack — migrate each surface on next touch, see Drift ledger):
 - Delight moments (supernovas, eclipses, meteor wishes) belong to brand
   surfaces and are always interruptible, rare, and reduced-motion-safe.
 
-## Insignia pipeline (ships get marks)
+## Marks
 
-The look: one concept-glyph per ship, hand-drawn wobbly ink, xkcd lineage.
+One simple mark per fleet app, all drawn on the same 32px grid with the same
+2.8 stroke and round caps. Each is one gesture in one mid-tone that clears 3:1
+on both paper and void: the app's atmosphere where it has one, ember otherwise.
+Keep them this simple: a mark must read at 16px in the rail.
 
-**Void marks are generated, not prompted** (ratified 2026-08-09). They come
-from the fleet's insignia generator (a private package in the platform repo), where each mark is a list
-of strokes (a centreline, a width profile, a colour) drawn by one shared kit.
-An image model cannot hold four marks to the same stroke weight, the same
-wobble, or the same framing; a shared constant can. Do not re-prompt a void
-mark, change the constant and rebuild.
+The SVGs, with 32px and 180px PNGs for favicons and touch icons, live in
+`apps/web/public/superthread/marks/` of the mauricekleine.com repo and are served
+from `https://www.mauricekleine.com/superthread/marks/<app>.svg`. The fleet rail
+and every app's favicon point there; `preview.html` beside them shows the set.
 
-- **Void ink**: each ship's SVG in the insignia generator is the source of truth;
-  the build rasterises PNGs to every consumer (copies of the current marks live in
-  `assets/` here). Rasterising is headless
-  **Chrome**, not ImageMagick — magick's SVG renderer silently drops gradient
-  references and filter primitives, so the grain and the sky vanish without
-  erroring.
-- **Paper ink**: still the image model: black ink on warm paper, with the house
-  STYLE prefix baked into the generator; describe only the scene. The model key is
-  authoring-time only: never on a server, never in a repo.
+| app | mark |
+| --- | --- |
+| orbit | a ring with its moon |
+| quanta | a quantised step |
+| hyperspeed | chevrons |
+| trisys | three stacked systems, the widest at the base (always three parts) |
+| constellation | linked points |
+| soliton | a solitary wave |
 
-**A mark's accent is its ship's atmosphere, never ember.** Ember is the
-interactive accent — links, focus, primary actions — and using it on a mark
-makes every ship look like quanta. The generator enforces this and a test
-fails if a mark wears another ship's colour.
-
-The family is four different gestures in one hand, so each stays distinct
-while the drawing is identical: a radial burst, a tilted sweep, a rising hump,
-concentric rings. What makes them a set lives in the `FAMILY` block:
-
-| dial | value | what it controls |
-| --- | --- | --- |
-| `weight` | 11 | widest a stroke gets, in tile pixels — the one thickness dial |
-| `hand` | 3.4 | how far a stroke may drift from its ideal path |
-| `fill` | 0.86 | fraction of the tile the drawing spans |
-| `accentShare` | 1/3 | share of strokes carrying the ship colour |
-| `grain` / `grainBlend` / `grainScale` | 0.35 / color-dodge / 0.5 | film grain (see below) |
-| `wash` | 0.18 | how much of its own atmosphere lights a mark's ground |
-
-Composition targets, measured off the marks that worked rather than guessed —
-the generator hits all of them by construction, and `marks.test.ts` asserts
-containment over every point:
-
-| property | target | why |
-| --- | --- | --- |
-| edge-touching pixels | **0** | a mark that bleeds off the tile loses its silhouette under iOS rounding |
-| ink coverage | 11-17% of the tile | below ~10% the mark looks lost when pinned; above ~20% it turns to mush at 32px |
-| drawing bbox | 80-87% of the tile | the breathing room that reads as "designed" |
-| gestures | exactly one | two elements plus a glow is the busy-icon failure |
-
-**Grain on a mark is not the page recipe.** `overlay` below 50% luminance
-resolves to `2 x backdrop x source`, so on a near-black ground the canon
-0.045-0.05/overlay pairing is close to a no-op. Icons use their own trio
-(`color-dodge`, 0.35, baseFrequency 0.5) — and note the blend lifts the
-strokes too, so measured accents run ~10-15% brighter than the atmosphere
-hexes. Coarse noise is what survives the shrink; fine noise averages away the
-moment a 512 tile is drawn at 54.
-
-Registry (update when a mark ships):
-
-| ship | gesture | meaning | renderings |
-| --- | --- | --- | --- |
-| quanta | concentric rings, one stroke aimed at the centre | one excitation, localized: "you are here" | paper (quanta repo, app icon — still hand-generated) + void (`assets/quanta-mark-void.png`) |
-| soliton | every stroke lifting through one bell hump | the solitary wave that travels without losing its shape | void (`assets/soliton-mark.png`) |
-| orbit | tilted elliptical sweep around a dense focus | a long exposure of one orbit: tasks circling the work | void (`assets/orbit-mark.png`; orbit favicon + apple-touch) |
-| hyperspeed | radial burst from an off-centre vanishing point | star streaks at the instant of the jump: work dispatched at speed | void (`assets/hyperspeed-mark.png`; hyperspeed repo `assets/`) |
+mauricekleine.com uses Maurice's portrait, and nonobench.com and fluncle.com keep
+their own brand icons.
 
 ## Per-surface flavor sheets
 
@@ -205,8 +162,7 @@ Registry (update when a mark ships):
 - **quanta** — paper zine. Reading serif body, ink illustrations, ember-paper
   accents, no grain, no starfield. The hand-drawn art IS its texture.
 - **the launchpad/bridge** (future) — void mode at high delight: the fleet's
-  front door. Starfield yes; each ship listed with its ink mark (void
-  rendering) + a Fragment Mono status line. Design it with impeccable when
+  front door. Starfield yes; each ship listed with its mark + a Fragment Mono status line. Design it with impeccable when
   phase 3 opens.
 
 ## Drift ledger (fix on next touch, don't crusade)
