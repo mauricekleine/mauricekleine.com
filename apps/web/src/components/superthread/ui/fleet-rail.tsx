@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Sidebar, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from '@/components/ui/sidebar'
 
 export type FleetApp = { name: string; href: string; mark: string }
@@ -28,7 +28,7 @@ export function FleetRail({ apps = defaultApps, current, sidebar, children }: { 
     </SidebarGroup>
   </SidebarContent>
 
-  return <SidebarProvider defaultOpen={!!sidebar} style={sidebar ? { '--sidebar-width': '350px' } as CSSProperties : undefined}>
+  return <SidebarProvider defaultOpen={!!sidebar}>
     <Sidebar collapsible="icon" className={sidebar ? 'overflow-hidden *:data-[sidebar=sidebar]:flex-row' : undefined}>
       {sidebar ? <>
         <Sidebar collapsible="none" className="w-[calc(var(--sidebar-width-icon)+1px)]! border-r max-md:h-auto">{rail}</Sidebar>
