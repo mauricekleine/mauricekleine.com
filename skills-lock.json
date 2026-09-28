@@ -17,12 +17,6 @@
       "source": "./skills/superthread-design",
       "sourceType": "local",
       "computedHash": "ee2049304d905eee555c51375890e1cea983a99de77d771b00695c92912f8a81"
-    },
-    "taste": {
-      "source": "mauricekleine/nucleus",
-      "sourceType": "github",
-      "skillPath": "skills/taste/SKILL.md",
-      "computedHash": "3b05435693bc5d40c40e00ba837a1dba874c2103da3305f9bad25f4e8a705515"
     }
   }
 }
