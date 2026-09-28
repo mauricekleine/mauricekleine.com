@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { superthreadHead } from '../seo'
 import { Button } from '@/components/ui/button'
@@ -11,11 +11,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FleetRail } from '@/components/superthread/ui/fleet-rail'
 import { SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger } from '@/components/ui/sidebar'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+
 
 export const Route = createFileRoute('/superthread')({ head: superthreadHead, component: SuperthreadPage })
 
 function SuperthreadPage() {
   const [mode, setMode] = useState<'paper' | 'void'>('paper')
+  const focusField = useRef<HTMLInputElement>(null)
   useEffect(() => {
     document.documentElement.classList.toggle('dark', mode === 'void')
   }, [mode])
@@ -48,9 +51,23 @@ function SuperthreadPage() {
         </div>
       </section>
 
+      <section aria-labelledby="states"><h2 id="states">states</h2>
+        <p>the next action, a field that needs work, and choices at rest.</p>
+        <div className="st-row"><Button onClick={() => focusField.current?.focus()}>focus ship name</Button>
+          <DropdownMenu><DropdownMenuTrigger render={<Button variant="outline" />}>open menu</DropdownMenuTrigger><DropdownMenuContent><DropdownMenuItem>view details</DropdownMenuItem><DropdownMenuItem>archive draft</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
+          <Button disabled>unavailable</Button></div>
+        <div className="st-state-grid">
+          <div className="st-field"><label htmlFor="focused-ship">focused field</label><Input ref={focusField} id="focused-ship" placeholder="ship name" /></div>
+          <div className="st-field"><label htmlFor="invalid-ship">error</label><Input id="invalid-ship" aria-invalid="true" aria-describedby="ship-error" placeholder="ship name" /><span id="ship-error" className="st-error">add a ship name to continue.</span></div>
+          <div className="st-field"><label htmlFor="disabled-ship">disabled</label><Input id="disabled-ship" disabled value="waiting for a name" /></div>
+        </div>
+        <div className="st-row"><Badge>current</Badge><Badge variant="secondary">settled</Badge><Badge variant="destructive">needs attention</Badge><Badge variant="outline">draft</Badge></div>
+      </section>
+
+
       <section aria-labelledby="fleet"><h2 id="fleet">fleet</h2><p>one mark per app, docked to the left edge.</p>
         <div className="st-rail-preview">
-          <FleetRail current="orbit"><div className="st-rail-stage"><SidebarTrigger className="md:hidden" /><p>orbit</p><span>the app keeps its own navigation.</span></div></FleetRail>
+          <FleetRail current="orbit"><div className="st-rail-stage"><SidebarTrigger className="md:hidden" /><p>orbit</p><span>current destination</span><a href="#states" className="st-data-row"><span>review next orbit</span><Badge>current</Badge></a></div></FleetRail>
         </div>
         <p>fleet rail with app navigation.</p>
         <div className="st-rail-preview">
@@ -61,14 +78,31 @@ function SuperthreadPage() {
                 <SidebarMenuButton isActive={item === 'board'}>{item}</SidebarMenuButton>
               </SidebarMenuItem>)}
             </SidebarMenu></SidebarGroup></SidebarContent>
-          </>}><div className="st-rail-stage"><SidebarTrigger /><p>board</p><span>app navigation inside the shared sidebar.</span></div></FleetRail>
+          </>}><div className="st-rail-stage"><SidebarTrigger /><p>board</p><span>app navigation inside the shared sidebar.</span><a href="#states" className="st-data-row"><span>one goal in motion</span><Badge>current</Badge></a></div></FleetRail>
         </div>
       </section>
 
       <section aria-labelledby="type"><h2 id="type">type</h2>
-        <p className="st-sans">supreme / body</p><p className="st-serif">erode / reading</p><p className="st-mono">fragment mono / meta</p><p className="st-display">panchang / display</p>
+        <div className="st-type-grid">
+          <div><span className="st-type-label">12 / metadata</span><p className="st-mono">orbit · 09:42 · 3 active</p></div>
+          <div><span className="st-type-label">14 / instrument</span><p className="st-instrument">one small thing is moving.</p></div>
+          <div><span className="st-type-label">16 / ui</span><p className="st-ui">a clear next step.</p></div>
+          <div><span className="st-type-label">18 / reading</span><p className="st-serif">a small experiment can still teach you something. keep the useful part and move on.</p></div>
+          <div><span className="st-type-label">24 / section</span><p className="st-section-type">the work</p></div>
+          <div><span className="st-type-label">32 / page</span><p className="st-page-type">current work</p></div>
+          <div><span className="st-type-label">48 / short hero</span><p className="st-hero-type">keep building</p></div>
+          <div><span className="st-type-label">64 / display</span><p className="st-display-type">superthread</p></div>
+        </div>
+      </section>
+      <section aria-labelledby="density"><h2 id="density">density</h2>
+        <p>reading gets room. operating rows stay close to the work.</p>
+        <div className="st-density-grid">
+          <div><span className="st-type-label">read / 48–56px rows</span><a className="st-reading-row" href="#type">one useful note <span>read</span></a><a className="st-reading-row" href="#type">another small experiment <span>read</span></a></div>
+          <div><span className="st-type-label">operate / 44–48px rows</span><a className="st-data-row" href="#states"><span>review next orbit</span><span className="st-mono">09:42</span></a><a className="st-data-row" href="#states"><span>archive draft</span><span className="st-mono">03</span></a></div>
+        </div>
       </section>
       <footer><a href="https://github.com/mauricekleine/mauricekleine.com/tree/main/packages/superthread">source and setup</a></footer>
     </div>
   </div></TooltipProvider>
 }
+
