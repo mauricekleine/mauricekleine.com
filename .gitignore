@@ -13,6 +13,7 @@ node_modules
 # TanStack Start build output
 apps/web/dist/
 apps/web/.wrangler/
+apps/web/public/api/deploy.json
 apps/web/tools/__pycache__/
 
 .shots/

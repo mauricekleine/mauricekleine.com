@@ -5,8 +5,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "bun run registry && bun run site:css && bun run specimen:css && bun run --filter @mauricekleine/web build && node apps/web/tools/link-deploy-config.mjs",
+    "build": "node apps/web/tools/stamp-deploy.mjs && bun run registry && bun run site:css && bun run specimen:css && bun run --filter @mauricekleine/web build && node apps/web/tools/link-deploy-config.mjs",
     "deploy": "bunx wrangler deploy",
+    "deploy:verify": "node apps/web/tools/deploy-verify.mjs",
     "dev": "bun run --cwd packages/superthread build && bun run site:css && bun run --filter @mauricekleine/web dev",
     "prepare": "husky",
     "registry": "bun run --cwd packages/superthread build && shadcn build packages/superthread/registry.json --output apps/web/public/r",
