@@ -1,4 +1,4 @@
-/* superthread alpha sha256:e6b56667b6c5 */
+/* superthread alpha sha256:7f4eacd0d03e */
 @font-face {
   font-family: "Supreme";
   src: url("https://www.mauricekleine.com/fonts/supreme-400.woff2") format("woff2");
@@ -101,29 +101,29 @@
   color-scheme: light;
   --radius: 8px;
   --background: #fbfaf7;
-  --foreground: #1a1a1a;
+  --foreground: #0a0a0a;
   --card: #f4f2ed;
-  --card-foreground: #1a1a1a;
+  --card-foreground: #0a0a0a;
   --popover: #f4f2ed;
-  --popover-foreground: #1a1a1a;
+  --popover-foreground: #0a0a0a;
   --primary: oklch(55% 0.13 55);
   --primary-foreground: #fbfaf7;
   --secondary: #f4f2ed;
-  --secondary-foreground: #1a1a1a;
+  --secondary-foreground: #0a0a0a;
   --muted: #e8e3da;
   --muted-foreground: #55524c;
   --accent: oklch(94% 0.035 60);
-  --accent-foreground: #1a1a1a;
+  --accent-foreground: #0a0a0a;
   --destructive: #735853;
   --border: #d9d5cc;
   --input: #898276;
   --ring: oklch(48% 0.14 52);
   --sidebar: #f4f2ed;
-  --sidebar-foreground: #1a1a1a;
+  --sidebar-foreground: #0a0a0a;
   --sidebar-primary: oklch(55% 0.13 55);
   --sidebar-primary-foreground: #fbfaf7;
   --sidebar-accent: oklch(94% 0.035 60);
-  --sidebar-accent-foreground: #1a1a1a;
+  --sidebar-accent-foreground: #0a0a0a;
   --sidebar-border: #d9d5cc;
   --sidebar-ring: oklch(48% 0.14 52);
 }
