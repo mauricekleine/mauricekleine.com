@@ -16,6 +16,8 @@
   Cache-Control: public, max-age=31536000, immutable
 /maurice.png
   Cache-Control: public, max-age=604800
+/api/deploy.json
+  Cache-Control: no-store
 /maurice-:size.webp
   Cache-Control: public, max-age=31536000, immutable
 /og.png

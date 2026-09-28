@@ -6,6 +6,8 @@ Read `apps/web/CLAUDE.md`, `apps/web/PRODUCT.md`, and `apps/web/DESIGN.md` befor
 
 Run commands from the repo root. `bun run dev` starts the web app on port 3000, `bun run build` prerenders every page and prepares Wrangler's root deploy config, `bun run test` checks the Worker, and `bun run deploy` deploys through the generated config. Cloudflare Workers Builds runs from this root.
 
+After a merge, run `bun run deploy:verify <merged-sha>` to wait for the build-stamped SHA served at `/api/deploy.json`.
+
 Keep Maurice's voice lowercase and understated. No em dashes in new copy.
 
 Superthread is a shadcn theme in `packages/superthread/`. `bun run registry`
