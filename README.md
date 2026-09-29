@@ -13,7 +13,7 @@ bun install
 bun run dev      # the site on port 3000
 bun run build    # prerender every page
 bun run test     # worker regression tests
-bun run deploy   # deploy the build output with cf
+bun run deploy   # deploy through the generated wrangler config
 ```
 
 Workers Builds deploys from the repo root. Site guidance is in `apps/web/CLAUDE.md`.

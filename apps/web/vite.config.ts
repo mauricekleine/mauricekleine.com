@@ -13,10 +13,7 @@ const essayPaths = readdirSync(new URL('./content/essays/', import.meta.url))
 export default defineConfig({
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   plugins: [
-    cloudflare({
-      viteEnvironment: { name: 'ssr' },
-      experimental: { newConfig: { cfBuildOutput: true } },
-    }),
+    cloudflare({ configPath: '../../wrangler.jsonc', viteEnvironment: { name: 'ssr' } }),
     tanstackStart({
       prerender: {
         enabled: true,

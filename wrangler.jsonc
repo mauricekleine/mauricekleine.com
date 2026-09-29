@@ -1,0 +1,25 @@
+{
+  // mauricekleine.com as a TanStack Start worker with static assets.
+  // deploy with: bun run deploy (bunx wrangler deploy)
+  "name": "mauricekleine-com",
+  "compatibility_date": "2026-07-16",
+  "compatibility_flags": ["nodejs_compat"],
+  // the custom server entry handles the existing HTTP behavior
+  "main": "apps/web/src/server.ts",
+  "assets": {
+    "binding": "ASSETS",
+    // /about serves about.html; /about.html redirects to /about
+    "html_handling": "auto-trailing-slash",
+    // missing routes get the "lost in space" page
+    "not_found_handling": "404-page",
+    // the worker fronts everything: apex redirect needs to see every path
+    "run_worker_first": true
+  },
+  // custom domains only; no workers.dev duplicate
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "www.mauricekleine.com", "custom_domain": true },
+    // apex is also served by the worker; the custom server sends it to www
+    { "pattern": "mauricekleine.com", "custom_domain": true }
+  ]
+}
