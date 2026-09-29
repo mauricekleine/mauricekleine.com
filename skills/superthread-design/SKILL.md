@@ -1,6 +1,6 @@
 ---
 name: superthread-design
-description: The Superthread design system - the shared visual foundation for Maurice's fleet of surfaces (mauricekleine.com, orbit, quanta, hyperspeed, trisys, constellation, and every future ship). Use this whenever designing, building, restyling, or critiquing UI for any fleet surface, creating logos/insignia/icons/avatars for a ship or service, picking colors/fonts/motion for anything Maurice-branded, or bootstrapping a brand-new surface. Pairs with impeccable (method) and copywriting-maurice (words); this skill owns the brand facts. Not for fluncle (own brand) or client work (Waimakers etc.).
+description: The Superthread design system - the shared visual foundation for Maurice's fleet of surfaces (mauricekleine.com, orbit, quanta, hyperspeed, trisys, constellation, and every future ship). Use this whenever designing, building, restyling, or critiquing UI for any fleet surface, creating logos/insignia/icons/avatars for a ship or service, picking colors/fonts/motion for anything Maurice-branded, or bootstrapping a brand-new surface. Pairs with impeccable (method) and copywriting-maurice (words); this skill owns the brand facts. Not for fluncle or nonobench (own brands) or client work (Waimakers etc.).
 ---
 
 # superthread-design
@@ -166,8 +166,7 @@ their own brand icons.
 
 As of 2026-09-26:
 
-- Type: every fleet app takes its faces from the superthread theme; nonobench
-  is mid-migration.
+- Type: every fleet app takes its faces from the superthread theme.
 - quanta: move the accent `#C0392B`-family to ember-paper (same hue as the fleet
   thread).
 - Every surface: replace hand-copied component values with the generated
