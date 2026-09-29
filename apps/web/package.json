@@ -6,10 +6,11 @@
     "build": "python3 tools/sync-essays.py && vite build && tsc --noEmit",
     "dev": "vite dev --port 3000",
     "preview": "vite preview",
-    "test": "node tools/test-worker.mjs"
+    "test": "bun test tools/mcp.test.ts && node tools/test-worker.mjs"
   },
   "dependencies": {
     "@base-ui/react": "~1.8.0",
+    "@modelcontextprotocol/server": "2.2.0",
     "@phosphor-icons/react": "~2.1.10",
     "@tailwindcss/vite": "~4.3.3",
     "@tanstack/react-router": "~1.170.39",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "~1.60.2",
+    "@modelcontextprotocol/client": "2.2.0",
     "@types/node": "~26.6.3",
     "@types/react": "~19.3.0",
     "@types/react-dom": "~19.3.0",

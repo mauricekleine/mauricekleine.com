@@ -9,7 +9,15 @@
     "type": "streamable-http",
     "endpoint": "https://www.mauricekleine.com/mcp"
   },
-  "protocolVersion": "2025-06-18",
+  "protocolVersion": "2026-07-28",
+  "protocolVersions": [
+    "2026-07-28",
+    "2025-11-25",
+    "2025-06-18",
+    "2025-03-26",
+    "2024-11-05",
+    "2024-10-07"
+  ],
   "capabilities": {
     "tools": { "listChanged": false }
   },

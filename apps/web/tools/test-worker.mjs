@@ -72,88 +72,11 @@ test("a missing essay asset cannot inherit immutable caching", async () => {
   assert.equal(res.headers.get("cache-control"), "public, max-age=0, must-revalidate");
 });
 
-test("apex preserves the URL and MCP still responds without asset lookup", async () => {
+test("apex preserves the URL", async () => {
   const assets = { ASSETS: { fetch: () => { throw Error("unexpected asset lookup"); } } };
   const apex = await worker.fetch(new Request("https://mauricekleine.com/about?from=x"), assets);
   assert.equal(apex.status, 301);
   assert.equal(apex.headers.get("location"), origin + "/about?from=x");
-  const rpc = await worker.fetch(new Request(origin + "/mcp", { method: "POST", body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "ping" }) }), assets);
-  assert.deepEqual(await rpc.json(), { jsonrpc: "2.0", id: 1, result: {} });
-});
-
-// --- essay mcp tools: list_essays and get_essay ---
-
-async function callTool(assets, name, args) {
-  const res = await worker.fetch(
-    new Request(origin + "/mcp", {
-      method: "POST",
-      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name, arguments: args } }),
-    }),
-    assets
-  );
-  return res.json();
-}
-
-test("list_essays and get_essay read the .md twins through ASSETS", async () => {
-  const essaysMd = [
-    "# essays",
-    "",
-    "- [essay one](https://www.mauricekleine.com/essays/essay-one.md) (2026-01-02) - summary one",
-    "- [essay two](https://www.mauricekleine.com/essays/essay-two.md) (2026-01-01) - summary two",
-    "",
-  ].join("\n");
-  const essayOneMd = [
-    "# Essay One",
-    "",
-    "2026-01-02 · first posted on [x](https://x.com/example/status/1)",
-    "",
-    "![](https://www.mauricekleine.com/essays/essay-one/01.jpg)",
-    "",
-    "---",
-    "",
-    "## heading",
-    "",
-    "This is the opening paragraph of essay one. It has some text.",
-    "",
-    "More paragraph text here.",
-    "",
-  ].join("\n");
-  const files = { "/essays.md": essaysMd, "/essays/essay-one.md": essayOneMd };
-  const assets = {
-    ASSETS: {
-      fetch: async (request) => {
-        const path = new URL(request.url || request).pathname;
-        return path in files ? new Response(files[path]) : new Response("not found", { status: 404 });
-      },
-    },
-  };
-
-  const list = await callTool(assets, "list_essays", {});
-  const essays = JSON.parse(list.result.content[0].text);
-  assert.deepEqual(essays, [
-    {
-      slug: "essay-one", title: "essay one", summary: "summary one", date: "2026-01-02",
-      url: `${origin}/essays/essay-one`, markdown_url: `${origin}/essays/essay-one.md`, cover: `${origin}/essays/essay-one/01.jpg`,
-    },
-    {
-      slug: "essay-two", title: "essay two", summary: "summary two", date: "2026-01-01",
-      url: `${origin}/essays/essay-two`, markdown_url: `${origin}/essays/essay-two.md`, cover: `${origin}/essays/essay-two/01.jpg`,
-    },
-  ]);
-
-  const teaser = await callTool(assets, "get_essay", { slug: "essay-one" });
-  const teaserBody = JSON.parse(teaser.result.content[0].text);
-  assert.equal(teaserBody.title, "essay one");
-  assert.equal(teaserBody.opening, "This is the opening paragraph of essay one. It has some text.");
-  assert.equal(teaserBody.markdown, undefined);
-
-  const full = await callTool(assets, "get_essay", { slug: "essay-one", full: true });
-  const fullBody = JSON.parse(full.result.content[0].text);
-  assert.equal(fullBody.markdown, essayOneMd);
-
-  const unknown = await callTool(assets, "get_essay", { slug: "nope" });
-  assert.equal(unknown.error.code, -32602);
-  assert.match(unknown.error.message, /unknown essay: nope/);
 });
 
 // --- essay signup: /subscribe and /subscribe/confirm ---
