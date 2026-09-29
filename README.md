@@ -16,4 +16,4 @@ bun run test     # worker regression tests
 bun run deploy   # deploy through the generated wrangler config
 ```
 
-Workers Builds deploys from the repo root. Site guidance is in `apps/web/CLAUDE.md`.
+Workers Builds deploys from the repo root. Site guidance is in `apps/web/AGENTS.md`.
