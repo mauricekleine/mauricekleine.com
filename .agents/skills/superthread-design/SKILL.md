@@ -166,7 +166,7 @@ their own brand icons.
 
 As of 2026-09-26:
 
-- Type: every fleet app takes its faces from the superthread theme.
+- Type: every superthread app takes its faces from the theme.
 - quanta: move the accent `#C0392B`-family to ember-paper (same hue as the fleet
   thread).
 - Every surface: replace hand-copied component values with the generated
