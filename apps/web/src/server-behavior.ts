@@ -1,5 +1,6 @@
-import { createMcpHandler, hostHeaderValidationResponse, McpServer, originValidationResponse, type StandardSchemaWithJSON } from "@modelcontextprotocol/server";
-import * as z from "zod/v4";
+import { AsyncLocalStorage } from "node:async_hooks";
+import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
+import * as z from "zod";
 
 export interface WorkerEnv {
   ASSETS: { fetch(input: Request | URL): Promise<Response> };
@@ -67,23 +68,11 @@ const SERVER_INFO = {
 
 const MCP_INSTRUCTIONS =
   "read-only tools about maurice kleine. everything here is public; no auth, no state, no tricks. markdown mirrors at /index.md, /about.md and /essays.md if you'd rather just read.";
-const MCP_HOSTNAMES = ["www.mauricekleine.com", "mauricekleine.com", "localhost", "127.0.0.1"];
 const MCP_SITE_ORIGINS = ["https://www.mauricekleine.com", "https://mauricekleine.com"];
 const MCP_CORS_HEADERS = {
   "access-control-allow-methods": "POST, OPTIONS",
   "access-control-allow-headers": "Content-Type, MCP-Protocol-Version, Mcp-Method, Mcp-Name",
 };
-
-// the repo's existing zod v4 compat build predates standard json schema conversion.
-function mcpSchema<T extends z.ZodType>(schema: T): T & StandardSchemaWithJSON<z.input<T>, z.output<T>> {
-  Object.assign(schema["~standard"], {
-    jsonSchema: {
-      input: ({ target }: { target: "draft-2020-12" }) => z.toJSONSchema(schema, { io: "input", target }),
-      output: ({ target }: { target: "draft-2020-12" }) => z.toJSONSchema(schema, { io: "output", target }),
-    },
-  });
-  return schema as T & StandardSchemaWithJSON<z.input<T>, z.output<T>>;
-}
 
 // essays.md lines look like:
 // - [title](https://www.mauricekleine.com/essays/slug.md) (2026-09-13) - summary
@@ -144,51 +133,53 @@ async function getEssay(env: WorkerEnv, origin: string, slug: string | undefined
   return full ? { ...teaser, markdown: body } : teaser;
 }
 
-function mcpHandler(env: WorkerEnv, origin: string) {
-  return createMcpHandler(() => {
-    const server = new McpServer(SERVER_INFO, {
-      instructions: MCP_INSTRUCTIONS,
-      capabilities: { tools: { listChanged: false } },
-      cacheHints: {
-        "tools/list": { ttlMs: 3_600_000, cacheScope: "public" },
-        "server/discover": { ttlMs: 3_600_000, cacheScope: "public" },
-      },
-    });
-    const noInput = mcpSchema(z.object({}));
-    const assetTool = (name: string, description: string, path: string) => {
-      server.registerTool(name, { description, inputSchema: noInput }, async () => {
-        const res = await env.ASSETS.fetch(new URL(path, origin));
-        return { content: [{ type: "text", text: await res.text() }], ...(!res.ok && { isError: true }) };
-      });
-    };
-
-    assetTool("about_maurice", "who maurice kleine is: bio, role, location, background, links", "/api/maurice.json");
-    assetTool("list_projects", "maurice's side quests and the graveyard of ended experiments, with statuses and epitaphs", "/api/projects.json");
-    server.registerTool("list_essays", {
-      description: "maurice's essays, newest first: slug, title, summary, date, links and cover image for each",
-      inputSchema: noInput,
-    }, async () => ({ content: [{ type: "text", text: JSON.stringify(await listEssays(env, origin)) }] }));
-    server.registerTool("get_essay", {
-      description: "read one essay by slug. by default returns a teaser (title, summary, opening paragraph, links); pass full: true for the whole markdown",
-      inputSchema: mcpSchema(z.object({
-        slug: z.string().describe("essay slug, e.g. ride-the-floor-up"),
-        full: z.boolean().optional().describe("return the full essay markdown instead of a teaser"),
-      })),
-    }, async ({ slug, full }) => {
-      const essay = await getEssay(env, origin, slug, Boolean(full));
-      if (!essay) throw new Error(`unknown essay: ${slug}`);
-      return { content: [{ type: "text", text: JSON.stringify(essay) }] };
-    });
-    assetTool("get_uptime", "operational status of maurice himself", "/api/uptime.json");
-    server.registerTool("make_a_wish", {
-      description: "log a wish on a shooting star. results not guaranteed",
-      inputSchema: mcpSchema(z.object({ wish: z.string().optional().describe("the wish. keep it small, this is a small internet thing") })),
-    }, async ({ wish }) => ({
-      content: [{ type: "text", text: wish ? `wish logged: "${wish}". results not guaranteed.` : "wish logged. results not guaranteed." }],
-    }));
-    return server;
+const mcpRequestEnv = new AsyncLocalStorage<WorkerEnv>();
+const mcpHandler = createMcpHandler(({ requestInfo }) => {
+  const env = mcpRequestEnv.getStore();
+  if (!env || !requestInfo) throw new Error("missing mcp request environment");
+  const origin = new URL(requestInfo.url).origin;
+  const server = new McpServer(SERVER_INFO, {
+    instructions: MCP_INSTRUCTIONS,
+    capabilities: { tools: { listChanged: false } },
+    cacheHints: {
+      "tools/list": { ttlMs: 3_600_000, cacheScope: "public" },
+      "server/discover": { ttlMs: 3_600_000, cacheScope: "public" },
+    },
   });
-}
+  const noInput = z.object({});
+  const assetTool = (name: string, description: string, path: string) => {
+    server.registerTool(name, { description, inputSchema: noInput }, async () => {
+      const res = await env.ASSETS.fetch(new URL(path, origin));
+      return { content: [{ type: "text", text: await res.text() }], ...(!res.ok && { isError: true }) };
+    });
+  };
+
+  assetTool("about_maurice", "who maurice kleine is: bio, role, location, background, links", "/api/maurice.json");
+  assetTool("list_projects", "maurice's side quests and the graveyard of ended experiments, with statuses and epitaphs", "/api/projects.json");
+  server.registerTool("list_essays", {
+    description: "maurice's essays, newest first: slug, title, summary, date, links and cover image for each",
+    inputSchema: noInput,
+  }, async () => ({ content: [{ type: "text", text: JSON.stringify(await listEssays(env, origin)) }] }));
+  server.registerTool("get_essay", {
+    description: "read one essay by slug. by default returns a teaser (title, summary, opening paragraph, links); pass full: true for the whole markdown",
+    inputSchema: z.object({
+      slug: z.string().describe("essay slug, e.g. ride-the-floor-up"),
+      full: z.boolean().optional().describe("return the full essay markdown instead of a teaser"),
+    }),
+  }, async ({ slug, full }) => {
+    const essay = await getEssay(env, origin, slug, Boolean(full));
+    if (!essay) throw new Error(`unknown essay: ${slug}`);
+    return { content: [{ type: "text", text: JSON.stringify(essay) }] };
+  });
+  assetTool("get_uptime", "operational status of maurice himself", "/api/uptime.json");
+  server.registerTool("make_a_wish", {
+    description: "log a wish on a shooting star. results not guaranteed",
+    inputSchema: z.object({ wish: z.string().optional().describe("the wish. keep it small, this is a small internet thing") }),
+  }, async ({ wish }) => ({
+    content: [{ type: "text", text: wish ? `wish logged: "${wish}". results not guaranteed.` : "wish logged. results not guaranteed." }],
+  }));
+  return server;
+});
 
 function allowedMcpOrigin(value: string | null): boolean {
   if (value === null) return true;
@@ -201,24 +192,33 @@ function allowedMcpOrigin(value: string | null): boolean {
   }
 }
 
-async function handleMcp(request: Request, env: WorkerEnv, origin: string): Promise<Response> {
-  const rejected = hostHeaderValidationResponse(request, MCP_HOSTNAMES)
-    ?? originValidationResponse(request, MCP_HOSTNAMES);
-  if (rejected) return rejected;
-  const requestOrigin = request.headers.get("origin");
-  if (!allowedMcpOrigin(requestOrigin)) return new Response("forbidden", { status: 403 });
+function withMcpHeaders(response: Response, requestOrigin: string | null): Response {
+  const vary = response.headers.get("vary")?.split(",").map((part) => part.trim()).filter(Boolean) ?? [];
+  if (!vary.some((part) => part.toLowerCase() === "origin")) vary.push("Origin");
+  return withHeaders(response, {
+    vary: vary.join(", "),
+    ...(requestOrigin && { "access-control-allow-origin": requestOrigin }),
+  });
+}
 
-  if (request.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: {
-      ...MCP_CORS_HEADERS,
-      vary: "Origin",
-      ...(requestOrigin && { "access-control-allow-origin": requestOrigin }),
-    } });
+async function handleMcp(request: Request, env: WorkerEnv): Promise<Response> {
+  const requestOrigin = request.headers.get("origin");
+  if (!allowedMcpOrigin(requestOrigin)) {
+    return withMcpHeaders(new Response("forbidden", { status: 403 }), null);
   }
 
-  const response = await mcpHandler(env, origin).fetch(request);
-  if (!requestOrigin) return withHeaders(response, { vary: "Origin" });
-  return withHeaders(response, { "access-control-allow-origin": requestOrigin, vary: "Origin" });
+  if (request.method === "OPTIONS") {
+    return withMcpHeaders(new Response(null, { status: 204, headers: MCP_CORS_HEADERS }), requestOrigin);
+  }
+  if (request.method !== "POST") {
+    return withMcpHeaders(new Response("mcp lives here. POST json-rpc, get maurice.", {
+      status: 405,
+      headers: { allow: "POST, OPTIONS", "content-type": "text/plain" },
+    }), requestOrigin);
+  }
+
+  const response = await mcpRequestEnv.run(env, () => mcpHandler.fetch(request));
+  return withMcpHeaders(response, requestOrigin);
 }
 
 // --- essay signup: double opt-in via a signed, expiring token ---
@@ -529,14 +529,14 @@ export async function handleSiteRequest(
 ): Promise<Response> {
     const url = new URL(request.url);
 
+    if (url.pathname === "/mcp") {
+      return handleMcp(request, env);
+    }
+
     // apex to www, handled here so the redirect lives in the repo
     if (url.hostname === "mauricekleine.com") {
       url.hostname = "www.mauricekleine.com";
       return Response.redirect(url.toString(), 301);
-    }
-
-    if (url.pathname === "/mcp") {
-      return handleMcp(request, env, url.origin);
     }
 
     if (url.pathname === "/subscribe" && request.method === "POST") {

@@ -48,9 +48,7 @@ function assets(overrides: Record<string, string | undefined> = {}): WorkerEnv {
 }
 
 function wire(request: Request, env = assets()) {
-  const headers = new Headers(request.headers);
-  headers.set("host", new URL(request.url).host);
-  return handleSiteRequest(new Request(request, { headers }), env);
+  return handleSiteRequest(request, env);
 }
 
 async function connect(modern: boolean, env = assets()) {
@@ -266,6 +264,25 @@ test("failed asset fetch becomes a tool error", async () => {
   }
 });
 
+test("concurrent requests keep their own ASSETS binding", async () => {
+  const request = () =>
+    raw(
+      "tools/call",
+      { name: "about_maurice", arguments: {} },
+      { "mcp-name": "about_maurice" },
+    );
+  const [first, second] = await Promise.all([
+    wire(request(), assets({ "/api/maurice.json": "first" })),
+    wire(request(), assets({ "/api/maurice.json": "second" })),
+  ]);
+  expect((await first.json()).result.content).toEqual([
+    { type: "text", text: "first" },
+  ]);
+  expect((await second.json()).result.content).toEqual([
+    { type: "text", text: "second" },
+  ]);
+});
+
 test("2026 header and method errors use the HTTP binding", async () => {
   const mismatch = await wire(
     raw("tools/list", {}, { "mcp-method": "tools/call" }),
@@ -286,9 +303,21 @@ test("2026 header and method errors use the HTTP binding", async () => {
   expect((await unknown.json()).error.code).toBe(-32601);
 });
 
-test("Origin and Host guards run before dispatch and CORS reflects only allowed origins", async () => {
+test("Origin policy and CORS reflect only allowed origins", async () => {
   const request = raw("tools/list");
-  expect((await wire(request)).status).toBe(200);
+  const noOrigin = await wire(request);
+  expect(noOrigin.status).toBe(200);
+  expect(noOrigin.headers.get("vary")).toContain("Origin");
+  const apexRequest = raw("tools/list");
+  const apex = await wire(
+    new Request("https://mauricekleine.com/mcp", {
+      method: "POST",
+      headers: apexRequest.headers,
+      body: await apexRequest.text(),
+    }),
+  );
+  expect(apex.status).toBe(200);
+  expect(apex.headers.get("vary")).toContain("Origin");
   for (const origin of [
     site,
     "https://mauricekleine.com",
@@ -305,7 +334,10 @@ test("Origin and Host guards run before dispatch and CORS reflects only allowed 
     "https://localhost:3000",
     "null",
   ]) {
-    expect((await wire(raw("tools/list", {}, { origin }))).status).toBe(403);
+    const response = await wire(raw("tools/list", {}, { origin }));
+    expect(response.status).toBe(403);
+    expect(response.headers.get("vary")).toContain("Origin");
+    expect(response.headers.get("access-control-allow-origin")).toBeNull();
   }
   const preflight = await wire(
     new Request(endpoint, { method: "OPTIONS", headers: { origin: site } }),
@@ -332,10 +364,50 @@ test("Origin and Host guards run before dispatch and CORS reflects only allowed 
       )
     ).status,
   ).toBe(403);
-  const badHost = new Request(request, {
-    headers: { ...Object.fromEntries(request.headers), host: "evil.example" },
-  });
-  expect((await handleSiteRequest(badHost, assets())).status).toBe(403);
+  const badHost = raw("tools/list", {}, { host: "evil.example" });
+  expect((await handleSiteRequest(badHost, assets())).status).toBe(200);
+});
+
+test("GET and DELETE return 405 with Allow and Vary before SDK dispatch", async () => {
+  for (const method of ["GET", "DELETE"]) {
+    const response = await wire(
+      new Request(endpoint, { method, headers: { origin: site } }),
+    );
+    expect(response.status).toBe(405);
+    expect(response.headers.get("allow")).toBe("POST, OPTIONS");
+    expect(response.headers.get("vary")).toContain("Origin");
+    expect(response.headers.get("access-control-allow-origin")).toBe(site);
+  }
+});
+
+test("2025 initialize is still SSE-framed on the same URL", async () => {
+  const response = await wire(
+    new Request(endpoint, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json, text/event-stream",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 1,
+        method: "initialize",
+        params: {
+          protocolVersion: "2025-06-18",
+          capabilities: {},
+          clientInfo: { name: "raw-test", version: "1.0.0" },
+        },
+      }),
+    }),
+  );
+  expect(response.status).toBe(200);
+  expect(response.headers.get("content-type")).toContain("text/event-stream");
+  expect(response.headers.get("vary")).toContain("Origin");
+  const body = await response.text();
+  expect(body).toContain("event: message");
+  const data = body.match(/^data: (.+)$/m)?.[1];
+  expect(data).toBeDefined();
+  expect(JSON.parse(data!).result.protocolVersion).toBe("2025-06-18");
 });
 
 test("2025 client still initializes and calls a tool on the same endpoint", async () => {
