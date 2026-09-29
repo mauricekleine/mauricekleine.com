@@ -37,4 +37,4 @@ python3 apps/web/tools/sync-essays.py
 
 The home and essays index lists read the new frontmatter automatically. Essay navigation follows date order; `link-essays.py` checks and reports that order. The sync tool updates the essay lists in `public/index.md` and `public/essays.md`. Then run `bun run build` and `bun run test`.
 
-The signup routes use Worker secrets `RESEND_API_KEY`, `RESEND_SEGMENT_ID`, `TURNSTILE_SECRET`, and `SUBSCRIBE_SECRET`. `src/server-behavior.ts` contains the HTTP behavior. Keep the 301 apex redirect, Markdown negotiation, MCP tools, signup, alias redirects, and `_headers` semantics intact.
+The signup routes use Worker secrets `RESEND_API_KEY`, `RESEND_SEGMENT_ID`, `TURNSTILE_SECRET`, and `SUBSCRIBE_SECRET`. `src/server-behavior.ts` contains the HTTP behavior. `/mcp` uses the official TypeScript SDK v2 `McpServer` and `createMcpHandler` for 2026-07-28 and stateless 2025 clients. Keep the 301 apex redirect, Markdown negotiation, MCP tools, signup, alias redirects, and `_headers` semantics intact.

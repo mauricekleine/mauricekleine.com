@@ -1,3 +1,7 @@
+import { AsyncLocalStorage } from "node:async_hooks";
+import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
+import * as z from "zod";
+
 export interface WorkerEnv {
   ASSETS: { fetch(input: Request | URL): Promise<Response> };
   RESEND_API_KEY?: string;
@@ -14,17 +18,10 @@ type SubscribePage = {
   back: { href: string; label: string };
 };
 
-type RpcMessage = {
-  id?: unknown;
-  method?: string;
-  params?: { name?: string; arguments?: { slug?: string; full?: boolean; wish?: string } };
-};
-
-// the worker: static assets plus three hand-written niceties.
+// the worker: static assets plus three niceties.
 // 1. markdown content negotiation: Accept: text/markdown on /, /about, /essays and /essays/*
-// 2. a tiny mcp server at /mcp. yes, a personal site with an mcp server.
+// 2. an sdk-backed mcp server at /mcp. yes, a personal site with an mcp server.
 // 3. essay email signup with double opt-in: POST /subscribe, GET /subscribe/confirm
-// no sdk, no framework. it's json-rpc over http and hand-rolled webcrypto, we can type that by hand.
 
 // every html page has a hand-written .md twin next to it
 function markdownMirror(pathname: string): string | null {
@@ -63,88 +60,19 @@ function withHeaders(res: Response, extra: Record<string, string>): Response {
   return out;
 }
 
-const MCP_PROTOCOL = "2025-06-18";
-
 const SERVER_INFO = {
   name: "mauricekleine",
   title: "maurice kleine's personal site",
   version: "1.0.0",
 };
 
-const TOOLS: Array<{ name: string; description: string; inputSchema: object; asset?: string }> = [
-  {
-    name: "about_maurice",
-    description:
-      "who maurice kleine is: bio, role, location, background, links",
-    inputSchema: { type: "object", properties: {} },
-    asset: "/api/maurice.json",
-  },
-  {
-    name: "list_projects",
-    description:
-      "maurice's side quests and the graveyard of ended experiments, with statuses and epitaphs",
-    inputSchema: { type: "object", properties: {} },
-    asset: "/api/projects.json",
-  },
-  {
-    name: "list_essays",
-    description:
-      "maurice's essays, newest first: slug, title, summary, date, links and cover image for each",
-    inputSchema: { type: "object", properties: {} },
-  },
-  {
-    name: "get_essay",
-    description:
-      "read one essay by slug. by default returns a teaser (title, summary, opening paragraph, links); pass full: true for the whole markdown",
-    inputSchema: {
-      type: "object",
-      properties: {
-        slug: { type: "string", description: "essay slug, e.g. ride-the-floor-up" },
-        full: { type: "boolean", description: "return the full essay markdown instead of a teaser" },
-      },
-      required: ["slug"],
-    },
-  },
-  {
-    name: "get_uptime",
-    description: "operational status of maurice himself",
-    inputSchema: { type: "object", properties: {} },
-    asset: "/api/uptime.json",
-  },
-  {
-    name: "make_a_wish",
-    description: "log a wish on a shooting star. results not guaranteed",
-    inputSchema: {
-      type: "object",
-      properties: {
-        wish: {
-          type: "string",
-          description: "the wish. keep it small, this is a small internet thing",
-        },
-      },
-    },
-  },
-];
-
-const JSON_HEADERS = {
-  "content-type": "application/json; charset=utf-8",
-  "access-control-allow-origin": "*",
+const MCP_INSTRUCTIONS =
+  "read-only tools about maurice kleine. everything here is public; no auth, no state, no tricks. markdown mirrors at /index.md, /about.md and /essays.md if you'd rather just read.";
+const MCP_SITE_ORIGINS = ["https://www.mauricekleine.com", "https://mauricekleine.com"];
+const MCP_CORS_HEADERS = {
   "access-control-allow-methods": "POST, OPTIONS",
-  "access-control-allow-headers": "content-type, mcp-protocol-version",
+  "access-control-allow-headers": "Content-Type, MCP-Protocol-Version, Mcp-Method, Mcp-Name",
 };
-
-function rpcResult(id: unknown, result: unknown): Response {
-  return new Response(JSON.stringify({ jsonrpc: "2.0", id, result }), {
-    headers: JSON_HEADERS,
-  });
-}
-
-function rpcError(id: unknown, code: number, message: string): Response {
-  return new Response(
-    JSON.stringify({ jsonrpc: "2.0", id: id ?? null, error: { code, message } }),
-    { status: 200, headers: JSON_HEADERS }
-  );
-}
 
 // essays.md lines look like:
 // - [title](https://www.mauricekleine.com/essays/slug.md) (2026-09-13) - summary
@@ -184,9 +112,10 @@ function essayOpening(markdown: string): string {
   return "";
 }
 
-async function fetchText(env: WorkerEnv, origin: string, path: string): Promise<string | null> {
+async function fetchText(env: WorkerEnv, origin: string, path: string): Promise<string> {
   const res = await env.ASSETS.fetch(new URL(path, origin));
-  return res.ok ? await res.text() : null;
+  if (!res.ok) throw new Error(`asset unavailable: ${path}`);
+  return res.text();
 }
 
 async function listEssays(env: WorkerEnv, origin: string) {
@@ -204,88 +133,92 @@ async function getEssay(env: WorkerEnv, origin: string, slug: string | undefined
   return full ? { ...teaser, markdown: body } : teaser;
 }
 
-async function handleMcp(request: Request, env: WorkerEnv, origin: string): Promise<Response> {
+const mcpRequestEnv = new AsyncLocalStorage<WorkerEnv>();
+const mcpHandler = createMcpHandler(({ requestInfo }) => {
+  const env = mcpRequestEnv.getStore();
+  if (!env || !requestInfo) throw new Error("missing mcp request environment");
+  const origin = new URL(requestInfo.url).origin;
+  const server = new McpServer(SERVER_INFO, {
+    instructions: MCP_INSTRUCTIONS,
+    capabilities: { tools: { listChanged: false } },
+    cacheHints: {
+      "tools/list": { ttlMs: 3_600_000, cacheScope: "public" },
+      "server/discover": { ttlMs: 3_600_000, cacheScope: "public" },
+    },
+  });
+  const noInput = z.object({});
+  const assetTool = (name: string, description: string, path: string) => {
+    server.registerTool(name, { description, inputSchema: noInput }, async () => {
+      const res = await env.ASSETS.fetch(new URL(path, origin));
+      return { content: [{ type: "text", text: await res.text() }], ...(!res.ok && { isError: true }) };
+    });
+  };
+
+  assetTool("about_maurice", "who maurice kleine is: bio, role, location, background, links", "/api/maurice.json");
+  assetTool("list_projects", "maurice's side quests and the graveyard of ended experiments, with statuses and epitaphs", "/api/projects.json");
+  server.registerTool("list_essays", {
+    description: "maurice's essays, newest first: slug, title, summary, date, links and cover image for each",
+    inputSchema: noInput,
+  }, async () => ({ content: [{ type: "text", text: JSON.stringify(await listEssays(env, origin)) }] }));
+  server.registerTool("get_essay", {
+    description: "read one essay by slug. by default returns a teaser (title, summary, opening paragraph, links); pass full: true for the whole markdown",
+    inputSchema: z.object({
+      slug: z.string().describe("essay slug, e.g. ride-the-floor-up"),
+      full: z.boolean().optional().describe("return the full essay markdown instead of a teaser"),
+    }),
+  }, async ({ slug, full }) => {
+    const essay = await getEssay(env, origin, slug, Boolean(full));
+    if (!essay) throw new Error(`unknown essay: ${slug}`);
+    return { content: [{ type: "text", text: JSON.stringify(essay) }] };
+  });
+  assetTool("get_uptime", "operational status of maurice himself", "/api/uptime.json");
+  server.registerTool("make_a_wish", {
+    description: "log a wish on a shooting star. results not guaranteed",
+    inputSchema: z.object({ wish: z.string().optional().describe("the wish. keep it small, this is a small internet thing") }),
+  }, async ({ wish }) => ({
+    content: [{ type: "text", text: wish ? `wish logged: "${wish}". results not guaranteed.` : "wish logged. results not guaranteed." }],
+  }));
+  return server;
+});
+
+function allowedMcpOrigin(value: string | null): boolean {
+  if (value === null) return true;
+  if (MCP_SITE_ORIGINS.includes(value)) return true;
+  try {
+    const url = new URL(value);
+    return url.origin === value && url.protocol === "http:" && ["localhost", "127.0.0.1"].includes(url.hostname);
+  } catch {
+    return false;
+  }
+}
+
+function withMcpHeaders(response: Response, requestOrigin: string | null): Response {
+  const vary = response.headers.get("vary")?.split(",").map((part) => part.trim()).filter(Boolean) ?? [];
+  if (!vary.some((part) => part.toLowerCase() === "origin")) vary.push("Origin");
+  return withHeaders(response, {
+    vary: vary.join(", "),
+    ...(requestOrigin && { "access-control-allow-origin": requestOrigin }),
+  });
+}
+
+async function handleMcp(request: Request, env: WorkerEnv): Promise<Response> {
+  const requestOrigin = request.headers.get("origin");
+  if (!allowedMcpOrigin(requestOrigin)) {
+    return withMcpHeaders(new Response("forbidden", { status: 403 }), null);
+  }
+
   if (request.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: JSON_HEADERS });
+    return withMcpHeaders(new Response(null, { status: 204, headers: MCP_CORS_HEADERS }), requestOrigin);
   }
   if (request.method !== "POST") {
-    return new Response("mcp lives here. POST json-rpc, get maurice.", {
+    return withMcpHeaders(new Response("mcp lives here. POST json-rpc, get maurice.", {
       status: 405,
       headers: { allow: "POST, OPTIONS", "content-type": "text/plain" },
-    });
+    }), requestOrigin);
   }
 
-  let msg: RpcMessage;
-  try {
-    msg = await request.json() as RpcMessage;
-  } catch {
-    return rpcError(null, -32700, "parse error");
-  }
-
-  const { id, method, params } = msg;
-
-  // notifications get a quiet nod
-  if (method && method.startsWith("notifications/")) {
-    return new Response(null, { status: 202 });
-  }
-
-  switch (method) {
-    case "initialize":
-      return rpcResult(id, {
-        protocolVersion: MCP_PROTOCOL,
-        capabilities: { tools: { listChanged: false } },
-        serverInfo: SERVER_INFO,
-        instructions:
-          "read-only tools about maurice kleine. everything here is public; no auth, no state, no tricks. markdown mirrors at /index.md, /about.md and /essays.md if you'd rather just read.",
-      });
-
-    case "ping":
-      return rpcResult(id, {});
-
-    case "tools/list":
-      return rpcResult(id, {
-        tools: TOOLS.map(({ name, description, inputSchema }) => ({
-          name,
-          description,
-          inputSchema,
-        })),
-      });
-
-    case "tools/call": {
-      const tool = TOOLS.find((t) => t.name === params?.name);
-      if (!tool) return rpcError(id, -32602, `unknown tool: ${params?.name}`);
-      if (tool.name === "make_a_wish") {
-        const wish = params?.arguments?.wish;
-        return rpcResult(id, {
-          content: [
-            {
-              type: "text",
-              text: wish
-                ? `wish logged: "${wish}". results not guaranteed.`
-                : "wish logged. results not guaranteed.",
-            },
-          ],
-        });
-      }
-      if (tool.name === "list_essays") {
-        const essays = await listEssays(env, origin);
-        return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(essays) }] });
-      }
-      if (tool.name === "get_essay") {
-        const slug = params?.arguments?.slug;
-        const essay = await getEssay(env, origin, slug, Boolean(params?.arguments?.full));
-        if (!essay) return rpcError(id, -32602, `unknown essay: ${slug}`);
-        return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(essay) }] });
-      }
-      if (!tool.asset) return rpcError(id, -32603, "tool asset unavailable");
-      const res = await env.ASSETS.fetch(new URL(tool.asset, origin));
-      const text = await res.text();
-      return rpcResult(id, { content: [{ type: "text", text }] });
-    }
-
-    default:
-      return rpcError(id, -32601, `method not found: ${method}`);
-  }
+  const response = await mcpRequestEnv.run(env, () => mcpHandler.fetch(request));
+  return withMcpHeaders(response, requestOrigin);
 }
 
 // --- essay signup: double opt-in via a signed, expiring token ---
@@ -596,14 +529,14 @@ export async function handleSiteRequest(
 ): Promise<Response> {
     const url = new URL(request.url);
 
+    if (url.pathname === "/mcp") {
+      return handleMcp(request, env);
+    }
+
     // apex to www, handled here so the redirect lives in the repo
     if (url.hostname === "mauricekleine.com") {
       url.hostname = "www.mauricekleine.com";
       return Response.redirect(url.toString(), 301);
-    }
-
-    if (url.pathname === "/mcp") {
-      return handleMcp(request, env, url.origin);
     }
 
     if (url.pathname === "/subscribe" && request.method === "POST") {
