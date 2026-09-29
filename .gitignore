@@ -17,3 +17,6 @@ apps/web/public/api/deploy.json
 apps/web/tools/__pycache__/
 
 .shots/
+
+# cf build output and generated types
+.cloudflare/
