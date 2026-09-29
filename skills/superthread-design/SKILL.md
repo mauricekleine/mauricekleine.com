@@ -1,6 +1,6 @@
 ---
 name: superthread-design
-description: The Superthread design system - the shared visual foundation for Maurice's fleet of surfaces (mauricekleine.com, orbit, quanta, hyperspeed, trisys, constellation, and every future ship). Use this whenever designing, building, restyling, or critiquing UI for any fleet surface, creating logos/insignia/icons/avatars for a ship or service, picking colors/fonts/motion for anything Maurice-branded, or bootstrapping a brand-new surface. Pairs with impeccable (method) and copywriting-maurice (words); this skill owns the brand facts. Not for fluncle or nonobench (own brands) or client work (Waimakers etc.).
+description: The Superthread design system - the shared visual foundation for Maurice's fleet of surfaces (mauricekleine.com, orbit, quanta, hyperspeed, trisys, constellation, and every future ship). Use this whenever designing, building, restyling, or critiquing UI for any fleet surface, creating logos/insignia/icons/avatars for a ship or service, picking colors/fonts/motion for anything Maurice-branded, or bootstrapping a brand-new surface. Pairs with impeccable (method) and mk-copywriting (words); this skill owns the brand facts. Not for fluncle or nonobench (own brands) or client work (Waimakers etc.).
 ---
 
 # superthread-design
@@ -24,7 +24,7 @@ Base UI components and import the generated CSS. Never copy theme values into
 an app or edit a stock component to apply the brand.
 
 Division of labor: **impeccable** owns design method (critique, hierarchy, polish
-passes) — load it for any serious UI work. **copywriting-maurice** owns every word.
+passes) — load it for any serious UI work. **mk-copywriting** owns every word.
 This skill owns the tokens, the moods, and the marks.
 
 ## The thread (invariant across modes)

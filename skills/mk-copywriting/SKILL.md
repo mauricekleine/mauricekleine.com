@@ -1,5 +1,5 @@
 ---
-name: copywriting-maurice
+name: mk-copywriting
 description: Maurice Kleine's personal founder voice for any user-facing writing - LinkedIn posts, X posts and threads, landing pages, changelogs, blog drafts, launch copy, DMs, and outreach. Product-neutral; pairs with a per-project copywriting-<project> overlay for product claims, terminology, and registers. Use whenever drafting or editing text Maurice will publish or send as himself.
 ---
 
