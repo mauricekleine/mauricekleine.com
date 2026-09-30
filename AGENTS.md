@@ -4,7 +4,7 @@
 
 ## Repository
 
-This is Maurice's public identity monorepo. `apps/web/` is the live TanStack Start app. `packages/superthread/` is the design system (DESIGN.md tokens and generated CSS). `packages/` is reserved for the superthread design system and shared config presets. `skills/` is reserved for public brand skills.
+This is Maurice's public identity monorepo. `apps/web/` is the live TanStack Start app. `packages/superthread/` is the design system (DESIGN.md tokens and generated CSS). `packages/` is reserved for the superthread design system and shared config presets. `skills/superthread-design/` is the public project skill for the design system.
 
 Read [`apps/web/AGENTS.md`](apps/web/AGENTS.md), [`apps/web/PRODUCT.md`](apps/web/PRODUCT.md), and [`apps/web/DESIGN.md`](apps/web/DESIGN.md) before site work.
 

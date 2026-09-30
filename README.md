@@ -1,10 +1,10 @@
 # mauricekleine.com
 
-Maurice Kleine's public identity monorepo: the site at [mauricekleine.com](https://www.mauricekleine.com), the superthread design system, and public brand skills.
+Maurice Kleine's public identity monorepo: the site at [mauricekleine.com](https://www.mauricekleine.com), the superthread design system, and its public `superthread-design` skill.
 
 - `apps/web`: the site (TanStack Start on Cloudflare Workers)
 - `packages/superthread`: design tokens (`DESIGN.md`) and generated CSS
-- `skills/`: public brand skills
+- `skills/superthread-design/`: the public design-system skill
 
 From the repo root:
 
