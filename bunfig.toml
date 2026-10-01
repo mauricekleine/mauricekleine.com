@@ -1,0 +1,4 @@
+[install]
+# Only resolve package versions published at least 3 days ago, so a freshly
+# compromised release is not installed before it is caught and yanked.
+minimumReleaseAge = 259200
