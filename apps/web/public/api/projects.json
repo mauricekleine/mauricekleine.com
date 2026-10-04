@@ -3,7 +3,7 @@
   "side_quests": [
     {
       "name": "mockly",
-      "url": "https://getmockly.com",
+      "url": "https://www.getmockly.com",
       "status": "active",
       "description": "fake chat screenshots for 17+ platforms. built it in a weekend, techcrunch wrote about it, 10k people use it. i can't believe this is legal",
       "team": [
@@ -29,7 +29,7 @@
     },
     {
       "name": "nonobench",
-      "url": "https://nonobench.com",
+      "url": "https://www.nonobench.com",
       "status": "active",
       "description": "benchmark for how well llms solve nonogram puzzles. the top score went from 63% in february to 93% in september"
     }
