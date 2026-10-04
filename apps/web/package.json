@@ -29,7 +29,7 @@
     "zod": "~4.6.5"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "~1.60.2",
+    "@cloudflare/vite-plugin": "~1.62.3",
     "@modelcontextprotocol/client": "2.2.0",
     "@types/node": "~26.6.3",
     "@types/react": "~19.3.0",
