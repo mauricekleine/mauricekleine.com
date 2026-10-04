@@ -20,10 +20,10 @@ the whole site is hand-written html with no framework and no build step. markdow
 
 ## side quests
 
-- [mockly](https://getmockly.com): fake chat screenshots for 17+ platforms. built by maurice, run with jasper de boer
+- [mockly](https://www.getmockly.com): fake chat screenshots for 17+ platforms. built by maurice, run with jasper de boer
 - [fluncle](https://www.fluncle.com): drum & bass bangers from another dimension, with a radio, an api, and an ssh rave terminal
 - [hackadam](https://hackadam.nl): monthly meetup in amsterdam for indie makers building their own stuff, co-organized with abner van den hout
-- [nonobench](https://nonobench.com): benchmark for how well llms solve nonogram puzzles
+- [nonobench](https://www.nonobench.com): benchmark for how well llms solve nonogram puzzles
 
 ## feed
 

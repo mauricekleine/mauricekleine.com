@@ -8,8 +8,8 @@ const marks = 'https://www.mauricekleine.com/superthread/marks'
 // Public apps open in a new tab: they have no rail to come back through.
 const publicApps: FleetApp[] = [
   { name: 'mauricekleine.com', href: 'https://www.mauricekleine.com', mark: 'https://www.mauricekleine.com/favicon.ico' },
-  { name: 'fluncle.com', href: 'https://fluncle.com', mark: `${marks}/fluncle.png` },
-  { name: 'nonobench.com', href: 'https://nonobench.com', mark: 'https://www.mauricekleine.com/superthread/nonobench-mark.svg' },
+  { name: 'fluncle.com', href: 'https://www.fluncle.com', mark: `${marks}/fluncle.png` },
+  { name: 'nonobench.com', href: 'https://www.nonobench.com', mark: 'https://www.mauricekleine.com/superthread/nonobench-mark.svg' },
 ]
 
 const privateApps: FleetApp[] = ['orbit', 'quanta', 'hyperspeed', 'trisys', 'constellation'].map((name) => ({ name, href: `https://${name}.mauricekleine.com`, mark: `${marks}/${name}.svg` }))

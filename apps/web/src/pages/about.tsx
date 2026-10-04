@@ -54,7 +54,7 @@ export function AboutPage() {
           <Waypoint constellation="mockly">
             <span className="glyph" aria-hidden="true">✦</span>
             <div>
-              {' '}<a href="https://getmockly.com">mockly</a>{' '}
+              {' '}<a href="https://www.getmockly.com">mockly</a>{' '}
               <p>
                 fake chat screenshots for 17+ platforms. built it in a weekend,
                 {' '}<a href="https://techcrunch.com/2025/07/10/mockly-made-a-fake-dm-generator-thats-actually-user-friendly/">techcrunch</a> wrote about it, 10k people use it.
@@ -87,7 +87,7 @@ export function AboutPage() {
           <Waypoint constellation="nonobench">
             <span className="glyph" aria-hidden="true">✦</span>
             <div>
-              {' '}<a href="https://nonobench.com">nonobench</a>{' '}
+              {' '}<a href="https://www.nonobench.com">nonobench</a>{' '}
               <p>
                 benchmark for how well llms solve nonogram puzzles. the top
                 score went from 63% in february to 93% in september
