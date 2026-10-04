@@ -15,3 +15,11 @@ After a merge, run `bun run deploy:verify <merged-sha>` to wait for the build-st
 Keep Maurice's voice lowercase and understated. No em dashes in new copy.
 
 Superthread is a shadcn theme in `packages/superthread/`. `bun run registry` regenerates its public theme and fleet-rail items in `apps/web/public/r/`. Keep theme values in `packages/superthread/DESIGN.md`.
+
+## Dependencies
+
+Upgrades follow the `mk-dependency-upgrades` skill; holds live in `taze.config.ts`.
+
+- Checks: `bun run build` (includes `tsc`), `bun run test`, `(cd apps/web && cf deploy --prebuilt --dry-run)`.
+- Groups: `@tanstack/react-start` pins `@tanstack/react-router`; `@cloudflare/vite-plugin` pins `wrangler`, `miniflare` and `workerd`; `@modelcontextprotocol/client` and `/server` share one exact version; `react`, `react-dom` and both type packages; the three Tailwind packages. `cf` is exempt from the gate, but the `@cloudflare/*` packages it pins are not, so its newest release installs only once those are mature.
+- Smoke test: `bun run dev`, then with `agent-browser` load `/`, `/about`, `/essays`, an essay, `/superthread` and an unknown route, and click between pages. On `main` too, dev logs one image width/height hydration warning and serves an empty-body 404.
