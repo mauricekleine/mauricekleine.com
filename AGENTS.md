@@ -21,5 +21,5 @@ Superthread is a shadcn theme in `packages/superthread/`. `bun run registry` reg
 Upgrades follow the `mk-dependency-upgrades` skill; holds live in `taze.config.ts`.
 
 - Checks: `bun run build` (includes `tsc`), `bun run test`, `(cd apps/web && cf deploy --prebuilt --dry-run)`.
-- Groups: `@tanstack/react-start` pins `@tanstack/react-router`; `@cloudflare/vite-plugin` pins `wrangler`, `miniflare` and `workerd`; `@modelcontextprotocol/client` and `/server` share one exact version; `react`, `react-dom` and both type packages; the three Tailwind packages. `cf` is exempt from the gate, but the `@cloudflare/*` packages it pins are not, so its newest release installs only once those are mature.
+- Groups: `@tanstack/react-start` pins `@tanstack/react-router`; `@cloudflare/vite-plugin` pins `wrangler`, `miniflare` and `workerd`; `@modelcontextprotocol/client` and `/server` share one exact version; `react`, `react-dom` and both type packages; the three Tailwind packages.
 - Smoke test: `bun run dev`, then with `agent-browser` load `/`, `/about`, `/essays`, an essay, `/superthread` and an unknown route, and click between pages. On `main` too, dev logs one image width/height hydration warning and serves an empty-body 404.
