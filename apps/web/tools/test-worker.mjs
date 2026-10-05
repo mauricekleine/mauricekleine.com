@@ -296,6 +296,7 @@ const shortLinks = {
   ph: "https://www.producthunt.com/@mauricekleine", producthunt: "https://www.producthunt.com/@mauricekleine",
   luma: "https://luma.com/user/mauricekleine",
   tinkerers: "https://amsterdam.aitinkerers.org/profile/client_kBU1ebRuvug",
+  waimakers: "https://www.waimakers.com/",
   dnb,
   m: "https://www.getmockly.com/", mockly: "https://www.getmockly.com/",
   h: "https://hackadam.nl/", hacka: "https://hackadam.nl/", hackadam: "https://hackadam.nl/",
@@ -312,8 +313,8 @@ for (const name of ["n", "nonobench", "bench"]) Object.assign(shortLinks, {
   [`${name}/gh`]: "https://github.com/mauricekleine/nonobench", [`${name}/github`]: "https://github.com/mauricekleine/nonobench",
 });
 
-test("mk.wtf redirects all 44 short links on both hosts", async () => {
-  assert.equal(Object.keys(shortLinks).length, 44);
+test("mk.wtf redirects all 45 short links on both hosts", async () => {
+  assert.equal(Object.keys(shortLinks).length, 45);
   for (const host of ["mk.wtf", "www.mk.wtf"]) {
     for (const [path, target] of Object.entries(shortLinks)) {
       const res = await worker.fetch(new Request(`https://${host}/${path}`), noAssets);
