@@ -35,7 +35,7 @@
     "@types/react": "~19.3.0",
     "@types/react-dom": "~19.3.0",
     "@vitejs/plugin-react": "~6.1.1",
-    "cf": "1.0.0-beta.11",
+    "cf": "1.0.0-beta.12",
     "parse5": "~8.0.1",
     "typescript": "~7.0.2",
     "vite": "~8.3.1"
