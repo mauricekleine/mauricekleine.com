@@ -19,8 +19,9 @@ export default defineConfig({
       // the worker fronts everything: apex redirect needs to see every path
       runWorkerFirst: true,
     },
-    // apex is also served by the worker; the custom server sends it to www
-    domains: ["www.mauricekleine.com", "mauricekleine.com"],
+    // apex is also served by the worker; the custom server sends it to www.
+    // mk.wtf only serves the short links in src/links.ts
+    domains: ["www.mauricekleine.com", "mauricekleine.com", "mk.wtf", "www.mk.wtf"],
     env: {
       ASSETS: bindings.assets(),
       // signup secrets; declared so a deploy fails instead of shipping without them
