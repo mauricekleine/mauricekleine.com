@@ -20,6 +20,7 @@ export const personal: Link[] = [
   { names: ["reddit"], url: "https://www.reddit.com/user/mauricekleine/" },
   { names: ["ph", "producthunt"], url: "https://www.producthunt.com/@mauricekleine" },
   { names: ["luma"], url: "https://luma.com/user/mauricekleine" },
+  { names: ["waimakers"], url: "https://www.waimakers.com/" },
   { names: ["tinkerers"], url: "https://amsterdam.aitinkerers.org/profile/client_kBU1ebRuvug" },
   { names: ["dnb"], url: fluncle.profiles.spotify },
 ];
