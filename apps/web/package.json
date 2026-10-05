@@ -3,10 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "python3 tools/sync-essays.py && vite build && tsc --noEmit",
+    "build": "node tools/sync-projects.ts && python3 tools/sync-essays.py && vite build && tsc --noEmit",
     "dev": "vite dev --port 3000",
     "preview": "vite preview",
-    "test": "bun test tools/mcp.test.ts && node tools/test-worker.mjs"
+    "test": "bun test tools/mcp.test.ts && node tools/test-worker.mjs && node tools/sync-projects.ts --check && node tools/test-projects.mjs"
   },
   "dependencies": {
     "@base-ui/react": "~1.8.0",

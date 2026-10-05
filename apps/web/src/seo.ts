@@ -10,7 +10,6 @@ const sameAs = [
   'https://www.linkedin.com/in/mauricekleine/',
   'https://x.com/mauricekleine',
   'https://www.reddit.com/user/mauricekleine/',
-  'https://peerlist.io/mockly',
   'https://www.producthunt.com/@mauricekleine',
   'https://luma.com/user/mauricekleine',
   'https://amsterdam.aitinkerers.org/profile/client_kBU1ebRuvug',

@@ -28,7 +28,7 @@ Playful, honest, understated. A builder talking to builders: lowercase, short li
 1. **The night sky is the personality.** One committed scene (canvas star field, the 2022 idea finally shipped) instead of decoration sprinkled on a plain page.
 2. **Ended experiments are shown, not hidden.** The graveyard is a first-class section; outcomes stated plainly.
 3. **One page, one scroll, every word earns its place.** Copy in Maurice's voice is the content; nothing padded. Essays get their own pages so the one-pager stays one page.
-4. **Small internet thing.** Hand-written HTML/CSS/JS, no framework, no build step. The craft is the flex.
+4. **Small internet thing.** Prerendered HTML from a small TanStack Start app on Cloudflare Workers. Pages stay light enough to read like hand-written ones. The craft is the flex.
 5. **Route outward.** Every project and profile is one obvious click away.
 
 ## Accessibility & Inclusion

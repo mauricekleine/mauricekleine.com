@@ -41,4 +41,10 @@ The signup routes use Worker secrets `RESEND_API_KEY`, `RESEND_SEGMENT_ID`, `TUR
 
 ## mk.wtf short links
 
-`mk.wtf` and `www.mk.wtf` serve only the 302 short links in `src/links.ts`, for bios, slides and QR codes; pages and JSON-LD keep the real URLs. Top-level names are Maurice. A project's names prefix its own links, and every project name combines with every link name, so `f/gh` and `fluncle/github` resolve alike. Add a link as one entry in `src/links.ts` and add each resulting path to the expected table in `tools/test-worker.mjs`, which fails on any untested path.
+`mk.wtf` and `www.mk.wtf` serve only the 302 short links in `src/links.ts`, for bios, slides and QR codes; pages and JSON-LD keep the real URLs. Top-level names are Maurice. A project's names prefix its own links, and every project name combines with every link name, so `f/gh` and `fluncle/github` resolve alike. Project destinations come from the manifest below; add a link as one entry in `src/links.ts` and add each resulting path to the expected table in `tools/test-worker.mjs`, which fails on any untested path.
+
+## Projects
+
+`src/projects.ts` is the manifest of side quests and the graveyard: names, canonical URLs, descriptions, team, project profiles, and how each live site credits Maurice. `tools/sync-projects.ts` writes `public/api/projects.json` and the side quests in `llms.txt` from it at build time (run it after editing; `bun run test` fails until you do). The pages, `src/links.ts` and the drift check import it. Hand-written copy (page JSX, `index.md`, `about.md`) keeps its own words, and `tools/test-projects.mjs` fails when a side quest link there or in either fleet rail copy disagrees with the manifest.
+
+`.github/workflows/drift.yml` runs `tools/drift-check.mjs` daily and by hand. It checks each side quest's live site (reachable, canonical host, JSON-LD `@id` and visible credit where the manifest says so), every `mk.wtf` destination on a domain Maurice owns, and the profile README's side quest links, and keeps one "Drift: mauricekleine.com" issue open while anything disagrees.

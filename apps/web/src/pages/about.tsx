@@ -1,4 +1,5 @@
 import { Hero, Section, Footer, Waypoint, ElsewhereLinks } from '../components'
+import { sideQuests } from '../projects'
 export function AboutPage() {
   return (
     <>
@@ -54,7 +55,7 @@ export function AboutPage() {
           <Waypoint constellation="mockly">
             <span className="glyph" aria-hidden="true">✦</span>
             <div>
-              {' '}<a href="https://www.getmockly.com">mockly</a>{' '}
+              {' '}<a href={sideQuests.mockly.url}>mockly</a>{' '}
               <p>
                 fake chat screenshots for 17+ platforms. built it in a weekend,
                 {' '}<a href="https://techcrunch.com/2025/07/10/mockly-made-a-fake-dm-generator-thats-actually-user-friendly/">techcrunch</a> wrote about it, 10k people use it.
@@ -66,7 +67,7 @@ export function AboutPage() {
           <Waypoint constellation="fluncle">
             <span className="glyph" aria-hidden="true">✦</span>
             <div>
-              {' '}<a href="https://www.fluncle.com">fluncle</a>{' '}
+              {' '}<a href={sideQuests.fluncle.url}>fluncle</a>{' '}
               <p>
                 drum &amp; bass bangers from another dimension. it has a radio,
                 an api, and an ssh rave terminal
@@ -76,7 +77,7 @@ export function AboutPage() {
           <Waypoint constellation="hackadam">
             <span className="glyph" aria-hidden="true">✦</span>
             <div>
-              {' '}<a href="https://hackadam.nl">hackadam</a>{' '}
+              {' '}<a href={sideQuests.hackadam.url}>hackadam</a>{' '}
               <p>
                 monthly meetup in amsterdam for indie makers building their own
                 stuff. co-organized with
@@ -87,7 +88,7 @@ export function AboutPage() {
           <Waypoint constellation="nonobench">
             <span className="glyph" aria-hidden="true">✦</span>
             <div>
-              {' '}<a href="https://www.nonobench.com">nonobench</a>{' '}
+              {' '}<a href={sideQuests.nonobench.url}>nonobench</a>{' '}
               <p>
                 benchmark for how well llms solve nonogram puzzles. the top
                 score went from 63% in february to 93% in september
@@ -100,7 +101,7 @@ export function AboutPage() {
       <Section aria-labelledby="community-heading">
         <h2 id="community-heading">community</h2>
         <p>
-          i co-organize <a href="https://hackadam.nl">hackadam</a> with
+          i co-organize <a href={sideQuests.hackadam.url}>hackadam</a> with
           {' '}<a href="https://x.com/AbnerHout">abner</a>, a monthly meetup in
           amsterdam for indie makers building their own stuff. we meet, share
           what we're working on, have lunch, do demos, hang out. part of the
