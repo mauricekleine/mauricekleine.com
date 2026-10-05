@@ -20,3 +20,4 @@ apps/web/tools/__pycache__/
 
 # cf build output and generated types
 .cloudflare/
+drift-report.json

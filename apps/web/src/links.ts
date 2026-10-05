@@ -3,10 +3,12 @@
 // and every project name combines with every link name (f/gh, fluncle/github).
 // pages and json-ld keep the real urls; these are only for people typing them.
 
+import { sideQuests } from "./projects.ts";
+
 type Link = { names: string[]; url: string };
 type Project = Link & { links: Link[] };
 
-const dnb = "https://open.spotify.com/playlist/1m5LADqpLjiBERdtqrIiL0";
+const { fluncle, nonobench, mockly, hackadam } = sideQuests;
 
 export const personal: Link[] = [
   { names: [""], url: "https://www.mauricekleine.com/" },
@@ -19,27 +21,28 @@ export const personal: Link[] = [
   { names: ["ph", "producthunt"], url: "https://www.producthunt.com/@mauricekleine" },
   { names: ["luma"], url: "https://luma.com/user/mauricekleine" },
   { names: ["tinkerers"], url: "https://amsterdam.aitinkerers.org/profile/client_kBU1ebRuvug" },
-  { names: ["dnb"], url: dnb },
+  { names: ["dnb"], url: fluncle.profiles.spotify },
 ];
 
+// destinations come from the manifest (src/projects.ts); the names live here
 export const projects: Project[] = [
   {
     names: ["f", "fluncle"],
-    url: "https://www.fluncle.com",
+    url: fluncle.url,
     links: [
-      { names: ["gh", "github"], url: "https://github.com/mauricekleine/fluncle" },
-      { names: ["yt", "youtube"], url: "https://www.youtube.com/@fluncle" },
-      { names: ["tt", "tiktok"], url: "https://www.tiktok.com/@fluncle" },
-      { names: ["dnb"], url: dnb },
+      { names: ["gh", "github"], url: fluncle.profiles.github },
+      { names: ["yt", "youtube"], url: fluncle.profiles.youtube },
+      { names: ["tt", "tiktok"], url: fluncle.profiles.tiktok },
+      { names: ["dnb"], url: fluncle.profiles.spotify },
     ],
   },
   {
     names: ["n", "nonobench", "bench"],
-    url: "https://www.nonobench.com",
-    links: [{ names: ["gh", "github"], url: "https://github.com/mauricekleine/nonobench" }],
+    url: nonobench.url,
+    links: [{ names: ["gh", "github"], url: nonobench.profiles.github }],
   },
-  { names: ["m", "mockly"], url: "https://www.getmockly.com", links: [] },
-  { names: ["h", "hacka", "hackadam"], url: "https://hackadam.nl", links: [] },
+  { names: ["m", "mockly"], url: mockly.url, links: [] },
+  { names: ["h", "hacka", "hackadam"], url: hackadam.url, links: [] },
 ];
 
 function buildTable(): Map<string, string> {

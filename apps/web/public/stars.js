@@ -666,7 +666,7 @@
       "\n         ✧      ·     .      ." +
       "\n     ✦ hackadam         nonobench ✦\n" +
       "%c\n" +
-      "hand-written html, css, and one canvas. no build step, no framework.\n" +
+      "prerendered html, css, and one canvas.\n" +
       'secrets: type "dnb" · click the sky · click the portrait · hover a side quest\n' +
       "impatient? window.sky.traffic('starlink' | 'iss' | 'ufo')\n" +
       "source: https://github.com/mauricekleine/mauricekleine.com\n" +
