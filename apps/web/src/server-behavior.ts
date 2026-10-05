@@ -1,6 +1,7 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod";
+import { handleShortLink, isShortLinkHost } from "./links.ts";
 
 export interface WorkerEnv {
   ASSETS: { fetch(input: Request | URL): Promise<Response> };
@@ -22,6 +23,7 @@ type SubscribePage = {
 // 1. markdown content negotiation: Accept: text/markdown on /, /about, /essays and /essays/*
 // 2. an sdk-backed mcp server at /mcp. yes, a personal site with an mcp server.
 // 3. essay email signup with double opt-in: POST /subscribe, GET /subscribe/confirm
+// 4. the mk.wtf short links (src/links.ts)
 
 // every html page has a hand-written .md twin next to it
 function markdownMirror(pathname: string): string | null {
@@ -528,6 +530,11 @@ export async function handleSiteRequest(
   renderPage?: (request: Request) => Response | Promise<Response>,
 ): Promise<Response> {
     const url = new URL(request.url);
+
+    // mk.wtf shares this worker but serves nothing except its short links
+    if (isShortLinkHost(url.hostname)) {
+      return handleShortLink(url);
+    }
 
     if (url.pathname === "/mcp") {
       return handleMcp(request, env);

@@ -283,3 +283,66 @@ test("GET /subscribe/confirm rejects an expired token", async () => {
     stub.restore();
   }
 });
+
+const noAssets = { ASSETS: { fetch: () => { throw Error("unexpected asset lookup"); } } };
+const mk = "https://www.mauricekleine.com";
+const dnb = "https://open.spotify.com/playlist/1m5LADqpLjiBERdtqrIiL0";
+const shortLinks = {
+  "": `${mk}/`, about: `${mk}/about`, essays: `${mk}/essays`,
+  x: "https://x.com/mauricekleine",
+  gh: "https://github.com/mauricekleine", github: "https://github.com/mauricekleine",
+  in: "https://www.linkedin.com/in/mauricekleine/", linkedin: "https://www.linkedin.com/in/mauricekleine/",
+  reddit: "https://www.reddit.com/user/mauricekleine/",
+  ph: "https://www.producthunt.com/@mauricekleine", producthunt: "https://www.producthunt.com/@mauricekleine",
+  luma: "https://luma.com/user/mauricekleine",
+  tinkerers: "https://amsterdam.aitinkerers.org/profile/client_kBU1ebRuvug",
+  dnb,
+  m: "https://www.getmockly.com/", mockly: "https://www.getmockly.com/",
+  h: "https://hackadam.nl/", hacka: "https://hackadam.nl/", hackadam: "https://hackadam.nl/",
+};
+for (const name of ["f", "fluncle"]) Object.assign(shortLinks, {
+  [name]: "https://www.fluncle.com/",
+  [`${name}/gh`]: "https://github.com/mauricekleine/fluncle", [`${name}/github`]: "https://github.com/mauricekleine/fluncle",
+  [`${name}/yt`]: "https://www.youtube.com/@fluncle", [`${name}/youtube`]: "https://www.youtube.com/@fluncle",
+  [`${name}/tt`]: "https://www.tiktok.com/@fluncle", [`${name}/tiktok`]: "https://www.tiktok.com/@fluncle",
+  [`${name}/dnb`]: dnb,
+});
+for (const name of ["n", "nonobench", "bench"]) Object.assign(shortLinks, {
+  [name]: "https://www.nonobench.com/",
+  [`${name}/gh`]: "https://github.com/mauricekleine/nonobench", [`${name}/github`]: "https://github.com/mauricekleine/nonobench",
+});
+
+test("mk.wtf redirects all 44 short links on both hosts", async () => {
+  assert.equal(Object.keys(shortLinks).length, 44);
+  for (const host of ["mk.wtf", "www.mk.wtf"]) {
+    for (const [path, target] of Object.entries(shortLinks)) {
+      const res = await worker.fetch(new Request(`https://${host}/${path}`), noAssets);
+      assert.equal(res.status, 302, `${host}/${path}`);
+      assert.equal(res.headers.get("location"), target, `${host}/${path}`);
+      assert.equal(res.headers.get("cache-control"), "public, max-age=300");
+    }
+  }
+  const { shortLinks: table } = await import("../src/links.ts");
+  assert.deepEqual([...table.keys()].sort(), Object.keys(shortLinks).sort(), "no untested links");
+});
+
+test("mk.wtf ignores case and trailing slashes and keeps the query", async () => {
+  for (const [path, target] of [
+    ["/F/GH/", "https://github.com/mauricekleine/fluncle"],
+    ["/Bench//", "https://www.nonobench.com/"],
+    ["/x?ref=talk", "https://x.com/mauricekleine?ref=talk"],
+    ["/f/dnb?a=1&a=2", `${dnb}?a=1&a=2`],
+  ]) {
+    const res = await worker.fetch(new Request(`https://mk.wtf${path}`), noAssets);
+    assert.equal(res.headers.get("location"), target, path);
+  }
+});
+
+test("an unknown mk.wtf link is a 404 that lists the real ones", async () => {
+  for (const path of ["/nope", "/f/nope", "/m/gh", "/mcp", "/about/x"]) {
+    const res = await worker.fetch(new Request(`https://mk.wtf${path}`), noAssets);
+    assert.equal(res.status, 404, path);
+    const body = await res.text();
+    assert.match(body, /mk\.wtf\/f\/gh  https:\/\/github\.com\/mauricekleine\/fluncle/);
+  }
+});
