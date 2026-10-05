@@ -4,6 +4,7 @@
 // couldn't run (network, timeouts). unknowns never count as clean.
 
 import { writeFileSync } from "node:fs";
+import { anchorHrefs, canonicalHref, jsonLdIds } from "./drift-parse.mjs";
 
 const { sideQuests } = await import("../src/projects.ts");
 const { shortLinks } = await import("../src/links.ts");
@@ -43,14 +44,14 @@ for (const quest of quests) {
 
   const host = new URL(quest.url).host;
   if (res.finalUrl.host !== host) drift.push(`${quest.name}: ${quest.url} ends up on ${res.finalUrl.host}`);
-  const canonical = res.body.match(/<link[^>]+rel="canonical"[^>]+href="([^"]+)"/)?.[1];
+  const canonical = canonicalHref(res.body);
   if (canonical && new URL(canonical, res.finalUrl).host !== host) {
     drift.push(`${quest.name}: canonical points at ${new URL(canonical, res.finalUrl).host}`);
   }
 
   if (quest.credit === "none") continue;
-  if (!res.body.includes(`"@id":"${PERSON_ID}"`)) drift.push(`${quest.name}: json-ld no longer references ${PERSON_ID}`);
-  if (quest.credit === "visible" && !/<a[^>]+href="https:\/\/www\.mauricekleine\.com\/?"/.test(res.body)) {
+  if (!jsonLdIds(res.body).has(PERSON_ID)) drift.push(`${quest.name}: json-ld no longer references ${PERSON_ID}`);
+  if (quest.credit === "visible" && !anchorHrefs(res.body).some((href) => /^https:\/\/www\.mauricekleine\.com\/?$/.test(href))) {
     drift.push(`${quest.name}: no visible link to www.mauricekleine.com`);
   }
 }

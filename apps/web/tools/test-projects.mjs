@@ -26,3 +26,20 @@ test("both fleet rail copies link public side quests at their manifest urls", ()
     for (const [, name, href] of checked) assert.equal(href, sideQuests[name].url, `${rail} links ${name}`);
   }
 });
+
+const { anchorHrefs, canonicalHref, jsonLdIds } = await import("./drift-parse.mjs");
+
+test("drift parsing reads attributes in any order", () => {
+  assert.equal(canonicalHref('<link href="https://wrong-host.example/" rel="canonical">'), "https://wrong-host.example/");
+  assert.equal(canonicalHref("<link rel='alternate canonical' href=https://a.example/>"), "https://a.example/");
+  assert.equal(canonicalHref('<link rel="icon" href="/x.png">'), undefined);
+  assert.deepEqual(anchorHrefs('<a class="x" href="https://www.mauricekleine.com/" rel="noreferrer">'), ["https://www.mauricekleine.com/"]);
+});
+
+test("drift parsing finds json-ld @id however it's formatted", () => {
+  const id = "https://www.mauricekleine.com/#maurice";
+  const pretty = JSON.stringify({ "@context": "https://schema.org", "@graph": [{ "@type": "WebSite", creator: { "@id": id } }] }, null, 2);
+  assert.ok(jsonLdIds(`<script type="application/ld+json">\n${pretty}\n</script>`).has(id));
+  assert.ok(jsonLdIds(`<script type=application/ld+json>{"founder":{"@id":"${id}"}}</script>`).has(id));
+  assert.equal(jsonLdIds('<script type="application/ld+json">{broken</script>').size, 0);
+});
