@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node tools/sync-projects.ts && python3 tools/sync-essays.py && vite build && tsc --noEmit",
+    "build": "node tools/sync-projects.ts && python3 tools/sync-essays.py && vite build && bun --check",
     "dev": "vite dev --port 3000",
     "preview": "vite preview",
     "test": "bun test tools/mcp.test.ts && node tools/test-worker.mjs && node tools/sync-projects.ts --check && node tools/test-projects.mjs"
@@ -37,7 +37,7 @@
     "@vitejs/plugin-react": "~6.1.1",
     "cf": "1.0.0-beta.12",
     "parse5": "~8.0.1",
-    "typescript": "~7.0.2",
+    "typescript": "7.0.2",
     "vite": "~8.3.1"
   }
 }
