@@ -10,11 +10,7 @@ const securityHeaders = {
 
 export default createServerEntry({
   async fetch(request) {
-    const response = await handleSiteRequest(
-      request,
-      env as WorkerEnv,
-      (pageRequest) => handler.fetch(pageRequest),
-    );
+    const response = await handleSiteRequest(request, env as WorkerEnv, (pageRequest) => handler.fetch(pageRequest));
     const headers = new Headers(response.headers);
     for (const [name, value] of Object.entries(securityHeaders)) {
       headers.set(name, value);

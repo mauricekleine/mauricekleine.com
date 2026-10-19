@@ -23,7 +23,11 @@ async function get(url) {
   let error;
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const res = await fetch(url, { headers: { "user-agent": UA }, redirect: "follow", signal: AbortSignal.timeout(20_000) });
+      const res = await fetch(url, {
+        headers: { "user-agent": UA },
+        redirect: "follow",
+        signal: AbortSignal.timeout(20_000),
+      });
       return { status: res.status, finalUrl: new URL(res.url), body: await res.text() };
     } catch (e) {
       error = e;
@@ -37,10 +41,22 @@ async function get(url) {
 for (const quest of quests) {
   const res = await get(quest.url);
   // a domain that doesn't resolve is drift, not flakiness: that's how hackadam.nl lapsed
-  if (res.error === "ENOTFOUND") { drift.push(`${quest.name}: ${quest.url} does not resolve`); continue; }
-  if (res.error) { unknown.push(`${quest.name}: ${quest.url} failed (${res.error})`); continue; }
-  if (res.status >= 500) { unknown.push(`${quest.name}: ${quest.url} returned ${res.status}`); continue; }
-  if (res.status >= 400) { drift.push(`${quest.name}: ${quest.url} returned ${res.status}`); continue; }
+  if (res.error === "ENOTFOUND") {
+    drift.push(`${quest.name}: ${quest.url} does not resolve`);
+    continue;
+  }
+  if (res.error) {
+    unknown.push(`${quest.name}: ${quest.url} failed (${res.error})`);
+    continue;
+  }
+  if (res.status >= 500) {
+    unknown.push(`${quest.name}: ${quest.url} returned ${res.status}`);
+    continue;
+  }
+  if (res.status >= 400) {
+    drift.push(`${quest.name}: ${quest.url} returned ${res.status}`);
+    continue;
+  }
 
   const host = new URL(quest.url).host;
   if (res.finalUrl.host !== host) drift.push(`${quest.name}: ${quest.url} ends up on ${res.finalUrl.host}`);
@@ -51,7 +67,10 @@ for (const quest of quests) {
 
   if (quest.credit === "none") continue;
   if (!jsonLdIds(res.body).has(PERSON_ID)) drift.push(`${quest.name}: json-ld no longer references ${PERSON_ID}`);
-  if (quest.credit === "visible" && !anchorHrefs(res.body).some((href) => /^https:\/\/www\.mauricekleine\.com\/?$/.test(href))) {
+  if (
+    quest.credit === "visible" &&
+    !anchorHrefs(res.body).some((href) => /^https:\/\/www\.mauricekleine\.com\/?$/.test(href))
+  ) {
     drift.push(`${quest.name}: no visible link to www.mauricekleine.com`);
   }
 }
@@ -63,7 +82,8 @@ for (const url of destinations) {
   if (quests.some((quest) => quest.url === url.replace(/\/$/, ""))) continue; // checked above
   const res = await get(url);
   if (res.error === "ENOTFOUND") drift.push(`mk.wtf destination ${url} does not resolve`);
-  else if (res.error || res.status >= 500) unknown.push(`mk.wtf destination ${url} failed (${res.error ?? res.status})`);
+  else if (res.error || res.status >= 500)
+    unknown.push(`mk.wtf destination ${url} failed (${res.error ?? res.status})`);
   else if (res.status >= 400) drift.push(`mk.wtf destination ${url} returned ${res.status}`);
 }
 
@@ -74,16 +94,20 @@ if (readme.error || readme.status !== 200) {
 } else {
   for (const [, link] of readme.body.matchAll(/\]\((https?:\/\/[^)\s]+)\)/g)) {
     const quest = quests.find((q) => bare(new URL(q.url).host) === bare(new URL(link).host));
-    if (quest && link.replace(/\/$/, "") !== quest.url) drift.push(`profile readme links ${quest.name} as ${link}, manifest says ${quest.url}`);
+    if (quest && link.replace(/\/$/, "") !== quest.url)
+      drift.push(`profile readme links ${quest.name} as ${link}, manifest says ${quest.url}`);
   }
   for (const quest of quests) {
-    if (!readme.body.includes(`(${quest.url})`)) drift.push(`profile readme doesn't link ${quest.name} at ${quest.url}`);
+    if (!readme.body.includes(`(${quest.url})`))
+      drift.push(`profile readme doesn't link ${quest.name} at ${quest.url}`);
   }
 }
 
-const section = (title, items) => (items.length ? `### ${title}\n\n${items.map((item) => `- ${item}`).join("\n")}\n` : "");
-const report = drift.length || unknown.length
-  ? `${section("drift", drift)}\n${section("couldn't check", unknown)}`.trim()
-  : "everything matches src/projects.ts.";
+const section = (title, items) =>
+  items.length ? `### ${title}\n\n${items.map((item) => `- ${item}`).join("\n")}\n` : "";
+const report =
+  drift.length || unknown.length
+    ? `${section("drift", drift)}\n${section("couldn't check", unknown)}`.trim()
+    : "everything matches src/projects.ts.";
 console.log(report);
 writeFileSync("drift-report.json", JSON.stringify({ drift, unknown, report }, null, 2));

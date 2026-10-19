@@ -80,7 +80,15 @@ const MCP_CORS_HEADERS = {
 // - [title](https://www.mauricekleine.com/essays/slug.md) (2026-09-13) - summary
 function parseEssayIndex(markdown: string, origin: string) {
   const re = /^- \[(.+?)\]\((.+?)\.md\) \((\d{4}-\d{2}-\d{2})\) - (.+)$/gm;
-  const essays: Array<{ slug: string; title: string; summary: string; date: string; url: string; markdown_url: string; cover: string }> = [];
+  const essays: Array<{
+    slug: string;
+    title: string;
+    summary: string;
+    date: string;
+    url: string;
+    markdown_url: string;
+    cover: string;
+  }> = [];
   let m;
   while ((m = re.exec(markdown))) {
     const [, title, mdUrl, date, summary] = m;
@@ -103,7 +111,10 @@ function parseEssayIndex(markdown: string, origin: string) {
 // the first real paragraph of an essay's .md twin: skip the h1, the date/
 // source line, the cover image and any divider, then take the next block.
 function essayOpening(markdown: string): string {
-  const blocks = markdown.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
+  const blocks = markdown
+    .split(/\n\s*\n/)
+    .map((b) => b.trim())
+    .filter(Boolean);
   for (const block of blocks) {
     if (/^#{1,6}\s/.test(block)) continue;
     if (/^!\[/.test(block)) continue;
@@ -157,29 +168,53 @@ const mcpHandler = createMcpHandler(({ requestInfo }) => {
   };
 
   assetTool("about_maurice", "who maurice kleine is: bio, role, location, background, links", "/api/maurice.json");
-  assetTool("list_projects", "maurice's side quests and the graveyard of ended experiments, with statuses and epitaphs", "/api/projects.json");
-  server.registerTool("list_essays", {
-    description: "maurice's essays, newest first: slug, title, summary, date, links and cover image for each",
-    inputSchema: noInput,
-  }, async () => ({ content: [{ type: "text", text: JSON.stringify(await listEssays(env, origin)) }] }));
-  server.registerTool("get_essay", {
-    description: "read one essay by slug. by default returns a teaser (title, summary, opening paragraph, links); pass full: true for the whole markdown",
-    inputSchema: z.object({
-      slug: z.string().describe("essay slug, e.g. ride-the-floor-up"),
-      full: z.boolean().optional().describe("return the full essay markdown instead of a teaser"),
-    }),
-  }, async ({ slug, full }) => {
-    const essay = await getEssay(env, origin, slug, Boolean(full));
-    if (!essay) throw new Error(`unknown essay: ${slug}`);
-    return { content: [{ type: "text", text: JSON.stringify(essay) }] };
-  });
+  assetTool(
+    "list_projects",
+    "maurice's side quests and the graveyard of ended experiments, with statuses and epitaphs",
+    "/api/projects.json",
+  );
+  server.registerTool(
+    "list_essays",
+    {
+      description: "maurice's essays, newest first: slug, title, summary, date, links and cover image for each",
+      inputSchema: noInput,
+    },
+    async () => ({ content: [{ type: "text", text: JSON.stringify(await listEssays(env, origin)) }] }),
+  );
+  server.registerTool(
+    "get_essay",
+    {
+      description:
+        "read one essay by slug. by default returns a teaser (title, summary, opening paragraph, links); pass full: true for the whole markdown",
+      inputSchema: z.object({
+        slug: z.string().describe("essay slug, e.g. ride-the-floor-up"),
+        full: z.boolean().optional().describe("return the full essay markdown instead of a teaser"),
+      }),
+    },
+    async ({ slug, full }) => {
+      const essay = await getEssay(env, origin, slug, Boolean(full));
+      if (!essay) throw new Error(`unknown essay: ${slug}`);
+      return { content: [{ type: "text", text: JSON.stringify(essay) }] };
+    },
+  );
   assetTool("get_uptime", "operational status of maurice himself", "/api/uptime.json");
-  server.registerTool("make_a_wish", {
-    description: "log a wish on a shooting star. results not guaranteed",
-    inputSchema: z.object({ wish: z.string().optional().describe("the wish. keep it small, this is a small internet thing") }),
-  }, async ({ wish }) => ({
-    content: [{ type: "text", text: wish ? `wish logged: "${wish}". results not guaranteed.` : "wish logged. results not guaranteed." }],
-  }));
+  server.registerTool(
+    "make_a_wish",
+    {
+      description: "log a wish on a shooting star. results not guaranteed",
+      inputSchema: z.object({
+        wish: z.string().optional().describe("the wish. keep it small, this is a small internet thing"),
+      }),
+    },
+    async ({ wish }) => ({
+      content: [
+        {
+          type: "text",
+          text: wish ? `wish logged: "${wish}". results not guaranteed.` : "wish logged. results not guaranteed.",
+        },
+      ],
+    }),
+  );
   return server;
 });
 
@@ -195,7 +230,12 @@ function allowedMcpOrigin(value: string | null): boolean {
 }
 
 function withMcpHeaders(response: Response, requestOrigin: string | null): Response {
-  const vary = response.headers.get("vary")?.split(",").map((part) => part.trim()).filter(Boolean) ?? [];
+  const vary =
+    response.headers
+      .get("vary")
+      ?.split(",")
+      .map((part) => part.trim())
+      .filter(Boolean) ?? [];
   if (!vary.some((part) => part.toLowerCase() === "origin")) vary.push("Origin");
   return withHeaders(response, {
     vary: vary.join(", "),
@@ -213,10 +253,13 @@ async function handleMcp(request: Request, env: WorkerEnv): Promise<Response> {
     return withMcpHeaders(new Response(null, { status: 204, headers: MCP_CORS_HEADERS }), requestOrigin);
   }
   if (request.method !== "POST") {
-    return withMcpHeaders(new Response("mcp lives here. POST json-rpc, get maurice.", {
-      status: 405,
-      headers: { allow: "POST, OPTIONS", "content-type": "text/plain" },
-    }), requestOrigin);
+    return withMcpHeaders(
+      new Response("mcp lives here. POST json-rpc, get maurice.", {
+        status: 405,
+        headers: { allow: "POST, OPTIONS", "content-type": "text/plain" },
+      }),
+      requestOrigin,
+    );
   }
 
   const response = await mcpRequestEnv.run(env, () => mcpHandler.fetch(request));
@@ -240,7 +283,7 @@ async function hmacSha256(secret: string, message: string): Promise<ArrayBuffer>
     new TextEncoder().encode(secret),
     { name: "HMAC", hash: "SHA-256" },
     false,
-    ["sign"]
+    ["sign"],
   );
   return crypto.subtle.sign("HMAC", key, new TextEncoder().encode(message));
 }
@@ -262,7 +305,10 @@ async function makeSubscribeToken(secret: string, email: string): Promise<string
 }
 
 // returns { email, expired: false } | { email, expired: true } | null (bad signature/shape)
-async function verifySubscribeToken(secret: string, token: string | null): Promise<{ email: string; expired: boolean } | null> {
+async function verifySubscribeToken(
+  secret: string,
+  token: string | null,
+): Promise<{ email: string; expired: boolean } | null> {
   const parts = (token || "").split(".");
   if (parts.length !== 2) return null;
   const [payloadB64, sigB64] = parts;
@@ -352,7 +398,7 @@ async function resendConfirmContact(env: WorkerEnv, email: string): Promise<bool
   }
   const segment = await fetch(
     `https://api.resend.com/contacts/${encodeURIComponent(email)}/segments/${env.RESEND_SEGMENT_ID}`,
-    { method: "POST", headers: { authorization: `Bearer ${env.RESEND_API_KEY}` } }
+    { method: "POST", headers: { authorization: `Bearer ${env.RESEND_API_KEY}` } },
   );
   if (!segment.ok) {
     console.error("subscribe/confirm: resend segment add failed", segment.status, await segment.text().catch(() => ""));
@@ -433,7 +479,7 @@ function subscribeErrorResponse(request: Request, status: number, message: strin
       message,
       back: { href: "/essays", label: "← back to essays" },
     }),
-    { status, headers: { "content-type": "text/html; charset=utf-8" } }
+    { status, headers: { "content-type": "text/html; charset=utf-8" } },
   );
 }
 
@@ -482,7 +528,7 @@ async function handleSubscribe(request: Request, env: WorkerEnv, url: URL): Prom
       message: "check your inbox for a confirmation link.",
       back: { href: "/essays", label: "← back to essays" },
     }),
-    { headers: { "content-type": "text/html; charset=utf-8" } }
+    { headers: { "content-type": "text/html; charset=utf-8" } },
   );
 }
 
@@ -503,7 +549,7 @@ async function handleSubscribeConfirm(request: Request, env: WorkerEnv, url: URL
         message: "confirmation links expire after 7 days. subscribe again and we'll send a fresh one.",
         back: { href: "/essays", label: "← back to essays" },
       }),
-      { status: 410, headers: { "content-type": "text/html; charset=utf-8" } }
+      { status: 410, headers: { "content-type": "text/html; charset=utf-8" } },
     );
   }
 
@@ -520,7 +566,7 @@ async function handleSubscribeConfirm(request: Request, env: WorkerEnv, url: URL
       message: "next essay lands in your inbox.",
       back: { href: "/essays", label: "← read the essays so far" },
     }),
-    { headers: { "content-type": "text/html; charset=utf-8" } }
+    { headers: { "content-type": "text/html; charset=utf-8" } },
   );
 }
 
@@ -529,92 +575,95 @@ export async function handleSiteRequest(
   env: WorkerEnv,
   renderPage?: (request: Request) => Response | Promise<Response>,
 ): Promise<Response> {
-    const url = new URL(request.url);
+  const url = new URL(request.url);
 
-    // mk.wtf shares this worker but serves nothing except its short links
-    if (isShortLinkHost(url.hostname)) {
-      return handleShortLink(url);
-    }
+  // mk.wtf shares this worker but serves nothing except its short links
+  if (isShortLinkHost(url.hostname)) {
+    return handleShortLink(url);
+  }
 
-    if (url.pathname === "/mcp") {
-      return handleMcp(request, env);
-    }
+  if (url.pathname === "/mcp") {
+    return handleMcp(request, env);
+  }
 
-    // apex to www, handled here so the redirect lives in the repo
-    if (url.hostname === "mauricekleine.com") {
-      url.hostname = "www.mauricekleine.com";
-      return Response.redirect(url.toString(), 301);
-    }
+  // apex to www, handled here so the redirect lives in the repo
+  if (url.hostname === "mauricekleine.com") {
+    url.hostname = "www.mauricekleine.com";
+    return Response.redirect(url.toString(), 301);
+  }
 
-    if (url.pathname === "/subscribe" && request.method === "POST") {
-      return handleSubscribe(request, env, url);
-    }
-    if (url.pathname === "/subscribe/confirm" && request.method === "GET") {
-      return handleSubscribeConfirm(request, env, url);
-    }
+  if (url.pathname === "/subscribe" && request.method === "POST") {
+    return handleSubscribe(request, env, url);
+  }
+  if (url.pathname === "/subscribe/confirm" && request.method === "GET") {
+    return handleSubscribeConfirm(request, env, url);
+  }
 
-    // markdown for agents, the hand-written edition
-    const mirror = markdownMirror(url.pathname);
-    const accept = request.headers.get("accept") || "";
-    if (mirror && prefersMarkdown(accept)) {
-      const res = await env.ASSETS.fetch(new URL(mirror, url.origin));
-      if (res.ok) {
-        const body = await res.text();
-        return new Response(body, {
-          headers: {
-            "content-type": "text/markdown; charset=utf-8",
-            "x-markdown-tokens": String(Math.ceil(body.length / 4)),
-            link: `<${url.origin}${url.pathname}>; rel="canonical"`,
-            "cache-control": "public, max-age=300",
-            vary: "accept",
-          },
-        });
-      }
-      // no twin: fall through so a missing essay is a real 404
-    }
-
-    const res = await env.ASSETS.fetch(request);
-
-    // The immutable image-path rule must not cache a missing page for a year.
-    if (res.status === 404) {
-      // During prerendering, the generated HTML is not in ASSETS yet.
-      // The app handler also supplies a real 404 for an unknown essay.
-      // Cloudflare's HTML asset handling asks for slash forms during prerender.
-      const pagePath = url.pathname.endsWith("/") && url.pathname !== "/"
-        ? url.pathname.slice(0, -1)
-        : url.pathname;
-      if ((markdownMirror(pagePath) || pagePath === "/404" || pagePath === "/superthread") && renderPage && (request.method === "GET" || request.method === "HEAD")) {
-        const renderUrl = new URL(request.url);
-        renderUrl.pathname = pagePath;
-        const rendered = await renderPage(new Request(renderUrl, request));
-        if (rendered.ok) return withHeaders(rendered, { vary: "accept" });
-      }
-      return withHeaders(res, {
-        "cache-control": "public, max-age=0, must-revalidate",
-        ...(mirror ? { vary: "accept" } : {}),
+  // markdown for agents, the hand-written edition
+  const mirror = markdownMirror(url.pathname);
+  const accept = request.headers.get("accept") || "";
+  if (mirror && prefersMarkdown(accept)) {
+    const res = await env.ASSETS.fetch(new URL(mirror, url.origin));
+    if (res.ok) {
+      const body = await res.text();
+      return new Response(body, {
+        headers: {
+          "content-type": "text/markdown; charset=utf-8",
+          "x-markdown-tokens": String(Math.ceil(body.length / 4)),
+          link: `<${url.origin}${url.pathname}>; rel="canonical"`,
+          "cache-control": "public, max-age=300",
+          vary: "accept",
+        },
       });
     }
+    // no twin: fall through so a missing essay is a real 404
+  }
 
-    // Static assets verifies that a page exists before normalizing its URL.
-    // Make only those HTML aliases permanent; leave other redirects alone.
-    const location = res.headers.get("location");
-    if ((request.method === "GET" || request.method === "HEAD") && res.status === 307 && location) {
-      const target = new URL(location, url);
-      const alias = target.pathname === "/"
+  const res = await env.ASSETS.fetch(request);
+
+  // The immutable image-path rule must not cache a missing page for a year.
+  if (res.status === 404) {
+    // During prerendering, the generated HTML is not in ASSETS yet.
+    // The app handler also supplies a real 404 for an unknown essay.
+    // Cloudflare's HTML asset handling asks for slash forms during prerender.
+    const pagePath = url.pathname.endsWith("/") && url.pathname !== "/" ? url.pathname.slice(0, -1) : url.pathname;
+    if (
+      (markdownMirror(pagePath) || pagePath === "/404" || pagePath === "/superthread") &&
+      renderPage &&
+      (request.method === "GET" || request.method === "HEAD")
+    ) {
+      const renderUrl = new URL(request.url);
+      renderUrl.pathname = pagePath;
+      const rendered = await renderPage(new Request(renderUrl, request));
+      if (rendered.ok) return withHeaders(rendered, { vary: "accept" });
+    }
+    return withHeaders(res, {
+      "cache-control": "public, max-age=0, must-revalidate",
+      ...(mirror ? { vary: "accept" } : {}),
+    });
+  }
+
+  // Static assets verifies that a page exists before normalizing its URL.
+  // Make only those HTML aliases permanent; leave other redirects alone.
+  const location = res.headers.get("location");
+  if ((request.method === "GET" || request.method === "HEAD") && res.status === 307 && location) {
+    const target = new URL(location, url);
+    const alias =
+      target.pathname === "/"
         ? url.pathname === "/index.html" || url.pathname === "/index"
         : url.pathname === `${target.pathname}.html` || url.pathname === `${target.pathname}/`;
-      if (alias && markdownMirror(target.pathname) && target.origin === url.origin && target.search === url.search) {
-        return new Response(res.body, { status: 308, headers: res.headers });
-      }
+    if (alias && markdownMirror(target.pathname) && target.origin === url.origin && target.search === url.search) {
+      return new Response(res.body, { status: 308, headers: res.headers });
     }
+  }
 
-    // the .md twins are readable duplicates of the html; say which page is canonical
-    const canonical = htmlForMirror(url.pathname);
-    if (canonical && res.ok) {
-      return withHeaders(res, { link: `<${url.origin}${canonical}>; rel="canonical"` });
-    }
-    if (mirror) {
-      return withHeaders(res, { vary: "accept" });
-    }
-    return res;
+  // the .md twins are readable duplicates of the html; say which page is canonical
+  const canonical = htmlForMirror(url.pathname);
+  if (canonical && res.ok) {
+    return withHeaders(res, { link: `<${url.origin}${canonical}>; rel="canonical"` });
+  }
+  if (mirror) {
+    return withHeaders(res, { vary: "accept" });
+  }
+  return res;
 }

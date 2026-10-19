@@ -1,8 +1,5 @@
 import { expect, test } from "bun:test";
-import {
-  Client,
-  StreamableHTTPClientTransport,
-} from "@modelcontextprotocol/client";
+import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import { handleSiteRequest, type WorkerEnv } from "../src/server-behavior";
 
 const site = "https://www.mauricekleine.com";
@@ -36,12 +33,9 @@ function assets(overrides: Record<string, string | undefined> = {}): WorkerEnv {
   return {
     ASSETS: {
       fetch: async (input) => {
-        const path = new URL(input instanceof Request ? input.url : input.href)
-          .pathname;
+        const path = new URL(input instanceof Request ? input.url : input.href).pathname;
         const body = { ...files, ...overrides }[path];
-        return body === undefined
-          ? new Response("not found", { status: 404 })
-          : new Response(body);
+        return body === undefined ? new Response("not found", { status: 404 }) : new Response(body);
       },
     },
   };
@@ -55,15 +49,12 @@ async function connect(modern: boolean, env = assets()) {
   const methods: string[] = [];
   const client = new Client(
     { name: "mcp-contract-test", version: "1.0.0" },
-    modern
-      ? { versionNegotiation: { mode: { pin: "2026-07-28" } } }
-      : { supportedProtocolVersions: ["2025-06-18"] },
+    modern ? { versionNegotiation: { mode: { pin: "2026-07-28" } } } : { supportedProtocolVersions: ["2025-06-18"] },
   );
   const transport = new StreamableHTTPClientTransport(new URL(endpoint), {
     fetch: async (url, init) => {
       const request = new Request(url, init);
-      if (request.method === "POST")
-        methods.push((await request.clone().json()).method);
+      if (request.method === "POST") methods.push((await request.clone().json()).method);
       return wire(request, env);
     },
   });
@@ -71,11 +62,7 @@ async function connect(modern: boolean, env = assets()) {
   return { client, methods };
 }
 
-function raw(
-  method: string,
-  params: Record<string, unknown> = {},
-  headers: Record<string, string> = {},
-) {
+function raw(method: string, params: Record<string, unknown> = {}, headers: Record<string, string> = {}) {
   return new Request(endpoint, {
     method: "POST",
     headers: {
@@ -108,9 +95,7 @@ test("2026 discovery and ordered tool catalog need no initialize or session", as
   const { client, methods } = await connect(true);
   try {
     expect(client.getProtocolEra()).toBe("modern");
-    expect(
-      client.getDiscoverResult()?._meta?.["io.modelcontextprotocol/serverInfo"],
-    ).toMatchObject({
+    expect(client.getDiscoverResult()?._meta?.["io.modelcontextprotocol/serverInfo"]).toMatchObject({
       name: "mauricekleine",
       title: "maurice kleine's personal site",
       version: "1.0.0",
@@ -143,9 +128,7 @@ test("2026 discovery and ordered tool catalog need no initialize or session", as
     ]);
     expect(catalog).toMatchObject({ ttlMs: 3_600_000, cacheScope: "public" });
     expect(catalog.tools[3].inputSchema.required).toEqual(["slug"]);
-    expect(catalog.tools[3].inputSchema.properties?.slug.description).toBe(
-      "essay slug, e.g. ride-the-floor-up",
-    );
+    expect(catalog.tools[3].inputSchema.properties?.slug.description).toBe("essay slug, e.g. ride-the-floor-up");
     expect(catalog.tools[5].inputSchema.properties?.wish.description).toBe(
       "the wish. keep it small, this is a small internet thing",
     );
@@ -163,9 +146,7 @@ test("all six tools keep their text content and essay input behavior", async () 
       ["list_projects", files["/api/projects.json"]],
       ["get_uptime", files["/api/uptime.json"]],
     ]) {
-      expect((await client.callTool({ name, arguments: {} })).content).toEqual([
-        { type: "text", text },
-      ]);
+      expect((await client.callTool({ name, arguments: {} })).content).toEqual([{ type: "text", text }]);
     }
     const listed = await client.callTool({
       name: "list_essays",
@@ -190,9 +171,7 @@ test("all six tools keep their text content and essay input behavior", async () 
         })
       ).content[0].text,
     );
-    expect(teaser.opening).toBe(
-      "This is the opening paragraph of essay one. It has some text.",
-    );
+    expect(teaser.opening).toBe("This is the opening paragraph of essay one. It has some text.");
     expect(teaser.markdown).toBeUndefined();
     const full = JSON.parse(
       (
@@ -216,9 +195,9 @@ test("all six tools keep their text content and essay input behavior", async () 
         text: 'wish logged: "clear skies". results not guaranteed.',
       },
     ]);
-    expect(
-      (await client.callTool({ name: "make_a_wish", arguments: {} })).content,
-    ).toEqual([{ type: "text", text: "wish logged. results not guaranteed." }]);
+    expect((await client.callTool({ name: "make_a_wish", arguments: {} })).content).toEqual([
+      { type: "text", text: "wish logged. results not guaranteed." },
+    ]);
     const invalidWish = await client.callTool({
       name: "make_a_wish",
       arguments: { wish: 12 },
@@ -237,10 +216,7 @@ test("all six tools keep their text content and essay input behavior", async () 
 });
 
 test("failed asset fetch becomes a tool error", async () => {
-  const { client } = await connect(
-    true,
-    assets({ "/api/maurice.json": undefined }),
-  );
+  const { client } = await connect(true, assets({ "/api/maurice.json": undefined }));
   try {
     const result = await client.callTool({
       name: "about_maurice",
@@ -265,36 +241,21 @@ test("failed asset fetch becomes a tool error", async () => {
 });
 
 test("concurrent requests keep their own ASSETS binding", async () => {
-  const request = () =>
-    raw(
-      "tools/call",
-      { name: "about_maurice", arguments: {} },
-      { "mcp-name": "about_maurice" },
-    );
+  const request = () => raw("tools/call", { name: "about_maurice", arguments: {} }, { "mcp-name": "about_maurice" });
   const [first, second] = await Promise.all([
     wire(request(), assets({ "/api/maurice.json": "first" })),
     wire(request(), assets({ "/api/maurice.json": "second" })),
   ]);
-  expect((await first.json()).result.content).toEqual([
-    { type: "text", text: "first" },
-  ]);
-  expect((await second.json()).result.content).toEqual([
-    { type: "text", text: "second" },
-  ]);
+  expect((await first.json()).result.content).toEqual([{ type: "text", text: "first" }]);
+  expect((await second.json()).result.content).toEqual([{ type: "text", text: "second" }]);
 });
 
 test("2026 header and method errors use the HTTP binding", async () => {
-  const mismatch = await wire(
-    raw("tools/list", {}, { "mcp-method": "tools/call" }),
-  );
+  const mismatch = await wire(raw("tools/list", {}, { "mcp-method": "tools/call" }));
   expect(mismatch.status).toBe(400);
   expect((await mismatch.json()).error.code).toBe(-32020);
   const wrongTool = await wire(
-    raw(
-      "tools/call",
-      { name: "about_maurice", arguments: {} },
-      { "mcp-name": "list_projects" },
-    ),
+    raw("tools/call", { name: "about_maurice", arguments: {} }, { "mcp-name": "list_projects" }),
   );
   expect(wrongTool.status).toBe(400);
   expect((await wrongTool.json()).error.code).toBe(-32020);
@@ -318,41 +279,22 @@ test("Origin policy and CORS reflect only allowed origins", async () => {
   );
   expect(apex.status).toBe(200);
   expect(apex.headers.get("vary")).toContain("Origin");
-  for (const origin of [
-    site,
-    "https://mauricekleine.com",
-    "http://localhost:3000",
-    "http://127.0.0.1:8787",
-  ]) {
+  for (const origin of [site, "https://mauricekleine.com", "http://localhost:3000", "http://127.0.0.1:8787"]) {
     const response = await wire(raw("tools/list", {}, { origin }));
     expect(response.status).toBe(200);
     expect(response.headers.get("access-control-allow-origin")).toBe(origin);
   }
-  for (const origin of [
-    "https://evil.example",
-    "http://www.mauricekleine.com",
-    "https://localhost:3000",
-    "null",
-  ]) {
+  for (const origin of ["https://evil.example", "http://www.mauricekleine.com", "https://localhost:3000", "null"]) {
     const response = await wire(raw("tools/list", {}, { origin }));
     expect(response.status).toBe(403);
     expect(response.headers.get("vary")).toContain("Origin");
     expect(response.headers.get("access-control-allow-origin")).toBeNull();
   }
-  const preflight = await wire(
-    new Request(endpoint, { method: "OPTIONS", headers: { origin: site } }),
-  );
+  const preflight = await wire(new Request(endpoint, { method: "OPTIONS", headers: { origin: site } }));
   expect(preflight.status).toBe(204);
   expect(preflight.headers.get("access-control-allow-origin")).toBe(site);
-  for (const header of [
-    "Content-Type",
-    "MCP-Protocol-Version",
-    "Mcp-Method",
-    "Mcp-Name",
-  ]) {
-    expect(preflight.headers.get("access-control-allow-headers")).toContain(
-      header,
-    );
+  for (const header of ["Content-Type", "MCP-Protocol-Version", "Mcp-Method", "Mcp-Name"]) {
+    expect(preflight.headers.get("access-control-allow-headers")).toContain(header);
   }
   expect(
     (
@@ -370,9 +312,7 @@ test("Origin policy and CORS reflect only allowed origins", async () => {
 
 test("GET and DELETE return 405 with Allow and Vary before SDK dispatch", async () => {
   for (const method of ["GET", "DELETE"]) {
-    const response = await wire(
-      new Request(endpoint, { method, headers: { origin: site } }),
-    );
+    const response = await wire(new Request(endpoint, { method, headers: { origin: site } }));
     expect(response.status).toBe(405);
     expect(response.headers.get("allow")).toBe("POST, OPTIONS");
     expect(response.headers.get("vary")).toContain("Origin");
@@ -417,9 +357,9 @@ test("2025 client still initializes and calls a tool on the same endpoint", asyn
     expect(client.getNegotiatedProtocolVersion()).toBe("2025-06-18");
     expect(client.getServerVersion()?.name).toBe("mauricekleine");
     expect(methods[0]).toBe("initialize");
-    expect(
-      (await client.callTool({ name: "about_maurice", arguments: {} })).content,
-    ).toEqual([{ type: "text", text: files["/api/maurice.json"] }]);
+    expect((await client.callTool({ name: "about_maurice", arguments: {} })).content).toEqual([
+      { type: "text", text: files["/api/maurice.json"] },
+    ]);
   } finally {
     await client.close();
   }
