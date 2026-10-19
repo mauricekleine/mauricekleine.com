@@ -17,7 +17,9 @@ export function canonicalHref(html) {
 }
 
 export function anchorHrefs(html) {
-  return tags(html, "a").map((attrs) => attrs.href).filter(Boolean);
+  return tags(html, "a")
+    .map((attrs) => attrs.href)
+    .filter(Boolean);
 }
 
 // every "@id" in every json-ld block, however it's formatted or nested

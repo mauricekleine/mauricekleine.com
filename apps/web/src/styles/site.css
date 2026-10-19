@@ -55,16 +55,8 @@ body::before {
     /* top vignette: the viewport's first pixels match the html
        overscroll color, so rubber-banding has no seam */
     linear-gradient(to bottom, var(--floor), oklch(from var(--floor) l c h / 0) 90px),
-    radial-gradient(
-      ellipse 90% 55% at 15% -5%,
-      oklch(from var(--nebula) l c h / 0.10),
-      transparent 60%
-    ),
-    radial-gradient(
-      ellipse 70% 45% at 90% 20%,
-      oklch(from var(--ember-wash) l c h / 0.04),
-      transparent 65%
-    ),
+    radial-gradient(ellipse 90% 55% at 15% -5%, oklch(from var(--nebula) l c h / 0.1), transparent 60%),
+    radial-gradient(ellipse 70% 45% at 90% 20%, oklch(from var(--ember-wash) l c h / 0.04), transparent 65%),
     linear-gradient(to bottom, oklch(from var(--background) l c h / 0), var(--floor));
 }
 

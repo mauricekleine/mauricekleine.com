@@ -1,20 +1,20 @@
-import { cloudflare } from '@cloudflare/vite-plugin'
-import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import { defineConfig } from 'vite'
-import { readdirSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
+import { cloudflare } from "@cloudflare/vite-plugin";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
+import { readdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
-const essayPaths = readdirSync(new URL('./content/essays/', import.meta.url))
-  .filter((name) => name.endsWith('.md'))
-  .map((name) => `/essays/${name.slice(0, -3)}`)
+const essayPaths = readdirSync(new URL("./content/essays/", import.meta.url))
+  .filter((name) => name.endsWith(".md"))
+  .map((name) => `/essays/${name.slice(0, -3)}`);
 
 export default defineConfig({
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   plugins: [
     cloudflare({
-      viteEnvironment: { name: 'ssr' },
+      viteEnvironment: { name: "ssr" },
       experimental: { newConfig: { cfBuildOutput: true } },
     }),
     tanstackStart({
@@ -25,15 +25,15 @@ export default defineConfig({
         failOnError: true,
       },
       pages: [
-        { path: '/', prerender: { enabled: true } },
-        { path: '/about', prerender: { enabled: true } },
-        { path: '/essays', prerender: { enabled: true } },
-        { path: '/404', prerender: { enabled: true } },
-        { path: '/superthread', prerender: { enabled: true } },
+        { path: "/", prerender: { enabled: true } },
+        { path: "/about", prerender: { enabled: true } },
+        { path: "/essays", prerender: { enabled: true } },
+        { path: "/404", prerender: { enabled: true } },
+        { path: "/superthread", prerender: { enabled: true } },
         ...essayPaths.map((path) => ({ path, prerender: { enabled: true } })),
       ],
     }),
     react(),
     tailwindcss(),
   ],
-})
+});
