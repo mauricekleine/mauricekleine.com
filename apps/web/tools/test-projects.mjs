@@ -19,8 +19,11 @@ test("markdown twins link each side quest at its manifest url", () => {
 
 // the fleet rail ships as a copied registry component, so it can't import the manifest
 test("both fleet rail copies link public side quests at their manifest urls", () => {
-  for (const rail of ["../src/components/superthread/ui/fleet-rail.tsx", "../../../packages/superthread/registry/ui/fleet-rail.tsx"]) {
-    const entries = [...read(rail).matchAll(/name: '([a-z]+)\.com', href: '([^']+)'/g)];
+  for (const rail of [
+    "../src/components/superthread/ui/fleet-rail.tsx",
+    "../../../packages/superthread/registry/ui/fleet-rail.tsx",
+  ]) {
+    const entries = [...read(rail).matchAll(/name: ["']([a-z]+)\.com["'],\s*href: ["']([^"']+)["']/g)];
     const checked = entries.filter(([, name]) => name in sideQuests);
     assert.ok(checked.length > 0, `${rail} has no side quests`);
     for (const [, name, href] of checked) assert.equal(href, sideQuests[name].url, `${rail} links ${name}`);
@@ -30,15 +33,24 @@ test("both fleet rail copies link public side quests at their manifest urls", ()
 const { anchorHrefs, canonicalHref, jsonLdIds } = await import("./drift-parse.mjs");
 
 test("drift parsing reads attributes in any order", () => {
-  assert.equal(canonicalHref('<link href="https://wrong-host.example/" rel="canonical">'), "https://wrong-host.example/");
+  assert.equal(
+    canonicalHref('<link href="https://wrong-host.example/" rel="canonical">'),
+    "https://wrong-host.example/",
+  );
   assert.equal(canonicalHref("<link rel='alternate canonical' href=https://a.example/>"), "https://a.example/");
   assert.equal(canonicalHref('<link rel="icon" href="/x.png">'), undefined);
-  assert.deepEqual(anchorHrefs('<a class="x" href="https://www.mauricekleine.com/" rel="noreferrer">'), ["https://www.mauricekleine.com/"]);
+  assert.deepEqual(anchorHrefs('<a class="x" href="https://www.mauricekleine.com/" rel="noreferrer">'), [
+    "https://www.mauricekleine.com/",
+  ]);
 });
 
 test("drift parsing finds json-ld @id however it's formatted", () => {
   const id = "https://www.mauricekleine.com/#maurice";
-  const pretty = JSON.stringify({ "@context": "https://schema.org", "@graph": [{ "@type": "WebSite", creator: { "@id": id } }] }, null, 2);
+  const pretty = JSON.stringify(
+    { "@context": "https://schema.org", "@graph": [{ "@type": "WebSite", creator: { "@id": id } }] },
+    null,
+    2,
+  );
   assert.ok(jsonLdIds(`<script type="application/ld+json">\n${pretty}\n</script>`).has(id));
   assert.ok(jsonLdIds(`<script type=application/ld+json>{"founder":{"@id":"${id}"}}</script>`).has(id));
   assert.equal(jsonLdIds('<script type="application/ld+json">{broken</script>').size, 0);
