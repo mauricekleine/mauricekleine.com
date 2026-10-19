@@ -2,3 +2,17 @@
 # Only resolve package versions published at least 3 days ago, so a freshly
 # compromised release is not installed before it is caught and yanked.
 minimumReleaseAge = 259200
+
+# bun fmt and bun lint come from bun-canary until a Bun release ships them; the pre-commit hook runs both on staged files.
+[fmt]
+printWidth = 120
+sortPackageJson = true
+# vendored skills, essays the publish pipeline reads verbatim, and generated output
+ignorePatterns = [
+  ".agents/**",
+  "skills/**",
+  "apps/web/content/**",
+  "apps/web/public/**",
+  "apps/web/src/routeTree.gen.ts",
+  "packages/superthread/dist/**",
+]

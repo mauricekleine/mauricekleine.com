@@ -1,1 +1,6 @@
-npx lint-staged
+# bun fmt and bun lint ship in bun canary first; dotfiles installs it as bun-canary.
+if command -v bun-canary >/dev/null 2>&1; then
+  bun-canary fmt --staged && bun-canary lint --staged
+else
+  echo "pre-commit: bun-canary not found, skipping bun fmt and bun lint" >&2
+fi

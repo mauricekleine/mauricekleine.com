@@ -12,6 +12,8 @@ Run commands from the repo root. `bun run dev` starts the web app on port 3000, 
 
 After a merge, run `bun run deploy:verify <merged-sha>` to wait for the build-stamped SHA served at `/api/deploy.json`.
 
+This repo trials Bun's formatter and linter ahead of a release. The pre-commit hook runs `bun-canary fmt --staged && bun-canary lint --staged` (dotfiles installs `bun-canary`); `[fmt]` in `bunfig.toml` sets the style and the ignored paths. Run `bun-canary fmt` or `bun-canary lint` by hand for the whole repo. Builds and installs stay on the pinned `bun`.
+
 Keep Maurice's voice lowercase and understated. No em dashes in new copy.
 
 Superthread is a shadcn theme in `packages/superthread/`. `bun run registry` regenerates its public theme and fleet-rail items in `apps/web/public/r/`. Keep theme values in `packages/superthread/DESIGN.md`.
