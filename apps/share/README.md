@@ -46,7 +46,8 @@ unlocks and cookies; PIN cookies never outlive the share. The alarm wakes at the
 share expiry even when nothing else is pending, then revokes the share like `DELETE`
 (staged re-shares of the same ID survive) and reclaims its R2 version. Shares stored
 before expiry existed have no `expiresAt` and expire 30 days after their `updated`
-time (upload start, seconds before commit).
+time (upload start, seconds before commit). When the store starts with shares and no
+pending alarm, as after the first deploy with expiry, it sets one for the earliest expiry.
 
 ## Storage and threat notes
 

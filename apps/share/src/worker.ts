@@ -200,6 +200,17 @@ function isUnlock(request: Request) {
 }
 
 export class ShareStore extends DurableObject<Env> {
+  constructor(ctx: DurableObjectState, env: Env) {
+    super(ctx, env);
+    // Shares stored before expiry existed may have no alarm; wake for the earliest one.
+    ctx.blockConcurrencyWhile(async () => {
+      if ((await ctx.storage.getAlarm()) !== null) return;
+      let next = Infinity;
+      for (const share of (await ctx.storage.list<Upload>({ prefix: "share:" })).values())
+        next = Math.min(next, shareExpiry(share));
+      if (next < Infinity) await ctx.storage.setAlarm(next);
+    });
+  }
   async fetch(request: Request) {
     let form: URLSearchParams | undefined;
     if (isUnlock(request)) {

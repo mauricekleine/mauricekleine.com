@@ -250,7 +250,7 @@ test("shares expire 30 days after commit, re-sharing renews, and the alarm recla
   const bucket = await worker.getR2Bucket("BUCKET");
   const stored = async (prefix) => (await bucket.list({ prefix })).objects.length;
   assert.ok((await stored(`${pub}/`)) > 0);
-  const { alarm } = await (await get("/_test/alarm")).json();
+  const { alarm } = await (await get("/_test/alarm?run")).json();
   const remaining = (await (await admin("")).json()).shares;
   assert.deepEqual(
     remaining.map((s) => s.id),
@@ -264,4 +264,18 @@ test("shares expire 30 days after commit, re-sharing renews, and the alarm recla
   const again = await commit(pub, await stage(pub, "public", "shared again"));
   assert.equal(await (await get(`/${pub}/`)).text(), "shared again");
   assert.ok(Date.parse(again.expiresAt) > Date.parse(after.expiresAt));
+});
+test("a share stored before expiry existed gets an alarm for its expiry on startup", async () => {
+  const legacy = "Legacy1234567890";
+  const receipt = await commit(legacy, await stage(legacy, "public", "legacy"));
+  await get(`/_test/legacy?id=${legacy}`).catch(() => null);
+  const { alarm } = await (await get("/_test/alarm")).json();
+  const shares = (await (await admin("")).json()).shares;
+  const listed = shares.find((s) => s.id === legacy);
+  assert.equal(listed.expiresAt, new Date(Date.parse(receipt.updated) + 30 * 86400000).toISOString());
+  assert.equal(
+    alarm,
+    Math.min(...shares.map((s) => Date.parse(s.expiresAt))),
+    "the alarm wakes for the earliest expiry",
+  );
 });
