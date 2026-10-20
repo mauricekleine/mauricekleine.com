@@ -4,6 +4,8 @@ import { pinPage } from "./pin-page";
 const HOUR = 3600000;
 const DAY = 24 * HOUR;
 const SHARE_LIFETIME = 30 * DAY;
+const MiB = 1024 * 1024;
+const MEDIA_EXTENSIONS = new Set(["mp4", "webm", "m4a", "mp3"]);
 const ID = /^[a-zA-Z0-9]{10,32}$/;
 const UUID = /^[a-f0-9-]{36}$/;
 const HEX = /^[a-f0-9]{64}$/;
@@ -25,6 +27,7 @@ type Upload = {
   // Set on the share pointer at commit; the client never chooses it.
   expiresAt?: number;
 };
+type FilePut = { key: string; uploadKey: string; path: string; size: number };
 type Attempt = { failures: number[]; locked: number };
 
 function reply(body: BodyInit | null = "not found", status = 404, headers: HeadersInit = {}) {
@@ -78,6 +81,82 @@ async function bounded(request: Request, limit: number) {
   }
   return bytes;
 }
+// R2 needs a known-length stream. Count incoming bytes before forwarding them,
+// and abort the write on a mismatch without buffering a media file in memory.
+async function putFile(bucket: R2Bucket, key: string, request: Request, size: number) {
+  if (Number(request.headers.get("Content-Length")) > size) throw new Invalid(413, "too large");
+  const reader = request.body?.getReader();
+  const read = async () => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      return await Promise.race([
+        reader!.read(),
+        new Promise<never>((_, reject) => {
+          timer = setTimeout(() => reject(new Invalid(408, "upload idle timeout")), 30000);
+        }),
+      ]);
+    } finally {
+      clearTimeout(timer);
+    }
+  };
+  if (!size) {
+    try {
+      if (reader) {
+        while (true) {
+          const { done, value } = await read();
+          if (done) break;
+          if (value.length) throw new Invalid(413, "too large");
+        }
+      }
+      await bucket.put(key, new Uint8Array());
+    } catch (error) {
+      await reader?.cancel(error);
+      throw error;
+    }
+    return;
+  }
+  const { readable, writable } = new FixedLengthStream(size);
+  const writer = writable.getWriter();
+  const pump = async () => {
+    try {
+      let received = 0;
+      let tail: Uint8Array | undefined;
+      if (reader) {
+        while (true) {
+          const { done, value } = await read();
+          if (done) break;
+          received += value.length;
+          if (received > size) throw new Invalid(413, "too large");
+          if (tail) await writer.write(tail);
+          tail = value;
+        }
+      }
+      if (received !== size) throw new Invalid(400, "file size mismatch");
+      // R2 can commit as soon as the fixed byte count arrives. Retain the last
+      // chunk until EOF so a trailing excess byte cannot replace a valid upload.
+      if (tail) await writer.write(tail);
+      await writer.close();
+    } catch (error) {
+      await Promise.allSettled([reader?.cancel(error), writer.abort(error)]);
+      throw error;
+    }
+  };
+  const [input, stored] = await Promise.allSettled([pump(), bucket.put(key, readable)]);
+  if (input.status === "rejected") throw input.reason;
+  if (stored.status === "rejected") throw stored.reason;
+}
+function extension(path: string) {
+  return path.split(".").pop()?.toLowerCase() || "";
+}
+function byteRange(header: string | null, size: number): { offset: number; length: number } | "unsatisfiable" | null {
+  // Malformed and multipart ranges fall back to the whole representation.
+  const match = header?.trim().match(/^bytes=(\d*)-(\d*)$/i);
+  if (!match || (!match[1] && !match[2])) return null;
+  const offset = match[1] ? Number(match[1]) : Math.max(0, size - Number(match[2]));
+  const end = match[1] && match[2] ? Math.min(size - 1, Number(match[2])) : size - 1;
+  if (offset >= size || end < offset) return "unsatisfiable";
+  return { offset, length: end - offset + 1 };
+}
 async function digest(value: string) {
   return new Uint8Array(await crypto.subtle.digest("SHA-256", encoder.encode(value)));
 }
@@ -109,7 +188,6 @@ async function verify(key: string, token: string, prefix: string) {
   return crypto.subtle.verify("HMAC", await hmac(key), bytes, encoder.encode(payload));
 }
 function contentType(path: string) {
-  const extension = path.split(".").pop()?.toLowerCase() || "";
   const types: Record<string, string> = {
     html: "text/html; charset=utf-8",
     htm: "text/html; charset=utf-8",
@@ -132,8 +210,11 @@ function contentType(path: string) {
     woff2: "font/woff2",
     mp4: "video/mp4",
     webm: "video/webm",
+    m4a: "audio/mp4",
+    mp3: "audio/mpeg",
   };
-  return Object.hasOwn(types, extension) ? types[extension] : "application/octet-stream";
+  const ext = extension(path);
+  return Object.hasOwn(types, ext) ? types[ext] : "application/octet-stream";
 }
 // Shares committed before expiry existed count from their upload time.
 function shareExpiry(share: Upload) {
@@ -163,13 +244,13 @@ function spec(value: unknown): Omit<Upload, "id" | "version" | "received" | "exp
       !validPath(file.path) ||
       !Number.isSafeInteger(file.size) ||
       file.size < 0 ||
-      file.size > 10 * 1024 * 1024 ||
+      file.size > (MEDIA_EXTENSIONS.has(extension(file.path)) ? 95 : 10) * MiB ||
       files.some((f) => f.path === file.path)
     )
       throw new Invalid(400, "invalid file");
     files.push({ path: file.path, size: file.size });
   }
-  if (!files.some((f) => f.path === "index.html") || files.reduce((n, f) => n + f.size, 0) > 50 * 1024 * 1024)
+  if (!files.some((f) => f.path === "index.html") || files.reduce((n, f) => n + f.size, 0) > 100 * MiB)
     throw new Invalid(400, "invalid snapshot");
   if (
     data.mode === "pin" &&
@@ -200,9 +281,21 @@ function isUnlock(request: Request) {
 }
 
 export class ShareStore extends DurableObject<Env> {
+  private pending: Promise<void> = Promise.resolve();
+  private inFlight = new Set<string>();
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
     ctx.blockConcurrencyWhile(() => this.bootstrap());
+  }
+  // Serialize catalog operations, with file bodies streamed between queue entries.
+  // blockConcurrencyWhile across an R2 streaming PUT deadlocks its input gate.
+  private serial<T>(operation: () => Promise<T>): Promise<T> {
+    const result = this.pending.then(operation);
+    this.pending = result.then(
+      () => {},
+      () => {},
+    );
+    return result;
   }
   // Shares stored before expiry existed may have no alarm; wake for the earliest one.
   // Runs on startup and on /_health, which deploy:verify polls after every deploy.
@@ -223,17 +316,35 @@ export class ShareStore extends DurableObject<Env> {
         throw error;
       }
     }
-    // Includes awaits on R2 and crypto: no concurrent PIN counter or pointer updates.
-    return this.ctx.blockConcurrencyWhile(async () => {
+    try {
+      // PIN counters, pointers and upload admission remain serialized, including
+      // their R2 and crypto awaits. Only the admitted file body leaves the queue.
+      const result = await this.serial(() => this.handle(request, form));
+      if (result instanceof Response) return result;
+      let stored = false;
       try {
-        return await this.handle(request, form);
-      } catch (error) {
-        if (error instanceof Invalid) return json({ error: error.message }, error.status);
-        return json({ error: "storage unavailable" }, 503);
+        await putFile(this.env.BUCKET, result.key, request, result.size);
+        stored = true;
+      } finally {
+        await this.serial(async () => {
+          this.inFlight.delete(result.key);
+          if (stored) {
+            // Other files may have finished, or DELETE/the alarm may have revoked
+            // this upload while it streamed. Never restore an old upload record.
+            const upload = await this.ctx.storage.get<Upload>(result.uploadKey);
+            if (!upload || upload.expires <= Date.now()) throw new Invalid(404, "not found");
+            upload.received.push(result.path);
+            await this.ctx.storage.put(result.uploadKey, upload);
+          }
+        });
       }
-    });
+      return reply(null, 204);
+    } catch (error) {
+      if (error instanceof Invalid) return json({ error: error.message }, error.status);
+      return json({ error: "storage unavailable" }, 503);
+    }
   }
-  async handle(request: Request, form?: URLSearchParams): Promise<Response> {
+  async handle(request: Request, form?: URLSearchParams): Promise<Response | FilePut> {
     const url = new URL(request.url);
     let parts: string[];
     try {
@@ -313,12 +424,16 @@ export class ShareStore extends DurableObject<Env> {
         const path = parts.slice(6).join("/");
         const file = upload.files.find((f) => f.path === path);
         if (!validPath(path) || !file) return reply();
-        const bytes = await bounded(request, file.size);
-        if (bytes.length !== file.size) throw new Invalid(400, "file size mismatch");
-        await this.env.BUCKET.put(`${id}/${version}/${path}`, bytes);
-        if (!upload.received.includes(path)) upload.received.push(path);
-        await this.ctx.storage.put(uploadKey, upload);
-        return reply(null, 204);
+        if (upload.received.includes(path)) {
+          // The CLI retries all files of a fingerprint-bound pending upload.
+          // A received object is immutable even before the snapshot commits.
+          if (request.body) this.ctx.waitUntil(request.body.cancel());
+          return reply(null, 204);
+        }
+        const key = `${id}/${version}/${path}`;
+        if (this.inFlight.has(key)) throw new Invalid(409, "file upload in progress");
+        this.inFlight.add(key);
+        return { key, uploadKey, path, size: file.size };
       }
       return reply();
     }
@@ -362,14 +477,28 @@ export class ShareStore extends DurableObject<Env> {
         return response;
       }
     }
-    if (!["GET", "HEAD"].includes(request.method) || !validPath(path) || !active.files.some((f) => f.path === path))
-      return reply();
-    const object = await this.env.BUCKET.get(`${id}/${active.version}/${path}`);
+    const file = active.files.find((f) => f.path === path);
+    if (!["GET", "HEAD"].includes(request.method) || !validPath(path) || !file) return reply();
+    const range = byteRange(request.headers.get("Range"), file.size);
+    const key = `${id}/${active.version}/${path}`;
+    const metadataOnly = request.method === "HEAD" || range === "unsatisfiable";
+    const content = metadataOnly ? null : await this.env.BUCKET.get(key, range ? { range } : undefined);
+    const object = metadataOnly ? await this.env.BUCKET.head(key) : content;
     if (!object) return reply();
     const type = contentType(path);
-    return reply(request.method === "HEAD" ? null : object.body, 200, {
+    const length = range === "unsatisfiable" ? 0 : range ? range.length : object.size;
+    return reply(content?.body ?? null, range === "unsatisfiable" ? 416 : range ? 206 : 200, {
       "Content-Type": type,
-      "Content-Length": String(object.size),
+      "Content-Length": String(length),
+      "Accept-Ranges": "bytes",
+      ...(range
+        ? {
+            "Content-Range":
+              range === "unsatisfiable"
+                ? `bytes */${object.size}`
+                : `bytes ${range.offset}-${range.offset + range.length - 1}/${object.size}`,
+          }
+        : {}),
       ...(type === "application/octet-stream" ? { "Content-Disposition": "attachment" } : {}),
     });
   }
@@ -415,7 +544,7 @@ export class ShareStore extends DurableObject<Env> {
     if (current === null || at < current) await this.ctx.storage.setAlarm(at);
   }
   async alarm() {
-    await this.ctx.blockConcurrencyWhile(async () => {
+    await this.serial(async () => {
       const time = Date.now();
       let next = Infinity;
       for (const [key, share] of await this.ctx.storage.list<Upload>({ prefix: "share:" })) {

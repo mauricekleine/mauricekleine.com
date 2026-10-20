@@ -174,6 +174,365 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   assert.equal((await admin(`/${pinId}`, "DELETE")).status, 204);
   assert.equal((await get(`/${id}/%2e%2e/%2e%2e/_admin/shares`)).status, 401);
 });
+test("committed files serve single byte ranges and HEAD with the same security headers", async () => {
+  const identity = "Ranges1234567890";
+  const body = "0123456789";
+  const types = [
+    ["index.html", "text/html; charset=utf-8"],
+    ["index.mp4", "video/mp4"],
+    ["clip.WEBM", "video/webm"],
+    ["audio.m4a", "audio/mp4"],
+    ["audio.mp3", "audio/mpeg"],
+    ["index.pdf", "application/pdf"],
+    ["unknown.bin", "application/octet-stream"],
+  ];
+  await commit(
+    identity,
+    await stage(identity, "public", body, [...types.slice(1).map(([path]) => [path, body]), ["empty.txt", ""]]),
+  );
+  for (const [path, type] of types) {
+    for (const [range, status, contentRange, expected] of [
+      [undefined, 200, null, body],
+      ["bytes=0-1", 206, "bytes 0-1/10", "01"],
+      ["bytes=3-", 206, "bytes 3-9/10", "3456789"],
+      ["bytes=-3", 206, "bytes 7-9/10", "789"],
+      ["bytes=9-99", 206, "bytes 9-9/10", "9"],
+      ["bytes=-99999999999999999999999", 206, "bytes 0-9/10", body],
+      ["bytes=0-99999999999999999999999", 206, "bytes 0-9/10", body],
+      ["bytes=10-", 416, "bytes */10", ""],
+      ["bytes=99999999999999999999999-", 416, "bytes */10", ""],
+      ["bytes=4-2", 416, "bytes */10", ""],
+      ["bytes=-0", 416, "bytes */10", ""],
+      ["bytes=0-1,4-5", 200, null, body],
+      ["bytes=99-100,0-1", 200, null, body],
+      ["bytes=invalid", 200, null, body],
+      ["items=0-1", 200, null, body],
+    ]) {
+      let getHeaders;
+      for (const method of ["GET", "HEAD"]) {
+        const response = await worker.dispatchFetch(`${origin}/${identity}/${path}`, {
+          method,
+          headers: { "Accept-Encoding": "identity", ...(range ? { Range: range } : {}) },
+        });
+        assert.equal(response.status, status, `${method} ${path} ${range}`);
+        assert.equal(response.headers.get("Accept-Ranges"), "bytes");
+        assert.equal(response.headers.get("Content-Range"), contentRange);
+        assert.equal(response.headers.get("Content-Length"), String(expected.length), `${method} ${path} ${range}`);
+        assert.equal(response.headers.get("Content-Type"), type);
+        assert.equal(
+          response.headers.get("Content-Disposition"),
+          type === "application/octet-stream" ? "attachment" : null,
+        );
+        headers(response, type === "application/pdf");
+        assert.equal(await response.text(), method === "HEAD" ? "" : expected);
+        if (method === "GET") getHeaders = [...response.headers];
+        else assert.deepEqual([...response.headers], getHeaders);
+      }
+    }
+  }
+  for (const method of ["GET", "HEAD"]) {
+    for (const range of [undefined, "bytes=0-", "bytes=-1"]) {
+      const response = await worker.dispatchFetch(`${origin}/${identity}/empty.txt`, {
+        method,
+        headers: { "Accept-Encoding": "identity", ...(range ? { Range: range } : {}) },
+      });
+      assert.equal(response.status, range ? 416 : 200);
+      assert.equal(response.headers.get("Content-Length"), "0");
+      assert.equal(response.headers.get("Content-Range"), range ? "bytes */0" : null);
+      assert.equal(response.headers.get("Accept-Ranges"), "bytes");
+      assert.equal(await response.text(), "");
+      headers(response);
+    }
+  }
+  assert.equal((await get(`/${identity}/missing.mp4`, { Range: "bytes=0-1" })).status, 404);
+});
+test("PIN media ranges require the version-bound cookie, including after unlocking", async () => {
+  const identity = "PinRanges1234567";
+  const share = () => stage(identity, "pin", "player", [["index.mp4", "0123456789"]]);
+  await commit(identity, await share());
+  async function locked(cookie) {
+    for (const method of ["GET", "HEAD"]) {
+      const response = await worker.dispatchFetch(`${origin}/${identity}/index.mp4`, {
+        method,
+        headers: { Range: "bytes=0-1", ...(cookie ? { Cookie: cookie } : {}) },
+      });
+      assert.equal(response.status, 200);
+      assert.equal(response.headers.get("Content-Type"), "text/html; charset=utf-8");
+      assert.equal(response.headers.get("Content-Range"), null);
+      assert.equal(response.headers.get("Accept-Ranges"), null);
+      headers(response);
+      if (method === "GET") assert.match(await response.text(), /shared with you/);
+      else assert.equal(await response.text(), "");
+    }
+  }
+  await locked();
+  const response = await unlock(identity, await challenge(identity), "482913");
+  const cookie = response.headers.get("Set-Cookie").split(";")[0];
+  for (const method of ["GET", "HEAD"]) {
+    const media = await worker.dispatchFetch(`${origin}/${identity}/index.mp4`, {
+      method,
+      headers: { Cookie: cookie, Range: "bytes=0-1" },
+    });
+    assert.equal(media.status, 206);
+    assert.equal(media.headers.get("Content-Type"), "video/mp4");
+    assert.equal(media.headers.get("Content-Range"), "bytes 0-1/10");
+    assert.equal(media.headers.get("Content-Length"), "2");
+    assert.equal(media.headers.get("Accept-Ranges"), "bytes");
+    assert.equal(await media.text(), method === "HEAD" ? "" : "01");
+    headers(media);
+  }
+  await locked();
+  await commit(identity, await share());
+  await locked(cookie);
+  await admin(`/${identity}`, "DELETE");
+  assert.equal((await get(`/${identity}/index.mp4`, { Cookie: cookie, Range: "bytes=0-1" })).status, 404);
+});
+test("media, ordinary file and snapshot limits are enforced at their exact byte boundaries", async () => {
+  const identity = "Limits1234567890";
+  const MiB = 1024 * 1024;
+  const start = (files) =>
+    admin(`/${identity}/uploads`, "POST", JSON.stringify({ mode: "public", fingerprint, files }));
+  for (const [path, limit] of [
+    ["index.mp4", 95 * MiB],
+    ["clip.WEBM", 95 * MiB],
+    ["audio.m4a", 95 * MiB],
+    ["audio.mp3", 95 * MiB],
+    ["asset.bin", 10 * MiB],
+    ["fake.mp4.txt", 10 * MiB],
+  ]) {
+    for (const extra of [0, 1]) {
+      const response = await start([
+        { path: "index.html", size: 0 },
+        { path, size: limit + extra },
+      ]);
+      assert.equal(response.status, extra ? 400 : 201, `${path}: ${limit + extra}`);
+    }
+  }
+  for (const extra of [0, 1]) {
+    const response = await start([
+      { path: "index.html", size: 0 },
+      { path: "index.mp4", size: 95 * MiB },
+      { path: "poster.jpg", size: 5 * MiB + extra },
+    ]);
+    assert.equal(response.status, extra ? 400 : 201, `snapshot: ${100 * MiB + extra}`);
+  }
+  for (const count of [200, 201]) {
+    const response = await start([
+      { path: "index.html", size: 0 },
+      ...Array.from({ length: count - 1 }, (_, i) => ({ path: `file-${i}.txt`, size: 0 })),
+    ]);
+    assert.equal(response.status, count === 200 ? 201 : 400);
+  }
+  const files = [
+    { path: "index.html", size: 0 },
+    { path: "index.mp4", size: 95 * MiB },
+    { path: "poster.jpg", size: 5 * MiB },
+  ];
+  const { upload } = await (await start(files)).json();
+  // A chunked sender exercises the read bound without allocating the whole file.
+  const stream = (size, byte = 42) =>
+    new ReadableStream({
+      pull(controller) {
+        if (!size) return controller.close();
+        const length = Math.min(size, 64 * 1024);
+        controller.enqueue(new Uint8Array(length).fill(byte));
+        size -= length;
+      },
+    });
+  const put = (path, size, byte) =>
+    worker.dispatchFetch(`${origin}/_admin/shares/${identity}/uploads/${upload}/files/${path}`, {
+      method: "PUT",
+      headers: auth,
+      body: stream(size, byte),
+      duplex: "half",
+    });
+  const bucket = await worker.getR2Bucket("BUCKET");
+  for (const file of files) {
+    if (file.path === "index.mp4") {
+      for (const [size, status] of [
+        [file.size + 1, 413],
+        [file.size - 1, 400],
+      ]) {
+        assert.equal((await put(file.path, size)).status, status, `media upload: ${size}`);
+        assert.equal(
+          await bucket.head(`${identity}/${upload}/${file.path}`),
+          null,
+          "failed uploads leave no partial object",
+        );
+        assert.equal((await admin(`/${identity}/uploads/${upload}/commit`, "POST")).status, 409);
+      }
+    }
+    assert.equal((await put(file.path, file.size)).status, 204, file.path);
+  }
+  await commit(identity, upload);
+  const tail = await get(`/${identity}/index.mp4`, { Range: `bytes=${95 * MiB - 2}-` });
+  assert.equal(tail.status, 206);
+  assert.deepEqual(new Uint8Array(await tail.arrayBuffer()), new Uint8Array([42, 42]));
+  // Non-media's 10 MiB boundary is also exercised by real uploads, with retry after failure.
+  const { upload: ordinary } = await (await start([{ path: "index.html", size: 10 * MiB }])).json();
+  for (const [size, status] of [
+    [10 * MiB + 1, 413],
+    [10 * MiB - 1, 400],
+    [10 * MiB, 204],
+  ]) {
+    const response = await worker.dispatchFetch(
+      `${origin}/_admin/shares/${identity}/uploads/${ordinary}/files/index.html`,
+      {
+        method: "PUT",
+        headers: auth,
+        body: stream(size),
+        duplex: "half",
+      },
+    );
+    assert.equal(response.status, status, `ordinary upload: ${size}`);
+    if (status !== 204) assert.equal((await admin(`/${identity}/uploads/${ordinary}/commit`, "POST")).status, 409);
+  }
+  await commit(identity, ordinary);
+});
+async function within(promise, ms, message) {
+  let timer;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise((_, reject) => (timer = setTimeout(() => reject(new Error(message)), ms))),
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+test("a slow file PUT leaves other links responsive and excludes a second writer until commit", async () => {
+  const identity = "SlowUpload123456",
+    open = "DuringUpload1234";
+  await commit(open, await stage(open, "public", "still served"));
+  const { upload } = await (
+    await admin(
+      `/${identity}/uploads`,
+      "POST",
+      JSON.stringify({
+        mode: "public",
+        fingerprint,
+        files: [
+          { path: "index.html", size: 10 },
+          { path: "note.txt", size: 4 },
+        ],
+      }),
+    )
+  ).json();
+  const path = `/${identity}/uploads/${upload}`;
+  let sender;
+  const pending = worker.dispatchFetch(`${origin}/_admin/shares${path}/files/index.html`, {
+    method: "PUT",
+    headers: auth,
+    duplex: "half",
+    body: new ReadableStream({
+      start(controller) {
+        sender = controller;
+        controller.enqueue(new TextEncoder().encode("0"));
+      },
+    }),
+  });
+  try {
+    // Leave the sender open, as in the reviewer's slow-upload probe.
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    const response = await within(get(`/${open}/`), 1000, "another link waited on the file upload");
+    assert.equal(response.status, 200);
+    assert.equal(await response.text(), "still served");
+    assert.equal(
+      (
+        await within(
+          admin(`${path}/files/index.html`, "PUT", "abcdefghij"),
+          1000,
+          "a concurrent PUT waited on the first writer",
+        )
+      ).status,
+      409,
+    );
+    assert.equal((await admin(`${path}/files/note.txt`, "PUT", "done")).status, 204);
+    assert.equal((await admin(`${path}/commit`, "POST")).status, 409);
+  } finally {
+    sender.enqueue(new TextEncoder().encode("123456789"));
+    sender.close();
+    assert.equal((await pending).status, 204);
+  }
+  await commit(identity, upload);
+  assert.equal(await (await get(`/${identity}/`)).text(), "0123456789");
+  assert.equal(await (await get(`/${identity}/note.txt`)).text(), "done");
+});
+test("retrying a received path is a no-op even when its body never finishes", async () => {
+  const identity = "RetryUpload12345";
+  const upload = await stage(identity, "public", "original");
+  const path = `/${identity}/uploads/${upload}/files/index.html`;
+  const bucket = await worker.getR2Bucket("BUCKET");
+  const key = `${identity}/${upload}/index.html`;
+  const before = await bucket.head(key);
+  // A different body with the same length must not rewrite the first object.
+  assert.equal((await admin(path, "PUT", "replaced")).status, 204);
+  let sender;
+  const pending = worker.dispatchFetch(`${origin}/_admin/shares${path}`, {
+    method: "PUT",
+    headers: auth,
+    duplex: "half",
+    body: new ReadableStream({
+      start(controller) {
+        sender = controller;
+        controller.enqueue(new TextEncoder().encode("x"));
+      },
+    }),
+  });
+  try {
+    assert.equal((await within(pending, 1000, "received-path retry read its body")).status, 204);
+  } finally {
+    sender.close();
+    await pending;
+  }
+  assert.equal((await bucket.head(key)).etag, before.etag);
+  assert.equal(await (await bucket.get(key)).text(), "original");
+  await commit(identity, upload);
+  assert.equal(await (await get(`/${identity}/`)).text(), "original");
+});
+test("a file PUT with no chunks for 30 seconds aborts and releases its path for retry", async () => {
+  const identity = "IdleUpload123456";
+  const { upload } = await (
+    await admin(
+      `/${identity}/uploads`,
+      "POST",
+      JSON.stringify({
+        mode: "public",
+        fingerprint,
+        files: [{ path: "index.html", size: 10 }],
+      }),
+    )
+  ).json();
+  const path = `/${identity}/uploads/${upload}`;
+  let sender;
+  const pending = worker.dispatchFetch(`${origin}/_admin/shares${path}/files/index.html`, {
+    method: "PUT",
+    headers: auth,
+    duplex: "half",
+    body: new ReadableStream({
+      start(controller) {
+        sender = controller;
+        controller.enqueue(new TextEncoder().encode("0"));
+      },
+    }),
+  });
+  const started = Date.now();
+  try {
+    const response = await within(pending, 35000, "stalled upload did not time out");
+    assert.equal(response.status, 408);
+    assert.match((await response.json()).error, /idle/i);
+    assert.ok(Date.now() - started >= 29000, "timeout must allow 30 seconds without a chunk");
+  } finally {
+    sender.close();
+    await pending;
+  }
+  const bucket = await worker.getR2Bucket("BUCKET");
+  assert.equal(await bucket.head(`${identity}/${upload}/index.html`), null);
+  assert.equal((await admin(`${path}/commit`, "POST")).status, 409);
+  assert.equal((await admin(`${path}/files/index.html`, "PUT", "0123456789")).status, 204);
+  await commit(identity, upload);
+  assert.equal(await (await get(`/${identity}/`)).text(), "0123456789");
+});
 test("a stalled PIN unlock body does not hold the store for other links", async () => {
   const stalled = "Stalled123456789",
     open = "OpenLink12345678";
