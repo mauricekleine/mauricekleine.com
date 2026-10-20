@@ -364,7 +364,6 @@ test("media, ordinary file and snapshot limits are enforced at their exact byte 
     }
     assert.equal((await put(file.path, file.size)).status, 204, file.path);
   }
-  assert.equal((await put("index.mp4", 95 * MiB + 1, 43)).status, 413);
   await commit(identity, upload);
   const tail = await get(`/${identity}/index.mp4`, { Range: `bytes=${95 * MiB - 2}-` });
   assert.equal(tail.status, 206);
@@ -389,6 +388,150 @@ test("media, ordinary file and snapshot limits are enforced at their exact byte 
     if (status !== 204) assert.equal((await admin(`/${identity}/uploads/${ordinary}/commit`, "POST")).status, 409);
   }
   await commit(identity, ordinary);
+});
+async function within(promise, ms, message) {
+  let timer;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise((_, reject) => (timer = setTimeout(() => reject(new Error(message)), ms))),
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+test("a slow file PUT leaves other links responsive and excludes a second writer until commit", async () => {
+  const identity = "SlowUpload123456",
+    open = "DuringUpload1234";
+  await commit(open, await stage(open, "public", "still served"));
+  const { upload } = await (
+    await admin(
+      `/${identity}/uploads`,
+      "POST",
+      JSON.stringify({
+        mode: "public",
+        fingerprint,
+        files: [
+          { path: "index.html", size: 10 },
+          { path: "note.txt", size: 4 },
+        ],
+      }),
+    )
+  ).json();
+  const path = `/${identity}/uploads/${upload}`;
+  let sender;
+  const pending = worker.dispatchFetch(`${origin}/_admin/shares${path}/files/index.html`, {
+    method: "PUT",
+    headers: auth,
+    duplex: "half",
+    body: new ReadableStream({
+      start(controller) {
+        sender = controller;
+        controller.enqueue(new TextEncoder().encode("0"));
+      },
+    }),
+  });
+  try {
+    // Leave the sender open, as in the reviewer's slow-upload probe.
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    const response = await within(get(`/${open}/`), 1000, "another link waited on the file upload");
+    assert.equal(response.status, 200);
+    assert.equal(await response.text(), "still served");
+    assert.equal(
+      (
+        await within(
+          admin(`${path}/files/index.html`, "PUT", "abcdefghij"),
+          1000,
+          "a concurrent PUT waited on the first writer",
+        )
+      ).status,
+      409,
+    );
+    assert.equal((await admin(`${path}/files/note.txt`, "PUT", "done")).status, 204);
+    assert.equal((await admin(`${path}/commit`, "POST")).status, 409);
+  } finally {
+    sender.enqueue(new TextEncoder().encode("123456789"));
+    sender.close();
+    assert.equal((await pending).status, 204);
+  }
+  await commit(identity, upload);
+  assert.equal(await (await get(`/${identity}/`)).text(), "0123456789");
+  assert.equal(await (await get(`/${identity}/note.txt`)).text(), "done");
+});
+test("retrying a received path is a no-op even when its body never finishes", async () => {
+  const identity = "RetryUpload12345";
+  const upload = await stage(identity, "public", "original");
+  const path = `/${identity}/uploads/${upload}/files/index.html`;
+  const bucket = await worker.getR2Bucket("BUCKET");
+  const key = `${identity}/${upload}/index.html`;
+  const before = await bucket.head(key);
+  // A different body with the same length must not rewrite the first object.
+  assert.equal((await admin(path, "PUT", "replaced")).status, 204);
+  let sender;
+  const pending = worker.dispatchFetch(`${origin}/_admin/shares${path}`, {
+    method: "PUT",
+    headers: auth,
+    duplex: "half",
+    body: new ReadableStream({
+      start(controller) {
+        sender = controller;
+        controller.enqueue(new TextEncoder().encode("x"));
+      },
+    }),
+  });
+  try {
+    assert.equal((await within(pending, 1000, "received-path retry read its body")).status, 204);
+  } finally {
+    sender.close();
+    await pending;
+  }
+  assert.equal((await bucket.head(key)).etag, before.etag);
+  assert.equal(await (await bucket.get(key)).text(), "original");
+  await commit(identity, upload);
+  assert.equal(await (await get(`/${identity}/`)).text(), "original");
+});
+test("a file PUT with no chunks for 30 seconds aborts and releases its path for retry", async () => {
+  const identity = "IdleUpload123456";
+  const { upload } = await (
+    await admin(
+      `/${identity}/uploads`,
+      "POST",
+      JSON.stringify({
+        mode: "public",
+        fingerprint,
+        files: [{ path: "index.html", size: 10 }],
+      }),
+    )
+  ).json();
+  const path = `/${identity}/uploads/${upload}`;
+  let sender;
+  const pending = worker.dispatchFetch(`${origin}/_admin/shares${path}/files/index.html`, {
+    method: "PUT",
+    headers: auth,
+    duplex: "half",
+    body: new ReadableStream({
+      start(controller) {
+        sender = controller;
+        controller.enqueue(new TextEncoder().encode("0"));
+      },
+    }),
+  });
+  const started = Date.now();
+  try {
+    const response = await within(pending, 35000, "stalled upload did not time out");
+    assert.equal(response.status, 408);
+    assert.match((await response.json()).error, /idle/i);
+    assert.ok(Date.now() - started >= 29000, "timeout must allow 30 seconds without a chunk");
+  } finally {
+    sender.close();
+    await pending;
+  }
+  const bucket = await worker.getR2Bucket("BUCKET");
+  assert.equal(await bucket.head(`${identity}/${upload}/index.html`), null);
+  assert.equal((await admin(`${path}/commit`, "POST")).status, 409);
+  assert.equal((await admin(`${path}/files/index.html`, "PUT", "0123456789")).status, 204);
+  await commit(identity, upload);
+  assert.equal(await (await get(`/${identity}/`)).text(), "0123456789");
 });
 test("a stalled PIN unlock body does not hold the store for other links", async () => {
   const stalled = "Stalled123456789",
