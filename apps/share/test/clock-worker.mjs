@@ -12,14 +12,15 @@ export class ShareStore extends Store {
       return Response.json({ alarm: await this.ctx.storage.getAlarm() });
     }
     // Recreates a share as the previous deployment stored it: no expiresAt and no
-    // alarm, then restarts the object so the next request runs its constructor.
+    // alarm. With `restart`, the next request runs the object's constructor.
     if (url.pathname === "/_test/legacy") {
       const key = `share:${url.searchParams.get("id")}`;
       const { expiresAt, ...share } = await this.ctx.storage.get(key);
       await this.ctx.storage.put(key, share);
       await this.ctx.storage.deleteAlarm();
       await this.ctx.storage.sync();
-      this.ctx.abort("test restart");
+      if (url.searchParams.has("restart")) this.ctx.abort("test restart");
+      return new Response(null, { status: 204 });
     }
     return super.fetch(request);
   }

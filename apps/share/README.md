@@ -46,8 +46,9 @@ unlocks and cookies; PIN cookies never outlive the share. The alarm wakes at the
 share expiry even when nothing else is pending, then revokes the share like `DELETE`
 (staged re-shares of the same ID survive) and reclaims its R2 version. Shares stored
 before expiry existed have no `expiresAt` and expire 30 days after their `updated`
-time (upload start, seconds before commit). When the store starts with shares and no
-pending alarm, as after the first deploy with expiry, it sets one for the earliest expiry.
+time (upload start, seconds before commit). When the store starts, or answers
+`/_health`, with shares and no pending alarm, as after the first deploy with expiry, it
+sets one for the earliest expiry. `deploy:verify` polls `/_health` after each deploy.
 
 ## Storage and threat notes
 
@@ -109,7 +110,7 @@ The CLI supports `MK_ARTIFACT_SHARE_URL` (HTTPS, or loopback HTTP for local test
 and `MK_ARTIFACT_SHARE_TOKEN` environment overrides. The default token is read from
 `op://Soliton Agents/ARTIFACT_SHARE_TOKEN/credential` without logging it.
 
-`GET /_health` returns `{sha}` from the build's `BUILD_SHA`, with the same security
+`GET /_health` returns `{sha}` from the build's `BUILD_SHA` through the store, with the same security
 headers. `bun run --cwd apps/share build` stamps HEAD; `cf deploy --prebuilt --dry-run` from `apps/share` validates
 the independent build without touching the existing web Worker.
 

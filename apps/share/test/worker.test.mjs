@@ -265,11 +265,16 @@ test("shares expire 30 days after commit, re-sharing renews, and the alarm recla
   assert.equal(await (await get(`/${pub}/`)).text(), "shared again");
   assert.ok(Date.parse(again.expiresAt) > Date.parse(after.expiresAt));
 });
-test("a share stored before expiry existed gets an alarm for its expiry on startup", async () => {
+test("a share stored before expiry existed gets an alarm on startup and on the deploy health check", async () => {
   const legacy = "Legacy1234567890";
   const receipt = await commit(legacy, await stage(legacy, "public", "legacy"));
-  await get(`/_test/legacy?id=${legacy}`).catch(() => null);
+  await get(`/_test/legacy?id=${legacy}`);
+  assert.equal((await (await get("/_test/alarm")).json()).alarm, null);
+  assert.deepEqual(await (await get("/_health")).json(), { sha: "local-test" });
+  const health = (await (await get("/_test/alarm")).json()).alarm;
+  await get(`/_test/legacy?id=${legacy}&restart`).catch(() => null);
   const { alarm } = await (await get("/_test/alarm")).json();
+  assert.equal(health, alarm);
   const shares = (await (await admin("")).json()).shares;
   const listed = shares.find((s) => s.id === legacy);
   assert.equal(listed.expiresAt, new Date(Date.parse(receipt.updated) + 30 * 86400000).toISOString());

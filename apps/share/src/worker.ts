@@ -202,14 +202,16 @@ function isUnlock(request: Request) {
 export class ShareStore extends DurableObject<Env> {
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
-    // Shares stored before expiry existed may have no alarm; wake for the earliest one.
-    ctx.blockConcurrencyWhile(async () => {
-      if ((await ctx.storage.getAlarm()) !== null) return;
-      let next = Infinity;
-      for (const share of (await ctx.storage.list<Upload>({ prefix: "share:" })).values())
-        next = Math.min(next, shareExpiry(share));
-      if (next < Infinity) await ctx.storage.setAlarm(next);
-    });
+    ctx.blockConcurrencyWhile(() => this.bootstrap());
+  }
+  // Shares stored before expiry existed may have no alarm; wake for the earliest one.
+  // Runs on startup and on /_health, which deploy:verify polls after every deploy.
+  async bootstrap() {
+    if ((await this.ctx.storage.getAlarm()) !== null) return;
+    let next = Infinity;
+    for (const share of (await this.ctx.storage.list<Upload>({ prefix: "share:" })).values())
+      next = Math.min(next, shareExpiry(share));
+    if (next < Infinity) await this.ctx.storage.setAlarm(next);
   }
   async fetch(request: Request) {
     let form: URLSearchParams | undefined;
@@ -238,6 +240,10 @@ export class ShareStore extends DurableObject<Env> {
       parts = url.pathname.split("/").slice(1).map(decodeURIComponent);
     } catch {
       return reply();
+    }
+    if (parts.length === 1 && parts[0] === "_health" && ["GET", "HEAD"].includes(request.method)) {
+      await this.bootstrap();
+      return json({ sha: this.env.BUILD_SHA });
     }
     const admin = parts[0] === "_admin";
     if (admin) {
@@ -445,7 +451,6 @@ export default {
       const token = request.headers.get("Authorization") || "";
       if (!env.ADMIN_TOKEN || !(await same(token, `Bearer ${env.ADMIN_TOKEN}`))) return reply("unauthorized", 401);
     }
-    if (path === "/_health" && ["GET", "HEAD"].includes(request.method)) return json({ sha: env.BUILD_SHA });
     if (isUnlock(request)) {
       // Buffer the capped form here so the store only ever receives a complete body.
       try {
