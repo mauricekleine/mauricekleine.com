@@ -14,7 +14,7 @@
     "registry": "bun run --cwd packages/superthread build && shadcn build packages/superthread/registry.json --output apps/web/public/r",
     "site:css": "tailwindcss -i apps/web/src/styles/site.css -o apps/web/public/style.css --minify",
     "specimen:css": "tailwindcss -i apps/web/src/styles/superthread-specimen.css -o apps/web/public/superthread/specimen.css --minify",
-    "test": "bun run --cwd packages/superthread test && bun run --cwd apps/web test"
+    "test": "bun run --cwd packages/superthread test && bun run --cwd apps/web test && bun run --cwd apps/share test"
   },
   "devDependencies": {
     "@tailwindcss/cli": "~4.3.3",
