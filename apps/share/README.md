@@ -42,7 +42,8 @@ One SQLite-backed `ShareStore` Durable Object (`catalog-v1`) owns all share poin
 upload manifests and per-link attempt windows. This low-volume, single-operator
 system favors one serialization boundary over a separate eventually consistent index.
 `blockConcurrencyWhile` serializes reads, uploads, commits, deletes and PIN attempts,
-including crypto awaits. R2 holds immutable `id/version/path` objects; only the DO
+including crypto awaits. PIN unlock forms (2 KiB cap) are read in full by the front
+Worker, before the store's serialized section, so a slow sender cannot stall other links. R2 holds immutable `id/version/path` objects; only the DO
 pointer makes them visible. Existing in-flight responses can finish after deletion.
 Each request sees one committed version; a page loading assets during replacement
 can span versions. Re-share replaces the whole snapshot and invalidates prior cookies.
