@@ -214,3 +214,73 @@ test("a stalled PIN unlock body does not hold the store for other links", async 
   assert.equal(oversized.status, 413);
   headers(oversized);
 });
+test("shares expire 30 days after commit, re-sharing renews, and the alarm reclaims them", async () => {
+  const DAY = 86400000;
+  const pub = "Expiring12345678",
+    pin = "ExpiringPin12345",
+    renewed = "Renewed123456789";
+  const lifetime = (receipt) => Date.parse(receipt.expiresAt) - Date.parse(receipt.updated);
+  const first = await commit(pub, await stage(pub, "public", "expiring"));
+  assert.ok(lifetime(first) >= 30 * DAY && lifetime(first) < 30 * DAY + 60000, first.expiresAt);
+  assert.equal((await admin(`/${pub}/uploads/${first.version}/commit`, "POST")).status, 200);
+  assert.equal(
+    (await (await admin(`/${pub}/uploads/${first.version}/commit`, "POST")).json()).expiresAt,
+    first.expiresAt,
+  );
+  await commit(pin, await stage(pin, "pin", "expiring protected"));
+  const cookie = (await unlock(pin, await challenge(pin), "482913")).headers.get("Set-Cookie").split(";")[0];
+  const before = await commit(renewed, await stage(renewed, "public", "before renewal"));
+  const listed = (await (await admin("")).json()).shares;
+  assert.equal(listed.find((s) => s.id === pub).expiresAt, first.expiresAt);
+  await get(`/_test/advance-clock?ms=${29 * DAY}`);
+  const after = await commit(renewed, await stage(renewed, "public", "renewed"));
+  assert.ok(Date.parse(after.expiresAt) - Date.parse(before.expiresAt) >= 29 * DAY, "re-sharing restarts the lifetime");
+  await get(`/_test/advance-clock?ms=${DAY - 120000}`);
+  assert.equal(await (await get(`/${pub}/`)).text(), "expiring");
+  assert.equal(await (await get(`/${pin}/`, { Cookie: cookie })).text(), "expiring protected");
+  const form = await challenge(pin);
+  await get("/_test/advance-clock?ms=240000");
+  for (const response of [await get(`/${pub}/`), await get(`/${pub}`), await get(`/${pin}/`, { Cookie: cookie })]) {
+    assert.equal(response.status, 404);
+    assert.equal(await response.text(), "not found");
+    headers(response);
+  }
+  assert.equal((await unlock(pin, form, "482913")).status, 404, "an expired PIN link no longer unlocks");
+  assert.equal(await (await get(`/${renewed}/`)).text(), "renewed");
+  const bucket = await worker.getR2Bucket("BUCKET");
+  const stored = async (prefix) => (await bucket.list({ prefix })).objects.length;
+  assert.ok((await stored(`${pub}/`)) > 0);
+  const { alarm } = await (await get("/_test/alarm?run")).json();
+  const remaining = (await (await admin("")).json()).shares;
+  assert.deepEqual(
+    remaining.map((s) => s.id),
+    [renewed],
+  );
+  assert.equal(await stored(`${pub}/`), 0);
+  assert.equal(await stored(`${pin}/`), 0);
+  assert.equal(await stored(`${renewed}/${before.version}/`), 0);
+  assert.equal(await stored(`${renewed}/${after.version}/`), 1);
+  assert.equal(alarm, Date.parse(after.expiresAt), "with only active shares left, the alarm waits for the next expiry");
+  const again = await commit(pub, await stage(pub, "public", "shared again"));
+  assert.equal(await (await get(`/${pub}/`)).text(), "shared again");
+  assert.ok(Date.parse(again.expiresAt) > Date.parse(after.expiresAt));
+});
+test("a share stored before expiry existed gets an alarm on startup and on the deploy health check", async () => {
+  const legacy = "Legacy1234567890";
+  const receipt = await commit(legacy, await stage(legacy, "public", "legacy"));
+  await get(`/_test/legacy?id=${legacy}`);
+  assert.equal((await (await get("/_test/alarm")).json()).alarm, null);
+  assert.deepEqual(await (await get("/_health")).json(), { sha: "local-test" });
+  const health = (await (await get("/_test/alarm")).json()).alarm;
+  await get(`/_test/legacy?id=${legacy}&restart`).catch(() => null);
+  const { alarm } = await (await get("/_test/alarm")).json();
+  assert.equal(health, alarm);
+  const shares = (await (await admin("")).json()).shares;
+  const listed = shares.find((s) => s.id === legacy);
+  assert.equal(listed.expiresAt, new Date(Date.parse(receipt.updated) + 30 * 86400000).toISOString());
+  assert.equal(
+    alarm,
+    Math.min(...shares.map((s) => Date.parse(s.expiresAt))),
+    "the alarm wakes for the earliest expiry",
+  );
+});

@@ -3,6 +3,7 @@ import { pinPage } from "./pin-page";
 
 const HOUR = 3600000;
 const DAY = 24 * HOUR;
+const SHARE_LIFETIME = 30 * DAY;
 const ID = /^[a-zA-Z0-9]{10,32}$/;
 const UUID = /^[a-f0-9-]{36}$/;
 const HEX = /^[a-f0-9]{64}$/;
@@ -21,6 +22,8 @@ type Upload = {
   received: string[];
   expires: number;
   updated: string;
+  // Set on the share pointer at commit; the client never chooses it.
+  expiresAt?: number;
 };
 type Attempt = { failures: number[]; locked: number };
 
@@ -132,11 +135,15 @@ function contentType(path: string) {
   };
   return Object.hasOwn(types, extension) ? types[extension] : "application/octet-stream";
 }
-function receipt(upload: Upload) {
-  const { id, mode, version, fingerprint, updated } = upload;
-  return { id, mode, version, fingerprint, updated };
+// Shares committed before expiry existed count from their upload time.
+function shareExpiry(share: Upload) {
+  return share.expiresAt ?? Date.parse(share.updated) + SHARE_LIFETIME;
 }
-function spec(value: unknown): Omit<Upload, "id" | "version" | "received" | "expires" | "updated"> {
+function receipt(share: Upload) {
+  const { id, mode, version, fingerprint, updated } = share;
+  return { id, mode, version, fingerprint, updated, expiresAt: new Date(shareExpiry(share)).toISOString() };
+}
+function spec(value: unknown): Omit<Upload, "id" | "version" | "received" | "expires" | "updated" | "expiresAt"> {
   if (!value || typeof value !== "object") throw new Invalid(400, "invalid manifest");
   const data = value as Record<string, unknown>;
   if (
@@ -193,6 +200,19 @@ function isUnlock(request: Request) {
 }
 
 export class ShareStore extends DurableObject<Env> {
+  constructor(ctx: DurableObjectState, env: Env) {
+    super(ctx, env);
+    ctx.blockConcurrencyWhile(() => this.bootstrap());
+  }
+  // Shares stored before expiry existed may have no alarm; wake for the earliest one.
+  // Runs on startup and on /_health, which deploy:verify polls after every deploy.
+  async bootstrap() {
+    if ((await this.ctx.storage.getAlarm()) !== null) return;
+    let next = Infinity;
+    for (const share of (await this.ctx.storage.list<Upload>({ prefix: "share:" })).values())
+      next = Math.min(next, shareExpiry(share));
+    if (next < Infinity) await this.ctx.storage.setAlarm(next);
+  }
   async fetch(request: Request) {
     let form: URLSearchParams | undefined;
     if (isUnlock(request)) {
@@ -221,6 +241,10 @@ export class ShareStore extends DurableObject<Env> {
     } catch {
       return reply();
     }
+    if (parts.length === 1 && parts[0] === "_health" && ["GET", "HEAD"].includes(request.method)) {
+      await this.bootstrap();
+      return json({ sha: this.env.BUILD_SHA });
+    }
     const admin = parts[0] === "_admin";
     if (admin) {
       if (
@@ -242,7 +266,7 @@ export class ShareStore extends DurableObject<Env> {
           upload.expires = 0;
           await this.ctx.storage.put(key, upload);
         }
-        await this.ctx.storage.setAlarm(Date.now() + HOUR);
+        await this.schedule(Date.now() + HOUR);
         return reply(null, 204);
       }
       if (parts[3] !== "uploads") return reply();
@@ -254,16 +278,17 @@ export class ShareStore extends DurableObject<Env> {
           if (error instanceof Invalid) throw error;
           throw new Invalid(400, "invalid JSON");
         }
+        const time = Date.now();
         const upload: Upload = {
           ...spec(data),
           id,
           version: crypto.randomUUID(),
           received: [],
-          expires: Date.now() + DAY,
-          updated: new Date().toISOString(),
+          expires: time + DAY,
+          updated: new Date(time).toISOString(),
         };
         await this.ctx.storage.put(`upload:${id}:${upload.version}`, upload);
-        await this.ctx.storage.setAlarm(Date.now() + HOUR);
+        await this.schedule(Date.now() + HOUR);
         return json({ upload: upload.version }, 201);
       }
       const version = parts[4];
@@ -275,11 +300,13 @@ export class ShareStore extends DurableObject<Env> {
       if (parts.length === 6 && parts[5] === "commit" && request.method === "POST") {
         if (active?.version === version) return json(receipt(active));
         if (upload.received.length !== upload.files.length) throw new Invalid(409, "incomplete upload");
-        await this.ctx.storage.put(activeKey, upload);
+        // Committing, including re-sharing, starts a fresh lifetime.
+        const share = { ...upload, expiresAt: Date.now() + SHARE_LIFETIME };
+        await this.ctx.storage.put(activeKey, share);
         // Old snapshots are unreachable and reclaimed on the next alarm.
         if (active) await this.ctx.storage.put(`upload:${id}:${active.version}`, { ...active, expires: 0 });
-        await this.ctx.storage.setAlarm(Date.now() + HOUR);
-        return json(receipt(upload));
+        await this.schedule(Date.now() + HOUR);
+        return json(receipt(share));
       }
       if (parts[5] === "files" && parts.length > 6 && request.method === "PUT") {
         if (active?.version === version) throw new Invalid(409, "committed snapshot is immutable");
@@ -299,6 +326,11 @@ export class ShareStore extends DurableObject<Env> {
     if (!id || !ID.test(id)) return reply();
     const active = await this.ctx.storage.get<Upload>(`share:${id}`);
     if (!active) return reply();
+    // An expired link answers like a revoked one; the alarm reclaims it.
+    if (shareExpiry(active) <= Date.now()) {
+      await this.schedule(Date.now());
+      return reply();
+    }
     if (parts.length === 1 && (request.method === "GET" || request.method === "HEAD"))
       return reply(null, 302, { Location: `/${id}/` });
     const path = parts.slice(1).join("/") || "index.html";
@@ -370,26 +402,44 @@ export class ShareStore extends DurableObject<Env> {
         attempt.locked ? { "Retry-After": "3600" } : {},
       );
     }
-    const session = await signed(this.env.COOKIE_KEY, `session.${active.id}.${active.version}.${time + 30 * DAY}`);
+    const until = Math.min(time + 30 * DAY, shareExpiry(active));
+    const session = await signed(this.env.COOKIE_KEY, `session.${active.id}.${active.version}.${until}`);
     return reply(null, 303, {
       Location: `/${active.id}/`,
-      "Set-Cookie": `__Secure-artifact-${active.id}=${session}; Path=/${active.id}/; Max-Age=2592000; HttpOnly; Secure; SameSite=Lax`,
+      "Set-Cookie": `__Secure-artifact-${active.id}=${session}; Path=/${active.id}/; Max-Age=${Math.ceil((until - time) / 1000)}; HttpOnly; Secure; SameSite=Lax`,
     });
+  }
+  // Keeps the earliest pending wake-up: setAlarm alone would replace it.
+  async schedule(at: number) {
+    const current = await this.ctx.storage.getAlarm();
+    if (current === null || at < current) await this.ctx.storage.setAlarm(at);
   }
   async alarm() {
     await this.ctx.blockConcurrencyWhile(async () => {
-      let pending = false;
+      const time = Date.now();
+      let next = Infinity;
+      for (const [key, share] of await this.ctx.storage.list<Upload>({ prefix: "share:" })) {
+        const expiry = shareExpiry(share);
+        if (expiry > time) {
+          next = Math.min(next, expiry);
+          continue;
+        }
+        // Revoke like DELETE, leaving staged re-shares of the same link alone.
+        await this.ctx.storage.delete(key);
+        await this.ctx.storage.delete(`attempt:${share.id}`);
+        await this.ctx.storage.put(`upload:${share.id}:${share.version}`, { ...share, expires: 0 });
+      }
       for (const [key, upload] of await this.ctx.storage.list<Upload>({ prefix: "upload:" })) {
         const active = await this.ctx.storage.get<Upload>(`share:${upload.id}`);
         if (active?.version === upload.version) continue;
-        if (upload.expires > Date.now()) {
-          pending = true;
+        if (upload.expires > time) {
+          next = Math.min(next, time + HOUR);
           continue;
         }
         await this.env.BUCKET.delete(upload.files.map((f) => `${upload.id}/${upload.version}/${f.path}`));
         await this.ctx.storage.delete(key);
       }
-      if (pending) await this.ctx.storage.setAlarm(Date.now() + HOUR);
+      if (next < Infinity) await this.ctx.storage.setAlarm(next);
     });
   }
 }
@@ -401,7 +451,6 @@ export default {
       const token = request.headers.get("Authorization") || "";
       if (!env.ADMIN_TOKEN || !(await same(token, `Bearer ${env.ADMIN_TOKEN}`))) return reply("unauthorized", 401);
     }
-    if (path === "/_health" && ["GET", "HEAD"].includes(request.method)) return json({ sha: env.BUILD_SHA });
     if (isUnlock(request)) {
       // Buffer the capped form here so the store only ever receives a complete body.
       try {
