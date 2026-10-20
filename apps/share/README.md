@@ -47,6 +47,15 @@ pointer makes them visible. Existing in-flight responses can finish after deleti
 Each request sees one committed version; a page loading assets during replacement
 can span versions. Re-share replaces the whole snapshot and invalidates prior cookies.
 
+Artifacts must be self-contained, in both modes, just as on the private vhost.
+The required opaque-origin sandbox and no-CORS policy prevent same-host ES modules,
+web fonts and `fetch()` of sibling files from loading. Inline scripts/styles/data,
+embedded images and external fonts with CORS (such as Superthread's public fonts)
+work. In PIN mode, the browser also withholds SameSite=Lax cookies from opaque-origin
+subresource requests, so embed images/styles rather than relying on sibling files.
+Assets and PDFs remain available as direct top-level links after unlocking; their
+HTTP MIME behavior does not imply they can be fetched by a sandboxed document.
+
 Five wrong PINs within one hour lock that link for one hour from the fifth attempt.
 A correct PIN does not reset the failure window; re-sharing also preserves lockout.
 A locked link rejects unlocks, including correct PINs; existing valid cookies still

@@ -1,8 +1,14 @@
 import assert from "node:assert/strict";
 import { after, test } from "node:test";
 import { createHash } from "node:crypto";
+import { fileURLToPath } from "node:url";
 import { localWorker } from "../tools/local.mjs";
-const worker = localWorker();
+const worker = localWorker({
+  modules: [
+    { type: "ESModule", path: fileURLToPath(new URL("./clock-worker.mjs", import.meta.url)) },
+    { type: "ESModule", path: fileURLToPath(new URL("../dist/worker.js", import.meta.url)) },
+  ],
+});
 after(() => worker.dispose());
 const origin = "https://share.mauricekleine.com";
 const id = "Public1234567890",
@@ -152,6 +158,14 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   await commit(pinId, await stage(pinId, "pin", "rotated"));
   assert.match(await (await get(`/${pinId}/`, { Cookie: cookieHeader })).text(), /shared with you/);
   assert.equal((await unlock(pinId, await challenge(pinId), "482913")).status, 429);
+  await get("/_test/advance-clock?ms=3600001");
+  const expiredForm = await challenge(pinId);
+  assert.equal(
+    (await unlock(pinId, expiredForm, "000000")).status,
+    403,
+    "one wrong PIN after an expired lock starts a fresh failure window",
+  );
+  assert.equal((await unlock(pinId, expiredForm, "482913")).status, 303);
   const listed = (await (await admin("")).json()).shares;
   assert.equal(listed.length, 3);
   assert.ok(listed.every((s) => !s.salt && !s.pinHash));

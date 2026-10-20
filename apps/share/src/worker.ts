@@ -334,6 +334,7 @@ export class ShareStore extends DurableObject<Env> {
       return reply("this link is locked. try again in an hour.", 429, {
         "Retry-After": String(Math.ceil((attempt.locked - time) / 1000)),
       });
+    attempt.locked = 0;
     attempt.failures = attempt.failures.filter((at) => time - at < HOUR);
     const pin = form.get("pin") || "";
     const actual = hex(await digest(`${active.salt}:${pin}`));
@@ -357,13 +358,18 @@ export class ShareStore extends DurableObject<Env> {
   }
   async alarm() {
     await this.ctx.blockConcurrencyWhile(async () => {
+      let pending = false;
       for (const [key, upload] of await this.ctx.storage.list<Upload>({ prefix: "upload:" })) {
         const active = await this.ctx.storage.get<Upload>(`share:${upload.id}`);
-        if (active?.version === upload.version || upload.expires > Date.now()) continue;
+        if (active?.version === upload.version) continue;
+        if (upload.expires > Date.now()) {
+          pending = true;
+          continue;
+        }
         await this.env.BUCKET.delete(upload.files.map((f) => `${upload.id}/${upload.version}/${f.path}`));
         await this.ctx.storage.delete(key);
       }
-      if ((await this.ctx.storage.list({ prefix: "upload:" })).size) await this.ctx.storage.setAlarm(Date.now() + HOUR);
+      if (pending) await this.ctx.storage.setAlarm(Date.now() + HOUR);
     });
   }
 }
