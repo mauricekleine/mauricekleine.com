@@ -10,7 +10,7 @@ Read [`apps/web/AGENTS.md`](apps/web/AGENTS.md), [`apps/web/PRODUCT.md`](apps/we
 
 Run commands from the repo root. `bun run dev` starts the web app on port 3000, `bun run build` prerenders every page and writes cf's build output, `bun run test` checks the Worker, and `bun run deploy` deploys that output with cf. Cloudflare Workers Builds runs from this root.
 
-After a merge, run `bun run deploy:verify <merged-sha>` to wait for the build-stamped SHA served at `/api/deploy.json`.
+After a merge, run `bun run deploy:verify <merged-sha>` to wait for the build-stamped SHAs: the web Worker's `/api/deploy.json` and, when the merge's history touches its paths, the share Worker's `/_health`.
 
 This repo trials Bun's formatter and linter ahead of a release. The pre-commit hook runs `bun-canary fmt --staged && bun-canary lint --staged` (dotfiles installs `bun-canary`); `[fmt]` in `bunfig.toml` sets the style and the ignored paths. Run `bun-canary fmt` or `bun-canary lint` by hand for the whole repo. Builds and installs stay on the pinned `bun`.
 

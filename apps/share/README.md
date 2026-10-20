@@ -2,8 +2,12 @@
 
 `artifact-share` serves snapshot copies at `share.mauricekleine.com`. The private
 Soliton store remains the source; nothing here reads it. Shares last until deleted.
-This app is deployed manually, independently of `apps/web`. Root build/deploy and
-Workers Builds still target only `mauricekleine-com`; merging before setup is safe.
+Workers Builds deploys it from `main` through its own `artifact-share` trigger, which
+runs only when `apps/share/`, `packages/superthread/`, `package.json` or `bun.lock`
+changes. It builds with `bun install --frozen-lockfile && bun run --cwd apps/share build`
+and deploys with `cd apps/share && cf deploy --prebuilt`. Deploys keep the Worker's
+existing secrets, so the build needs no credentials beyond its Workers Builds token.
+Root `bun run deploy:verify <sha>` waits for both Workers.
 
 ## Admin API v1
 
@@ -99,9 +103,8 @@ the independent build without touching the existing web Worker.
 ## One-time M5 setup
 
 Run from a fresh checkout of this repo on the M5, after loading `mk-cloudflare` and
-`mk-1password`. Select Kaulos (`cloudflare-account --name` from this repo). No Workers
-Builds connection is needed for sharing. Keep the R2 bucket private with no r2.dev or
-custom bucket domain. The Worker is its only reader.
+`mk-1password`. Select Kaulos (`cloudflare-account --name` from this repo). Keep the
+R2 bucket private with no r2.dev or custom bucket domain. The Worker is its only reader.
 
 Create two **API Credential** items in **Soliton Agents**, with a concealed built-in
 `credential` field and notes naming the readers and scope. The admin token authorizes
@@ -138,9 +141,9 @@ First deploy provisions the SQLite Durable Object migration for exported `ShareS
 binds private R2 `artifact-share`, installs both secrets in that same deployment and
 attaches **only** `share.mauricekleine.com`. `exports.durableObject({storage:"sqlite"})`
 is cf's migration declaration; no separate Wrangler migration is needed. Existing
-`mauricekleine-com` and all four of its domains are untouched. For subsequent releases,
-repeat install/build and the `op inject | cf deploy` pipeline. Compare `_health.sha`
-with `git rev-parse HEAD`. Root `bun run deploy` continues to deploy only the web app.
+`mauricekleine-com` and all four of its domains are untouched. Later releases deploy
+through Workers Builds. Rotate a secret by repeating the `op inject | cf deploy`
+pipeline. Root `bun run deploy` deploys only the web app.
 
 After the dotfiles refresh, run `mk artifacts share <project>/<slug> --public` or
 `--pin` from the M5/Soliton and open the result. No Soliton Cloudflare credential or
