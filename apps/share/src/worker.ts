@@ -180,19 +180,40 @@ function spec(value: unknown): Omit<Upload, "id" | "version" | "received" | "exp
   };
 }
 
+// Unlock bodies come from anyone holding a PIN link, so they are read before the
+// serialized section: a slow sender must never hold the store.
+function isUnlock(request: Request) {
+  if (request.method !== "POST") return false;
+  try {
+    const parts = new URL(request.url).pathname.split("/").slice(1).map(decodeURIComponent);
+    return parts.length === 2 && parts[1] === "_unlock" && ID.test(parts[0]);
+  } catch {
+    return false;
+  }
+}
+
 export class ShareStore extends DurableObject<Env> {
-  fetch(request: Request) {
+  async fetch(request: Request) {
+    let form: URLSearchParams | undefined;
+    if (isUnlock(request)) {
+      try {
+        form = new URLSearchParams(new TextDecoder().decode(await bounded(request, 2048)));
+      } catch (error) {
+        if (error instanceof Invalid) return json({ error: error.message }, error.status);
+        throw error;
+      }
+    }
     // Includes awaits on R2 and crypto: no concurrent PIN counter or pointer updates.
     return this.ctx.blockConcurrencyWhile(async () => {
       try {
-        return await this.handle(request);
+        return await this.handle(request, form);
       } catch (error) {
         if (error instanceof Invalid) return json({ error: error.message }, error.status);
         return json({ error: "storage unavailable" }, 503);
       }
     });
   }
-  async handle(request: Request): Promise<Response> {
+  async handle(request: Request, form?: URLSearchParams): Promise<Response> {
     const url = new URL(request.url);
     let parts: string[];
     try {
@@ -292,7 +313,7 @@ export class ShareStore extends DurableObject<Env> {
           ?.split("=")
           .slice(1)
           .join("=") || "";
-      if (path === "_unlock" && request.method === "POST") return this.unlock(request, active);
+      if (form) return this.unlock(request, form, active);
       if (!(await verify(this.env.COOKIE_KEY, cookie, prefix))) {
         if (!["GET", "HEAD"].includes(request.method)) return reply();
         const challenge = await signed(
@@ -320,8 +341,7 @@ export class ShareStore extends DurableObject<Env> {
       ...(type === "application/octet-stream" ? { "Content-Disposition": "attachment" } : {}),
     });
   }
-  async unlock(request: Request, active: Upload) {
-    const form = new URLSearchParams(new TextDecoder().decode(await bounded(request, 2048)));
+  async unlock(request: Request, form: URLSearchParams, active: Upload) {
     if (
       request.headers.get("Content-Type")?.split(";")[0] !== "application/x-www-form-urlencoded" ||
       !(await verify(this.env.COOKIE_KEY, form.get("challenge") || "", `form.${active.id}.${active.version}.`))
@@ -382,6 +402,15 @@ export default {
       if (!env.ADMIN_TOKEN || !(await same(token, `Bearer ${env.ADMIN_TOKEN}`))) return reply("unauthorized", 401);
     }
     if (path === "/_health" && ["GET", "HEAD"].includes(request.method)) return json({ sha: env.BUILD_SHA });
+    if (isUnlock(request)) {
+      // Buffer the capped form here so the store only ever receives a complete body.
+      try {
+        request = new Request(request, { body: await bounded(request, 2048) });
+      } catch (error) {
+        if (error instanceof Invalid) return json({ error: error.message }, error.status);
+        throw error;
+      }
+    }
     return env.STORE.get(env.STORE.idFromName("catalog-v1")).fetch(request);
   },
 } satisfies ExportedHandler<Env>;

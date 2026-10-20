@@ -174,3 +174,43 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   assert.equal((await admin(`/${pinId}`, "DELETE")).status, 204);
   assert.equal((await get(`/${id}/%2e%2e/%2e%2e/_admin/shares`)).status, 401);
 });
+test("a stalled PIN unlock body does not hold the store for other links", async () => {
+  const stalled = "Stalled123456789",
+    open = "OpenLink12345678";
+  await commit(stalled, await stage(stalled, "pin", "stalled protected"));
+  await commit(open, await stage(open, "public", "still served"));
+  let sender;
+  const body = new ReadableStream({
+    start(controller) {
+      sender = controller;
+      controller.enqueue(new TextEncoder().encode("challenge="));
+    },
+  });
+  const pending = worker
+    .dispatchFetch(`${origin}/${stalled}/_unlock`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body,
+      duplex: "half",
+      redirect: "manual",
+    })
+    .catch(() => null);
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  let timer;
+  const response = await Promise.race([
+    get(`/${open}/`),
+    new Promise((resolve) => (timer = setTimeout(() => resolve(null), 5000))),
+  ]);
+  clearTimeout(timer);
+  sender.error(new Error("test done"));
+  await pending;
+  assert.ok(response, "a concurrent request to another link waited on the stalled unlock body");
+  assert.equal(await response.text(), "still served");
+  const oversized = await worker.dispatchFetch(`${origin}/${stalled}/_unlock`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: "pin=" + "1".repeat(2048),
+  });
+  assert.equal(oversized.status, 413);
+  headers(oversized);
+});
