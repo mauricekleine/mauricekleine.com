@@ -1,0 +1,21 @@
+{
+  "name": "@mauricekleine/share",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs && vite build",
+    "dev": "node tools/dev.mjs",
+    "test": "bun run build && bun run typecheck && node --test test/worker.test.mjs",
+    "typecheck": "cf workers types && bun --check",
+    "deploy": "cf deploy --prebuilt"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "~1.62.3",
+    "@types/node": "~26.6.3",
+    "cf": "1.0.0-beta.12",
+    "esbuild": "~0.28.1",
+    "miniflare": "5.20260930.0-alpha",
+    "typescript": "7.0.2",
+    "vite": "~8.3.1"
+  }
+}
