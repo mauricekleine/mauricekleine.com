@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { after, test } from "node:test";
 import { createHash } from "node:crypto";
+import { request as httpRequest } from "node:http";
 import { fileURLToPath } from "node:url";
 import { localWorker } from "../tools/local.mjs";
 const worker = localWorker({
@@ -57,14 +58,14 @@ function unlock(identity, challenge, pin) {
     redirect: "manual",
   });
 }
-function headers(response, pdf = false) {
+function headers(response, sandbox = true) {
   assert.equal(response.headers.get("X-Robots-Tag"), "noindex, nofollow");
   assert.equal(response.headers.get("Referrer-Policy"), "no-referrer");
   assert.equal(response.headers.get("X-Content-Type-Options"), "nosniff");
   assert.equal(response.headers.get("Cache-Control"), "private, no-store");
   assert.equal(response.headers.get("Access-Control-Allow-Origin"), null);
-  if (pdf) assert.equal(response.headers.get("Content-Security-Policy"), null);
-  else assert.match(response.headers.get("Content-Security-Policy"), /^sandbox allow-scripts/);
+  if (sandbox) assert.match(response.headers.get("Content-Security-Policy"), /^sandbox allow-scripts/);
+  else assert.equal(response.headers.get("Content-Security-Policy"), null);
 }
 test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lockout", async () => {
   for (const path of ["/", "/unknown12345/", "/_admin/shares", "/%5fadmin/shares"]) {
@@ -89,7 +90,7 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   assert.equal(await response.text(), "old");
   headers(response);
   response = await get(`/${id}/index.pdf`);
-  headers(response, true);
+  headers(response, false);
   response = await get(`/${id}/assets/image.svg`);
   assert.equal(response.headers.get("Content-Type"), "image/svg+xml");
   response = await get(`/${id}/unknown.constructor`);
@@ -178,19 +179,20 @@ test("committed files serve single byte ranges and HEAD with the same security h
   const identity = "Ranges1234567890";
   const body = "0123456789";
   const types = [
-    ["index.html", "text/html; charset=utf-8"],
-    ["index.mp4", "video/mp4"],
-    ["clip.WEBM", "video/webm"],
-    ["audio.m4a", "audio/mp4"],
-    ["audio.mp3", "audio/mpeg"],
-    ["index.pdf", "application/pdf"],
-    ["unknown.bin", "application/octet-stream"],
+    ["index.html", "text/html; charset=utf-8", true],
+    ["index.mp4", "video/mp4", false],
+    ["clip.WEBM", "video/webm", false],
+    ["audio.m4a", "audio/mp4", false],
+    ["audio.mp3", "audio/mpeg", false],
+    ["index.pdf", "application/pdf", false],
+    ["image.svg", "image/svg+xml", true],
+    ["unknown.bin", "application/octet-stream", true],
   ];
   await commit(
     identity,
     await stage(identity, "public", body, [...types.slice(1).map(([path]) => [path, body]), ["empty.txt", ""]]),
   );
-  for (const [path, type] of types) {
+  for (const [path, type, sandbox] of types) {
     for (const [range, status, contentRange, expected] of [
       [undefined, 200, null, body],
       ["bytes=0-1", 206, "bytes 0-1/10", "01"],
@@ -223,7 +225,7 @@ test("committed files serve single byte ranges and HEAD with the same security h
           response.headers.get("Content-Disposition"),
           type === "application/octet-stream" ? "attachment" : null,
         );
-        headers(response, type === "application/pdf");
+        headers(response, sandbox);
         assert.equal(await response.text(), method === "HEAD" ? "" : expected);
         if (method === "GET") getHeaders = [...response.headers];
         else assert.deepEqual([...response.headers], getHeaders);
@@ -279,7 +281,7 @@ test("PIN media ranges require the version-bound cookie, including after unlocki
     assert.equal(media.headers.get("Content-Length"), "2");
     assert.equal(media.headers.get("Accept-Ranges"), "bytes");
     assert.equal(await media.text(), method === "HEAD" ? "" : "01");
-    headers(media);
+    headers(media, false);
   }
   await locked();
   await commit(identity, await share());
@@ -458,8 +460,10 @@ test("a slow file PUT leaves other links responsive and excludes a second writer
   assert.equal(await (await get(`/${identity}/`)).text(), "0123456789");
   assert.equal(await (await get(`/${identity}/note.txt`)).text(), "done");
 });
-test("retrying a received path is a no-op even when its body never finishes", async () => {
+test("a received-path retry drains its large HTTP body before 204 without blocking another link or rewriting R2", async () => {
   const identity = "RetryUpload12345";
+  const open = "DuringRetry1234";
+  await commit(open, await stage(open, "public", "still served"));
   const upload = await stage(identity, "public", "original");
   const path = `/${identity}/uploads/${upload}/files/index.html`;
   const bucket = await worker.getR2Bucket("BUCKET");
@@ -467,30 +471,49 @@ test("retrying a received path is a no-op even when its body never finishes", as
   const before = await bucket.head(key);
   // A different body with the same length must not rewrite the first object.
   assert.equal((await admin(path, "PUT", "replaced")).status, 204);
-  let sender;
-  const pending = worker.dispatchFetch(`${origin}/_admin/shares${path}`, {
+  const address = await worker.ready;
+  let responded = false;
+  const request = httpRequest(new URL(`/_admin/shares${path}`, address), {
     method: "PUT",
     headers: auth,
-    duplex: "half",
-    body: new ReadableStream({
-      start(controller) {
-        sender = controller;
-        controller.enqueue(new TextEncoder().encode("x"));
-      },
-    }),
   });
+  const pending = new Promise((resolve, reject) => {
+    request.on("error", reject);
+    request.on("response", (response) => {
+      responded = true;
+      response.resume();
+      resolve(response.statusCode);
+    });
+  });
+  // Observe errors immediately, including a reset while the client is still sending.
+  pending.catch(() => {});
   try {
-    assert.equal((await within(pending, 1000, "received-path retry read its body")).status, 204);
+    await within(
+      (async () => {
+        const chunk = Buffer.alloc(64 * 1024, "x");
+        for (let sent = 0; sent < 16 * 1024 * 1024; sent += chunk.length) {
+          await new Promise((resolve, reject) => request.write(chunk, (error) => (error ? reject(error) : resolve())));
+        }
+      })(),
+      10000,
+      "retry body could not be sent in full",
+    );
+    // Keep the chunked request open after all bytes, so EOF determines success.
+    const response = await within(get(`/${open}/`), 1000, "another link waited on the retry body");
+    assert.equal(await response.text(), "still served");
+    assert.equal(responded, false, "204 must wait for the retry body to finish");
+    request.end();
+    assert.equal(await within(pending, 1000, "received-path retry never completed"), 204);
   } finally {
-    sender.close();
-    await pending;
+    request.destroy();
+    await pending.catch(() => {});
   }
   assert.equal((await bucket.head(key)).etag, before.etag);
   assert.equal(await (await bucket.get(key)).text(), "original");
   await commit(identity, upload);
   assert.equal(await (await get(`/${identity}/`)).text(), "original");
 });
-test("a file PUT with no chunks for 30 seconds aborts and releases its path for retry", async () => {
+test("new and received file PUTs time out after 30 idle seconds and remain retryable", async () => {
   const identity = "IdleUpload123456";
   const { upload } = await (
     await admin(
@@ -504,34 +527,44 @@ test("a file PUT with no chunks for 30 seconds aborts and releases its path for 
     )
   ).json();
   const path = `/${identity}/uploads/${upload}`;
-  let sender;
-  const pending = worker.dispatchFetch(`${origin}/_admin/shares${path}/files/index.html`, {
-    method: "PUT",
-    headers: auth,
-    duplex: "half",
-    body: new ReadableStream({
-      start(controller) {
-        sender = controller;
-        controller.enqueue(new TextEncoder().encode("0"));
-      },
+  const retryId = "IdleRetry1234567";
+  const retry = await stage(retryId, "public", "original");
+  const retryPath = `/${retryId}/uploads/${retry}`;
+  await Promise.all(
+    [path, retryPath].map(async (base) => {
+      let sender;
+      const pending = worker.dispatchFetch(`${origin}/_admin/shares${base}/files/index.html`, {
+        method: "PUT",
+        headers: auth,
+        duplex: "half",
+        body: new ReadableStream({
+          start(controller) {
+            sender = controller;
+            controller.enqueue(new TextEncoder().encode("0"));
+          },
+        }),
+      });
+      const started = Date.now();
+      try {
+        const response = await within(pending, 35000, "stalled upload did not time out");
+        assert.equal(response.status, 408, base);
+        assert.match((await response.json()).error, /idle/i);
+        assert.ok(Date.now() - started >= 29000, "timeout must allow 30 seconds without a chunk");
+      } finally {
+        sender.close();
+        await pending;
+      }
     }),
-  });
-  const started = Date.now();
-  try {
-    const response = await within(pending, 35000, "stalled upload did not time out");
-    assert.equal(response.status, 408);
-    assert.match((await response.json()).error, /idle/i);
-    assert.ok(Date.now() - started >= 29000, "timeout must allow 30 seconds without a chunk");
-  } finally {
-    sender.close();
-    await pending;
-  }
+  );
   const bucket = await worker.getR2Bucket("BUCKET");
   assert.equal(await bucket.head(`${identity}/${upload}/index.html`), null);
   assert.equal((await admin(`${path}/commit`, "POST")).status, 409);
   assert.equal((await admin(`${path}/files/index.html`, "PUT", "0123456789")).status, 204);
   await commit(identity, upload);
   assert.equal(await (await get(`/${identity}/`)).text(), "0123456789");
+  assert.equal((await admin(`${retryPath}/files/index.html`, "PUT", "replaced")).status, 204);
+  await commit(retryId, retry);
+  assert.equal(await (await get(`/${retryId}/`)).text(), "original");
 });
 test("a stalled PIN unlock body does not hold the store for other links", async () => {
   const stalled = "Stalled123456789",

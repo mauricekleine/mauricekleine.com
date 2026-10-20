@@ -6,6 +6,7 @@ const DAY = 24 * HOUR;
 const SHARE_LIFETIME = 30 * DAY;
 const MiB = 1024 * 1024;
 const MEDIA_EXTENSIONS = new Set(["mp4", "webm", "m4a", "mp3"]);
+const VIEWER_TYPES = new Set(["application/pdf", "video/mp4", "video/webm", "audio/mp4", "audio/mpeg"]);
 const ID = /^[a-zA-Z0-9]{10,32}$/;
 const UUID = /^[a-f0-9-]{36}$/;
 const HEX = /^[a-f0-9]{64}$/;
@@ -36,7 +37,8 @@ function reply(body: BodyInit | null = "not found", status = 404, headers: Heade
   result.headers.set("Referrer-Policy", "no-referrer");
   result.headers.set("X-Content-Type-Options", "nosniff");
   result.headers.set("Cache-Control", "private, no-store");
-  if (result.headers.get("Content-Type") !== "application/pdf") result.headers.set("Content-Security-Policy", SANDBOX);
+  if (!VIEWER_TYPES.has(result.headers.get("Content-Type") || ""))
+    result.headers.set("Content-Security-Policy", SANDBOX);
   return result;
 }
 function json(value: unknown, status = 200) {
@@ -81,29 +83,42 @@ async function bounded(request: Request, limit: number) {
   }
   return bytes;
 }
+async function readFileChunk(reader: ReadableStreamDefaultReader<Uint8Array>) {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      reader.read(),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Invalid(408, "upload idle timeout")), 30000);
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+// Read retries to EOF before responding so clients can finish sending their body.
+async function drainFile(request: Request) {
+  const reader = request.body?.getReader();
+  if (!reader) return;
+  try {
+    while (!(await readFileChunk(reader)).done) {
+      // The first received object remains immutable; discard each chunk.
+    }
+  } catch (error) {
+    await reader.cancel(error);
+    throw error;
+  }
+}
 // R2 needs a known-length stream. Count incoming bytes before forwarding them,
 // and abort the write on a mismatch without buffering a media file in memory.
 async function putFile(bucket: R2Bucket, key: string, request: Request, size: number) {
   if (Number(request.headers.get("Content-Length")) > size) throw new Invalid(413, "too large");
   const reader = request.body?.getReader();
-  const read = async () => {
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    try {
-      return await Promise.race([
-        reader!.read(),
-        new Promise<never>((_, reject) => {
-          timer = setTimeout(() => reject(new Invalid(408, "upload idle timeout")), 30000);
-        }),
-      ]);
-    } finally {
-      clearTimeout(timer);
-    }
-  };
   if (!size) {
     try {
       if (reader) {
         while (true) {
-          const { done, value } = await read();
+          const { done, value } = await readFileChunk(reader);
           if (done) break;
           if (value.length) throw new Invalid(413, "too large");
         }
@@ -123,7 +138,7 @@ async function putFile(bucket: R2Bucket, key: string, request: Request, size: nu
       let tail: Uint8Array | undefined;
       if (reader) {
         while (true) {
-          const { done, value } = await read();
+          const { done, value } = await readFileChunk(reader);
           if (done) break;
           received += value.length;
           if (received > size) throw new Invalid(413, "too large");
@@ -321,6 +336,10 @@ export class ShareStore extends DurableObject<Env> {
       // their R2 and crypto awaits. Only the admitted file body leaves the queue.
       const result = await this.serial(() => this.handle(request, form));
       if (result instanceof Response) return result;
+      if (result === "received") {
+        await drainFile(request);
+        return reply(null, 204);
+      }
       let stored = false;
       try {
         await putFile(this.env.BUCKET, result.key, request, result.size);
@@ -344,7 +363,7 @@ export class ShareStore extends DurableObject<Env> {
       return json({ error: "storage unavailable" }, 503);
     }
   }
-  async handle(request: Request, form?: URLSearchParams): Promise<Response | FilePut> {
+  async handle(request: Request, form?: URLSearchParams): Promise<Response | FilePut | "received"> {
     const url = new URL(request.url);
     let parts: string[];
     try {
@@ -427,8 +446,7 @@ export class ShareStore extends DurableObject<Env> {
         if (upload.received.includes(path)) {
           // The CLI retries all files of a fingerprint-bound pending upload.
           // A received object is immutable even before the snapshot commits.
-          if (request.body) this.ctx.waitUntil(request.body.cancel());
-          return reply(null, 204);
+          return "received";
         }
         const key = `${id}/${version}/${path}`;
         if (this.inFlight.has(key)) throw new Invalid(409, "file upload in progress");
