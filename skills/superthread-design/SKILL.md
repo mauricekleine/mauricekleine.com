@@ -79,6 +79,7 @@ Stock shadcn components own their sizes, variants and focus behavior.
 
 Starfields, grain and ship atmospheres belong to the surrounding brand surface,
 not to shared component source.
+for zero or missing values, comparisons or chart legends, read [data display](references/data-display.md).
 
 ## Paper mode (light surfaces: quanta, future reading surfaces)
 
@@ -125,6 +126,7 @@ Bricolage-era stack — migrate each surface on next touch, see Drift ledger):
 - One hero entrance maximum; no scroll-gated reveal choreography.
 - Delight moments (supernovas, eclipses, meteor wishes) belong to brand
   surfaces and are always interruptible, rare, and reduced-motion-safe.
+- for overlays, gestures, hover feedback or continuous updates, read [interaction craft](references/interaction-craft.md).
 
 ## Marks
 
