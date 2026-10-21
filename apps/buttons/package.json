@@ -1,0 +1,13 @@
+{
+  "name": "@mauricekleine/buttons",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs && bun --check",
+    "dev": "node tools/dev.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "~0.28.1",
+    "typescript": "7.0.2"
+  }
+}

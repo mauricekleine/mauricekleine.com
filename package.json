@@ -5,11 +5,12 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "node apps/web/tools/stamp-deploy.mjs && bun run registry && bun run site:css && bun run specimen:css && bun run --filter @mauricekleine/web build",
+    "build": "node apps/web/tools/stamp-deploy.mjs && bun run registry && bun run site:css && bun run specimen:css && bun run buttons && bun run --filter @mauricekleine/web build",
+    "buttons": "bun run --cwd apps/buttons build",
     "deploy": "cd apps/web && cf deploy --prebuilt",
     "deploy:preview": "cd apps/web && cf workers versions create --prebuilt",
     "deploy:verify": "node apps/web/tools/deploy-verify.mjs",
-    "dev": "bun run registry && bun run site:css && bun run specimen:css && bun run --filter @mauricekleine/web dev",
+    "dev": "bun run registry && bun run site:css && bun run specimen:css && bun run buttons && bun run --filter @mauricekleine/web dev",
     "prepare": "husky",
     "registry": "bun run --cwd packages/superthread build && shadcn build packages/superthread/registry.json --output apps/web/public/r",
     "site:css": "tailwindcss -i apps/web/src/styles/site.css -o apps/web/public/style.css --minify",

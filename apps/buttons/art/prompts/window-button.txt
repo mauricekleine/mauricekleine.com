@@ -1,0 +1,10 @@
+# edit: image 1 is the chosen window-analog take, image 2 the canonical button
+Edit the first image. Keep everything exactly the same: the same man with the same face, hair, build and clothes, the same room, every object in it, the same light, framing and cream paper edge, and the same illustration style and colors. Change only these things:
+
+1. His hands no longer touch the window. The lower sash is still raised halfway, exactly as before, and the curtains still billow in the breeze.
+2. Mounted on the white window casing beside the window, at the height of his chest, is the push-button plate from the second image: a small square brushed-steel plate with four slotted screws and one round polished chrome push button ringed with orange-red light, about the size of his palm.
+3. He stands upright beside the window and presses the chrome button with his index finger; his other arm hangs at his side.
+4. He looks at the button, not out of the window. His eyes are open, his smile is gone, and his face is calm and slightly blank.
+5. The button's faint orange-red glow falls on his fingertip and knuckles.
+
+Render the push-button plate with crisp photographic realism, unlike the painted illustration around it, so it looks out of place, like an object from a much later century. Do not add any text, letters or numbers.

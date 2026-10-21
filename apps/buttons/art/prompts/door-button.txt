@@ -1,0 +1,11 @@
+# edit: image 1 is the chosen door-analog take, image 2 the canonical button
+Edit the first image. Keep everything exactly the same: the same man, face, hat, clothes, the coat over his arm, the pose of his body, the same hallway, door, morning sunlight, telephone, hat stand, framing, cream paper edge, illustration style and colors. Change only these things:
+
+1. The door has no doorknob, no lock and no keyhole any more; all of its brass hardware is gone. In the place where the brass doorknob and its plate were, the door now carries the push-button plate from the second image: a small square brushed-steel plate with four slotted screws and one round polished chrome push button ringed with orange-red light, about the size of his palm, mounted flat on the door at the height the knob was.
+2. His right hand no longer grips anything: his index finger is extended and presses the chrome button; his other fingers are loosely curled.
+3. He looks at the button, not out through the door. His smile is gone; his face is calm, attentive and slightly blank.
+4. The button's faint orange-red glow falls on his fingertip and knuckles.
+
+The door still stands open a hand's width, with the same warm morning sunlight coming through the gap.
+
+Render the push-button plate with crisp photographic realism, unlike the painted illustration around it, so it looks out of place, like an object from a much later century. Do not add any text, letters or numbers.

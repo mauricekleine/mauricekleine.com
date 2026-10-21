@@ -1,0 +1,10 @@
+# edit: image 1 is the chosen kiss-analog take, image 2 the GOOD NIGHT panel
+Edit the first image. Keep everything exactly the same: the same man and the same woman with the same faces, hair and nightclothes, the same bedroom, the twin beds, the nightstand between them, the wallpaper, the framed picture, the window, the rug, the same framing and cream paper edge, and the same illustration style and colors. Change only these things:
+
+1. They are not kissing. Each lies in their own twin bed, propped against the pillows under the covers: the man in the left bed, his wife in the right bed.
+2. On the nightstand between the beds stands the two-button panel from the second image, tilted up toward the beds, with the words "GOOD NIGHT" engraved above its two buttons. Each button is a round polished chrome push button ringed with orange-red light.
+3. Each of them reaches one arm across the gap between the beds and presses the button on their own side with an index finger: he presses the left button, she presses the right one.
+4. Both look at the panel, not at each other. Their faces are calm and blank.
+5. The bedside lamp is switched off and the room is dim, in deep blue night light; the faint orange-red glow of the two buttons is the only warm light, falling on their hands and faintly on their faces.
+
+Render the two-button panel with crisp photographic realism, unlike the painted illustration around it, so it looks out of place, like an object from a much later century. Do not add any other text, letters or numbers.

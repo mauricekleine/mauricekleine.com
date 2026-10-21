@@ -453,10 +453,47 @@ test("mk.wtf ignores case and trailing slashes and keeps the query", async () =>
 });
 
 test("an unknown mk.wtf link is a 404 that lists the real ones", async () => {
-  for (const path of ["/nope", "/f/nope", "/m/gh", "/mcp", "/about/x"]) {
+  for (const path of ["/nope", "/f/nope", "/m/gh", "/mcp", "/about/x", "/buttons/door"]) {
     const res = await worker.fetch(new Request(`https://mk.wtf${path}`), noAssets);
     assert.equal(res.status, 404, path);
     const body = await res.text();
     assert.match(body, /mk\.wtf\/f\/gh {2}https:\/\/github\.com\/mauricekleine\/fluncle/);
+  }
+});
+
+test("mk.wtf/buttons and its plates come from static assets, also on preview hosts", async () => {
+  const assets = {
+    ASSETS: {
+      fetch: async (request) => {
+        const path = new URL(request.url).pathname;
+        return path.endsWith("/missing.webp")
+          ? new Response("lost", { status: 404, headers: { "cache-control": "public, max-age=31536000, immutable" } })
+          : new Response(`asset ${path}`);
+      },
+    },
+  };
+  for (const host of ["https://mk.wtf", "http://localhost:3000"]) {
+    for (const path of ["/buttons", "/buttons/a/door-analog.0123abcd.webp"]) {
+      const res = await worker.fetch(new Request(host + path), assets);
+      assert.equal(res.status, 200, host + path);
+      assert.equal(await res.text(), `asset ${path}`);
+    }
+  }
+  const missing = await worker.fetch(new Request("https://mk.wtf/buttons/a/missing.webp"), assets);
+  assert.equal(missing.status, 404);
+  assert.equal(missing.headers.get("cache-control"), "public, max-age=0, must-revalidate");
+});
+
+test("every other way to the buttons page leads to mk.wtf/buttons", async () => {
+  for (const [url, status, location] of [
+    ["https://mk.wtf/buttons/", 301, "https://mk.wtf/buttons"],
+    ["https://mk.wtf/Buttons?ref=talk", 301, "https://mk.wtf/buttons?ref=talk"],
+    ["https://mk.wtf/buttons.html", 301, "https://mk.wtf/buttons"],
+    ["https://www.mk.wtf/buttons", 301, "https://mk.wtf/buttons"],
+    ["https://www.mk.wtf/buttons/a/og.0123abcd.jpg", 301, "https://mk.wtf/buttons/a/og.0123abcd.jpg"],
+  ]) {
+    const res = await worker.fetch(new Request(url), noAssets);
+    assert.equal(res.status, status, url);
+    assert.equal(res.headers.get("location"), location, url);
   }
 });
