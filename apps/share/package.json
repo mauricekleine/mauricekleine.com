@@ -12,7 +12,7 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "~1.62.3",
     "@types/node": "~26.6.3",
-    "cf": "1.0.0-beta.12",
+    "cf": "1.0.0-beta.18",
     "esbuild": "~0.28.1",
     "miniflare": "5.20260930.0-alpha",
     "typescript": "7.0.2",
