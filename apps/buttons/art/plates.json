@@ -1,0 +1,80 @@
+{
+  "crop": [72, 82, 72, 82],
+  "size": [1200, 1500],
+  "button": "takes/button-1.png",
+  "plates": {
+    "door": {
+      "analog": "takes/door-analog-1.png",
+      "button": "takes/door-button-1.png",
+      "mask": [
+        [
+          [389, 652],
+          [470, 652],
+          [470, 759],
+          [389, 759]
+        ]
+      ],
+      "glows": [[436, 705, 26]]
+    },
+    "window": {
+      "analog": "takes/window-analog-1.png",
+      "button": "takes/window-button-3.png",
+      "mask": [
+        [
+          [430, 539],
+          [508, 539],
+          [508, 634],
+          [430, 634]
+        ]
+      ],
+      "glows": [[471, 585, 22]]
+    },
+    "pipe": {
+      "analog": "takes/pipe-analog-1.png",
+      "button": "takes/pipe-button-1.png",
+      "mask": [
+        [
+          [209, 1099],
+          [322, 1068],
+          [402, 1108],
+          [402, 1113],
+          [285, 1162],
+          [208, 1105]
+        ]
+      ],
+      "glows": [[302, 1102, 36, 16]]
+    },
+    "highfive": {
+      "analog": "takes/highfive-analog-2.png",
+      "button": "takes/highfive-button-1.png",
+      "mask": [
+        [
+          [467, 688],
+          [751, 688],
+          [776, 852],
+          [452, 852]
+        ]
+      ],
+      "glows": [
+        [549, 762, 44, 38],
+        [675, 762, 45, 38]
+      ]
+    },
+    "kiss": {
+      "analog": "takes/kiss-analog-3.png",
+      "button": "takes/kiss-button-1.png",
+      "mask": [
+        [
+          [572, 571],
+          [742, 584],
+          [723, 696],
+          [560, 675]
+        ]
+      ],
+      "glows": [
+        [607, 625, 24, 25],
+        [677, 633, 26, 27]
+      ]
+    }
+  }
+}

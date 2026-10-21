@@ -10,6 +10,13 @@
         "taze": "21.3.0",
       },
     },
+    "apps/buttons": {
+      "name": "@mauricekleine/buttons",
+      "devDependencies": {
+        "esbuild": "~0.28.1",
+        "typescript": "7.0.2",
+      },
+    },
     "apps/share": {
       "name": "@mauricekleine/share",
       "devDependencies": {
@@ -283,6 +290,8 @@
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.6.0", "", {}, "sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw=="],
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.9", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.0.3", "@jridgewell/sourcemap-codec": "^1.4.10" } }, "sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ=="],
+
+    "@mauricekleine/buttons": ["@mauricekleine/buttons@workspace:apps/buttons"],
 
     "@mauricekleine/share": ["@mauricekleine/share@workspace:apps/share"],
 

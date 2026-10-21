@@ -3,6 +3,8 @@
 Maurice Kleine's public identity monorepo: the site at [mauricekleine.com](https://www.mauricekleine.com), the superthread design system, and its public `superthread-design` skill.
 
 - `apps/web`: the site (TanStack Start on Cloudflare Workers)
+- `apps/buttons`: [mk.wtf/buttons](https://mk.wtf/buttons), a catalog page the site's Worker serves
+- `apps/share`: artifact sharing at `share.mauricekleine.com`
 - `packages/superthread`: design tokens (`DESIGN.md`) and generated CSS
 - `skills/superthread-design/`: the public design-system skill
 

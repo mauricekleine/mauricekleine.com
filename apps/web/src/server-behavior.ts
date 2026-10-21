@@ -19,11 +19,12 @@ type SubscribePage = {
   back: { href: string; label: string };
 };
 
-// the worker: static assets plus three niceties.
+// the worker: static assets, plus
 // 1. markdown content negotiation: Accept: text/markdown on /, /about, /essays and /essays/*
 // 2. an sdk-backed mcp server at /mcp. yes, a personal site with an mcp server.
 // 3. essay email signup with double opt-in: POST /subscribe, GET /subscribe/confirm
 // 4. the mk.wtf short links (src/links.ts)
+// 5. mk.wtf/buttons, the one page on mk.wtf (apps/buttons builds it into public/)
 
 // every html page has a hand-written .md twin next to it
 function markdownMirror(pathname: string): string | null {
@@ -60,6 +61,31 @@ function withHeaders(res: Response, extra: Record<string, string>): Response {
   const out = new Response(res.body, res);
   for (const [k, v] of Object.entries(extra)) out.headers.set(k, v);
   return out;
+}
+
+// a missing file must not inherit an immutable caching rule from _headers
+function uncached404(res: Response, extra: Record<string, string> = {}): Response {
+  return withHeaders(res, { "cache-control": "public, max-age=0, must-revalidate", ...extra });
+}
+
+// the page lives at mk.wtf/buttons, its hashed plates and fonts under /buttons/a/
+const BUTTONS_HOST = "mk.wtf";
+const SITE_HOSTS = ["www.mauricekleine.com", "mauricekleine.com"];
+
+function buttonsPath(pathname: string): string | null {
+  if (pathname.startsWith("/buttons/a/")) return pathname;
+  return /^\/buttons(\.html|\/*)$/i.test(pathname) ? "/buttons" : null;
+}
+
+async function handleButtons(request: Request, env: WorkerEnv, url: URL, path: string): Promise<Response> {
+  if (url.hostname === BUTTONS_HOST && url.pathname === path) {
+    const res = await env.ASSETS.fetch(request);
+    return res.status === 404 ? uncached404(res) : res;
+  }
+  // www and spelling variants settle on the one url for good; the site's copy
+  // only points there, so a later home for the page stays possible
+  const status = SITE_HOSTS.includes(url.hostname) ? 302 : 301;
+  return Response.redirect(`https://${BUTTONS_HOST}${path}${url.search}`, status);
 }
 
 const SERVER_INFO = {
@@ -581,7 +607,12 @@ export async function handleSiteRequest(
 ): Promise<Response> {
   const url = new URL(request.url);
 
-  // mk.wtf shares this worker but serves nothing except its short links
+  // mk.wtf shares this worker and serves the buttons page and its short links;
+  // the site sends the page's paths there
+  const buttons = buttonsPath(url.pathname);
+  if (buttons && (isShortLinkHost(url.hostname) || SITE_HOSTS.includes(url.hostname))) {
+    return handleButtons(request, env, url, buttons);
+  }
   if (isShortLinkHost(url.hostname)) {
     return handleShortLink(url);
   }
@@ -641,10 +672,7 @@ export async function handleSiteRequest(
       const rendered = await renderPage(new Request(renderUrl, request));
       if (rendered.ok) return withHeaders(rendered, { vary: "accept" });
     }
-    return withHeaders(res, {
-      "cache-control": "public, max-age=0, must-revalidate",
-      ...(mirror ? { vary: "accept" } : {}),
-    });
+    return uncached404(res, mirror ? { vary: "accept" } : {});
   }
 
   // Static assets verifies that a page exists before normalizing its URL.

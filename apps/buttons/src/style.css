@@ -1,0 +1,526 @@
+@font-face {
+  font-family: "Libre Franklin";
+  src: url("{{font:libre-franklin-latin.woff2}}") format("woff2");
+  font-weight: 700 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Old Standard TT";
+  src: url("{{font:old-standard-tt-latin-400.woff2}}") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Old Standard TT";
+  src: url("{{font:old-standard-tt-latin-400-italic.woff2}}") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Old Standard TT";
+  src: url("{{font:old-standard-tt-latin-700.woff2}}") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --paper: #efe5cf;
+  --paper-light: #f6efdf;
+  --ink: #221c16;
+  --ink-soft: #54473a;
+  --mustard: #c99a2e;
+  --denim: #3d5a7f;
+  --brick: #a3412c;
+  --glow: #ff5b2e;
+  --sans: "Libre Franklin", "Franklin Gothic Medium", "Arial Narrow", sans-serif;
+  --serif: "Old Standard TT", Georgia, "Times New Roman", serif;
+  --gutter: clamp(16px, 5vw, 64px);
+  --pad: clamp(12px, 2.4vw, 28px);
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  /* newsprint grain */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .13 0 0 0 0 .11 0 0 0 0 .09 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  color: var(--ink);
+  font: 400 1.0625rem/1.5 var(--serif);
+}
+
+::selection {
+  background: var(--mustard);
+  color: var(--ink);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--brick);
+  outline-offset: 4px;
+}
+
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(20px, 4vw, 48px) var(--gutter) clamp(48px, 8vw, 96px);
+}
+
+/* masthead */
+
+.folio {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding-bottom: 0.6rem;
+  border-bottom: 3px double var(--ink);
+  font: 700 0.7rem/1.2 var(--sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.kicker {
+  margin: clamp(48px, 9vw, 96px) 0 0;
+  color: var(--brick);
+  text-align: center;
+  font: 700 clamp(0.78rem, 1.6vw, 0.95rem) / 1 var(--sans);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0.14em 0 0;
+  text-align: center;
+  /* the word is five ems wide: 17vw and 11.5rem both keep it inside the page's margins */
+  font: 900 clamp(3rem, 17vw, 11.5rem) / 0.8 var(--sans);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  /* the mustard plate landed a little off the black one */
+  text-shadow: 0.03em 0.028em 0 var(--mustard);
+}
+
+.subtitle {
+  margin: 0.55em 0 0;
+  text-align: center;
+  font: italic 400 clamp(1.2rem, 2.8vw, 1.7rem) / 1.3 var(--serif);
+}
+
+.lede {
+  max-width: 29em;
+  margin: clamp(28px, 4vw, 44px) auto 0;
+  text-align: center;
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.cover {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  margin-top: clamp(40px, 7vw, 72px);
+}
+
+.press {
+  position: relative;
+  width: clamp(132px, 30vw, 196px);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 7%;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow:
+    0 14px 28px -14px rgb(34 28 22 / 0.6),
+    0 2px 5px rgb(34 28 22 / 0.3);
+}
+
+.press img {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  transition:
+    transform 0.12s ease-out,
+    filter 0.12s ease-out;
+}
+
+.press-glow,
+.press-sheen {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* the ring's light, breathing on the same clock as every button on the page */
+.press-glow {
+  inset: -32%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    transparent 22%,
+    rgb(255 91 46 / 0.5) 27%,
+    rgb(255 91 46 / 0.16) 42%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+  opacity: var(--pulse, 0.6);
+}
+
+.press-sheen {
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(118deg, transparent 38%, rgb(255 255 255 / 0.32) 50%, transparent 62%) no-repeat;
+  background-size: 260% 100%;
+  background-position: calc(50% - var(--tx, 0) * 45%) 0;
+  mix-blend-mode: soft-light;
+}
+
+.press:active img,
+.press.pressed img {
+  transform: translateY(2px) scale(0.985);
+  filter: brightness(0.95);
+}
+
+.press.pressed .press-glow {
+  animation: flare 0.9s ease-out;
+}
+
+@keyframes flare {
+  from {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+
+.press-label {
+  margin: 0;
+  font: 700 0.76rem/1 var(--sans);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+/* scenes: one catalog panel each */
+
+.scene {
+  margin-top: clamp(80px, 12vw, 152px);
+  border: 2px solid var(--ink);
+  background: var(--paper-light);
+}
+
+.scene-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  margin: 0;
+  padding: 0.7rem var(--pad);
+  border-bottom: 2px solid var(--ink);
+  /* a mustard tint, screened like the plates */
+  background-color: #e6d1a1;
+  background-image: radial-gradient(circle, var(--mustard) 1.15px, transparent 1.45px);
+  background-size: 3.2px 3.2px;
+  font: 900 clamp(1rem, 2.4vw, 1.45rem) / 1.1 var(--sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.scene-no {
+  flex: none;
+  padding: 0.32em 0.55em 0.26em;
+  background: var(--ink);
+  color: var(--paper-light);
+  font-size: 0.68em;
+  letter-spacing: 0.1em;
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 clamp(20px, 3.4vw, 40px);
+  padding: var(--pad);
+}
+
+/* the column rule between the old model and the new */
+.stage::after {
+  content: "";
+  position: absolute;
+  top: var(--pad);
+  bottom: var(--pad);
+  left: 50%;
+  border-left: 1px solid rgb(34 28 22 / 0.45);
+}
+
+.plate {
+  min-width: 0;
+  margin: 0;
+}
+
+.art {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
+
+.art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.35s;
+}
+
+/* until the browser prints the plate itself, a dot screen stands in */
+.art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgb(34 28 22 / 0.2) 0.7px, transparent 1.1px);
+  background-size: 3px 3px;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.printed .art img,
+.printed .art::after {
+  opacity: 0;
+}
+
+.print {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.key {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper-light);
+  font: 900 0.8rem/1 var(--sans);
+  transition: opacity 0.35s;
+}
+
+.listing {
+  margin-top: 20px;
+  transition: opacity 0.35s;
+}
+
+.listing h3 {
+  margin: 0;
+  font: 900 clamp(0.95rem, 1.5vw, 1.06rem) / 1.2 var(--sans);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.listing-body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-top: 12px;
+}
+
+.price {
+  display: flex;
+  align-items: flex-start;
+  margin: 0;
+  color: var(--brick);
+  font: 900 2.15rem/0.9 var(--sans);
+  white-space: nowrap;
+}
+
+.cents {
+  margin-left: 0.04em;
+  font-size: 0.5em;
+  line-height: 1.05;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.unit {
+  align-self: flex-end;
+  margin-left: 0.4em;
+  color: var(--ink);
+  font: 700 0.6rem/1 var(--sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.price.words {
+  flex-direction: column;
+  font-size: 1.15rem;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.copy {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.spec {
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  font: italic 0.92rem/1.35 var(--serif);
+}
+
+.item {
+  margin: 10px 0 0;
+  padding-top: 9px;
+  border-top: 1px dotted var(--ink);
+  font: 700 0.7rem/1.3 var(--sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.item b {
+  margin-right: 0.5em;
+  font-weight: 900;
+}
+
+.flip {
+  display: none;
+}
+
+/* colophon */
+
+.colophon {
+  margin-top: clamp(80px, 12vw, 152px);
+}
+
+.colophon .folio {
+  padding: 0.6rem 0 0;
+  border-top: 3px double var(--ink);
+  border-bottom: 0;
+}
+
+.note {
+  max-width: 32em;
+  margin: clamp(32px, 5vw, 48px) auto 0;
+  color: var(--ink-soft);
+  text-align: center;
+  font: italic 1rem/1.55 var(--serif);
+}
+
+/* phones: one lenticular card per scene */
+
+@media (max-width: 759px) {
+  .stage {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .stage::after {
+    display: none;
+  }
+
+  .listing-body {
+    gap: 14px;
+  }
+
+  .js .stage {
+    gap: 0;
+    grid-template-areas: "art" "hint" "listing";
+  }
+
+  .js .plate {
+    display: contents;
+  }
+
+  .js .art {
+    grid-area: art;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .js .listing {
+    grid-area: listing;
+  }
+
+  .js .stage[data-side="analog"] .plate[data-side="button"] :is(img, .key, .listing),
+  .js .stage[data-side="button"] .plate[data-side="analog"] :is(img, .key, .listing) {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .js .stage[data-side="analog"] .plate[data-side="button"] .art::after,
+  .js .stage[data-side="button"] .plate[data-side="analog"] .art::after {
+    opacity: 0;
+  }
+
+  .js .flip {
+    grid-area: hint;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    width: 100%;
+    margin: 14px 0 0;
+    padding: 0.75em 1em;
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink);
+    font: 700 0.72rem/1.2 var(--sans);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .flip-hand {
+    font:
+      1.15rem/1 "Apple Symbols",
+      "Segoe UI Symbol",
+      var(--serif);
+  }
+
+  .js .flip:active {
+    background: var(--paper);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

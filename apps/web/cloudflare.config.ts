@@ -20,7 +20,7 @@ export default defineConfig({
       runWorkerFirst: true,
     },
     // apex is also served by the worker; the custom server sends it to www.
-    // mk.wtf only serves the short links in src/links.ts
+    // mk.wtf serves the short links in src/links.ts and the buttons page
     domains: ["www.mauricekleine.com", "mauricekleine.com", "mk.wtf", "www.mk.wtf"],
     env: {
       ASSETS: bindings.assets(),
