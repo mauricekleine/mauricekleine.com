@@ -491,6 +491,10 @@ test("every other way to the buttons page leads to mk.wtf/buttons", async () => 
     ["https://mk.wtf/buttons.html", 301, "https://mk.wtf/buttons"],
     ["https://www.mk.wtf/buttons", 301, "https://mk.wtf/buttons"],
     ["https://www.mk.wtf/buttons/a/og.0123abcd.jpg", 301, "https://mk.wtf/buttons/a/og.0123abcd.jpg"],
+    ["https://www.mauricekleine.com/buttons", 302, "https://mk.wtf/buttons"],
+    ["https://www.mauricekleine.com/buttons.html?x=1", 302, "https://mk.wtf/buttons?x=1"],
+    ["https://mauricekleine.com/buttons/", 302, "https://mk.wtf/buttons"],
+    ["https://www.mauricekleine.com/buttons/a/og.0123abcd.jpg", 302, "https://mk.wtf/buttons/a/og.0123abcd.jpg"],
   ]) {
     const res = await worker.fetch(new Request(url), noAssets);
     assert.equal(res.status, status, url);

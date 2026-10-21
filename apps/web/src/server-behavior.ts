@@ -70,6 +70,7 @@ function uncached404(res: Response, extra: Record<string, string> = {}): Respons
 
 // the page lives at mk.wtf/buttons, its hashed plates and fonts under /buttons/a/
 const BUTTONS_HOST = "mk.wtf";
+const SITE_HOSTS = ["www.mauricekleine.com", "mauricekleine.com"];
 
 function buttonsPath(pathname: string): string | null {
   if (pathname.startsWith("/buttons/a/")) return pathname;
@@ -81,8 +82,10 @@ async function handleButtons(request: Request, env: WorkerEnv, url: URL, path: s
     const res = await env.ASSETS.fetch(request);
     return res.status === 404 ? uncached404(res) : res;
   }
-  // www and spelling variants settle on the one url for good
-  return Response.redirect(`https://${BUTTONS_HOST}${path}${url.search}`, 301);
+  // www and spelling variants settle on the one url for good; the site's copy
+  // only points there, so a later home for the page stays possible
+  const status = SITE_HOSTS.includes(url.hostname) ? 302 : 301;
+  return Response.redirect(`https://${BUTTONS_HOST}${path}${url.search}`, status);
 }
 
 const SERVER_INFO = {
@@ -604,10 +607,14 @@ export async function handleSiteRequest(
 ): Promise<Response> {
   const url = new URL(request.url);
 
-  // mk.wtf shares this worker and serves the buttons page and its short links
+  // mk.wtf shares this worker and serves the buttons page and its short links;
+  // the site sends the page's paths there
+  const buttons = buttonsPath(url.pathname);
+  if (buttons && (isShortLinkHost(url.hostname) || SITE_HOSTS.includes(url.hostname))) {
+    return handleButtons(request, env, url, buttons);
+  }
   if (isShortLinkHost(url.hostname)) {
-    const buttons = buttonsPath(url.pathname);
-    return buttons ? handleButtons(request, env, url, buttons) : handleShortLink(url);
+    return handleShortLink(url);
   }
 
   if (url.pathname === "/mcp") {

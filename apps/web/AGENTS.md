@@ -41,7 +41,7 @@ The signup routes use Worker secrets `RESEND_API_KEY`, `RESEND_SEGMENT_ID`, `TUR
 
 ## mk.wtf short links
 
-`mk.wtf` and `www.mk.wtf` serve the 302 short links in `src/links.ts`, for bios, slides and QR codes; pages and JSON-LD keep the real URLs. The one page on mk.wtf is `/buttons`, built by `apps/buttons`: mk.wtf serves it and its hashed files under `/buttons/a/` from static assets; www.mk.wtf and other spellings of the path redirect there. Top-level names are Maurice. A project's names prefix its own links, and every project name combines with every link name, so `f/gh` and `fluncle/github` resolve alike. Project destinations come from the manifest below; add a link as one entry in `src/links.ts` and add each resulting path to the expected table in `tools/test-worker.mjs`, which fails on any untested path.
+`mk.wtf` and `www.mk.wtf` serve the 302 short links in `src/links.ts`, for bios, slides and QR codes; pages and JSON-LD keep the real URLs. The one page on mk.wtf is `/buttons`, built by `apps/buttons`: mk.wtf serves it and its hashed files under `/buttons/a/` from static assets; www.mk.wtf, the site's domains and other spellings of the path redirect there. Top-level names are Maurice. A project's names prefix its own links, and every project name combines with every link name, so `f/gh` and `fluncle/github` resolve alike. Project destinations come from the manifest below; add a link as one entry in `src/links.ts` and add each resulting path to the expected table in `tools/test-worker.mjs`, which fails on any untested path.
 
 ## Projects
 

@@ -20,7 +20,7 @@ From the repo root, `bun run buttons` runs `tools/build.mjs`, then type-checks. 
 
 `bun run --cwd apps/buttons dev` serves http://localhost:3001/buttons and rebuilds it, unminified, on every page load.
 
-The web Worker serves the page (`apps/web/src/server-behavior.ts`). mk.wtf serves `/buttons` and `/buttons/a/*` from static assets, and `_headers` caches the hashed files for a year. www.mk.wtf and other spellings of the path get a 301.
+The web Worker serves the page (`apps/web/src/server-behavior.ts`). mk.wtf serves `/buttons` and `/buttons/a/*` from static assets, and `_headers` caches the hashed files for a year. www.mk.wtf and other spellings of the path get a 301, and mauricekleine.com sends `/buttons` to mk.wtf with a 302.
 
 ## Art
 
