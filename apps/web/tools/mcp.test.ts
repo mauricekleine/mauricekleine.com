@@ -215,6 +215,29 @@ test("all six tools keep their text content and essay input behavior", async () 
   }
 });
 
+test("MCP input and body limits reject oversized requests while normal calls work", async () => {
+  const { client } = await connect(true);
+  try {
+    const normal = await client.callTool({
+      name: "get_essay",
+      arguments: { slug: "essay-one", full: true },
+    });
+    expect(normal.isError).not.toBe(true);
+    expect(JSON.parse(normal.content[0].text).markdown).toBe(essayMarkdown);
+
+    const overElementLimit = await client.callTool({
+      name: "make_a_wish",
+      arguments: { wish: "clear skies", extra: ["one", "two"] },
+    });
+    expect(overElementLimit.isError).toBe(true);
+  } finally {
+    await client.close();
+  }
+
+  const oversizedBody = await wire(raw("tools/list", { padding: "x".repeat(5 * 1024) }));
+  expect(oversizedBody.status).toBe(413);
+});
+
 test("failed asset fetch becomes a tool error", async () => {
   const { client } = await connect(true, assets({ "/api/maurice.json": undefined }));
   try {
