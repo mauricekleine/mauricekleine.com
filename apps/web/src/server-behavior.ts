@@ -71,6 +71,8 @@ const SERVER_INFO = {
 const MCP_INSTRUCTIONS =
   "read-only tools about maurice kleine. everything here is public; no auth, no state, no tricks. markdown mirrors at /index.md, /about.md and /essays.md if you'd rather just read.";
 const MCP_SITE_ORIGINS = ["https://www.mauricekleine.com", "https://mauricekleine.com"];
+const MCP_MAX_TOOL_INPUT_ELEMENTS = 3; // The largest tool input has two object members, with one spare.
+const MCP_MAX_REQUEST_BODY_SIZE = 4 * 1024; // 4 KiB fits the MCP envelope, slugs, flags, and short wishes.
 const MCP_CORS_HEADERS = {
   "access-control-allow-methods": "POST, OPTIONS",
   "access-control-allow-headers": "Content-Type, MCP-Protocol-Version, Mcp-Method, Mcp-Name",
@@ -147,12 +149,13 @@ async function getEssay(env: WorkerEnv, origin: string, slug: string | undefined
 }
 
 const mcpRequestEnv = new AsyncLocalStorage<WorkerEnv>();
-const mcpHandler = createMcpHandler(({ requestInfo }) => {
+const createMcpServer: Parameters<typeof createMcpHandler>[0] = ({ requestInfo }) => {
   const env = mcpRequestEnv.getStore();
   if (!env || !requestInfo) throw new Error("missing mcp request environment");
   const origin = new URL(requestInfo.url).origin;
   const server = new McpServer(SERVER_INFO, {
     instructions: MCP_INSTRUCTIONS,
+    maxToolInputElements: MCP_MAX_TOOL_INPUT_ELEMENTS,
     capabilities: { tools: { listChanged: false } },
     cacheHints: {
       "tools/list": { ttlMs: 3_600_000, cacheScope: "public" },
@@ -216,7 +219,8 @@ const mcpHandler = createMcpHandler(({ requestInfo }) => {
     }),
   );
   return server;
-});
+};
+const mcpHandler = createMcpHandler(createMcpServer, { maxRequestBodySize: MCP_MAX_REQUEST_BODY_SIZE });
 
 function allowedMcpOrigin(value: string | null): boolean {
   if (value === null) return true;

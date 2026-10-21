@@ -457,6 +457,6 @@ test("an unknown mk.wtf link is a 404 that lists the real ones", async () => {
     const res = await worker.fetch(new Request(`https://mk.wtf${path}`), noAssets);
     assert.equal(res.status, 404, path);
     const body = await res.text();
-    assert.match(body, /mk\.wtf\/f\/gh  https:\/\/github\.com\/mauricekleine\/fluncle/);
+    assert.match(body, /mk\.wtf\/f\/gh {2}https:\/\/github\.com\/mauricekleine\/fluncle/);
   }
 });
