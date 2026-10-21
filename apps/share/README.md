@@ -6,7 +6,8 @@ their commit, or earlier when deleted.
 Workers Builds deploys it from `main` through its own `artifact-share` trigger, which
 runs only when `apps/share/`, `packages/superthread/`, `package.json` or `bun.lock`
 changes. It builds with `bun install --frozen-lockfile && bun run --cwd apps/share build`
-and deploys with `cd apps/share && cf deploy --prebuilt`. Deploys keep the Worker's
+and deploys with `bun run --cwd apps/share deploy`: the build image has no global `cf`,
+and `bun run` puts the repository's pinned one on `PATH`. Deploys keep the Worker's
 existing secrets, so the build needs no credentials beyond its Workers Builds token.
 Root `bun run deploy:verify <sha>` waits for both Workers.
 
