@@ -12,7 +12,7 @@ Run commands from the repo root. `bun run dev` starts the web app on port 3000, 
 
 After a merge, run `bun run deploy:verify <merged-sha>` to wait for the build-stamped SHAs: the web Worker's `/api/deploy.json` and, when the merge's history touches its paths, the share Worker's `/_health`.
 
-This repo trials Bun's formatter and linter ahead of a release. The pre-commit hook runs `bun-canary fmt --staged && bun-canary lint --staged` (dotfiles installs `bun-canary`); `[fmt]` in `bunfig.toml` sets the style and the ignored paths. Run `bun-canary fmt` or `bun-canary lint` by hand for the whole repo. Builds and installs stay on the pinned `bun`.
+The pre-commit hook runs `bun fmt --staged` with the pinned Bun release, then `bun-canary lint --staged` when the canary is installed (dotfiles supplies it). Lint is still canary-only. `[fmt]` in `bunfig.toml` sets the style and ignored paths. Run `bun fmt` or `bun-canary lint` by hand for the whole repo.
 
 Keep Maurice's voice lowercase and understated. No em dashes in new copy.
 
