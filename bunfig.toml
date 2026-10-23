@@ -3,7 +3,7 @@
 # compromised release is not installed before it is caught and yanked.
 minimumReleaseAge = 259200
 
-# bun fmt and bun lint come from bun-canary until a Bun release ships them; the pre-commit hook runs both on staged files.
+# The pre-commit hook runs release bun fmt and canary bun lint on staged files.
 [fmt]
 printWidth = 120
 sortPackageJson = true
