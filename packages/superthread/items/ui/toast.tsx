@@ -1,9 +1,8 @@
-import * as React from "react";
 import { Toast as ToastPrimitive } from "@base-ui/react/toast";
 import { cn } from "@/components/superthread/lib/utils";
 
 import { Button } from "@/components/superthread/ui/button";
-import { Icon } from "@/components/superthread/ui/glyphs";
+import { Icon, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
 
 const toast = ToastPrimitive.createToastManager();
 
@@ -20,7 +19,7 @@ function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
     <ToastPrimitive.Viewport
       data-slot="toast-viewport"
       className={cn(
-        "pointer-events-none fixed inset-x-4 bottom-4 z-50 mx-auto w-auto max-w-sm sm:right-4 sm:left-auto sm:mx-0 sm:w-full",
+        "pointer-events-none fixed inset-x-4 bottom-4 z-50 mx-auto w-auto max-w-[420px] sm:right-4 sm:left-auto sm:mx-0 sm:w-full",
         className,
       )}
       {...props}
@@ -32,11 +31,13 @@ function Toast({ className, ...props }: ToastPrimitive.Root.Props) {
   return (
     <ToastPrimitive.Root
       data-slot="toast"
+      data-mk="toast"
       className={cn(
-        "group/toast pointer-events-auto absolute right-0 bottom-0 z-[calc(1000-var(--toast-index))] w-full origin-bottom rounded-2xl border bg-popover text-popover-foreground shadow-lg will-change-transform select-none",
+        "group/toast pointer-events-auto absolute right-0 bottom-0 z-[calc(1000-var(--toast-index))] w-full origin-bottom border bg-popover text-popover-foreground shadow-leaf texture-contact [--contact-lift:var(--elevation-leaf-rake)] will-change-transform select-none",
         "[--gap:0.75rem] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc(var(--toast-offset-y)*-1+calc(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y))] [--peek:0.75rem] [--scale:calc(max(0,1-(var(--toast-index)*0.1)))] [--shrink:calc(1-var(--scale))]",
-        "h-(--height) [transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))] [transition:transform_500ms_cubic-bezier(0.22,1,0.36,1),opacity_500ms,height_150ms]",
-        "after:absolute after:top-full after:left-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-['']",
+        "h-(--height) [transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))] transition-[transform,opacity,height] duration-(--duration-travel) ease-(--ease-brand)",
+        // The hover bridge to the toast below sits on ::before: the contact screen owns ::after.
+        "before:absolute before:top-full before:left-0 before:h-[calc(var(--gap)+1px)] before:w-full before:content-['']",
         "data-expanded:h-(--toast-height) data-expanded:[transform:translateX(var(--toast-swipe-movement-x))_translateY(var(--offset-y))]",
         "data-limited:opacity-0 data-starting-style:[transform:translateY(150%)]",
         "[&[data-ending-style]:not([data-limited]):not([data-swipe-direction])]:[transform:translateY(150%)]",
@@ -60,7 +61,7 @@ function ToastContent({ className, ...props }: ToastPrimitive.Content.Props) {
     <ToastPrimitive.Content
       data-slot="toast-content"
       className={cn(
-        "flex h-full items-center gap-3 overflow-hidden p-4 transition-opacity duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] data-behind:opacity-0 data-expanded:opacity-100",
+        "flex h-full items-start gap-3 overflow-hidden py-4 pr-4 pl-[18px] transition-opacity duration-(--duration-travel) ease-(--ease-brand) data-behind:opacity-0 data-expanded:opacity-100",
         className,
       )}
       {...props}
@@ -69,14 +70,14 @@ function ToastContent({ className, ...props }: ToastPrimitive.Content.Props) {
 }
 
 function ToastTitle({ className, ...props }: ToastPrimitive.Title.Props) {
-  return <ToastPrimitive.Title data-slot="toast-title" className={cn("text-sm font-medium", className)} {...props} />;
+  return <ToastPrimitive.Title data-slot="toast-title" className={cn("text-ui font-medium", className)} {...props} />;
 }
 
 function ToastDescription({ className, ...props }: ToastPrimitive.Description.Props) {
   return (
     <ToastPrimitive.Description
       data-slot="toast-description"
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn("text-instrument text-muted-foreground", className)}
       {...props}
     />
   );
@@ -88,7 +89,12 @@ function ToastAction({
   ...props
 }: ToastPrimitive.Action.Props) {
   return (
-    <ToastPrimitive.Action data-slot="toast-action" render={render} className={cn("shrink-0", className)} {...props} />
+    <ToastPrimitive.Action
+      data-slot="toast-action"
+      render={render}
+      className={cn("shrink-0 self-start", className)}
+      {...props}
+    />
   );
 }
 
@@ -104,7 +110,7 @@ function ToastClose({
       aria-label="Close toast"
       render={render}
       className={cn(
-        "relative shrink-0 text-muted-foreground after:absolute after:-inset-2 after:content-[''] hover:text-foreground",
+        "relative -mt-1 -mr-1 shrink-0 text-muted-foreground after:absolute after:-inset-2 after:content-[''] hover:bg-raised-hover hover:text-foreground",
         className,
       )}
       {...props}
@@ -114,36 +120,25 @@ function ToastClose({
   );
 }
 
+// Each kind prints its 14 px status glyph in its own ink: tick, i, pause, cross. Loading shows the i.
+const TOAST_GLYPHS: Partial<Record<string, StatusState>> = {
+  success: "done",
+  info: "running",
+  warning: "waiting",
+  error: "failed",
+  loading: "running",
+};
+
 function ToastIcon({ type }: { type: string | undefined }) {
-  let icon: React.ReactNode = null;
+  const state = type ? TOAST_GLYPHS[type] : undefined;
 
-  if (type === "success") {
-    icon = <Icon name="tick" aria-hidden="true" />;
-  }
-
-  if (type === "info") {
-    icon = <Icon name="i" aria-hidden="true" />;
-  }
-
-  if (type === "warning") {
-    icon = <Icon name="pause" aria-hidden="true" />;
-  }
-
-  if (type === "error") {
-    icon = <Icon name="cross" className="text-destructive" aria-hidden="true" />;
-  }
-
-  if (type === "loading") {
-    icon = <Icon name="i" aria-hidden="true" />;
-  }
-
-  if (!icon) {
+  if (!state) {
     return null;
   }
 
   return (
-    <span data-slot="toast-icon" className="shrink-0 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4">
-      {icon}
+    <span data-slot="toast-icon" className="mt-[3px] flex shrink-0 [&_svg]:pointer-events-none">
+      <StatusGlyph state={state} />
     </span>
   );
 }
@@ -158,8 +153,8 @@ function ToastList() {
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <ToastTitle />
           <ToastDescription />
+          <ToastAction className="mt-1.5" />
         </div>
-        <ToastAction />
         <ToastClose />
       </ToastContent>
     </Toast>
