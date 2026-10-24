@@ -2,9 +2,8 @@
 // this file to the fixture's src/routes/all.tsx, and the fixture's build is its only type-check.
 // It uses only shadcn's own API for each item, which the skins keep.
 // Layers (the dialog, the select popup, toasts) open from in-flow triggers. Their portals render
-// only on the client, outside the section, so the dialog and the select popup carry their section's
-// mode class themselves. Toasts take no class through Toaster: they follow the document's mode, so
-// add .dark to <body> to see them dark.
+// only on the client, outside the section, so they take the mode of the document they portal into,
+// as in any shadcn app with the mode class on <html>: add .dark to <body> to see them dark.
 import { type ReactNode, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { fleet } from "@/components/superthread/lib/fleet";
@@ -214,7 +213,7 @@ function Sink({ mode }: { mode: Mode }) {
           <SelectTrigger className="w-56" aria-label="ship">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className={mode}>
+          <SelectContent>
             <SelectGroup>
               <SelectLabel>ships</SelectLabel>
               {fleet.map((ship) => (
@@ -318,7 +317,7 @@ function Sink({ mode }: { mode: Mode }) {
         <div>
           <Dialog>
             <DialogTrigger render={<Button variant="outline" />}>rename the ship</DialogTrigger>
-            <DialogContent className={mode}>
+            <DialogContent>
               <DialogHeader>
                 <DialogTitle>rename the ship</DialogTitle>
                 <DialogDescription>the new name shows in the rail and in every run.</DialogDescription>
