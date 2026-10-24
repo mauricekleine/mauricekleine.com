@@ -1,0 +1,1287 @@
+{
+  "name": "superthread / master",
+  "thesis": "the exposure record's form in two inks: key and white, one house ink, flat where you read and screened where you look",
+  "inks": {
+    "key": {
+      "hex": "#16181d",
+      "oklch": "oklch(0.209 0.010 268.2)",
+      "role": "the first ink in light; the stock in dark"
+    },
+    "stock": {
+      "hex": "#ffffff",
+      "role": "the stock in light; paper-white, the first ink, in dark"
+    }
+  },
+  "tint_rule": "role = (1 - t) * stock + t * ink in linear light (murray-davies), css color-mix(in srgb-linear, ...); a flat tint equals the average of its screen",
+  "wedge": {
+    "light": {
+      "ink": "key over white",
+      "steps": [
+        100,
+        98,
+        88,
+        78,
+        64,
+        48,
+        32,
+        20,
+        12,
+        5,
+        0
+      ]
+    },
+    "dark": {
+      "ink": "paper-white over key",
+      "steps": [
+        80,
+        60,
+        44,
+        24,
+        16,
+        10,
+        6,
+        4,
+        3,
+        1,
+        0
+      ]
+    },
+    "rule": "the exposure record's ramp as first-ink tints; each neutral role names its step"
+  },
+  "light": {
+    "background": "#ffffff",
+    "foreground": "#16181d",
+    "card": "#ffffff",
+    "card-foreground": "#16181d",
+    "popover": "#ffffff",
+    "popover-foreground": "#16181d",
+    "primary": "#aa337a",
+    "primary-foreground": "#ffffff",
+    "secondary": "#f1f1f1",
+    "secondary-foreground": "#16181d",
+    "muted": "#f9f9f9",
+    "muted-foreground": "#646465",
+    "accent": "#f7f2f4",
+    "accent-foreground": "#16181d",
+    "destructive": "#16181d",
+    "destructive-foreground": "#ffffff",
+    "border": "#e7e7e7",
+    "input": "#838384",
+    "ring": "#aa337a",
+    "success": "#5e6e42",
+    "warning": "#a48551",
+    "info": "#405d7b"
+  },
+  "dark": {
+    "background": "#16181d",
+    "foreground": "#e7e7e7",
+    "card": "#242629",
+    "card-foreground": "#e7e7e7",
+    "popover": "#242629",
+    "popover-foreground": "#e7e7e7",
+    "primary": "#c074a1",
+    "primary-foreground": "#16181d",
+    "secondary": "#3e3e40",
+    "secondary-foreground": "#e7e7e7",
+    "muted": "#242629",
+    "muted-foreground": "#b2b2b2",
+    "accent": "#503246",
+    "accent-foreground": "#e7e7e7",
+    "destructive": "#e7e7e7",
+    "destructive-foreground": "#16181d",
+    "border": "#37373a",
+    "input": "#888889",
+    "ring": "#c074a1",
+    "success": "#95a67b",
+    "warning": "#e6c99a",
+    "info": "#94b0cd"
+  },
+  "extra": {
+    "light": {
+      "rule": "#16181d",
+      "ground": "#2e2f32",
+      "ground-foreground": "#ffffff",
+      "error": "#7c3832",
+      "selection": "#eee3e8",
+      "disabled": "#bfc0c0",
+      "faint": "#f9f9f9",
+      "code": "#16181d"
+    },
+    "dark": {
+      "rule": "#727273",
+      "ground": "#0d0f12",
+      "ground-foreground": "#e7e7e7",
+      "error": "#dca59a",
+      "selection": "#71455f",
+      "disabled": "#5c5c5e",
+      "faint": "#2e2f32",
+      "code": "#0d0f12"
+    }
+  },
+  "recipe": {
+    "light": {
+      "background": "stock",
+      "foreground": "key 100",
+      "card": "stock",
+      "card-foreground": "key 100",
+      "popover": "stock",
+      "popover-foreground": "key 100",
+      "primary": "house 100",
+      "primary-foreground": "stock",
+      "secondary": "key 12",
+      "secondary-foreground": "key 100",
+      "muted": "key 5",
+      "muted-foreground": "key 88",
+      "accent": "house 12",
+      "accent-foreground": "key 100",
+      "destructive": "key 100",
+      "destructive-foreground": "stock",
+      "border": "key 20",
+      "input": "key 78",
+      "ring": "house 100",
+      "success": "done glyph",
+      "warning": "waiting glyph",
+      "info": "running glyph",
+      "rule": "key 100",
+      "ground": "key 98",
+      "ground-foreground": "stock",
+      "error": "failed text",
+      "selection": "house 24",
+      "disabled": "key 48",
+      "faint": "key 5",
+      "code": "key 100"
+    },
+    "dark": {
+      "background": "stock",
+      "foreground": "paper 80",
+      "card": "paper 1",
+      "card-foreground": "paper 80",
+      "popover": "paper 1",
+      "popover-foreground": "paper 80",
+      "primary": "house 100",
+      "primary-foreground": "stock",
+      "secondary": "paper 4",
+      "secondary-foreground": "paper 80",
+      "muted": "paper 1",
+      "muted-foreground": "paper 44",
+      "accent": "house 14",
+      "accent-foreground": "paper 80",
+      "destructive": "paper 80",
+      "destructive-foreground": "stock",
+      "border": "paper 3",
+      "input": "paper 24",
+      "ring": "house 100",
+      "success": "done glyph",
+      "warning": "waiting glyph",
+      "info": "running glyph",
+      "rule": "paper 16",
+      "ground": "key twice (50)",
+      "ground-foreground": "paper 80",
+      "error": "failed text",
+      "selection": "house 30",
+      "disabled": "paper 10",
+      "faint": "paper 2",
+      "code": "key twice (50)"
+    }
+  },
+  "house": {
+    "default": "plum",
+    "leads": [
+      "plum"
+    ],
+    "rule": "the one primary on every surface (docs, every app's working page, every reading page): primary actions, links, focus rings, the current item (nav, contents, the rail cell's outline), selection and accent tints, the progress fill, the opener's and the figures' second plate, the rail's home cell. one parameter; the reach sheet's masthead switch re-inks the whole sheet, board and reading page included",
+    "ship rule": "a ship never sets a control colour. its identity is its mark, whose dithered region prints its bright spot (so its rail cell and its fleet row), and its series in a chart. every working page is a true two-ink page: key plus the house ink",
+    "ship primary": {
+      "default": "house",
+      "alternative": "spot-ink: each ship's own text-safe ink as its primary, links and ring inside its surfaces (round 2's default). restore it by setting SHIP_PRIMARY = \"spot-ink\" in src/palette.py and rebuilding: its values, floors and scopes are kept there, in check.py and in build_reach.ship_scope"
+    },
+    "floors": {
+      "failed glyph, word and solid from the lead house ink": 12,
+      "the lead house ink (plum) from done, running and waiting": 12,
+      "lead house inks from every ship spot": 10,
+      "failed chroma at most": 0.11,
+      "the house ink's dark value on the deep ground (current edge, progress), contrast": 3,
+      "other candidates": "the record of the round (tachyon teal, thread violet, vermilion, ember): they keep every contrast check; below a distance floor they pay a named cost, shown in the switch",
+      "unit": "oklab delta e x 100, unless named a contrast"
+    },
+    "candidates": {
+      "plum": {
+        "name": "plum",
+        "from": "the exposure record's filter",
+        "light": "#aa337a",
+        "dark": "#c074a1",
+        "oklch": {
+          "light": "oklch(0.520 0.170 347.9)",
+          "dark": "oklch(0.655 0.111 344.2)"
+        },
+        "contrast": {
+          "light": {
+            "label on primary": 6.06,
+            "primary on background": 6.06,
+            "hover label": 6.98,
+            "pressed label": 7.98
+          },
+          "dark": {
+            "label on primary": 5.29,
+            "primary on background": 5.29,
+            "hover label": 6.16,
+            "pressed label": 7.18
+          }
+        },
+        "nearest ship spot": {
+          "light": "constellation, delta e 19.9",
+          "dark": "constellation, delta e 11.1"
+        },
+        "nearest status": {
+          "light": "failed, delta e 13.2",
+          "dark": "queued, delta e 11.4"
+        },
+        "cost": "clear of every status and every ship spot"
+      },
+      "teal": {
+        "name": "tachyon teal",
+        "from": "hyperspeed's spot, freed when hyperspeed left the fleet",
+        "light": "#007575",
+        "dark": "#50a9a8",
+        "oklch": {
+          "light": "oklch(0.509 0.087 194.8)",
+          "dark": "oklch(0.680 0.085 194.3)"
+        },
+        "contrast": {
+          "light": {
+            "label on primary": 5.52,
+            "primary on background": 5.52,
+            "hover label": 6.41,
+            "pressed label": 7.35
+          },
+          "dark": {
+            "label on primary": 6.41,
+            "primary on background": 6.41,
+            "hover label": 7.46,
+            "pressed label": 8.59
+          }
+        },
+        "nearest ship spot": {
+          "light": "soliton, delta e 20.5",
+          "dark": "orbit, delta e 11.2"
+        },
+        "nearest status": {
+          "light": "running, delta e 8.3",
+          "dark": "queued, delta e 8.8"
+        },
+        "cost": "9 from done in light, 9 in dark; 8 from running in light, 10 in dark; 1.3 from tailwind teal-700 in light; on key in dark it is one cool accent on near-black, so it stays at chroma 0.085 to print as an ink, not a glow"
+      },
+      "violet": {
+        "name": "thread violet",
+        "from": "the two-ink proof's house spot",
+        "light": "#7235cc",
+        "dark": "#9b7ae6",
+        "oklch": {
+          "light": "oklch(0.497 0.216 295.9)",
+          "dark": "oklch(0.658 0.158 295.9)"
+        },
+        "contrast": {
+          "light": {
+            "label on primary": 6.78,
+            "primary on background": 6.78,
+            "hover label": 7.73,
+            "pressed label": 8.73
+          },
+          "dark": {
+            "label on primary": 5.34,
+            "primary on background": 5.34,
+            "hover label": 6.22,
+            "pressed label": 7.3
+          }
+        },
+        "nearest ship spot": {
+          "light": "soliton, delta e 13.3",
+          "dark": "constellation, delta e 4.5"
+        },
+        "nearest status": {
+          "light": "running, delta e 18.2",
+          "dark": "running, delta e 15.5"
+        },
+        "cost": "5 from constellation in dark; 7 from soliton in dark; 2.9 from tailwind violet-700 in light"
+      },
+      "vermilion": {
+        "name": "vermilion",
+        "from": "the quarterly's primary",
+        "light": "#d33a15",
+        "dark": "#f3724f",
+        "oklch": {
+          "light": "oklch(0.575 0.195 34.0)",
+          "dark": "oklch(0.699 0.167 36.1)"
+        },
+        "contrast": {
+          "light": {
+            "label on primary": 4.79,
+            "primary on background": 4.79,
+            "hover label": 5.62,
+            "pressed label": 6.5
+          },
+          "dark": {
+            "label on primary": 6.2,
+            "primary on background": 6.2,
+            "hover label": 7.23,
+            "pressed label": 8.43
+          }
+        },
+        "nearest ship spot": {
+          "light": "trisys, delta e 12.8",
+          "dark": "trisys, delta e 5.0"
+        },
+        "nearest status": {
+          "light": "failed, delta e 15.8",
+          "dark": "failed, delta e 12.2"
+        },
+        "cost": "5 from trisys in dark"
+      },
+      "ember": {
+        "name": "ember",
+        "from": "today's thread, oklch(55% 0.13 55)",
+        "light": "#aa5910",
+        "dark": "#e28d4f",
+        "oklch": {
+          "light": "oklch(0.550 0.131 54.8)",
+          "dark": "oklch(0.720 0.129 55.0)"
+        },
+        "contrast": {
+          "light": {
+            "label on primary": 5.07,
+            "primary on background": 5.07,
+            "hover label": 5.9,
+            "pressed label": 6.86
+          },
+          "dark": {
+            "label on primary": 6.9,
+            "primary on background": 6.9,
+            "hover label": 8.02,
+            "pressed label": 9.24
+          }
+        },
+        "nearest ship spot": {
+          "light": "trisys, delta e 14.3",
+          "dark": "trisys, delta e 3.0"
+        },
+        "nearest status": {
+          "light": "waiting, delta e 10.7",
+          "dark": "failed, delta e 8.8"
+        },
+        "cost": "11 from waiting in light; 12 from failed in light, 9 in dark; 3 from trisys in dark; 2.1 from tailwind amber-700 in light; with erode heads on white it carries two of ivory's three traits"
+      }
+    }
+  },
+  "fleet": [
+    "orbit",
+    "quanta",
+    "trisys",
+    "constellation",
+    "artifacts",
+    "soliton"
+  ],
+  "ships": {
+    "orbit": {
+      "light": {
+        "tile": "#16181d",
+        "ink": "#ffffff",
+        "spot": "#2d9ff2"
+      },
+      "dark": {
+        "tile": "#ffffff",
+        "ink": "#16181d",
+        "spot": "#55acf3"
+      },
+      "spot name": "comet blue",
+      "hue": 246,
+      "angle": 45,
+      "oklch": {
+        "light": "oklch(0.680 0.157 245.8)",
+        "dark": "oklch(0.721 0.134 245.8)"
+      },
+      "contrast": {
+        "light": {
+          "dithered region on tile": 11.99
+        },
+        "dark": {
+          "dithered region on tile": 4.28
+        }
+      },
+      "mark": {
+        "light": "marks/orbit.svg",
+        "dark": "marks/orbit-dark.svg"
+      },
+      "use": "tile and ink are the mark's silhouette; spot fills its one dithered region (so the ship's rail cell and fleet row) and its series in a chart. a ship colour never sets a control: primary, links, ring and the current item are the house ink",
+      "nearest lead house ink": {
+        "light": "plum, delta e 30.1",
+        "dark": "plum, delta e 19.7"
+      }
+    },
+    "quanta": {
+      "light": {
+        "tile": "#16181d",
+        "ink": "#ffffff",
+        "spot": "#39b357"
+      },
+      "dark": {
+        "tile": "#ffffff",
+        "ink": "#16181d",
+        "spot": "#4ec769"
+      },
+      "spot name": "quark green",
+      "hue": 148,
+      "angle": 90,
+      "oklch": {
+        "light": "oklch(0.679 0.169 148.0)",
+        "dark": "oklch(0.739 0.171 148.1)"
+      },
+      "contrast": {
+        "light": {
+          "dithered region on tile": 12.13
+        },
+        "dark": {
+          "dithered region on tile": 3.84
+        }
+      },
+      "mark": {
+        "light": "marks/quanta.svg",
+        "dark": "marks/quanta-dark.svg"
+      },
+      "use": "tile and ink are the mark's silhouette; spot fills its one dithered region (so the ship's rail cell and fleet row) and its series in a chart. a ship colour never sets a control: primary, links, ring and the current item are the house ink",
+      "nearest lead house ink": {
+        "light": "plum, delta e 37.0",
+        "dark": "plum, delta e 29.2"
+      }
+    },
+    "trisys": {
+      "light": {
+        "tile": "#16181d",
+        "ink": "#ffffff",
+        "spot": "#e9772a"
+      },
+      "dark": {
+        "tile": "#ffffff",
+        "ink": "#16181d",
+        "spot": "#f38745"
+      },
+      "spot name": "flare orange",
+      "hue": 50,
+      "angle": 27,
+      "oklch": {
+        "light": "oklch(0.689 0.164 49.9)",
+        "dark": "oklch(0.730 0.154 49.7)"
+      },
+      "contrast": {
+        "light": {
+          "dithered region on tile": 11.86
+        },
+        "dark": {
+          "dithered region on tile": 4.42
+        }
+      },
+      "mark": {
+        "light": "marks/trisys.svg",
+        "dark": "marks/trisys-dark.svg"
+      },
+      "use": "tile and ink are the mark's silhouette; spot fills its one dithered region (so the ship's rail cell and fleet row) and its series in a chart. a ship colour never sets a control: primary, links, ring and the current item are the house ink",
+      "nearest lead house ink": {
+        "light": "plum, delta e 24.1",
+        "dark": "plum, delta e 16.6"
+      }
+    },
+    "constellation": {
+      "light": {
+        "tile": "#16181d",
+        "ink": "#ffffff",
+        "spot": "#a970f0"
+      },
+      "dark": {
+        "tile": "#ffffff",
+        "ink": "#16181d",
+        "spot": "#b085ec"
+      },
+      "spot name": "nova violet",
+      "hue": 302,
+      "angle": 63,
+      "oklch": {
+        "light": "oklch(0.661 0.188 302.1)",
+        "dark": "oklch(0.699 0.152 301.9)"
+      },
+      "contrast": {
+        "light": {
+          "dithered region on tile": 11.58
+        },
+        "dark": {
+          "dithered region on tile": 4.89
+        }
+      },
+      "mark": {
+        "light": "marks/constellation.svg",
+        "dark": "marks/constellation-dark.svg"
+      },
+      "use": "tile and ink are the mark's silhouette; spot fills its one dithered region (so the ship's rail cell and fleet row) and its series in a chart. a ship colour never sets a control: primary, links, ring and the current item are the house ink",
+      "nearest lead house ink": {
+        "light": "plum, delta e 19.9",
+        "dark": "plum, delta e 11.1"
+      }
+    },
+    "artifacts": {
+      "light": {
+        "tile": "#16181d",
+        "ink": "#ffffff",
+        "spot": "#e3ae34"
+      },
+      "dark": {
+        "tile": "#ffffff",
+        "ink": "#16181d",
+        "spot": "#e7b546"
+      },
+      "spot name": "manila gold",
+      "hue": 84,
+      "angle": 135,
+      "oklch": {
+        "light": "oklch(0.780 0.144 83.6)",
+        "dark": "oklch(0.799 0.138 84.0)"
+      },
+      "contrast": {
+        "light": {
+          "dithered region on tile": 13.24
+        },
+        "dark": {
+          "dithered region on tile": 3.43
+        }
+      },
+      "mark": {
+        "light": "marks/artifacts.svg",
+        "dark": "marks/artifacts-dark.svg"
+      },
+      "use": "tile and ink are the mark's silhouette; spot fills its one dithered region (so the ship's rail cell and fleet row) and its series in a chart. a ship colour never sets a control: primary, links, ring and the current item are the house ink",
+      "nearest lead house ink": {
+        "light": "plum, delta e 34.9",
+        "dark": "plum, delta e 23.9"
+      }
+    },
+    "soliton": {
+      "light": {
+        "tile": "#16181d",
+        "ink": "#ffffff",
+        "spot": "#6272e9"
+      },
+      "dark": {
+        "tile": "#ffffff",
+        "ink": "#16181d",
+        "spot": "#6a7be5"
+      },
+      "spot name": "canal indigo",
+      "hue": 274,
+      "angle": 117,
+      "oklch": {
+        "light": "oklch(0.601 0.179 274.0)",
+        "dark": "oklch(0.621 0.160 274.0)"
+      },
+      "contrast": {
+        "light": {
+          "dithered region on tile": 11.02
+        },
+        "dark": {
+          "dithered region on tile": 6.19
+        }
+      },
+      "mark": {
+        "light": "marks/soliton.svg",
+        "dark": "marks/soliton-dark.svg"
+      },
+      "use": "tile and ink are the mark's silhouette; spot fills its one dithered region (so the ship's rail cell and fleet row) and its series in a chart. a ship colour never sets a control: primary, links, ring and the current item are the house ink",
+      "nearest lead house ink": {
+        "light": "plum, delta e 22.5",
+        "dark": "plum, delta e 16.4"
+      }
+    }
+  },
+  "status": {
+    "vocabulary": [
+      "done",
+      "running",
+      "waiting",
+      "failed",
+      "queued"
+    ],
+    "rule": "the sanctioned exception to one colour: badge scale only. a fill near the stock, a 1 px edge, a 14 px square in the glyph colour with the glyph knocked out, the word in the text colour. failed is the one solid badge.",
+    "edge rule": "the edge is the glyph colour over the stock in linear light, 0.60 in light and 0.40 in dark: about half strength, so the square stays the loudest part",
+    "ship rule": "a ship colour never marks a state and never sets a control: status always carries its glyph square and word, and the house ink is every surface's primary",
+    "fill rule": "the fill sits near the stock: oklch(0.975 0.01 h) in the status hue in light, the glyph at 6 percent over key in dark. the colour lives in the glyph square and the edge; the states part by glyph, word and square, not by fill",
+    "level": {
+      "current": "steer 3",
+      "ladder": [
+        "steer 2",
+        "steer 3",
+        "calmer"
+      ],
+      "set": "STATUS_LEVEL in src/palette.py; status-ladder.html prints all three side by side",
+      "steer 2": "as built before steer 3 (snapshots/master-judge-fixed): chroma 0.10 to 0.12, failed brick at 0.15, pale tinted fills",
+      "steer 3": "the default: dusty printing inks in plum's register, glyphs at chroma 0.052 to 0.080, fills at the stock, failed a deep madder at 0.10",
+      "calmer": "the alternative, one step calmer: chroma down about a third again, failed at 0.085",
+      "alternative values": {
+        "done": {
+          "light": {
+            "glyph": "#616c4f",
+            "text": "#4f5840",
+            "fill": "#f8faf6",
+            "edge": "#b7bab2"
+          },
+          "dark": {
+            "glyph": "#98a387",
+            "text": "#98a387",
+            "fill": "#272a28",
+            "edge": "#656d5b"
+          }
+        },
+        "running": {
+          "light": {
+            "glyph": "#495d72",
+            "text": "#425468",
+            "fill": "#f7f9fc",
+            "edge": "#b1b6bc"
+          },
+          "dark": {
+            "glyph": "#9cafc3",
+            "text": "#9cafc3",
+            "fill": "#282d33",
+            "edge": "#687583"
+          }
+        },
+        "waiting": {
+          "light": {
+            "glyph": "#9d8764",
+            "text": "#69583b",
+            "fill": "#fbf9f5",
+            "edge": "#ccc3b8"
+          },
+          "dark": {
+            "glyph": "#dfcbab",
+            "text": "#dfcbab",
+            "fill": "#36332f",
+            "edge": "#958873"
+          }
+        },
+        "failed": {
+          "light": {
+            "glyph": "#7b3e38",
+            "text": "#763d37",
+            "solid": "#7e413b",
+            "fill": "#fcf8f7",
+            "edge": "#7e413b"
+          },
+          "dark": {
+            "glyph": "#d2a9a1",
+            "text": "#d2a9a1",
+            "solid": "#9f6054",
+            "fill": "#332b2d",
+            "edge": "#9f6054"
+          }
+        },
+        "queued": {
+          "light": {
+            "glyph": "#7d7e7e",
+            "text": "#646465",
+            "fill": "#fcfcfc",
+            "edge": "#bfc0c0"
+          },
+          "dark": {
+            "glyph": "#888889",
+            "text": "#9f9f9f",
+            "fill": "#2e2f32",
+            "edge": "#5a5b5c"
+          }
+        }
+      }
+    },
+    "failed": {
+      "ink": "madder",
+      "rule": "failed is the most urgent state by its form: the one solid badge, the cross and the word. it is one red for every house ink, madder (hue 27), a deep red on the warm side of plum: 12 or more from plum and at chroma 0.11 or less, so it is never the loudest ink on the page. an app never picks its own red; error text and the invalid edge follow failed. the switch's other candidates pay a named cost where it sits near them",
+      "nearest house ink": {
+        "plum": "13.1",
+        "teal": "17.6",
+        "violet": "21.0",
+        "vermilion": "12.2",
+        "ember": "8.8"
+      }
+    },
+    "states": {
+      "done": {
+        "role": "success",
+        "glyph": "tick",
+        "light": {
+          "glyph": "#5e6e42",
+          "text": "#4c5a34",
+          "fill": "#f5f8f1",
+          "edge": "#b6bab0"
+        },
+        "dark": {
+          "glyph": "#95a67b",
+          "text": "#95a67b",
+          "fill": "#2c322a",
+          "edge": "#636f53"
+        },
+        "contrast": {
+          "light": {
+            "word on fill": 6.94,
+            "glyph on fill": 5.17,
+            "glyph on background": 5.55
+          },
+          "dark": {
+            "word on fill": 5.02,
+            "glyph on fill": 5.02,
+            "glyph on background": 6.78
+          }
+        }
+      },
+      "running": {
+        "role": "info",
+        "glyph": "i",
+        "light": {
+          "glyph": "#405d7b",
+          "text": "#3a5571",
+          "fill": "#f2f7fd",
+          "edge": "#afb6bf"
+        },
+        "dark": {
+          "glyph": "#94b0cd",
+          "text": "#94b0cd",
+          "fill": "#2c343e",
+          "edge": "#627589"
+        },
+        "contrast": {
+          "light": {
+            "word on fill": 7.17,
+            "glyph on fill": 6.35,
+            "glyph on background": 6.84
+          },
+          "dark": {
+            "word on fill": 5.61,
+            "glyph on fill": 5.61,
+            "glyph on background": 7.91
+          }
+        }
+      },
+      "waiting": {
+        "role": "warning",
+        "glyph": "pause",
+        "light": {
+          "glyph": "#a48551",
+          "text": "#6f562a",
+          "fill": "#faf6ef",
+          "edge": "#cfc2b3"
+        },
+        "dark": {
+          "glyph": "#e6c99a",
+          "text": "#e6c99a",
+          "fill": "#423b31",
+          "edge": "#9a8667"
+        },
+        "contrast": {
+          "light": {
+            "word on fill": 6.41,
+            "glyph on fill": 3.22,
+            "glyph on background": 3.47
+          },
+          "dark": {
+            "word on fill": 6.93,
+            "glyph on fill": 6.93,
+            "glyph on background": 11.15
+          }
+        }
+      },
+      "failed": {
+        "role": "error",
+        "glyph": "cross",
+        "light": {
+          "glyph": "#813933",
+          "text": "#7c3832",
+          "solid": "#843c36",
+          "fill": "#fef4f3",
+          "edge": "#843c36"
+        },
+        "dark": {
+          "glyph": "#dca59a",
+          "text": "#dca59a",
+          "solid": "#a55b4e",
+          "fill": "#3f3131",
+          "edge": "#a55b4e"
+        },
+        "contrast": {
+          "light": {
+            "word on fill": 7.88,
+            "glyph on fill": 7.58,
+            "glyph on background": 8.18
+          },
+          "dark": {
+            "word on fill": 5.84,
+            "glyph on fill": 5.84,
+            "glyph on background": 8.37
+          }
+        }
+      },
+      "queued": {
+        "role": "neutral",
+        "glyph": "dash",
+        "light": {
+          "glyph": "#7d7e7e",
+          "text": "#646465",
+          "fill": "#fafbfb",
+          "edge": "#bfc0c0"
+        },
+        "dark": {
+          "glyph": "#888889",
+          "text": "#9f9f9f",
+          "fill": "#2e2f32",
+          "edge": "#5a5b5c"
+        },
+        "contrast": {
+          "light": {
+            "word on fill": 5.7,
+            "glyph on fill": 3.93,
+            "glyph on background": 4.07
+          },
+          "dark": {
+            "word on fill": 5.06,
+            "glyph on fill": 3.78,
+            "glyph on background": 5.01
+          }
+        }
+      }
+    },
+    "input error glyph": "bang"
+  },
+  "fonts": {
+    "display": "Unbounded",
+    "ui": "Supreme",
+    "reading": "Erode",
+    "mono": "Fragment Mono"
+  },
+  "font_roles": {
+    "display": "Unbounded 300: titles, section heads, the board and dialog titles",
+    "ui": "Supreme 400, 500: controls, tables, body of the docs shell",
+    "reading": "Erode 400 to 600: the reading page, ledes, footnotes",
+    "mono": "Fragment Mono: legends in caps at 11 px and .14em, ids, numbers, code"
+  },
+  "font_sources": [
+    "https://api.fontshare.com/v2/css?f[]=supreme@400,500&display=swap",
+    "https://api.fontshare.com/v2/css?f[]=erode@400,401,500,600&display=swap",
+    "https://fonts.googleapis.com/css2?family=Fragment+Mono&family=Unbounded:wght@300;400;500&display=swap"
+  ],
+  "states": {
+    "light": {
+      "recipe": {
+        "inked hover": "fill + key 20",
+        "inked pressed": "fill + key 36, 1 px key inset",
+        "secondary": "key 12, hover key 20, pressed key 32",
+        "outline and ghost": "hover key 5, pressed key 12",
+        "destructive": "key 100 with the trash glyph and the word; hover key 88, pressed key 84",
+        "selected": "house 12 (14 in dark) fill, a 1 px house edge and the 8 px house square: the boxed current item",
+        "focus": "controls (buttons, tabs, links, rail cells, a button inside a field): a 2 px house ring, at 2 px offset (inside the button for one inside a field). fields: while the text control holds focus the box's 1 px edge becomes a 2 px house edge inside it, the error edge for an invalid field, none for a disabled one",
+        "disabled": "key 5 fill, key 48 label"
+      },
+      "house": {
+        "primary hover": "#9a2f6f",
+        "primary pressed": "#8b2b65"
+      },
+      "controls": {
+        "destructive-hover": "#646465",
+        "destructive-press": "#727273",
+        "secondary-hover": "#e7e7e7",
+        "secondary-press": "#d7d7d8",
+        "neutral-hover": "#f9f9f9",
+        "neutral-press": "#f1f1f1",
+        "raised-hover": "#f9f9f9",
+        "raised-press": "#f1f1f1"
+      }
+    },
+    "dark": {
+      "recipe": {
+        "inked hover": "the ink lifted 0.04 in oklch lightness, chroma held",
+        "inked pressed": "the ink lifted 0.08 in oklch lightness at 95 percent chroma, 1 px key inset",
+        "secondary": "paper 4, hover paper 6, pressed paper 10",
+        "outline and ghost": "hover paper 1, pressed paper 3; on a raised surface hover paper 3, pressed paper 6",
+        "destructive": "paper 80 with the trash glyph and the word; hover paper 60, pressed paper 40",
+        "selected": "house 12 (14 in dark) fill, a 1 px house edge and the 8 px house square: the boxed current item",
+        "focus": "controls (buttons, tabs, links, rail cells, a button inside a field): a 2 px house ring, at 2 px offset (inside the button for one inside a field). fields: while the text control holds focus the box's 1 px edge becomes a 2 px house edge inside it, the error edge for an invalid field, none for a disabled one",
+        "disabled": "paper 2 fill, paper 10 label"
+      },
+      "house": {
+        "primary hover": "#cd80ad",
+        "primary pressed": "#d88eb9"
+      },
+      "controls": {
+        "destructive-hover": "#cccccc",
+        "destructive-press": "#ababab",
+        "secondary-hover": "#494a4c",
+        "secondary-press": "#5c5c5e",
+        "neutral-hover": "#242629",
+        "neutral-press": "#37373a",
+        "raised-hover": "#37373a",
+        "raised-press": "#494a4c"
+      }
+    }
+  },
+  "text": {
+    "rule": "house and status words sit on background, card, muted, popover and their own badge fill. inside accent and selection fills every word is foreground or muted-foreground. on the deep ground every word is ground-foreground.",
+    "house and status words on": [
+      "background",
+      "card",
+      "muted",
+      "popover"
+    ]
+  },
+  "code": {
+    "rule": "the code patch is dark in both modes (solid key in light, the deep ground in dark) and takes the dark tokens for its inks, as the deep ground does: package names and the copy link's focus ring print in the house ink's dark value in both modes, never its light value. its words are paper: stock white in light, paper 80 in dark. the ring is 2 px at a -4px offset, drawn inside the link so it sits on the patch on every side",
+    "ring offset": "-4px",
+    "light": {
+      "patch": "#16181d",
+      "text": "#ffffff",
+      "prompt": "#bbbbbb",
+      "separator": "#3e3f42",
+      "packages": {
+        "plum": "#c074a1",
+        "teal": "#50a9a8",
+        "violet": "#9b7ae6",
+        "vermilion": "#f3724f",
+        "ember": "#e28d4f"
+      },
+      "ring": {
+        "plum": "#c074a1",
+        "teal": "#50a9a8",
+        "violet": "#9b7ae6",
+        "vermilion": "#f3724f",
+        "ember": "#e28d4f"
+      },
+      "contrast": {
+        "text on patch": 17.76,
+        "prompt on patch": 9.25,
+        "packages and ring on patch": {
+          "plum": 5.29,
+          "teal": 6.41,
+          "violet": 5.34,
+          "vermilion": 6.2,
+          "ember": 6.9
+        }
+      }
+    },
+    "dark": {
+      "patch": "#0d0f12",
+      "text": "#e7e7e7",
+      "prompt": "#b2b2b2",
+      "separator": "#37373a",
+      "packages": {
+        "plum": "#c074a1",
+        "teal": "#50a9a8",
+        "violet": "#9b7ae6",
+        "vermilion": "#f3724f",
+        "ember": "#e28d4f"
+      },
+      "ring": {
+        "plum": "#c074a1",
+        "teal": "#50a9a8",
+        "violet": "#9b7ae6",
+        "vermilion": "#f3724f",
+        "ember": "#e28d4f"
+      },
+      "contrast": {
+        "text on patch": 15.52,
+        "prompt on patch": 9.05,
+        "packages and ring on patch": {
+          "plum": 5.72,
+          "teal": 6.93,
+          "violet": 5.78,
+          "vermilion": 6.7,
+          "ember": 7.45
+        }
+      }
+    }
+  },
+  "shape": {
+    "radius": 0,
+    "border": "1 px",
+    "focus": {
+      "controls": "buttons, tabs, links and rail cells: a 2 px ring in the house ink at 2 px offset, on every surface; a button inside a field takes the same ring inside itself (offset -2 px)",
+      "fields": "text input, search, textarea, select trigger: the box carries focus. while the text control holds focus (or the box is the control, as the select's trigger is) its 1 px edge becomes a 2 px edge in the house ink drawn inside it (outline 2 px at offset -2 px over the border), the error ink for an invalid field, and the caret takes the same ink; the text control draws no outline and the text never moves. a button inside the box (clear, reveal, a combobox's toggle) keeps its own 2 px ring, drawn inside it, and the box stays at 1 px. a disabled field takes no focus",
+      "css": ".inp :is(input,textarea,select):is(:focus,:focus-visible){outline:0} .inp:is(:has(:is(input,textarea,select):focus),.kf),button.inp:focus{border-color:var(--fx);outline:2px solid var(--fx);outline-offset:-2px} .inp button:focus-visible{outline:2px solid var(--pri);outline-offset:-2px}",
+      "why fields differ": "a field is already a box with an edge, and the caret is its focus signal; a ring outside it reads as a second frame and its gap as a third. a button or a tab has no edge to thicken, so the offset ring is what shows it"
+    },
+    "rules": "1 px rule colour, full-bleed to both window edges: masthead, section heads, table heads"
+  },
+  "shadow": {
+    "rule": "one light from the upper left; shadows fall right and down at 3:2; length grows with lift; a contact shadow under the edge; square corners",
+    "slip": "6px 4px 6px -2px",
+    "leaf": "12px 8px 14px -4px",
+    "sheet": "27px 18px 26px -6px",
+    "lifted": "39px 26px 36px -8px",
+    "contact": {
+      "slip": "1px .7px 1px",
+      "leaf": "2px 1.3px 2px",
+      "sheet": "5px 3.4px 5px",
+      "lifted": "6px 4px 6px"
+    },
+    "light colour": "the key printed twice, #020203, at 62 percent alpha; the contact shadow at 30",
+    "dark colour": "black at 85 percent alpha, the contact shadow at 40, plus a 1 px paper 6 edge on the raised surface",
+    "where": [
+      "reading sheet (sheet, on the deep ground)",
+      "raised working panel, the board (sheet, on the deep ground)",
+      "dialog (sheet, on stock)",
+      "popover, menu and select list (leaf, on stock)",
+      "toast (leaf, on stock)"
+    ],
+    "on stock": "the soft rake at each layer's size, as on the ground; in light the contact shadow prints as a screen instead of a blur: the shadow ink at 50 percent, 3 px right of the layer and 2 px below it at every lift (texture.component details, contact). a layer's screen is an edge, never a field: it covers no more than the layer's own edge would, so no dots fall on the words beyond it. in dark the screen would print black on key, so the contact stays soft",
+    "on the deep ground": "the board and the reading sheet keep the quarterly's soft rake below, the lift maurice called gorgeous; a screen of key on key 98 would read as a dotted band beside the data",
+    "measured on the ground": "light: the ground stops a step short of solid key, so the rake darkens it beside the sheet and the lift reads. dark: the ground is key printed twice, too near black for any shadow to darken, so the sheet lifts by its lighter stock and its paper 6 edge, as the quarterly's own dark leaf does; the shadow is still drawn and shows wherever a sheet overhangs anything lighter (measured in tokens.json shadow.measured)",
+    "before": "judge round: key 100 ground in light; slip 4px 3px 6px -2px, leaf 12px 8px 16px -6px, sheet 24px 16px 32px -12px, lifted 36px 24px 40px -14px in key at 22 percent alpha (black at 55 in dark), contact 0 1px 2px at 10 (40)",
+    "measured": {
+      "light": {
+        "ground": "#2e2f32",
+        "sheet": "#ffffff",
+        "shadow core": "#131315",
+        "sheet on ground": 13.39,
+        "ground L*": 19.4,
+        "shadow core L*": 5.9,
+        "shadow mid L*": 12.7,
+        "drop at core": 13.5,
+        "drop at mid": 6.7
+      },
+      "dark": {
+        "ground": "#0d0f12",
+        "sheet": "#242629",
+        "shadow core": "#020203",
+        "sheet on ground": 1.27,
+        "ground L*": 4.3,
+        "shadow core L*": 0.6,
+        "shadow mid L*": 2.4,
+        "drop at core": 3.7,
+        "drop at mid": 1.9
+      }
+    }
+  },
+  "ground": {
+    "light": "#2e2f32",
+    "dark": "#0d0f12",
+    "recipe": {
+      "light": "key 98",
+      "dark": "key printed twice (50)"
+    },
+    "on it": "ship surfaces with the fleet rail: the board, the reading page, any app's frame. not docs or public pages, which print on stock",
+    "scope": "the deep ground is dark in both modes. words flat on it (the ground's legend, the ship's nav, a reading page's contents and meter) print in ground-foreground for the page's mode (#ffffff in light, #e7e7e7 in dark), and the nav's hover is paper 5 over the ground. the rest of what prints flat on it takes the dark tokens in both modes: the fleet rail's tiles and hover tab, the rules, the current box's accent fill, and the house ink as its dark value for the current edge, the rail cell's outline and the progress, which keeps 3:1 against both grounds. what is raised on it (the board panel, the reading sheet) takes the page's own mode",
+    "why key 98 in light": "a step short of solid key, so the sheet's rake shadow has something to darken (judge round); the white sheet still keeps 13.4:1 on it"
+  },
+  "space": {
+    "base": 4,
+    "steps": [
+      4,
+      8,
+      12,
+      16,
+      24,
+      32,
+      48,
+      64,
+      96
+    ],
+    "rows": {
+      "board": 56,
+      "table": 48,
+      "nav item": 32
+    },
+    "section": "64 px above a section head inside its full-bleed rule, 44 px below the head, panes padded 36 to 48 px",
+    "panels": "the board panel at most 880 px, the reading sheet 672 px, both beside the fleet rail and the ship's nav on the deep ground; the reading page keeps a 264 px margin on the ground for its contents and progress",
+    "reading": "erode 19 px on 32 px (1.68), 27.5em measure for about 66 characters, 72 px sheet padding",
+    "rule": "horizontal rules belong to the page: they run to both window edges, never stopped by a column"
+  },
+  "surface": {
+    "docs and public pages": "print on stock (white in light, key in dark) with full-bleed rules, the boxed nav and the aside; no fleet rail",
+    "ship surfaces": "an app with the fleet rail prints on the deep ground (key 98 in light, key printed twice in dark): the rail and the ship's own nav flat on the ground in ground-foreground, the working panel (the board, the reading sheet) raised on it",
+    "rail rule": "the rail takes the tile of the ground it sits on: on the deep ground it prints reversed, paper tiles and a paper hover tab, in both modes",
+    "ground scope": "the deep ground is dark in both modes. words flat on it (the ground's legend, the ship's nav, a reading page's contents and meter) print in ground-foreground for the page's mode (#ffffff in light, #e7e7e7 in dark), and the nav's hover is paper 5 over the ground. the rest of what prints flat on it takes the dark tokens in both modes: the fleet rail's tiles and hover tab, the rules, the current box's accent fill, and the house ink as its dark value for the current edge, the rail cell's outline and the progress, which keeps 3:1 against both grounds. what is raised on it (the board panel, the reading sheet) takes the page's own mode",
+    "phone": "at 900 px and below the rail turns into a 48 px bar of 32 px marks above the panel, icon only, the current ship boxed in the house ink; the label shows on focus; 12 px of ground stays on each side of the panel"
+  },
+  "texture": {
+    "rule": "flat where you read, screened where you look; a flat tint equals the linear-light average of its screen",
+    "places": [
+      "opener (one band per page head, inside crop marks)",
+      "figures (reading figures and the chart's line screens)",
+      "marks (one dithered region)",
+      "state fields (the progress bar's dithered leading edge)",
+      "empty and loading places (a light key wedge)",
+      "raised layers: select list, toast, dialog: contact edge",
+      "checkbox: mixed",
+      "tabs: hover bar",
+      "table: row edge",
+      "disabled button and field: disabled edge",
+      "skeleton: loading rows"
+    ],
+    "component details": {
+      "rule": "at most one per component, at its edge, track, shadow or state; never behind words, numbers, data or code. 50 percent, the half, is the in-between state (a hover previewing the solid current bar or strip, the mixed checkbox, a control screened back while disabled); solid is the settled one. a raised layer's screen is an edge, never a field",
+      "masks": "4 x 4 bayer tiles from src/screen.py as svg masks of integer squares (shape-rendering crispEdges), painted at 4 px so a css pixel is a whole device pixel block; css inks them, so the house-ink switch and the mode re-ink them. crisp at whole device-pixel ratios (1x, 2x, 3x); a fractional zoom (1.5x) resamples the tiles into an uneven rhythm",
+      "scale": "coverage is named in percent everywhere in the world's dither: the 4 x 4 matrix prints steps of 6.25 percent, so 50 percent is 8 of its 16 cells and 18.75 percent is 3",
+      "contact": {
+        "component": "raised layers: select list, toast, dialog",
+        "detail": "contact edge",
+        "job": "draws where a floating layer meets the page, under its soft lift",
+        "screen": "light only: the contact shadow as the shadow ink (the key printed twice) at 50 percent, 3 px right of the layer and 2 px below it at every lift, inside the quarterly's soft rake; an edge, never a field, so no dots fall on the words beyond it. in dark it would print black on key, so dark layers keep the soft contact and lift by their stock and 1 px edge",
+        "where": "(c) select, toast, dialog; (d) layers over the board; (h) elevation, on stock"
+      },
+      "mixed": {
+        "component": "checkbox",
+        "detail": "mixed",
+        "job": "some, not all: the classic half",
+        "screen": "the house ink at 50 percent inside the box's house edge",
+        "where": "(c) checkbox"
+      },
+      "tabhover": {
+        "component": "tabs",
+        "detail": "hover bar",
+        "job": "previews the current bar at half",
+        "screen": "a 2 px bar of the house ink at 50 percent",
+        "where": "(c) tabs, (d) the board's filters"
+      },
+      "rowedge": {
+        "component": "table",
+        "detail": "row edge",
+        "job": "marks the row under the pointer, beside its cells",
+        "screen": "a 4 px strip of the house ink at 50 percent at the row's left edge, inside the first cell's 16 px of left padding, so it sits inside the table's box (a scrolling wrapper cannot clip it) and 12 px clear of the cell's content; solid when the row is selected",
+        "where": "(c) table, (d) board"
+      },
+      "disabled": {
+        "component": "disabled button and field",
+        "detail": "disabled edge",
+        "job": "screened back: there, but not available now",
+        "screen": "the input edge ink at 50 percent as the 1 px edge; the fill stays flat and the label plain",
+        "where": "(c) button, input"
+      },
+      "skeleton": {
+        "component": "skeleton",
+        "detail": "loading rows",
+        "job": "the rows take shape before their words arrive",
+        "screen": "the first ink at 18.75 percent, the empty wedge's top step, on whole-pixel bars",
+        "where": "(c) empty and loading"
+      },
+      "rejected": {
+        "switch track": "the on state must read as settled ink at a glance, and the 18 px of track beside the knob is too short to carry a ramp",
+        "slider fill": "no fleet surface has a slider yet, and a thumb marks an exact value: a dithered edge would blur the number it sets. progress stays the one quantity in motion",
+        "sideways table fade": "the fade would sit on the cells it cuts, so on data",
+        "drop zone": "no fleet surface takes uploads yet, and a screened edge already means disabled"
+      }
+    },
+    "never": [
+      "behind words, numbers, data or code: text, table cells, the board's rows, a control's label",
+      "a component grey with dots",
+      "grain or noise",
+      "glow",
+      "misregistration on text",
+      "animation"
+    ],
+    "crop marks": "10 px corner ticks 16 px outside every screened field (openers, figures, the empty wedge): the frame's signature wherever a screen sits",
+    "halftone": {
+      "dot": "round, grows from the cell centre, whole pixels, no anti-aliasing",
+      "opener": {
+        "key": {
+          "vector": [
+            5,
+            5
+          ],
+          "pitch_px": 7.071,
+          "angle_deg": 45.0,
+          "pixels_per_cell": 50
+        },
+        "spot": {
+          "vector": [
+            2,
+            7
+          ],
+          "pitch_px": 7.28,
+          "angle_deg": 74.05,
+          "pixels_per_cell": 53
+        }
+      },
+      "figure": {
+        "key": {
+          "vector": [
+            4,
+            4
+          ],
+          "pitch_px": 5.657,
+          "angle_deg": 45.0,
+          "pixels_per_cell": 32
+        },
+        "spot": {
+          "vector": [
+            5,
+            1
+          ],
+          "pitch_px": 5.099,
+          "angle_deg": 11.31,
+          "pixels_per_cell": 26
+        }
+      },
+      "screen pitch": "openers 7.071 px (key) and 7.28 px (house); figures 5.657 and 5.099 px",
+      "screen angles": {
+        "key": 45.0,
+        "house or spot": 74.05,
+        "figure spot": 11.31
+      },
+      "plates": "each ink is a 1-bit plate shipped as a mask, so the house-ink switch re-inks the opener without new images",
+      "dark cap": "paper-white never prints solid: 78 percent at most in the openers, 72 in the figures"
+    },
+    "line screen": {
+      "use": "chart series: the ship's spot with 1 px lines knocked out to the stock every 4 px, at the ship's own angle",
+      "pitch_px": 4,
+      "coverage": "75 percent spot, 25 percent stock",
+      "angles": {
+        "trisys": 27,
+        "orbit": 45,
+        "constellation": 63,
+        "quanta": 90,
+        "soliton": 117,
+        "artifacts": 135
+      },
+      "pixel rule": "0, 45, 90 and 135 degrees are exact 1 px lines; 27, 63 and 117 are the 2:1 pixel steps nearest the exposure record's 22.5, 67.5 and 112.5"
+    },
+    "dither": {
+      "matrix": "bayer 4 x 4",
+      "bayer4": [
+        [
+          0,
+          8,
+          2,
+          10
+        ],
+        [
+          12,
+          4,
+          14,
+          6
+        ],
+        [
+          3,
+          11,
+          1,
+          9
+        ],
+        [
+          15,
+          7,
+          13,
+          5
+        ]
+      ],
+      "use": [
+        "marks: one region at 50 percent, a 1 px checker of spot",
+        "progress: a 24 px bayer ramp from 100 to 0 percent at the fill's leading edge",
+        "empty and loading: a key ramp from 3.5 to 22 percent, which bayer 4 x 4 prints as three steps (6.25, 12.5 and 18.75 percent), drawn at the width it shows",
+        "the components: six details at 50 and 18.75 percent, listed under texture.component details"
+      ]
+    }
+  },
+  "marks at 16 px": {
+    "default": "the spot region dithered at 50 percent; the pop lives at rail and fleet sizes (32 to 48 px) and in the chart",
+    "option": "the spot region solid at 16 px, light chrome only: on dark chrome's paper tile a solid spot drops to about 2 to 3:1",
+    "files": "marks/<ship>.svg and marks/<ship>-dark.svg; the solid option is drawn by common.mark_svg(solid=True)"
+  }
+}

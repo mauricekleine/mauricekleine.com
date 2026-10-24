@@ -1,0 +1,938 @@
+{
+  "constants": {
+    "SHEET_FLOOR": 7,
+    "DROP_FLOOR": 9,
+    "FAILED_FLOOR": 12,
+    "WORD_FLOOR": 12,
+    "STATUS_FLOOR": 12,
+    "SPOT_FLOOR": 10,
+    "SHIP_STATUS_FLOOR": 10,
+    "SOLID_APART": 2,
+    "GLYPH_APART": 7,
+    "CHROMATIC": [
+      "done",
+      "running",
+      "waiting"
+    ],
+    "SHIPPABLE": [
+      "steer 3",
+      "calmer"
+    ],
+    "GATE_TEXT": [
+      [
+        "foreground",
+        "background"
+      ],
+      [
+        "card-foreground",
+        "card"
+      ],
+      [
+        "popover-foreground",
+        "popover"
+      ],
+      [
+        "primary-foreground",
+        "primary"
+      ],
+      [
+        "secondary-foreground",
+        "secondary"
+      ],
+      [
+        "muted-foreground",
+        "background"
+      ],
+      [
+        "muted-foreground",
+        "muted"
+      ],
+      [
+        "accent-foreground",
+        "accent"
+      ],
+      [
+        "destructive-foreground",
+        "destructive"
+      ]
+    ],
+    "GATE_UI": [
+      [
+        "primary",
+        "background"
+      ],
+      [
+        "ring",
+        "background"
+      ],
+      [
+        "input",
+        "background"
+      ],
+      [
+        "destructive",
+        "background"
+      ],
+      [
+        "success",
+        "background"
+      ],
+      [
+        "warning",
+        "background"
+      ],
+      [
+        "info",
+        "background"
+      ]
+    ],
+    "TEXT_GROUNDS": [
+      "background",
+      "card",
+      "muted",
+      "popover"
+    ]
+  },
+  "shipped": {
+    "HOUSE_DEFAULT": "plum",
+    "STATUS_LEVEL": "steer 3"
+  },
+  "assertions": [
+    {
+      "fn": "apart",
+      "label": "f\"{tag} [{lv}] house to {label}\"",
+      "floor": {
+        "source": "floor",
+        "value": null
+      },
+      "line": 160
+    },
+    {
+      "fn": "apart",
+      "label": "f\"{tag} [{lv}] house to {s_}\"",
+      "floor": {
+        "source": "STATUS_FLOOR",
+        "value": 12
+      },
+      "line": 167
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} text {fg} on {bg}\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 175
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} ui {fg} on {bg}\"",
+      "floor": {
+        "source": "3",
+        "value": 3
+      },
+      "line": 177
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} house text on {g}\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 180
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} foreground on accent\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 181
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} muted-foreground on accent\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 182
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} foreground on selection\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 183
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} stock label on house hover\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 184
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} stock label on house pressed\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 185
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} house edge on accent\"",
+      "floor": {
+        "source": "3",
+        "value": 3
+      },
+      "line": 186
+    },
+    {
+      "fn": "apart",
+      "label": "f\"{tag} house to {name} spot\"",
+      "floor": {
+        "source": "SPOT_FLOOR",
+        "value": 10
+      },
+      "line": 189
+    },
+    {
+      "fn": "apart",
+      "label": "f\"{tag} house to {name} spot-ink\"",
+      "floor": {
+        "source": "SPOT_FLOOR",
+        "value": 10
+      },
+      "line": 191
+    },
+    {
+      "fn": "apart",
+      "label": "f\"{tag} neutral hover apart from background\"",
+      "floor": {
+        "source": "1.5",
+        "value": 1.5
+      },
+      "line": 197
+    },
+    {
+      "fn": "apart",
+      "label": "f\"{tag} raised hover apart from card\"",
+      "floor": {
+        "source": "1.5",
+        "value": 1.5
+      },
+      "line": 198
+    },
+    {
+      "fn": "apart",
+      "label": "f\"{tag} raised pressed apart from raised hover\"",
+      "floor": {
+        "source": "1.5",
+        "value": 1.5
+      },
+      "line": 199
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} ground-foreground on ground\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 200
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} card on ground (the raised sheet)\"",
+      "floor": {
+        "source": "1.0",
+        "value": 1
+      },
+      "line": 201
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} house (dark value) on the ground: current edge and progress\"",
+      "floor": {
+        "source": "3",
+        "value": 3
+      },
+      "line": 204
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} ground text inside the current box (dark accent)\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 205
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} package names on the code patch (house dark value)\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 208
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} copy link ring on the code patch (house dark value)\"",
+      "floor": {
+        "source": "3",
+        "value": 3
+      },
+      "line": 209
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} label on primary\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 217
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} ring on background\"",
+      "floor": {
+        "source": "3",
+        "value": 3
+      },
+      "line": 218
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} link text on {g}\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 220
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} foreground on accent\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 222
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} muted-foreground on accent\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 223
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} foreground on selection\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 224
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} stock label on hover\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 225
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} stock label on pressed\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 226
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} edge on accent\"",
+      "floor": {
+        "source": "3",
+        "value": 3
+      },
+      "line": 227
+    },
+    {
+      "fn": "apart",
+      "label": "f\"{tag} to failed glyph and solid\"",
+      "floor": {
+        "source": "FAILED_FLOOR",
+        "value": 12
+      },
+      "line": 229
+    },
+    {
+      "fn": "apart",
+      "label": "f\"{tag} to failed word\"",
+      "floor": {
+        "source": "WORD_FLOOR",
+        "value": 12
+      },
+      "line": 230
+    },
+    {
+      "fn": "apart",
+      "label": "f\"{tag} to {s} glyph, word and edge\"",
+      "floor": {
+        "source": "SHIP_STATUS_FLOOR",
+        "value": 10
+      },
+      "line": 236
+    },
+    {
+      "fn": "apart",
+      "label": "f\"{tag} to the nearest stock colour, {n}\"",
+      "floor": {
+        "source": "STOCK_FLOOR",
+        "value": 3
+      },
+      "line": 238
+    },
+    {
+      "fn": "need",
+      "label": "f\"[{mode}] {role} on {name}\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 337
+    },
+    {
+      "fn": "need",
+      "label": "f\"[{mode}] rail tip name on first ink\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 338
+    },
+    {
+      "fn": "need",
+      "label": "f\"[{mode}] rail tip line on first ink\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 339
+    },
+    {
+      "fn": "need",
+      "label": "f\"[{mode}] error text on background\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 340
+    },
+    {
+      "fn": "need",
+      "label": "f\"[{mode}] code text on the code patch\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 342
+    },
+    {
+      "fn": "need",
+      "label": "f\"[{mode}] code prompt on the code patch\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 343
+    },
+    {
+      "fn": "need",
+      "label": "f\"[{mode}] muted-foreground on card\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 344
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} {s} word on its fill\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 349
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} {s} glyph on its fill\"",
+      "floor": {
+        "source": "3",
+        "value": 3
+      },
+      "line": 350
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} {s} glyph on {g}\"",
+      "floor": {
+        "source": "3",
+        "value": 3
+      },
+      "line": 352
+    },
+    {
+      "fn": "chroma",
+      "label": "f\"{tag} {s} {k}\"",
+      "floor": {
+        "source": "ceiling",
+        "value": null
+      },
+      "line": 356
+    },
+    {
+      "fn": "chroma",
+      "label": "f\"{tag} {s} light fill\"",
+      "floor": {
+        "source": "cmax[\"light fill\"]",
+        "value": null
+      },
+      "line": 358
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} {s} label on solid\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 360
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} {s} solid on {g}\"",
+      "floor": {
+        "source": "3",
+        "value": 3
+      },
+      "line": 362
+    },
+    {
+      "fn": "need",
+      "label": "f\"{tag} the failed solid against the {o} badge's fill\"",
+      "floor": {
+        "source": "SOLID_APART",
+        "value": 2
+      },
+      "line": 366
+    },
+    {
+      "fn": "apart",
+      "label": "f\"{tag} status glyphs apart {a} / {b}\"",
+      "floor": {
+        "source": "GLYPH_APART",
+        "value": 7
+      },
+      "line": 371
+    },
+    {
+      "fn": "need",
+      "label": "f\"[{mode}] {name} dithered region (spot over silhouette at 50 percent) on its tile\"",
+      "floor": {
+        "source": "3",
+        "value": 3
+      },
+      "line": 383
+    },
+    {
+      "fn": "need",
+      "label": "f\"[light] {name} stock label on spot-ink\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 388
+    },
+    {
+      "fn": "need",
+      "label": "f\"[light] {name} spot-ink as text\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 389
+    },
+    {
+      "fn": "need",
+      "label": "f\"[dark] {name} key label on spot-ink\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 391
+    },
+    {
+      "fn": "need",
+      "label": "f\"[dark] {name} spot-ink as text on {g}\"",
+      "floor": {
+        "source": "4.5",
+        "value": 4.5
+      },
+      "line": 393
+    },
+    {
+      "fn": "need",
+      "label": "\"[light] the white sheet on the deep ground\"",
+      "floor": {
+        "source": "SHEET_FLOOR",
+        "value": 7
+      },
+      "line": 404
+    },
+    {
+      "fn": "apart",
+      "label": "\"[light] the rake's drop in L* beside the sheet, at its core\"",
+      "floor": {
+        "source": "DROP_FLOOR",
+        "value": 9
+      },
+      "line": 405
+    }
+  ],
+  "labels": [
+    "steer 2 level matches snapshots/master-judge-fixed/tokens.json",
+    "[light] house to failed glyph and solid",
+    "[light] house to failed word",
+    "[light] house to done",
+    "[light] house to running",
+    "[light] house to waiting",
+    "[light] house to queued",
+    "[light] house to queued",
+    "[light] text foreground on background",
+    "[light] text card-foreground on card",
+    "[light] text popover-foreground on popover",
+    "[light] text primary-foreground on primary",
+    "[light] text secondary-foreground on secondary",
+    "[light] text muted-foreground on background",
+    "[light] text muted-foreground on muted",
+    "[light] text accent-foreground on accent",
+    "[light] text destructive-foreground on destructive",
+    "[light] ui primary on background",
+    "[light] ui ring on background",
+    "[light] ui input on background",
+    "[light] ui destructive on background",
+    "[light] ui success on background",
+    "[light] ui warning on background",
+    "[light] ui info on background",
+    "[light] house text on background",
+    "[light] house text on card",
+    "[light] house text on muted",
+    "[light] house text on popover",
+    "[light] foreground on accent",
+    "[light] muted-foreground on accent",
+    "[light] foreground on selection",
+    "[light] stock label on house hover",
+    "[light] stock label on house pressed",
+    "[light] house edge on accent",
+    "[light] house to orbit spot",
+    "[light] house to quanta spot",
+    "[light] house to trisys spot",
+    "[light] house to constellation spot",
+    "[light] house to artifacts spot",
+    "[light] house to soliton spot",
+    "[light] neutral hover apart from background",
+    "[light] raised hover apart from card",
+    "[light] raised pressed apart from raised hover",
+    "[light] ground-foreground on ground",
+    "[light] card on ground (the raised sheet)",
+    "[light] house (dark value) on the ground: current edge and progress",
+    "[light] ground text inside the current box (dark accent)",
+    "[light] package names on the code patch (house dark value)",
+    "[light] copy link ring on the code patch (house dark value)",
+    "[dark] house to failed glyph and solid",
+    "[dark] house to failed word",
+    "[dark] house to done",
+    "[dark] house to running",
+    "[dark] house to waiting",
+    "[dark] house to queued",
+    "[dark] house to queued",
+    "[dark] text foreground on background",
+    "[dark] text card-foreground on card",
+    "[dark] text popover-foreground on popover",
+    "[dark] text primary-foreground on primary",
+    "[dark] text secondary-foreground on secondary",
+    "[dark] text muted-foreground on background",
+    "[dark] text muted-foreground on muted",
+    "[dark] text accent-foreground on accent",
+    "[dark] text destructive-foreground on destructive",
+    "[dark] ui primary on background",
+    "[dark] ui ring on background",
+    "[dark] ui input on background",
+    "[dark] ui destructive on background",
+    "[dark] ui success on background",
+    "[dark] ui warning on background",
+    "[dark] ui info on background",
+    "[dark] house text on background",
+    "[dark] house text on card",
+    "[dark] house text on muted",
+    "[dark] house text on popover",
+    "[dark] foreground on accent",
+    "[dark] muted-foreground on accent",
+    "[dark] foreground on selection",
+    "[dark] stock label on house hover",
+    "[dark] stock label on house pressed",
+    "[dark] house edge on accent",
+    "[dark] house to orbit spot",
+    "[dark] house to quanta spot",
+    "[dark] house to trisys spot",
+    "[dark] house to constellation spot",
+    "[dark] house to artifacts spot",
+    "[dark] house to soliton spot",
+    "[dark] neutral hover apart from background",
+    "[dark] raised hover apart from card",
+    "[dark] raised pressed apart from raised hover",
+    "[dark] ground-foreground on ground",
+    "[dark] card on ground (the raised sheet)",
+    "[dark] house (dark value) on the ground: current edge and progress",
+    "[dark] ground text inside the current box (dark accent)",
+    "[dark] package names on the code patch (house dark value)",
+    "[dark] copy link ring on the code patch (house dark value)",
+    "status-ladder.html: no script",
+    "status-ladder.html: no em dash",
+    "status-ladder.html: viewport meta present",
+    "status-ladder.html: no fixed body width or height, no hidden overflow",
+    "status-ladder.html: 93 lines, under 200",
+    "reach.html: 20 fields, each held by a field box",
+    "reach.html: no !important, so no rule can push a ring past the field's own",
+    "sketch.html: 1 fields, each held by a field box",
+    "sketch.html: no !important, so no rule can push a ring past the field's own",
+    "sketch-dark.html: 1 fields, each held by a field box",
+    "sketch-dark.html: no !important, so no rule can push a ring past the field's own",
+    "status-ladder.html: 0 fields, each held by a field box",
+    "status-ladder.html: no !important, so no rule can push a ring past the field's own",
+    "focus: no rule silences or frames a field box for a button inside it",
+    "focus: a field with a button inside it in each pane (2), shot by shoot_focus.sh as Tab onto the button",
+    "focus: controls keep the 2 px ring at 2 px offset",
+    "focus: the text control in a field draws no outline, and only it",
+    "focus: a field's box takes a 2 px edge inside while its text control holds focus (or it is the select's trigger), the demo the same",
+    "focus: a button inside a field keeps its own 2 px ring, inside it",
+    "focus: an invalid field's error edge takes the same weight",
+    "focus: the caret follows the field's edge ink",
+    "focus: the overview's search: no outline on its input",
+    "focus: the overview's search: the box's edge 2 px inside while its input holds focus",
+    "focus: a disabled field in each pane (2), so it takes no focus",
+    "texture: raised layers: select list, toast, dialog, contact edge, shown and captioned in light and dark (2)",
+    "texture: checkbox, mixed, shown and captioned in light and dark (2)",
+    "texture: tabs, hover bar, shown and captioned in light and dark (2)",
+    "texture: table, row edge, shown and captioned in light and dark (2)",
+    "texture: disabled button and field, disabled edge, shown and captioned in light and dark (2)",
+    "texture: skeleton, loading rows, shown and captioned in light and dark (2)",
+    "texture: the 50 percent tile is 8 of 16 whole-pixel squares, crisp edges",
+    "texture: the 18.75 percent tile is 3 of 16 whole-pixel squares, crisp edges",
+    "texture: a raised layer's screen is its contact edge only (3 by 2 px, light only), never a field",
+    "texture: the row edge sits inside the table's box, in the first cell's padding",
+    "texture: the component details never move or blur",
+    "marks/orbit.svg matches the strip drawing",
+    "marks/orbit-dark.svg matches the strip drawing",
+    "marks/quanta.svg matches the strip drawing",
+    "marks/quanta-dark.svg matches the strip drawing",
+    "marks/trisys.svg matches the strip drawing",
+    "marks/trisys-dark.svg matches the strip drawing",
+    "marks/constellation.svg matches the strip drawing",
+    "marks/constellation-dark.svg matches the strip drawing",
+    "marks/artifacts.svg matches the strip drawing",
+    "marks/artifacts-dark.svg matches the strip drawing",
+    "marks/soliton.svg matches the strip drawing",
+    "marks/soliton-dark.svg matches the strip drawing",
+    "marks/superthread.svg matches the strip drawing",
+    "marks/superthread-dark.svg matches the strip drawing",
+    "[light] destructive-foreground on destructive-hover",
+    "[light] destructive-foreground on destructive-press",
+    "[light] secondary-foreground on secondary-hover",
+    "[light] secondary-foreground on secondary-press",
+    "[light] foreground on neutral-hover",
+    "[light] foreground on neutral-press",
+    "[light] card-foreground on raised-hover",
+    "[light] card-foreground on raised-press",
+    "[light] rail tip name on first ink",
+    "[light] rail tip line on first ink",
+    "[light] error text on background",
+    "[light] code text on the code patch",
+    "[light] code prompt on the code patch",
+    "[light] muted-foreground on card",
+    "[light] done word on its fill",
+    "[light] done glyph on its fill",
+    "[light] done glyph on background",
+    "[light] done glyph on card",
+    "[light] done glyph on muted",
+    "[light] done glyph",
+    "[light] done text",
+    "[light] done light fill",
+    "[light] running word on its fill",
+    "[light] running glyph on its fill",
+    "[light] running glyph on background",
+    "[light] running glyph on card",
+    "[light] running glyph on muted",
+    "[light] running glyph",
+    "[light] running text",
+    "[light] running light fill",
+    "[light] waiting word on its fill",
+    "[light] waiting glyph on its fill",
+    "[light] waiting glyph on background",
+    "[light] waiting glyph on card",
+    "[light] waiting glyph on muted",
+    "[light] waiting glyph",
+    "[light] waiting text",
+    "[light] waiting light fill",
+    "[light] failed word on its fill",
+    "[light] failed glyph on its fill",
+    "[light] failed glyph on background",
+    "[light] failed glyph on card",
+    "[light] failed glyph on muted",
+    "[light] failed glyph",
+    "[light] failed text",
+    "[light] failed solid",
+    "[light] failed light fill",
+    "[light] failed label on solid",
+    "[light] failed solid on background",
+    "[light] failed solid on card",
+    "[light] the failed solid against the done badge's fill",
+    "[light] the failed solid against the running badge's fill",
+    "[light] the failed solid against the waiting badge's fill",
+    "[light] the failed solid against the queued badge's fill",
+    "[light] queued word on its fill",
+    "[light] queued glyph on its fill",
+    "[light] queued glyph on background",
+    "[light] queued glyph on card",
+    "[light] queued glyph on muted",
+    "[light] status glyphs apart waiting / queued",
+    "[light] status glyphs apart done / queued",
+    "[light] status glyphs apart done / running",
+    "[light] closest glyph squares as seen: waiting / queued 9.01 (floor 7)",
+    "[light] orbit dithered region (spot over silhouette at 50 percent) on its tile",
+    "[light] quanta dithered region (spot over silhouette at 50 percent) on its tile",
+    "[light] trisys dithered region (spot over silhouette at 50 percent) on its tile",
+    "[light] constellation dithered region (spot over silhouette at 50 percent) on its tile",
+    "[light] artifacts dithered region (spot over silhouette at 50 percent) on its tile",
+    "[light] soliton dithered region (spot over silhouette at 50 percent) on its tile",
+    "[light] spots apart constellation / soliton",
+    "[light] spots apart orbit / soliton",
+    "[light] spots apart trisys / artifacts",
+    "[light] spots apart orbit / constellation",
+    "[light] spots apart quanta / artifacts",
+    "[dark] destructive-foreground on destructive-hover",
+    "[dark] destructive-foreground on destructive-press",
+    "[dark] secondary-foreground on secondary-hover",
+    "[dark] secondary-foreground on secondary-press",
+    "[dark] foreground on neutral-hover",
+    "[dark] foreground on neutral-press",
+    "[dark] card-foreground on raised-hover",
+    "[dark] card-foreground on raised-press",
+    "[dark] rail tip name on first ink",
+    "[dark] rail tip line on first ink",
+    "[dark] error text on background",
+    "[dark] code text on the code patch",
+    "[dark] code prompt on the code patch",
+    "[dark] muted-foreground on card",
+    "[dark] done word on its fill",
+    "[dark] done glyph on its fill",
+    "[dark] done glyph on background",
+    "[dark] done glyph on card",
+    "[dark] done glyph on muted",
+    "[dark] done glyph",
+    "[dark] done text",
+    "[dark] running word on its fill",
+    "[dark] running glyph on its fill",
+    "[dark] running glyph on background",
+    "[dark] running glyph on card",
+    "[dark] running glyph on muted",
+    "[dark] running glyph",
+    "[dark] running text",
+    "[dark] waiting word on its fill",
+    "[dark] waiting glyph on its fill",
+    "[dark] waiting glyph on background",
+    "[dark] waiting glyph on card",
+    "[dark] waiting glyph on muted",
+    "[dark] waiting glyph",
+    "[dark] waiting text",
+    "[dark] failed word on its fill",
+    "[dark] failed glyph on its fill",
+    "[dark] failed glyph on background",
+    "[dark] failed glyph on card",
+    "[dark] failed glyph on muted",
+    "[dark] failed glyph",
+    "[dark] failed text",
+    "[dark] failed solid",
+    "[dark] failed label on solid",
+    "[dark] failed solid on background",
+    "[dark] failed solid on card",
+    "[dark] the failed solid against the done badge's fill",
+    "[dark] the failed solid against the running badge's fill",
+    "[dark] the failed solid against the waiting badge's fill",
+    "[dark] the failed solid against the queued badge's fill",
+    "[dark] queued word on its fill",
+    "[dark] queued glyph on its fill",
+    "[dark] queued glyph on background",
+    "[dark] queued glyph on card",
+    "[dark] queued glyph on muted",
+    "[dark] status glyphs apart waiting / failed",
+    "[dark] status glyphs apart done / queued",
+    "[dark] status glyphs apart done / running",
+    "[dark] closest glyph squares as seen: waiting / failed 9.66 (floor 7)",
+    "[dark] orbit dithered region (spot over silhouette at 50 percent) on its tile",
+    "[dark] quanta dithered region (spot over silhouette at 50 percent) on its tile",
+    "[dark] trisys dithered region (spot over silhouette at 50 percent) on its tile",
+    "[dark] constellation dithered region (spot over silhouette at 50 percent) on its tile",
+    "[dark] artifacts dithered region (spot over silhouette at 50 percent) on its tile",
+    "[dark] soliton dithered region (spot over silhouette at 50 percent) on its tile",
+    "[dark] spots apart constellation / soliton",
+    "[dark] spots apart trisys / artifacts",
+    "[dark] spots apart constellation / plum",
+    "[dark] spots apart orbit / soliton",
+    "[dark] spots apart orbit / constellation",
+    "[light] the white sheet on the deep ground",
+    "[light] the rake's drop in L* beside the sheet, at its core"
+  ],
+  "reported": [
+    "[light] house to failed under deuteranopia: 10.1 (reported; the cross glyph and the solid badge carry it)",
+    "[light] house to failed under protanopia: 11.1 (reported; the cross glyph and the solid badge carry it)",
+    "[dark] house to failed under deuteranopia: 12.5 (reported; the cross glyph and the solid badge carry it)",
+    "[dark] house to failed under protanopia: 13.8 (reported; the cross glyph and the solid badge carry it)",
+    "[light] closest state pair under deuteranopia (glyph squares, failed's solid): done / failed 5.8 (reported; glyph and word carry it)",
+    "[light] closest state pair under protanopia (glyph squares, failed's solid): waiting / queued 8.0 (reported; glyph and word carry it)",
+    "[light] badge fills apart done / waiting: 0.7 (reported: the fill sits near the stock, the square and edge carry the hue)",
+    "[dark] closest state pair under deuteranopia (glyph squares, failed's solid): failed / queued 8.9 (reported; glyph and word carry it)",
+    "[dark] closest state pair under protanopia (glyph squares, failed's solid): done / queued 9.7 (reported; glyph and word carry it)",
+    "[dark] badge fills apart done / queued: 2.1 (reported: the fill sits near the stock, the square and edge carry the hue)",
+    "[light] reference: the quarterly's drop 8.9 (L* 14.5 to 5.6)",
+    "[dark] the sheet on the deep ground 1.27:1, L* 4.3 to 15.1; the rake's drop 3.7 (reported: the sheet lifts by its lighter stock and its paper edge)"
+  ],
+  "printed": {
+    "--gnd-h": {
+      "light": "#4e4e50",
+      "dark": "#424243"
+    }
+  }
+}
