@@ -1,0 +1,52 @@
+name: superthread
+on:
+  pull_request:
+    paths:
+      - packages/superthread/**
+      - package.json
+      - bun.lock
+      - bunfig.toml
+      - .github/workflows/superthread.yml
+  push:
+    branches: [main]
+    paths:
+      - packages/superthread/**
+      - package.json
+      - bun.lock
+      - bunfig.toml
+      - .github/workflows/superthread.yml
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # the snapshot check diffs against origin/main
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: "1.4.4"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.0.0
+        with:
+          node-version: "24.22.1"
+      - run: bun install --frozen-lockfile
+      - run: python3 --version
+      - run: bun run --cwd packages/superthread check
+      - run: bun run --cwd packages/superthread test
+      - name: clean room (the pinned shadcn)
+        run: bun run test:clean-room
+      - name: clean room (shadcn@latest, not gating)
+        continue-on-error: true
+        run: bun run test:clean-room -- --cli latest
+      - name: published snapshots are immutable
+        if: github.event_name == 'pull_request'
+        run: |
+          changed="$(git diff --diff-filter=MDR --name-only origin/main...HEAD -- packages/superthread/versions)"
+          if [ -n "$changed" ]; then
+            echo "a published snapshot changed; ship a new version instead:"
+            echo "$changed"
+            exit 1
+          fi
