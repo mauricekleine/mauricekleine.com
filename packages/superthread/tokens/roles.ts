@@ -191,6 +191,9 @@ export function roles(master: Master): Role[] {
       name,
       each((m) => path(`extra.${m}.${name}`)),
     );
+  // the first ink, the plate that prints over the house: key in light, paper-white in dark, as build_reach.py
+  // sets --first. texture-skeleton prints the loading rows in it.
+  add("first", { light: path(KEY), dark: path(PAPER) });
 
   const house = master.house.default;
   add(

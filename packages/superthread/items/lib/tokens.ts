@@ -281,6 +281,11 @@ export const tokens = {
       "oklch": "oklch(0.9821 0 0)",
       "provisional": true
     },
+    "first": {
+      "hex": "#16181d",
+      "oklch": "oklch(0.2091 0.0104 268.19)",
+      "provisional": true
+    },
     "code": {
       "hex": "#16181d",
       "oklch": "oklch(0.2091 0.0104 268.19)",
@@ -704,6 +709,11 @@ export const tokens = {
     "faint": {
       "hex": "#2e2f32",
       "oklch": "oklch(0.3053 0.0055 271.23)",
+      "provisional": true
+    },
+    "first": {
+      "hex": "#ffffff",
+      "oklch": "oklch(1 0 0)",
       "provisional": true
     },
     "code": {
