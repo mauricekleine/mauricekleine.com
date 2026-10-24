@@ -205,12 +205,14 @@ function utilityOf(token: string): string {
 }
 
 /**
- * Build ruling 2: no seeded control carries `outline-none` (in Tailwind 4.3.3 it nulls the base ring and
- * `outline-2`), a `ring-*` class, `focus-visible:outline-1` or a focus `border-ring`.
+ * Build ruling 2: no seeded control carries `outline-none` or `outline-hidden` (in Tailwind 4.3.3 each sets
+ * `outline-style: none`, which nulls the base ring and `outline-2`), under any variant, nor a `ring-*` class,
+ * `focus-visible:outline-1` or a focus `border-ring`. `outline-0` stays: it sets only the width, and the text
+ * control inside a field keeps it.
  */
 export function isStrippedFocusClass(token: string): boolean {
   const u = utilityOf(token);
-  if (u === "outline-none") return true;
+  if (u === "outline-none" || u === "outline-hidden") return true;
   if (u === "ring" || u.startsWith("ring-")) return true;
   return (u === "outline-1" || u === "border-ring") && token.includes("focus");
 }

@@ -4,6 +4,7 @@ import { join } from "node:path";
 import {
   GENERATED,
   ICON_LIBRARIES,
+  isStrippedFocusClass,
   SEEDS,
   manifestDrift,
   passFiles,
@@ -86,9 +87,30 @@ describe("seeds and pass-through files", () => {
 });
 
 describe("the transforms", () => {
+  test("the seed strip drops outline-none and outline-hidden under any variant, and keeps outline-0", () => {
+    for (const utility of ["outline-none", "outline-hidden"])
+      for (const token of [
+        utility,
+        `focus-visible:${utility}`,
+        `focus:${utility}`,
+        `data-[state=open]:${utility}`,
+        `group-hover/menu-item:focus-visible:${utility}`,
+        `!${utility}`,
+        `${utility}!`,
+      ])
+        expect(isStrippedFocusClass(token), token).toBe(true);
+    for (const token of ["outline-0", "focus:outline-0", "focus-visible:outline-2", "outline-(--fx)"])
+      expect(isStrippedFocusClass(token), token).toBe(false);
+    const seed = transform(`const c = "focus-visible:outline-hidden outline-hidden outline-0 px-2"\n`, "probe", {
+      seed: true,
+    });
+    expect(seed).toBe(`const c = "outline-0 px-2"\n`);
+  });
+
   test("print makes every seed without the focus classes the gate rules off (build ruling 2)", () => {
     const ruled = [
       /(?<![\w-])outline-none\b/,
+      /(?<![\w-])outline-hidden\b/,
       /(?<![\w-])ring-/,
       /focus-visible:outline-1\b/,
       /focus-visible:border-ring\b/,
