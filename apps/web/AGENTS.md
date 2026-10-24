@@ -1,6 +1,6 @@
 # mauricekleine.com web app
 
-`apps/web/` is the live TanStack Start app. Read `PRODUCT.md` (product brief) and `DESIGN.md` (the site's visual design) in this folder before changing product or design; the shared design system tokens live in `packages/superthread/DESIGN.md`.
+`apps/web/` is the live TanStack Start app. Read `PRODUCT.md` (product brief) and `DESIGN.md` (the site's visual design) in this folder before changing product or design. www uses superthread's frozen v1 theme, `packages/superthread/dist/superthread.css`; v2 lives in `packages/superthread`.
 
 ## Commands
 
@@ -23,7 +23,7 @@ Workers Builds uses `bun install && bun run --if-present build` as its build com
 
 `content/essays/<slug>.md` is the single essay source. Frontmatter contains data such as title, dates, social URLs, cover and image dimensions, and the five historical inline link targets that the public Markdown twin leaves unlinked. The body is the canonical public Markdown, byte for byte. `src/essay-markdown.tsx` renders it with React Markdown and GFM. `src/essay-content.ts` derives essay order from date and applies narrow render-only fixes for legacy Markdown syntax. The same source produces each public essay `.md` twin.
 
-`public/` contains static files at their original URLs, including `_headers`. `tools/sync-essays.py` writes the essay Markdown twins and updates the feed, sitemap, `llms.txt`, and essays index Markdown. `public/index.md` and `public/about.md` remain byte-identical static files. `src/styles/site.css` imports the generated Superthread theme and builds to `public/style.css` without Tailwind preflight. `public/style.css`, `public/superthread/specimen.css`, `public/r/`, `public/buttons.html` and `public/buttons/` are build outputs that git ignores; root `bun run build` and `bun run dev` regenerate them. The browser scripts remain in use. `/superthread` is a prerendered, route-scoped specimen that uses the generated shadcn theme and stock Base UI components. Its Tailwind CSS must never load on the existing pages.
+`public/` contains static files at their original URLs, including `_headers`. `tools/sync-essays.py` writes the essay Markdown twins and updates the feed, sitemap, `llms.txt`, and essays index Markdown. `public/index.md` and `public/about.md` remain byte-identical static files. `src/styles/site.css` imports the frozen v1 Superthread theme and builds to `public/style.css` without Tailwind preflight. `public/style.css`, `public/superthread/specimen.css`, `public/r/`, `public/buttons.html` and `public/buttons/` are build outputs that git ignores; root `bun run build` and `bun run dev` write them, and `public/r/` is a copy of superthread's frozen v1 items. The browser scripts remain in use. `/superthread` is a prerendered, route-scoped specimen that uses the frozen v1 shadcn theme and stock Base UI components. Its Tailwind CSS must never load on the existing pages. `site.css` and `superthread-specimen.css` both turn off Tailwind's source detection (`source(none)`) and name their sources with `@source`, so files elsewhere in the repo never change www's CSS; add an `@source` line when a page starts using classes from a new file.
 
 ## Adding an essay
 
