@@ -710,7 +710,8 @@ async function main(): Promise<boolean> {
       const absent: string[] = [];
       for (const mark of marks) {
         if (html.includes(`data-mk="${mark}"`)) continue;
-        if (js.includes(`"data-mk":"${mark}"`)) clientOnly.push(mark);
+        // a client-only value: the minifier writes the prop as a double- or single-quoted string or a template literal
+        if (['"', "'", "`"].some((q) => js.includes(`"data-mk":${q}${mark}${q}`))) clientOnly.push(mark);
         else absent.push(mark);
       }
       check(absent.length === 0, `/all carries no data-mk for: ${absent.join(", ")}`);
