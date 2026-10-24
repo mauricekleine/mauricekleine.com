@@ -7,7 +7,7 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fontFaces, fonts } from "../fonts.ts";
-import { ELEVATIONS, KEY, MODES, PAPER, roles, type Mode, type Role, type Source } from "../tokens/roles.ts";
+import { alphaOf, ELEVATIONS, KEY, MODES, PAPER, roles, type Mode, type Role, type Source } from "../tokens/roles.ts";
 import * as scale from "../tokens/scale.ts";
 import { oklchCss, tint } from "./color.ts";
 
@@ -60,7 +60,7 @@ export function hexOf(master: Master, source: Source): string | null {
 
 export function cssOf(master: Master, source: Source): string {
   const hex = hexOf(master, source);
-  return hex === null ? (source as { css: string }).css : oklchCss(hex);
+  return hex === null ? (source as { css: string }).css : oklchCss(hex, alphaOf(source));
 }
 
 // ---------- the pieces ----------
@@ -205,7 +205,11 @@ export function plainTexture(css: string): string {
 function tokenData(master: Master, all: Role[], texture: Texture | null, details: Master) {
   const colour = (source: Source, provisional: boolean) => {
     const hex = hexOf(master, source);
-    const value = hex === null ? { css: (source as { css: string }).css } : { hex, oklch: oklchCss(hex) };
+    const alpha = alphaOf(source);
+    const value =
+      hex === null
+        ? { css: (source as { css: string }).css }
+        : { hex, oklch: oklchCss(hex, alpha), ...(alpha === undefined ? {} : { alpha }) };
     return provisional ? { ...value, provisional: true } : value;
   };
   const mode = (m: Mode) => Object.fromEntries(all.map((role) => [role.name, colour(role[m], role.provisional)]));

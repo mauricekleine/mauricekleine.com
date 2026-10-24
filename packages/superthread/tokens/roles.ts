@@ -1,18 +1,22 @@
 // The role map: every colour var the v2 css declares, with its source in tokens/master.json per mode.
-// A source is a master path to a hex, a tint of two such paths, a hex from scale.ts, or a literal css value.
+// A source is a master path to a hex, a tint of two such paths, a hex from scale.ts, or a literal css value. A path
+// or a scale.ts hex may carry an alpha, which the oklch() it emits as keeps.
 // The status and ship roles are read from the master's own lists (status.states and fleet), never from
 // today's names. `provisional` marks every role v1's dist/superthread.css does not declare.
 
-import { shadowInk } from "./scale.ts";
+import { scrim, shadowInk } from "./scale.ts";
 
 export type Mode = "light" | "dark";
 export const MODES: Mode[] = ["light", "dark"];
 
 export type Source =
-  | { path: string }
+  | { path: string; alpha?: number }
   | { tint: { over: string; under: string; pct: number } }
-  | { hex: string; from: string }
+  | { hex: string; from: string; alpha?: number }
   | { css: string };
+
+/** The alpha a source prints at, or undefined when it is opaque. */
+export const alphaOf = (source: Source): number | undefined => ("alpha" in source ? source.alpha : undefined);
 
 export type Role = { name: string; light: Source; dark: Source; provisional: boolean };
 
@@ -194,6 +198,16 @@ export function roles(master: Master): Role[] {
   // the first ink, the plate that prints over the house: key in light, paper-white in dark, as build_reach.py
   // sets --first. texture-skeleton prints the loading rows in it.
   add("first", { light: path(KEY), dark: path(PAPER) });
+  // the key in both modes, as reach.css's :root sets --key once: the pressed house button's 1 px ring
+  add(
+    "key",
+    each(() => path(KEY)),
+  );
+  // the scrim under a modal layer, as build_reach.py sets --scrim
+  add(
+    "scrim",
+    each((m) => ({ hex: scrim[m].ink, from: scrim[m].from, alpha: scrim[m].alpha })),
+  );
 
   const house = master.house.default;
   add(

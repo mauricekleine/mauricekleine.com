@@ -141,3 +141,10 @@ export const shadowInk = {
   light: { ink: "#020203", rake: 0.62, contact: 0.3, from: "tokens/master.json shadow.light colour" },
   dark: { ink: "#000000", rake: 0.85, contact: 0.4, from: "tokens/master.json shadow.dark colour" },
 };
+
+// The scrim under a modal layer, per mode: the key at 42 percent in light, black at 60 percent in dark. The master
+// sets it in its build script, not in tokens.json.
+export const scrim = {
+  light: { ink: "#16181d", alpha: 0.42, from: "M/src/build_reach.py mode_vars --scrim: rgb(22 24 29/.42), the key" },
+  dark: { ink: "#000000", alpha: 0.6, from: "M/src/build_reach.py mode_vars --scrim: rgb(0 0 0/.6)" },
+};

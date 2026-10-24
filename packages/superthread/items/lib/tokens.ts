@@ -286,6 +286,17 @@ export const tokens = {
       "oklch": "oklch(0.2091 0.0104 268.19)",
       "provisional": true
     },
+    "key": {
+      "hex": "#16181d",
+      "oklch": "oklch(0.2091 0.0104 268.19)",
+      "provisional": true
+    },
+    "scrim": {
+      "hex": "#16181d",
+      "oklch": "oklch(0.2091 0.0104 268.19 / 0.42)",
+      "alpha": 0.42,
+      "provisional": true
+    },
     "code": {
       "hex": "#16181d",
       "oklch": "oklch(0.2091 0.0104 268.19)",
@@ -714,6 +725,17 @@ export const tokens = {
     "first": {
       "hex": "#ffffff",
       "oklch": "oklch(1 0 0)",
+      "provisional": true
+    },
+    "key": {
+      "hex": "#16181d",
+      "oklch": "oklch(0.2091 0.0104 268.19)",
+      "provisional": true
+    },
+    "scrim": {
+      "hex": "#000000",
+      "oklch": "oklch(0 0 0 / 0.6)",
+      "alpha": 0.6,
       "provisional": true
     },
     "code": {

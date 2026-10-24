@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { oklchCss, oklchCssToHex, tint } from "../scripts/color.ts";
 import { blockVars, emittedVars, hexAt, hexOf, lookup, root } from "../scripts/generate.ts";
-import { CONSUMED, ELEVATIONS, IGNORED, KEY, MODES, PAPER, roles, V1, type Source } from "../tokens/roles.ts";
+import { alphaOf, CONSUMED, ELEVATIONS, IGNORED, KEY, MODES, PAPER, roles, V1, type Source } from "../tokens/roles.ts";
 import * as scale from "../tokens/scale.ts";
 
 // Reads only the vendored tokens/*.json, the frozen v1 css and this slice's own outputs.
@@ -92,8 +92,14 @@ describe("the emitted css", () => {
       for (const role of all) {
         const hex = hexOf(master, role[m]);
         const value = emitted[m][role.name];
-        expect(value, `${m} ${role.name}`).toBe(hex === null ? (role[m] as { css: string }).css : oklchCss(hex));
-        if (hex !== null) expect(value).toMatch(/^oklch\(\d+(\.\d{1,4})? \d+(\.\d{1,4})? \d+(\.\d{1,2})?\)$/);
+        const alpha = alphaOf(role[m]);
+        expect(value, `${m} ${role.name}`).toBe(hex === null ? (role[m] as { css: string }).css : oklchCss(hex, alpha));
+        if (hex !== null)
+          expect(value).toMatch(
+            alpha === undefined
+              ? /^oklch\(\d+(\.\d{1,4})? \d+(\.\d{1,4})? \d+(\.\d{1,2})?\)$/
+              : /^oklch\(\d+(\.\d{1,4})? \d+(\.\d{1,4})? \d+(\.\d{1,2})? \/ (0|1|0?\.\d+)\)$/,
+          );
       }
   });
 
@@ -130,6 +136,17 @@ describe("the emitted css", () => {
     expect(edge).toBe(master.states.dark.controls["secondary-hover"]);
     expect(hexIn(emitted.dark["raised-edge"]!)).toBe(edge);
     expect(emitted.light["raised-edge"]).toBe("transparent");
+  });
+
+  test("the key holds in both modes, and the scrim is the key at 42 percent in light and black at 60 in dark", () => {
+    const key = hexAt(master, KEY);
+    for (const m of MODES) expect(hexIn(emitted[m].key!), m).toBe(key);
+    expect(scale.scrim.light.ink).toBe(key);
+    expect(emitted.light.scrim).toBe(oklchCss(key, 0.42));
+    expect(emitted.dark.scrim).toBe(oklchCss("#000000", 0.6));
+    const json = JSON.parse(read("dist/v2/tokens.json"));
+    expect(json.light.scrim).toMatchObject({ hex: key, alpha: 0.42, provisional: true });
+    expect(json.dark.scrim).toMatchObject({ hex: "#000000", alpha: 0.6, provisional: true });
   });
 
   test("the sidebar hover is the master's printed --gnd-h in each mode", () => {
