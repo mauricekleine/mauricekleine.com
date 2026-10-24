@@ -1,0 +1,203 @@
+/* superthread's texture utilities, ported from the master world's src/reach.css as steer 4 leaves it (src/details.py
+   names the details). each prints an ink through a 1-bit tile from texture/tiles.json, which scripts/generate.ts
+   declares in :root as --texture-<tile>, at the tile's own whole-pixel size, so it stays crisp at 1x and 2x and
+   re-inks with the mode. nothing here moves. a screen sits at a component's edge, track, shadow or state, never
+   behind words, numbers, data or code; at most one detail per component. 50 percent, the half, is the in-between
+   state; solid is the settled one. */
+
+/* contact: a raised layer (the select list, a toast, a dialog) lifts by the soft rake for its size. in light the item
+   sets --contact-lift to its --elevation-<e>-rake, the soft rake alone, and the contact shadow prints as a screen of
+   the shadow ink at 50 percent, --contact-x right of the layer and --contact-y below it, clipped to the L outside
+   the layer: an edge, never a field. the band starts on the layer's corner (its 1 px edge), so its tile does too.
+   in dark the screen would print black on key, so the layer keeps its shadow-<e>, soft contact included, and no
+   screen prints. it sets no position: the item keeps the layer positioned and lets ::after overflow it. */
+@utility texture-contact {
+  &:not(:is(.dark *):not(.light *)) {
+    box-shadow:
+      var(--contact-lift),
+      inset 0 0 0 1px var(--raised-edge);
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    left: -1px;
+    top: -1px;
+    width: calc(100% + 2px + var(--contact-x));
+    height: calc(100% + 2px + var(--contact-y));
+    background: var(--shadow-ink);
+    pointer-events: none;
+    mask: var(--texture-rake-contact) 0 0 / 4px 4px;
+    clip-path: polygon(
+      calc(100% - var(--contact-x)) var(--contact-y),
+      100% var(--contact-y),
+      100% 100%,
+      var(--contact-x) 100%,
+      var(--contact-x) calc(100% - var(--contact-y)),
+      calc(100% - var(--contact-x)) calc(100% - var(--contact-y))
+    );
+  }
+  &:is(.dark *):not(.light *)::after {
+    display: none;
+  }
+}
+
+/* mixed: the checkbox's some-not-all state, a 12 px square of the house ink at 50 percent centred inside the box's
+   house edge. it draws on ::before, so base-nova's enlarged hit area on ::after stays, and centres itself, so it
+   holds whatever else the box lays out. the box stays positioned. */
+@utility texture-mixed {
+  &[data-indeterminate]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 12px;
+    height: 12px;
+    background: var(--primary);
+    pointer-events: none;
+    mask: var(--texture-b50) 0 0 / 4px 4px;
+  }
+}
+
+/* tab hover: a tab that is not current previews the current bar at 50 percent, a 2 px bar of the house ink over the
+   list's rule. the tab stays positioned. */
+@utility texture-tabhover {
+  @variant hover {
+    &:not([aria-selected="true"])::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: var(--primary);
+      pointer-events: none;
+      mask: var(--texture-b50) 0 0 / 4px 4px;
+    }
+  }
+}
+
+/* row edge, on the table: every row's first cell takes 16 px of left padding, and the row under the pointer prints
+   a 4 px strip of the house ink at 50 percent at its left edge, inside that padding, so the strip sits inside the
+   table's box (a scrolling wrapper cannot clip it) and 12 px clear of the cell's content. a selected row
+   (aria-selected, or shadcn's data-state) prints the strip solid. */
+@utility texture-rowedge {
+  & :is(th, td):first-child {
+    padding-left: 16px;
+  }
+  & :where(td:first-child) {
+    position: relative;
+  }
+  & tbody tr {
+    @variant hover {
+      &:not([aria-selected="true"], [data-state="selected"]) > td:first-child::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 8px;
+        bottom: 8px;
+        width: 4px;
+        background: var(--primary);
+        pointer-events: none;
+        mask: var(--texture-b50) 0 0 / 4px 4px;
+      }
+    }
+    &:is([aria-selected="true"], [data-state="selected"]) > td:first-child::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 4px;
+      background: var(--primary);
+      pointer-events: none;
+    }
+  }
+}
+
+/* disabled: a button or field that is not available now is screened back. its fill stays flat and its label plain;
+   its 1 px edge prints in the input ink at 50 percent. a button, or a field box holding a disabled control, draws a
+   screen over its border box on ::before with the padding box cut out (the element stays positioned). a bare input
+   or textarea renders no ::before, so it masks its own border instead, the tile anchored on its border box as the
+   ::before's is at inset -1px. */
+@utility texture-disabled {
+  @variant disabled {
+    border-color: transparent;
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      padding: 1px;
+      background: var(--input);
+      pointer-events: none;
+      mask:
+        var(--texture-b50) 0 0 / 4px 4px,
+        linear-gradient(#000 0 0) content-box;
+      mask-composite: subtract;
+    }
+    &:is(input, textarea) {
+      border-color: var(--input);
+      mask:
+        var(--texture-b50) 0 0 / 4px 4px border-box,
+        linear-gradient(#000 0 0) padding-box;
+    }
+  }
+  &:has(:disabled) {
+    border-color: transparent;
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      padding: 1px;
+      background: var(--input);
+      pointer-events: none;
+      mask:
+        var(--texture-b50) 0 0 / 4px 4px,
+        linear-gradient(#000 0 0) content-box;
+      mask-composite: subtract;
+    }
+  }
+}
+
+/* loading rows: a skeleton bar in the first ink (key in light, paper-white in dark) at 18.75 percent, the empty
+   wedge's top step. it masks the bar itself, which carries no words. */
+@utility texture-skeleton {
+  background-color: var(--first, var(--foreground));
+  mask: var(--texture-b19) 0 0 / 4px 4px;
+}
+
+/* the progress edge, one of the five places: the fill in the house ink, its leading 24 px the 24 x 8 bayer ramp
+   from 100 to 0 percent. it masks the fill itself, which carries no words. */
+@utility texture-ramp {
+  background-color: var(--primary);
+  mask:
+    linear-gradient(#000 0 0) 0 0 / calc(100% - 24px) 100% no-repeat,
+    var(--texture-ramp) 100% 0 / 24px 8px repeat-y;
+}
+
+/* chart line screens, one of the five places: a series prints in its ship's spot with 1 px lines knocked out to the
+   stock every 4 px at the ship's own angle, so it reads by colour first and by angle without colour. each masks the
+   series' fill itself. */
+@utility texture-line-trisys {
+  background-color: var(--ship-trisys);
+  mask: var(--texture-line-trisys) 0 0 / 8px 4px;
+}
+@utility texture-line-orbit {
+  background-color: var(--ship-orbit);
+  mask: var(--texture-line-orbit) 0 0 / 4px 4px;
+}
+@utility texture-line-constellation {
+  background-color: var(--ship-constellation);
+  mask: var(--texture-line-constellation) 0 0 / 4px 8px;
+}
+@utility texture-line-quanta {
+  background-color: var(--ship-quanta);
+  mask: var(--texture-line-quanta) 0 0 / 4px 4px;
+}
+@utility texture-line-soliton {
+  background-color: var(--ship-soliton);
+  mask: var(--texture-line-soliton) 0 0 / 4px 8px;
+}
+@utility texture-line-artifacts {
+  background-color: var(--ship-artifacts);
+  mask: var(--texture-line-artifacts) 0 0 / 4px 4px;
+}

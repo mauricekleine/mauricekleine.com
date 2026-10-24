@@ -1,0 +1,114 @@
+{
+  "about": "the site's plates, built by scripts/texture/build.py plates through the vendored fields.py. a size, path or rope width given as a name is read from tokens/details.json plate_inputs; a number is this spec's own. composite plates print the master's indexed image per mode (the overlap keeps its true overprint colour); masks plates print a first and a spot plate per mode, inked by css. master maps each output file to the master plates it must equal, by pixels (same form) or by planes (index & 1 and index >> 1 of a composite against the master's two masks)",
+  "plates": {
+    "opener": {
+      "job": "the overview's opener band",
+      "function": "fields.opener_png",
+      "form": "composite",
+      "w": "build_sketch.W",
+      "h": "build_sketch.H",
+      "path": "fields.SKETCH_PATH",
+      "width": 58,
+      "width_from": "build_sketch.py build(): opener_png(opener, W, H, mode, HOUSE, SKETCH_PATH, 58)",
+      "modes": ["light", "dark"],
+      "compare": "pixels",
+      "master": {
+        "opener-light": ["sketch-opener.png"],
+        "opener-dark": ["sketch-opener-dark.png"]
+      }
+    },
+    "opener-phone": {
+      "job": "the overview's opener band at 600 px and below",
+      "function": "fields.opener_png",
+      "form": "composite",
+      "w": "fields.PHONE_W",
+      "h": "fields.PHONE_H",
+      "path": "fields.PHONE_PATH",
+      "width": "fields.PHONE_WIDTH",
+      "modes": ["light", "dark"],
+      "compare": "planes",
+      "master": {
+        "opener-phone-light": ["reach-opener-light-phone-first.png", "reach-opener-light-phone-spot.png"],
+        "opener-phone-dark": ["reach-opener-dark-phone-first.png", "reach-opener-dark-phone-spot.png"]
+      }
+    },
+    "band": {
+      "job": "an inner page head's slim band (lead decision 9); new, so its hash is recorded, not compared",
+      "function": "fields.opener_png",
+      "form": "composite",
+      "w": "build_sketch.W",
+      "h": 120,
+      "path": "fields.REACH_PATH",
+      "width": 36,
+      "width_from": "the sketch's rope width 58 scaled by height, 58 x 120 / 196, rounded",
+      "modes": ["light", "dark"]
+    },
+    "band-phone": {
+      "job": "an inner page head's slim band at 600 px and below; new, so its hash is recorded, not compared",
+      "function": "fields.opener_png",
+      "form": "composite",
+      "w": "fields.PHONE_W",
+      "h": 120,
+      "path": "fields.PHONE_PATH",
+      "width": 36,
+      "width_from": "the band's rope width",
+      "modes": ["light", "dark"]
+    },
+    "figure": {
+      "job": "the reading figure at the sheet's measure",
+      "function": "fields.figure_plates",
+      "form": "masks",
+      "w": "build_reach.FIG_W",
+      "h": "build_reach.FIG_H",
+      "modes": ["light", "dark"],
+      "compare": "planes",
+      "master": {
+        "figure-light-first": ["figure-light-first.png"],
+        "figure-light-spot": ["figure-light-spot.png"],
+        "figure-dark-first": ["figure-dark-first.png"],
+        "figure-dark-spot": ["figure-dark-spot.png"]
+      }
+    },
+    "figure-phone": {
+      "job": "the reading figure at 390",
+      "function": "fields.figure_plates",
+      "form": "masks",
+      "w": "build_reach.FIG_PW",
+      "h": "build_reach.FIG_H",
+      "modes": ["light", "dark"],
+      "compare": "planes",
+      "master": {
+        "figure-phone-light-first": ["figure-light-phone-first.png"],
+        "figure-phone-light-spot": ["figure-light-phone-spot.png"],
+        "figure-phone-dark-first": ["figure-dark-phone-first.png"],
+        "figure-phone-dark-spot": ["figure-dark-phone-spot.png"]
+      }
+    },
+    "empty": {
+      "job": "the empty and loading place: a light wedge of the first ink",
+      "function": "fields.wedge",
+      "form": "composite",
+      "w": "build_reach.EMPTY_W[0]",
+      "h": 120,
+      "modes": ["light", "dark"],
+      "compare": "pixels",
+      "master": {
+        "empty-light": ["empty-light.png"],
+        "empty-dark": ["empty-dark.png"]
+      }
+    },
+    "empty-phone": {
+      "job": "the empty place at 390",
+      "function": "fields.wedge",
+      "form": "composite",
+      "w": "build_reach.EMPTY_W[1]",
+      "h": 120,
+      "modes": ["light", "dark"],
+      "compare": "pixels",
+      "master": {
+        "empty-phone-light": ["empty-light-phone.png"],
+        "empty-phone-dark": ["empty-dark-phone.png"]
+      }
+    }
+  }
+}
