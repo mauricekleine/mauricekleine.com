@@ -27,7 +27,9 @@ type BuiltFile = { target?: string; content?: string };
 type Built = { files?: BuiltFile[]; meta?: unknown; [key: string]: unknown };
 const filesSha = (files: BuiltFile[]) => sha256(JSON.stringify(files.map((f) => [f.target, f.content])));
 
-// Stamps: after the last import in TS and TSX, line 1 in TS and TSX without imports, line 1 in CSS.
+// Stamps: after the last import in TS and TSX, the last line in TS and TSX without imports, line 1 in CSS.
+// shadcn strips a TS file's leading comment block on install, so a file with no imports carries its stamp
+// after its statements, where it survives.
 const importStatement = /^import(?:\s|\{|\*|"|')[^"']*["'][^"'\n]*["'].*$/gm;
 
 function stamp(item: string, version: string, path: string, code: string): string {
@@ -35,7 +37,7 @@ function stamp(item: string, version: string, path: string, code: string): strin
   if (!/\.tsx?$/.test(path)) throw new Error(`${item}: ${path} is neither TS, TSX nor CSS, so it has no stamp form`);
   const line = `// @mk/${item} ${version}`;
   const last = [...code.matchAll(importStatement)].at(-1);
-  if (!last) return `${line}\n${code}`;
+  if (!last) return `${code.trimEnd()}\n${line}\n`;
   const end = last.index + last[0].length;
   return `${code.slice(0, end)}\n${line}${code.slice(end)}`;
 }

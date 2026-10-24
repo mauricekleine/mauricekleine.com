@@ -145,7 +145,7 @@ test("no icon library outside init's dependency list", () => {
   }
 });
 
-test("every file carries its stamp: after the last import, else line 1; line 1 in css", () => {
+test("every file carries its stamp: after the last import, else the last line; line 1 in css", () => {
   for (const { item, file } of files) {
     const lines = file.content.split("\n");
     if (file.target.endsWith(".css")) {
@@ -162,7 +162,10 @@ test("every file carries its stamp: after the last import, else line 1; line 1 i
       end = j;
       i = j;
     }
-    expect(lines[end + 1], `${item.name} ${file.target}`).toBe(stamp);
+    // with no imports the stamp follows the statements, since shadcn strips a leading comment block on install
+    const at = end === -1 ? file.content.trimEnd().split("\n").at(-1) : lines[end + 1];
+    expect(at, `${item.name} ${file.target}`).toBe(stamp);
+    if (end === -1) expect(file.content.endsWith(`${stamp}\n`), `${item.name} ${file.target}`).toBe(true);
     expect(lines.filter((line) => line.includes(`@mk/${item.name} `))).toEqual([stamp]);
   }
 });
