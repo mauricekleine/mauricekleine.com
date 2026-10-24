@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "types": ["bun"],
+    "paths": { "@/components/superthread/*": ["./items/*"] }
+  },
+  "include": ["items", "scripts", "test", "tokens", "fonts.ts"],
+  "exclude": ["test/clean-room/fixture/**", "test/clean-room/all-items.tsx"]
+}

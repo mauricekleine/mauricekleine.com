@@ -4,10 +4,11 @@
 minimumReleaseAge = 259200
 
 # The pre-commit hook runs release bun fmt and canary bun lint on staged files.
+# [fmt] does not expand braces, so every entry is an exact path or a * or ** glob.
 [fmt]
 printWidth = 120
 sortPackageJson = true
-# vendored skills, essays the publish pipeline reads verbatim, and generated output
+# vendored skills, essays the publish pipeline reads verbatim, and generated or byte-copied output
 ignorePatterns = [
   ".agents/**",
   "skills/**",
@@ -15,4 +16,51 @@ ignorePatterns = [
   "apps/web/public/**",
   "apps/web/src/routeTree.gen.ts",
   "packages/superthread/dist/**",
+  "packages/superthread/v1/**",
+  "packages/superthread/registry.json",
+  "packages/superthread/registry/**",
+  "packages/superthread/versions/**",
+  "packages/superthread/upstream/**",
+  "packages/superthread/tokens/*.json",
+  "packages/superthread/scripts/texture/master/**",
+  "packages/superthread/texture/tiles.json",
+  "packages/superthread/items/lib/tokens.ts",
+  "packages/superthread/items/lib/fleet.ts",
+  "packages/superthread/items/ui/glyphs.tsx",
+  "packages/superthread/items/ui/card.tsx",
+  "packages/superthread/items/ui/label.tsx",
+  "packages/superthread/items/ui/separator.tsx",
+  "packages/superthread/items/ui/sheet.tsx",
+  "packages/superthread/items/ui/tooltip.tsx",
+  "packages/superthread/items/hooks/**",
+  "packages/superthread/test/clean-room/fixture/src/routeTree.gen.ts",
+]
+
+# Lint does not inherit the [fmt] ignores, so it repeats the full list.
+[lint]
+ignorePatterns = [
+  ".agents/**",
+  "skills/**",
+  "apps/web/content/**",
+  "apps/web/public/**",
+  "apps/web/src/routeTree.gen.ts",
+  "packages/superthread/dist/**",
+  "packages/superthread/v1/**",
+  "packages/superthread/registry.json",
+  "packages/superthread/registry/**",
+  "packages/superthread/versions/**",
+  "packages/superthread/upstream/**",
+  "packages/superthread/tokens/*.json",
+  "packages/superthread/scripts/texture/master/**",
+  "packages/superthread/texture/tiles.json",
+  "packages/superthread/items/lib/tokens.ts",
+  "packages/superthread/items/lib/fleet.ts",
+  "packages/superthread/items/ui/glyphs.tsx",
+  "packages/superthread/items/ui/card.tsx",
+  "packages/superthread/items/ui/label.tsx",
+  "packages/superthread/items/ui/separator.tsx",
+  "packages/superthread/items/ui/sheet.tsx",
+  "packages/superthread/items/ui/tooltip.tsx",
+  "packages/superthread/items/hooks/**",
+  "packages/superthread/test/clean-room/fixture/src/routeTree.gen.ts",
 ]

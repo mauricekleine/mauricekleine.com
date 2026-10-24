@@ -27,6 +27,14 @@ apps/buttons/art/takes/
 
 .shots/
 
+# packages/superthread: registry builds, kept clean-room apps, Python caches,
+# and the build/ directory the vendored fields.py creates on import
+packages/superthread/out/
+packages/superthread/test/clean-room/.out/
+packages/superthread/scripts/texture/__pycache__/
+packages/superthread/scripts/texture/master/__pycache__/
+packages/superthread/scripts/texture/build/
+
 # cf build output and generated types
 .cloudflare/
 drift-report.json
