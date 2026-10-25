@@ -21,7 +21,7 @@ function Page() {
     <>
       <PageHead
         title="glyphs"
-        lede="the pixel icons and status glyphs from the master world, drawn as whole-pixel squares in the current colour."
+        lede="the pixel icons and status glyphs, drawn as whole-pixel squares in the current colour."
       >
         <InstallLine items={["glyphs"]} />
       </PageHead>

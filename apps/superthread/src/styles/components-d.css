@@ -9,6 +9,7 @@
     font-size: var(--text-summary);
     line-height: var(--text-summary--line-height);
     letter-spacing: var(--text-summary--letter-spacing);
+    text-wrap: pretty;
   }
   .st-pass-prose + .st-modepair {
     margin-top: 28px;
@@ -58,6 +59,60 @@
     color: var(--muted-foreground);
   }
 
+  /* a quantity (a task id, an age): mono with tabular figures, as the world sets them */
+  .st-pass-q {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* sheet and tooltip: the layer printed open in a frame. The frame is a containing block for fixed and absolute
+     boxes and clips what reaches past it (contain: layout paint), so the sheet docks to its right edge and the
+     tooltip stays inside it, under the page's sticky masthead. */
+  .st-pass-screen,
+  .st-pass-tipframe {
+    position: relative;
+    contain: layout paint;
+  }
+
+  /* sheet: the frame plays the window, the board behind the sheet stands in for the page, light above dark at every
+     width so each frame has the column */
+  .st-modepair.st-pass-stacked {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .st-pass-stacked > .st-modepair-pane + .st-modepair-pane {
+    border-top: 1px solid var(--rule);
+    border-left: 0;
+  }
+  .st-pass-screen {
+    height: 328px;
+    border: 1px solid var(--rule);
+    background: var(--background);
+  }
+  .st-pass-board {
+    padding: 20px 24px;
+  }
+  .st-pass-board > .type-meta {
+    margin-bottom: 4px;
+    color: var(--muted-foreground);
+  }
+  .st-pass-board li {
+    display: flex;
+    gap: 12px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+    font-size: var(--text-ui);
+    line-height: var(--text-ui--line-height);
+  }
+  .st-pass-board li > .st-pass-q {
+    color: var(--muted-foreground);
+  }
+
+  /* tooltip: room above the buttons for the tooltip and its 4 px offset */
+  .st-pass-tipframe {
+    padding-top: 44px;
+  }
+
   /* sheet: a run's facts under the sheet's header, on its 16 px inset */
   .st-pass-facts {
     display: grid;
@@ -75,7 +130,7 @@
     text-transform: uppercase;
   }
 
-  /* tooltip and sheet: the controls, then a line on how to try them */
+  /* tooltip and sheet, live: the controls, then a line on how to try them */
   .st-pass-tools {
     display: flex;
     flex-wrap: wrap;

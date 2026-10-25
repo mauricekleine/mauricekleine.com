@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { TooltipExample } from "@/examples/tooltip";
+import { TooltipExample, TooltipPrinted } from "@/examples/tooltip";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -8,7 +8,8 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/tooltip")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
+      { id: "modes", title: "in both modes" },
+      { id: "try", title: "try it" },
       { id: "upstream", title: "upstream" },
     ],
   },
@@ -24,7 +25,16 @@ function Page() {
       >
         <InstallLine items={["tooltip"]} />
       </PageHead>
-      <Section id="example" title="example">
+      <Section id="modes" title="in both modes">
+        <p className="st-pass-prose">
+          each pane prints the tooltip open over the search button: the pane&rsquo;s ink as its ground, 4&nbsp;px above
+          the control it names.
+        </p>
+        <ModePair>
+          <TooltipPrinted />
+        </ModePair>
+      </Section>
+      <Section id="try" title="try it">
         <ModePair light={<TooltipExample mode="light" />} dark={<TooltipExample mode="dark" />} />
       </Section>
       <Section id="upstream" title="upstream">
