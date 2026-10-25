@@ -401,9 +401,11 @@
    the shadow ink at 50 percent, --contact-x right of the layer and --contact-y below it, clipped to the L outside
    the layer: an edge, never a field. the band starts on the layer's corner (its 1 px edge), so its tile does too.
    in dark the screen would print black on key, so the layer keeps its shadow-<e>, soft contact included, and no
-   screen prints. it sets no position: the item keeps the layer positioned and lets ::after overflow it. */
+   screen prints. dark is scripts/generate.ts's DARK scope, inside a .dark and not inside a .light within one, so a
+   layer in a dark island on a light page prints dark. it sets no position: the item keeps the layer positioned and
+   lets ::after overflow it. */
 .texture-contact {
-  &:not(:is(.dark *):not(.light *)) {
+  &:not(:is(.dark *):not(.dark .light *)) {
     box-shadow:
       var(--contact-lift),
       inset 0 0 0 1px var(--raised-edge);
@@ -427,7 +429,7 @@
       calc(100% - var(--contact-x)) calc(100% - var(--contact-y))
     );
   }
-  &:is(.dark *):not(.light *)::after {
+  &:is(.dark *):not(.dark .light *)::after {
     display: none;
   }
 }
@@ -506,10 +508,10 @@
 }
 
 /* disabled: a button or field that is not available now is screened back. its fill stays flat and its label plain;
-   its 1 px edge prints in the input ink at 50 percent. a button, or a field box holding a disabled control, draws a
-   screen over its border box on ::before with the padding box cut out (the element stays positioned). a bare input
-   or textarea renders no ::before, so it masks its own border instead, the tile anchored on its border box as the
-   ::before's is at inset -1px. */
+   its 1 px edge prints in the input ink at 50 percent. a button, or a field box holding a disabled text control,
+   draws a screen over its border box on ::before with the padding box cut out (the element stays positioned). a
+   disabled button inside a field box screens itself, never the box. a bare input or textarea renders no ::before,
+   so it masks its own border instead, the tile anchored on its border box as the ::before's is at inset -1px. */
 .texture-disabled {
   &:disabled {
     border-color: transparent;
@@ -532,7 +534,7 @@
         linear-gradient(#000 0 0) padding-box;
     }
   }
-  &:has(:disabled) {
+  &:has(:is(input:disabled, textarea:disabled)) {
     border-color: transparent;
     &::before {
       content: "";
@@ -552,7 +554,7 @@
 /* loading rows: a skeleton bar in the first ink (key in light, paper-white in dark) at 18.75 percent, the empty
    wedge's top step. it masks the bar itself, which carries no words. */
 .texture-skeleton {
-  background-color: var(--first, var(--foreground));
+  background-color: var(--first);
   mask: var(--texture-b19) 0 0 / 4px 4px;
 }
 

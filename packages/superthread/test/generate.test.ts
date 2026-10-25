@@ -94,3 +94,63 @@ describe("plain texture", () => {
     expect(() => plainTexture("@utility a { @variant peer-hover { color: red; } }")).toThrow("peer-hover");
   });
 });
+
+// ---------- the dark scope ----------
+
+// An element as its chain of class lists, the root first and the element last.
+type Chain = string[][];
+
+// A descendant chain of `.class` and `*` compounds, matched as css does: the last compound on the element, each
+// earlier one on a further ancestor (the nearest that matches, which is enough for descendant combinators alone).
+function chainMatches(complex: string, chain: Chain): boolean {
+  const compounds = complex.trim().split(/\s+/);
+  const fits = (compound: string, classes: string[]) => {
+    if (compound === "*") return true;
+    if (!/^(\.[a-z-]+)+$/.test(compound)) throw new Error(`no matcher for ${compound}`);
+    return compound
+      .split(".")
+      .slice(1)
+      .every((name) => classes.includes(name));
+  };
+  let at = chain.length - 1;
+  if (!fits(compounds.at(-1)!, chain[at]!)) return false;
+  for (const compound of compounds.slice(0, -1).reverse()) {
+    at--;
+    while (at >= 0 && !fits(compound, chain[at]!)) at--;
+    if (at < 0) return false;
+  }
+  return true;
+}
+
+// `&` followed by :is() and :not() over lists of descendant chains: DARK's grammar.
+function inScope(selector: string, chain: Chain): boolean {
+  const body = selector.replace(/^&/, "");
+  const parts = [...body.matchAll(/:(is|not)\(([^()]*)\)/g)];
+  if (parts.map((m) => m[0]).join("") !== body) throw new Error(`no matcher for ${selector}`);
+  return parts.every(([, fn, list]) => list!.split(",").some((c) => chainMatches(c, chain)) === (fn === "is"));
+}
+
+describe("the dark scope", () => {
+  const cases: [string, Chain, boolean][] = [
+    ["no mode class anywhere", [[], [], []], false],
+    ["inside a .dark page", [["dark"], [], []], true],
+    ["inside a .light page", [["light"], [], []], false],
+    ["the element that carries .dark itself (its descendants are in scope)", [[], ["dark"]], false],
+    ["a dark island on a page with no class", [[], ["dark"], []], true],
+    ["a dark island on a .light page", [["light"], ["dark"], []], true],
+    ["a light island on a .dark page", [["dark"], ["light"], []], false],
+    ["a light island inside a dark island on a .light page", [["light"], ["dark"], ["light"], []], false],
+  ];
+  for (const [name, chain, dark] of cases)
+    test(`${name}: ${dark ? "dark" : "light"}`, () => expect(inScope(DARK, chain)).toBe(dark));
+
+  test("tailwind's dark variant and texture.css's dark and light branches are DARK, and the plain css declares no variant", () => {
+    for (const out of [OUTPUTS.css, OUTPUTS.site]) expect(read(out)).toContain(`\n@custom-variant dark (${DARK});\n`);
+    expect(read(OUTPUTS.plain)).not.toContain("@custom-variant");
+    const branches = read("tokens/texture.css")
+      .split("\n")
+      .filter((line) => /\.(dark|light)\b/.test(line) && line.trimEnd().endsWith("{"))
+      .map((line) => line.trim());
+    expect(branches).toEqual([`&:not(${DARK.slice(1)}) {`, `${DARK}::after {`]);
+  });
+});

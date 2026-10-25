@@ -12,7 +12,16 @@ import { emittedVars, root } from "../scripts/generate.ts";
 const read = (path: string) => readFileSync(join(root, path), "utf8");
 const master = JSON.parse(read("tokens/master.json"));
 const record = JSON.parse(read("tokens/check.json")) as {
-  constants: Record<string, any>;
+  // the check.py constants these checks read; the record holds more
+  constants: {
+    FAILED_FLOOR: number;
+    WORD_FLOOR: number;
+    GLYPH_APART: number;
+    CHROMATIC: string[];
+    GATE_TEXT: [string, string][];
+    GATE_UI: [string, string][];
+    TEXT_GROUNDS: string[];
+  };
   shipped: { HOUSE_DEFAULT: string; STATUS_LEVEL: string };
   assertions: { fn: string; label: string; floor: { source: string; value: number | null }; line: number }[];
   labels: string[];
@@ -95,7 +104,7 @@ const PORTED: Record<string, Ported> = {
   'f"{tag} [{lv}] house to {s_}"': {
     checks: (floor) =>
       perMode((m) =>
-        (C.CHROMATIC as string[]).map((state) => {
+        C.CHROMATIC.map((state) => {
           const r = roleOf(state);
           const kinds = ["glyph", "foreground", ...(vars[m][`${r}-solid`] ? ["solid"] : [])];
           return apart(
@@ -109,25 +118,17 @@ const PORTED: Record<string, Ported> = {
   'f"{tag} text {fg} on {bg}"': {
     checks: (floor) =>
       perMode((m) =>
-        (C.GATE_TEXT as [string, string][]).map(([fg, bg]) =>
-          need(`${tag(m)} text ${fg} on ${bg}`, ink(m, fg), ink(m, bg), floor!),
-        ),
+        C.GATE_TEXT.map(([fg, bg]) => need(`${tag(m)} text ${fg} on ${bg}`, ink(m, fg), ink(m, bg), floor!)),
       ),
   },
   'f"{tag} ui {fg} on {bg}"': {
     checks: (floor) =>
-      perMode((m) =>
-        (C.GATE_UI as [string, string][]).map(([fg, bg]) =>
-          need(`${tag(m)} ui ${fg} on ${bg}`, ink(m, fg), ink(m, bg), floor!),
-        ),
-      ),
+      perMode((m) => C.GATE_UI.map(([fg, bg]) => need(`${tag(m)} ui ${fg} on ${bg}`, ink(m, fg), ink(m, bg), floor!))),
   },
   'f"{tag} house text on {g}"': {
     checks: (floor) =>
       perMode((m) =>
-        (C.TEXT_GROUNDS as string[]).map((g) =>
-          need(`${tag(m)} house text on ${g}`, ink(m, "primary"), ink(m, g), floor!),
-        ),
+        C.TEXT_GROUNDS.map((g) => need(`${tag(m)} house text on ${g}`, ink(m, "primary"), ink(m, g), floor!)),
       ),
   },
   'f"{tag} foreground on accent"': { checks: one(() => ["foreground on accent", "foreground", "accent"]) },
@@ -538,4 +539,27 @@ describe("check.py on the emitted css", () => {
         .map((c) => `${c.label}: ${c.value.toFixed(3)} ${c.at === "most" ? ">" : "<"} ${c.floor}`);
       expect(fails).toEqual([]);
     });
+});
+
+// The sidebar and the rail frame keep each mode's deep ground and print on it in the dark palette, as the world's
+// `gutter dk` does (GATE.md, S1.F round 1, review 4). check.py checks no status glyph on the ground, so this holds
+// every status glyph's dark value to check.py's glyph floor on each mode's sidebar ground.
+describe("the deep ground", () => {
+  test("every status glyph's dark value clears the glyph floor on each mode's sidebar ground", () => {
+    const floor = floorOf('f"{tag} {s} glyph on {g}"')!;
+    const fails = perMode((m) =>
+      STATES.map((s) =>
+        need(
+          `${tag(m)} ${s.state} glyph (dark) on the sidebar`,
+          ink("dark", `${s.role}-glyph`),
+          ink(m, "sidebar"),
+          floor,
+        ),
+      ),
+    )
+      .filter((c) => c.value < c.floor)
+      .map((c) => `${c.label}: ${c.value.toFixed(3)} < ${c.floor}`);
+    expect(floor).toBe(3);
+    expect(fails).toEqual([]);
+  });
 });

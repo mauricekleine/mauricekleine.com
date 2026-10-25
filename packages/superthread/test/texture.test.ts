@@ -349,7 +349,7 @@ test("texture.css has a utility for every DETAILS key, the ramp and each ship's 
 
 test("texture-contact lifts light layers by --contact-lift and its edge, screens the L, and leaves dark alone", () => {
   const contact = utility("texture-contact");
-  const light = child(contact, "&:not(:is(.dark *):not(.light *))");
+  const light = child(contact, "&:not(:is(.dark *):not(.dark .light *))");
   expect(light.decls).toEqual([["box-shadow", "var(--contact-lift), inset 0 0 0 1px var(--raised-edge)"]]);
   const after = child(contact, "&::after");
   expect(value(after, "content")).toBe('""');
@@ -363,21 +363,21 @@ test("texture-contact lifts light layers by --contact-lift and its edge, screens
   expect(value(after, "clip-path")).toBe(
     "polygon(calc(100% - var(--contact-x)) var(--contact-y), 100% var(--contact-y), 100% 100%, var(--contact-x) 100%, var(--contact-x) calc(100% - var(--contact-y)), calc(100% - var(--contact-x)) calc(100% - var(--contact-y)))",
   );
-  expect(child(contact, "&:is(.dark *):not(.light *)::after").decls).toEqual([["display", "none"]]);
+  expect(child(contact, "&:is(.dark *):not(.dark .light *)::after").decls).toEqual([["display", "none"]]);
   // the light rule is the only box-shadow, and the layer's own position is never set
   expect(declsOf(contact).filter(([p]) => p === "box-shadow")).toHaveLength(1);
   expect(contact.decls).toEqual([]);
   expect(contact.rules.map((r) => r.sel)).toEqual([
-    "&:not(:is(.dark *):not(.light *))",
+    "&:not(:is(.dark *):not(.dark .light *))",
     "&::after",
-    "&:is(.dark *):not(.light *)::after",
+    "&:is(.dark *):not(.dark .light *)::after",
   ]);
 });
 
-test("texture-disabled screens the edge on ::before, and a bare input or textarea masks its own border (ruling 3)", () => {
+test("texture-disabled screens the edge on ::before, a field box only for a disabled text control, and a bare input or textarea masks its own border (ruling 3)", () => {
   const disabled = utility("texture-disabled");
   const variant = child(disabled, "@variant disabled");
-  for (const box of [variant, child(disabled, "&:has(:disabled)")]) {
+  for (const box of [variant, child(disabled, "&:has(:is(input:disabled, textarea:disabled))")]) {
     expect(value(box, "border-color")).toBe("transparent");
     const before = child(box, "&::before");
     expect(value(before, "inset")).toBe("-1px");
@@ -396,7 +396,7 @@ test("texture-disabled screens the edge on ::before, and a bare input or textare
 test("state selectors go through @variant, so the site's demo variants reach them", () => {
   const selectors = walk(sheet).map((r) => r.sel);
   for (const s of selectors) expect(s).not.toMatch(/:(hover|focus-visible|focus|active)\b/);
-  expect(selectors.filter((s) => /:disabled/.test(s))).toEqual(["&:has(:disabled)"]);
+  expect(selectors.filter((s) => /:disabled/.test(s))).toEqual(["&:has(:is(input:disabled, textarea:disabled))"]);
   child(utility("texture-tabhover"), "@variant hover");
   child(child(utility("texture-rowedge"), "& tbody tr"), "@variant hover");
 });

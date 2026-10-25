@@ -1,0 +1,4 @@
+# bun test reads the bunfig.toml in its working directory, so this one serves every run from packages/superthread.
+# Installs and formatting still follow the root bunfig.toml.
+[test]
+preload = ["./test/dom.ts"]

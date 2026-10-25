@@ -26,12 +26,32 @@ export const OUTPUTS = {
   glyphs: "items/ui/glyphs.tsx",
 };
 
-// Tailwind's dark variant, also the plain variant's expansion of `@variant dark`.
-export const DARK = "&:is(.dark *):not(.light *)";
+// The dark scope: inside a .dark, and not inside a .light that itself sits inside a .dark. So a dark island (the deep
+// ground's gutter) prints dark on an explicit light page, and a light island prints light on a dark page; a dark
+// island inside a light island inside a dark page prints light. Tailwind's dark variant, texture.css's dark and light
+// branches and the plain variant's `@variant dark` all use it.
+export const DARK = "&:is(.dark *):not(.dark .light *)";
 
 // ---------- sources ----------
 
-export type Master = Record<string, any>;
+type Status = { role: string; glyph: string } & Record<Mode, Record<string, string>>;
+type Ship = { angle: number; light: { spot: string }; dark: { spot: string }; mark: { light: string; dark: string } };
+
+// The parts of tokens/master.json the generator reads by name; lookup() walks the rest by path.
+export type Master = {
+  fleet: string[];
+  ships: Record<string, Ship>;
+  status: { states: Record<string, Status> };
+  space: { base: number; steps: number[] };
+  texture: { places: string[] };
+};
+
+// tokens/details.json: the vendored details.py's data.
+export type Details = {
+  LEVELS: Record<string, number>;
+  CONTACT: { x: number; y: number; pct: number; on: boolean };
+  DETAILS: { key: string; component: string; detail: string; job: string }[];
+};
 
 export function lookup(master: Master, path: string): unknown {
   let at: unknown = master;
@@ -154,7 +174,7 @@ export function readTexture(): Texture | null {
   return { tiles, css };
 }
 
-function textureVars(texture: Texture, details: { CONTACT: { x: number; y: number } }): string[] {
+function textureVars(texture: Texture, details: Details): string[] {
   const out = Object.entries(texture.tiles).map(
     ([name, tile]) =>
       `--texture-${name}: url("data:image/svg+xml;base64,${Buffer.from(tile.svg).toString("base64")}");`,
@@ -202,7 +222,7 @@ export function plainTexture(css: string): string {
 
 // ---------- the typed values ----------
 
-function tokenData(master: Master, all: Role[], texture: Texture | null, details: Master) {
+function tokenData(master: Master, all: Role[], texture: Texture | null, details: Details) {
   const colour = (source: Source, provisional: boolean) => {
     const hex = hexOf(master, source);
     const alpha = alphaOf(source);
@@ -221,10 +241,8 @@ function tokenData(master: Master, all: Role[], texture: Texture | null, details
       step,
       ...hex(m === "light" ? tint(key, paper, step) : tint(paper, key, step)),
     }));
-  const states = master.status.states as Record<string, Record<string, any>>;
-  const detailNames = new Set(
-    (details.DETAILS as { component: string; detail: string }[]).map((d) => `${d.component}: ${d.detail}`),
-  );
+  const states = master.status.states;
+  const detailNames = new Set(details.DETAILS.map((d) => `${d.component}: ${d.detail}`));
   return {
     light: mode("light"),
     dark: mode("dark"),
@@ -268,7 +286,7 @@ function tokenData(master: Master, all: Role[], texture: Texture | null, details
     },
     wedge: { light: wedge("light"), dark: wedge("dark") },
     ships: Object.fromEntries(
-      (master.fleet as string[]).map((id) => [
+      master.fleet.map((id) => [
         id,
         {
           light: hex(master.ships[id].light.spot),
@@ -284,18 +302,15 @@ function tokenData(master: Master, all: Role[], texture: Texture | null, details
           role: s.role,
           glyph: s.glyph,
           ...Object.fromEntries(
-            MODES.map((m) => [
-              m,
-              Object.fromEntries(Object.entries(s[m] as Record<string, string>).map(([k, v]) => [k, hex(v)])),
-            ]),
+            MODES.map((m) => [m, Object.fromEntries(Object.entries(s[m]).map(([k, v]) => [k, hex(v)]))]),
           ),
         },
       ]),
     ),
     surface: { stock: "background", raised: "card", float: "popover", ground: "ground" },
     texture: {
-      places: (master.texture.places as string[]).filter((place) => !detailNames.has(place)),
-      details: (details.DETAILS as Record<string, string>[]).map(({ key, component, detail, job }) => ({
+      places: master.texture.places.filter((place) => !detailNames.has(place)),
+      details: details.DETAILS.map(({ key, component, detail, job }) => ({
         key,
         component,
         detail,
@@ -339,7 +354,7 @@ function glyphsTsx(
   });
   for (const [name, size] of icons)
     if (![12, 14].includes(size)) throw new Error(`glyph ${name} is ${size} cells, not 12 or 14`);
-  const states = Object.entries(master.status.states as Record<string, { role: string; glyph: string }>);
+  const states = Object.entries(master.status.states);
   const squares = states.map(([state, s]) => {
     const art = glyphs.GLYPHS[s.glyph];
     if (!art) throw new Error(`status ${state} names glyph ${s.glyph}, which glyphs.json lacks`);
@@ -436,7 +451,7 @@ export function emittedVars(css: string): Record<Mode, Record<string, string>> {
 export function build(): Map<string, string> {
   const raw = read("tokens/master.json");
   const master = JSON.parse(raw) as Master;
-  const details = JSON.parse(read("tokens/details.json")) as Master;
+  const details = JSON.parse(read("tokens/details.json")) as Details;
   const glyphs = JSON.parse(read("tokens/glyphs.json"));
   const base = read("tokens/base.css").trimEnd();
   const texture = readTexture();
@@ -446,28 +461,28 @@ export function build(): Map<string, string> {
 
   const css = (fontBase: string, plain: boolean) => {
     const parts = [`/* superthread v2 tokens${plain ? ", plain css" : ""}: ${said} */`];
-    if (!plain) parts.push("@custom-variant dark (&:is(.dark *):not(.light *));");
+    if (!plain) parts.push(`@custom-variant dark (${DARK});`);
     parts.push(fontFaces(fontBase));
     parts.push(block(":root,\n.light", [...declarations(master, all, "light"), ...shared(), "color-scheme: light;"]));
     parts.push(block(".dark", [...declarations(master, all, "dark"), "color-scheme: dark;"]));
     if (!plain) parts.push(block("@theme inline", theme(all)), typeUtilities());
     parts.push(base);
     if (texture) {
-      parts.push(block(":root", textureVars(texture, details as never)));
+      parts.push(block(":root", textureVars(texture, details)));
       if (texture.css !== null) parts.push((plain ? plainTexture(texture.css) : texture.css).trimEnd());
     }
     return parts.join("\n\n") + "\n";
   };
 
   const data = tokenData(master, all, texture, details);
-  const ships = (master.fleet as string[]).map((id) => ({
+  const ships = master.fleet.map((id) => ({
     id,
     name: id,
-    angle: master.ships[id].angle as number,
+    angle: master.ships[id].angle,
     // file names under the consumer's markBase
     mark: {
-      light: String(master.ships[id].mark.light).replace(/^marks\//, ""),
-      dark: String(master.ships[id].mark.dark).replace(/^marks\//, ""),
+      light: master.ships[id].mark.light.replace(/^marks\//, ""),
+      dark: master.ships[id].mark.dark.replace(/^marks\//, ""),
     },
   }));
 
