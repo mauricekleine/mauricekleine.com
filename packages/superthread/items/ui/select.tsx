@@ -45,20 +45,26 @@ function SelectTrigger({
 }
 
 // The list is a raised layer: shadow-leaf, and in light its contact shadow prints as a screen (texture-contact),
-// which sits outside the box, so the list scrolls inside the popup and the popup never clips.
+// which sits outside the box, so the list scrolls inside the popup and the popup never clips. Opened under the
+// trigger, it sits 6 px below it, as the world prints it. portalProps go to the portal: a container to render into,
+// or a class such as the mode a layer should take. The popup's duration times its enter and exit keyframes, and it
+// transitions nothing.
 function SelectContent({
   className,
   children,
   side = "bottom",
-  sideOffset = 4,
+  sideOffset = 6,
   align = "center",
   alignOffset = 0,
   alignItemWithTrigger = true,
+  portalProps,
   ...props
 }: SelectPrimitive.Popup.Props &
-  Pick<SelectPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger">) {
+  Pick<SelectPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger"> & {
+    portalProps?: SelectPrimitive.Portal.Props;
+  }) {
   return (
-    <SelectPrimitive.Portal>
+    <SelectPrimitive.Portal {...portalProps}>
       <SelectPrimitive.Positioner
         side={side}
         sideOffset={sideOffset}
@@ -72,7 +78,7 @@ function SelectContent({
           data-mk="select"
           data-align-trigger={alignItemWithTrigger}
           className={cn(
-            "relative isolate z-50 w-(--anchor-width) min-w-36 origin-(--transform-origin) border border-border bg-popover text-popover-foreground shadow-leaf texture-contact [--contact-lift:var(--elevation-leaf-rake)] duration-(--duration-instant) ease-(--ease-brand) data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+            "relative isolate z-50 w-(--anchor-width) min-w-36 origin-(--transform-origin) border border-border bg-popover text-popover-foreground shadow-leaf texture-contact [--contact-lift:var(--elevation-leaf-rake)] transition-none duration-(--duration-instant) ease-(--ease-brand) data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
             className,
           )}
           {...props}

@@ -76,3 +76,23 @@ export function StatusGlyph({ state, className, ...aria }: { state: StatusState 
     </svg>
   )
 }
+
+// field-error: the input error glyph, the bang knocked out of the 14 px square in the failed glyph ink. It sits
+// before a field's error message, which names what is wrong in the error ink.
+const FIELD_ERROR = "M1 0h12v1h-12zM0 1h14v1h-14zM0 2h6v1h-6zM8 2h6v1h-6zM0 3h6v1h-6zM8 3h6v1h-6zM0 4h6v1h-6zM8 4h6v1h-6zM0 5h6v1h-6zM8 5h6v1h-6zM0 6h6v1h-6zM8 6h6v1h-6zM0 7h6v1h-6zM8 7h6v1h-6zM0 8h6v1h-6zM8 8h6v1h-6zM0 9h14v1h-14zM0 10h6v1h-6zM8 10h6v1h-6zM0 11h6v1h-6zM8 11h6v1h-6zM0 12h14v1h-14zM1 13h12v1h-12z"
+
+export function FieldErrorGlyph({ className, ...aria }: Aria) {
+  return (
+    <svg
+      viewBox="0 0 14 14"
+      width={14}
+      height={14}
+      shapeRendering="crispEdges"
+      fill="currentColor"
+      className={cn("text-error-glyph", className)}
+      {...labelled(aria)}
+    >
+      <path d={FIELD_ERROR} />
+    </svg>
+  )
+}

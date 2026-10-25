@@ -41,7 +41,7 @@ type Ship = { angle: number; light: { spot: string }; dark: { spot: string }; ma
 export type Master = {
   fleet: string[];
   ships: Record<string, Ship>;
-  status: { states: Record<string, Status> };
+  status: { states: Record<string, Status>; "input error glyph": string };
   space: { base: number; steps: number[] };
   texture: { places: string[] };
 };
@@ -343,6 +343,11 @@ export function artPath(rows: boolean[][]): string {
 
 const NOTCH = new Set(["0,0", "13,0", "0,13", "13,13"]);
 
+// The 14 px square with its corners notched and the glyph knocked out, as the master's common.glyph_url draws it.
+function square(art: Art): string {
+  return artPath(art.map((row, y) => [...row].map((c, x) => c !== "#" && !NOTCH.has(`${x},${y}`))));
+}
+
 function glyphsTsx(
   glyphs: { ICONS: Record<string, Art>; GLYPHS: Record<string, Art> },
   master: Master,
@@ -358,9 +363,16 @@ function glyphsTsx(
   const squares = states.map(([state, s]) => {
     const art = glyphs.GLYPHS[s.glyph];
     if (!art) throw new Error(`status ${state} names glyph ${s.glyph}, which glyphs.json lacks`);
-    const rows = art.map((row, y) => [...row].map((c, x) => c !== "#" && !NOTCH.has(`${x},${y}`)));
-    return [state, s.role, artPath(rows)] as const;
+    return [state, s.role, square(art)] as const;
   });
+  // The input error glyph prints in failed's glyph ink: error text and the invalid edge follow failed (the master's
+  // status.failed rule, and reach.css's .msg i on --failed-g).
+  const errorGlyph = master.status["input error glyph"];
+  const errorArt = glyphs.GLYPHS[errorGlyph];
+  if (!errorArt) throw new Error(`the input error glyph is ${errorGlyph}, which glyphs.json lacks`);
+  const failed = master.status.states.failed;
+  if (!failed) throw new Error("tokens/master.json has no failed status state");
+  const fieldError = [failed.role, square(errorArt)] as const;
   return `${header}
 import type { AriaAttributes } from "react"
 
@@ -418,6 +430,26 @@ export function StatusGlyph({ state, className, ...aria }: { state: StatusState 
       {...labelled(aria)}
     >
       <path d={d} />
+    </svg>
+  )
+}
+
+// field-error: the input error glyph, the ${errorGlyph} knocked out of the 14 px square in the failed glyph ink. It sits
+// before a field's error message, which names what is wrong in the error ink.
+const FIELD_ERROR = ${JSON.stringify(fieldError[1])}
+
+export function FieldErrorGlyph({ className, ...aria }: Aria) {
+  return (
+    <svg
+      viewBox="0 0 14 14"
+      width={14}
+      height={14}
+      shapeRendering="crispEdges"
+      fill="currentColor"
+      className={cn("text-${fieldError[0]}-glyph", className)}
+      {...labelled(aria)}
+    >
+      <path d={FIELD_ERROR} />
     </svg>
   )
 }

@@ -1,10 +1,11 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { act, type ReactNode } from "react";
+import { act, type ComponentProps, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
+import { FieldErrorGlyph } from "@/components/superthread/ui/glyphs";
 import { Input } from "@/components/superthread/ui/input";
 import {
   InputGroup,
@@ -153,13 +154,18 @@ const FX_PRIMARY = "[--fx:var(--primary)]";
 
 const ships = ["orbit", "quanta", "trisys"];
 
-function SelectSpecimen(props: { open?: boolean; disabled?: boolean; invalid?: boolean }) {
+function SelectSpecimen(props: {
+  open?: boolean;
+  disabled?: boolean;
+  invalid?: boolean;
+  content?: Omit<ComponentProps<typeof SelectContent>, "children">;
+}) {
   return (
     <Select defaultValue="trisys" open={props.open} disabled={props.disabled}>
       <SelectTrigger aria-label="ship" aria-invalid={props.invalid || undefined}>
         <SelectValue />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent {...props.content}>
         <SelectGroup>
           <SelectLabel>ships</SelectLabel>
           {ships.map((ship) => (
@@ -315,6 +321,83 @@ describe("select", () => {
       expect(claim("select")).toEqual(["texture-contact"]);
       expect(forbidden(rendered)).toEqual([]);
     });
+
+    // The popup's duration times its enter and exit keyframes. On its own it would also time a transition of
+    // whatever the default property list names, so the popup says it transitions nothing.
+    test("the popup animates in and out on its keyframes and transitions nothing", () => {
+      const popup = one(body, "[data-slot=select-content]");
+      expect(popup.classes).toEqual(
+        expect.arrayContaining(["duration-(--duration-instant)", "data-open:animate-in", "transition-none"]),
+      );
+    });
+  });
+
+  describe("portal and offset", () => {
+    test("the popup portals into the container its portal props name, carrying their class", async () => {
+      const frame = document.createElement("div");
+      document.body.append(frame);
+      const { done } = await client(
+        <SelectSpecimen open content={{ portalProps: { container: frame, className: "dark" } }} />,
+      );
+      try {
+        const popup = one(frame, "[data-slot=select-content]");
+        const portal = [...frame.children].find((child) => child.contains(popup.el));
+        expect(portal?.classList.contains("dark")).toBe(true);
+      } finally {
+        await done();
+        frame.remove();
+      }
+    });
+
+    // The world prints the list 6 px under the trigger (reach.css .list). Under happy-dom every box measures 0, so
+    // the positioner's translation from the trigger is the side offset alone.
+    test("a list that opens under the trigger sits 6 px below it by default", async () => {
+      const { body, done } = await client(<SelectSpecimen open content={{ alignItemWithTrigger: false }} />);
+      try {
+        const popup = one(body, "[data-slot=select-content]");
+        const positioner = popup.el.parentElement as HTMLElement;
+        expect(positioner.getAttribute("data-side")).toBe("bottom");
+        expect(positioner.style.transform).toBe("translate(0px, 6px)");
+      } finally {
+        await done();
+      }
+    });
+  });
+});
+
+// The world's input error glyph (M/reach.html, --g-bang decoded): the 14 px square with its corners notched and the
+// bang knocked out, which the world prints in the failed glyph ink before a field's error message.
+const WORLD_BANG =
+  "M1 0h12v1h-12zM0 1h14v1h-14zM0 2h6v1h-6zM8 2h6v1h-6zM0 3h6v1h-6zM8 3h6v1h-6zM0 4h6v1h-6zM8 4h6v1h-6zM0 5h6v1h-6zM8 5h6v1h-6zM0 6h6v1h-6zM8 6h6v1h-6zM0 7h6v1h-6zM8 7h6v1h-6zM0 8h6v1h-6zM8 8h6v1h-6zM0 9h14v1h-14zM0 10h6v1h-6zM8 10h6v1h-6zM0 11h6v1h-6zM8 11h6v1h-6zM0 12h14v1h-14zM1 13h12v1h-12z";
+
+describe("field-error glyph", () => {
+  const master = JSON.parse(readFileSync(join(root, "tokens/master.json"), "utf8")) as {
+    status: { states: Record<string, { role: string }>; "input error glyph": string };
+  };
+
+  test("draws the world's input error glyph, whole pixels, in the ink error text follows", () => {
+    const svg = one(server(<FieldErrorGlyph />), "svg");
+    expect(master.status["input error glyph"]).toBe("bang");
+    expect(svg.el.querySelector("path")?.getAttribute("d")).toBe(WORLD_BANG);
+    expect([svg.el.getAttribute("viewBox"), svg.el.getAttribute("width"), svg.el.getAttribute("height")]).toEqual([
+      "0 0 14 14",
+      "14",
+      "14",
+    ]);
+    expect(svg.el.getAttribute("shape-rendering")).toBe("crispEdges");
+    // error text and the invalid edge follow failed (master.json status.failed), and so does this glyph
+    const ink = `text-${master.status.states.failed!.role}-glyph`;
+    expect(svg.classes).toContain(ink);
+    expect(css).toContain(`--color-${ink.slice("text-".length)}:`);
+  });
+
+  test("is hidden from screen readers until it gets a label, and takes the caller's classes", () => {
+    const bare = one(server(<FieldErrorGlyph className="mt-0.5" />), "svg");
+    expect(bare.el.getAttribute("aria-hidden")).toBe("true");
+    expect(bare.classes).toContain("mt-0.5");
+    const named = one(server(<FieldErrorGlyph aria-label="error" />), "svg");
+    expect(named.el.getAttribute("role")).toBe("img");
+    expect(named.el.hasAttribute("aria-hidden")).toBe(false);
   });
 });
 

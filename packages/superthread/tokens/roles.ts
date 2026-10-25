@@ -285,6 +285,7 @@ export function roles(master: Master): Role[] {
 export const CONSUMED: { path: string; by: string }[] = [
   { path: "status.states.*.role", by: "names the status roles" },
   { path: "status.states.*.glyph", by: "glyphs.tsx StatusGlyph" },
+  { path: "status.input error glyph", by: "glyphs.tsx FieldErrorGlyph" },
   { path: "fleet", by: "the ship roles and fleet.ts, in this order" },
   { path: "ships.*.angle", by: "fleet.ts, the line-screen angle" },
   { path: "ships.*.mark", by: "fleet.ts, the mark files" },
