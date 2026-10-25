@@ -147,31 +147,30 @@ test("a file under /fonts/ that is not a face keeps the asset layer's headers", 
   }
 });
 
-// a fake asset layer with one published snapshot file, as the real one answers: the file, a 304 for its own ETag,
-// the prerendered 404 page for any other path, no body for HEAD, and the given headers over its defaults
+// a fake asset layer with one published snapshot file, as the real one answers (the asset worker in
+// @cloudflare/vite-plugin): the file, or the prerendered 404 page for any other path, each with its own strong ETag;
+// a 304 with no body when If-None-Match is that ETag, strong or weak, which it checks before it looks at whether the
+// file exists; no body for HEAD; and the given headers over its defaults
 const snapshot = "/r/v/2.0.0-next.1/button.json";
+const hitTag = '"button"';
+const missTag = '"404"';
 const notFoundPage = "<!doctype html><title>not found · superthread</title>";
 function snapshots(upstream = {}) {
-  const seen = [];
   return {
-    seen,
-    env: {
-      ASSETS: {
-        fetch: async (request) => {
-          const path = new URL(request.url).pathname;
-          seen.push(`${request.method} ${path}`);
-          const hit = path === snapshot;
-          const etag = hit ? '"button"' : '"404"';
-          const status = !hit ? 404 : request.headers.get("if-none-match") === etag ? 304 : 200;
-          const body = status === 304 || request.method === "HEAD" ? null : hit ? '{"name":"button"}' : notFoundPage;
-          const headers = {
-            "cache-control": "public, max-age=0, must-revalidate",
-            "content-type": hit ? "application/json" : "text/html; charset=utf-8",
-            etag,
-            ...upstream,
-          };
-          return new Response(body, { status, headers });
-        },
+    ASSETS: {
+      fetch: async (request) => {
+        const hit = new URL(request.url).pathname === snapshot;
+        const etag = hit ? hitTag : missTag;
+        const matched = [etag, `W/${etag}`].includes(request.headers.get("if-none-match") ?? "");
+        const status = matched ? 304 : hit ? 200 : 404;
+        const body = matched || request.method === "HEAD" ? null : hit ? '{"name":"button"}' : notFoundPage;
+        const headers = {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-type": hit ? "application/json" : "text/html; charset=utf-8",
+          etag,
+          ...upstream,
+        };
+        return new Response(body, { status, headers });
       },
     },
   };
@@ -181,34 +180,39 @@ test("a file in a published snapshot keeps for a year, for anyone, on GET, HEAD 
   for (const [method, conditional, status, body] of [
     ["GET", undefined, 200, '{"name":"button"}'],
     ["HEAD", undefined, 200, ""],
-    ["GET", '"button"', 304, ""],
+    ["GET", hitTag, 304, ""],
+    ["HEAD", hitTag, 304, ""],
+    ["GET", `W/${hitTag}`, 304, ""],
+    // a miss's ETag names another representation, so the file comes back whole
+    ["GET", missTag, 200, '{"name":"button"}'],
   ]) {
-    const { env, seen } = snapshots();
     const headers = conditional === undefined ? {} : { "if-none-match": conditional };
-    const res = await handle(new Request(site + snapshot, { method, headers }), env, refuse);
+    const res = await handle(new Request(site + snapshot, { method, headers }), snapshots(), refuse);
     assert.equal(res.status, status, `${method} ${conditional}`);
-    assert.deepEqual(seen, [`${method} ${snapshot}`]);
     assert.equal(res.headers.get("cache-control"), "public, max-age=31536000, immutable");
     assert.equal(res.headers.get("access-control-allow-origin"), "*");
-    assert.equal(res.headers.get("etag"), '"button"');
+    assert.equal(res.headers.get("etag"), hitTag);
     assert.equal(await res.text(), body);
   }
 });
 
-test("a missing snapshot file gets the 404 page, never stored, on GET and HEAD", async () => {
+test("a missing snapshot file gets the 404 page, never stored, on GET, HEAD and a revalidation with any ETag, the 404 page's own included", async () => {
   // the asset layer sends what the old /r/v/* rule in public/_headers gave every response: a year, immutable
   const old = { "cache-control": "public, max-age=31536000, immutable" };
+  // a file no published version has, a file in a version not published yet, and a version's directory
   const missing = ["/r/v/2.0.0-next.1/missing.json", "/r/v/2.0.0-next.2/button.json", "/r/v/2.0.0-next.1/"];
   for (const path of missing) {
     for (const method of ["GET", "HEAD"]) {
-      const { env, seen } = snapshots(old);
-      const res = await handle(new Request(site + path, { method }), env, refuse);
-      assert.equal(res.status, 404, `${method} ${path}`);
-      assert.deepEqual(seen, [`${method} ${path}`]);
-      assert.equal(res.headers.get("cache-control"), "no-store", `${method} ${path}`);
-      assert.equal(res.headers.get("access-control-allow-origin"), "*");
-      assert.equal(res.headers.get("content-type"), "text/html; charset=utf-8");
-      assert.equal(await res.text(), method === "GET" ? notFoundPage : "");
+      for (const conditional of [undefined, missTag, `W/${missTag}`, hitTag]) {
+        const label = `${method} ${path} ${conditional}`;
+        const headers = conditional === undefined ? {} : { "if-none-match": conditional };
+        const res = await handle(new Request(site + path, { method, headers }), snapshots(old), refuse);
+        assert.equal(res.status, 404, label);
+        assert.equal(res.headers.get("cache-control"), "no-store", label);
+        assert.equal(res.headers.get("access-control-allow-origin"), "*", label);
+        assert.equal(res.headers.get("content-type"), "text/html; charset=utf-8", label);
+        assert.equal(await res.text(), method === "GET" ? notFoundPage : "", label);
+      }
     }
   }
 });

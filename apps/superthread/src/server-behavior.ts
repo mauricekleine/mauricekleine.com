@@ -33,15 +33,29 @@ export function fontHeaders(path: string, origin: string | null): Record<string,
   return headers;
 }
 
-// The headers a snapshot response carries, from the asset layer's status. A published version never changes, so a
-// file in it keeps for a year. A miss (a file no version has, or a version not published yet) is never stored, so a
-// version is there on the first request after it ships. Since no client stores a miss, a 304 always answers a stored
-// file, and it keeps the year too.
-export function snapshotHeaders(status: number): Record<string, string> {
+// The headers a snapshot response carries, from whether the file exists. A published version never changes, so a
+// file in it keeps for a year, and so does a 304 for it. A miss (a file no version has, or a version not published
+// yet) is never stored, so a version is there on the first request after it ships.
+export function snapshotHeaders(exists: boolean): Record<string, string> {
   return {
     "access-control-allow-origin": "*",
-    "cache-control": status === 200 || status === 304 ? "public, max-age=31536000, immutable" : "no-store",
+    "cache-control": exists ? "public, max-age=31536000, immutable" : "no-store",
   };
+}
+
+// A snapshot file through the asset layer. Its 304 does not say the file exists: the asset layer answers 304 whenever
+// If-None-Match names the ETag of what it would serve, and for a miss that is the 404 page. So a 304 keeps the year
+// only when the same request without its validators finds the file; otherwise the client gets that miss.
+async function snapshotFile(request: Request, env: WorkerEnv): Promise<Response> {
+  const response = await env.ASSETS.fetch(request);
+  if (response.status !== 304) return withHeaders(response, snapshotHeaders(response.status === 200));
+  const headers = new Headers(request.headers);
+  headers.delete("if-none-match");
+  headers.delete("if-modified-since");
+  const unconditional = await env.ASSETS.fetch(new Request(request, { headers }));
+  if (unconditional.status !== 200) return withHeaders(unconditional, snapshotHeaders(false));
+  await unconditional.body?.cancel();
+  return withHeaders(response, snapshotHeaders(true));
 }
 
 export async function handle(
@@ -50,10 +64,7 @@ export async function handle(
   next: (request: Request) => Response | Promise<Response>,
 ): Promise<Response> {
   const { pathname } = new URL(request.url);
-  if (pathname.startsWith("/r/v/")) {
-    const response = await env.ASSETS.fetch(request);
-    return withHeaders(response, snapshotHeaders(response.status));
-  }
+  if (pathname.startsWith("/r/v/")) return snapshotFile(request, env);
   if (!pathname.startsWith("/fonts/")) return next(request);
 
   const response = await env.ASSETS.fetch(request);
