@@ -4,15 +4,20 @@ import { applyTheme, chooseTheme, readChoice, themeKey, type ThemeChoice } from 
 
 const choices: readonly ThemeChoice[] = ["light", "dark", "auto"];
 
-// One store for every mode control on the page. The inline script set the choice on <html> before React ran; the
-// store reads it from there, re-applies auto when the system mode changes, and follows other tabs through storage.
+// One store for every mode control on the page. The choice in force lives on <html> as data-theme-choice: the inline
+// script set it from storage before React ran, and every choice made here sets it again, whether or not storage takes
+// the write. The store reads it from there and re-applies auto when the system mode changes. Storage is read again
+// only when another tab writes it.
 const listeners = new Set<() => void>();
 const notify = () => listeners.forEach((listener) => listener());
 
+const getChoice = () => (document.documentElement.getAttribute("data-theme-choice") as ThemeChoice | null) ?? "auto";
+
 function attach() {
   const system = matchMedia("(prefers-color-scheme: dark)");
+  // the choice in force, never storage: with storage blocked, a choice made on this page lives only on <html>
   const onSystem = () => {
-    if (readChoice() === "auto") applyTheme("auto");
+    if (getChoice() === "auto") applyTheme("auto");
     notify();
   };
   const onStorage = (event: StorageEvent) => {
@@ -41,8 +46,6 @@ function subscribe(listener: () => void) {
     }
   };
 }
-
-const getChoice = () => (document.documentElement.getAttribute("data-theme-choice") as ThemeChoice | null) ?? "auto";
 
 // null until hydration: the prerendered markup cannot know the stored choice, so its pressed look comes from CSS on
 // html[data-theme-choice] (shell.css) and aria-checked follows once React runs
