@@ -1,0 +1,124 @@
+/* The action and data pages: button, badge, tabs, progress, table and skeleton. Specimen rows and notes follow the
+   world's component sheet (reach.html, section c): 12 px between specimens, 16 px between rows, notes in 11/14 mono
+   under what they describe. In the components layer, so an item's own utilities still win inside a specimen. */
+
+@layer components {
+  /* a section's few lines of prose, as the world sets a sheet's notes */
+  .st-b-copy {
+    max-width: 72ch;
+    color: var(--muted-foreground);
+    font: 400 15px/24px var(--font-sans);
+  }
+  .st-b-copy + .st-b-copy {
+    margin-top: 12px;
+  }
+  .st-b-copy code {
+    color: var(--foreground);
+    font: 400 13px/24px var(--font-mono);
+    white-space: nowrap;
+  }
+  .st-b-copy + * {
+    margin-top: 24px;
+  }
+
+  /* a mode pair whose specimens want the whole column: light above dark at every width, each pane as wide as the
+     world's */
+  .st-modepair.st-b-stack {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .st-b-stack > .st-modepair-pane + .st-modepair-pane {
+    border-top: 1px solid var(--rule);
+    border-left: 0;
+  }
+
+  .st-b-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+  .st-b-row + .st-b-row {
+    margin-top: 16px;
+  }
+  .st-b-specimens {
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .st-b-specimen {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .st-b-note {
+    color: var(--muted-foreground);
+    font: 400 11px/14px var(--font-mono);
+  }
+
+  /* a printed focus: the base layer's ring, which no data-demo variant reaches, written out as the base layer has it */
+  :is([data-slot="button"], [data-slot="tabs-trigger"])[data-demo~="focus-visible"] {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* tabs */
+  .st-b-panel {
+    padding-top: 4px;
+    color: var(--muted-foreground);
+  }
+  .st-b-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    margin-top: 16px;
+  }
+  .st-b-onrule {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* progress: the live bar and its control; the edges stacked on the meter's rhythm */
+  .st-b-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .st-b-progress > button {
+    align-self: flex-start;
+  }
+  .st-b-stack-list {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* table: a ship's name with its mark; the mark that matches the mode around it shows */
+  .st-b-ship {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .st-b-ship img {
+    flex: none;
+    image-rendering: pixelated;
+  }
+  .st-b-mark-dark,
+  .st-b-mark-light:is(.dark *):not(.dark .light *) {
+    display: none;
+  }
+  .st-b-mark-dark:is(.dark *):not(.dark .light *) {
+    display: block;
+  }
+
+  /* skeleton: the world's loading rows, 48 px plus the rule */
+  .st-b-skel {
+    max-width: 608px;
+    list-style: none;
+  }
+  .st-b-skel li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 49px;
+    border-bottom: 1px solid var(--border);
+  }
+}
