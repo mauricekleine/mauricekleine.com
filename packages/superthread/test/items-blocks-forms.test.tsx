@@ -94,6 +94,24 @@ describe("form section", () => {
     expect(forms[2]!.classList.contains("max-w-xl")).toBe(true);
   });
 
+  test("a supplied titleId names the form, and a stray title id cannot unname it", () => {
+    const stray = { id: "elsewhere" } as object;
+    const rendered = server(
+      <>
+        <FormSection titleId="settings">
+          <FormSectionTitle>settings</FormSectionTitle>
+        </FormSection>
+        <FormSection>
+          <FormSectionTitle {...stray}>preferences</FormSectionTitle>
+        </FormSection>
+      </>,
+    );
+    const forms = [...rendered.querySelectorAll("form")];
+    expect(forms[0]!.getAttribute("aria-labelledby")).toBe("settings");
+    for (const form of forms) expect(form.getAttribute("aria-labelledby")).toBe(form.querySelector("h2")!.id);
+    expect(rendered.querySelector("#elsewhere")).toBeNull();
+  });
+
   test("save and discard stay app-owned and update the announced status", async () => {
     const view = await client(<Settings />);
     try {

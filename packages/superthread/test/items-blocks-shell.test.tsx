@@ -158,6 +158,20 @@ describe("section header", () => {
     expect(detailsUsed(elements(host), "section-header")).toEqual([]);
     expect(forbidden(elements(host))).toEqual([]);
   });
+
+  test("a stray title id cannot unname its section", () => {
+    const stray = { id: "elsewhere" } as object;
+    const host = server(
+      <Section>
+        <SectionHeader>
+          <SectionTitle {...stray}>recent runs</SectionTitle>
+        </SectionHeader>
+      </Section>,
+    );
+    const section = one(host, "section").el;
+    expect(section.getAttribute("aria-labelledby")).toBe(one(host, "h2").el.id);
+    expect(host.querySelector("#elsewhere")).toBeNull();
+  });
 });
 
 async function key(target: EventTarget, value: string, modifiers: KeyboardEventInit = {}) {

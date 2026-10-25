@@ -5,9 +5,14 @@ import { FieldGroup } from "@/components/superthread/ui/field";
 const FormSectionContext = createContext<string | undefined>(undefined);
 
 // A named form with room for its fields and a ruled save row. The app owns validation, saving and discarding.
-function FormSection({ className, ...props }: React.ComponentProps<"form">) {
+// It owns its title's id, so the form keeps its name; pass titleId when the app needs a known id.
+function FormSection({
+  className,
+  titleId: suppliedTitleId,
+  ...props
+}: React.ComponentProps<"form"> & { titleId?: string }) {
   const id = useId();
-  const titleId = `${id}-title`;
+  const titleId = suppliedTitleId ?? `${id}-title`;
   return (
     <FormSectionContext.Provider value={titleId}>
       <form
@@ -27,10 +32,10 @@ function FormSectionHeader({ className, ...props }: React.ComponentProps<"div">)
 }
 
 // The form's heading supplies its accessible name without a separate label.
-function FormSectionTitle({ className, ...props }: React.ComponentProps<"h2">) {
+function FormSectionTitle({ className, ...props }: Omit<React.ComponentProps<"h2">, "id">) {
   const titleId = useContext(FormSectionContext);
   return (
-    <h2 data-slot="form-section-title" id={titleId} className={cn("type-title text-balance", className)} {...props} />
+    <h2 data-slot="form-section-title" className={cn("type-title text-balance", className)} {...props} id={titleId} />
   );
 }
 

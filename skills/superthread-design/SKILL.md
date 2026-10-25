@@ -5,7 +5,7 @@ description: Superthread, the design system for Maurice's fleet (orbit, quanta, 
 
 # superthread-design
 
-Superthread is the design system Maurice's fleet shares. v2 (`2.0.0-next.3`) is `@mk`, a shadcn registry of Base UI items on one set of tokens, served with its reference site at https://superthread.mauricekleine.com. The site renders every item from its source, in light and dark, beside the foundations and three mock app pages. When this skill and the site disagree, the site is right and this skill needs a fix.
+Superthread is the design system Maurice's fleet shares. v2 (`2.0.0-next.4`) is `@mk`, a shadcn registry of Base UI items on one set of tokens, served with its reference site at https://superthread.mauricekleine.com. The site renders every item from its source, in light and dark, beside the foundations and three mock app pages. When this skill and the site disagree, the site is right and this skill needs a fix.
 
 The sources, in the mauricekleine.com repo:
 
