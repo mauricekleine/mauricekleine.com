@@ -15,7 +15,7 @@ const upstream = (name: string) =>
   ).files[0]!.content;
 
 // the brand items 2.0 adds, each seeded from its base-nova namesake
-export const ADDED = [
+const ADDED = [
   "accordion",
   "alert-dialog",
   "breadcrumb",

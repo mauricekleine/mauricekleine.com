@@ -13,6 +13,7 @@ const marks: Record<IconName, string | null> = {
   close: null,
   trash: null,
   plus: null,
+  more: null,
   tick: "done",
   i: "running",
   pause: "waiting",
