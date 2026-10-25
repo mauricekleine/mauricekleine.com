@@ -10,6 +10,7 @@
 @import "./components-c.css";
 @import "./components-d.css";
 @import "./components-e.css";
+@import "./components-f.css";
 @import "./mock.css";
 
 /* a build renders the registry's payloads and dev their sources, so classes are scanned from both */

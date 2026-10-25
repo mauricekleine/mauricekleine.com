@@ -34,19 +34,22 @@ function Toaster({ className, toastOptions, icons, expand = true, ...props }: To
           closeButtonAriaLabel: toastOptions?.closeButtonAriaLabel ?? "close toast",
           classNames: {
             toast:
-              "isolate flex w-full items-start gap-3 border border-border bg-popover p-4 text-popover-foreground shadow-leaf! texture-contact! [--contact-lift:var(--elevation-leaf-rake)] transition-[transform,opacity,height]! duration-(--duration-travel)! ease-(--ease-brand)! focus-visible:outline-2! focus-visible:outline-offset-2! focus-visible:outline-(--ring)!",
+              "isolate flex w-full flex-wrap items-start gap-3 border border-border bg-popover p-4 text-popover-foreground shadow-leaf! texture-contact! [--contact-lift:var(--elevation-leaf-rake)] transition-[transform,opacity,height]! duration-(--duration-travel)! ease-(--ease-brand)! focus-visible:outline-2! focus-visible:outline-offset-2! focus-visible:outline-(--ring)!",
             icon: "mt-[3px] flex size-3.5 shrink-0 items-center justify-center",
             loader: "relative! top-auto! left-auto! transform-none! transition-none! [&[data-visible=false]]:hidden",
-            content: "flex min-w-0 flex-1 flex-col gap-1",
+            content: "flex min-w-[min(100%,12rem)] flex-1 flex-col gap-1",
             title: "text-ui font-medium",
             description: "type-instrument text-muted-foreground!",
-            // The toast owns the contact detail; its actions keep the button look with a flat disabled edge.
+            // The toast owns the contact detail; its actions keep the button look with a flat disabled edge. When the
+            // words need the width, the actions wrap below them and keep to the end.
             actionButton: cn(
               buttonVariants({ size: "sm" }).replace("texture-disabled", ""),
+              "ml-auto [[data-cancel]+&]:ml-0",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
             ),
             cancelButton: cn(
               buttonVariants({ variant: "outline", size: "sm" }).replace("texture-disabled", ""),
+              "ml-auto",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
             ),
             closeButton:

@@ -389,6 +389,13 @@
   .st-pagehead > .st-pagehead-title {
     margin-top: 28px;
   }
+  /* a long single-word title (breadcrumb, collapsible) steps down with the phone's width rather than overflow it */
+  @media (max-width: 600px) {
+    .st-pagehead > .st-pagehead-title {
+      font-size: min(var(--text-hero), 12.5vw);
+      line-height: 1.1;
+    }
+  }
   .st-pagehead > .st-lede {
     margin-top: 36px;
   }
