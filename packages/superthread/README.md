@@ -58,6 +58,8 @@ Nested dependencies resolve through the same mapping, so every item comes from t
 
 Apps in this repo can import the package directly: `@mauricekleine/superthread/v2/theme.css`, `/v2/plain.css`, `/v2/tokens`, `/v2/tokens.json`, `/fleet` and `/fonts`. `/theme.css` is v1.
 
+`AppShellNav` is the page's banner by default. When embedding a shell inside another landmark, pass `role="group"` to `AppShellNav`. If that layout already owns main, also pass `render={<div />}` to `AppShellGround`. The ship's navigation keeps its accessible name.
+
 ## What v2 holds
 
 | tier  | items                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -158,7 +160,7 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 ## Versions and stamps
 
-- **Version.** `package.json` `version` is the one source for every item, `2.1.0` now. A fix to a served item ships as the next patch, a new item or variant as the next minor, and a changed API as the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
+- **Version.** `package.json` `version` is the one source for every item, `2.1.1` now. A fix to a served item ships as the next patch, a new item or variant as the next minor, and a changed API as the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
 - **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. In CSS, `/* @mk/<item> <version> */` is line 1.
 - **Meta.** Each built item JSON carries `meta: { version, sha256, tier, upstream }`: the hash of its targets and contents, its tier, and the base-nova item and CLI it was seeded from. A block's meta adds `serves`, the apps it serves. Meta stays in the registry and never reaches an installed file.
 - **Paths.** Latest: `/r/<name>.json` and `/r/registry.json`. Pinned: `/r/v/<version>/<name>.json` and `/r/v/<version>/registry.json`. Index: `/r/versions.json`, `{ latest, versions }`.

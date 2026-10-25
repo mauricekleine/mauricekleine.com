@@ -174,7 +174,8 @@ function Page() {
           </dt>
           <dd>
             is the page's main, named workspace, and leaves the gutter around <code>AppShellPanel</code>, the raised
-            working surface. inside a layout that already owns main, it renders a div, as these specimens do.
+            working surface. inside a layout that already owns main, render a div and pass <code>role="group"</code> to{" "}
+            <code>AppShellNav</code>.
           </dd>
         </dl>
       </Section>

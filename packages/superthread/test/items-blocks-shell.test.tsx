@@ -57,6 +57,27 @@ describe("app shell", () => {
     expect(one(host, '[data-mk="fleet-rail"]').classes).toContain("min-h-svh");
   });
 
+  test("the ship name and nav share a banner by default, while caller roles still win", () => {
+    for (const role of [undefined, "banner", "region", "group"] as const) {
+      const shell = (
+        <AppShell
+          current="orbit"
+          sidebar={
+            <AppShellNav ship="orbit" role={role}>
+              <AppShellNavItem render={<a href="/board" />}>board</AppShellNavItem>
+            </AppShellNav>
+          }
+        />
+      );
+      const host = server(role === "group" ? <main>{shell}</main> : shell);
+      const landmark = one(host, `[role="${role ?? "banner"}"]`).el;
+      expect(landmark.querySelector('[data-slot="sidebar-header"]')?.textContent).toBe("orbit");
+      expect(landmark.querySelector('nav[aria-label="orbit"] a')?.getAttribute("href")).toBe("/board");
+      expect(host.querySelectorAll('[role="banner"]')).toHaveLength(role && role !== "banner" ? 0 : 1);
+      expect(host.querySelectorAll('main [role="banner"]')).toHaveLength(0);
+    }
+  });
+
   test("the ground is the page's main, or a div inside a layout that owns main", () => {
     const host = frame();
     const ground = one(host, '[data-slot="app-shell-ground"]').el;

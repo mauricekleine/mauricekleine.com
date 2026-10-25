@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group",
+  "title": "radio group",
+  "description": "square radios: the chosen one boxed in the house ink with its 8 px square",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/radio-group.tsx",
+      "content": "import { Radio as RadioPrimitive } from \"@base-ui/react/radio\";\nimport { RadioGroup as RadioGroupPrimitive } from \"@base-ui/react/radio-group\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/radio-group 2.1.1\n\n// A grid of square choices, with 12 px between controls.\nfunction RadioGroup({ className, ...props }: RadioGroupPrimitive.Props) {\n  return (\n    <RadioGroupPrimitive\n      data-slot=\"radio-group\"\n      data-mk=\"radio-group\"\n      className={cn(\"grid w-full gap-3\", className)}\n      {...props}\n    />\n  );\n}\n\n// An 18 px stock box; chosen, its house edge encloses an 8 px house square. Focus sits outside the box.\nfunction RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {\n  return (\n    <RadioPrimitive.Root\n      data-slot=\"radio-group-item\"\n      className={cn(\n        \"group/radio-group-item peer relative flex size-[18px] shrink-0 items-center justify-center border border-input bg-background after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) data-checked:border-primary aria-invalid:border-error data-disabled:cursor-not-allowed data-disabled:border-disabled data-disabled:bg-faint data-disabled:data-checked:border-disabled\",\n        className,\n      )}\n      {...props}\n    >\n      <RadioPrimitive.Indicator data-slot=\"radio-group-indicator\" className=\"flex items-center justify-center\">\n        <span className=\"size-2 bg-primary group-data-disabled/radio-group-item:bg-disabled\" />\n      </RadioPrimitive.Indicator>\n    </RadioPrimitive.Root>\n  );\n}\n\nexport { RadioGroup, RadioGroupItem };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/radio-group.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.1.1",
+    "sha256": "668b40d3d47d590e0f0d7fb314351cb7f565e2b5deb4313e6266f6fcc36fce42",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "radio-group",
+      "sha256": "874b30662ba338d06362491b663cae9198281a4bc385b6be6425f2de442384d7",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

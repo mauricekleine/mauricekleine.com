@@ -22,7 +22,7 @@ const passed = [];
 const done = (check, detail) => passed.push(detail ? `${check} (${detail})` : check);
 
 // Published versions are immutable, so this list only grows.
-const PUBLISHED_VERSIONS = ["2.0.0-next.1", "2.0.0-next.2", "2.0.0-next.3", "2.0.0-next.4", "2.0.0", "2.1.0"];
+const PUBLISHED_VERSIONS = ["2.0.0-next.1", "2.0.0-next.2", "2.0.0-next.3", "2.0.0-next.4", "2.0.0", "2.1.0", "2.1.1"];
 
 // the client output: cf's build output, or Vite's own when the Cloudflare plugin writes there
 const outputs = process.env.CHECK_BUILD_OUT

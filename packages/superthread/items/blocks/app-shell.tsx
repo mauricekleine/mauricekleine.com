@@ -21,9 +21,16 @@ function AppShell(props: ComponentProps<typeof FleetRail>) {
 }
 
 // The ship's name lines up with home in the rail. Below 900 px the name yields to a wrapped row of links.
-function AppShellNav({ ship, children, className, ...props }: ComponentProps<"div"> & { ship: string }) {
+// Its banner keeps the ship's name and named navigation in one landmark.
+function AppShellNav({
+  ship,
+  children,
+  className,
+  role = "banner",
+  ...props
+}: ComponentProps<"div"> & { ship: string }) {
   return (
-    <div data-mk="app-shell" data-slot="app-shell-nav" className={cn("min-w-0", className)} {...props}>
+    <div data-mk="app-shell" data-slot="app-shell-nav" role={role} className={cn("min-w-0", className)} {...props}>
       <SidebarHeader className="h-[59px] justify-center border-b border-sidebar-border px-2.5 py-0 type-subtitle [@media(max-width:900px)]:hidden">
         {ship}
       </SidebarHeader>
@@ -85,6 +92,7 @@ function AppShellNavItem({
 
 // The app's ground starts level with the frame and keeps 12 px beside the working panel below 900 px.
 // It is the page's main, named workspace; render a div when the app's layout already owns main.
+// Inside another landmark, pass role="group" to AppShellNav.
 function AppShellGround({ className, render, ...props }: useRender.ComponentProps<"main">) {
   return useRender({
     render: render ?? <main />,

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs",
+  "title": "tabs",
+  "description": "tabs with a solid current tab",
+  "dependencies": [
+    "@base-ui/react@^1.8.0",
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/tabs.tsx",
+      "content": "import { Tabs as TabsPrimitive } from \"@base-ui/react/tabs\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/tabs 2.1.1\n\nfunction Tabs({ className, orientation = \"horizontal\", ...props }: TabsPrimitive.Root.Props) {\n  return (\n    <TabsPrimitive.Root\n      data-slot=\"tabs\"\n      data-mk=\"tabs\"\n      data-orientation={orientation}\n      orientation={orientation}\n      className={cn(\"group/tabs flex gap-4 data-horizontal:flex-col\", className)}\n      {...props}\n    />\n  );\n}\n\n// Tabs sit on a rule: the default list draws its own 1 px rule under the tabs, the full width of its box; the line\n// list leaves the rule to the page, for tabs that sit on one the page already draws. Stacked, the tabs keep their\n// bars and the list drops its rule.\nconst tabsListVariants = cva(\n  \"group/tabs-list flex gap-7 text-muted-foreground group-data-horizontal/tabs:items-end group-data-vertical/tabs:flex-col group-data-vertical/tabs:items-start group-data-vertical/tabs:gap-3\",\n  {\n    variants: {\n      variant: {\n        default: \"w-full border-b border-border group-data-vertical/tabs:w-fit group-data-vertical/tabs:border-b-0\",\n        line: \"w-fit\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  },\n);\n\nfunction TabsList({\n  className,\n  variant = \"default\",\n  ...props\n}: TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>) {\n  return (\n    <TabsPrimitive.List\n      data-slot=\"tabs-list\"\n      data-variant={variant}\n      className={cn(tabsListVariants({ variant }), className)}\n      {...props}\n    />\n  );\n}\n\n// The current tab is solid: its word in the foreground over a 2 px bar of the house ink that covers the list's\n// rule. A tab that is not current previews that bar at the half on hover (texture-tabhover, on ::after, under the\n// word). Focus is the base layer's 2 px house ring at 2 px offset.\nfunction TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {\n  return (\n    <TabsPrimitive.Tab\n      data-slot=\"tabs-trigger\"\n      className={cn(\n        \"relative inline-flex items-center gap-2 pb-3 text-ui font-medium whitespace-nowrap text-muted-foreground transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) hover:text-foreground disabled:pointer-events-none disabled:text-disabled aria-disabled:pointer-events-none aria-disabled:text-disabled data-disabled:pointer-events-none data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0\",\n        \"data-active:text-foreground data-active:after:absolute data-active:after:inset-x-0 data-active:after:-bottom-px data-active:after:h-0.5 data-active:after:bg-primary\",\n        \"texture-tabhover\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {\n  return (\n    <TabsPrimitive.Panel\n      data-slot=\"tabs-content\"\n      className={cn(\n        \"flex-1 text-ui focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/tabs.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.1.1",
+    "sha256": "f67001350a8431c7c5886487bf029901c4a77ad54181ea8f532a5bdb380c9113",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "tabs",
+      "sha256": "b4552a0329dd9a6e2bfaf03405c133874df5a4930c7bb3dd84c9ab5c45b89402",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}
