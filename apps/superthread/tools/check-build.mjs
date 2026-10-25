@@ -1,7 +1,9 @@
 // Checks the built site, after `vite build`: every page is there with the theme script first in its head, the
 // served words hold the rules (no em dash, no private host, no prose lifted from the surface contract), every
-// raster says where it came from, the registry is complete and points at the base it was built for, the deploy
-// stamp is HEAD, and the mock pages compose registry components only. Prints each failure and exits 1 on any.
+// raster says where it came from, the registry is complete and serves every published snapshot byte for byte, init
+// points at the base it was built for, the deploy stamp is HEAD, and the mock pages compose registry components only.
+// Prints each failure and exits 1 on any. CHECK_BUILD_OUT and CHECK_BUILD_VERSIONS point it at another client output
+// and another versions/ tree, for a negative control on a copy.
 import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, dirname, extname, join, relative, sep } from "node:path";
@@ -18,10 +20,14 @@ const fail = (check, message) => failures.push(`${check}: ${message}`);
 const passed = [];
 const done = (check, detail) => passed.push(detail ? `${check} (${detail})` : check);
 
+// Published versions are immutable, so this list only grows.
+const PUBLISHED_VERSIONS = ["2.0.0-next.1"];
+
 // the client output: cf's build output, or Vite's own when the Cloudflare plugin writes there
-const out = [join(app, ".cloudflare/output/v0/workers/default/assets"), join(app, "dist/client")].find((dir) =>
-  existsSync(dir),
-);
+const outputs = process.env.CHECK_BUILD_OUT
+  ? [process.env.CHECK_BUILD_OUT]
+  : [join(app, ".cloudflare/output/v0/workers/default/assets"), join(app, "dist/client")];
+const out = outputs.find((dir) => existsSync(dir));
 if (!out) {
   console.error("check-build: no build output; run vite build first");
   process.exit(1);
@@ -164,8 +170,42 @@ const plateFiles = [...gen.matchAll(/"(\/texture\/[^"]+)"/g)].map((hit) => hit[1
 for (const path of plateFiles) if (!existsSync(join(out, path))) fail("plates", `${path} is named but not served`);
 done("plates", `${plateFiles.length} files named`);
 
-// 6. the registry: every catalog item, the snapshots copied byte for byte, init's @mk at the base built for
+// 6. the registry: every catalog item; exactly the published snapshots, in the source and served, each file for file
+// and byte for byte; init's @mk at the base built for
 const r = join(out, "r");
+const versionsDir = process.env.CHECK_BUILD_VERSIONS || join(pkg, "versions");
+const servedVersions = join(r, "v");
+const subdirs = (dir) =>
+  existsSync(dir)
+    ? readdirSync(dir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => entry.name)
+    : [];
+const inventory = (dir) => new Set(walk(dir).map((path) => relative(dir, path).split(sep).join("/")));
+const sourceVersions = subdirs(versionsDir);
+if (!existsSync(versionsDir)) fail("snapshot", "the source versions/ is missing");
+else if (sourceVersions.length === 0) fail("snapshot", "the source versions/ holds no version");
+const snapshotFiles = [];
+for (const version of [...new Set([...PUBLISHED_VERSIONS, ...sourceVersions, ...subdirs(servedVersions)])].sort()) {
+  const committed = join(versionsDir, version, "r");
+  const copy = join(servedVersions, version);
+  if (!PUBLISHED_VERSIONS.includes(version)) fail("snapshot", `${version} is a snapshot but not in PUBLISHED_VERSIONS`);
+  if (!existsSync(join(versionsDir, version))) fail("snapshot", `versions/${version} is missing from the source`);
+  else if (!existsSync(committed)) fail("snapshot", `versions/${version} has no r/`);
+  if (!existsSync(copy)) fail("snapshot", `r/v/${version} is not served`);
+  if (!existsSync(committed) || !existsSync(copy)) continue;
+  const want = inventory(committed);
+  const have = inventory(copy);
+  if (want.size === 0) fail("snapshot", `versions/${version}/r/ is empty`);
+  for (const local of want) {
+    if (!have.has(local)) fail("snapshot", `r/v/${version}/${local} is missing`);
+    else if (!readFileSync(join(copy, local)).equals(readFileSync(join(committed, local))))
+      fail("snapshot", `r/v/${version}/${local} differs from versions/${version}/r/${local}`);
+  }
+  for (const local of have)
+    if (!want.has(local)) fail("snapshot", `r/v/${version}/${local} is served but not in versions/${version}/r/`);
+  snapshotFiles.push(`${version}: ${want.size} files`);
+}
 const registryFile = join(r, "registry.json");
 if (!existsSync(registryFile)) fail("registry", "r/registry.json is missing");
 else {
@@ -174,18 +214,6 @@ else {
     if (!listed.has(item.name)) fail("registry", `r/registry.json does not list ${item.name}`);
     if (!existsSync(join(r, `${item.name}.json`))) fail("registry", `r/${item.name}.json is missing`);
   }
-  const versionsDir = join(pkg, "versions");
-  const versions = existsSync(versionsDir) ? readdirSync(versionsDir) : [];
-  for (const version of versions) {
-    const committed = join(versionsDir, version, "r");
-    if (!existsSync(committed)) continue;
-    for (const file of walk(committed)) {
-      const local = relative(committed, file);
-      const copy = join(r, "v", version, local);
-      if (!existsSync(copy)) fail("snapshot", `r/v/${version}/${local} is missing`);
-      else if (!readFileSync(copy).equals(readFileSync(file))) fail("snapshot", `r/v/${version}/${local} differs`);
-    }
-  }
   const base = (process.env.SUPERTHREAD_BASE_URL || "https://superthread.mauricekleine.com").replace(/\/+$/, "");
   const initFile = join(r, "init.json");
   if (!existsSync(initFile)) fail("init", "r/init.json is missing");
@@ -193,7 +221,7 @@ else {
     const mk = JSON.parse(readFileSync(initFile, "utf8")).config?.registries?.["@mk"];
     if (mk !== `${base}/r/{name}.json`) fail("init", `@mk is ${JSON.stringify(mk)}, not ${base}/r/{name}.json`);
   }
-  done("registry", `${catalog.length} items, ${versions.length} snapshots, @mk at ${base}`);
+  done("registry", `${catalog.length} items, snapshots ${snapshotFiles.join(", ")}, @mk at ${base}`);
 }
 
 // 7. the deploy stamp is the commit built

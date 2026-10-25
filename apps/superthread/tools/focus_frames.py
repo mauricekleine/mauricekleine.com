@@ -1,15 +1,16 @@
 """Count the frames a field draws, from the 2x crops tools/shoot.ts --focus takes after real interaction.
 
-A port of the master world's src/focus.py, with its constants and its verdict, plus three checks of the plan's: the
-2 px edge prints in the house ink (the error ink on an invalid field), no ancestor hugging the box draws a frame of
-its own, and the text never moves inside the box.
+A port of the master world's src/focus.py, with its constants and its verdict held to every side, plus three checks
+of the plan's: the 2 px edge prints in the house ink (the error ink on an invalid field), no ancestor hugging the box
+draws a frame of its own, and the text never moves inside the box.
 
 Each crop holds one field box with PAD css px of page round it. The probe walks four lines into the box, from OUT css
 px outside it (past where any offset ring would sit, short of a neighbour such as an open list) to INSET css px
 inside it (short of the field's padding, its icon, its key cap or its text): left and right ROW px below the box's
 top, top and bottom three quarters across. Every run of pixels that is neither the page colour where the line starts
-nor the box's fill where it ends is a frame edge; the frames a field draws are the most runs on any line. One frame
-of 1 px (rest, or a button inside the box holding focus) or 2 px (focus, or a printed focus demo) is the rule.
+nor the box's fill where it ends is a frame edge; the frames a field draws are the most runs on any line. An enabled
+field draws exactly one run on each of the four lines, 1 px (rest, or a button inside the box holding focus) or 2 px
+(focus, or a printed focus demo) wide, so a frame clipped or covered on one side fails.
 
 usage: focus_frames.py DIR [--html OUT.html]   (DIR holds manifest.jsonl and the crops it names; prints one row per
        crop and exits 1 when any field fails; --html writes the contact sheet)
@@ -29,6 +30,7 @@ sys.path[:0] = [str(HERE), str(HERE.parents[2] / "packages/superthread/scripts/t
 from png import _chunk, read_rgb  # noqa: E402
 
 PAD, K, INSET, OUT, ROW = 8, 2, 9, 6, 4
+SIDES = ("left", "right", "top", "bottom")
 
 
 def px(rows, x, y):
@@ -72,15 +74,18 @@ def frames(path):
 
 
 def verdict(rec, fr):
-    """The master's verdict, unchanged. One frame on every side: 2 css px (4 device px) when focused, 1 css px at
-    rest. After Tab, a click or typing, the control must hold focus, draw no outline of its own, and its box must
-    carry the 2 px outline inside (offset -2 px). A disabled field takes no focus and never shows the 2 px edge."""
+    """The master's verdict, held to each side. One frame on every side: exactly one run on each of the four lines,
+    2 css px (4 device px) wide when focused, 1 css px at rest. After Tab, a click or typing, the control must hold
+    focus, draw no outline of its own, and its box must carry the 2 px outline inside (offset -2 px). A disabled field
+    keeps the master's own rule: it takes no focus and never shows the 2 px edge, and its screened 1 px edge may miss
+    a line, so a side may carry no run."""
     count = max(len(v) for v in fr.values())
     widths = sorted({ln for v in fr.values() for ln, _ in v})
     p = rec.get("probe", {})
     if rec.get("disabled"):
         return count, widths, not rec.get("active") and count <= 1 and all(w <= K for w in widths)
-    ok = count == 1 and widths == [2 * K if rec["focused"] else K]
+    want = 2 * K if rec["focused"] else K
+    ok = all([ln for ln, _ in fr.get(side, [])] == [want] for side in SIDES)
     if rec["how"] in ("tab", "click", "type"):
         ok = ok and rec.get("active") is True and p.get("ctl_outline") in ("none", "self") and p.get("box_outline") == "2px -2px"
     if rec["how"] == "inner":   # a button inside the box holds focus: its own 2 px ring, the box at its 1 px edge

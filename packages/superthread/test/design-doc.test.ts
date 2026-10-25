@@ -7,9 +7,10 @@ import { ELEVATIONS, type Mode } from "../tokens/roles.ts";
 import { phone } from "../tokens/scale.ts";
 
 // DESIGN.md restates the emitted tokens for impeccable and designmd lint, and .impeccable/design.json carries what
-// its frontmatter has no place for. Both are held here to the generated dist/v2/superthread.css and
-// dist/v2/tokens.json, so neither can drift from what ships. A frontmatter colour `x` is --x on :root and .light,
-// and `dark-x` is --x under .dark.
+// its frontmatter has no place for. The frontmatter and the sidecar are held here to the generated
+// dist/v2/superthread.css and dist/v2/tokens.json, so neither can drift from what ships. The prose is held only for
+// its hex colours and its em dashes; its other numbers are not checked. A frontmatter colour `x` is --x on :root and
+// .light, and `dark-x` is --x under .dark.
 
 const read = (path: string) => readFileSync(join(root, path), "utf8");
 const doc = read("DESIGN.md");
@@ -182,12 +183,29 @@ describe(".impeccable/design.json", () => {
     expect(wrong).toEqual([]);
   });
 
-  test("its shadows, motion and breakpoints are the emitted values", () => {
+  test("its shadows and motion name the emitted inventory, and they and its breakpoints are the emitted values", () => {
+    // The inventory is what each mode's own block declares, so an empty or short list cannot pass: every
+    // --elevation-<e> and --elevation-<e>-rake is shadow-<e>[-rake] in light and dark-shadow-<e>[-rake] in dark, and
+    // the motion tokens are --duration-* and --ease-*.
+    const own = { light: blockVars(css, ":root,\n.light"), dark: blockVars(css, ".dark") };
+    const elevations = (mode: Mode) =>
+      Object.keys(own[mode]).flatMap((v) =>
+        v.startsWith("elevation-") ? [`${mode === "dark" ? "dark-" : ""}shadow-${v.slice("elevation-".length)}`] : [],
+      );
+    const wantShadows = [...elevations("light"), ...elevations("dark")].sort();
+    for (const e of ELEVATIONS)
+      expect(wantShadows).toEqual(expect.arrayContaining([`shadow-${e}`, `shadow-${e}-rake`, `dark-shadow-${e}`]));
+    expect(shadows.map((s) => s.name).sort()).toEqual(wantShadows);
+    const wantMotion = Object.keys(own.light)
+      .filter((v) => /^(duration|ease)-/.test(v))
+      .sort();
+    expect(wantMotion.length).toBeGreaterThan(0);
+    expect(motion.map((m) => m.name).sort()).toEqual(wantMotion);
+
     const shadow = (name: string): string | undefined => {
       const m = /^(dark-)?shadow-([a-z]+)(-rake)?$/.exec(name);
       return m ? vars[m[1] ? "dark" : "light"][`elevation-${m[2]}${m[3] ?? ""}`] : undefined;
     };
-    expect(shadows.map((s) => s.name).filter((name) => !ELEVATIONS.some((e) => name.includes(e)))).toEqual([]);
     expect(shadows.filter((s) => s.value !== shadow(s.name))).toEqual([]);
     expect(motion.filter((m) => m.value !== vars.light[m.name])).toEqual([]);
     expect(breakpoints.find((b) => b.name === "phone")?.value).toBe(`${phone.maxWidth}px`);

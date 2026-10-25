@@ -37,7 +37,7 @@ bun apps/superthread/tools/shoot.ts --focus --base http://127.0.0.1:3001 --tag <
 
 ## Checks
 
-- `build` ends in `tools/check-build.mjs`, which lists its eight checks at the top: every page prerendered with the theme script first, the served words, the contract's prose, provenance, plates, the registry against its snapshot and base, the deploy stamp, and the mock pages' imports. A failure names the file; fix that file.
+- `build` ends in `tools/check-build.mjs`, which lists its eight checks at the top: every page prerendered with the theme script first, the served words, the contract's prose, provenance, plates, the registry against the snapshots in `PUBLISHED_VERSIONS` and its base, the deploy stamp, and the mock pages' imports. A failure names the file; fix that file. A new snapshot version goes into `PUBLISHED_VERSIONS` in the change that cuts it.
 - `test` runs `tools/test-worker.mjs` (the Worker's headers and font origins), `bun test src`, `tools/check-fonts.mjs` (`public/fonts/` against `packages/superthread/fonts.ts`) and `build.py verify` over `public/texture/`.
 - `tools/shoot.ts --focus` shoots each field on the field pages and the masthead search at rest, after Tab, after a click and after typing, in both modes at 2x. `tools/focus_frames.py` counts the frames in each crop, and the run exits 1 when any field fails.
 - The clean room can install from a built site instead of a local registry build. Build with the preview's base, serve it, run the clean room against it, then rebuild:
