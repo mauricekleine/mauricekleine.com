@@ -590,47 +590,51 @@ The column of ship marks down the left of every ship surface, on the deep ground
 
 Pass items: base-nova's card, label and separator on the tokens, square and ruled like the rest.
 
-### radio-group
+### Switch
+
+A square track with the input edge on the stock and an input-ink square inside it. On, the track fills with plum and the square crosses to the right in the stock ink, on the quick duration; hover overprints the fill. The track is a control, with the outside ring. Disabled, the track and its square take the disabled ink on faint stock. The world rejected a screened track: on must read as settled.
+
+### Radio group
 
 An 18 px stock square with the input edge and an outside control ring. Chosen, a plum edge encloses an 8 px plum square; disabled, the edge and square take the disabled ink on faint stock. The grid leaves 12 px between choices.
 
-### slider
+### Slider
 
 An 8 px ruled stock track holds a flat plum range, with no screen. The 16 px square thumbs keep their outside control ring when the range input takes keyboard focus, and take the accent fill on hover or drag. Vertical tracks mirror the same dimensions; disabled tracks and thumbs use the disabled edge and range ink.
 
-### toggle
+### Toggle
 
 The button's 40 px height, with 32 and 48 px sizes, Supreme 500 at 14 px, and an outside control ring. Default rests without a visible edge; outline draws the input edge. Pressed is boxed in plum on the accent fill. Only fill, edge and label transition, at the instant duration.
 
-### toggle-group
+### Toggle group
 
 Joined by default at spacing 0, with neighbouring 1 px edges overlapping. The pressed item rises so all four plum edges show, and joined keyboard focus sits inside the item. Positive spacing separates the controls and restores the outside ring; vertical groups share horizontal edges instead.
 
-### button-group
+### Button group
 
 Actions join on shared 1 px edges, horizontally or vertically, and the focused child rises above its neighbours. The text addon is a 40 px secondary-stock box with an input edge and muted UI words. A separator stretches in the input ink.
 
-### kbd
+### Kbd
 
 A 20 px keycap, at least 20 px wide, with a quiet edge on muted stock. Keys set in Fragment Mono at 11 px without caps or tracking. Inside a tooltip they take the inverted stock ink, with an opaque foreground fill and a muted edge; groups leave 4 px between keys.
 
-### field
+### Field
 
 Fieldsets keep their upstream parts and orientation variants. Legends set in mono caps, labels and titles at the UI step, and descriptions at the instrument step. Invalid labels take the error ink, disabled labels the disabled ink. A checked choice card is boxed in plum on the accent fill with 16 px padding. Every error message leads with the bang square, including each line of a list; separators carry a meta label on the stock over a 1 px rule.
 
-### native-select
+### Native select
 
 The native select is a flat 40 px field box, or 32 px at the small size, with the input edge and the same inside focus edge as the select trigger. Invalid changes the edge and focus ink together; disabled uses the faint fill and disabled label. A pixel chevron sits at the right without taking pointer input, and options keep native platform semantics.
 
-### accordion
+### Accordion
 
 Rows run between full-width 1 px rules. The 48 px trigger keeps its focus ring inside and turns one pixel chevron on the quick duration. The panel's measured height travels on the same duration and brand ease; its muted UI copy keeps 16 px below it, with links in the house ink.
 
-### breadcrumb
+### Breadcrumb
 
 A wrapping path at the instrument step, with muted links that take foreground ink on hover and the control ring on keyboard focus. The current page prints in foreground ink. Right-facing pixel chevrons separate the items, and a 20 px square holds the more glyph for an omitted stretch.
 
-### resizable
+### Resizable
 
 A 1 px rule separates full-size panels, with an invisible 8 px hit area; hover and drag turn the rule plum. With a handle, a 6 by 16 px grip holds two whole-pixel lines and draws the focus ring inside its box. Without a grip the ring has zero offset around the rule, which has no room for an inside ring. Vertical groups mirror the layout; the installed v4 primitive supplies the hover, active and disabled states.
 
