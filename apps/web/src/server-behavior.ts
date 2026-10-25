@@ -25,6 +25,7 @@ type SubscribePage = {
 // 3. essay email signup with double opt-in: POST /subscribe, GET /subscribe/confirm
 // 4. the mk.wtf short links (src/links.ts)
 // 5. mk.wtf/buttons, the one page on mk.wtf (apps/buttons builds it into public/)
+// 6. /superthread, now a 301 to superthread.mauricekleine.com; its marks stay here
 
 // every html page has a hand-written .md twin next to it
 function markdownMirror(pathname: string): string | null {
@@ -71,6 +72,7 @@ function uncached404(res: Response, extra: Record<string, string> = {}): Respons
 // the page lives at mk.wtf/buttons, its hashed plates and fonts under /buttons/a/
 const BUTTONS_HOST = "mk.wtf";
 const SITE_HOSTS = ["www.mauricekleine.com", "mauricekleine.com"];
+const SUPERTHREAD_ORIGIN = "https://superthread.mauricekleine.com";
 
 function buttonsPath(pathname: string): string | null {
   if (pathname.startsWith("/buttons/a/")) return pathname;
@@ -627,6 +629,15 @@ export async function handleSiteRequest(
     return Response.redirect(url.toString(), 301);
   }
 
+  // the old specimen page moved to superthread's own site; its marks stay here
+  if (
+    SITE_HOSTS.includes(url.hostname) &&
+    (url.pathname === "/superthread" || url.pathname === "/superthread/") &&
+    (request.method === "GET" || request.method === "HEAD")
+  ) {
+    return Response.redirect(`${SUPERTHREAD_ORIGIN}/${url.search}`, 301);
+  }
+
   if (url.pathname === "/subscribe" && request.method === "POST") {
     return handleSubscribe(request, env, url);
   }
@@ -663,7 +674,7 @@ export async function handleSiteRequest(
     // Cloudflare's HTML asset handling asks for slash forms during prerender.
     const pagePath = url.pathname.endsWith("/") && url.pathname !== "/" ? url.pathname.slice(0, -1) : url.pathname;
     if (
-      (markdownMirror(pagePath) || pagePath === "/404" || pagePath === "/superthread") &&
+      (markdownMirror(pagePath) || pagePath === "/404") &&
       renderPage &&
       (request.method === "GET" || request.method === "HEAD")
     ) {

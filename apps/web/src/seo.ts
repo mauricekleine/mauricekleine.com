@@ -46,7 +46,6 @@ type PageSeo = {
   published?: string;
   turnstile?: boolean;
   relativeStylesheet?: boolean;
-  siteStylesheet?: boolean;
   jsonLd?: StructuredData;
 };
 
@@ -120,8 +119,7 @@ function buildHead(page: PageSeo): { meta: Meta[]; links: Link[]; scripts: Scrip
       crossOrigin: "",
     },
   );
-  if (page.siteStylesheet !== false)
-    links.push({ rel: "stylesheet", href: `${page.relativeStylesheet ? "" : "/"}style.css?v=20260927-stock` });
+  links.push({ rel: "stylesheet", href: `${page.relativeStylesheet ? "" : "/"}style.css?v=20260927-stock` });
 
   const scripts: Script[] = [];
   if (page.turnstile)
@@ -226,18 +224,6 @@ export function notFoundHead() {
     description: "this page drifted out of orbit",
     robots: "noindex",
   });
-}
-
-export function superthreadHead() {
-  const head = buildHead({
-    path: "/superthread",
-    title: "superthread | maurice kleine",
-    description: "one thread through the things maurice builds. a theme for stock shadcn components.",
-    ogType: "website",
-    siteStylesheet: false,
-  });
-  head.links.push({ rel: "stylesheet", href: "/superthread/specimen.css" });
-  return head;
 }
 
 export function essayHead(essay: Essay) {

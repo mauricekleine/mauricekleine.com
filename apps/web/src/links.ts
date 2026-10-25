@@ -44,6 +44,8 @@ export const projects: Project[] = [
   },
   { names: ["m", "mockly"], url: mockly.url, links: [] },
   { names: ["h", "hacka", "hackadam"], url: hackadam.url, links: [] },
+  // the design system, not a side quest, so its url lives here rather than in the manifest
+  { names: ["superthread"], url: "https://superthread.mauricekleine.com/", links: [] },
 ];
 
 function buildTable(): Map<string, string> {

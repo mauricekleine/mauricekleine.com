@@ -407,6 +407,7 @@ const shortLinks = {
   h: "https://hackadam.nl/",
   hacka: "https://hackadam.nl/",
   hackadam: "https://hackadam.nl/",
+  superthread: "https://superthread.mauricekleine.com/",
 };
 for (const name of ["f", "fluncle"])
   Object.assign(shortLinks, {
@@ -426,8 +427,8 @@ for (const name of ["n", "nonobench", "bench"])
     [`${name}/github`]: "https://github.com/mauricekleine/nonobench",
   });
 
-test("mk.wtf redirects all 45 short links on both hosts", async () => {
-  assert.equal(Object.keys(shortLinks).length, 45);
+test("mk.wtf redirects all 46 short links on both hosts", async () => {
+  assert.equal(Object.keys(shortLinks).length, 46);
   for (const host of ["mk.wtf", "www.mk.wtf"]) {
     for (const [path, target] of Object.entries(shortLinks)) {
       const res = await worker.fetch(new Request(`https://${host}/${path}`), noAssets);
@@ -499,5 +500,35 @@ test("every other way to the buttons page leads to mk.wtf/buttons", async () => 
     const res = await worker.fetch(new Request(url), noAssets);
     assert.equal(res.status, status, url);
     assert.equal(res.headers.get("location"), location, url);
+  }
+});
+
+test("/superthread moves to superthread.mauricekleine.com, and its marks stay", async () => {
+  for (const method of ["GET", "HEAD"]) {
+    for (const [path, location] of [
+      ["/superthread", "https://superthread.mauricekleine.com/"],
+      ["/superthread/", "https://superthread.mauricekleine.com/"],
+      ["/superthread?ref=x", "https://superthread.mauricekleine.com/?ref=x"],
+    ]) {
+      const res = await worker.fetch(new Request(origin + path, { method }), noAssets);
+      assert.equal(res.status, 301, `${method} ${path}`);
+      assert.equal(res.headers.get("location"), location, `${method} ${path}`);
+    }
+  }
+  const apex = await worker.fetch(new Request("https://mauricekleine.com/superthread?ref=x"), noAssets);
+  assert.equal(apex.status, 301);
+  assert.equal(apex.headers.get("location"), origin + "/superthread?ref=x");
+
+  const assets = {
+    ASSETS: { fetch: async (request) => new Response(`asset ${new URL(request.url).pathname}`) },
+  };
+  for (const [path, method] of [
+    ["/superthread/marks/orbit.svg", "GET"],
+    ["/superthread/nonobench-mark.svg", "GET"],
+    ["/superthread", "POST"],
+  ]) {
+    const res = await worker.fetch(new Request(origin + path, { method }), assets);
+    assert.equal(res.status, 200, `${method} ${path}`);
+    assert.equal(await res.text(), `asset ${path}`);
   }
 });

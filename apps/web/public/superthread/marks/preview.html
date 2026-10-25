@@ -4,12 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>fleet marks</title>
-  <link rel="stylesheet" href="../specimen.css">
+  <link rel="stylesheet" href="/style.css">
   <style>
-    body { background: #fbfaf7; color: #1a1a1a; }
-    main { width: min(100% - 32px, 1300px); margin: 48px auto 80px; }
-    h1 { font: 600 clamp(28px, 4vw, 44px)/1.1 var(--font-display); }
-    header p { margin: 12px 0 36px; }
+    /* style.css brings the v1 faces and www's page rules; undo the page rules here */
+    body { background: #fbfaf7; color: #1a1a1a; font-size: 16px; line-height: 1.5; }
+    body::before, body::after { content: none; }
+    img { display: block; vertical-align: middle; }
+    section { margin: 0; }
+    main { width: min(100% - 32px, 1300px); max-width: none; margin: 48px auto 80px; padding: 0; }
+    h1 { font: 600 clamp(28px, 4vw, 44px)/1.1 var(--font-display); letter-spacing: normal; }
+    header p, header p:last-child { margin: 12px 0 36px; }
+    .rail-wrap p { margin: 0; }
     .grounds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
     .ground { padding: 24px; border: 1px solid #d9d5cc; border-radius: 8px; overflow-x: auto; }
     .paper { background: #fbfaf7; color: #1a1a1a; }
