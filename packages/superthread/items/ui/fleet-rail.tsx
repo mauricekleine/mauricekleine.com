@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useId } from "react";
 
 import { fleet, type ShipId } from "@/components/superthread/lib/fleet";
 import { cn } from "@/components/superthread/lib/utils";
@@ -8,7 +8,8 @@ import { TooltipProvider } from "@/components/superthread/ui/tooltip";
 const MARK_BASE = "https://superthread.mauricekleine.com/marks";
 
 // The rail and the ship's nav print on the deep ground. Every cell is a 32 px mark; hover or focus inverts the
-// cell, swaps in the light mark and slides the name out as a joined tab. At 900 px and below the rail is a bar.
+// cell, swaps in the light mark and slides out a joined tab, the ship's name over its descriptor. At 900 px and below
+// the rail is a bar.
 //
 // The ground keeps the mode it is in, and the frame on it (the rail and the ship's sidebar) prints in the dark palette
 // in both modes, as the world's gutter does. GROUND holds the ground's roles where the frame paints them, and
@@ -34,10 +35,14 @@ const boxed =
 // while hidden: crossing 900 px moves the clip from one form to the other, and that move never shows. The visibility
 // turns on as the tab opens and off once it has closed, so the slide plays in full; the cell carries the ship's name.
 const tab =
-  "pointer-events-none invisible absolute top-[-1px] bottom-[-1px] left-full z-30 flex items-center bg-foreground pr-[18px] pl-[14px] text-summary font-medium whitespace-nowrap text-background [clip-path:inset(0_100%_0_0)] transition-[clip-path,visibility] duration-(--duration-quick) ease-(--ease-brand) motion-reduce:transition-none group-hover/cell:visible group-hover/cell:[clip-path:inset(0)] group-focus-visible/cell:visible group-focus-visible/cell:[clip-path:inset(0)] [@media(max-width:900px)]:top-full [@media(max-width:900px)]:bottom-auto [@media(max-width:900px)]:left-[-1px] [@media(max-width:900px)]:pt-2.5 [@media(max-width:900px)]:pb-3 [@media(max-width:900px)]:[clip-path:inset(0_0_100%_0)] [@media(max-width:900px)]:group-hover/cell:[clip-path:inset(0)] [@media(max-width:900px)]:group-focus-visible/cell:[clip-path:inset(0)]";
+  "pointer-events-none invisible absolute top-[-1px] bottom-[-1px] left-full z-30 flex flex-col justify-center gap-0.5 bg-foreground pr-[18px] pl-[14px] whitespace-nowrap text-background [clip-path:inset(0_100%_0_0)] transition-[clip-path,visibility] duration-(--duration-quick) ease-(--ease-brand) motion-reduce:transition-none group-hover/cell:visible group-hover/cell:[clip-path:inset(0)] group-focus-visible/cell:visible group-focus-visible/cell:[clip-path:inset(0)] [@media(max-width:900px)]:top-full [@media(max-width:900px)]:bottom-auto [@media(max-width:900px)]:left-[-1px] [@media(max-width:900px)]:pt-2.5 [@media(max-width:900px)]:pb-3 [@media(max-width:900px)]:[clip-path:inset(0_0_100%_0)] [@media(max-width:900px)]:group-hover/cell:[clip-path:inset(0)] [@media(max-width:900px)]:group-focus-visible/cell:[clip-path:inset(0)]";
 // From the fourth cell on, the bar's tab hangs right so it stays on screen.
 const tabEnd =
-  "[@media(max-width:900px)]:right-[-1px] [@media(max-width:900px)]:left-auto [@media(max-width:900px)]:pr-[14px] [@media(max-width:900px)]:pl-[18px]";
+  "[@media(max-width:900px)]:right-[-1px] [@media(max-width:900px)]:left-auto [@media(max-width:900px)]:pr-[14px] [@media(max-width:900px)]:pl-[18px] [@media(max-width:900px)]:text-right";
+// The tab prints the name over the ship's one-line descriptor. The tab is the dark frame's foreground, the light stock,
+// so the descriptor takes the light palette's muted ink: it opens a light scope of its own.
+const tabName = "text-summary/[18px] font-medium";
+const tabDesc = "light text-[12px]/[16px] text-muted-foreground";
 
 export function FleetRail({
   current,
@@ -62,6 +67,7 @@ export function FleetRail({
   // classes for the wrapper that paints the ground and holds the rail, its nav and the page
   className?: string;
 }) {
+  const uid = useId();
   const base = markBase.replace(/\/+$/, "");
   const mark = (id: string, file: string) => `${base}/${id}/${file}`;
   const homeMark = <img src={mark("superthread", "superthread-dark.svg")} alt="" width={32} height={32} />;
@@ -94,9 +100,13 @@ export function FleetRail({
               {fleet.map((ship, index) => {
                 const href = hrefs[ship.id];
                 const isCurrent = current === ship.id;
+                const describedBy = `${uid}-${ship.id}`;
                 const name = (
                   <span data-slot="fleet-rail-label" className={cn(tab, index >= 3 && tabEnd)}>
-                    {ship.name}
+                    <span className={tabName}>{ship.name}</span>
+                    <span data-slot="fleet-rail-description" id={describedBy} className={tabDesc}>
+                      {ship.desc}
+                    </span>
                   </span>
                 );
                 const dark = mark(ship.id, ship.mark.dark);
@@ -108,6 +118,7 @@ export function FleetRail({
                         data-slot="fleet-rail-cell"
                         href={href}
                         aria-label={ship.name}
+                        aria-describedby={describedBy}
                         aria-current={isCurrent ? "page" : undefined}
                         className={cn(cell, linked, isCurrent && boxed)}
                       >
@@ -132,6 +143,7 @@ export function FleetRail({
                         data-slot="fleet-rail-cell"
                         role="link"
                         aria-label={ship.name}
+                        aria-describedby={describedBy}
                         aria-disabled="true"
                         aria-current={isCurrent ? "page" : undefined}
                         className={cn(cell, isCurrent && boxed)}

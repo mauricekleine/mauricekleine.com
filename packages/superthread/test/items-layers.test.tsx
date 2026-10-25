@@ -504,6 +504,28 @@ describe("the layers rendered", () => {
     expect(server(<toastItem.ToastIcon type={undefined} />).innerHTML).toBe("");
   });
 
+  test("the toast viewport names its region in lowercase, and an aria-label passed in names it instead", async () => {
+    const manager = toastItem.createToastManager();
+    await client(
+      <>
+        <toastItem.Toaster toastManager={manager} timeout={0} />
+        <toastItem.ToastProvider>
+          <toastItem.ToastViewport data-testid="own" aria-label="fleet alerts" />
+        </toastItem.ToastProvider>
+      </>,
+    );
+    await act(async () => {
+      manager.add({ title: "or-412 picked up", type: "info" });
+    });
+
+    const named = (selector: string) =>
+      [...document.body.querySelectorAll(`[data-slot="toast-viewport"]${selector}`)].map((el) =>
+        el.getAttribute("aria-label"),
+      );
+    expect(named(":not([data-testid])")).toEqual(["notifications"]);
+    expect(named('[data-testid="own"]')).toEqual(["fleet alerts"]);
+  });
+
   test("the rail takes a className on the wrapper that paints the ground, merged with its own", () => {
     const wrapper = server(<FleetRail current="orbit" className="st-frame min-h-0" />).querySelector(
       '[data-mk="fleet-rail"]',
@@ -533,6 +555,34 @@ describe("the layers rendered", () => {
     }
     // An invisible tab names nothing, so the cell names its ship.
     expect(cells.map((cell) => cell.getAttribute("aria-label"))).toEqual(fleet.map((ship) => ship.name));
+  });
+
+  // Integration-only in S1.F round 2b: the descriptors are fleet.ts's, which S1.F-L generates from the vendored DESC.
+  test("the rail's tab prints the ship's name over its descriptor, in the light palette's muted ink in both modes", () => {
+    for (const mode of ["light", "dark"]) {
+      const dom = server(
+        <div className={mode}>
+          <FleetRail current="orbit" hrefs={{ orbit: "/orbit" }} />
+        </div>,
+      );
+      const frame = dom.querySelector('[data-slot="fleet-rail-frame"]')!;
+      const cells = [...dom.querySelectorAll('[data-slot="fleet-rail-cell"]')];
+      const lines = (cell: Element) =>
+        [...cell.querySelector('[data-slot="fleet-rail-label"]')!.children].map((line) => line.textContent);
+      expect(cells.map(lines)).toEqual(fleet.map((ship) => [ship.name, ship.desc]));
+      expect(fleet.every((ship) => typeof ship.desc === "string" && ship.desc.length > 0)).toBe(true);
+
+      for (const cell of cells) {
+        const desc = cell.querySelector('[data-slot="fleet-rail-description"]')!;
+        // The tab is the dark frame's foreground, the light stock, so the descriptor opens a light scope inside it.
+        expect(classesOf(desc)).toEqual(expect.arrayContaining(["light", "text-muted-foreground"]));
+        expect(darkScope(desc)).toBe(frame);
+        // A reader hears it as the cell's description; the cell's name stays the ship's.
+        expect(desc.id).not.toBe("");
+        expect(cell.getAttribute("aria-describedby")).toBe(desc.id);
+      }
+      expect(new Set(cells.map((cell) => cell.getAttribute("aria-describedby"))).size).toBe(cells.length);
+    }
   });
 
   test("a menu skeleton draws the same bar on the server and in the client that hydrates it", async () => {
@@ -618,6 +668,15 @@ describe("the layers rendered", () => {
     } finally {
       await act(async () => viewport.setViewport({ width }));
     }
+  });
+
+  test("the sidebar trigger's arrow turns to point the other way on a right-to-left page", () => {
+    const dom = server(
+      <s.SidebarProvider>
+        <s.SidebarTrigger />
+      </s.SidebarProvider>,
+    );
+    expect(classesOf(dom.querySelector('[data-slot="sidebar-trigger"] svg')!)).toEqual(["rtl:rotate-180"]);
   });
 
   test("the dialog and the toast export shadcn's names, and the toast its list and icon", () => {

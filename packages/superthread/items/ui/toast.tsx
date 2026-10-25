@@ -14,10 +14,12 @@ function ToastPortal({ ...props }: ToastPrimitive.Portal.Props) {
   return <ToastPrimitive.Portal data-slot="toast-portal" {...props} />;
 }
 
+// The region's name is lowercase, as every label here is; pass aria-label to name it otherwise.
 function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
   return (
     <ToastPrimitive.Viewport
       data-slot="toast-viewport"
+      aria-label="notifications"
       className={cn(
         "pointer-events-none fixed inset-x-4 bottom-4 z-50 mx-auto w-auto max-w-[420px] sm:right-4 sm:left-auto sm:mx-0 sm:w-full",
         className,
