@@ -283,7 +283,7 @@
       "module": "scripts/texture/master/fields.py",
       "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
     },
-    "band-light.31209fd0.png": {
+    "band-light.9bd28dd3.png": {
       "plate": "band",
       "mode": "light",
       "plane": null,
@@ -292,7 +292,7 @@
       "function": "fields.opener_png",
       "params": {
         "w": 696,
-        "h": 120,
+        "h": 160,
         "mode": "light",
         "spot": "#aa337a",
         "path": [
@@ -327,16 +327,16 @@
         ],
         "width": 36
       },
-      "pixels_sha256": "31209fd0d970c16be0ecb8f5a768e2761c046915d78601895ad53019ea3ecfd6",
+      "pixels_sha256": "9bd28dd3b1bae28684296f6b22f191118450e5c8bd0220ec33ec39a889bf4653",
       "planes_sha256": [
-        "052969803f9592e4a33d53a51397744007edc2a540ca6811e257435ab2ae24c9",
-        "fb2434744c42f54cbf6e66a6283d8810256b251324c971da60303c791db05fec"
+        "6d6a672c7ad98b5f51ac0074b12e6282c5905b6def835796ca9b97e058b64e75",
+        "ae6bd00ac14d252bc4a48a85daf7477ce4ed2595c2d96609724103eee7ea7d50"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
       "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
     },
-    "band-dark.9d18232f.png": {
+    "band-dark.73cda9f0.png": {
       "plate": "band",
       "mode": "dark",
       "plane": null,
@@ -345,7 +345,7 @@
       "function": "fields.opener_png",
       "params": {
         "w": 696,
-        "h": 120,
+        "h": 160,
         "mode": "dark",
         "spot": "#c074a1",
         "path": [
@@ -380,16 +380,16 @@
         ],
         "width": 36
       },
-      "pixels_sha256": "9d18232fcb05482e4096db9db1648a3b2d399adbc8550c9b8a6aaf81a1640570",
+      "pixels_sha256": "73cda9f0a4d41321f04a2c87530854b79ff78ba44aaaa2dfb91440f85c60a383",
       "planes_sha256": [
-        "1473df0bfb329e095144f4d75f4c5cd76a8b950b174ec8005ef70a4962963306",
-        "5550caf3f35ab0b90b9c89dacfc3fe24512af9db54051775d16625e0c3d71711"
+        "d3b3d207893b890552e47e04ef81454e5b81c6b59ae1ff1e16eb415ebf8887f1",
+        "263e00dcc1d2ce3ab374a08586fccba412d86d81d4e7a162f9fdb33bc3a9317a"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
       "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
     },
-    "band-phone-light.cc1bb5e1.png": {
+    "band-phone-light.3e916a01.png": {
       "plate": "band-phone",
       "mode": "light",
       "plane": null,
@@ -398,7 +398,7 @@
       "function": "fields.opener_png",
       "params": {
         "w": 342,
-        "h": 120,
+        "h": 136,
         "mode": "light",
         "spot": "#aa337a",
         "path": [
@@ -433,16 +433,16 @@
         ],
         "width": 36
       },
-      "pixels_sha256": "cc1bb5e16b8c10c1d43e13fa813939d9129300177fc684cd9d8759fb734966ef",
+      "pixels_sha256": "3e916a017657b37c50d3b0fed29cd3a8029a07c993065969d136593309d807d1",
       "planes_sha256": [
-        "471e472943964f8aca2179b072286e999fd7f5ad8f2ea42e4929578bbc0ada04",
-        "ad18c0f7a0186847f285aa505546c715645e3c6e0cf1a60479e950a2a4377345"
+        "f23161eccd1431d1515799b2044e0f5dd29d5e8bf7ae95a54bc033a0d0e91940",
+        "609c8575f95648097cc4fc139225e56f2cb12d904105c9eb5118b3cf901d0590"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
       "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
     },
-    "band-phone-dark.fc3dfc22.png": {
+    "band-phone-dark.7d3a9ed3.png": {
       "plate": "band-phone",
       "mode": "dark",
       "plane": null,
@@ -451,7 +451,7 @@
       "function": "fields.opener_png",
       "params": {
         "w": 342,
-        "h": 120,
+        "h": 136,
         "mode": "dark",
         "spot": "#c074a1",
         "path": [
@@ -486,10 +486,10 @@
         ],
         "width": 36
       },
-      "pixels_sha256": "fc3dfc2215ef956906cde54eb9b00410723959d1f0ccee2bee1d097aaaad4b9d",
+      "pixels_sha256": "7d3a9ed35137de071b4ee80d85f7f79fcff52db5e60d2899ab7930b7f0c9d78b",
       "planes_sha256": [
-        "8fb17deeff1dbfdc648a0b526941cd41552a2f27532c6755b5a090b91761d078",
-        "33c0db0bc467356d180fc07a94b6c49f73068a8a28d6ff1df382cbe0843e1e7f"
+        "c85695ee72bf6f183c6b89fc0b244498645b0fdea9359db90a7fee9cb85b36cb",
+        "6e46dcf80340b008dec3cb21c4a7d4646e5e7551f6e0c3fba9152b885e8e4b0d"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",

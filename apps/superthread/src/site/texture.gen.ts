@@ -23,19 +23,19 @@ export const plates = {
   "band": {
     "form": "composite",
     "w": 696,
-    "h": 120,
+    "h": 160,
     "url": {
-      "light": "/texture/band-light.31209fd0.png",
-      "dark": "/texture/band-dark.9d18232f.png"
+      "light": "/texture/band-light.9bd28dd3.png",
+      "dark": "/texture/band-dark.73cda9f0.png"
     }
   },
   "band-phone": {
     "form": "composite",
     "w": 342,
-    "h": 120,
+    "h": 136,
     "url": {
-      "light": "/texture/band-phone-light.cc1bb5e1.png",
-      "dark": "/texture/band-phone-dark.fc3dfc22.png"
+      "light": "/texture/band-phone-light.3e916a01.png",
+      "dark": "/texture/band-phone-dark.7d3a9ed3.png"
     }
   },
   "figure": {
