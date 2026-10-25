@@ -733,12 +733,15 @@ async function main(): Promise<boolean> {
         "init --reinstall",
       );
       const afterReinstall = await hashTree(app, "src/components/superthread");
-      styles = { keepsImportAfterApply: keptAfterApply, keepsImportAfterReinstall: await keeps() };
+      const keptAfterReinstall = await keeps();
+      styles = { keepsImportAfterApply: keptAfterApply, keepsImportAfterReinstall: keptAfterReinstall };
       detail.styles = styles;
       const byApply = changed(before, afterApply);
       const byReinstall = changed(afterApply, afterReinstall);
       check(byApply.length === 0, `apply nova changed: ${byApply.join(", ")}`);
+      check(keptAfterApply, `apply nova left src/styles.css without ${SUPERTHREAD_IMPORT}`);
       check(byReinstall.length === 0, `init --reinstall changed: ${byReinstall.join(", ")}`);
+      check(keptAfterReinstall, `init --reinstall left src/styles.css without ${SUPERTHREAD_IMPORT}`);
       detail.files = before.size;
     });
 
