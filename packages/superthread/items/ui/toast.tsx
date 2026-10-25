@@ -1,4 +1,5 @@
 import { Toast as ToastPrimitive } from "@base-ui/react/toast";
+import type { ReactNode } from "react";
 import { cn } from "@/components/superthread/lib/utils";
 
 import { Button } from "@/components/superthread/ui/button";
@@ -148,10 +149,18 @@ function ToastIcon({ type }: { type: string | undefined }) {
   );
 }
 
+const oneAction = () => <ToastAction />;
+
 // The toasts of the nearest provider, as the Toaster prints them. Put it in a viewport of your own to print a stack
-// somewhere else, and use ToastIcon to build a list of your own.
-function ToastList() {
-  const { toasts } = ToastPrimitive.useToastManager();
+// somewhere else, and use ToastIcon to build a list of your own. actions fills each toast's action row from the toast,
+// for example its ToastAction and a ghost Button beside it; by default the row holds the toast's one action. The row
+// sits 14 px under the text with 8 px between its buttons, and takes no room when it is empty.
+function ToastList<Data extends object>({
+  actions = oneAction,
+}: {
+  actions?: (toast: ToastPrimitive.Root.ToastObject<Data>) => ReactNode;
+}) {
+  const { toasts } = ToastPrimitive.useToastManager<Data>();
 
   return toasts.map((toastItem) => (
     <Toast key={toastItem.id} toast={toastItem}>
@@ -160,7 +169,9 @@ function ToastList() {
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <ToastTitle />
           <ToastDescription />
-          <ToastAction className="mt-1.5" />
+          <div data-slot="toast-actions" className="mt-2.5 flex gap-2 empty:hidden">
+            {actions(toastItem)}
+          </div>
         </div>
         <ToastClose />
       </ToastContent>

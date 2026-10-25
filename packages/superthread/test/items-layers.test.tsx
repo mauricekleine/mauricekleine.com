@@ -1,9 +1,11 @@
+import type { ToastManagerAddOptions } from "@base-ui/react/toast";
 import { afterEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { act, type ReactNode } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
+import { Button } from "@/components/superthread/ui/button";
 import * as dialogItem from "@/components/superthread/ui/dialog";
 import { fleet } from "@/components/superthread/lib/fleet";
 import { FleetRail } from "@/components/superthread/ui/fleet-rail";
@@ -502,6 +504,70 @@ describe("the layers rendered", () => {
     expect(pathOf(toasts[0]!.querySelector('[data-slot="toast-icon"]'))).toBe(waiting);
     expect(pathOf(server(<toastItem.ToastIcon type="warning" />))).toBe(waiting);
     expect(server(<toastItem.ToastIcon type={undefined} />).innerHTML).toBe("");
+  });
+
+  test("ToastList prints a toast's one action by default, and its actions slot fills the row from the toast", async () => {
+    type Printed = { undo?: string };
+    const notes: ToastManagerAddOptions<Printed>[] = [
+      {
+        title: "chapter 7 published",
+        type: "success",
+        timeout: 0,
+        actionProps: { children: "view chapter" },
+        data: { undo: "undo" },
+      },
+      { title: "or-412 picked up", type: "info", timeout: 0 },
+    ];
+    const stock = toastItem.createToastManager<Printed>();
+    const slotted = toastItem.createToastManager<Printed>();
+    await client(
+      <>
+        <toastItem.ToastProvider toastManager={stock}>
+          <toastItem.ToastViewport data-testid="stock" className="relative">
+            <toastItem.ToastList />
+          </toastItem.ToastViewport>
+        </toastItem.ToastProvider>
+        <toastItem.ToastProvider toastManager={slotted}>
+          <toastItem.ToastViewport data-testid="slotted" className="relative">
+            <toastItem.ToastList<Printed>
+              actions={(item) => (
+                <>
+                  <toastItem.ToastAction />
+                  {item.data?.undo && (
+                    <Button variant="ghost" size="sm">
+                      {item.data.undo}
+                    </Button>
+                  )}
+                </>
+              )}
+            />
+          </toastItem.ToastViewport>
+        </toastItem.ToastProvider>
+      </>,
+    );
+    await act(async () => {
+      for (const manager of [stock, slotted]) for (const note of notes) manager.add(note);
+    });
+
+    // Each toast's actions, every button but its close, as slot and text, by title.
+    const rows = (testid: string) =>
+      Object.fromEntries(
+        [...document.body.querySelectorAll(`[data-testid="${testid}"] [data-mk="toast"]`)].map((toast) => [
+          toast.querySelector('[data-slot="toast-title"]')?.textContent,
+          [...toast.querySelectorAll('button:not([data-slot="toast-close"])')].map(
+            (el) => `${el.getAttribute("data-slot")}: ${el.textContent}`,
+          ),
+        ]),
+      );
+    expect(rows("stock")).toEqual({
+      "chapter 7 published": ["toast-action: view chapter"],
+      "or-412 picked up": [],
+    });
+    expect(rows("slotted")).toEqual({
+      "chapter 7 published": ["toast-action: view chapter", "button: undo"],
+      "or-412 picked up": [],
+    });
+    expect(nullsRing(document.body)).toEqual([]);
   });
 
   test("the toast viewport names its region in lowercase, and an aria-label passed in names it instead", async () => {
