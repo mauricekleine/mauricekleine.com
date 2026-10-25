@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "native-select",
+  "title": "native select",
+  "description": "the browser's own select in a field box",
+  "registryDependencies": [
+    "@mk/glyphs",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/native-select.tsx",
+      "content": "import * as React from \"react\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n\nimport { Icon } from \"@/components/superthread/ui/glyphs\";\n// @mk/native-select 2.0.0\n\ntype NativeSelectProps = Omit<React.ComponentProps<\"select\">, \"size\"> & {\n  size?: \"sm\" | \"default\";\n};\n\n// The native box owns the same inside focus edge as the select trigger, without a texture.\nfunction NativeSelect({ className, size = \"default\", ...props }: NativeSelectProps) {\n  return (\n    <div\n      className={cn(\"group/native-select relative w-fit\", className)}\n      data-slot=\"native-select-wrapper\"\n      data-mk=\"native-select\"\n      data-size={size}\n    >\n      <select\n        data-slot=\"native-select\"\n        data-size={size}\n        className=\"h-10 w-full min-w-0 appearance-none border border-input bg-background px-3 pr-8 text-ui text-foreground select-none [--fx:var(--primary)] focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled data-[size=sm]:h-8\"\n        {...props}\n      />\n      <Icon\n        name=\"chevron\"\n        className=\"pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground select-none\"\n        aria-hidden=\"true\"\n        data-slot=\"native-select-icon\"\n      />\n    </div>\n  );\n}\n\n// Native options keep the platform menu semantics on the role inks.\nfunction NativeSelectOption({ className, ...props }: React.ComponentProps<\"option\">) {\n  return (\n    <option data-slot=\"native-select-option\" className={cn(\"bg-background text-foreground\", className)} {...props} />\n  );\n}\n\n// Group names stay native so the platform keeps its own option navigation.\nfunction NativeSelectOptGroup({ className, ...props }: React.ComponentProps<\"optgroup\">) {\n  return (\n    <optgroup\n      data-slot=\"native-select-optgroup\"\n      className={cn(\"bg-background text-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\nexport { NativeSelect, NativeSelectOptGroup, NativeSelectOption };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/native-select.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.0.0",
+    "sha256": "ca462e57bb24e4283f335ce97e8e20728e1dba5bf439b1ab1018896757517178",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "native-select",
+      "sha256": "743d128b09f67c1921e3c302e778834639e5be92c454205cabfb61eed34b4ff1",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

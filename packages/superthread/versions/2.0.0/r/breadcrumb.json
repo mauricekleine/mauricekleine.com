@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "breadcrumb",
+  "title": "breadcrumb",
+  "description": "the path to the page, in muted words with the current one in the first ink",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/glyphs",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/breadcrumb.tsx",
+      "content": "import * as React from \"react\";\nimport { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n\nimport { Icon } from \"@/components/superthread/ui/glyphs\";\n// @mk/breadcrumb 2.0.0\n\n// A named navigation region keeps the path at the instrument step.\nfunction Breadcrumb({ className, ...props }: React.ComponentProps<\"nav\">) {\n  return (\n    <nav\n      aria-label=\"breadcrumb\"\n      data-slot=\"breadcrumb\"\n      data-mk=\"breadcrumb\"\n      className={cn(\"type-instrument\", className)}\n      {...props}\n    />\n  );\n}\n\n// The path wraps without losing the spacing between its parts.\nfunction BreadcrumbList({ className, ...props }: React.ComponentProps<\"ol\">) {\n  return (\n    <ol\n      data-slot=\"breadcrumb-list\"\n      className={cn(\n        \"flex flex-wrap items-center gap-1.5 type-instrument wrap-break-word text-muted-foreground\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// An item keeps its words and any inline detail together.\nfunction BreadcrumbItem({ className, ...props }: React.ComponentProps<\"li\">) {\n  return <li data-slot=\"breadcrumb-item\" className={cn(\"inline-flex items-center gap-1\", className)} {...props} />;\n}\n\n// Links change ink on hover and keep the control ring on keyboard focus.\nfunction BreadcrumbLink({ className, render, ...props }: useRender.ComponentProps<\"a\">) {\n  return useRender({\n    defaultTagName: \"a\",\n    props: mergeProps<\"a\">(\n      {\n        className: cn(\n          \"text-muted-foreground transition-[color] duration-(--duration-instant) ease-(--ease-brand) hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)\",\n          className,\n        ),\n      },\n      props,\n    ),\n    render,\n    state: {\n      slot: \"breadcrumb-link\",\n    },\n  });\n}\n\n// The current page prints in the foreground and names its position to assistive technology.\nfunction BreadcrumbPage({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-slot=\"breadcrumb-page\"\n      role=\"link\"\n      aria-disabled=\"true\"\n      aria-current=\"page\"\n      className={cn(\"font-normal text-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\n// A right-facing pixel chevron separates path items.\nfunction BreadcrumbSeparator({ children, className, ...props }: React.ComponentProps<\"li\">) {\n  return (\n    <li\n      data-slot=\"breadcrumb-separator\"\n      role=\"presentation\"\n      aria-hidden=\"true\"\n      className={cn(\"text-muted-foreground [&>svg]:shrink-0\", className)}\n      {...props}\n    >\n      {children ?? <Icon name=\"chevron\" className=\"-rotate-90\" />}\n    </li>\n  );\n}\n\n// The more glyph marks an omitted stretch of the path.\nfunction BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-slot=\"breadcrumb-ellipsis\"\n      role=\"presentation\"\n      aria-hidden=\"true\"\n      className={cn(\"flex size-5 items-center justify-center\", className)}\n      {...props}\n    >\n      <Icon name=\"more\" />\n      <span className=\"sr-only\">more</span>\n    </span>\n  );\n}\n\nexport {\n  Breadcrumb,\n  BreadcrumbList,\n  BreadcrumbItem,\n  BreadcrumbLink,\n  BreadcrumbPage,\n  BreadcrumbSeparator,\n  BreadcrumbEllipsis,\n};\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/breadcrumb.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.0.0",
+    "sha256": "44c8207c658484556ab4e29acf06f43646df86a07479617df2cfbd409f4020d4",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "breadcrumb",
+      "sha256": "5e7a33d921824d659494dc90411393cdf795c0ad5c94631da5c2883924623350",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}
