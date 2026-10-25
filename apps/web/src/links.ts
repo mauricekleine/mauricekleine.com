@@ -28,11 +28,6 @@ export const personal: Link[] = [
 // destinations come from the manifest (src/projects.ts); the names live here
 export const projects: Project[] = [
   {
-    names: ["pilot"],
-    url: sideQuests["pilot"].url,
-    links: [{ names: ["gh", "github"], url: sideQuests["pilot"].profiles.github }],
-  },
-  {
     names: ["f", "fluncle"],
     url: fluncle.url,
     links: [

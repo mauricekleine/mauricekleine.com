@@ -2,12 +2,6 @@
   "philosophy": "life is a series of experiments. some of them end, and that's fine, as long as you keep learning.",
   "side_quests": [
     {
-      "name": "pilot",
-      "url": "https://pilot.mauricekleine.com",
-      "status": "active",
-      "description": "a small app built with superthread"
-    },
-    {
       "name": "mockly",
       "url": "https://www.getmockly.com",
       "status": "active",

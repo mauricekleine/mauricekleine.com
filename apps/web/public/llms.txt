@@ -20,7 +20,6 @@ a tanstack start app on cloudflare workers, prerendered to plain html. markdown 
 
 ## side quests
 
-- [pilot](https://pilot.mauricekleine.com): a small app built with superthread
 - [mockly](https://www.getmockly.com): fake chat screenshots for 17+ platforms. built it in a weekend, techcrunch wrote about it, 10k people use it. i can't believe this is legal (with jasper de boer)
 - [fluncle](https://www.fluncle.com): drum & bass bangers from another dimension. it has a radio, an api, and an ssh rave terminal
 - [hackadam](https://hackadam.nl): monthly meetup in amsterdam for indie makers building their own stuff (with abner van den hout)
