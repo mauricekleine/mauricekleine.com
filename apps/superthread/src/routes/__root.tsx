@@ -79,7 +79,7 @@ export function NotFoundPage(): ReactNode {
       title="not found"
       lede={
         <>
-          no page lives at this address. the <Link to="/">overview</Link> lists every page there is.
+          no page lives at this address. the nav lists every page, or start at the <Link to="/">overview</Link>.
         </>
       }
     />

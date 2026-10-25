@@ -38,7 +38,8 @@ const served = walk(out);
 const rel = (path) => relative(out, path).split(sep).join("/");
 const textual = new Set([".html", ".js", ".mjs", ".css", ".json", ".txt", ".svg", ".xml", ".md", ".webmanifest", ""]);
 const isText = (path) => textual.has(extname(path)) && statSync(path).size < 8_000_000;
-const isLicence = (path) => /(^|\/)(licen[cs]e|ofl|copying)[^/]*$/i.test(rel(path));
+// a licence file by name, alone or after a prefix (SIL-OFL.txt, Fragment-LICENSE.txt)
+const isLicence = (path) => /(^|[/_.-])(licen[cs]e|ofl|copying)[^/]*$/i.test(rel(path));
 
 // 1. every nav page and /404 prerendered, the theme script first in <head> (server.ts puts it there)
 const htmlFor = (path) => (path === "/" ? "index.html" : `${path.slice(1)}.html`);

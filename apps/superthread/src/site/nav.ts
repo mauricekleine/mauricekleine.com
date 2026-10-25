@@ -62,13 +62,17 @@ export const nav: readonly NavEntry[] = [
   component("tooltip"),
   component("use-mobile", "use-mobile"),
   mock("board"),
-  mock("reading"),
   mock("orbit"),
+  mock("reading"),
   { path: "/install", title: "install", section: "install", layout: "docs" },
 ];
 
 // the nav's groups, in order; overview and install stand alone
 export const navSections: readonly NavSection[] = ["overview", "foundations", "components", "mock pages", "install"];
+
+// the groups the docs nav holds at its foot, above the mode control, so the mock pages and install stay in view
+// while the rest of the list scrolls
+export const navPinned: readonly NavSection[] = ["mock pages", "install"];
 
 // every nav page plus /404, which notFoundHandling serves for any path the site does not have
 export const prerenderPaths: readonly string[] = [...nav.map((entry) => entry.path), "/404"];

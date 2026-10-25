@@ -40,3 +40,15 @@
   outline: 2px solid var(--fx);
   outline-offset: -2px;
 }
+
+/* The printed focus ring, for every specimen that shows focus-visible: the base layer's ring for buttons, tabs, links
+   and rail cells, matched on the printed state as well, in the same layer, so an item's own focus classes still win
+   over it exactly as they do over the real ring. */
+@layer base {
+  :where(a, button, summary, [role="tab"], [role="button"]):where(
+      :not([data-slot="select-trigger"])
+    )[data-demo~="focus-visible"] {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}

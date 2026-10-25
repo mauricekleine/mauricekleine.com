@@ -183,6 +183,10 @@
   .st-page {
     max-width: 696px;
   }
+  /* the overview is one screen at 1440 x 900, as the sketch is: its foot is 64 px, so the page ends at the window */
+  .st-main:has(.st-opener) {
+    padding-bottom: 64px;
+  }
   /* beside the page the aside spans both rows, so its rule runs to the foot like the nav's */
   .st-aside {
     grid-row: 1 / span 2;
@@ -191,23 +195,31 @@
     min-width: 0;
     border-left: 1px solid var(--rule);
   }
+  /* beside the page the aside's content holds under the masthead while the page scrolls, so "on this page" can
+     follow; a window too short for all of it scrolls the aside on its own */
   .st-aside-inner {
+    position: sticky;
+    top: 77px;
+    max-height: calc(100dvh - 77px);
     padding: 28px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
   }
 
-  /* the nav: groups under mono labels, the current page boxed in the house ink with its 8 px square; the list
-     scrolls on its own so the mode control stays at the foot */
+  /* the nav: groups under mono labels, the current page boxed in the house ink with its 8 px square. Overview,
+     foundations and components scroll on their own, cut at the masthead's rule above and at the foot's rule below;
+     the mock pages, install and the mode control hold the foot, as the sketch prints them */
   .st-sidenav {
     display: flex;
     flex-direction: column;
-    padding: 20px 16px;
   }
   .st-sidenav-list {
     flex: 1;
     min-height: 0;
-    margin: 0 -4px;
-    padding: 20px 4px 4px;
+    padding: 40px 16px 20px;
     overflow-y: auto;
+    overscroll-behavior: contain;
     scrollbar-width: thin;
   }
   .st-sidenav ul {
@@ -216,7 +228,13 @@
   .st-sidenav h3 {
     margin: 18px 10px 6px;
   }
-  .st-sidenav-plain:last-child {
+  .st-sidenav-foot {
+    flex: none;
+    padding: 0 16px 20px;
+    border-top: 1px solid var(--rule);
+  }
+  .st-sidenav-foot .st-sidenav-plain,
+  .st-sidenav-foot .st-mode {
     margin-top: 20px;
   }
   .st-sidenav a {
@@ -243,10 +261,6 @@
     width: 8px;
     height: 8px;
     background: var(--primary);
-  }
-  .st-sidenav-foot {
-    flex: none;
-    padding-top: 16px;
   }
 
   /* the mode control: three cells in one box; the stored choice prints pressed from <html data-theme-choice>, so
@@ -359,27 +373,23 @@
     margin-top: 12px;
   }
 
-  /* an inner page's head: the slim band inside its crop marks, the title knocked out of its lower left */
+  /* an inner page's head: the slim band whole inside its crop marks, the title set under it clear of the marks,
+     the lede at the reach head's 36 px */
   .st-pagehead {
     padding-top: 40px;
   }
   .st-pagehead > :not(.st-band) {
     margin-top: 40px;
   }
+  .st-pagehead > .st-pagehead-title {
+    margin-top: 28px;
+  }
   .st-pagehead > .st-lede {
-    margin-top: 44px;
+    margin-top: 36px;
   }
   .st-band {
     position: relative;
     max-width: 696px;
-  }
-  .st-knock {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    max-width: 100%;
-    padding: 14px 30px 0 0;
-    background: var(--background);
   }
   .st-lede {
     max-width: 696px;
@@ -481,17 +491,19 @@
     margin-top: 24px;
   }
 
-  /* the code patch: one command on the code ground, the prompt cell, the copy cell */
+  /* the code patch: one command on the code ground, the prompt cell, the copy cell. One line is 52 px; a command
+     too long for its column wraps between its words and the patch grows, the prompt staying on the first line */
   .st-code {
     display: flex;
-    height: 52px;
+    min-height: 52px;
     background: var(--code);
     color: var(--code-foreground);
-    font: 400 15px/52px var(--font-mono);
+    font: 400 15px/24px var(--font-mono);
   }
   .st-code-prompt {
     flex: none;
     width: 52px;
+    padding-top: 14px;
     border-right: 1px solid var(--code-border);
     color: var(--code-muted);
     text-align: center;
@@ -499,11 +511,15 @@
   .st-code code {
     flex: 1;
     min-width: 0;
-    padding: 0 20px;
-    overflow-x: auto;
+    padding: 14px 20px;
     font: inherit;
-    white-space: nowrap;
-    scrollbar-width: none;
+  }
+  /* a word moves to the next line whole, so no line breaks after a hyphen; only a word wider than the whole line
+     (a url on a phone) breaks inside itself */
+  .st-code-word {
+    display: inline-block;
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
   .st-code em {
     color: var(--code-accent);
@@ -581,6 +597,9 @@
   .st-sheet-nav .st-sidenav {
     height: 100%;
     padding-top: 48px;
+  }
+  .st-sheet-nav .st-sidenav-list {
+    padding-top: 20px;
   }
 
   /* the mock pages: a 32 px strip back to the docs over the app, full bleed on the deep ground */
@@ -666,8 +685,11 @@
       border-left: 0;
     }
     .st-aside-inner {
+      position: static;
       max-width: 808px;
+      max-height: none;
       padding: 28px 40px 64px;
+      overflow-y: visible;
     }
     .st-meta {
       display: none;
@@ -748,9 +770,6 @@
 
   /* the phone plates take over, drawn at the column's own width so the field stays whole */
   @media (max-width: 600px) {
-    .st-knock {
-      padding: 10px 16px 0 0;
-    }
     /* the strip keeps the page's name; "mock pages" goes */
     .st-strip-crumb .type-meta {
       display: none;
@@ -789,7 +808,7 @@
       width: 40px;
     }
     .st-code code {
-      padding: 0 12px;
+      padding-inline: 12px;
     }
     .st-code button {
       padding: 0 14px;

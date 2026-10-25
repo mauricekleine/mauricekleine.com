@@ -13,6 +13,12 @@
   Cache-Control: public, max-age=86400
 /texture/*
   Cache-Control: public, max-age=31536000, immutable
+/marks/PROVENANCE.json
+  ! Cache-Control
+  Cache-Control: public, max-age=300, must-revalidate
+/texture/PROVENANCE.json
+  ! Cache-Control
+  Cache-Control: public, max-age=300, must-revalidate
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 /api/deploy.json

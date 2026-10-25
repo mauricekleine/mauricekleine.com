@@ -1,5 +1,7 @@
 // Shoots the site with agent-browser: every nav page at 1440 x 900 and 390 x 844, light and dark, each after the
-// mode is stored and the page reloaded and its fonts have loaded, as a full-page shot.
+// mode is stored and the page reloaded and its fonts have loaded, as a full-page shot. The pages with a rail or a
+// sidebar beside the content (the tall pages below) are shot in a viewport as tall as the page instead, because a
+// full-page capture keeps the 900 px layout and cuts what sticks to the window into slivers.
 //
 //   bun apps/superthread/tools/shoot.ts [--base <url>] [--tag <name>] [--only <path>]... [--focus]
 //
@@ -77,6 +79,25 @@ function pages(): string[] {
   return values.only;
 }
 
+// the pages whose rail or sidebar holds to the window: the fleet rail, the sidebar and the mock pages
+const tall = (path: string) =>
+  path === "/components/fleet-rail" || path === "/components/sidebar" || path.startsWith("/mock/");
+
+// grows the viewport to the page's height until the two agree (the layout can grow with the window), shoots it,
+// then puts the viewport back
+function shootTall(file: string, width: number, height: number) {
+  let size = height;
+  for (let round = 0; round < 4; round++) {
+    const page = js<number>("Math.ceil(document.documentElement.scrollHeight)");
+    if (page <= size) break;
+    size = page;
+    ab("set", "viewport", String(width), String(size), "1");
+    ab("wait", "300");
+  }
+  ab("screenshot", file);
+  if (size !== height) ab("set", "viewport", String(width), String(height), "1");
+}
+
 function shootPages() {
   mkdirSync(dir, { recursive: true });
   const list = pages();
@@ -92,7 +113,8 @@ function shootPages() {
       for (const path of list) {
         visit(path, mode);
         const file = join(dir, `${slug(path)}-${width}-${mode}.png`);
-        ab("screenshot", "--full", file);
+        if (tall(path)) shootTall(file, width, height);
+        else ab("screenshot", "--full", file);
         count++;
       }
     }
@@ -147,7 +169,7 @@ const TAG = `(() => {
     const label = c.getAttribute("aria-label") || (c.labels && c.labels[0] && c.labels[0].textContent) ||
       (labelled && labelled.split(" ").map((x) => document.getElementById(x)?.textContent || "").join(" ")) ||
       c.getAttribute("placeholder") || "field";
-    const invalid = c.getAttribute("aria-invalid") === "true" || b.getAttribute("aria-invalid") === "true";
+    const invalid = b.matches('[aria-invalid="true"]') || !!b.querySelector('[aria-invalid="true"]');
     const disabled = c.disabled === true || b.hasAttribute("data-disabled");
     const select = b.matches('[data-slot="select-trigger"]');
     let name = label.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "") || "field";
@@ -159,9 +181,10 @@ const TAG = `(() => {
   return out;
 })()`;
 
-// What the browser draws: whether the control holds focus, its own outline, the box's outline and edge, the house
-// and error inks at the box, any ancestor hugging the box (within 8 px) that draws an outline or a shadow, and where
-// the text sits inside the box.
+// What the browser draws: whether the control holds focus, whether the field reads as invalid (aria-invalid on the
+// box, its control or anything inside the box), its own outline, the box's outline and edge, the house and error
+// inks at the box, any ancestor hugging the box (within 8 px) that draws an outline or a shadow, and where the text
+// sits inside the box.
 const PROBE = (id: string, cid: string, tid: string) => `((id, cid, tid) => {
   const q = (x) => document.querySelector('[data-focus-id="' + x + '"]');
   const b = q(id), c = q(cid), t = q(tid), s = getComputedStyle(b), u = getComputedStyle(c);
@@ -198,6 +221,7 @@ const PROBE = (id: string, cid: string, tid: string) => `((id, cid, tid) => {
   return {
     active: document.activeElement === c,
     fv: c.matches(":focus-visible"),
+    invalid: b.matches('[aria-invalid="true"]') || c.matches('[aria-invalid="true"]') || !!b.querySelector('[aria-invalid="true"]'),
     ctl_outline: b === c ? "self" : u.outlineStyle === "none" || parseFloat(u.outlineWidth) === 0 ? "none" : u.outlineWidth + " " + u.outlineStyle,
     box_outline: s.outlineStyle === "none" ? "none" : s.outlineWidth + " " + s.outlineOffset,
     box_edge: rgb(s.borderTopColor),
@@ -210,10 +234,11 @@ const PROBE = (id: string, cid: string, tid: string) => `((id, cid, tid) => {
 })(${JSON.stringify(id)}, ${JSON.stringify(cid)}, ${JSON.stringify(tid)})`;
 
 // Focuses the control before the target in tab order, without scrolling, so Tab is a real keypress onto the field.
+// The target stays in the list when it is disabled, so a disabled field's Tab starts beside it, not at the page top.
 const PREV = (cid: string) => `((cid) => {
   const c = document.querySelector('[data-focus-id="' + cid + '"]');
   const all = [...document.querySelectorAll("a[href], button, input, textarea, select, [tabindex]")].filter((e) =>
-    e.tabIndex >= 0 && !e.disabled && e.getClientRects().length && getComputedStyle(e).visibility !== "hidden");
+    e === c || (e.tabIndex >= 0 && !e.disabled && e.getClientRects().length && getComputedStyle(e).visibility !== "hidden"));
   const i = all.indexOf(c);
   (i > 0 ? all[i - 1] : document.body).focus({ preventScroll: true });
   return i;
@@ -266,14 +291,17 @@ function shootFocus() {
       }
       for (const field of fields) {
         const shot = (how: string, focused: boolean, cid = field.cid) => {
+          // Tab past a disabled field lands on a control further down and can scroll the field out of the window;
+          // bring the box back (focus stays where it is) so the crop holds the field
           const rect = js<number[]>(
-            `(() => { const r = document.querySelector('${sel(field.id)}').getBoundingClientRect(); return [r.x - 8, r.y - 8, r.width + 16, r.height + 16]; })()`,
+            `(() => { const b = document.querySelector('${sel(field.id)}'); let r = b.getBoundingClientRect(); if (r.top < 8 || r.left < 8 || r.bottom > innerHeight - 8 || r.right > innerWidth - 8) { b.scrollIntoView({ block: "center", inline: "center" }); r = b.getBoundingClientRect(); } return [r.x - 8, r.y - 8, r.width + 16, r.height + 16]; })()`,
           );
           ab("wait", "120");
           ab("screenshot", viewport);
           const file = `${page}-${pageMode}-${field.id}-${how}.png`;
+          // exit 3: the rect reached past the shot and the crop is cut to it, which the verdict fails
           const crop = python("crop", viewport, join(out, file), ...rect.map(String), "2");
-          if (crop.exitCode !== 0) throw new Error(`crop failed for ${file}`);
+          if (crop.exitCode !== 0 && crop.exitCode !== 3) throw new Error(`crop failed for ${file}`);
           const probe = js<Record<string, unknown>>(PROBE(field.id, cid, field.tid));
           const record = {
             page,
@@ -285,7 +313,8 @@ function shootFocus() {
             file,
             focused,
             disabled: field.disabled,
-            invalid: field.name.endsWith("_invalid"),
+            invalid: probe.invalid === true,
+            clipped: crop.exitCode === 3,
             active: probe.active,
             probe,
           };

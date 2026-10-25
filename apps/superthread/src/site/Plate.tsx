@@ -39,14 +39,17 @@ function vars(prefix: string, entry: PlateEntry): Record<string, string> {
 }
 
 // A screened plate from texture.gen.ts, printed at its own pixel size so it stays crisp at 1x and 2x: a composite
-// shows the active mode's image only (one file loads), masks print the first ink and the house ink through the
-// mode's two plates. A narrower box crops the plate rather than scaling it. `phone` names the plate that takes over
-// at 600 px and below. A plate not generated yet prints as a flat field of the given size.
+// shows the active mode's image only (one file loads), masks print the mode's two plates, the house ink first and
+// the first ink over it, as the master prints them, so the key cores read on top. A narrower box crops the plate
+// rather than scaling it. `phone` names the plate that takes over at 600 px and below. A plate not generated yet
+// prints as a flat field of the given size (phoneWidth and phoneHeight at 600 px and below).
 export function Plate({
   name,
   phone,
   width,
   height,
+  phoneWidth,
+  phoneHeight,
   className,
   label,
 }: {
@@ -54,6 +57,8 @@ export function Plate({
   phone?: string;
   width?: number;
   height?: number;
+  phoneWidth?: number;
+  phoneHeight?: number;
   className?: string;
   // the plate's alt text; without one the plate is decorative
   label?: string;
@@ -61,15 +66,19 @@ export function Plate({
   const wide = plate(name);
   const narrow = phone === undefined ? undefined : plate(phone);
   const form = wide?.form ?? "missing";
+  const flatPhone = phone !== undefined && !narrow && (phoneWidth !== undefined || phoneHeight !== undefined);
   const style = {
     ...(wide ? vars("plate", wide) : { "--plate-w": `${width ?? 0}px`, "--plate-h": `${height ?? 0}px` }),
     ...(narrow ? vars("plate-phone", narrow) : {}),
+    ...(flatPhone
+      ? { "--plate-phone-w": `${phoneWidth ?? width ?? 0}px`, "--plate-phone-h": `${phoneHeight ?? height ?? 0}px` }
+      : {}),
   } as CSSProperties;
   return (
     <div
       className={cn("st-plate", className)}
       data-form={form}
-      data-phone={narrow ? narrow.form : undefined}
+      data-phone={narrow ? narrow.form : flatPhone ? "missing" : undefined}
       data-plate={name}
       style={style}
       role={label ? "img" : undefined}
@@ -78,8 +87,8 @@ export function Plate({
     >
       {form === "masks" && (
         <>
-          <i className="st-plate-first" />
           <i className="st-plate-spot" />
+          <i className="st-plate-first" />
         </>
       )}
     </div>

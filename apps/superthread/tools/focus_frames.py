@@ -13,7 +13,8 @@ of 1 px (rest, or a button inside the box holding focus) or 2 px (focus, or a pr
 
 usage: focus_frames.py DIR [--html OUT.html]   (DIR holds manifest.jsonl and the crops it names; prints one row per
        crop and exits 1 when any field fails; --html writes the contact sheet)
-       focus_frames.py crop SHOT OUT X Y W H [K]   (cuts a css rect out of a viewport shot taken at device scale K)
+       focus_frames.py crop SHOT OUT X Y W H [K]   (cuts a css rect out of a viewport shot taken at device scale K;
+       a rect reaching past the shot is cut to it and the command exits 3, so the run can mark that crop clipped)
 """
 import json
 import pathlib
@@ -54,9 +55,12 @@ def runs(line, bgs):
 
 
 def frames(path):
-    """Runs of edge pixels on each of four lines walking into the box: {side: [(width in device px, colour)]}."""
+    """Runs of edge pixels on each of four lines walking into the box: {side: [(width in device px, colour)]}, or None
+    when the crop is too small to hold the four lines."""
     w, h, rows = read_rgb(path)
     a, b = (PAD - OUT) * K, (PAD + INSET) * K
+    if w < 2 * b or h < 2 * b or len(rows) < h:
+        return None
     y, x = (PAD + ROW) * K, (w * 3) // 4
     lines = {
         "left": [px(rows, i, y) for i in range(a, b)],
@@ -112,13 +116,20 @@ def report(d):
         if not r.get("count", True):
             print(f"note {r['page']:<22} {r['pageMode']:<5} {r.get('note', '')}")
             continue
-        fr = frames(d / r["file"])
-        count, widths, ok = verdict(r, fr)
+        path = d / r["file"]
+        fr = frames(path) if path.exists() else None
         key = r["key"]
         first_text.setdefault(key, r.get("probe", {}).get("text"))
-        problems = extra(r, fr, first_text[key])
+        if fr is None:
+            count, widths, ok = 0, [], False
+            problems = ["no crop" if not path.exists() else "the crop is too small to read"]
+        else:
+            count, widths, ok = verdict(r, fr)
+            problems = extra(r, fr, first_text[key])
+        if r.get("clipped"):
+            problems.append("the box reaches past the window, so the crop is cut")
         ok = ok and not problems
-        r.update(frames=count, widths=[w // K for w in widths], colour=next((c for v in fr.values() for _, c in v), ""), ok=ok,
+        r.update(frames=count, widths=[w // K for w in widths], colour=next((c for v in (fr or {}).values() for _, c in v), ""), ok=ok,
                  problems=problems)
         counted += 1
         bad += 0 if ok else 1
@@ -161,21 +172,28 @@ def page(d, recs, out):
 
 
 def crop(shot, out, x, y, w, h, k=2):
-    """Cut a css rect out of a viewport shot taken at device scale k, as the master's crop.py does."""
+    """Cut a css rect out of a viewport shot taken at device scale k, as the master's crop.py does. The rect is cut to
+    the shot; returns whether it had to be."""
     x, y, w, h = (round(v * k) for v in (x, y, w, h))
-    _, _, rows = read_rgb(shot)
-    cut = [bytes(r[x * 3:(x + w) * 3]) for r in rows[y:y + h]]
+    sw, sh, rows = read_rgb(shot)
+    x0, y0, x1, y1 = max(0, x), max(0, y), min(sw, x + w), min(sh, y + h)
+    clipped = (x0, y0, x1, y1) != (x, y, x + w, y + h)
+    x1, y1 = max(x1, x0 + 1), max(y1, y0 + 1)   # never an empty image; the report fails a crop this small
+    x0, y0 = min(x0, sw - 1), min(y0, sh - 1)
+    x1, y1 = min(x1, sw), min(y1, sh)
+    cut = [bytes(r[x0 * 3:x1 * 3]) for r in rows[y0:y1]]
     raw = b"".join(b"\x00" + r for r in cut)
     with open(out, "wb") as f:
-        f.write(b"\x89PNG\r\n\x1a\n" + _chunk(b"IHDR", struct.pack(">IIBBBBB", w, len(cut), 8, 2, 0, 0, 0))
+        f.write(b"\x89PNG\r\n\x1a\n" + _chunk(b"IHDR", struct.pack(">IIBBBBB", x1 - x0, len(cut), 8, 2, 0, 0, 0))
                 + _chunk(b"IDAT", zlib.compress(raw, 6)) + _chunk(b"IEND", b""))
+    return clipped
 
 
 if __name__ == "__main__":
     args = sys.argv[1:]
     if args and args[0] == "crop":
-        crop(args[1], args[2], *map(float, args[3:7]), *(float(v) for v in args[7:8]))
-        sys.exit(0)
+        clipped = crop(args[1], args[2], *map(float, args[3:7]), *(float(v) for v in args[7:8]))
+        sys.exit(3 if clipped else 0)
     d = pathlib.Path(args[0])
     recs, bad = report(d)
     if "--html" in args:
