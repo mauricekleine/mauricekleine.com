@@ -87,14 +87,14 @@ function Page() {
           init sets an app up for <Code>@mk</Code>. it writes the base-nova style and the registry into{" "}
           <Code>components.json</Code>, then installs the utils, the tokens and the button.
         </p>
-        <InitLine className="st-in-wrap" />
+        <InitLine />
       </Section>
       <Section id="add" title="add an item" className="st-in">
         <p className="st-in-text">
           after init, every item installs by name, and the <Code>@mk</Code> items it needs come with it. most apps start
           with the tokens and the button:
         </p>
-        <InstallLine items={["tokens", "button"]} className="st-in-wrap" />
+        <InstallLine items={["tokens", "button"]} />
         <p className="st-in-text">
           the files go to <Code>components/superthread/</Code>, outside <Code>components/ui/</Code>, so a later{" "}
           <Code>shadcn apply</Code> or <Code>init --reinstall</Code> never overwrites them.
@@ -139,7 +139,7 @@ function Page() {
                       <b>{page ? <Link to={page.path}>{entry.title}</Link> : entry.title}</b>
                       <span>{entry.description}</span>
                     </p>
-                    <CodePatch command={commandFor(entry.name)} className="st-in-wrap st-in-patch" />
+                    <CodePatch command={commandFor(entry.name)} className="st-in-patch" />
                   </li>
                 );
               })}
