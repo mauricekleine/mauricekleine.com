@@ -34,6 +34,37 @@ import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { Input } from "@/components/superthread/ui/input";
 import { cn } from "@/components/superthread/lib/utils";
 import { Button } from "@/components/superthread/ui/button";
+import {
+  CollectionToolbar,
+  ToolbarGroup,
+  ToolbarSpacer,
+  FilterChip,
+  ToolbarCount,
+  ViewSwitch,
+} from "@/components/superthread/blocks/collection-toolbar";
+import {
+  ListRows,
+  ListRow,
+  ListRowLead,
+  ListRowTitle,
+  ListRowAside,
+  ListRowMeta,
+  ListRowActions,
+} from "@/components/superthread/blocks/list-rows";
+import {
+  ItemCards,
+  ItemCard,
+  ItemCardMedia,
+  ItemCardId,
+  ItemCardTitle,
+  ItemCardMeta,
+  ItemCardActions,
+} from "@/components/superthread/blocks/item-cards";
+import { DataTable, SortableHead, TableEmpty } from "@/components/superthread/blocks/data-table";
+import { Checkbox } from "@/components/superthread/ui/checkbox";
+import { Icon } from "@/components/superthread/ui/glyphs";
+import { Badge } from "@/components/superthread/ui/badge";
+import { TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/superthread/ui/table";
 
 export const Route = createFileRoute("/blocks")({ component: AllBlocks });
 
@@ -83,6 +114,99 @@ function Sink({ mode }: { mode: Mode }) {
 
       {/* blocks: shell */}
       {/* blocks: collections */}
+      <Part name="collection-toolbar">
+        <CollectionToolbar label="task controls">
+          <ToolbarGroup label="status">
+            <Button variant="outline" size="sm">
+              queued
+            </Button>
+          </ToolbarGroup>
+          <FilterChip shown={2} total={12} onClear={() => {}}>
+            agent: sol
+          </FilterChip>
+          <ToolbarSpacer />
+          <ToolbarCount shown={2} total={12} />
+          <ViewSwitch
+            views={[
+              { value: "rows", label: "rows" },
+              { value: "cards", label: "cards" },
+            ]}
+          />
+        </CollectionToolbar>
+      </Part>
+      <Part name="list-rows">
+        <ListRows aria-label="tasks">
+          <ListRow>
+            <ListRowLead>
+              <Checkbox aria-label="complete task" />
+            </ListRowLead>
+            <ListRowTitle render={<a href="#task" />}>check the registry</ListRowTitle>
+            <ListRowAside>
+              <time dateTime="2026-10-25">2h ago</time>
+            </ListRowAside>
+            <ListRowMeta>
+              <Badge variant="queued" />
+              <span>orbit</span>
+            </ListRowMeta>
+            <ListRowActions>
+              <Button variant="outline" size="sm">
+                accept
+              </Button>
+            </ListRowActions>
+          </ListRow>
+          <ListRow>
+            <ListRowTitle>plain task</ListRowTitle>
+          </ListRow>
+        </ListRows>
+      </Part>
+      <Part name="item-cards">
+        <ItemCards aria-label="drafts">
+          <ItemCard>
+            <ItemCardMedia>
+              <div className="h-full bg-muted" />
+            </ItemCardMedia>
+            <ItemCardId>or-12</ItemCardId>
+            <ItemCardTitle render={<a href="#draft" />}>a draft to review</ItemCardTitle>
+            <ItemCardMeta>
+              <Badge variant="queued" />
+              <time dateTime="2026-10-25">2h ago</time>
+            </ItemCardMeta>
+            <ItemCardActions>
+              <Button variant="ghost" size="icon-sm" aria-label="draft actions">
+                <Icon name="more" />
+              </Button>
+            </ItemCardActions>
+          </ItemCard>
+          <ItemCard>
+            <ItemCardTitle>plain draft</ItemCardTitle>
+          </ItemCard>
+        </ItemCards>
+      </Part>
+      <Part name="data-table">
+        <DataTable label="runs" rows="board">
+          <TableHeader>
+            <TableRow>
+              <TableHead kind="id">id</TableHead>
+              <SortableHead sort="ascending" onSort={() => {}}>
+                title
+              </SortableHead>
+              <SortableHead kind="number" onSort={() => {}}>
+                age
+              </SortableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow aria-selected="true">
+              <TableCell kind="id">or-12</TableCell>
+              <TableCell>check the registry</TableCell>
+              <TableCell kind="number">2h</TableCell>
+            </TableRow>
+            <TableEmpty columns={3} title="no other runs">
+              a new run lands here.
+            </TableEmpty>
+          </TableBody>
+        </DataTable>
+      </Part>
       {/* blocks: forms */}
       <Part name="form-section">
         <FormSection onSubmit={(event) => event.preventDefault()}>
