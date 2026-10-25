@@ -10,7 +10,8 @@ export default defineConfig({
     // the custom server entry sets the font and snapshot headers (src/server-behavior.ts)
     entrypoint: "./src/server.ts",
     workersDev: false,
-    // no domains: superthread.mauricekleine.com waits for the operator step
+    // custom domain only; no workers.dev duplicate
+    domains: ["superthread.mauricekleine.com"],
     assets: {
       // /install serves install.html; /install.html redirects to /install
       htmlHandling: "auto-trailing-slash",
