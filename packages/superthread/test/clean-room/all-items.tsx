@@ -8,6 +8,30 @@ import { type ReactNode, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { fleet } from "@/components/superthread/lib/fleet";
 import { cn } from "@/components/superthread/lib/utils";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/superthread/ui/accordion";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/superthread/ui/breadcrumb";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from "@/components/superthread/ui/field";
+import { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "@/components/superthread/ui/native-select";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/superthread/ui/resizable";
 import { Badge } from "@/components/superthread/ui/badge";
 import { Button } from "@/components/superthread/ui/button";
 import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from "@/components/superthread/ui/button-group";
@@ -494,6 +518,114 @@ function Sink({ mode }: { mode: Mode }) {
       {/* 2.0: layers */}
 
       {/* 2.0: forms */}
+      <Part name="field">
+        <FieldSet className="max-w-md">
+          <FieldLegend>notifications</FieldLegend>
+          <FieldGroup>
+            <Field data-invalid="true">
+              <FieldLabel htmlFor={`field-email-${mode}`}>email</FieldLabel>
+              <Input
+                id={`field-email-${mode}`}
+                defaultValue="maurice"
+                aria-invalid
+                aria-describedby={`field-error-${mode}`}
+              />
+              <FieldDescription>
+                read the <a href="#preferences">preferences</a> before saving.
+              </FieldDescription>
+              <FieldError
+                id={`field-error-${mode}`}
+                errors={[{ message: "enter a complete email address" }, { message: "use your work address" }]}
+              />
+            </Field>
+            <FieldSeparator>or</FieldSeparator>
+            <FieldLabel>
+              <Field orientation="horizontal">
+                <Checkbox defaultChecked />
+                <FieldContent>
+                  <FieldTitle>send updates</FieldTitle>
+                  <FieldDescription>a weekly digest of completed runs.</FieldDescription>
+                </FieldContent>
+              </Field>
+            </FieldLabel>
+          </FieldGroup>
+        </FieldSet>
+      </Part>
+      <Part name="native-select">
+        <div className="flex flex-wrap gap-4">
+          <NativeSelect aria-label="ship" defaultValue="orbit">
+            <NativeSelectOptGroup label="ships">
+              <NativeSelectOption value="orbit">orbit</NativeSelectOption>
+              <NativeSelectOption value="quanta">quanta</NativeSelectOption>
+            </NativeSelectOptGroup>
+          </NativeSelect>
+          <NativeSelect aria-label="small ship" size="sm">
+            <NativeSelectOption>orbit</NativeSelectOption>
+          </NativeSelect>
+          <NativeSelect aria-label="invalid ship" aria-invalid>
+            <NativeSelectOption>choose a ship</NativeSelectOption>
+          </NativeSelect>
+          <NativeSelect aria-label="locked ship" disabled>
+            <NativeSelectOption>orbit</NativeSelectOption>
+          </NativeSelect>
+        </div>
+      </Part>
+      <Part name="accordion">
+        <Accordion defaultValue={["details"]} className="max-w-md">
+          <AccordionItem value="details">
+            <AccordionTrigger>run details</AccordionTrigger>
+            <AccordionContent>
+              read the <a href="#run">run log</a> for the full output.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="history">
+            <AccordionTrigger>history</AccordionTrigger>
+            <AccordionContent>no earlier runs.</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="locked" disabled>
+            <AccordionTrigger>locked run</AccordionTrigger>
+            <AccordionContent>unavailable.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Part>
+      <Part name="breadcrumb">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="#home">home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbEllipsis />
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>runs</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </Part>
+      <Part name="resizable">
+        <div className="h-48 max-w-lg border border-border">
+          <ResizablePanelGroup>
+            <ResizablePanel defaultSize="40%">
+              <div className="p-4">runs</div>
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize="60%">
+              <ResizablePanelGroup orientation="vertical">
+                <ResizablePanel defaultSize="50%">
+                  <div className="p-4">output</div>
+                </ResizablePanel>
+                <ResizableHandle />
+                <ResizablePanel defaultSize="50%">
+                  <div className="p-4">details</div>
+                </ResizablePanel>
+              </ResizablePanelGroup>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </div>
+      </Part>
     </section>
   );
 }
