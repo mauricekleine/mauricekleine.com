@@ -52,7 +52,7 @@ A single operator's fleet identity that agents build and maintain. Values live i
 ## Evidence on Hand
 
 - The system: `tokens/master.json` and `DESIGN.md` beside this file, the generated `dist/v2/`, the items in `items/`, and the site in `apps/superthread/`, with the marks in `apps/superthread/public/marks/`.
-- v1, which www keeps until the fleet rollout: `dist/superthread.css`, the marks in `apps/web/public/superthread/marks/` and the `/superthread` specimen in `apps/web`.
+- v1, which www keeps until the fleet rollout: `dist/superthread.css`, the `/r` items and the marks in `apps/web/public/superthread/marks/`.
 - The fleet manifest in `apps/web/src/projects.ts`.
 - Screenshot, accessibility and route baselines of every app (kept outside the repo; they show private data).
 - No customers, testimonials or usage numbers exist; nothing may claim them.

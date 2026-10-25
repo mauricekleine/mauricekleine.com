@@ -129,7 +129,7 @@ Run them from the repo root as `bun run --cwd packages/superthread <script>`.
 | `test`       | `bun test && bun --check`                                                                                                                       |
 | `lint`       | `designmd lint DESIGN.md` with the pinned local copy                                                                                            |
 
-At the root, `bun run registry` copies v1's JSON into `apps/web/public/r/`, and `bun run test` runs this package's tests with web's and share's.
+At the root, `bun run registry` copies v1's JSON into `apps/web/public/r/`, and `bun run test` runs this package's tests with those of the web, share and superthread apps.
 
 After editing an input, regenerate in this order: `texture`, `build`, then `upstream regen`. When `texture/plates.json` changes, also rewrite the pixel hashes from this directory: `python3 -I scripts/texture/build.py plates --out "$TMPDIR/plates" --write-hashes texture/plates.sha256`. Builds copy committed outputs and never run Python; `check`, `texture` and the tests run `python3 -I` with the standard library only.
 
@@ -173,7 +173,7 @@ Any change to a served item after its version reaches main ships as the next ver
 
 ## v1, frozen
 
-- `dist/superthread.css`, `registry.json` and `registry/ui/fleet-rail.tsx` stay byte-identical at their paths. www's `site.css` and `superthread-specimen.css`, the share Worker's pin page and `apps/web/tools/test-projects.mjs` read them.
+- `dist/superthread.css`, `registry.json` and `registry/ui/fleet-rail.tsx` stay byte-identical at their paths. www's `site.css`, the share Worker's pin page and `apps/web/tools/test-projects.mjs` read them.
 - `v1/r/*.json` are the bytes www serves at `/r/superthread.json`, `/r/fleet-rail.json` and `/r/registry.json`, captured from the last v1 build. Root `bun run registry` copies them with `scripts/publish-v1.ts`. No shadcn build runs for v1, so a CLI upgrade cannot change them.
 - `test/v1-frozen.test.ts` pins the sha256 of every one of these files.
 - www's `/r` stays v1 until the fleet rollout. Existing consumers keep installing `https://www.mauricekleine.com/r/superthread.json` and `/r/fleet-rail.json`.

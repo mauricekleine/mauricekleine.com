@@ -6,6 +6,7 @@ function git(...args) {
 }
 
 const SHARE_PATHS = ["apps/share", "packages/superthread", "package.json", "bun.lock"];
+const SUPERTHREAD_PATHS = ["apps/superthread", "packages/superthread", "package.json", "bun.lock"];
 
 async function waitFor(worker, deadline, timeout) {
   let observed;
@@ -52,13 +53,16 @@ try {
     throw new Error(`${target} is not a commit on origin/main`);
   }
 
-  // Workers Builds deploys artifact-share only for these paths, so it must contain the
-  // newest commit at or before the target that touched them.
-  const shareChange = git("log", "-1", "--format=%H", target, "--", ...SHARE_PATHS);
-  if (!shareChange.ok) throw new Error(`could not read share history: ${shareChange.error}`);
+  // Workers Builds deploys artifact-share and the superthread site only for their paths,
+  // so each must contain the newest commit at or before the target that touched them.
   const workers = [{ name: "Web", url: "https://www.mauricekleine.com/api/deploy.json", target }];
-  if (shareChange.output) {
-    workers.push({ name: "Share", url: "https://share.mauricekleine.com/_health", target: shareChange.output });
+  for (const [name, url, paths] of [
+    ["Share", "https://share.mauricekleine.com/_health", SHARE_PATHS],
+    ["Superthread", "https://superthread.mauricekleine.com/api/deploy.json", SUPERTHREAD_PATHS],
+  ]) {
+    const change = git("log", "-1", "--format=%H", target, "--", ...paths);
+    if (!change.ok) throw new Error(`could not read ${name.toLowerCase()} history: ${change.error}`);
+    if (change.output) workers.push({ name, url, target: change.output });
   }
 
   const deadline = Date.now() + timeout * 1000;
