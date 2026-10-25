@@ -1,0 +1,832 @@
+/* The foundations pages: colour, type, space, motion, marks and texture. Values, tables and legends follow the
+   world's token sheet (reach.html, sections g and h): mono values at 12/16, caps legends at 11/14, notes in the muted
+   ink, 1 px rules between rows and a rule in the foreground ink under a table's head. In the components layer, so an
+   item's own utilities still win inside a specimen. */
+
+@layer components {
+  /* prose, legends and notes between the specimens */
+  .st-f-copy {
+    max-width: 600px;
+    color: var(--muted-foreground);
+    font: 400 15px/24px var(--font-sans);
+  }
+  .st-f-copy + * {
+    margin-top: 24px;
+  }
+  .st-f-legend {
+    margin-top: 32px;
+    color: var(--muted-foreground);
+  }
+  .st-f-legend + * {
+    margin-top: 12px;
+  }
+  .st-f-note {
+    margin-top: 4px;
+    color: var(--muted-foreground);
+    font: 400 13px/20px var(--font-sans);
+  }
+  .st-f-note + * {
+    margin-top: 16px;
+  }
+  :is(.st-f-strip, .st-f-states-row, .st-f-focus, .st-f-band, .st-f-face-head, .st-f-face-cuts) .type-meta {
+    color: var(--muted-foreground);
+  }
+
+  /* one ink as a value: chip, hex, and a note under the hex */
+  .st-f-ink {
+    display: inline-grid;
+    grid-template-columns: 16px auto;
+    column-gap: 8px;
+    align-items: center;
+    min-width: 0;
+  }
+  .st-f-ink i {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border);
+  }
+  .st-f-ink code {
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-f-ink small {
+    grid-column: 2;
+    color: var(--muted-foreground);
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  /* a reference table: caps legends over a rule in the foreground ink, 1 px rules between rows */
+  .st-f-scroll {
+    overflow-x: auto;
+  }
+  .st-f-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .st-f-table thead th {
+    padding: 0 16px 12px 0;
+    border-bottom: 1px solid var(--foreground);
+    color: var(--muted-foreground);
+    font: 400 11px/14px var(--font-mono);
+    letter-spacing: 0.14em;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .st-f-table tbody :is(th, td) {
+    padding: 10px 16px 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+    text-align: left;
+    vertical-align: middle;
+  }
+  .st-f-table :is(th, td):last-child {
+    padding-right: 0;
+  }
+  .st-f-table code {
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-f-roles tbody th {
+    width: 36%;
+  }
+  .st-f-breaks tbody th {
+    width: 120px;
+  }
+
+  /* colour: the wedge as two strips of steps; below 640 px of column each strip stands up as a list */
+  .st-f-strips {
+    display: grid;
+    gap: 28px;
+  }
+  .st-f-strip {
+    container-type: inline-size;
+  }
+  .st-f-strip ol {
+    display: grid;
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    margin-top: 12px;
+    border: 1px solid var(--rule);
+  }
+  .st-f-strip li {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 72px;
+    padding: 6px;
+    font: 400 11px/14px var(--font-mono);
+  }
+  .st-f-strip b {
+    font-weight: 400;
+  }
+  @container (max-width: 640px) {
+    .st-f-strip ol {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .st-f-strip li {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      height: 32px;
+      padding: 0 12px;
+    }
+  }
+
+  /* colour: the house ink's roles, ratios and pressed states */
+  .st-f-swatches {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px 12px;
+  }
+  .st-f-swatches .st-swatch i {
+    height: 40px;
+  }
+  .st-f-swatches .st-swatch b {
+    font-size: 13px;
+    line-height: 18px;
+    overflow-wrap: anywhere;
+  }
+  .st-f-ratios {
+    display: grid;
+    margin-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    line-height: 20px;
+  }
+  .st-f-ratios div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .st-f-ratios dt {
+    color: var(--muted-foreground);
+  }
+  .st-f-ratios dd {
+    font: 400 12px/20px var(--font-mono);
+  }
+  .st-f-states-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .st-f-states-row li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* colour: each ship's mark, name, spot, line screen and hex */
+  .st-f-ships li {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .st-f-ships li:first-child {
+    border-top: 1px solid var(--border);
+  }
+  .st-f-ships li > span:first-of-type {
+    min-width: 0;
+  }
+  .st-f-ship-name {
+    display: flex;
+    flex-direction: column;
+  }
+  .st-f-ship-name small {
+    color: var(--muted-foreground);
+    font-size: 13px;
+    line-height: 18px;
+  }
+  .st-f-ship-inks {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .st-f-ship-inks i {
+    width: 24px;
+    height: 24px;
+  }
+  .st-f-ship-inks code {
+    margin-left: 6px;
+    font: 400 12px/16px var(--font-mono);
+  }
+
+  /* colour: each state's badge and inks, with the ratios that hold them */
+  .st-f-status > li {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .st-f-status > li:first-child {
+    padding-top: 0;
+  }
+  .st-f-status-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .st-f-status-head small {
+    color: var(--muted-foreground);
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-f-status dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .st-f-status dl > div {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+  }
+  .st-f-status dt {
+    color: var(--muted-foreground);
+    font: 400 11px/14px var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* type: each face with its cuts, then the steps */
+  .st-f-faces {
+    border-top: 1px solid var(--rule);
+  }
+  .st-f-faces > li {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    column-gap: 24px;
+    padding: 24px 0 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .st-f-face-head {
+    display: contents;
+  }
+  .st-f-face-head .type-meta {
+    grid-row: 1;
+    padding-top: 9px;
+  }
+  .st-f-face-head b {
+    grid-column: 2;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 28px;
+  }
+  .st-f-face-head small {
+    grid-column: 2;
+    color: var(--muted-foreground);
+    font-size: 13px;
+    line-height: 20px;
+  }
+  .st-f-face-cuts {
+    display: grid;
+    grid-column: 2;
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .st-f-face-cuts li {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    align-items: baseline;
+    gap: 4px 16px;
+  }
+  .st-f-cut {
+    font-size: 28px;
+    line-height: 36px;
+  }
+  .st-f-steps {
+    border-top: 1px solid var(--rule);
+  }
+  .st-f-steps > li {
+    padding: 20px 0 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .st-f-step-spec {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 16px;
+    margin-bottom: 12px;
+  }
+  .st-f-step-spec code {
+    color: var(--muted-foreground);
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-f-steps .type-read,
+  .st-f-steps .type-lede {
+    max-width: 27.5em;
+  }
+
+  /* space: the scale, the rows and the focus specimens */
+  .st-f-scale li {
+    display: grid;
+    grid-template-columns: 32px auto;
+    align-items: center;
+    gap: 16px;
+    height: 28px;
+  }
+  .st-f-scale code {
+    color: var(--muted-foreground);
+    font: 400 12px/16px var(--font-mono);
+    text-align: right;
+  }
+  .st-f-scale i {
+    display: block;
+    background: var(--foreground);
+  }
+  .st-f-rows {
+    border-top: 1px solid var(--rule);
+  }
+  .st-f-rows li {
+    box-sizing: content-box;
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .st-f-rows b {
+    font-weight: 500;
+  }
+  .st-f-rows span {
+    color: var(--muted-foreground);
+  }
+  .st-f-rows code {
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-f-focus {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 24px 40px;
+    padding: 4px;
+  }
+  .st-f-focus figure {
+    display: grid;
+    justify-items: start;
+    gap: 12px;
+  }
+  .st-f-focus figure:last-child {
+    flex: 1;
+    justify-items: stretch;
+    min-width: 160px;
+  }
+
+  /* space: elevation on stock and on the deep ground, in each mode. The right padding leaves room for the rake */
+  .st-f-bands {
+    border: 1px solid var(--rule);
+  }
+  .st-f-band {
+    padding: 24px 64px 48px 24px;
+    background: var(--background);
+    color: var(--foreground);
+  }
+  .st-f-band[data-ground] {
+    background: var(--ground);
+    color: var(--ground-foreground);
+  }
+  .st-f-band[data-ground] > .type-meta {
+    color: var(--ground-foreground);
+  }
+  .st-f-lifts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px 64px;
+    margin-top: 20px;
+  }
+  .st-f-lift {
+    position: relative;
+    min-height: 88px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    background: var(--popover);
+    color: var(--popover-foreground);
+  }
+  .st-f-lift b {
+    font-weight: 500;
+  }
+  .st-f-lift code {
+    display: block;
+    margin-top: 4px;
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-f-lift small {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted-foreground);
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  /* motion: the play control, each duration's track, and the ease drawn */
+  .st-f-durations {
+    margin-top: 20px;
+    border-top: 1px solid var(--rule);
+  }
+  .st-f-durations li {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    align-items: center;
+    gap: 6px 24px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .st-f-durations p {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .st-f-durations b {
+    font-weight: 500;
+  }
+  .st-f-durations code {
+    color: var(--muted-foreground);
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-f-durations small {
+    grid-column: 2;
+    color: var(--muted-foreground);
+    font-size: 13px;
+    line-height: 20px;
+  }
+  .st-f-track {
+    display: block;
+    height: 12px;
+    padding: 1px;
+    border: 1px solid var(--input);
+  }
+  .st-f-track i {
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    transition-property: width;
+    transition-timing-function: var(--ease-brand);
+  }
+  [data-played] .st-f-track i {
+    width: 100%;
+  }
+  .st-f-ease {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px 24px;
+  }
+  .st-f-ease code {
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-f-curve rect {
+    fill: none;
+    stroke: var(--border);
+  }
+  .st-f-curve-handle {
+    fill: none;
+    stroke: var(--muted-foreground);
+  }
+  .st-f-curve-line {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 2;
+  }
+  .st-f-curve circle {
+    fill: var(--background);
+    stroke: var(--muted-foreground);
+  }
+
+  /* marks: each drawing at 11 px a cell under its grid, the 16 px file on four chromes, then its name and spot */
+  .st-f-marks {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 176px);
+    gap: 40px 48px;
+  }
+  .st-f-marks > li {
+    display: flex;
+    flex-direction: column;
+  }
+  .st-f-drawing {
+    position: relative;
+    width: 176px;
+    height: 176px;
+  }
+  .st-f-drawing :is(img, svg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .st-f-drawing path {
+    fill: none;
+    stroke: #8a8b8d;
+    stroke-opacity: 0.3;
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    shape-rendering: crispEdges;
+  }
+  .st-f-chromes {
+    display: flex;
+    width: max-content;
+    margin-top: 14px;
+    border: 1px solid var(--border);
+  }
+  .st-f-chromes li {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 28px;
+  }
+  .st-f-marks b {
+    margin-top: 14px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 22px;
+  }
+  .st-f-marks code {
+    margin-top: 2px;
+    color: var(--muted-foreground);
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-f-marks p {
+    margin-top: 8px;
+    color: var(--muted-foreground);
+    font-size: 13px;
+    line-height: 19px;
+  }
+  /* a band in one mode, so a drawing always sits on the chrome it was drawn for, whatever the page's mode */
+  .st-f-markband {
+    padding: 24px 24px 40px;
+    background: var(--background);
+    color: var(--foreground);
+  }
+  .light.st-f-markband {
+    border: 1px solid var(--rule);
+  }
+  .st-f-markband > .st-f-legend {
+    margin-top: 0;
+  }
+  .st-f-home {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid var(--rule);
+  }
+  .st-f-home > .st-f-markband {
+    flex: 1;
+    border: 0;
+  }
+  .st-f-tab {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--border);
+  }
+  .st-f-files a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: underline;
+    text-decoration-color: var(--border);
+    text-underline-offset: 4px;
+  }
+  @media (hover: hover) {
+    .st-f-files a:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+
+  /* texture: the places, each specimen pair stacked so the plates keep their width */
+  .st-f-places > li + li,
+  .st-f-details > li + li {
+    margin-top: 56px;
+  }
+  .st-f-places h3 + *,
+  .st-f-details h3 + * {
+    margin-top: 6px;
+  }
+  .st-f-details .st-caption + * {
+    margin-top: 4px;
+  }
+  .st-modepair.st-f-stack {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .st-f-stack > .st-modepair-pane + .st-modepair-pane {
+    border-top: 1px solid var(--rule);
+    border-left: 0;
+  }
+  .st-f-cropped {
+    position: relative;
+    width: calc(100% - 52px);
+    max-width: var(--crop-w);
+    margin: 26px;
+  }
+  .st-f-lines {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(184px, 1fr));
+    gap: 12px 20px;
+    margin-top: 16px;
+  }
+  .st-f-cropped + .st-f-lines {
+    margin-top: 8px;
+  }
+  .st-f-lines li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 20px;
+  }
+  .st-f-lines i {
+    flex: none;
+    width: 32px;
+    height: 24px;
+  }
+  .st-f-lines code {
+    margin-left: auto;
+    color: var(--muted-foreground);
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-f-marks-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .st-f-progress {
+    max-width: 400px;
+  }
+  .st-f-levels {
+    display: flex;
+    gap: 32px;
+  }
+  .st-f-levels li {
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+  }
+  .st-f-levels code {
+    color: var(--muted-foreground);
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-f-level {
+    display: block;
+    width: 48px;
+    height: 48px;
+    background: var(--first);
+  }
+  .st-f-b50 {
+    mask: var(--texture-b50) 0 0 / 4px 4px;
+  }
+  .st-f-b19 {
+    mask: var(--texture-b19) 0 0 / 4px 4px;
+  }
+  .st-f-bayer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 24px;
+    margin-top: 28px;
+  }
+  .st-f-bayer table {
+    border-spacing: 2px;
+    border-collapse: separate;
+  }
+  .st-f-bayer td {
+    width: 30px;
+    height: 30px;
+    background: var(--muted);
+    color: var(--muted-foreground);
+    font: 400 12px/30px var(--font-mono);
+    text-align: center;
+  }
+  .st-f-bayer figcaption {
+    max-width: 360px;
+    color: var(--muted-foreground);
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  /* texture: the component details' specimens */
+  .st-f-layer {
+    position: relative;
+    width: 200px;
+    margin-bottom: 16px;
+    padding: 4px 0;
+  }
+  .st-f-layer li {
+    padding: 6px 12px;
+  }
+  .st-f-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+  }
+  .st-f-checks label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .st-f-disabled {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+  .st-f-field {
+    width: 200px;
+  }
+  .st-f-skeleton {
+    display: grid;
+    gap: 12px;
+    max-width: 100%;
+  }
+  .st-f-skeleton > * {
+    max-width: 100%;
+  }
+
+  /* the nav and aside leave: tables and lists tighten */
+  @media (max-width: 900px) {
+    .st-f-band {
+      padding-right: 48px;
+    }
+  }
+
+  /* the phone: one column wherever two would crowd, drawings at 9 px a cell, phone plates' widths */
+  @media (max-width: 600px) {
+    .st-f-cropped {
+      max-width: var(--crop-phone-w);
+    }
+    .st-f-faces > li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .st-f-face-head .type-meta {
+      padding-top: 0;
+    }
+    .st-f-face-head :is(b, small),
+    .st-f-face-cuts {
+      grid-column: 1;
+    }
+    .st-f-face-cuts li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .st-f-cut {
+      font-size: 24px;
+      line-height: 32px;
+    }
+    .st-f-lifts {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .st-f-band {
+      padding: 20px 48px 40px 20px;
+    }
+    .st-f-durations li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .st-f-durations small {
+      grid-column: 1;
+    }
+    .st-f-marks {
+      grid-template-columns: repeat(2, 144px);
+      gap: 32px 16px;
+    }
+    .st-f-drawing {
+      width: 144px;
+      height: 144px;
+    }
+    .st-f-markband {
+      padding: 20px 16px 32px;
+    }
+    .st-f-roles tbody th {
+      width: 30%;
+      overflow-wrap: anywhere;
+    }
+    /* the files table stands up: each mark's name, then its two files, one per line */
+    .st-f-files,
+    .st-f-files tbody {
+      display: block;
+    }
+    .st-f-files thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .st-f-files tbody {
+      border-top: 1px solid var(--foreground);
+    }
+    .st-f-files tbody tr {
+      display: grid;
+      gap: 8px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .st-f-files tbody :is(th, td) {
+      padding: 0;
+      border: 0;
+    }
+  }
+}
