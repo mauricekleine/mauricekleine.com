@@ -537,9 +537,10 @@
     }
   }
 
-  @media (max-width: 599px) {
-    /* the agents page's runs keep run, task, status and took, and the task wraps to the width left */
-    .mock-phone-off {
+  @container (width < 720px) {
+    /* the whole runs table needs 719 px; in a narrower section it keeps run, task, status and took, and the task
+       wraps to the width left */
+    .mock-narrow-off {
       display: none;
     }
     .mock-task {
