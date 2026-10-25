@@ -42,9 +42,17 @@ function Page() {
               <figcaption className="type-meta">rest · try it</figcaption>
               <RailLive />
             </figure>
-            <figure className="st-c-figure">
+            <figure className="st-c-figure st-c-column-only">
               <figcaption className="type-meta">hover quanta · focus artifacts · trisys unlinked</figcaption>
-              <RailStates />
+              <RailStates hover="quanta" focus="artifacts" />
+            </figure>
+            <figure className="st-c-figure st-c-bar-only">
+              <figcaption className="type-meta">hover quanta · trisys unlinked</figcaption>
+              <RailStates hover="quanta" />
+            </figure>
+            <figure className="st-c-figure st-c-bar-only">
+              <figcaption className="type-meta">focus artifacts · trisys unlinked</figcaption>
+              <RailStates focus="artifacts" />
             </figure>
           </div>
         </ModePair>

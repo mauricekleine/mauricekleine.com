@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { fleet, type ShipId } from "@/components/superthread/lib/fleet";
 import { FleetRail } from "@/components/superthread/ui/fleet-rail";
 import {
   SidebarContent,
@@ -43,17 +44,20 @@ export function RailLive() {
   );
 }
 
-// The rail's states, printed: quanta under the pointer, artifacts under keyboard focus and trisys with no link, which
-// makes it a disabled cell. The rail sets no props on its cells, so the demo states go on after it mounts. Quanta's
-// tab hangs right and artifacts' hangs left, so on a phone's bar both show and never meet. The print is inert, so it
-// takes no pointer and no focus; the ground around it still scrolls.
-export function RailStates() {
+// The rail's states, printed: the ship under the pointer, the ship under keyboard focus and trisys with no link, which
+// makes it a disabled cell. The rail sets no props on its cells, so the demo states go on after it mounts, on the
+// cells in the fleet's order. Beside the column each tab slides out on its cell's own row, so one print holds quanta's
+// tab and artifacts'. On the bar at 900 px and below both tabs drop under the row, and artifacts' tab, hanging left,
+// covers quanta's, so the page prints each state on a bar of its own there. The print is inert, so it takes no pointer
+// and no focus; the ground around it still scrolls.
+export function RailStates({ hover, focus }: { hover?: ShipId; focus?: ShipId }) {
   const print = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const cells = print.current?.querySelectorAll('[data-slot="fleet-rail-cell"]');
-    cells?.[1]?.setAttribute("data-demo", "hover");
-    cells?.[4]?.setAttribute("data-demo", "focus-visible");
-  }, []);
+    const at = (id?: ShipId) => (id ? cells?.[fleet.findIndex((ship) => ship.id === id)] : undefined);
+    at(hover)?.setAttribute("data-demo", "hover");
+    at(focus)?.setAttribute("data-demo", "focus-visible");
+  }, [hover, focus]);
   return (
     <div className="st-c-ground st-c-print">
       <div ref={print} inert>

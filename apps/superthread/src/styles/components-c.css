@@ -115,6 +115,10 @@
   .st-c-figure > figcaption {
     color: var(--muted-foreground);
   }
+  /* the printed states: above 900 px one column print holds both tabs, and the two bar prints stay hidden */
+  .st-c-bar-only {
+    display: none;
+  }
 
   @media (max-width: 900px) {
     /* the rail is a bar now: each specimen takes the column, and a bar wider than the column scrolls inside it */
@@ -123,6 +127,14 @@
     }
     .st-c-ground {
       overflow-x: auto;
+    }
+
+    /* on the bar both tabs drop under the row and artifacts', hanging left, would cover quanta's: a bar per state */
+    .st-c-column-only {
+      display: none;
+    }
+    .st-c-bar-only {
+      display: grid;
     }
   }
 
