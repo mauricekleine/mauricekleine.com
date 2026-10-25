@@ -7,9 +7,11 @@
 //
 // Transforms, in order: the `cn` package and `@/lib/utils` become our utils; registry hooks and lib paths, then
 // ui paths, move under `@/components/superthread/`; `@/hooks/use-mobile` follows; `IconPlaceholder` becomes
-// `Icon` from our glyphs by the table below; `"use client"` goes. `print` also strips the focus classes the stage 0
-// gate rules off every seeded control (build ruling 2). Anything a rule does not cover fails, so a new upstream
-// import, icon or prop is a decision, never a silent drop.
+// `Icon` from our glyphs by the table below; `"use client"` goes; upstream's style hooks become our utilities; served
+// labels (an sr-only element's text, aria labels, titles, alt text, placeholders) go lowercase. `print` also strips
+// the focus classes the stage 0 gate rules off every seeded control (build ruling 2). `regen` also applies each pass
+// item's class table and fails on a style hook no rule maps. Anything a rule does not cover fails, so a new upstream
+// import, icon, prop or class is a decision, never a silent drop.
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -66,6 +68,35 @@ export const ICON_MAP: Record<string, { glyph: string; add?: string; drop?: stri
   OctagonXIcon: { glyph: "cross" }, // error is failed
   Loader2Icon: { glyph: "i", drop: ["animate-spin"] }, // loading shows as running, static, no spin
 };
+
+/**
+ * Upstream's style hooks (`cn-*` classes, which shadcn's own style sheet defines and ours does not) to the utilities
+ * that carry them here. `regen` fails on a hook this table does not map, so no pass item names an undefined class.
+ */
+export const STYLE_HOOKS: Record<string, string[]> = {
+  "cn-font-heading": ["font-display"],
+};
+
+/**
+ * Per pass item, an upstream class word and the words that replace it. A word the upstream file no longer carries
+ * fails `regen`, so the table cannot go stale silently.
+ */
+export const PASS_CLASSES: Record<string, Record<string, string[]>> = {
+  // a bare `transition` also fades outline-color, so the close button's focus ring would fade in with the popup;
+  // the popup moves only these two
+  sheet: { transition: ["transition-[opacity,translate]"] },
+};
+
+/** JSX attributes whose string value is served as words. */
+export const LABEL_ATTRIBUTES = [
+  "aria-label",
+  "aria-description",
+  "aria-roledescription",
+  "aria-valuetext",
+  "title",
+  "alt",
+  "placeholder",
+];
 
 const UTILS = "@/components/superthread/lib/utils";
 const GLYPHS_MODULE = "@/components/superthread/ui/glyphs";
@@ -217,18 +248,63 @@ export function isStrippedFocusClass(token: string): boolean {
   return (u === "outline-1" || u === "border-ring") && token.includes("focus");
 }
 
-/** The seed transform: drops the ruled focus classes from every class string in the file. */
-function stripFocusClasses(src: string): string {
-  return src.replace(/"(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'/g, (lit) => {
+/** A one-line string literal in single or double quotes: where class words live. */
+const LITERAL = /"(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'/g;
+
+/** Rewrites the words of every string literal: `map` returns a word's replacement words, or undefined to keep it. */
+function mapClassWords(src: string, map: (word: string) => string[] | undefined): string {
+  return src.replace(LITERAL, (lit) => {
     const quote = lit[0]!;
     const words = lit.slice(1, -1).split(/\s+/).filter(Boolean);
-    const kept = words.filter((w) => !isStrippedFocusClass(w));
-    return kept.length === words.length ? lit : `${quote}${kept.join(" ")}${quote}`;
+    let changed = false;
+    const out = words.flatMap((word) => {
+      const replaced = map(word);
+      if (replaced === undefined) return [word];
+      changed = true;
+      return replaced;
+    });
+    return changed ? `${quote}${out.join(" ")}${quote}` : lit;
   });
 }
 
-/** Transforms 1 to 6, in order; `seed` adds the seed transform (`print`). */
-export function transform(content: string, where: string, opts: { seed?: boolean } = {}): string {
+/** The seed transform: drops the ruled focus classes from every class string in the file. */
+function stripFocusClasses(src: string): string {
+  return mapClassWords(src, (word) => (isStrippedFocusClass(word) ? [] : undefined));
+}
+
+/** Upstream's style hooks become our utilities; a pass item also takes its class table, every entry of which must hit. */
+function mapClasses(src: string, where: string, pass: string | undefined): string {
+  const table = (pass && PASS_CLASSES[pass]) || {};
+  const hit = new Set<string>();
+  const out = mapClassWords(src, (word) => {
+    if (Object.hasOwn(table, word)) {
+      hit.add(word);
+      return table[word];
+    }
+    return Object.hasOwn(STYLE_HOOKS, word) ? STYLE_HOOKS[word] : undefined;
+  });
+  const stale = Object.keys(table).filter((word) => !hit.has(word));
+  if (stale.length)
+    throw new Error(`${where}: the pass class table names ${stale.join(", ")}, which upstream no longer has`);
+  return out;
+}
+
+/** Served labels go lowercase: string values of the label attributes, and the text of an sr-only element. */
+function lowercaseLabels(src: string): string {
+  const attribute = new RegExp(`(\\s(?:${LABEL_ATTRIBUTES.join("|")})=)(["'])([^"'\\n]*)\\2`, "g");
+  return src
+    .replace(
+      attribute,
+      (_, name: string, quote: string, text: string) => `${name}${quote}${text.toLowerCase()}${quote}`,
+    )
+    .replace(
+      /(className=(["'])(?:[^"'\n]*\s)?sr-only(?:\s[^"'\n]*)?\2[^<>]*>)([^<{]*)(?=<)/g,
+      (_, open: string, _quote: string, text: string) => `${open}${text.toLowerCase()}`,
+    );
+}
+
+/** Transforms 1 to 8, in order; `seed` adds the seed transform (`print`), `pass` names the pass item `regen` writes. */
+export function transform(content: string, where: string, opts: { seed?: boolean; pass?: string } = {}): string {
   let src = content;
   let usesIcons = false;
   src = src.replace(SPECIFIER, (all, lead: string, q: string, spec: string) => {
@@ -246,8 +322,15 @@ export function transform(content: string, where: string, opts: { seed?: boolean
     src = replaceIcons(src, where, glyphNames());
   }
   src = src.replace(/^(["'])use client\1;?[ \t]*\n(?:[ \t]*\n)?/, "");
+  src = mapClasses(src, where, opts.pass);
+  src = lowercaseLabels(src);
   if (opts.seed) src = stripFocusClasses(src);
 
+  if (opts.pass) {
+    const words = [...src.matchAll(LITERAL)].flatMap(([lit]) => lit.slice(1, -1).split(/\s+/));
+    const hooks = [...new Set(words.filter((word) => utilityOf(word).startsWith("cn-")))];
+    if (hooks.length) throw new Error(`${where}: style hook ${hooks.join(", ")} has no rule in STYLE_HOOKS`);
+  }
   for (const m of src.matchAll(SPECIFIER)) {
     const spec = m[3]!;
     if (/^@\/(registry|app|lib|hooks|components\/ui)\//.test(spec) || spec === "@/lib/utils")
@@ -283,7 +366,8 @@ export function itemPath(file: UpstreamFile): string {
 export function passFiles(): Map<string, string> {
   const out = new Map<string, string>();
   for (const name of GENERATED)
-    for (const file of readItem(name).files) out.set(itemPath(file), transform(file.content, `${name}: ${file.path}`));
+    for (const file of readItem(name).files)
+      out.set(itemPath(file), transform(file.content, `${name}: ${file.path}`, { pass: name }));
   return out;
 }
 

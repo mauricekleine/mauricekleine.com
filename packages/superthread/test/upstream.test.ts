@@ -122,6 +122,39 @@ describe("the transforms", () => {
     expect(hits).toEqual([]);
   });
 
+  test("served labels go lowercase and upstream's style hooks become our utilities, in seeds and pass items alike", () => {
+    const probe = [
+      `const a = <span className="sr-only">Close</span>`,
+      `const b = <button aria-label="Close toast" title="Toggle Sidebar" />`,
+      `const c = <img alt='A Mark' placeholder="Search" />`,
+      `const d = "cn-font-heading text-base font-medium"`,
+      ``,
+    ].join("\n");
+    const want = [
+      `const a = <span className="sr-only">close</span>`,
+      `const b = <button aria-label="close toast" title="toggle sidebar" />`,
+      `const c = <img alt='a mark' placeholder="search" />`,
+      `const d = "font-display text-base font-medium"`,
+      ``,
+    ].join("\n");
+    expect(transform(probe, "probe")).toBe(want);
+    expect(transform(probe, "probe", { seed: true })).toBe(want);
+  });
+
+  test("regen applies a pass item's class table, and fails on a stale entry or a style hook with no rule", () => {
+    expect(transform(`const c = "transition duration-200"\n`, "probe", { pass: "sheet" })).toBe(
+      `const c = "transition-[opacity,translate] duration-200"\n`,
+    );
+    expect(() => transform(`const c = "px-2"\n`, "probe", { pass: "sheet" })).toThrow(/no longer has/);
+    expect(() => transform(`const c = "cn-menu-target px-2"\n`, "probe", { pass: "card" })).toThrow(
+      /style hook cn-menu-target has no rule/,
+    );
+    // a brand seed keeps its other hooks for its slice to decide
+    expect(transform(`const c = "cn-menu-target px-2"\n`, "probe", { seed: true })).toBe(
+      `const c = "cn-menu-target px-2"\n`,
+    );
+  });
+
   test("an unmapped icon or an unknown icon prop fails instead of dropping silently", () => {
     const icon = (attrs: string) =>
       `import { IconPlaceholder } from "@/app/(create)/components/icon-placeholder"\nconst x = <IconPlaceholder ${attrs} />\n`;

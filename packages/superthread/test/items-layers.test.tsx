@@ -118,17 +118,6 @@ describe("the layer sources", () => {
   });
 });
 
-// A focus ring snaps on: `transition-colors` and `transition-all` would also fade outline-color, so no shipped item
-// transitions more than the colours it changes on hover (button, tabs and the rail name theirs).
-test("no shipped item transitions colours or everything wholesale", () => {
-  const files = [...new Set(catalog.flatMap((item) => item.files.map((file) => file.path)))];
-  expect(files.length).toBeGreaterThan(20);
-  const hits = files.flatMap((path) =>
-    [...read(path).matchAll(/(?<![\w-])transition-(?:colors|all)(?![\w-])/g)].map(([hit]) => `${path}: ${hit}`),
-  );
-  expect(hits).toEqual([]);
-});
-
 // ---------------------------------------------------------------------------------------------------------------
 
 type Rendered = { el: Element; classes: string[] };

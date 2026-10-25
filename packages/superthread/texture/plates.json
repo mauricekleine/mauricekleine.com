@@ -37,10 +37,11 @@
       "function": "fields.opener_png",
       "form": "composite",
       "w": "build_sketch.W",
-      "h": 120,
+      "h": 160,
+      "h_from": "up from the first 120, so the page title's knock in the lower left covers less of the rope",
       "path": "fields.REACH_PATH",
       "width": 36,
-      "width_from": "the sketch's rope width 58 scaled by height, 58 x 120 / 196, rounded",
+      "width_from": "the sketch's rope width 58 scaled to the first 120 px band, 58 x 120 / 196, rounded; the band grew taller and the rope kept its weight",
       "modes": ["light", "dark"]
     },
     "band-phone": {
@@ -48,7 +49,8 @@
       "function": "fields.opener_png",
       "form": "composite",
       "w": "fields.PHONE_W",
-      "h": 120,
+      "h": 136,
+      "h_from": "up from the first 120, for the same knock at 600 px and below",
       "path": "fields.PHONE_PATH",
       "width": 36,
       "width_from": "the band's rope width",

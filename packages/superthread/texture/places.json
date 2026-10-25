@@ -1,0 +1,35 @@
+{
+  "about": "caption keys for the five places the world screens beside its component details, which tokens/master.json texture.places names without keys. each entry gives the world's place name, the key a page captions it by, the caption's name and its job (the world's note, except the progress edge, which names its 24 px). package-owned: tokens/details.json is the world's dump and never takes it. test/captions.test.ts holds this list to the world's places, in the world's order",
+  "places": [
+    {
+      "key": "opener",
+      "place": "opener",
+      "detail": "opener",
+      "job": "one band per page head, inside crop marks"
+    },
+    {
+      "key": "figure",
+      "place": "figures",
+      "detail": "figures",
+      "job": "reading figures and the chart's line screens"
+    },
+    {
+      "key": "mark",
+      "place": "marks",
+      "detail": "marks",
+      "job": "one dithered region"
+    },
+    {
+      "key": "ramp",
+      "place": "state fields",
+      "detail": "progress edge",
+      "job": "the fill's leading 24 px, screened from solid to the stock"
+    },
+    {
+      "key": "empty",
+      "place": "empty and loading places",
+      "detail": "empty and loading",
+      "job": "a light key wedge"
+    }
+  ]
+}
