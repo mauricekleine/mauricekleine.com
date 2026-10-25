@@ -1,9 +1,8 @@
-/* The mock pages: three apps composed from the registry's items inside the fleet frame, on the deep ground. This
-   file lays them out; every control's look is the item's own. Measures follow the master's board and reading page;
-   the breakpoints are the master's (1279, 900 and 600). In the components layer, so an item's own utilities win. */
+/* App-specific layout: the reading sheet, plate choices, chart geometry, collection breakpoints and field grid.
+   The composition blocks own the frame, panels, heads, controls, rows, cards, states and forms. */
 
 @layer components {
-  /* the app's ground beside the frame: its top lines up with the rail's */
+  /* AppShellGround is main-only; the docs shell already owns main, so this ground remains a div. */
   .mock-ground {
     flex: 1;
     min-width: 0;
@@ -39,44 +38,11 @@
     color: var(--muted-foreground);
   }
 
-  /* a raised working panel: the board, and the agents page */
-  .mock-panel {
-    max-width: 880px;
-    padding: 40px 48px 28px;
+  .mock-empty {
+    container: empty / inline-size;
   }
-  .mock-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 28px;
-  }
-  .mock-count {
-    margin-right: auto;
-    font-size: var(--text-summary);
-    line-height: 22px;
-    color: var(--muted-foreground);
-  }
-  .mock-tabs {
-    margin-bottom: 32px;
-  }
-
-  /* the board's second row: the agent picker, and the quieter switch between the rows and the columns */
-  .mock-tools {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px 16px;
-    margin-bottom: 24px;
-  }
-  .mock-view {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .mock-view > .type-meta {
-    margin-right: 8px;
+  .mock-board-rows {
+    display: none;
   }
 
   /* the board's columns: five across while each keeps 144 px, so an empty column's field holds the 112 px column
@@ -93,45 +59,6 @@
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 16px;
     }
-  }
-  .mock-column {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-  .mock-column-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding-bottom: 12px;
-    margin-bottom: 12px;
-    border-bottom: 1px solid var(--foreground);
-  }
-  .mock-column-head .mock-quiet {
-    font-family: var(--font-mono);
-    font-size: var(--text-instrument);
-  }
-  .mock-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
-    gap: 8px;
-    list-style: none;
-  }
-  .mock-meta {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    font-size: var(--text-instrument);
-    line-height: var(--text-instrument--line-height);
-    color: var(--muted-foreground);
-  }
-  .mock-empty {
-    container: empty / inline-size;
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    padding: 28px 16px 0;
   }
   /* the empty wedge prints whole at the width it shows: the wide plate where the field holds its 608 px, the phone
      plate where it does not, and the column plate in a column of the five-across board */
@@ -157,16 +84,6 @@
       display: block;
     }
   }
-  .mock-empty p {
-    font-size: var(--text-instrument);
-    line-height: var(--text-instrument--line-height);
-    color: var(--muted-foreground);
-  }
-  .mock-empty b {
-    display: block;
-    font-weight: 500;
-    color: var(--foreground);
-  }
 
   /* a plate in its crop marks; the field is as wide as the plate it shows */
   .mock-field {
@@ -180,9 +97,6 @@
     grid-template-columns: minmax(0, 672px) 264px;
     gap: 48px;
     align-items: start;
-  }
-  .mock-sheet {
-    padding: 40px 72px 56px;
   }
   .mock-runhead {
     display: flex;
@@ -309,12 +223,6 @@
   .mock-section {
     container-type: inline-size;
   }
-  .mock-section + .mock-section {
-    margin-top: 56px;
-  }
-  .mock-section > h2 {
-    margin-bottom: 20px;
-  }
   .mock-ship {
     display: inline-flex;
     align-items: center;
@@ -322,9 +230,6 @@
   }
   .mock-task {
     min-width: 224px;
-  }
-  .mock-after {
-    margin-top: 20px;
   }
 
   /* the chart: whole-pixel slots, the phone drawing below 600 px of pane rather than a scaled one */
@@ -439,60 +344,9 @@
     }
   }
 
-  /* the forms: two columns of fields, one on a phone */
-  .mock-form {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
-    max-width: 640px;
-  }
-  .mock-wide,
-  .mock-actions {
+  /* Paired fields span both columns where they need the full measure. */
+  .mock-wide {
     grid-column: 1 / -1;
-  }
-  .mock-control {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    min-width: 0;
-    margin: 0;
-    padding: 0;
-    border: 0;
-  }
-  .mock-control legend {
-    margin-bottom: 8px;
-    padding: 0;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1;
-  }
-  .mock-checks {
-    gap: 12px;
-  }
-  .mock-check-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding-left: 26px;
-  }
-  .mock-hint {
-    font-size: var(--text-instrument);
-    line-height: var(--text-instrument--line-height);
-    color: var(--muted-foreground);
-  }
-  .mock-error {
-    color: var(--error);
-  }
-  .mock-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 12px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border);
-  }
-  .mock-actions:has(> :only-child) {
-    justify-content: flex-end;
   }
 
   @media (max-width: 1279px) {
@@ -508,7 +362,7 @@
 
   @media (max-width: 900px) {
     .mock-ground {
-      padding: 0 16px 40px;
+      padding: 0 12px 40px;
     }
     /* the board's rows keep id, title, status and age */
     .mock-agent {
@@ -517,23 +371,17 @@
   }
 
   @media (max-width: 600px) {
-    .mock-ground {
-      padding: 0 12px 40px;
+    .mock-board-table {
+      display: none;
     }
-    .mock-panel {
-      padding: 28px 16px 16px;
-    }
-    .mock-sheet {
-      padding: 28px 20px 40px;
+    .mock-board-rows {
+      display: block;
     }
     .mock-sheet h1 {
       margin-top: 36px;
     }
     .mock-field {
       width: min(100%, var(--field-phone-w));
-    }
-    .mock-form {
-      grid-template-columns: minmax(0, 1fr);
     }
   }
 
