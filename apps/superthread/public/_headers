@@ -1,0 +1,19 @@
+/*
+  Strict-Transport-Security: max-age=31536000
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+/r/:file
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300, must-revalidate
+/r/v/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
+/marks/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=86400
+/texture/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/api/deploy.json
+  Cache-Control: no-store

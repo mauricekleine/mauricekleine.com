@@ -1,0 +1,801 @@
+/* The site's shell: the masthead, the nav, the page column and the aside, the mock pages' strip, and the content
+   blocks every page shares. Measures follow the master's sketch at 1440 x 900; the breakpoints are the master's
+   (1279, 1099, 900 and 600). In the components layer, so an item's own utilities still win inside a block. */
+
+@layer components {
+  html {
+    scroll-padding-top: 77px;
+  }
+
+  .st-skip {
+    position: fixed;
+    left: 8px;
+    top: 8px;
+    z-index: 70;
+    padding: 8px 12px;
+    border: 1px solid var(--rule);
+    background: var(--background);
+    color: var(--foreground);
+  }
+  .st-skip:not(:focus) {
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+  .st-main:focus,
+  .st-app-main:focus {
+    outline: 0;
+  }
+
+  /* labels set in mono read in the muted ink unless a cell says otherwise */
+  :is(.st-crumb, .st-meta, .st-sidenav, .st-toc, .st-wedge, .st-states, .st-modepair-pane, .st-caption, .st-strip-crumb)
+    > .type-meta,
+  .st-crumb .type-meta,
+  .st-meta dt,
+  .st-sidenav h3,
+  .st-search-list .type-meta {
+    color: var(--muted-foreground);
+  }
+
+  /* the masthead: one row of cells divided by rules, held at the top while the page scrolls */
+  .st-mast {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    height: 77px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--background);
+  }
+  .st-brand {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 264px;
+    padding: 0 24px;
+    border-right: 1px solid var(--rule);
+    font: 400 21px/1 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  .st-mark {
+    flex: none;
+    display: block;
+    image-rendering: pixelated;
+  }
+  .st-crumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 0 28px;
+    white-space: nowrap;
+  }
+  .st-crumb b {
+    min-width: 0;
+    overflow: hidden;
+    font-weight: 500;
+    text-overflow: ellipsis;
+  }
+  .st-mast-search {
+    flex: none;
+    align-self: center;
+    width: 260px;
+  }
+  .st-meta {
+    flex: none;
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    align-content: center;
+    row-gap: 5px;
+    width: 291px;
+    margin-left: auto;
+    padding: 0 24px;
+    border-left: 1px solid var(--rule);
+  }
+  .st-meta dt {
+    line-height: 16px;
+  }
+  .st-meta dd {
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-mast-menu {
+    display: none;
+  }
+  .st-house {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 77px;
+    border-left: 1px solid var(--rule);
+  }
+  .st-house i {
+    width: 46px;
+    height: 46px;
+    background: var(--primary);
+    outline: 1px solid var(--foreground);
+    outline-offset: 3px;
+  }
+
+  /* the search: the field is the registry's input-group; the matches open 8 px below it as a raised list */
+  .st-search {
+    position: relative;
+  }
+  .st-key {
+    padding: 0 6px;
+    border: 1px solid var(--input);
+    color: var(--foreground);
+    font: 400 12px/18px var(--font-mono);
+  }
+  .st-search-list {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 40;
+    width: max(100%, 280px);
+    padding: 4px;
+    list-style: none;
+  }
+  .st-search-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+    cursor: default;
+  }
+  .st-search-list li[aria-selected="true"] {
+    background: var(--raised-hover);
+  }
+  .st-search-list .st-search-none {
+    color: var(--muted-foreground);
+  }
+
+  /* the docs body: nav, page and aside, divided by rules that run the full height. The nav's rule belongs to the
+     column, not to the sticky nav, so it runs past the first screen on a long page */
+  .st-body {
+    display: grid;
+    grid-template-columns: 264px minmax(0, 1fr) 368px;
+    align-items: start;
+    min-height: calc(100dvh - 77px);
+    background: linear-gradient(var(--rule), var(--rule)) 263px 0 / 1px 100% no-repeat;
+  }
+  .st-body-nav {
+    position: sticky;
+    top: 77px;
+    grid-row: 1 / span 2;
+    grid-column: 1;
+    height: calc(100dvh - 77px);
+  }
+  .st-main {
+    position: relative;
+    grid-row: 1;
+    grid-column: 2;
+    min-width: 0;
+    padding: 0 56px 96px;
+  }
+  .st-page {
+    max-width: 696px;
+  }
+  /* beside the page the aside spans both rows, so its rule runs to the foot like the nav's */
+  .st-aside {
+    grid-row: 1 / span 2;
+    grid-column: 3;
+    align-self: stretch;
+    min-width: 0;
+    border-left: 1px solid var(--rule);
+  }
+  .st-aside-inner {
+    padding: 28px;
+  }
+
+  /* the nav: groups under mono labels, the current page boxed in the house ink with its 8 px square; the list
+     scrolls on its own so the mode control stays at the foot */
+  .st-sidenav {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px;
+  }
+  .st-sidenav-list {
+    flex: 1;
+    min-height: 0;
+    margin: 0 -4px;
+    padding: 20px 4px 4px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .st-sidenav ul {
+    list-style: none;
+  }
+  .st-sidenav h3 {
+    margin: 18px 10px 6px;
+  }
+  .st-sidenav-plain:last-child {
+    margin-top: 20px;
+  }
+  .st-sidenav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 29px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+  }
+  @media (hover: hover) {
+    .st-sidenav a:not([aria-current="page"]):hover {
+      background: var(--control-hover);
+    }
+  }
+  .st-sidenav a[aria-current="page"] {
+    border-color: var(--primary);
+    background: var(--accent);
+    font-weight: 500;
+  }
+  .st-sidenav a[aria-current="page"]::before {
+    content: "";
+    flex: none;
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+  }
+  .st-sidenav-foot {
+    flex: none;
+    padding-top: 16px;
+  }
+
+  /* the mode control: three cells in one box; the stored choice prints pressed from <html data-theme-choice>, so
+     the prerendered page never shows the wrong one */
+  .st-mode {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--foreground);
+  }
+  .st-mode button {
+    height: 30px;
+    padding: 0 10px;
+    background: transparent;
+    color: var(--muted-foreground);
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+    letter-spacing: var(--text-meta--letter-spacing);
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .st-mode button + button {
+    border-left: 1px solid var(--border);
+  }
+  @media (hover: hover) {
+    .st-mode button:hover {
+      color: var(--foreground);
+    }
+  }
+  html[data-theme-choice="light"] .st-mode [data-theme-option="light"],
+  html[data-theme-choice="dark"] .st-mode [data-theme-option="dark"],
+  html[data-theme-choice="auto"] .st-mode [data-theme-option="auto"] {
+    background: var(--foreground);
+    color: var(--background);
+  }
+  .st-mode-compact {
+    grid-template-columns: repeat(3, auto);
+    height: 100%;
+    border: 0;
+    border-left: 1px solid var(--rule);
+  }
+  .st-mode-compact button {
+    height: 100%;
+    padding: 0 12px;
+  }
+
+  /* the aside: on this page, the wedge, the states */
+  .st-toc ul {
+    margin-top: 8px;
+    list-style: none;
+  }
+  .st-toc a {
+    display: block;
+    color: var(--muted-foreground);
+    line-height: 28px;
+  }
+  .st-toc a[aria-current] {
+    color: var(--foreground);
+    font-weight: 500;
+  }
+  .st-wedge {
+    margin-top: 28px;
+  }
+  .st-wedge-dark,
+  .st-wedge-light:is(.dark *):not(.light *) {
+    display: none;
+  }
+  .st-wedge-dark:is(.dark *):not(.light *) {
+    display: block;
+  }
+  .st-wedge table {
+    width: 100%;
+    margin-top: 12px;
+    border: 1px solid var(--rule);
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .st-wedge td {
+    height: 34px;
+    padding: 0 10px;
+    border-top: 1px solid var(--border);
+  }
+  .st-wedge td:first-child {
+    width: 52px;
+    padding: 0;
+    border-right: 1px solid var(--border);
+  }
+  .st-wedge td i {
+    display: block;
+    height: 33px;
+  }
+  .st-wedge .st-wedge-step {
+    width: 44px;
+    font: 400 12px/16px var(--font-mono);
+  }
+  .st-wedge s {
+    color: var(--muted-foreground);
+    text-decoration: none;
+  }
+  .st-wedge tr:last-child td {
+    border-top-color: var(--rule);
+  }
+  .st-states {
+    margin-top: 28px;
+  }
+  .st-states > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  /* an inner page's head: the slim band inside its crop marks, the title knocked out of its lower left */
+  .st-pagehead {
+    padding-top: 40px;
+  }
+  .st-pagehead > :not(.st-band) {
+    margin-top: 40px;
+  }
+  .st-pagehead > .st-lede {
+    margin-top: 44px;
+  }
+  .st-band {
+    position: relative;
+    max-width: 696px;
+  }
+  .st-knock {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    max-width: 100%;
+    padding: 14px 30px 0 0;
+    background: var(--background);
+  }
+  .st-lede {
+    max-width: 696px;
+  }
+  .st-lede a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  /* crop marks: 10 px ticks set 16 px outside the field */
+  .st-crop {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .st-crop i {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 0 solid var(--foreground);
+  }
+  .st-crop i:nth-child(1) {
+    left: -16px;
+    top: -16px;
+    border-width: 0 1px 1px 0;
+  }
+  .st-crop i:nth-child(2) {
+    right: -16px;
+    top: -16px;
+    border-width: 0 0 1px 1px;
+  }
+  .st-crop i:nth-child(3) {
+    left: -16px;
+    bottom: -16px;
+    border-width: 1px 1px 0 0;
+  }
+  .st-crop i:nth-child(4) {
+    right: -16px;
+    bottom: -16px;
+    border-width: 1px 0 0 1px;
+  }
+
+  /* a plate at its own pixel size: a narrower box crops it, never scales it */
+  .st-plate {
+    position: relative;
+    width: min(100%, var(--plate-w));
+    height: var(--plate-h);
+    overflow: hidden;
+    image-rendering: pixelated;
+  }
+  .st-plate[data-form="missing"] {
+    background: var(--muted);
+  }
+  .st-plate[data-form="composite"] {
+    background: var(--plate-light) 0 0 / var(--plate-w) var(--plate-h) no-repeat;
+  }
+  .st-plate[data-form="composite"]:is(.dark *):not(.light *) {
+    background-image: var(--plate-dark);
+  }
+  .st-plate i {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--plate-w);
+    height: var(--plate-h);
+    mask: var(--plate-mask) 0 0 / var(--plate-w) var(--plate-h) no-repeat;
+  }
+  .st-plate-first {
+    --plate-mask: var(--plate-light-first);
+    background: var(--first);
+  }
+  .st-plate-spot {
+    --plate-mask: var(--plate-light-spot);
+    background: var(--primary);
+  }
+  .st-plate-first:is(.dark *):not(.light *) {
+    --plate-mask: var(--plate-dark-first);
+  }
+  .st-plate-spot:is(.dark *):not(.light *) {
+    --plate-mask: var(--plate-dark-spot);
+  }
+
+  /* a page section: a rule across the whole page column, then the heading, on the 64/44 rhythm */
+  .st-section {
+    margin-top: 64px;
+    padding-top: 44px;
+  }
+  .st-section::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    margin-top: -44px;
+    background: var(--rule);
+  }
+  .st-section > h2 + * {
+    margin-top: 24px;
+  }
+
+  /* the code patch: one command on the code ground, the prompt cell, the copy cell */
+  .st-code {
+    display: flex;
+    height: 52px;
+    background: var(--code);
+    color: var(--code-foreground);
+    font: 400 15px/52px var(--font-mono);
+  }
+  .st-code-prompt {
+    flex: none;
+    width: 52px;
+    border-right: 1px solid var(--code-border);
+    color: var(--code-muted);
+    text-align: center;
+  }
+  .st-code code {
+    flex: 1;
+    min-width: 0;
+    padding: 0 20px;
+    overflow-x: auto;
+    font: inherit;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+  .st-code em {
+    color: var(--code-accent);
+    font-style: normal;
+  }
+  .st-code button {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px;
+    border-left: 1px solid var(--code-border);
+    background: none;
+    color: inherit;
+    font: 400 11px/1 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .st-code button:focus-visible {
+    outline-color: var(--code-ring);
+    outline-offset: var(--code-ring-offset);
+  }
+
+  /* one specimen in both modes, side by side */
+  .st-modepair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid var(--rule);
+  }
+  .st-modepair-pane {
+    min-width: 0;
+    padding: 20px 24px 28px;
+    background: var(--background);
+    color: var(--foreground);
+  }
+  .st-modepair-pane + .st-modepair-pane {
+    border-left: 1px solid var(--rule);
+  }
+  .st-modepair-body {
+    margin-top: 16px;
+  }
+
+  .st-swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .st-swatch i {
+    display: block;
+    height: 56px;
+    border: 1px solid var(--border);
+  }
+  .st-swatch figcaption {
+    display: flex;
+    flex-direction: column;
+  }
+  .st-swatch b {
+    font-weight: 500;
+  }
+  .st-swatch span {
+    color: var(--muted-foreground);
+    font: 400 12px/16px var(--font-mono);
+  }
+
+  .st-caption {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+    margin-top: 12px;
+  }
+
+  /* the nav inside the phone sheet: clear of the sheet's close button */
+  .st-sheet-nav .st-sidenav {
+    height: 100%;
+    padding-top: 48px;
+  }
+
+  /* the mock pages: a 32 px strip back to the docs over the app, full bleed on the deep ground */
+  .st-app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    background: var(--ground);
+    color: var(--ground-foreground);
+  }
+  .st-strip {
+    flex: none;
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+    height: 32px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--background);
+    color: var(--foreground);
+  }
+  .st-strip-back {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    border-right: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    letter-spacing: var(--text-meta--letter-spacing);
+    text-transform: uppercase;
+  }
+  .st-strip-crumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .st-strip-crumb b {
+    min-width: 0;
+    overflow: hidden;
+    font-weight: 500;
+    text-overflow: ellipsis;
+  }
+  .st-strip-mode {
+    margin-left: auto;
+  }
+  .st-app-main {
+    flex: 1;
+    min-height: 0;
+  }
+
+  @media (max-width: 1279px) {
+    .st-body {
+      grid-template-columns: 264px minmax(0, 1fr) 312px;
+    }
+    .st-main {
+      padding: 0 40px 96px;
+    }
+    .st-crumb {
+      padding: 0 20px;
+    }
+    .st-mast-search {
+      width: 220px;
+    }
+    .st-meta {
+      grid-template-columns: 64px 1fr;
+      width: 240px;
+      padding: 0 20px;
+    }
+  }
+
+  /* the aside drops under the page; the masthead loses the system cell */
+  @media (max-width: 1099px) {
+    .st-body {
+      grid-template-columns: 264px minmax(0, 1fr);
+    }
+    .st-aside {
+      grid-row: 2;
+      grid-column: 2;
+      border-top: 1px solid var(--rule);
+      border-left: 0;
+    }
+    .st-aside-inner {
+      max-width: 808px;
+      padding: 28px 40px 64px;
+    }
+    .st-meta {
+      display: none;
+    }
+    .st-mast-search {
+      margin-left: auto;
+      margin-right: 20px;
+    }
+  }
+
+  /* the nav leaves the page for the masthead's menu; the masthead becomes the top bar with the search below it */
+  @media (max-width: 900px) {
+    html {
+      scroll-padding-top: 0;
+    }
+    .st-mast {
+      position: static;
+      flex-wrap: wrap;
+      height: auto;
+    }
+    .st-brand {
+      flex: 1;
+      width: auto;
+      height: 65px;
+      padding: 0 16px;
+      border-right: 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .st-crumb {
+      display: none;
+    }
+    .st-mast-menu {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .st-house {
+      width: 64px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .st-house i {
+      width: 36px;
+      height: 36px;
+    }
+    .st-mast-search {
+      order: 3;
+      flex-basis: calc(100% - 32px);
+      width: auto;
+      margin: 14px 16px;
+    }
+    .st-body {
+      grid-template-columns: minmax(0, 1fr);
+      min-height: 0;
+      background: none;
+    }
+    .st-body-nav {
+      display: none;
+    }
+    .st-main {
+      grid-column: 1;
+      padding: 0 16px 64px 32px;
+    }
+    .st-aside {
+      grid-column: 1;
+    }
+    .st-aside-inner {
+      padding: 28px 16px 56px 32px;
+    }
+    .st-modepair {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .st-modepair-pane + .st-modepair-pane {
+      border-top: 1px solid var(--rule);
+      border-left: 0;
+    }
+  }
+
+  /* the phone plates take over, drawn at the column's own width so the field stays whole */
+  @media (max-width: 600px) {
+    .st-knock {
+      padding: 10px 16px 0 0;
+    }
+    /* the strip keeps the page's name; "mock pages" goes */
+    .st-strip-crumb .type-meta {
+      display: none;
+    }
+    .st-plate[data-phone] {
+      width: min(100%, var(--plate-phone-w));
+      height: var(--plate-phone-h);
+    }
+    .st-plate[data-phone="composite"] {
+      background: var(--plate-phone-light) 0 0 / var(--plate-phone-w) var(--plate-phone-h) no-repeat;
+    }
+    .st-plate[data-phone="composite"]:is(.dark *):not(.light *) {
+      background-image: var(--plate-phone-dark);
+    }
+    .st-plate[data-phone] i {
+      width: var(--plate-phone-w);
+      height: var(--plate-phone-h);
+      mask-size: var(--plate-phone-w) var(--plate-phone-h);
+    }
+    .st-plate[data-phone] .st-plate-first {
+      --plate-mask: var(--plate-phone-light-first);
+    }
+    .st-plate[data-phone] .st-plate-spot {
+      --plate-mask: var(--plate-phone-light-spot);
+    }
+    .st-plate[data-phone] .st-plate-first:is(.dark *):not(.light *) {
+      --plate-mask: var(--plate-phone-dark-first);
+    }
+    .st-plate[data-phone] .st-plate-spot:is(.dark *):not(.light *) {
+      --plate-mask: var(--plate-phone-dark-spot);
+    }
+    .st-code {
+      font-size: 13px;
+    }
+    .st-code-prompt {
+      width: 40px;
+    }
+    .st-code code {
+      padding: 0 12px;
+    }
+    .st-code button {
+      padding: 0 14px;
+    }
+    .st-code button span {
+      display: none;
+    }
+  }
+}

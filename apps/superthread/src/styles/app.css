@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "../../../../packages/superthread/dist/v2/site/superthread.css";
+@import "./shell.css";
+@import "./overview.css";
+@import "./foundations.css";
+@import "./components-a.css";
+@import "./components-b.css";
+@import "./components-c.css";
+@import "./components-d.css";
+@import "./mock.css";
+
+/* the site renders the registry's own item sources, so their classes are scanned from there */
+@source "../../../../packages/superthread/items";
+
+/* Site-only state variants. Each matches the real state and a printed one, [data-demo~="<state>"], so a static
+   specimen shows exactly what the item's own classes draw in that state, texture included. The items never see
+   these: an app that installs them gets Tailwind's own variants. */
+@custom-variant hover {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+  &[data-demo~="hover"] {
+    @slot;
+  }
+}
+@custom-variant active (&:is(:active, [data-demo~="active"]));
+@custom-variant focus (&:is(:focus, [data-demo~="focus"]));
+@custom-variant focus-visible (&:is(:focus-visible, [data-demo~="focus-visible"]));
+@custom-variant focus-within (&:is(:focus-within, [data-demo~="focus-within"]));
+@custom-variant disabled (&:is(:disabled, [data-demo~="disabled"]));
+
+/* The input-group box draws its focus edge under has-[input:focus,textarea:focus], which no variant above reaches,
+   so its printed focus is the same edge written out: 2 px inside the box in --fx. */
+[data-slot="input-group"][data-demo~="focus"] {
+  border-color: var(--fx);
+  outline: 2px solid var(--fx);
+  outline-offset: -2px;
+}
