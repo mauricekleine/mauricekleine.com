@@ -143,23 +143,6 @@
     }
   }
 
-  /* the install patch wraps once the column is too narrow for its line, so the whole command stays in view */
-  @container (max-width: 639px) {
-    .st-ov-install .st-code {
-      height: auto;
-      min-height: 52px;
-      line-height: 24px;
-    }
-    .st-ov-install .st-code-prompt {
-      padding-top: 14px;
-    }
-    .st-ov-install .st-code code {
-      padding-block: 14px;
-      white-space: normal;
-      overflow-wrap: anywhere;
-    }
-  }
-
   /* the fleet folds to two rows of three once a cell is too narrow for the longest spot name, then to three rows of
      two; a row's first cell drops its divider and every row after the first takes one on top */
   @container (max-width: 649px) {
@@ -273,21 +256,7 @@
   .st-in-item span {
     color: var(--muted-foreground);
   }
-  /* code patches on this page wrap instead of scrolling, so a long line (init's url, any line on a phone) shows whole */
-  .st-code.st-in-wrap {
-    height: auto;
-    min-height: 52px;
-    line-height: 24px;
-  }
-  .st-code.st-in-wrap .st-code-prompt {
-    padding-top: 14px;
-  }
-  .st-code.st-in-wrap code {
-    padding-block: 14px;
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-  /* an item's line: the same patch at 40 px */
+  /* an item's line: the shell's code patch at 40 px; it wraps between words as every patch does */
   .st-code.st-in-patch {
     min-height: 40px;
     font-size: 13px;

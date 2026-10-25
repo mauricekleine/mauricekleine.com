@@ -393,6 +393,7 @@
   }
   .st-lede {
     max-width: 696px;
+    text-wrap: pretty;
   }
   .st-lede a {
     text-decoration: underline;

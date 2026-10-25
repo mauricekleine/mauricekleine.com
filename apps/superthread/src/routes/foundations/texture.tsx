@@ -74,7 +74,7 @@ function Marks({ mode }: { mode: Mode }) {
 
 // each place by the name tokens.ts gives it, before its note in parentheses
 const placeSpecimen: Record<string, (mode: Mode) => ReactNode> = {
-  opener: () => <Screened name="band" phone="band-phone" width={696} height={120} />,
+  opener: () => <Screened name="band" phone="band-phone" width={696} height={160} />,
   figures: () => (
     <>
       <Screened name="figure" phone="figure-phone" width={520} height={150} />
