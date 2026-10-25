@@ -5,7 +5,7 @@ import { act, createElement } from "react";
 import { createRoot } from "react-dom/client";
 import { catalog } from "../items/catalog.ts";
 
-// Scans every shipped component source, the brand items and the pass items regen writes, as it is served: through
+// Scans every shipped component source, the brand items, the blocks and the pass items regen writes, as it is served: through
 // Bun's transpiler first, so types and comments are gone and JSX text arrives as string children. One test per file,
 // so a file's own owner can run its row. Labels a primitive supplies itself never reach the source, so the toast
 // viewport, whose Base UI part names itself, is also rendered (into the preload's happy-dom) and its labels read.
@@ -15,7 +15,7 @@ const FILES = [
   ...new Set(
     catalog
       .flatMap((item) => item.files)
-      .filter((file) => file.type === "registry:ui" || file.type === "registry:hook")
+      .filter((file) => ["registry:ui", "registry:hook", "registry:component"].includes(file.type))
       .map((file) => file.path),
   ),
 ].sort();

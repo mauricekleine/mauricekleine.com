@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle",
+  "title": "toggle",
+  "description": "a button that stays pressed, boxed in the house ink while it is on",
+  "dependencies": [
+    "@base-ui/react@^1.8.0",
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/toggle.tsx",
+      "content": "import { Toggle as TogglePrimitive } from \"@base-ui/react/toggle\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/toggle 2.0.0-next.4\n\n// The button sizes, with a quiet rest and a boxed current state. Only ink and fill transition; focus snaps on.\nconst toggleVariants = cva(\n  \"group/toggle relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2.5 border border-transparent text-ui font-medium whitespace-nowrap text-foreground transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none not-data-disabled:not-aria-pressed:hover:bg-control-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) aria-invalid:border-error aria-pressed:border-primary aria-pressed:bg-accent aria-pressed:text-accent-foreground data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        outline: \"border-input bg-transparent data-disabled:bg-faint\",\n      },\n      size: {\n        default: \"h-10 min-w-10 px-4.5 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3\",\n        sm: \"h-8 min-w-8 gap-2 px-3 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2\",\n        lg: \"h-12 min-w-12 px-6 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  },\n);\n\n// A standalone pressed control keeps the outside house ring. Disabled outline toggles take the faint stock.\nfunction Toggle({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  ...props\n}: TogglePrimitive.Props & VariantProps<typeof toggleVariants>) {\n  return (\n    <TogglePrimitive\n      data-slot=\"toggle\"\n      data-mk=\"toggle\"\n      className={cn(toggleVariants({ variant, size, className }))}\n      {...props}\n    />\n  );\n}\n\nexport { Toggle, toggleVariants };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/toggle.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.0.0-next.4",
+    "sha256": "c1f01ef8c0315a0bc20e3604ec5a3836ec850a535c157a53cff8bc0eb6697e4f",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "toggle",
+      "sha256": "f06447a03bcc1e510f3a50d5e7735bd82bdc17bc77849596709727c215bcc20e",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

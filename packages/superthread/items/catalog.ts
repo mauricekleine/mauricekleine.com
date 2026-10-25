@@ -3,12 +3,15 @@
 // Only init and tokens list dependencies by hand: init has no files, and tokens' css imports
 // packages that no TS file imports. Sources mirror their install targets under items/.
 
-export type Tier = "style" | "brand" | "pass" | "lib";
+export type Tier = "style" | "brand" | "pass" | "lib" | "block";
+
+// The apps a composition serves: the fleet apps whose screens repeat it.
+export type App = "constellation" | "quanta" | "trisys" | "orbit" | "artifacts" | "www";
 
 // The DETAILS keys in tokens/details.json (steer 4's component details), at most one per item.
 export type TextureKey = "contact" | "mixed" | "tabhover" | "rowedge" | "disabled" | "skeleton";
 
-export type FileType = "registry:file" | "registry:lib" | "registry:ui" | "registry:hook";
+export type FileType = "registry:file" | "registry:lib" | "registry:ui" | "registry:hook" | "registry:component";
 
 export type CatalogFile = {
   // relative to packages/superthread
@@ -43,6 +46,8 @@ export type CatalogItem = {
   // the base-nova item it is seeded from, or null
   upstream: string | null;
   texture?: TextureKey;
+  // a block's apps, which build-registry.ts serves in its meta
+  serves?: App[];
   extends?: "none";
   dependencies?: string[];
   registryDependencies?: string[];
@@ -54,6 +59,12 @@ const ui = (name: string): CatalogFile => ({
   path: `items/ui/${name}.tsx`,
   type: "registry:ui",
   target: `@components/superthread/ui/${name}.tsx`,
+});
+
+const block = (name: string): CatalogFile => ({
+  path: `items/blocks/${name}.tsx`,
+  type: "registry:component",
+  target: `@components/superthread/blocks/${name}.tsx`,
 });
 
 const lib = (name: string): CatalogFile => ({
@@ -518,5 +529,136 @@ export const catalog: CatalogItem[] = [
     ],
     tier: "pass",
     upstream: "use-mobile",
+  },
+  // compositions: the patterns the fleet's apps repeat, composed from the items above
+  {
+    name: "page-header",
+    type: "registry:block",
+    title: "page header",
+    description: "a page's title, with a way back, a lede, its meta and its actions",
+    files: [block("page-header")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "quanta", "trisys", "orbit", "artifacts", "www"],
+  },
+  {
+    name: "states",
+    type: "registry:block",
+    title: "states",
+    description: "what a collection shows while it loads, when it fails and when it is empty",
+    files: [block("states")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "quanta", "trisys", "orbit", "artifacts"],
+  },
+  {
+    name: "app-shell",
+    type: "registry:block",
+    title: "app shell",
+    description: "a ship's frame: the fleet rail, the ship's own nav and the working panel on the deep ground",
+    files: [block("app-shell")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "quanta", "trisys", "orbit", "artifacts"],
+  },
+  {
+    name: "section-header",
+    type: "registry:block",
+    title: "section header",
+    description: "a section's head, with its count and a link to the rest",
+    files: [block("section-header")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "quanta", "trisys", "orbit", "www"],
+  },
+  {
+    name: "search-palette",
+    type: "registry:block",
+    title: "search palette",
+    description: "one search over everything, opened from its button or its key",
+    files: [block("search-palette")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "trisys", "artifacts"],
+  },
+  {
+    name: "collection-toolbar",
+    type: "registry:block",
+    title: "collection toolbar",
+    description: "the row above a collection: its filters, how many show, and how to view them",
+    files: [block("collection-toolbar")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "trisys", "orbit", "artifacts"],
+  },
+  {
+    name: "list-rows",
+    type: "registry:block",
+    title: "list rows",
+    description: "ruled rows, each a title with its time, a meta line and its actions",
+    files: [block("list-rows")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "quanta", "trisys", "orbit", "www"],
+  },
+  {
+    name: "item-cards",
+    type: "registry:block",
+    title: "item cards",
+    description: "a grid of cards, each a title with its status, meta and actions",
+    files: [block("item-cards")],
+    tier: "block",
+    upstream: null,
+    serves: ["trisys", "orbit", "artifacts", "www"],
+  },
+  {
+    name: "data-table",
+    type: "registry:block",
+    title: "data table",
+    description: "a table its heads sort, with chosen rows and a row for when it is empty",
+    files: [block("data-table")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "quanta", "trisys", "artifacts"],
+  },
+  {
+    name: "form-section",
+    type: "registry:block",
+    title: "form section",
+    description: "a titled group of fields that saves or discards its changes",
+    files: [block("form-section")],
+    tier: "block",
+    upstream: null,
+    serves: ["quanta", "trisys", "orbit", "www"],
+  },
+  {
+    name: "quick-add",
+    type: "registry:block",
+    title: "quick add",
+    description: "one field and its button, for adding a thing by its name",
+    files: [block("quick-add")],
+    tier: "block",
+    upstream: null,
+    serves: ["trisys", "orbit", "www"],
+  },
+  {
+    name: "facts",
+    type: "registry:block",
+    title: "facts",
+    description: "labelled values in a ruled grid",
+    files: [block("facts")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "quanta", "trisys", "orbit", "artifacts"],
+  },
+  {
+    name: "notice",
+    type: "registry:block",
+    title: "notice",
+    description: "a flat notice in the flow: its status glyph, what happened and what to do",
+    files: [block("notice")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "trisys", "orbit", "artifacts"],
   },
 ];

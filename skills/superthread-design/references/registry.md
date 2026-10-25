@@ -1,6 +1,6 @@
 # registry
 
-`@mk` is a shadcn registry of Base UI items on the superthread tokens, served at https://superthread.mauricekleine.com/r/. The version is `2.0.0-next.2`. Each item's page on the site shows it in light and dark with its install line.
+`@mk` is a shadcn registry of Base UI items on the superthread tokens, served at https://superthread.mauricekleine.com/r/. The version is `2.0.0-next.4`. Each item's page on the site shows it in light and dark with its install line.
 
 ## items
 
@@ -8,13 +8,15 @@
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | style | `init`, `tokens`                                                                                                                                                           |
 | lib   | `tokens-plain`, `utils`, `fleet`                                                                                                                                           |
-| brand | `glyphs`, `button`, `badge`, `input`, `input-group`, `textarea`, `select`, `checkbox`, `dialog`, `toast`, `tabs`, `table`, `progress`, `skeleton`, `sidebar`, `fleet-rail` |
-| pass  | `card`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile`                                                                                                             |
+| brand | `glyphs`, `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`, `input`, `input-group`, `textarea`, `field`, `select`, `native-select`, `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
+| pass  | `card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile` |
+| block | `app-shell`, `page-header`, `section-header`, `collection-toolbar`, `list-rows`, `item-cards`, `data-table`, `states`, `facts`, `form-section`, `quick-add`, `notice`, `search-palette` |
 
 - **style**: `init` sets up an app; `tokens` is the theme (colour roles, type, motion, shape and the texture tiles).
 - **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `tokens-plain` is the theme as plain CSS and a typed module.
 - **brand**: superthread's own components. They keep shadcn's Base UI API (exports, props, `data-slot`, variants) and add `data-mk="<item>"` on the root.
 - **pass**: base-nova's items as shadcn ships them, on the superthread tokens.
+- **block**: the compositions the fleet's apps repeat, built from the items: a shell, headers, collections, forms, notices and states. Each installs at `components/superthread/blocks/<name>.tsx`; its meta names the apps it serves. Reach for a block before composing the same pattern by hand.
 
 ## install
 
@@ -27,7 +29,7 @@ bunx --bun shadcn@latest add @mk/tokens @mk/button
 
 Init writes the base-nova style and `"@mk": "https://superthread.mauricekleine.com/r/{name}.json"` into `components.json`, and installs `@mk/utils`, `@mk/tokens` and `@mk/button`. After that, `bunx --bun shadcn@latest add @mk/<item>` installs any item and its `@mk` dependencies, and `bunx --bun shadcn@latest search @mk` lists them all.
 
-Items install in `superthread/` under the components directory (`ui/`, `lib/`, `hooks/`, `styles/`), apart from `components/ui/`, so `shadcn apply` and `init --reinstall` leave them alone. Import them from `@/components/superthread/ui/<item>`.
+Items install in `superthread/` under the components directory (`ui/`, `lib/`, `hooks/`, `styles/`, `blocks/`), apart from `components/ui/`, so `shadcn apply` and `init --reinstall` leave them alone. Import them from `@/components/superthread/ui/<item>`.
 
 ## the css entry
 
@@ -72,7 +74,7 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0-next.2/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0-next.4/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions with a snapshot. A snapshot never changes once it is published.
