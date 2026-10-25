@@ -256,6 +256,12 @@
   .st-in-item span {
     color: var(--muted-foreground);
   }
+  /* a composition's apps take their own line under the description */
+  .st-in-item .st-in-serves {
+    flex-basis: 100%;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
   /* an item's line: the shell's code patch at 40 px; it wraps between words as every patch does */
   .st-code.st-in-patch {
     min-height: 40px;

@@ -68,6 +68,12 @@ export const itemGroups = tiers.map(({ tier, title }) => ({
   items: catalog.filter((candidate) => candidate.tier === tier),
 }));
 
+// the apps a composition serves, as a sentence: "serves orbit, trisys and www"
+export function servesLine(apps: readonly string[]): string {
+  const list = apps.length > 1 ? `${apps.slice(0, -1).join(", ")} and ${apps.at(-1)}` : (apps[0] ?? "");
+  return `serves ${list}`;
+}
+
 export function commandFor(name: string): string {
   return name === "init" ? initCommand : installCommand(name);
 }
@@ -127,7 +133,10 @@ function Page() {
         </p>
       </Section>
       <Section id="items" title="every item" className="st-in">
-        <p className="st-in-text">each item in the registry with its line. an item with a page links to it.</p>
+        <p className="st-in-text">
+          each item in the registry with its line. an item with a page links to it, and a composition names the apps it
+          serves.
+        </p>
         {itemGroups.map((group) => (
           <div key={group.tier} className="st-in-group">
             <h3 className="type-meta">{group.title}</h3>
@@ -139,6 +148,7 @@ function Page() {
                     <p className="st-in-item">
                       <b>{page ? <Link to={page.path}>{entry.title}</Link> : entry.title}</b>
                       <span>{entry.description}</span>
+                      {entry.serves && <span className="st-in-serves">{servesLine(entry.serves)}</span>}
                     </p>
                     <CodePatch command={commandFor(entry.name)} className="st-in-patch" />
                   </li>
