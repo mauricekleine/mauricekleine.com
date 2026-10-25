@@ -4,9 +4,12 @@ export interface WorkerEnv {
   ASSETS: { fetch(input: Request | URL): Promise<Response> };
 }
 
-// the worker: static assets, plus the font headers. /fonts/* reaches it first (cloudflare.config.ts), and each face
-// carries its licence's CORS rule from packages/superthread/fonts.ts: the OFL faces to anyone, the ITF faces
-// (Supreme, Erode) only to Maurice's own origins and to local development.
+// the worker: static assets, plus the headers of the two paths that reach it first (cloudflare.config.ts). It sets
+// them on the asset layer's response, and public/_headers has no rule for either path, so each header has one source.
+// - /fonts/*: each face carries its licence's CORS rule from packages/superthread/fonts.ts: the OFL faces to anyone,
+//   the ITF faces (Supreme, Erode) only to Maurice's own origins and to local development.
+// - /r/v/*: the pinned registry snapshots, whose caching depends on whether the file exists, which a path rule
+//   cannot see.
 const ownOrigins = [
   /^https:\/\/([a-z0-9-]+\.)*mauricekleine\.com$/,
   /^https:\/\/(www\.)?mk\.wtf$/,
@@ -30,20 +33,40 @@ export function fontHeaders(path: string, origin: string | null): Record<string,
   return headers;
 }
 
+// The headers a snapshot response carries, from the asset layer's status. A published version never changes, so a
+// file in it keeps for a year. A miss (a file no version has, or a version not published yet) is never stored, so a
+// version is there on the first request after it ships. Since no client stores a miss, a 304 always answers a stored
+// file, and it keeps the year too.
+export function snapshotHeaders(status: number): Record<string, string> {
+  return {
+    "access-control-allow-origin": "*",
+    "cache-control": status === 200 || status === 304 ? "public, max-age=31536000, immutable" : "no-store",
+  };
+}
+
 export async function handle(
   request: Request,
   env: WorkerEnv,
   next: (request: Request) => Response | Promise<Response>,
 ): Promise<Response> {
   const { pathname } = new URL(request.url);
+  if (pathname.startsWith("/r/v/")) {
+    const response = await env.ASSETS.fetch(request);
+    return withHeaders(response, snapshotHeaders(response.status));
+  }
   if (!pathname.startsWith("/fonts/")) return next(request);
 
   const response = await env.ASSETS.fetch(request);
   const fontRule = response.status < 400 ? fontHeaders(pathname, request.headers.get("origin")) : null;
   if (fontRule === null) return response;
-  const headers = new Headers(response.headers);
   // the rule decides the CORS header alone, so nothing upstream can widen it
-  headers.delete("access-control-allow-origin");
-  for (const [name, value] of Object.entries(fontRule)) headers.set(name, value);
+  return withHeaders(response, fontRule, ["access-control-allow-origin"]);
+}
+
+// the asset layer's response, with the dropped headers removed and the given ones set over whatever it sent
+function withHeaders(response: Response, set: Record<string, string>, drop: string[] = []): Response {
+  const headers = new Headers(response.headers);
+  for (const name of drop) headers.delete(name);
+  for (const [name, value] of Object.entries(set)) headers.set(name, value);
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }

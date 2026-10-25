@@ -7,7 +7,7 @@ export default defineConfig({
     name: "superthread",
     compatibilityDate: "2026-07-16",
     compatibilityFlags: ["nodejs_compat"],
-    // the custom server entry sets the font headers (src/server-behavior.ts)
+    // the custom server entry sets the font and snapshot headers (src/server-behavior.ts)
     entrypoint: "./src/server.ts",
     workersDev: false,
     // no domains: superthread.mauricekleine.com waits for the operator step
@@ -16,8 +16,9 @@ export default defineConfig({
       htmlHandling: "auto-trailing-slash",
       // missing routes get the prerendered /404
       notFoundHandling: "404-page",
-      // the worker sees only the fonts, which need their CORS rule; public/_headers covers the rest
-      runWorkerFirst: ["/fonts/*"],
+      // the worker sees the fonts, for their CORS rule, and the pinned snapshots, whose caching depends on whether
+      // the file exists; public/_headers covers the rest
+      runWorkerFirst: ["/fonts/*", "/r/v/*"],
     },
     env: { ASSETS: bindings.assets() },
   },

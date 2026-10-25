@@ -5,9 +5,7 @@
 /r/:file
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=300, must-revalidate
-/r/v/*
-  Access-Control-Allow-Origin: *
-  Cache-Control: public, max-age=31536000, immutable
+# /fonts/* and /r/v/* get their cache and CORS headers from the Worker (src/server-behavior.ts), never from here
 /marks/*
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=86400
