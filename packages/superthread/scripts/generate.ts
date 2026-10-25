@@ -336,6 +336,17 @@ function tokenData(master: Master, all: Role[], texture: Texture | null, details
 
 type Art = string[];
 
+// tokens/glyphs.json is the world's, vendored; tokens/icons.json holds the icons superthread draws beyond it, by hand
+// on the same 12-cell grid. A name in both is an error, so the world's drawing never changes silently.
+export function withOwnIcons(
+  glyphs: { ICONS: Record<string, Art>; GLYPHS: Record<string, Art> },
+  own: Record<string, Art>,
+): { ICONS: Record<string, Art>; GLYPHS: Record<string, Art> } {
+  for (const name of Object.keys(own))
+    if (name in glyphs.ICONS || name in glyphs.GLYPHS) throw new Error(`tokens/icons.json redraws the world's ${name}`);
+  return { ICONS: { ...glyphs.ICONS, ...own }, GLYPHS: glyphs.GLYPHS };
+}
+
 // Runs of set cells as whole-pixel squares, as the master's common.art_path draws them.
 export function artPath(rows: boolean[][]): string {
   let d = "";
@@ -493,7 +504,7 @@ export function build(): Map<string, string> {
   const raw = read("tokens/master.json");
   const master = JSON.parse(raw) as Master;
   const details = JSON.parse(read("tokens/details.json")) as Details;
-  const glyphs = JSON.parse(read("tokens/glyphs.json"));
+  const glyphs = withOwnIcons(JSON.parse(read("tokens/glyphs.json")), JSON.parse(read("tokens/icons.json")));
   const base = read("tokens/base.css").trimEnd();
   const texture = readTexture();
   const all = roles(master as never);

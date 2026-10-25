@@ -14,6 +14,7 @@ const ICONS = {
   "close": [12, "M1 1h2v1h-2zM9 1h2v1h-2zM2 2h2v1h-2zM8 2h2v1h-2zM3 3h2v1h-2zM7 3h2v1h-2zM4 4h4v1h-4zM5 5h2v1h-2zM4 6h4v1h-4zM3 7h2v1h-2zM7 7h2v1h-2zM2 8h2v1h-2zM8 8h2v1h-2zM1 9h2v1h-2zM9 9h2v1h-2z"],
   "trash": [12, "M4 1h4v1h-4zM1 2h10v1h-10zM2 4h8v1h-8zM2 5h1v1h-1zM4 5h1v1h-1zM7 5h1v1h-1zM9 5h1v1h-1zM2 6h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM9 6h1v1h-1zM2 7h1v1h-1zM4 7h1v1h-1zM7 7h1v1h-1zM9 7h1v1h-1zM2 8h1v1h-1zM4 8h1v1h-1zM7 8h1v1h-1zM9 8h1v1h-1zM2 9h8v1h-8z"],
   "plus": [12, "M5 2h2v1h-2zM5 3h2v1h-2zM5 4h2v1h-2zM1 5h10v1h-10zM1 6h10v1h-10zM5 7h2v1h-2zM5 8h2v1h-2zM5 9h2v1h-2z"],
+  "more": [12, "M1 5h2v1h-2zM5 5h2v1h-2zM9 5h2v1h-2zM1 6h2v1h-2zM5 6h2v1h-2zM9 6h2v1h-2z"],
   "tick": [14, "M11 3h2v1h-2zM10 4h2v1h-2zM9 5h2v1h-2zM2 6h2v1h-2zM8 6h2v1h-2zM3 7h2v1h-2zM7 7h2v1h-2zM4 8h4v1h-4zM5 9h2v1h-2z"],
   "i": [14, "M6 2h2v1h-2zM6 3h2v1h-2zM6 5h2v1h-2zM6 6h2v1h-2zM6 7h2v1h-2zM6 8h2v1h-2zM6 9h2v1h-2zM6 10h2v1h-2zM6 11h2v1h-2z"],
   "pause": [14, "M4 3h2v1h-2zM8 3h2v1h-2zM4 4h2v1h-2zM8 4h2v1h-2zM4 5h2v1h-2zM8 5h2v1h-2zM4 6h2v1h-2zM8 6h2v1h-2zM4 7h2v1h-2zM8 7h2v1h-2zM4 8h2v1h-2zM8 8h2v1h-2zM4 9h2v1h-2zM8 9h2v1h-2zM4 10h2v1h-2zM8 10h2v1h-2z"],

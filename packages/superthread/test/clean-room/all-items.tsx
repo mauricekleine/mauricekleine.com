@@ -57,6 +57,7 @@ import {
   SidebarProvider,
 } from "@/components/superthread/ui/sidebar";
 import { Skeleton } from "@/components/superthread/ui/skeleton";
+import { Switch } from "@/components/superthread/ui/switch";
 import {
   Table,
   TableBody,
@@ -392,6 +393,21 @@ function Sink({ mode }: { mode: Mode }) {
           </FleetRail>
         </Contained>
       </Part>
+
+      {/* 2.0: controls */}
+      <Part name="switch">
+        <div className="flex flex-wrap items-center gap-6">
+          <Switch aria-label="off" />
+          <Switch aria-label="on" defaultChecked />
+          <Switch aria-label="small" size="sm" defaultChecked />
+          <Switch aria-label="disabled" disabled defaultChecked />
+          <Switch aria-label="invalid" aria-invalid />
+        </div>
+      </Part>
+
+      {/* 2.0: layers */}
+
+      {/* 2.0: forms */}
     </section>
   );
 }
