@@ -1,0 +1,172 @@
+/* The layer and frame pages: dialog, toast, sidebar and fleet rail. Their printed specimens sit in the mode pairs;
+   the live ones open over the page in its mode. In the components layer, so an item's own utilities still win inside
+   a specimen. */
+
+@layer components {
+  /* a section's few lines of prose */
+  .st-c-copy {
+    max-width: 72ch;
+    color: var(--muted-foreground);
+    font: 400 15px/24px var(--font-sans);
+  }
+  .st-c-copy + * {
+    margin-top: 24px;
+  }
+  .st-c-copy + .st-c-copy {
+    margin-top: 12px;
+  }
+  .st-c-copy code,
+  .st-c-parts code {
+    color: var(--foreground);
+    font: 400 13px/24px var(--font-mono);
+  }
+  .st-c-copy code {
+    white-space: nowrap;
+  }
+
+  /* a mode pair whose specimens want the whole column: light above dark at every width */
+  .st-modepair.st-c-stack {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .st-c-stack > .st-modepair-pane + .st-modepair-pane {
+    border-top: 1px solid var(--rule);
+    border-left: 0;
+  }
+
+  /* controls to try a live specimen */
+  .st-c-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* parts and props: a name in the mono face, then what it does */
+  .st-c-parts {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    max-width: 72ch;
+    border-top: 1px solid var(--rule);
+    font: 400 15px/24px var(--font-sans);
+  }
+  .st-c-parts dt,
+  .st-c-parts dd {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .st-c-parts dt {
+    padding-right: 32px;
+  }
+  .st-c-parts dd {
+    color: var(--muted-foreground);
+  }
+  .st-c-parts dd code {
+    white-space: nowrap;
+  }
+
+  /* dialog: a frame that plays the window. contain: layout makes it the containing block for the fixed scrim and
+     sheet, and paint keeps them inside it. */
+  .st-c-screen {
+    position: relative;
+    height: 328px;
+    border: 1px solid var(--rule);
+    background: var(--background);
+    contain: layout paint;
+  }
+  .st-c-drafts {
+    padding: 20px 24px;
+  }
+  .st-c-drafts > .type-meta {
+    margin-bottom: 4px;
+    color: var(--muted-foreground);
+  }
+  .st-c-drafts li {
+    display: flex;
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+    font-size: var(--text-ui);
+    line-height: var(--text-ui--line-height);
+  }
+  .st-c-drafts li > span:nth-child(2) {
+    color: var(--muted-foreground);
+  }
+
+  /* toast: the printed stack sits in the page, at the toaster's width. Its toasts arrive after hydration, so the
+     box holds their height (the front toast and two peeks) from the first paint. */
+  .st-c-toasts {
+    min-height: 153px;
+    padding-top: 4px;
+  }
+
+  /* fleet rail: specimens side by side, each on a ground wide enough for the longest name's tab */
+  .st-c-rails {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 24px 32px;
+  }
+  .st-c-figure {
+    display: grid;
+    gap: 12px;
+    width: 240px;
+    min-width: 0;
+  }
+  .st-c-figure > figcaption {
+    color: var(--muted-foreground);
+  }
+  /* the printed states: above 900 px one column print holds both tabs, and the two bar prints stay hidden */
+  .st-c-bar-only {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    /* the rail is a bar now: each specimen takes the column, and a bar wider than the column scrolls inside it */
+    .st-c-figure {
+      width: 100%;
+    }
+    .st-c-ground {
+      overflow-x: auto;
+    }
+
+    /* on the bar both tabs drop under the row and artifacts', hanging left, would cover quanta's: a bar per state */
+    .st-c-column-only {
+      display: none;
+    }
+    .st-c-bar-only {
+      display: grid;
+    }
+  }
+
+  @media (max-width: 600px) {
+    /* on a phone the bar's ground runs out through its pane's 24 px inset to the pane's edges, so the home cell and
+       all six ships fit at 390 px. The inset is set here too, so the two numbers move together. */
+    .st-modepair-pane:has(.st-c-ground) {
+      padding-inline: 24px;
+    }
+    .st-c-ground {
+      margin-inline: -24px;
+    }
+
+    /* the dialog's footer stacks its buttons */
+    .st-c-screen {
+      height: 404px;
+    }
+
+    /* and each part's name sits above what it does */
+    .st-c-parts {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .st-c-parts dt {
+      padding: 12px 0 0;
+      border-bottom: 0;
+    }
+    .st-c-parts dd {
+      padding-top: 4px;
+    }
+    .st-c-parts dd code {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  }
+}

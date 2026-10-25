@@ -1,0 +1,212 @@
+/* The pass-through pages (card, label, separator, sheet, tooltip, use-mobile) and the glyphs page: their examples and
+   their short notes. In the components layer, so an item's own utilities still win inside an example. */
+
+@layer components {
+  /* a page's notes: the summary step in the muted ink, at a reading measure, with code in the mono face */
+  .st-pass-prose {
+    max-width: 62ch;
+    color: var(--muted-foreground);
+    font-size: var(--text-summary);
+    line-height: var(--text-summary--line-height);
+    letter-spacing: var(--text-summary--letter-spacing);
+    text-wrap: pretty;
+  }
+  .st-pass-prose + .st-pass-prose {
+    margin-top: 12px;
+  }
+  .st-pass-prose + .st-modepair {
+    margin-top: 28px;
+  }
+  .st-pass-prose code,
+  .st-glyphs-name code {
+    color: var(--foreground);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* card: the footer's facts in the instrument step */
+  .st-pass-note {
+    color: var(--muted-foreground);
+    font-size: var(--text-instrument);
+    line-height: var(--text-instrument--line-height);
+  }
+
+  /* label: a named field above a checkbox */
+  .st-pass-stack {
+    display: grid;
+    gap: 24px;
+  }
+  .st-pass-field {
+    display: grid;
+    gap: 10px;
+  }
+
+  /* separator: rows split across, facts split down */
+  .st-pass-runs > .type-meta {
+    margin-bottom: 12px;
+    color: var(--muted-foreground);
+  }
+  .st-pass-run {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    white-space: nowrap;
+  }
+  .st-pass-run b {
+    min-width: 0;
+    font-weight: 500;
+  }
+  .st-pass-run span {
+    color: var(--muted-foreground);
+  }
+
+  /* a quantity (a task id, an age): mono with tabular figures, as the world sets them */
+  .st-pass-q {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* sheet and tooltip: the layer printed open in a frame. The frame is a containing block for fixed and absolute
+     boxes and clips what reaches past it (contain: layout paint), so the sheet docks to its right edge and the
+     tooltip stays inside it, under the page's sticky masthead. */
+  .st-pass-screen,
+  .st-pass-tipframe {
+    position: relative;
+    contain: layout paint;
+  }
+
+  /* sheet: the frame plays the window, the board behind the sheet stands in for the page, light above dark at every
+     width so each frame has the column */
+  .st-modepair.st-pass-stacked {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .st-pass-stacked > .st-modepair-pane + .st-modepair-pane {
+    border-top: 1px solid var(--rule);
+    border-left: 0;
+  }
+  .st-pass-screen {
+    height: 328px;
+    border: 1px solid var(--rule);
+    background: var(--background);
+  }
+  .st-pass-board {
+    padding: 20px 24px;
+  }
+  .st-pass-board > .type-meta {
+    margin-bottom: 4px;
+    color: var(--muted-foreground);
+  }
+  .st-pass-board li {
+    display: flex;
+    gap: 12px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+    font-size: var(--text-ui);
+    line-height: var(--text-ui--line-height);
+  }
+  .st-pass-board li > .st-pass-q {
+    color: var(--muted-foreground);
+  }
+
+  /* tooltip: room above the buttons for the tooltip and its 4 px offset */
+  .st-pass-tipframe {
+    padding-top: 44px;
+  }
+
+  /* sheet: a run's facts under the sheet's header, on its 16 px inset */
+  .st-pass-facts {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    align-items: center;
+    row-gap: 14px;
+    padding: 0 16px;
+  }
+  .st-pass-facts dt {
+    color: var(--muted-foreground);
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+    letter-spacing: var(--text-meta--letter-spacing);
+    text-transform: uppercase;
+  }
+
+  /* tooltip and sheet, live: the controls, then a line on how to try them */
+  .st-pass-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .st-pass-hint {
+    margin-top: 16px;
+    color: var(--muted-foreground);
+    font-size: var(--text-instrument);
+    line-height: var(--text-instrument--line-height);
+  }
+
+  /* use-mobile: the hook's value and the window's width, as a two-line readout */
+  .st-pass-readout {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    border: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 20px;
+  }
+  .st-pass-readout dt,
+  .st-pass-readout dd {
+    padding: 12px 16px;
+  }
+  .st-pass-readout dt {
+    color: var(--muted-foreground);
+  }
+  .st-pass-readout dd {
+    padding-left: 4px;
+  }
+  .st-pass-readout :is(dt, dd):nth-of-type(n + 2) {
+    border-top: 1px solid var(--border);
+  }
+
+  /* glyphs: a proof sheet of cells, each shape at 2x over its own size and its name. Columns are whole pixels and
+     the shapes sit on the cell's left edge, so every cell of a glyph lands on a whole pixel. */
+  .st-glyphs-sheet {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 96px);
+    gap: 24px 8px;
+    list-style: none;
+  }
+  .st-glyphs-sheet + .st-glyphs-sheet {
+    margin-top: 28px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+  .st-glyphs-cell {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+  }
+  .st-glyphs-big {
+    display: flex;
+    align-items: flex-end;
+    height: 28px;
+  }
+  .st-glyphs-x2 {
+    zoom: 2;
+  }
+  .st-glyphs-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .st-glyphs-name svg {
+    flex: none;
+  }
+  .st-glyphs-note {
+    margin-top: -6px;
+    color: var(--muted-foreground);
+    font-size: var(--text-instrument);
+    line-height: var(--text-instrument--line-height);
+  }
+}

@@ -1,0 +1,272 @@
+/* The overview and the install page. The overview follows the master's sketch at 1440 x 900: the opener band 696 x 196
+   at 40 px under the masthead, the wordmark knocked out of it, the lede 44 px below, the install patch 40 px below
+   that, the fleet 48 px below, and the way in 44 px below the fleet. Narrower columns step by the column's own width
+   (container queries), so the same rules hold beside the aside, under it and on a phone. In the components layer,
+   like the shell, so an item's own utilities still win. */
+
+@layer components {
+  /* the opener: a container, so the wordmark steps with the band's width and never runs past it */
+  .st-opener {
+    container-type: inline-size;
+    padding-top: 40px;
+  }
+  .st-opener-band {
+    position: relative;
+    max-width: 696px;
+  }
+  .st-opener-knock {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    max-width: 100%;
+    padding: 14px 30px 0 0;
+    background: var(--background);
+  }
+  .st-opener-knock h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    font-weight: 300;
+    line-height: var(--text-display--line-height);
+    letter-spacing: var(--text-display--letter-spacing);
+    white-space: nowrap;
+  }
+  .st-opener-lede {
+    max-width: 696px;
+    margin-top: 44px;
+  }
+  .st-ov-install {
+    margin-top: 40px;
+  }
+
+  /* the fleet: six cells in one ruled box, each after the first divided by the border ink */
+  .st-ov-fleet {
+    container-type: inline-size;
+    margin-top: 48px;
+  }
+  .st-fleet {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    margin-top: 18px;
+    border: 1px solid var(--rule);
+    list-style: none;
+  }
+  .st-fleet li {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 12px;
+  }
+  .st-fleet li + li {
+    border-left: 1px solid var(--border);
+  }
+  .st-fleet-mark {
+    flex: none;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+    background: var(--mark-light) 0 0 / 48px 48px no-repeat;
+    image-rendering: pixelated;
+  }
+  .st-fleet-mark:is(.dark *):not(.light *) {
+    background-image: var(--mark-dark);
+  }
+  .st-fleet b {
+    font-weight: 500;
+    line-height: 20px;
+  }
+  .st-fleet-spot {
+    color: var(--muted-foreground);
+    font: 400 11px/16px var(--font-mono);
+    white-space: nowrap;
+  }
+
+  /* the way in: the primary action, the second action, and the next page boxed at the right */
+  .st-ov-next {
+    container-type: inline-size;
+    margin-top: 44px;
+  }
+  .st-ov-next-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .st-ov-nextbox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 230px;
+    height: 46px;
+    margin-left: auto;
+    padding: 6px 16px;
+    border: 1px solid var(--foreground);
+    transition: background-color var(--duration-instant) var(--ease-brand);
+  }
+  .st-ov-nextbox .type-meta {
+    color: var(--muted-foreground);
+  }
+  .st-ov-nextbox b {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+  @media (hover: hover) {
+    .st-ov-nextbox:hover {
+      background: var(--control-hover);
+    }
+  }
+
+  /* a column too narrow for the wordmark at its full size: the reach sheet's phone step */
+  @container (max-width: 559px) {
+    .st-opener-knock {
+      padding: 10px 16px 0 0;
+    }
+    .st-opener-knock h1 {
+      font-size: 52px;
+      line-height: 56px;
+    }
+  }
+  /* a phone column: the wordmark steps down once more so it stays inside the 342 px band, and again on a 320 px phone */
+  @container (max-width: 379px) {
+    .st-opener-knock h1 {
+      font-size: 44px;
+      line-height: 48px;
+    }
+  }
+  @container (max-width: 319px) {
+    .st-opener-knock h1 {
+      font-size: 38px;
+      line-height: 42px;
+    }
+  }
+
+  /* the fleet folds to two rows of three once a cell is too narrow for the longest spot name, then to three rows of
+     two; a row's first cell drops its divider and every row after the first takes one on top */
+  @container (max-width: 649px) {
+    .st-fleet {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .st-fleet li:nth-child(3n + 1) {
+      border-left: 0;
+    }
+    .st-fleet li:nth-child(n + 4) {
+      border-top: 1px solid var(--border);
+    }
+  }
+  @container (max-width: 329px) {
+    .st-fleet {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .st-fleet li:nth-child(n) {
+      border-left: 1px solid var(--border);
+    }
+    .st-fleet li:nth-child(odd) {
+      border-left: 0;
+    }
+    .st-fleet li:nth-child(n + 3) {
+      border-top: 1px solid var(--border);
+    }
+  }
+
+  /* the way in: under about 610 px the next box takes its own row; on a phone column all three stack */
+  @container (max-width: 609px) {
+    .st-ov-nextbox {
+      flex-basis: 100%;
+      width: auto;
+      margin-left: 0;
+    }
+  }
+  @container (max-width: 379px) {
+    .st-ov-next-row {
+      flex-direction: column;
+    }
+    .st-ov-next-row > * {
+      flex: none;
+      width: 100%;
+    }
+  }
+
+  /* the install page: section text in the reach sheet's 15/24, code blocks on the code patch's ground */
+  .st-in > * + * {
+    margin-top: 20px;
+  }
+  .st-in-text {
+    max-width: 72ch;
+    overflow-wrap: break-word;
+    color: var(--muted-foreground);
+    font-size: var(--text-summary);
+    line-height: var(--text-summary--line-height);
+  }
+  .st-in-inline {
+    color: var(--foreground);
+    font: 400 13px/1 var(--font-mono);
+  }
+  /* a multi-line block keeps its indents and wraps a long line rather than hiding it behind a scroll */
+  .st-in-block {
+    padding: 14px 20px;
+    background: var(--code);
+    color: var(--code-foreground);
+    font: 400 14px/24px var(--font-mono);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .st-in-block code {
+    font: inherit;
+  }
+  .st-in-group {
+    margin-top: 40px;
+  }
+  .st-in-group h3 {
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--muted-foreground);
+  }
+  .st-in-group ul {
+    list-style: none;
+  }
+  .st-in-group li {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    scroll-margin-top: 24px;
+  }
+  .st-in-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 12px;
+    margin-bottom: 10px;
+  }
+  .st-in-item b {
+    font-weight: 500;
+  }
+  .st-in-item a {
+    text-decoration: underline;
+    text-decoration-color: var(--input);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+  @media (hover: hover) {
+    .st-in-item a:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+  .st-in-item span {
+    color: var(--muted-foreground);
+  }
+  /* an item's line: the shell's code patch at 40 px; it wraps between words as every patch does */
+  .st-code.st-in-patch {
+    min-height: 40px;
+    font-size: 13px;
+    line-height: 20px;
+  }
+  .st-code.st-in-patch .st-code-prompt {
+    width: 40px;
+    padding-top: 10px;
+  }
+  .st-code.st-in-patch code {
+    padding-block: 10px;
+  }
+}

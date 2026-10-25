@@ -6,16 +6,19 @@
   ],
   "scripts": {
     "build": "node apps/web/tools/stamp-deploy.mjs && bun run registry && bun run site:css && bun run specimen:css && bun run buttons && bun run --filter @mauricekleine/web build",
+    "build:superthread": "node apps/superthread/tools/stamp-deploy.mjs && bun run --cwd packages/superthread build && bun run --cwd packages/superthread registry --out ../../apps/superthread/public && bun run --filter @mauricekleine/superthread-site build",
     "buttons": "bun run --cwd apps/buttons build",
     "deploy": "cd apps/web && cf deploy --prebuilt",
+    "deploy:superthread": "cd apps/superthread && cf deploy --prebuilt",
     "deploy:preview": "cd apps/web && cf workers versions create --prebuilt",
     "deploy:verify": "node apps/web/tools/deploy-verify.mjs",
     "dev": "bun run registry && bun run site:css && bun run specimen:css && bun run buttons && bun run --filter @mauricekleine/web dev",
+    "dev:superthread": "bun run --cwd packages/superthread build && bun run --cwd packages/superthread registry --out ../../apps/superthread/public && bun run --filter @mauricekleine/superthread-site dev",
     "prepare": "husky",
     "registry": "bun packages/superthread/scripts/publish-v1.ts --out apps/web/public/r",
     "site:css": "tailwindcss -i apps/web/src/styles/site.css -o apps/web/public/style.css --minify",
     "specimen:css": "tailwindcss -i apps/web/src/styles/superthread-specimen.css -o apps/web/public/superthread/specimen.css --minify",
-    "test": "bun run --cwd packages/superthread test && bun run --cwd apps/web test && bun run --cwd apps/share test",
+    "test": "bun run --cwd packages/superthread test && bun run --cwd apps/web test && bun run --cwd apps/share test && bun run --cwd apps/superthread test",
     "test:clean-room": "bun run --cwd packages/superthread clean-room"
   },
   "devDependencies": {

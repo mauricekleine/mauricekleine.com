@@ -1,175 +1,79 @@
 ---
 name: superthread-design
-description: The Superthread design system - the shared visual foundation for Maurice's fleet of surfaces (mauricekleine.com, orbit, quanta, hyperspeed, trisys, constellation, and every future ship). Use this whenever designing, building, restyling, or critiquing UI for any fleet surface, creating logos/insignia/icons/avatars for a ship or service, picking colors/fonts/motion for anything Maurice-branded, or bootstrapping a brand-new surface. Pairs with impeccable (method) and mk-copywriting (words); this skill owns the brand facts. Not for fluncle or nonobench (own brands) or client work (Waimakers etc.).
+description: Superthread, the design system for Maurice's fleet (orbit, quanta, trisys, constellation, artifacts, soliton, mauricekleine.com and every new surface), served as the @mk shadcn registry. Use when designing, building, restyling or critiquing UI for a fleet surface; installing or updating @mk items in an app; drawing a mark or icon for a ship; choosing colours, fonts, texture or motion for anything Maurice-branded; or bootstrapping a new surface. Pairs with impeccable (method) and mk-copywriting (words); this skill owns the brand facts. Not for fluncle or nonobench (own brands) or client work.
 ---
 
 # superthread-design
 
-Superthread is the thread that runs through every surface Maurice ships under his own
-name. The name is the holding company's, repurposed: above the strings. One thread,
-two papers: surfaces live either in the **void** (dark, night-sky: the website, orbit,
-the hyperspeed board) or on **paper** (warm light, for long reading: quanta). The thread
-itself never changes.
+Superthread is the design system Maurice's fleet shares. v2 (`2.0.0-next.1`) is `@mk`, a shadcn registry of Base UI items on one set of tokens, served with its reference site at https://superthread.mauricekleine.com. The site renders every item from its source, in light and dark, beside the foundations and three mock app pages. When this skill and the site disagree, the site is right and this skill needs a fix.
 
-The mother dialect is mauricekleine.com's "Night Garden" (the site's own design and
-product brief live in `apps/web/DESIGN.md` + `apps/web/PRODUCT.md` in the
-mauricekleine.com repo); this skill is the canon for the whole fleet.
+The sources, in the mauricekleine.com repo:
 
-**Theme source and rules:** `packages/superthread/DESIGN.md` in the mauricekleine.com repo.
-Read it for type, density, spacing, shape, accent, focus, motion and elevation.
-`bun run registry` generates versioned `dist/superthread.css`: paper at `:root`, void at
-`.dark`, with shadcn color roles, Tailwind font keys and radius. Keep scene colors
-in each app's stylesheet. Install stock shadcn
-Base UI components and import the generated CSS. Never copy theme values into
-an app or edit a stock component to apply the brand.
+- `packages/superthread/tokens/master.json`: every value, vendored from the master world and never hand-edited.
+- `packages/superthread/DESIGN.md`: the values and rules as a design doc.
+- `packages/superthread/PRODUCT.md`: who superthread serves and its register.
+- `packages/superthread/README.md`: install, pinning, scripts and versions.
+- `packages/superthread/items/`: the item sources. `apps/superthread/` is the site.
 
-Division of labor: **impeccable** owns design method (critique, hierarchy, polish
-passes) — load it for any serious UI work. **mk-copywriting** owns every word.
-This skill owns the tokens, the moods, and the marks.
+Inside an app, the installed `components/superthread/styles/superthread.css` holds the values that app runs on.
 
-## The thread (invariant across modes)
+## Division of work
 
-- **One accent: ember.** The orange thread is the brand. Void: `--primary`
-  `oklch(75% 0.13 55)`. Paper: `--primary` `oklch(55% 0.13 55)` (same hue,
-  darkened for light ground). Nothing else gets accent duty; if a second accent
-  feels needed, the hierarchy is wrong (impeccable will agree).
-- **Fixed type roles.** Unbounded for display, Supreme for body, Fragment Mono for
-  meta, labels, stamps, coordinates. No other face on void surfaces. (Paper-mode
-  long-form body in Erode is the one sanctioned exception, below.)
-- **Lowercase chrome headings.** Authored essays and chapters keep their casing.
-- **Glyph grammar:** `✦` marks the living (active projects, section markers),
-  `✧` the dormant (graveyard, archived). Sparkles are punctuation, not decoration:
-  one per heading, not confetti.
-- **Ships get marks; people get wordmarks.** Each fleet app has one
-  single-stroke mark; Maurice himself is only ever the wordmark in
-  Unbounded 800. See Marks below.
-- **Space vocabulary,** used precisely: the fleet (all surfaces), the mothership
-  (Soliton), ships (services), waypoints (projects), the graveyard (ended things),
-  droids (coding agents), the fleet rail (the way between ships). Don't
-  invent synonyms; a metaphor is a namespace.
-- **Texture over flatness:** void surfaces carry film grain and (where the delight
-  budget allows) the starfield. Paper surfaces are honest paper: no grain overlay,
-  the warmth is in the color.
-- **Motion is earned.** House rule: motion tied to moments, never page-load
-  decoration. Every animation respects `prefers-reduced-motion`.
+- **impeccable** owns the method: shaping, critique, audit, hierarchy and polish. Load it for any serious UI work. When it proposes a value, a face or an effect, hold the proposal to this skill: the brand facts here win.
+- **mk-copywriting** owns every word a person reads. Chrome is lowercase, plain and understated, with no em dashes.
+- **This skill** owns the values, the rules, the items and the marks.
 
-## Ship atmospheres (per-surface identity color)
+## The system
 
-Ember remains the ONLY interactive accent everywhere (links, actions, focus).
-What varies per ship is the ATMOSPHERE: the color the room is lit with —
-backgrounds, shader layers, glows, icon tinting. Ratified 2026-07-30 from the
-texture lab:
+The thesis is flat where you read, screened where you look. Each rule below follows from it.
 
-| ship | atmosphere | tokens |
-| --- | --- | --- |
-| soliton | nebula violet | `oklch(45-62% 0.09-0.12 300)` family (`#7e5ab0` mid) |
-| orbit | comet blue | `oklch(60% 0.10 260)` family (`#6b7fd4` mid) — the starfield's faint-blue star, promoted |
-| quanta | warm paper daylight | paper mode as-is; no dark atmosphere |
-| mauricekleine.com | ember-forward Night Garden | the classic; atmosphere IS the thread |
-| hyperspeed | tachyon teal (ratified 2026-08-02) | `oklch(65% 0.10 200)` family (`#4aa5ad` mid) — faster than light, cooler than comet blue |
+- **Two inks.** Key `#16181d` on white stock `#ffffff`; dark mode prints white on key. Every neutral is a tint of the first ink, mixed in linear light. Detail: [colour](references/colour.md).
+- **One house ink.** Plum (`#aa337a`, dark `#c074a1`) is the only control colour: primary actions, links, focus rings, the current item, selection and accent tints, the progress fill. A ship never sets a control colour.
+- **Five statuses**, at badge scale only, each with its glyph and its word: done, running, waiting, failed, queued. Failed is the one solid badge. Destructive is the key ink with the trash glyph and the word.
+- **Ship spots.** A ship's bright spot lives in its mark (so its rail cell and fleet row) and in its chart series. A large area of spot or status colour breaks the system. Detail: [marks](references/marks.md).
+- **Four faces, one job each.** Unbounded for display, Supreme for the interface, Erode for reading, Fragment Mono for ids, numbers, code and caps legends. Chrome is lowercase. Detail: [type and layout](references/type-and-layout.md).
+- **Square and ruled.** Radius 0, 1 px edges, and horizontal rules that reach both edges of the window.
+- **Focus.** A control takes a 2 px plum ring at a 2 px offset. A field's box draws a 2 px edge inside itself. Every focusable element shows one of the two.
+- **Screens.** 1-bit texture prints in five places and as at most one small detail per component, always beside words, numbers, data and code. Everything else stays flat, with no grain, noise or glow, and no screen moves. Detail: [texture](references/texture.md).
+- **Motion.** Three durations (120, 180 and 240 ms) share one ease, `--ease-brand`. Reduced motion makes every duration zero.
+- **Two surfaces.** Docs and public pages print on stock. A ship surface prints on the deep ground: the fleet rail and the ship's nav flat on it, the working panel raised on it.
 
-A ship's mark takes its atmosphere as its colour (see Marks).
+## Build or restyle a fleet surface
 
-## Void mode
+1. **Install.** In a TanStack Start app on Tailwind 4, run:
 
-Void uses `.dark`. The shadcn roles carry the brand: `background` is night,
-`foreground` is starlight, `card` and `popover` are panel, `primary` is ember,
-and `ring` is ember-bright. `accent` is a quiet ember tint for hover surfaces.
-Stock shadcn components own their sizes, variants and focus behavior.
+   ```sh
+   bunx --bun shadcn@latest init https://superthread.mauricekleine.com/r/init.json --base base -y
+   bunx --bun shadcn@latest add @mk/tokens @mk/button
+   ```
 
-Starfields, grain and ship atmospheres belong to the surrounding brand surface,
-not to shared component source.
-for zero or missing values, comparisons or chart legends, read [data display](references/data-display.md).
+   Done when `components.json` maps `@mk` and the CSS entry imports `superthread.css` after Tailwind. Other layouts, version pins and plain CSS: [registry](references/registry.md).
 
-## Paper mode (light surfaces: quanta, future reading surfaces)
+2. **Set the mode on `<html>`.** `.dark` on `<html>` is dark mode; raised layers portal to `<body>` and take the document's mode. An inline script, first in `<head>`, sets the class before anything paints, so the mode never flashes.
+3. **Compose from items.** Open the item's page on the site, then run `bunx --bun shadcn@latest add @mk/<item>`. Style app code with the token roles (`bg-primary`, `text-muted-foreground`, `border-border`) and utilities (`type-<step>`, `shadow-<lift>`, `texture-<detail>`), so the mode and the house ink reach everything. Values come from the tokens, and the mode comes from the `.dark` class: no hex values and no `dark:` classes in app code. A component the registry lacks is built on Base UI from the tokens, held to these rules, and proposed for the registry.
+4. **Frame a ship.** Wrap the app in `FleetRail` with `current` set to the ship's id, `hrefs` for home and each ship the app links to, and the ship's nav as `sidebar`. The working panel sits beside it on the deep ground.
+5. **Fix items at the source.** When an item is wrong, change it in `packages/superthread/items/` in the mauricekleine.com repo and ship a new version. In the app, `add @mk/<item> --diff` shows the change and `add @mk/<item> --overwrite` takes it. Installed files stay as the registry writes them, so every app runs the same item.
+6. **Check.** Compare each screen with the matching pages on the site, in light and dark, at 1440 and 390 px wide, then run impeccable's critique. Done when every control colour is plum or key, every state shows its glyph and its word, every focusable element shows its ring or edge, and every screen sits beside words rather than behind them.
 
-Same roles, warm light values: paper `#fbfaf7` ground (never clinical white), near-black
-ink `#0a0a0a` (never `#000`), and the thread darkened to ember-paper
-`oklch(55% 0.13 55)` so it holds on a light ground. Paper is `:root` by default.
+## Words for things
 
-- Long-form body text on paper uses **Erode** (Fontshare) —
-  the sanctioned reading serif, same foundry as Supreme, earned by
-  read-in-bed legibility. Wordmarks and headings use Unbounded; meta stays
-  Fragment Mono.
-- Layout: one column, 66ch measure, 18px body, 1.65 line-height.
-- Illustrations carry the hand-drawn energy; the
-  typography stays disciplined. Feels like a well-typeset zine, not a SaaS app.
-- Quiz/correct states and links use `--primary`; wrong/muted states stay in
-  gray-ink territory. Same one-accent law as void.
+- **fleet**: every surface Maurice ships under his own name. **ship**: one app in it, with a mark and a spot.
+- **fleet rail**: the column of ship marks down the left of a ship surface; a 48 px bar at 900 px and below.
+- **key**, **stock**: the first ink and the paper it prints on. **wedge**: the eleven tint steps from one to the other.
+- **house ink**: plum, the one control colour. **spot**: a ship's own bright colour.
+- **deep ground**: the dark field a ship surface prints on, in both modes.
+- **screen**: a 1-bit pattern standing in for a tint. **plate**: one ink's 1-bit image. **crop marks**: the corner ticks around a screened field.
 
-## Type roles (both modes)
+## v1 surfaces
 
-Ratified 2026-07-30 (texture-era refresh; supersedes the
-Bricolage-era stack — migrate each surface on next touch, see Drift ledger):
+v1 is frozen. A surface that imports `packages/superthread/dist/superthread.css` or installs from www's `/r` (`superthread.json`, `fleet-rail.json`) is on v1 and keeps it until its own migration change, which moves the whole surface to v2 at once. Until then, work on a v1 surface stays in v1's values. A new surface starts on v2.
 
-- **Unbounded:** display for wordmarks, short headings and ship names. 800 on brand surfaces,
-  600 in dense UI. Wide and rounded; the voice of the fleet.
-  Self-hosted on mauricekleine.com.
-- **Supreme** — body. 400 (500 for emphasis). Warm, round, legible; reports to
-  Unbounded without competing.
-  Self-hosted on mauricekleine.com.
-- **Fragment Mono:** meta, labels, stamps, coordinates (unchanged). On
-  instruments: 12px, uppercase, `letter-spacing: 0.14em`, `--muted-foreground`.
-  Self-hosted on mauricekleine.com. Mono is seasoning: small doses, never paragraphs.
-- Display sizing follows `DESIGN.md`; use tight letter-spacing (-0.02em) and
-  `text-wrap: balance`.
-- Paper-mode long-form body: **Erode** (Fontshare, 400/500) — the ITF reading serif completing the family. The quanta exception, now with a name.
-- Bricolage Grotesque is RETIRED from new work; it survives only on surfaces
-  not yet migrated (listed in the Drift ledger).
+## References
 
-## Motion
-
-- `cubic-bezier(0.16, 1, 0.3, 1)` — ambient/brand surfaces
-  (rises, reveals, celestial events).
-- `cubic-bezier(0.22, 1, 0.36, 1)` for app-authored instruments;
-  use the 120/180/240ms limits in `DESIGN.md`.
-- One hero entrance maximum; no scroll-gated reveal choreography.
-- Delight moments (supernovas, eclipses, meteor wishes) belong to brand
-  surfaces and are always interruptible, rare, and reduced-motion-safe.
-- for overlays, gestures, hover feedback or continuous updates, read [interaction craft](references/interaction-craft.md).
-
-## Marks
-
-One simple mark per fleet app, all drawn on the same 32px grid with the same
-2.8 stroke and round caps. Each is one gesture in one mid-tone that clears 3:1
-on both paper and void: the app's atmosphere where it has one, ember otherwise.
-Keep them this simple: a mark must read at 16px in the rail.
-
-The SVGs, with 32px and 180px PNGs for favicons and touch icons, live in
-`apps/web/public/superthread/marks/` of the mauricekleine.com repo and are served
-from `https://www.mauricekleine.com/superthread/marks/<app>.svg`. The fleet rail
-and every app's favicon point there; `preview.html` beside them shows the set.
-
-| app | mark |
-| --- | --- |
-| orbit | a ring with its moon |
-| quanta | a quantised step |
-| hyperspeed | chevrons |
-| trisys | three stacked systems, the widest at the base (always three parts) |
-| constellation | linked points |
-| soliton | a solitary wave |
-
-mauricekleine.com uses Maurice's portrait, and nonobench.com and fluncle.com keep
-their own brand icons.
-
-## Per-surface flavor sheets
-
-- **mauricekleine.com** — the mother dialect at full delight budget:
-  starfield + nebula shader + grain, constellations, easter eggs, no cards, no
-  logo (wordmark only). Its `apps/web/DESIGN.md`/`PRODUCT.md` remain authoritative
-  for site-specific components; this skill governs where they'd conflict.
-- **orbit** — instrument panel. Dense, px-scale, panel/line surfaces, mono
-  labels, swift easing, static grain, zero easter eggs: it's for working. Its
-  violet due states use orbit-specific atmosphere outside the shared theme.
-- **quanta** — paper zine. Reading serif body, ink illustrations, ember-paper
-  accents, no grain, no starfield. The hand-drawn art IS its texture.
-
-## Drift ledger (fix on next touch, don't crusade)
-
-As of 2026-09-26:
-
-- Type: every superthread app takes its faces from the theme.
-- quanta: move the accent `#C0392B`-family to ember-paper (same hue as the fleet
-  thread).
-- Every surface: replace hand-copied component values with the generated
-  `dist/superthread.css` from `packages/superthread` and stock shadcn components.
+- [colour](references/colour.md): the wedge, every role, the house ink's states, the statuses, the ship spots, the deep ground and the code patch. Read it before choosing or checking any colour.
+- [type and layout](references/type-and-layout.md): faces, type steps, space, rows, breakpoints, focus, elevation and motion.
+- [texture](references/texture.md): the five places, the six component details, levels, line screens, crop marks and plates.
+- [marks](references/marks.md): how a mark is drawn, its files and URLs, the home mark, icons, and adding a ship.
+- [registry](references/registry.md): items and tiers, install, the CSS entry, pinning, plain CSS, fonts and origins, and updating.
+- [interaction craft](references/interaction-craft.md): overlays, gestures, hover feedback and continuous updates.
+- [data display](references/data-display.md): zero, missing values, comparisons and chart legends.

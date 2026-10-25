@@ -1,0 +1,63 @@
+{
+  "about": "the master world's marks, copied byte for byte at the paths the marks generator will keep; each file's sha256 equals its source's",
+  "source": "superthread-audit-2026-10-20/week1/i1/worlds/master/marks",
+  "generator": "worlds/master/src (common.mark_svg)",
+  "files": {
+    "orbit/orbit.svg": {
+      "source": "worlds/master/marks/orbit.svg",
+      "sha256": "93464a0fcc871e12bde7921bc07d098e3ec8ff9a3a80d8014cd25765b05571fd"
+    },
+    "orbit/orbit-dark.svg": {
+      "source": "worlds/master/marks/orbit-dark.svg",
+      "sha256": "db1a9f044ddb2a7bd6b856588d412719e7795e63edab270d4bc2be21875bc104"
+    },
+    "quanta/quanta.svg": {
+      "source": "worlds/master/marks/quanta.svg",
+      "sha256": "cf105a56aae48c61deee8392d28ad4fa503d53dcfce9afe8e6419ac7706a5633"
+    },
+    "quanta/quanta-dark.svg": {
+      "source": "worlds/master/marks/quanta-dark.svg",
+      "sha256": "0be871a0ee163d7845c02a3e5b2fcb01c02e172d889de915f2069c518cc9504b"
+    },
+    "trisys/trisys.svg": {
+      "source": "worlds/master/marks/trisys.svg",
+      "sha256": "da91558a82cc24e8904f3e673ef91e0b1c4f4ffc6b1035653081ea0921c0f296"
+    },
+    "trisys/trisys-dark.svg": {
+      "source": "worlds/master/marks/trisys-dark.svg",
+      "sha256": "0b3c743602141534330022d9a029f7a224612fbeb554573c8e731930d6d517b8"
+    },
+    "constellation/constellation.svg": {
+      "source": "worlds/master/marks/constellation.svg",
+      "sha256": "8375b956481d44ee384331d614588d4963068fd96e1012e22b46aa00afe8f73e"
+    },
+    "constellation/constellation-dark.svg": {
+      "source": "worlds/master/marks/constellation-dark.svg",
+      "sha256": "59c171cdcce5746b231ab3b09e4d9da86e4283f93ae6a56b60cd327466dd9151"
+    },
+    "artifacts/artifacts.svg": {
+      "source": "worlds/master/marks/artifacts.svg",
+      "sha256": "428ecd51f238f6a6c0a6ebd18ed319db3147278f770c2a572d6f3be204c6bf71"
+    },
+    "artifacts/artifacts-dark.svg": {
+      "source": "worlds/master/marks/artifacts-dark.svg",
+      "sha256": "6901d462849ed075939322af226813d4f0f7523fb54aed153323249660c7f219"
+    },
+    "soliton/soliton.svg": {
+      "source": "worlds/master/marks/soliton.svg",
+      "sha256": "354d1b23141452ac5d9158ce6cefcf11d2c38b612956232dc243cb3274bd4ff2"
+    },
+    "soliton/soliton-dark.svg": {
+      "source": "worlds/master/marks/soliton-dark.svg",
+      "sha256": "a1a765d8f3e9de056c0cb67d9ba1954879fc802ad6fa517b9321d13ed3a097b9"
+    },
+    "superthread/superthread.svg": {
+      "source": "worlds/master/marks/superthread.svg",
+      "sha256": "224bf8486c8ee3995d18897070288470f455b596a25758e4bc9fc4de128c76d4"
+    },
+    "superthread/superthread-dark.svg": {
+      "source": "worlds/master/marks/superthread-dark.svg",
+      "sha256": "77e3485024d8fb84d145da5f58c0cda23b67b110c081861332c9a15ae5676d8b"
+    }
+  }
+}

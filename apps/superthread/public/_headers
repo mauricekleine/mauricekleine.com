@@ -1,0 +1,23 @@
+/*
+  Strict-Transport-Security: max-age=31536000
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+/r/:file
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300, must-revalidate
+# /fonts/* and /r/v/* get their cache and CORS headers from the Worker (src/server-behavior.ts), never from here
+/marks/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=86400
+/texture/*
+  Cache-Control: public, max-age=31536000, immutable
+/marks/PROVENANCE.json
+  ! Cache-Control
+  Cache-Control: public, max-age=300, must-revalidate
+/texture/PROVENANCE.json
+  ! Cache-Control
+  Cache-Control: public, max-age=300, must-revalidate
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/api/deploy.json
+  Cache-Control: no-store

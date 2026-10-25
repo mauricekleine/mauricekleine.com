@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - packages/superthread/**
+      - apps/superthread/**
       - package.json
       - bun.lock
       - bunfig.toml
@@ -11,6 +12,7 @@ on:
     branches: [main]
     paths:
       - packages/superthread/**
+      - apps/superthread/**
       - package.json
       - bun.lock
       - bunfig.toml
@@ -36,6 +38,10 @@ jobs:
       - run: python3 --version
       - run: bun run --cwd packages/superthread check
       - run: bun run --cwd packages/superthread test
+      - name: design doc lint
+        run: bun run --cwd packages/superthread lint
+      - run: bun run build:superthread
+      - run: bun run --cwd apps/superthread test
       - name: clean room (the pinned shadcn)
         run: bun run test:clean-room
       - name: clean room (shadcn@latest, not gating)

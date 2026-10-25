@@ -1,0 +1,921 @@
+{
+  "generator": "packages/superthread/scripts/texture/build.py",
+  "spec": "packages/superthread/texture/plates.json",
+  "modules": {
+    "scripts/texture/master/details.py": "3e2835cc18040c1e9c497c9d80450c611669cc9c46dbd54f484e99e51a1ebe9a",
+    "scripts/texture/master/fields.py": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7",
+    "scripts/texture/master/ink.py": "9985cb48df02c84b430d0aab632a81bb282091a53f4e68799b9cbb4142c651e9",
+    "scripts/texture/master/opener.py": "cf2e9f60200a1b90dc35813ce99d37f93b67ef14726f4501d2605cdcb0cd76f8",
+    "scripts/texture/master/palette.py": "555810108c1255ade167860ddc3da2b00b5c7daef8d4ef5fd58d03a416b1bee3",
+    "scripts/texture/master/png.py": "78a255ce217ed4ee88dba82b0fde15ee9d93bda9453014e1539f2e924a10761f",
+    "scripts/texture/master/screen.py": "55ee9b53686e24e143eb287d78192ae4b0781420cc0ba32a0f7b7d758e8f32ec"
+  },
+  "files": {
+    "opener-light.35426931.png": {
+      "plate": "opener",
+      "mode": "light",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.opener_png",
+      "params": {
+        "w": 696,
+        "h": 196,
+        "mode": "light",
+        "spot": "#aa337a",
+        "path": [
+          [
+            0.0,
+            0.25
+          ],
+          [
+            0.22,
+            0.17
+          ],
+          [
+            0.46,
+            0.2
+          ],
+          [
+            0.66,
+            0.22
+          ],
+          [
+            0.8,
+            0.28
+          ],
+          [
+            0.9,
+            0.62
+          ],
+          [
+            1.0,
+            0.72
+          ]
+        ],
+        "width": 58
+      },
+      "pixels_sha256": "35426931bcc720f7ada223e41fd755ce0af21275c040f6166f5ec42351bfa93b",
+      "planes_sha256": [
+        "f9788e6b7e6e2fba6b9f054a702634390373f0e9022b77224e48bd79a8923370",
+        "b4076508f31d5a515de55521e3c98c909e594cbd4820c5a20720459819f95d01"
+      ],
+      "master": {
+        "compare": "pixels",
+        "files": [
+          {
+            "file": "sketch-opener.png",
+            "pixels_sha256": "35426931bcc720f7ada223e41fd755ce0af21275c040f6166f5ec42351bfa93b",
+            "planes_sha256": [
+              "f9788e6b7e6e2fba6b9f054a702634390373f0e9022b77224e48bd79a8923370",
+              "b4076508f31d5a515de55521e3c98c909e594cbd4820c5a20720459819f95d01"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "opener-dark.7938b603.png": {
+      "plate": "opener",
+      "mode": "dark",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.opener_png",
+      "params": {
+        "w": 696,
+        "h": 196,
+        "mode": "dark",
+        "spot": "#c074a1",
+        "path": [
+          [
+            0.0,
+            0.25
+          ],
+          [
+            0.22,
+            0.17
+          ],
+          [
+            0.46,
+            0.2
+          ],
+          [
+            0.66,
+            0.22
+          ],
+          [
+            0.8,
+            0.28
+          ],
+          [
+            0.9,
+            0.62
+          ],
+          [
+            1.0,
+            0.72
+          ]
+        ],
+        "width": 58
+      },
+      "pixels_sha256": "7938b603366dde8e3a2de097b3da8b6f2458ebc0de63e80fc6bc7f3bd53b2bdb",
+      "planes_sha256": [
+        "b0d6b1ec45567e2126802721664d0e4a410ecbd0c3782a4c6cf0c2d5962108fd",
+        "814e6c7957351e45d1ef4bb424ab6730da16141adb76001f900477f64247b998"
+      ],
+      "master": {
+        "compare": "pixels",
+        "files": [
+          {
+            "file": "sketch-opener-dark.png",
+            "pixels_sha256": "7938b603366dde8e3a2de097b3da8b6f2458ebc0de63e80fc6bc7f3bd53b2bdb",
+            "planes_sha256": [
+              "b0d6b1ec45567e2126802721664d0e4a410ecbd0c3782a4c6cf0c2d5962108fd",
+              "814e6c7957351e45d1ef4bb424ab6730da16141adb76001f900477f64247b998"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "opener-phone-light.399d4323.png": {
+      "plate": "opener-phone",
+      "mode": "light",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.opener_png",
+      "params": {
+        "w": 342,
+        "h": 200,
+        "mode": "light",
+        "spot": "#aa337a",
+        "path": [
+          [
+            0.0,
+            0.22
+          ],
+          [
+            0.25,
+            0.15
+          ],
+          [
+            0.5,
+            0.2
+          ],
+          [
+            0.66,
+            0.38
+          ],
+          [
+            0.8,
+            0.66
+          ],
+          [
+            0.92,
+            0.72
+          ],
+          [
+            1.0,
+            0.58
+          ]
+        ],
+        "width": 44
+      },
+      "pixels_sha256": "399d4323a0e3249e688617cba29963fd4b19b70333bbe1ad9296c5622e2ff0d9",
+      "planes_sha256": [
+        "74c06f4e0a1a04908a1216831d11d3b7b661ac6ad4952928aebd06f622412790",
+        "a58e9f263735fb0addc28efced3c654be1b377530af9b99527da99b02407363a"
+      ],
+      "master": {
+        "compare": "planes",
+        "files": [
+          {
+            "file": "reach-opener-light-phone-first.png",
+            "pixels_sha256": "74c06f4e0a1a04908a1216831d11d3b7b661ac6ad4952928aebd06f622412790",
+            "planes_sha256": [
+              "74c06f4e0a1a04908a1216831d11d3b7b661ac6ad4952928aebd06f622412790"
+            ]
+          },
+          {
+            "file": "reach-opener-light-phone-spot.png",
+            "pixels_sha256": "a58e9f263735fb0addc28efced3c654be1b377530af9b99527da99b02407363a",
+            "planes_sha256": [
+              "a58e9f263735fb0addc28efced3c654be1b377530af9b99527da99b02407363a"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "opener-phone-dark.10fa6fe8.png": {
+      "plate": "opener-phone",
+      "mode": "dark",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.opener_png",
+      "params": {
+        "w": 342,
+        "h": 200,
+        "mode": "dark",
+        "spot": "#c074a1",
+        "path": [
+          [
+            0.0,
+            0.22
+          ],
+          [
+            0.25,
+            0.15
+          ],
+          [
+            0.5,
+            0.2
+          ],
+          [
+            0.66,
+            0.38
+          ],
+          [
+            0.8,
+            0.66
+          ],
+          [
+            0.92,
+            0.72
+          ],
+          [
+            1.0,
+            0.58
+          ]
+        ],
+        "width": 44
+      },
+      "pixels_sha256": "10fa6fe8fddbbc610605766e77223312550bea3e8151375939f8ea4327b7f477",
+      "planes_sha256": [
+        "c85344d852e27c2d357870373a6795eece74b3005d6b90b5c74816c8329dd75c",
+        "c2e326047f9f82942257dea2cf3fb103daf0067dac8cc7cd0c5c0fe5f1d7280d"
+      ],
+      "master": {
+        "compare": "planes",
+        "files": [
+          {
+            "file": "reach-opener-dark-phone-first.png",
+            "pixels_sha256": "c85344d852e27c2d357870373a6795eece74b3005d6b90b5c74816c8329dd75c",
+            "planes_sha256": [
+              "c85344d852e27c2d357870373a6795eece74b3005d6b90b5c74816c8329dd75c"
+            ]
+          },
+          {
+            "file": "reach-opener-dark-phone-spot.png",
+            "pixels_sha256": "c2e326047f9f82942257dea2cf3fb103daf0067dac8cc7cd0c5c0fe5f1d7280d",
+            "planes_sha256": [
+              "c2e326047f9f82942257dea2cf3fb103daf0067dac8cc7cd0c5c0fe5f1d7280d"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "band-light.9bd28dd3.png": {
+      "plate": "band",
+      "mode": "light",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.opener_png",
+      "params": {
+        "w": 696,
+        "h": 160,
+        "mode": "light",
+        "spot": "#aa337a",
+        "path": [
+          [
+            0.0,
+            0.22
+          ],
+          [
+            0.2,
+            0.17
+          ],
+          [
+            0.42,
+            0.24
+          ],
+          [
+            0.6,
+            0.3
+          ],
+          [
+            0.74,
+            0.56
+          ],
+          [
+            0.88,
+            0.66
+          ],
+          [
+            1.0,
+            0.42
+          ]
+        ],
+        "width": 36
+      },
+      "pixels_sha256": "9bd28dd3b1bae28684296f6b22f191118450e5c8bd0220ec33ec39a889bf4653",
+      "planes_sha256": [
+        "6d6a672c7ad98b5f51ac0074b12e6282c5905b6def835796ca9b97e058b64e75",
+        "ae6bd00ac14d252bc4a48a85daf7477ce4ed2595c2d96609724103eee7ea7d50"
+      ],
+      "master": null,
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "band-dark.73cda9f0.png": {
+      "plate": "band",
+      "mode": "dark",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.opener_png",
+      "params": {
+        "w": 696,
+        "h": 160,
+        "mode": "dark",
+        "spot": "#c074a1",
+        "path": [
+          [
+            0.0,
+            0.22
+          ],
+          [
+            0.2,
+            0.17
+          ],
+          [
+            0.42,
+            0.24
+          ],
+          [
+            0.6,
+            0.3
+          ],
+          [
+            0.74,
+            0.56
+          ],
+          [
+            0.88,
+            0.66
+          ],
+          [
+            1.0,
+            0.42
+          ]
+        ],
+        "width": 36
+      },
+      "pixels_sha256": "73cda9f0a4d41321f04a2c87530854b79ff78ba44aaaa2dfb91440f85c60a383",
+      "planes_sha256": [
+        "d3b3d207893b890552e47e04ef81454e5b81c6b59ae1ff1e16eb415ebf8887f1",
+        "263e00dcc1d2ce3ab374a08586fccba412d86d81d4e7a162f9fdb33bc3a9317a"
+      ],
+      "master": null,
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "band-phone-light.3e916a01.png": {
+      "plate": "band-phone",
+      "mode": "light",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.opener_png",
+      "params": {
+        "w": 342,
+        "h": 136,
+        "mode": "light",
+        "spot": "#aa337a",
+        "path": [
+          [
+            0.0,
+            0.22
+          ],
+          [
+            0.25,
+            0.15
+          ],
+          [
+            0.5,
+            0.2
+          ],
+          [
+            0.66,
+            0.38
+          ],
+          [
+            0.8,
+            0.66
+          ],
+          [
+            0.92,
+            0.72
+          ],
+          [
+            1.0,
+            0.58
+          ]
+        ],
+        "width": 36
+      },
+      "pixels_sha256": "3e916a017657b37c50d3b0fed29cd3a8029a07c993065969d136593309d807d1",
+      "planes_sha256": [
+        "f23161eccd1431d1515799b2044e0f5dd29d5e8bf7ae95a54bc033a0d0e91940",
+        "609c8575f95648097cc4fc139225e56f2cb12d904105c9eb5118b3cf901d0590"
+      ],
+      "master": null,
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "band-phone-dark.7d3a9ed3.png": {
+      "plate": "band-phone",
+      "mode": "dark",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.opener_png",
+      "params": {
+        "w": 342,
+        "h": 136,
+        "mode": "dark",
+        "spot": "#c074a1",
+        "path": [
+          [
+            0.0,
+            0.22
+          ],
+          [
+            0.25,
+            0.15
+          ],
+          [
+            0.5,
+            0.2
+          ],
+          [
+            0.66,
+            0.38
+          ],
+          [
+            0.8,
+            0.66
+          ],
+          [
+            0.92,
+            0.72
+          ],
+          [
+            1.0,
+            0.58
+          ]
+        ],
+        "width": 36
+      },
+      "pixels_sha256": "7d3a9ed35137de071b4ee80d85f7f79fcff52db5e60d2899ab7930b7f0c9d78b",
+      "planes_sha256": [
+        "c85695ee72bf6f183c6b89fc0b244498645b0fdea9359db90a7fee9cb85b36cb",
+        "6e46dcf80340b008dec3cb21c4a7d4646e5e7551f6e0c3fba9152b885e8e4b0d"
+      ],
+      "master": null,
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "figure-light-first.5b41026f.png": {
+      "plate": "figure",
+      "mode": "light",
+      "plane": "first",
+      "form": "mask",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.figure_plates",
+      "params": {
+        "w": 520,
+        "h": 150,
+        "mode": "light"
+      },
+      "pixels_sha256": "5b41026fe665da13ca166521c6363accd7ad31489738b16187e48d2017b464e7",
+      "planes_sha256": [
+        "5b41026fe665da13ca166521c6363accd7ad31489738b16187e48d2017b464e7"
+      ],
+      "master": {
+        "compare": "planes",
+        "files": [
+          {
+            "file": "figure-light-first.png",
+            "pixels_sha256": "5b41026fe665da13ca166521c6363accd7ad31489738b16187e48d2017b464e7",
+            "planes_sha256": [
+              "5b41026fe665da13ca166521c6363accd7ad31489738b16187e48d2017b464e7"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "figure-light-spot.34acae61.png": {
+      "plate": "figure",
+      "mode": "light",
+      "plane": "spot",
+      "form": "mask",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.figure_plates",
+      "params": {
+        "w": 520,
+        "h": 150,
+        "mode": "light"
+      },
+      "pixels_sha256": "34acae61adc963f1bd0e94667b485d4a657faf7cd07d48641339cfe1aa82feef",
+      "planes_sha256": [
+        "34acae61adc963f1bd0e94667b485d4a657faf7cd07d48641339cfe1aa82feef"
+      ],
+      "master": {
+        "compare": "planes",
+        "files": [
+          {
+            "file": "figure-light-spot.png",
+            "pixels_sha256": "34acae61adc963f1bd0e94667b485d4a657faf7cd07d48641339cfe1aa82feef",
+            "planes_sha256": [
+              "34acae61adc963f1bd0e94667b485d4a657faf7cd07d48641339cfe1aa82feef"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "figure-dark-first.30cadd3c.png": {
+      "plate": "figure",
+      "mode": "dark",
+      "plane": "first",
+      "form": "mask",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.figure_plates",
+      "params": {
+        "w": 520,
+        "h": 150,
+        "mode": "dark"
+      },
+      "pixels_sha256": "30cadd3cb80be813621993d2c84df04b553925ca9c60b4b7b4fb3b800cce6b5d",
+      "planes_sha256": [
+        "30cadd3cb80be813621993d2c84df04b553925ca9c60b4b7b4fb3b800cce6b5d"
+      ],
+      "master": {
+        "compare": "planes",
+        "files": [
+          {
+            "file": "figure-dark-first.png",
+            "pixels_sha256": "30cadd3cb80be813621993d2c84df04b553925ca9c60b4b7b4fb3b800cce6b5d",
+            "planes_sha256": [
+              "30cadd3cb80be813621993d2c84df04b553925ca9c60b4b7b4fb3b800cce6b5d"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "figure-dark-spot.34acae61.png": {
+      "plate": "figure",
+      "mode": "dark",
+      "plane": "spot",
+      "form": "mask",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.figure_plates",
+      "params": {
+        "w": 520,
+        "h": 150,
+        "mode": "dark"
+      },
+      "pixels_sha256": "34acae61adc963f1bd0e94667b485d4a657faf7cd07d48641339cfe1aa82feef",
+      "planes_sha256": [
+        "34acae61adc963f1bd0e94667b485d4a657faf7cd07d48641339cfe1aa82feef"
+      ],
+      "master": {
+        "compare": "planes",
+        "files": [
+          {
+            "file": "figure-dark-spot.png",
+            "pixels_sha256": "34acae61adc963f1bd0e94667b485d4a657faf7cd07d48641339cfe1aa82feef",
+            "planes_sha256": [
+              "34acae61adc963f1bd0e94667b485d4a657faf7cd07d48641339cfe1aa82feef"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "figure-phone-light-first.ec8a0823.png": {
+      "plate": "figure-phone",
+      "mode": "light",
+      "plane": "first",
+      "form": "mask",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.figure_plates",
+      "params": {
+        "w": 326,
+        "h": 150,
+        "mode": "light"
+      },
+      "pixels_sha256": "ec8a0823512d5405645390088f92d76d4ba52215f843f3389873af63b2976e74",
+      "planes_sha256": [
+        "ec8a0823512d5405645390088f92d76d4ba52215f843f3389873af63b2976e74"
+      ],
+      "master": {
+        "compare": "planes",
+        "files": [
+          {
+            "file": "figure-light-phone-first.png",
+            "pixels_sha256": "ec8a0823512d5405645390088f92d76d4ba52215f843f3389873af63b2976e74",
+            "planes_sha256": [
+              "ec8a0823512d5405645390088f92d76d4ba52215f843f3389873af63b2976e74"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "figure-phone-light-spot.b804c372.png": {
+      "plate": "figure-phone",
+      "mode": "light",
+      "plane": "spot",
+      "form": "mask",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.figure_plates",
+      "params": {
+        "w": 326,
+        "h": 150,
+        "mode": "light"
+      },
+      "pixels_sha256": "b804c3726964bc8afd61d838d987a1e0826f347de3b8c883910e838d03155675",
+      "planes_sha256": [
+        "b804c3726964bc8afd61d838d987a1e0826f347de3b8c883910e838d03155675"
+      ],
+      "master": {
+        "compare": "planes",
+        "files": [
+          {
+            "file": "figure-light-phone-spot.png",
+            "pixels_sha256": "b804c3726964bc8afd61d838d987a1e0826f347de3b8c883910e838d03155675",
+            "planes_sha256": [
+              "b804c3726964bc8afd61d838d987a1e0826f347de3b8c883910e838d03155675"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "figure-phone-dark-first.a7d1059f.png": {
+      "plate": "figure-phone",
+      "mode": "dark",
+      "plane": "first",
+      "form": "mask",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.figure_plates",
+      "params": {
+        "w": 326,
+        "h": 150,
+        "mode": "dark"
+      },
+      "pixels_sha256": "a7d1059fb32bbe7fdae7b16634f343a825e25ed6287d0a5e7de900f527d527d8",
+      "planes_sha256": [
+        "a7d1059fb32bbe7fdae7b16634f343a825e25ed6287d0a5e7de900f527d527d8"
+      ],
+      "master": {
+        "compare": "planes",
+        "files": [
+          {
+            "file": "figure-dark-phone-first.png",
+            "pixels_sha256": "a7d1059fb32bbe7fdae7b16634f343a825e25ed6287d0a5e7de900f527d527d8",
+            "planes_sha256": [
+              "a7d1059fb32bbe7fdae7b16634f343a825e25ed6287d0a5e7de900f527d527d8"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "figure-phone-dark-spot.b804c372.png": {
+      "plate": "figure-phone",
+      "mode": "dark",
+      "plane": "spot",
+      "form": "mask",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.figure_plates",
+      "params": {
+        "w": 326,
+        "h": 150,
+        "mode": "dark"
+      },
+      "pixels_sha256": "b804c3726964bc8afd61d838d987a1e0826f347de3b8c883910e838d03155675",
+      "planes_sha256": [
+        "b804c3726964bc8afd61d838d987a1e0826f347de3b8c883910e838d03155675"
+      ],
+      "master": {
+        "compare": "planes",
+        "files": [
+          {
+            "file": "figure-dark-phone-spot.png",
+            "pixels_sha256": "b804c3726964bc8afd61d838d987a1e0826f347de3b8c883910e838d03155675",
+            "planes_sha256": [
+              "b804c3726964bc8afd61d838d987a1e0826f347de3b8c883910e838d03155675"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "empty-light.0725758a.png": {
+      "plate": "empty",
+      "mode": "light",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.wedge",
+      "params": {
+        "w": 608,
+        "h": 120,
+        "mode": "light"
+      },
+      "pixels_sha256": "0725758a8d10bbb5f2d686593da6796810838027002c3acf4d65b312ff1dd40c",
+      "planes_sha256": [
+        "dff8dbfdfc4d40bbacdbc562d8b85af59c070264db453bc6be549892dfe762c6",
+        "c213e2d1493eea3956ee07e54b2974b094326e18c1ce01b63976d57ea29a0d7d"
+      ],
+      "master": {
+        "compare": "pixels",
+        "files": [
+          {
+            "file": "empty-light.png",
+            "pixels_sha256": "0725758a8d10bbb5f2d686593da6796810838027002c3acf4d65b312ff1dd40c",
+            "planes_sha256": [
+              "dff8dbfdfc4d40bbacdbc562d8b85af59c070264db453bc6be549892dfe762c6",
+              "c213e2d1493eea3956ee07e54b2974b094326e18c1ce01b63976d57ea29a0d7d"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "empty-dark.d54d8709.png": {
+      "plate": "empty",
+      "mode": "dark",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.wedge",
+      "params": {
+        "w": 608,
+        "h": 120,
+        "mode": "dark"
+      },
+      "pixels_sha256": "d54d87097fee133d7133f1784af156443b00d667216a1d82c792af31f75a2ba5",
+      "planes_sha256": [
+        "dff8dbfdfc4d40bbacdbc562d8b85af59c070264db453bc6be549892dfe762c6",
+        "c213e2d1493eea3956ee07e54b2974b094326e18c1ce01b63976d57ea29a0d7d"
+      ],
+      "master": {
+        "compare": "pixels",
+        "files": [
+          {
+            "file": "empty-dark.png",
+            "pixels_sha256": "d54d87097fee133d7133f1784af156443b00d667216a1d82c792af31f75a2ba5",
+            "planes_sha256": [
+              "dff8dbfdfc4d40bbacdbc562d8b85af59c070264db453bc6be549892dfe762c6",
+              "c213e2d1493eea3956ee07e54b2974b094326e18c1ce01b63976d57ea29a0d7d"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "empty-phone-light.1adcdca1.png": {
+      "plate": "empty-phone",
+      "mode": "light",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.wedge",
+      "params": {
+        "w": 326,
+        "h": 120,
+        "mode": "light"
+      },
+      "pixels_sha256": "1adcdca1c88739fed0123e7283bb652506597f5bc5042e943cdebbce106225bc",
+      "planes_sha256": [
+        "a07702904e9ffd2539344396372d13f927dabe3584b9864a6203d01041864395",
+        "f2b798233e1ba21125b2a0ccee29cd243c4f5a5101b63052c55c4fcd0bcbc588"
+      ],
+      "master": {
+        "compare": "pixels",
+        "files": [
+          {
+            "file": "empty-light-phone.png",
+            "pixels_sha256": "1adcdca1c88739fed0123e7283bb652506597f5bc5042e943cdebbce106225bc",
+            "planes_sha256": [
+              "a07702904e9ffd2539344396372d13f927dabe3584b9864a6203d01041864395",
+              "f2b798233e1ba21125b2a0ccee29cd243c4f5a5101b63052c55c4fcd0bcbc588"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "empty-phone-dark.fb613cb3.png": {
+      "plate": "empty-phone",
+      "mode": "dark",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.wedge",
+      "params": {
+        "w": 326,
+        "h": 120,
+        "mode": "dark"
+      },
+      "pixels_sha256": "fb613cb3a548134be1da970670a7495aea2e2ef47afae0352ff2bd9cc52092ea",
+      "planes_sha256": [
+        "a07702904e9ffd2539344396372d13f927dabe3584b9864a6203d01041864395",
+        "f2b798233e1ba21125b2a0ccee29cd243c4f5a5101b63052c55c4fcd0bcbc588"
+      ],
+      "master": {
+        "compare": "pixels",
+        "files": [
+          {
+            "file": "empty-dark-phone.png",
+            "pixels_sha256": "fb613cb3a548134be1da970670a7495aea2e2ef47afae0352ff2bd9cc52092ea",
+            "planes_sha256": [
+              "a07702904e9ffd2539344396372d13f927dabe3584b9864a6203d01041864395",
+              "f2b798233e1ba21125b2a0ccee29cd243c4f5a5101b63052c55c4fcd0bcbc588"
+            ]
+          }
+        ]
+      },
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "empty-column-light.9f9a3553.png": {
+      "plate": "empty-column",
+      "mode": "light",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.wedge",
+      "params": {
+        "w": 112,
+        "h": 120,
+        "mode": "light"
+      },
+      "pixels_sha256": "9f9a3553275cb3e937b77cf4267dd2679b6df32d49145f89a15a886db3168b51",
+      "planes_sha256": [
+        "cfa07da7b08ed81ed066320f284ab5f3b64ba26acdb7d678a07849e7aba8a620",
+        "00b012eb4e071f929536f8e29e2ec2665a5a33df088ae2e09aa45349600426c4"
+      ],
+      "master": null,
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "empty-column-dark.67b633a9.png": {
+      "plate": "empty-column",
+      "mode": "dark",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.wedge",
+      "params": {
+        "w": 112,
+        "h": 120,
+        "mode": "dark"
+      },
+      "pixels_sha256": "67b633a9c2333575a6ff1294965a153b7b2c76e7659dd4ecf8ad6b5843fb7a06",
+      "planes_sha256": [
+        "cfa07da7b08ed81ed066320f284ab5f3b64ba26acdb7d678a07849e7aba8a620",
+        "00b012eb4e071f929536f8e29e2ec2665a5a33df088ae2e09aa45349600426c4"
+      ],
+      "master": null,
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    }
+  }
+}
