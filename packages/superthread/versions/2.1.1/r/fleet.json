@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "fleet",
+  "title": "fleet",
+  "description": "the six ships: ids, names, one-line descriptors, line-screen angles and mark file names",
+  "files": [
+    {
+      "path": "items/lib/fleet.ts",
+      "content": "// the fleet, in its order: generated from marks/fleet.json; edit the manifest, then run bun run build in packages/superthread\n// desc is the line under a ship's name in the rail's tab. Each mark is a file name under the consumer's mark base;\n// hrefs are the consumer's.\n\nexport const fleet = [\n  {\n    \"id\": \"orbit\",\n    \"name\": \"orbit\",\n    \"desc\": \"tasks, direction and the agents' board\",\n    \"angle\": 45,\n    \"mark\": {\n      \"light\": \"orbit.svg\",\n      \"dark\": \"orbit-dark.svg\"\n    }\n  },\n  {\n    \"id\": \"quanta\",\n    \"name\": \"quanta\",\n    \"desc\": \"learning chapters\",\n    \"angle\": 90,\n    \"mark\": {\n      \"light\": \"quanta.svg\",\n      \"dark\": \"quanta-dark.svg\"\n    }\n  },\n  {\n    \"id\": \"trisys\",\n    \"name\": \"trisys\",\n    \"desc\": \"essays and decks\",\n    \"angle\": 27,\n    \"mark\": {\n      \"light\": \"trisys.svg\",\n      \"dark\": \"trisys-dark.svg\"\n    }\n  },\n  {\n    \"id\": \"constellation\",\n    \"name\": \"constellation\",\n    \"desc\": \"a personal graph\",\n    \"angle\": 63,\n    \"mark\": {\n      \"light\": \"constellation.svg\",\n      \"dark\": \"constellation-dark.svg\"\n    }\n  },\n  {\n    \"id\": \"artifacts\",\n    \"name\": \"artifacts\",\n    \"desc\": \"reports and documents\",\n    \"angle\": 135,\n    \"mark\": {\n      \"light\": \"artifacts.svg\",\n      \"dark\": \"artifacts-dark.svg\"\n    }\n  },\n  {\n    \"id\": \"soliton\",\n    \"name\": \"soliton\",\n    \"desc\": \"the server\",\n    \"angle\": 117,\n    \"mark\": {\n      \"light\": \"soliton.svg\",\n      \"dark\": \"soliton-dark.svg\"\n    }\n  },\n  {\n    \"id\": \"pilot\",\n    \"name\": \"pilot\",\n    \"desc\": \"a new star\",\n    \"angle\": 1,\n    \"mark\": {\n      \"light\": \"pilot.svg\",\n      \"dark\": \"pilot-dark.svg\"\n    }\n  }\n] as const\n\nexport type Ship = (typeof fleet)[number]\nexport type ShipId = Ship[\"id\"]\n// @mk/fleet 2.1.1\n",
+      "type": "registry:lib",
+      "target": "@components/superthread/lib/fleet.ts"
+    }
+  ],
+  "meta": {
+    "version": "2.1.1",
+    "sha256": "32dddabb1a56558a43d8831ec18fb86ee40f0d8b38ca40b6c436d30956fbbdc1",
+    "tier": "lib",
+    "upstream": null
+  },
+  "type": "registry:lib"
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table",
+  "title": "table",
+  "description": "a table with mono ids and tabular numbers, and an edge beside the row under the pointer",
+  "dependencies": [
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/table.tsx",
+      "content": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/table 2.1.1\n\n// Rows come from the row spacing: table rows are 48 px and board rows 56 px, each plus its 1 px rule. Rules live on\n// the cells, since a separate-border table paints no row borders. The row edge (texture-rowedge) gives every first\n// cell 16 px of left padding and draws a 4 px strip at its left edge, inside the cell, at the half on hover and\n// solid on a selected row.\nconst tableVariants = cva(\n  \"w-full caption-bottom border-separate border-spacing-0 text-ui tabular-nums texture-rowedge\",\n  {\n    variants: {\n      rows: {\n        table: \"[--row:var(--spacing-row-table)]\",\n        board: \"[--row:var(--spacing-row-board)]\",\n      },\n    },\n    defaultVariants: {\n      rows: \"table\",\n    },\n  },\n);\n\nfunction Table({\n  className,\n  rows = \"table\",\n  ...props\n}: React.ComponentProps<\"table\"> & VariantProps<typeof tableVariants>) {\n  return (\n    <div data-slot=\"table-container\" data-mk=\"table\" className=\"relative w-full overflow-x-auto\">\n      <table data-slot=\"table\" data-rows={rows} className={cn(tableVariants({ rows }), className)} {...props} />\n    </div>\n  );\n}\n\nfunction TableHeader({ className, ...props }: React.ComponentProps<\"thead\">) {\n  return <thead data-slot=\"table-header\" className={className} {...props} />;\n}\n\nfunction TableBody({ className, ...props }: React.ComponentProps<\"tbody\">) {\n  return <tbody data-slot=\"table-body\" className={className} {...props} />;\n}\n\nfunction TableFooter({ className, ...props }: React.ComponentProps<\"tfoot\">) {\n  return <tfoot data-slot=\"table-footer\" className={cn(\"bg-muted font-medium\", className)} {...props} />;\n}\n\n// No hover fill: hover shows only the strip. A selected row takes the accent ground under its cells.\nfunction TableRow({ className, ...props }: React.ComponentProps<\"tr\">) {\n  return (\n    <tr\n      data-slot=\"table-row\"\n      className={cn(\n        \"transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) has-aria-expanded:bg-control-hover aria-selected:bg-accent data-[state=selected]:bg-accent\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// Ids and numbers set in mono; numbers align right. Every figure in the table is tabular.\nconst cellKind = cva(\"\", {\n  variants: {\n    kind: {\n      id: \"font-mono\",\n      number: \"text-right font-mono\",\n    },\n  },\n});\n\ntype CellKind = VariantProps<typeof cellKind>;\n\nfunction TableHead({ className, kind, ...props }: React.ComponentProps<\"th\"> & CellKind) {\n  return (\n    <th\n      data-slot=\"table-head\"\n      data-kind={kind ?? undefined}\n      className={cn(\n        \"border-b border-foreground pr-4 pb-3 text-left align-bottom type-meta whitespace-nowrap text-muted-foreground last:pr-0 [&:has([role=checkbox])]:pr-0\",\n        cellKind({ kind }),\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction TableCell({ className, kind, ...props }: React.ComponentProps<\"td\"> & CellKind) {\n  return (\n    <td\n      data-slot=\"table-cell\"\n      data-kind={kind ?? undefined}\n      className={cn(\n        \"h-[calc(var(--row)+1px)] border-b border-border pr-4 align-middle leading-5 whitespace-nowrap last:pr-0 [&:has([role=checkbox])]:pr-0\",\n        cellKind({ kind }),\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction TableCaption({ className, ...props }: React.ComponentProps<\"caption\">) {\n  return (\n    <caption\n      data-slot=\"table-caption\"\n      className={cn(\"mt-4 text-instrument text-muted-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\nexport { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/table.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.1.1",
+    "sha256": "0f6280d57cadfa50098e60438ba24b686c3edaf6412a66bca2e148715dcbbd6c",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "table",
+      "sha256": "054c89df40058a96723c9ed8cde6308e738f3a303fd19301ce94ade032306b60",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

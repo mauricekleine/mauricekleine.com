@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collection-toolbar",
+  "title": "collection toolbar",
+  "description": "the row above a collection: its filters, how many show, and how to view them",
+  "registryDependencies": [
+    "@mk/glyphs",
+    "@mk/toggle-group",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/blocks/collection-toolbar.tsx",
+      "content": "import * as React from \"react\";\nimport { cn } from \"@/components/superthread/lib/utils\";\nimport { Icon } from \"@/components/superthread/ui/glyphs\";\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/superthread/ui/toggle-group\";\n// @mk/collection-toolbar 2.1.1\n\n// The row above a collection: related controls stay together and wrap before the collection starts.\nfunction CollectionToolbar({\n  className,\n  label = \"collection controls\",\n  ...props\n}: React.ComponentProps<\"div\"> & { label?: string }) {\n  return (\n    <div\n      data-mk=\"collection-toolbar\"\n      data-slot=\"collection-toolbar\"\n      role=\"group\"\n      aria-label={label}\n      className={cn(\"mb-6 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-3\", className)}\n      {...props}\n    />\n  );\n}\n\n// A named set of controls, with its quiet label beside them and room to wrap on a phone.\nfunction ToolbarGroup({ className, label, children, ...props }: React.ComponentProps<\"div\"> & { label: string }) {\n  const labelId = React.useId();\n  return (\n    <div\n      data-mk=\"collection-toolbar\"\n      data-slot=\"toolbar-group\"\n      role=\"group\"\n      aria-labelledby={labelId}\n      className={cn(\"flex min-w-0 max-w-full flex-wrap items-center gap-2\", className)}\n      {...props}\n    >\n      <span id={labelId} className=\"type-meta text-muted-foreground\">\n        {label}\n      </span>\n      {children}\n    </div>\n  );\n}\n\n// Spare space pushes sort and view controls to the far end without fixing their position on narrow screens.\nfunction ToolbarSpacer({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-mk=\"collection-toolbar\"\n      data-slot=\"toolbar-spacer\"\n      aria-hidden=\"true\"\n      className={cn(\"flex-1\", className)}\n      {...props}\n    />\n  );\n}\n\n// The active filter is boxed in the house ink. Its clear control keeps its own ring inside the box.\nfunction FilterChip({\n  className,\n  children,\n  shown,\n  total,\n  onClear,\n  clearLabel = \"clear filter\",\n  ...props\n}: React.ComponentProps<\"div\"> & { shown?: number; total?: number; onClear: () => void; clearLabel?: string }) {\n  return (\n    <div\n      data-mk=\"collection-toolbar\"\n      data-slot=\"filter-chip\"\n      className={cn(\n        \"flex min-h-8 min-w-0 max-w-full items-center gap-2 border border-primary bg-accent pl-3 text-ui text-foreground\",\n        className,\n      )}\n      {...props}\n    >\n      <span className=\"min-w-0 [overflow-wrap:anywhere]\">{children}</span>\n      {shown !== undefined && total !== undefined && <ToolbarCount shown={shown} total={total} />}\n      <button\n        data-slot=\"filter-chip-clear\"\n        type=\"button\"\n        aria-label={clearLabel}\n        onClick={onClear}\n        className=\"flex w-8 shrink-0 items-center justify-center self-stretch transition-[background-color] duration-(--duration-instant) ease-(--ease-brand) hover:bg-control-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)\"\n      >\n        <Icon name=\"close\" />\n      </button>\n    </div>\n  );\n}\n\n// The number of results, read out when a filter changes it. Zero is a result too.\nfunction ToolbarCount({\n  className,\n  shown,\n  total,\n  ...props\n}: React.ComponentProps<\"span\"> & { shown: number; total: number }) {\n  return (\n    <span\n      data-mk=\"collection-toolbar\"\n      data-slot=\"toolbar-count\"\n      aria-live=\"polite\"\n      aria-atomic=\"true\"\n      className={cn(\n        \"shrink-0 type-instrument whitespace-nowrap text-muted-foreground font-mono tabular-nums\",\n        className,\n      )}\n      {...props}\n    >\n      {shown} of {total}\n    </span>\n  );\n}\n\ntype View = { value: string; label: string };\ntype ViewSwitchProps = Omit<React.ComponentProps<\"div\">, \"defaultValue\" | \"onChange\"> & {\n  views: readonly [View, ...View[]];\n  value?: string;\n  defaultValue?: string;\n  onValueChange?: (value: string) => void;\n  label?: string;\n  disabled?: boolean;\n};\n\n// One view stays pressed. The app may keep it in the URL, or let the switch remember it locally.\nfunction ViewSwitch({\n  className,\n  views,\n  value,\n  defaultValue,\n  onValueChange,\n  label = \"view\",\n  disabled,\n  ...props\n}: ViewSwitchProps) {\n  const [localValue, setLocalValue] = React.useState(defaultValue ?? views[0].value);\n  const requested = value ?? localValue;\n  const selected = views.some((view) => view.value === requested) ? requested : views[0].value;\n  return (\n    <div\n      data-mk=\"collection-toolbar\"\n      data-slot=\"view-switch\"\n      className={cn(\"min-w-0 max-w-full\", className)}\n      {...props}\n    >\n      <ToggleGroup\n        aria-label={label}\n        multiple={false}\n        variant=\"outline\"\n        size=\"sm\"\n        spacing={0}\n        disabled={disabled}\n        value={[selected]}\n        onValueChange={(values) => {\n          const next = values[0];\n          if (next === undefined || next === selected) return;\n          if (value === undefined) setLocalValue(next);\n          onValueChange?.(next);\n        }}\n        className=\"max-w-full flex-wrap\"\n      >\n        {views.map((view) => (\n          <ToggleGroupItem key={view.value} value={view.value}>\n            {view.label}\n          </ToggleGroupItem>\n        ))}\n      </ToggleGroup>\n    </div>\n  );\n}\n\nexport { CollectionToolbar, ToolbarGroup, ToolbarSpacer, FilterChip, ToolbarCount, ViewSwitch };\n",
+      "type": "registry:component",
+      "target": "@components/superthread/blocks/collection-toolbar.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.1.1",
+    "sha256": "23162edd9a8f43cde6ab99cb24f34f7b0b359da15befbec028484587f3bd1357",
+    "tier": "block",
+    "upstream": null,
+    "serves": [
+      "constellation",
+      "trisys",
+      "orbit",
+      "artifacts"
+    ]
+  },
+  "type": "registry:block"
+}
