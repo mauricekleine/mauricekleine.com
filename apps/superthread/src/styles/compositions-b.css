@@ -1,0 +1,95 @@
+/* Composition specimens only arrange the registry's parts. The blocks keep their own surfaces and states. */
+@layer components {
+  .st-cb-copy,
+  .st-cb-serves {
+    max-width: 72ch;
+    color: var(--muted-foreground);
+    font: 400 15px/24px var(--font-sans);
+  }
+  .st-cb-serves {
+    margin-top: 24px;
+  }
+  .st-cb-copy + * {
+    margin-top: 24px;
+  }
+  .st-modepair.st-cb-stack {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .st-cb-stack > .st-modepair-pane + .st-modepair-pane {
+    border-top: 1px solid var(--rule);
+    border-left: 0;
+  }
+  .st-cb-flow {
+    display: grid;
+    min-width: 0;
+    gap: 24px;
+  }
+  .st-cb-states {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    align-items: start;
+    gap: 32px;
+  }
+  .st-cb-states > .st-a-state,
+  .st-cb-flow > .st-a-state {
+    width: 100%;
+    min-width: 0;
+  }
+  .st-cb-note {
+    color: var(--muted-foreground);
+    font: 400 13px/20px var(--font-sans);
+    overflow-wrap: anywhere;
+  }
+  .st-cb-note:empty {
+    display: none;
+  }
+  .st-cb-preview-rows,
+  .st-cb-preview-cards {
+    list-style: none;
+    min-width: 0;
+  }
+  .st-cb-preview-rows {
+    border-top: 1px solid var(--border);
+  }
+  .st-cb-preview-rows li {
+    display: grid;
+    gap: 4px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    overflow-wrap: anywhere;
+  }
+  .st-cb-preview-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr));
+    gap: 12px;
+  }
+  .st-cb-preview-cards li {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    overflow-wrap: anywhere;
+  }
+  .st-cb-preview-rows span,
+  .st-cb-preview-cards span {
+    color: var(--muted-foreground);
+  }
+  .st-cb-diagram {
+    width: 100%;
+    height: 100%;
+    color: var(--primary);
+  }
+  .st-cb-phone {
+    display: block;
+    width: 320px;
+    max-width: 100%;
+    border: 1px solid var(--border);
+    background: var(--background);
+  }
+  .st-cb-phone-body {
+    padding: 16px;
+    min-width: 0;
+    background: var(--background);
+    color: var(--foreground);
+  }
+}

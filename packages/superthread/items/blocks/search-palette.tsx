@@ -117,6 +117,7 @@ function SearchPaletteTrigger({
 }
 
 // The command items stay the app's. Render children with select and pass it to each item's onSelect to close and go.
+// portalProps reach the dialog's portal, so an app can mount the palette inside a scoped mode.
 function SearchPaletteContent({
   className,
   placeholder = "search everything",
@@ -126,6 +127,7 @@ function SearchPaletteContent({
   onSelect,
   children,
   inputProps,
+  portalProps,
   ...props
 }: Omit<React.ComponentProps<typeof Command>, "children" | "onSelect"> & {
   placeholder?: string;
@@ -135,6 +137,7 @@ function SearchPaletteContent({
   onSelect?: (value: string) => void;
   children?: React.ReactNode | ((select: (value: string) => void) => React.ReactNode);
   inputProps?: React.ComponentProps<typeof CommandInput>;
+  portalProps?: React.ComponentProps<typeof CommandDialog>["portalProps"];
 }) {
   const { open, setOpen, contentId } = usePalette();
   const select = (value: string) => {
@@ -143,7 +146,13 @@ function SearchPaletteContent({
   };
   return (
     <div data-mk="search-palette" data-slot="search-palette-content" className="contents">
-      <CommandDialog open={open} onOpenChange={setOpen} title={title} description={description}>
+      <CommandDialog
+        open={open}
+        onOpenChange={setOpen}
+        title={title}
+        description={description}
+        portalProps={portalProps}
+      >
         <Command id={contentId} aria-label={title} className={cn(className)} {...props}>
           <CommandInput aria-label="search" placeholder={placeholder} {...inputProps} />
           <CommandList label="search results" aria-live="polite">

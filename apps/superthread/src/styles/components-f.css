@@ -1,0 +1,128 @@
+/* Layer and disclosure specimens. These classes arrange the examples; the items keep their installed looks. */
+@layer components {
+  .st-modepair.st-gl-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .st-gl-pair > .st-modepair-pane + .st-modepair-pane {
+    border-top: 1px solid var(--rule);
+    border-left: 0;
+  }
+  @media (max-width: 600px) {
+    .st-gl-pair > .st-modepair-pane {
+      padding-inline: 12px;
+    }
+  }
+  .st-gl-copy {
+    max-width: 72ch;
+    color: var(--muted-foreground);
+    font: 400 15px/24px var(--font-sans);
+  }
+  .st-gl-copy + * {
+    margin-top: 24px;
+  }
+  .st-gl-stack {
+    display: grid;
+    justify-items: start;
+    gap: 24px;
+    min-width: 0;
+    width: 100%;
+  }
+  .st-gl-stack > * {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .st-gl-field {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+    width: 100%;
+  }
+  .st-gl-note {
+    color: var(--muted-foreground);
+    font: 400 var(--text-instrument)/var(--text-instrument--line-height) var(--font-sans);
+  }
+  .st-gl-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .st-a-state.st-gl-full {
+    width: 100%;
+  }
+  .st-gl-leaf {
+    width: min(100%, 264px);
+  }
+  .st-gl-print {
+    width: 100%;
+    margin-top: -18px;
+  }
+  .st-gl-command {
+    width: 100%;
+    border: 1px solid var(--border);
+  }
+  .st-gl-sheet {
+    width: min(100%, 440px);
+  }
+  .st-gl-alert-print {
+    width: 100%;
+  }
+  .st-gl-scrim {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    padding: 24px 0;
+  }
+  .st-gl-toast-print {
+    position: relative;
+    width: min(100%, 420px);
+    min-height: 116px;
+  }
+  .st-gl-toast-print:has([data-action]) {
+    min-height: 188px;
+  }
+  .st-gl-live-toasts {
+    position: relative;
+    width: min(100%, 420px);
+    min-height: 220px;
+  }
+  .st-gl-panels {
+    height: 208px;
+    width: 100%;
+    border: 1px solid var(--border);
+  }
+  .st-gl-split {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) 1px minmax(0, 3fr);
+  }
+  .st-gl-panel {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    overflow-wrap: anywhere;
+  }
+  .st-a-state.st-gl-resize-state {
+    width: min(100%, 240px);
+  }
+  .st-gl-resize-state .st-gl-panels {
+    height: 120px;
+  }
+  .st-gl-logs {
+    display: grid;
+    gap: 12px;
+    width: 100%;
+  }
+  .st-gl-logs li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+    font: 400 var(--text-ui)/var(--text-ui--line-height) var(--font-sans);
+  }
+  .st-gl-logs li > :first-child {
+    font-family: var(--font-mono);
+  }
+}

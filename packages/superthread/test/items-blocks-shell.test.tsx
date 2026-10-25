@@ -57,6 +57,22 @@ describe("app shell", () => {
     expect(one(host, '[data-mk="fleet-rail"]').classes).toContain("min-h-svh");
   });
 
+  test("the ground is the page's main, or a div inside a layout that owns main", () => {
+    const host = frame();
+    const ground = one(host, '[data-slot="app-shell-ground"]').el;
+    expect(ground.tagName).toBe("MAIN");
+    expect(ground.getAttribute("aria-label")).toBe("orbit workspace");
+    expect(ground.getAttribute("data-mk")).toBe("app-shell");
+    const nested = server(
+      <AppShellGround render={<div />}>
+        <AppShellPanel>working panel</AppShellPanel>
+      </AppShellGround>,
+    );
+    expect(nested.querySelector("main")).toBeNull();
+    expect(one(nested, '[data-slot="app-shell-ground"]').el.hasAttribute("aria-label")).toBe(false);
+    expect(one(nested, '[data-slot="app-shell-ground"]').classes).toContain("flex-1");
+  });
+
   test("names the ship nav, keeps real list links and announces a zero count", () => {
     const host = frame();
     const nav = one(host, 'nav[aria-label="orbit"]').el;
@@ -333,6 +349,23 @@ describe("search palette", () => {
       expect(isOpen(view.body)).toBe(true);
     } finally {
       await view.done();
+    }
+  });
+
+  test("portalProps mount the dialog inside the app's own container", async () => {
+    const scope = document.createElement("div");
+    scope.className = "dark";
+    document.body.append(scope);
+    const view = await client(
+      <SearchPalette defaultOpen>
+        <SearchPaletteContent portalProps={{ container: scope }} />
+      </SearchPalette>,
+    );
+    try {
+      expect(scope.querySelector('[data-slot="command-input"]')).not.toBeNull();
+    } finally {
+      await view.done();
+      scope.remove();
     }
   });
 

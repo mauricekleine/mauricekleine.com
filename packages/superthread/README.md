@@ -3,7 +3,7 @@
 The design system for Maurice's fleet, as a shadcn registry. This package holds two versions side by side:
 
 - **v1, frozen.** The theme www and the share Worker import (`dist/superthread.css`) and the two items www serves at `/r`. Nothing regenerates it.
-- **v2.** Tokens generated from the master world, and the versioned `@mk` registry of Base UI items built on them. The version is `2.0.0-next.4`.
+- **v2.** Tokens generated from the master world, and the versioned `@mk` registry of Base UI items built on them. The version is `2.0.0`.
 
 ## Install v2
 
@@ -49,7 +49,7 @@ Only the Start layout is tested. For a surface without Tailwind, `@mk/tokens-pla
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0-next.4/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions that have a snapshot.
@@ -78,11 +78,11 @@ Brand items keep shadcn's Base UI API (exports, props, `data-slot`, variants) an
 
 ## The site
 
-superthread.mauricekleine.com is v2's home. It renders every item from its source in `items/`:
+superthread.mauricekleine.com is v2's home. Its build renders every item from the files the registry serves, the same bytes an app installs (development renders the sources in `items/`):
 
 - the overview, then the foundations: colour, type, space, motion, marks and texture
-- a page for every item, with its install line
-- `/mock/board`, `/mock/reading` and `/mock/orbit`: a task board, a reading page and an agents dashboard, built only from the items
+- a page for every item and every composition, with its install line; a composition's page names the apps it serves
+- `/mock/board`, `/mock/reading` and `/mock/orbit`: a task board, a reading page and an agents dashboard, built only from the items and compositions
 - `/install`: init, adding an item, the css entry, pinning a version, and every item
 
 It serves the `@mk` registry beside the pages. Init maps `@mk` to `https://superthread.mauricekleine.com/r/{name}.json`, so after the init line in [Install v2](#install-v2), `bunx --bun shadcn@latest add @mk/<item>` installs any item.
@@ -157,17 +157,17 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 ## Versions and stamps
 
-- **Version.** `package.json` `version` is the one source for every item: `2.0.0-next.4` now, `2.0.0` at the fleet rollout.
+- **Version.** `package.json` `version` is the one source for every item, `2.0.0` now. A fix to a served item ships as the next patch, a new item or variant as the next minor, and a changed API as the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
 - **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. In CSS, `/* @mk/<item> <version> */` is line 1.
 - **Meta.** Each built item JSON carries `meta: { version, sha256, tier, upstream }`: the hash of its targets and contents, its tier, and the base-nova item and CLI it was seeded from. A block's meta adds `serves`, the apps it serves. Meta stays in the registry and never reaches an installed file.
 - **Paths.** Latest: `/r/<name>.json` and `/r/registry.json`. Pinned: `/r/v/<version>/<name>.json` and `/r/v/<version>/registry.json`. Index: `/r/versions.json`, `{ latest, versions }`.
 - **Snapshots.** `versions/<version>/r/` holds that version's item JSONs and `registry.json`, with a `SHA256SUMS` beside them. A snapshot's `init.json` maps `@mk` to its own version. Once a snapshot is on main it never changes: CI fails a pull request that modifies or deletes one, and `registry.test.ts` fails when the current version's snapshot differs from a fresh build.
 
-### cutting next.N
+### cutting a version
 
 Any change to a served item after its version reaches main ships as the next version.
 
-1. Set `version` in `package.json` to the next `2.0.0-next.N`.
+1. Set `version` in `package.json` to the next patch, minor or major.
 2. `git fetch origin`, then `bun run --cwd packages/superthread snapshot`. It refuses a version that origin/main already holds.
 3. Run `bun run test` and `bun run test:clean-room`, whose pinned step now installs from the new snapshot.
 4. Commit the snapshot as the pull request's last commit. If an item changes again before the merge, retake it: the script replaces a snapshot that is not on main yet.

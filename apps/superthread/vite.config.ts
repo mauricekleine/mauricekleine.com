@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import { execFileSync } from "node:child_process";
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { prerenderPaths } from "./src/site/nav.ts";
@@ -30,7 +30,16 @@ const baseUi = [local("./src"), local("../../packages/superthread/items")].flatM
     ),
 );
 
-export default defineConfig({
+// a build renders the items from the registry's payloads, written to .payload/ by tools/payload.mjs, so every page
+// shows the bytes an app installs; dev renders their sources, so an edit to an item reloads at once
+const payload = local("./.payload");
+const items = (command: "build" | "serve") => {
+  if (command === "serve") return local("../../packages/superthread/items");
+  if (!existsSync(payload)) throw new Error("no .payload/; run bun run build:superthread from the repo root");
+  return payload;
+};
+
+export default defineConfig(({ command }) => ({
   define: {
     __BUILD_DATE__: JSON.stringify(buildDate),
     __SUPERTHREAD_VERSION__: JSON.stringify(version),
@@ -38,7 +47,9 @@ export default defineConfig({
   resolve: {
     // the site renders the registry's own item sources, under the alias consumers install them to
     alias: [
-      { find: "@/components/superthread", replacement: local("../../packages/superthread/items") },
+      // the catalog is the registry's index, not a served item, so it always comes from the source
+      { find: "@/components/superthread/catalog", replacement: local("../../packages/superthread/items/catalog.ts") },
+      { find: "@/components/superthread", replacement: items(command) },
       { find: "@", replacement: local("./src") },
     ],
     // the items and the site share one copy of each, so context-based parts (the toast manager) hold together
@@ -66,4 +77,4 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-});
+}));

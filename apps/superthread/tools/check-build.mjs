@@ -1,7 +1,8 @@
 // Checks the built site, after `vite build`: every page is there with the theme script first in its head, the
 // served words hold the rules (no em dash, no private host, no prose lifted from the surface contract), every
 // raster says where it came from, the registry is complete and serves every published snapshot byte for byte, init
-// points at the base it was built for, the deploy stamp is HEAD, and the mock pages compose registry components only.
+// points at the base it was built for, the deploy stamp is HEAD, the mock pages compose registry components only, and
+// the pages rendered the registry's payloads as served.
 // Prints each failure and exits 1 on any. CHECK_BUILD_OUT and CHECK_BUILD_VERSIONS point it at another client output
 // and another versions/ tree, for a negative control on a copy.
 import { execFileSync } from "node:child_process";
@@ -21,7 +22,7 @@ const passed = [];
 const done = (check, detail) => passed.push(detail ? `${check} (${detail})` : check);
 
 // Published versions are immutable, so this list only grows.
-const PUBLISHED_VERSIONS = ["2.0.0-next.1", "2.0.0-next.2", "2.0.0-next.3", "2.0.0-next.4"];
+const PUBLISHED_VERSIONS = ["2.0.0-next.1", "2.0.0-next.2", "2.0.0-next.3", "2.0.0-next.4", "2.0.0"];
 
 // the client output: cf's build output, or Vite's own when the Cloudflare plugin writes there
 const outputs = process.env.CHECK_BUILD_OUT
@@ -253,6 +254,15 @@ for (const file of mocks) {
   }
 }
 done("mock imports", `${mocks.length} pages`);
+
+// 9. the pages rendered the payloads: .payload/ holds every file the served registry installs, byte for byte
+{
+  const { drift, payloadFiles } = await import("./payload.mjs");
+  const files = payloadFiles(join(out, "r"));
+  const problems = drift(files);
+  for (const problem of problems) fail("payload", problem);
+  if (problems.length === 0) done("payload", `${files.size} files`);
+}
 
 if (failures.length > 0) {
   for (const line of failures) console.error(`check-build: ${line}`);

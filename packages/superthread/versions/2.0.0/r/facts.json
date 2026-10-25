@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "facts",
+  "title": "facts",
+  "description": "labelled values in a ruled grid",
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/blocks/facts.tsx",
+      "content": "import { cn } from \"@/components/superthread/lib/utils\";\n// @mk/facts 2.0.0\n\n// Labelled values as shared columns, or ruled cells with the label above. Phones keep one cell per line.\nfunction Facts({\n  className,\n  layout = \"list\",\n  columns = 2,\n  ...props\n}: React.ComponentProps<\"dl\"> & { layout?: \"list\" | \"grid\"; columns?: 2 | 3 | 4 }) {\n  return (\n    <dl\n      data-mk=\"facts\"\n      data-slot=\"facts\"\n      data-layout={layout}\n      data-columns={columns}\n      className={cn(\n        \"group/facts grid min-w-0 border-t border-border data-[layout=list]:grid-cols-[max-content_minmax(0,1fr)] data-[layout=list]:gap-x-6 data-[layout=grid]:border-l data-[layout=grid]:grid-cols-1 [@media(min-width:601px)]:data-[layout=grid]:data-[columns=2]:grid-cols-2 [@media(min-width:601px)]:data-[layout=grid]:data-[columns=3]:grid-cols-3 [@media(min-width:601px)]:data-[layout=grid]:data-[columns=4]:grid-cols-4\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// A semantic term/value pair keeps its rule across both columns in the list.\nfunction Fact({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"fact\"\n      className={cn(\n        \"grid min-w-0 gap-y-2 border-b border-border py-3 group-data-[layout=list]/facts:col-span-full group-data-[layout=list]/facts:grid-cols-subgrid group-data-[layout=list]/facts:items-baseline group-data-[layout=grid]/facts:content-start group-data-[layout=grid]/facts:border-r group-data-[layout=grid]/facts:px-4 group-data-[layout=grid]/facts:py-4\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// The quiet label stays narrow enough to leave room for a long value on a phone.\nfunction FactLabel({ className, ...props }: React.ComponentProps<\"dt\">) {\n  return (\n    <dt\n      data-slot=\"fact-label\"\n      className={cn(\n        \"min-w-0 type-meta text-muted-foreground [overflow-wrap:anywhere] group-data-[layout=list]/facts:max-w-[min(24ch,35vw)]\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// Numbers align at the list's far edge; identifiers keep their mono face without changing alignment.\nfunction FactValue({ className, kind, ...props }: React.ComponentProps<\"dd\"> & { kind?: \"number\" | \"id\" }) {\n  return (\n    <dd\n      data-slot=\"fact-value\"\n      data-kind={kind}\n      className={cn(\n        \"min-w-0 text-ui [overflow-wrap:anywhere] data-[kind=number]:font-mono data-[kind=number]:tabular-nums data-[kind=id]:font-mono data-[kind=id]:tabular-nums group-data-[layout=list]/facts:data-[kind=number]:text-right\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Facts, Fact, FactLabel, FactValue };\n",
+      "type": "registry:component",
+      "target": "@components/superthread/blocks/facts.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.0.0",
+    "sha256": "97ed9cbf2de8e2e8c111611900c28eedece77f87589a5efbb98dbc6db58bd8a6",
+    "tier": "block",
+    "upstream": null,
+    "serves": [
+      "constellation",
+      "quanta",
+      "trisys",
+      "orbit",
+      "artifacts"
+    ]
+  },
+  "type": "registry:block"
+}

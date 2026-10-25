@@ -216,7 +216,7 @@ async function committedVersions(): Promise<string[]> {
   return found.sort(Bun.semver.order);
 }
 
-// A snapshot on origin/main is released: it never changes, and an item edit needs next.N+1.
+// A snapshot on origin/main is released: it never changes, and an item edit needs the next version.
 function refuseReleased(version: string) {
   const git = (...args: string[]) => Bun.spawnSync(["git", "-C", pkg, ...args], { stdout: "pipe", stderr: "pipe" });
   if (git("rev-parse", "--verify", "--quiet", "origin/main^{commit}").exitCode !== 0)

@@ -64,6 +64,18 @@ describe("/install", () => {
       expect(lines).toContain(commandFor(name));
     }
   });
+
+  test("each composition names every app it serves, in the catalog's order", async () => {
+    const html = await renderInstall();
+    const blocks = catalog.filter((item) => item.tier === "block");
+    expect(blocks.length).toBeGreaterThan(0);
+    for (const block of blocks) {
+      const row = html.split(`id="item-${block.name}"`)[1]?.split("</li>")[0] ?? "";
+      const apps = block.serves ?? [];
+      const said = `serves ${apps.slice(0, -1).join(", ")} and ${apps.at(-1)}`;
+      expect(row).toContain(said);
+    }
+  });
 });
 
 describe("the fleet row", () => {

@@ -1,6 +1,6 @@
 # registry
 
-`@mk` is a shadcn registry of Base UI items on the superthread tokens, served at https://superthread.mauricekleine.com/r/. The version is `2.0.0-next.4`. Each item's page on the site shows it in light and dark with its install line.
+`@mk` is a shadcn registry of Base UI items on the superthread tokens, served at https://superthread.mauricekleine.com/r/. The version is `2.0.0`. Each item's page on the site shows it in light and dark with its install line.
 
 ## items
 
@@ -74,7 +74,7 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0-next.4/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions with a snapshot. A snapshot never changes once it is published.
@@ -83,7 +83,7 @@ Nested dependencies resolve through the same mapping, so every item comes from t
 
 - Every installed file names its item and version: `// @mk/<item> <version>` after the imports in TS and TSX, `/* @mk/<item> <version> */` on line 1 in CSS.
 - `bunx --bun shadcn@latest add @mk/<item> --diff` shows how the installed file differs from the registry; `--overwrite` takes the registry's version.
-- Installed files stay as the registry writes them. A fix goes into `packages/superthread/items/` in the mauricekleine.com repo, and any change to a served item after its version is published ships as the next version, `2.0.0-next.N`.
+- Installed files stay as the registry writes them. A fix goes into `packages/superthread/items/` in the mauricekleine.com repo, and any change to a served item after its version is published ships as the next version: a patch for a fix, a minor for a new item or variant.
 
 ## changing an item
 
