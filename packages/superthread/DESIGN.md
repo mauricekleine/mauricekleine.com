@@ -510,14 +510,14 @@ The current item, wherever it is (a sidebar entry, the fleet rail's cell, a chos
 
 Every `@mk` item is a branded skin on base-nova, shadcn's Base UI style: shadcn's API, exports and `data-slot` attributes stay, and the craft lives in the classes. Each brand item's root carries `data-mk="<item>"`. Install with `bunx --bun shadcn@latest add @mk/<item>`; `shadcn init` with the registry's `init` item sets an app up with the style, the tokens, `utils` and the button. Brand items carry the system's rules; pass items (`card`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile`) are base-nova on the tokens. Each brand item carries at most one texture detail:
 
-| detail    | utility            | item                                 | what prints                                                                           |
-| --------- | ------------------ | ------------------------------------ | ------------------------------------------------------------------------------------- |
-| contact   | `texture-contact`  | select list, toast, dialog           | light only: the contact shadow as a 50 percent screen                                 |
-| mixed     | `texture-mixed`    | checkbox                             | a 12 px plum square at 50 percent inside the box's plum edge                          |
-| tab hover | `texture-tabhover` | tabs                                 | a 2 px plum bar at 50 percent, previewing the current bar                             |
-| row edge  | `texture-rowedge`  | table                                | a 4 px plum strip at 50 percent beside the row under the pointer; solid when selected |
-| disabled  | `texture-disabled` | button, input, textarea, input group | the 1 px edge in the input ink at 50 percent; the fill stays flat, the label plain    |
-| loading   | `texture-skeleton` | skeleton                             | the first ink at 18.75 percent on whole-pixel bars                                    |
+| detail    | utility            | item                                                                      | what prints                                                                           |
+| --------- | ------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| contact   | `texture-contact`  | select list, toast, dialog, dropdown menu, combobox, alert dialog, sonner | light only: the contact shadow as a 50 percent screen                                 |
+| mixed     | `texture-mixed`    | checkbox                                                                  | a 12 px plum square at 50 percent inside the box's plum edge                          |
+| tab hover | `texture-tabhover` | tabs                                                                      | a 2 px plum bar at 50 percent, previewing the current bar                             |
+| row edge  | `texture-rowedge`  | table                                                                     | a 4 px plum strip at 50 percent beside the row under the pointer; solid when selected |
+| disabled  | `texture-disabled` | button, input, textarea, input group                                      | the 1 px edge in the input ink at 50 percent; the fill stays flat, the label plain    |
+| loading   | `texture-skeleton` | skeleton                                                                  | the first ink at 18.75 percent on whole-pixel bars                                    |
 
 ### Buttons
 
@@ -589,6 +589,26 @@ The column of ship marks down the left of every ship surface, on the deep ground
 ### Card, label and separator
 
 Pass items: base-nova's card, label and separator on the tokens, square and ruled like the rest.
+
+### Dropdown menu
+
+The menu and its submenus are leaf lists with the contact edge, 6 px from their triggers. Only the inner list scrolls. Rows are 36 px tall, highlight in the raised hover fill and draw keyboard focus inside; destructive stays in the key ink. Checks and 6 px house squares occupy the left indicator column. Group labels and mono shortcuts keep the list hierarchy.
+
+### Combobox
+
+The input is an input group whose field box owns focus; trigger and clear keep their own inside control rings. The popup takes the select's leaf lift and contact edge, with the chosen option boxed on aria-selected and the check at the end. Multiple values print as 24 px secondary chips with named 16 px ghost remove controls; the chips box thickens only while its text control holds focus.
+
+### Command
+
+The cmdk surface stays flat, with a 40 px input group and a scroll list of 36 px rows. cmdk's selected state means the pointer or keys position, so it takes the raised hover fill rather than the chosen box. Group headings use the meta step and shortcuts use Fragment Mono. The palette uses the dialog's sheet and contact edge, with its lowercase accessible title and description inside it.
+
+### Alert dialog
+
+The confirmation is a whole-pixel centred sheet on the popover fill, with a 1 px edge, 28 px padding, the sheet lift and its contact edge. Default width stops at 440 px; small keeps the compact 320 px width. The title uses the subtitle step, media sits in a 40 px secondary square, and house buttons align right 24 px below the explanation. The plain scrim and sheet fade at the quick duration.
+
+### Sonner
+
+Sonner's toast API prints unstyled on the toast's popover fill, 1 px edge and leaf lift with the contact edge, padded 16 px. Every kind uses its 14 px status glyph, including a static i for loading. Titles use UI medium over muted instrument descriptions; actions and cancels take the small default and outline button looks with flat edges. The stack expands by default so toasts never scale. A wrapper carries data-slot and data-mk because sonner drops arbitrary attributes; the viewport label is "notifications".
 
 ### Motion
 
