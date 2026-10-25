@@ -1,0 +1,97 @@
+/* Composition specimens supply only their layout. The installed blocks own their dress. */
+.st-ca-copy {
+  max-width: 66ch;
+  margin-bottom: 24px;
+  color: var(--muted-foreground);
+  font: 400 14px/21px var(--font-sans);
+}
+.st-ca-serves {
+  margin-top: 24px;
+  color: var(--muted-foreground);
+  font: 400 13px/20px var(--font-sans);
+}
+.st-ca-state {
+  width: 100%;
+}
+.st-ca-stack {
+  display: grid;
+  min-width: 0;
+  gap: 24px;
+}
+.st-ca-stack > button {
+  justify-self: start;
+}
+.st-ca-wide-pair {
+  grid-template-columns: minmax(0, 1fr);
+}
+.st-ca-wide-pair > .st-modepair-pane + .st-modepair-pane {
+  border-top: 1px solid var(--rule);
+  border-left: 0;
+}
+.st-ca-viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.st-ca-frame {
+  display: block;
+  max-width: none;
+  border: 0;
+  transform-origin: top left;
+}
+.st-ca-inset {
+  padding: 24px;
+}
+.st-ca-panel-copy {
+  margin: 16px 0 24px;
+  color: var(--muted-foreground);
+  font: 400 15px/24px var(--font-sans);
+}
+.st-ca-note {
+  color: var(--muted-foreground);
+  font: 400 13px/20px var(--font-sans);
+}
+.st-ca-parts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 16px 24px;
+  font: 400 14px/21px var(--font-sans);
+}
+.st-ca-parts dt {
+  overflow-wrap: anywhere;
+}
+.st-ca-parts dd {
+  color: var(--muted-foreground);
+}
+.st-ca-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 400 14px/21px var(--font-sans);
+}
+.st-ca-rows li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.st-ca-empty-media {
+  display: grid;
+  width: 80px;
+  height: 64px;
+  place-items: center;
+  border: 1px solid var(--border);
+}
+.st-ca-stack > .st-ca-copy {
+  margin-bottom: 0;
+}
+@media (max-width: 600px) {
+  .st-ca-parts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .st-ca-parts dd + dt {
+    margin-top: 16px;
+  }
+  .st-ca-inset {
+    padding: 16px;
+  }
+}
