@@ -9,7 +9,8 @@ import { Button } from "@/components/superthread/ui/button";
 // (the house ink, or the error ink when the control is invalid); the control itself draws no outline and its caret
 // takes --fx. The rule matches the text control with :has(), never :focus-within, because a button inside the box
 // (clear, reveal, a toggle) is a control: it takes its own 2 px ring inside itself and the box stays at 1 px.
-// Disabled: never focused, a flat fill and the edge screened back.
+// Disabled is the text control's state: the box never takes focus, keeps a flat fill and the disabled label, and its
+// edge is screened back. A disabled button inside the box is the button's own state and leaves the box as it is.
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -17,7 +18,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
       data-mk="input-group"
       role="group"
       className={cn(
-        "group/input-group relative flex h-10 w-full min-w-0 items-center border border-input bg-background text-ui text-foreground [--fx:var(--primary)] has-[input:focus,textarea:focus]:border-(--fx) has-[input:focus,textarea:focus]:outline-2 has-[input:focus,textarea:focus]:-outline-offset-2 has-[input:focus,textarea:focus]:outline-(--fx) has-[[aria-invalid=true]]:border-error has-[[aria-invalid=true]]:[--fx:var(--error)] has-disabled:cursor-not-allowed has-disabled:bg-faint has-disabled:text-disabled texture-disabled has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-2.5 has-[>[data-align=inline-start]]:[&>input]:pl-2.5",
+        "group/input-group relative flex h-10 w-full min-w-0 items-center border border-input bg-background text-ui text-foreground [--fx:var(--primary)] has-[input:focus,textarea:focus]:border-(--fx) has-[input:focus,textarea:focus]:outline-2 has-[input:focus,textarea:focus]:-outline-offset-2 has-[input:focus,textarea:focus]:outline-(--fx) has-[[aria-invalid=true]]:border-error has-[[aria-invalid=true]]:[--fx:var(--error)] has-[input:disabled,textarea:disabled]:cursor-not-allowed has-[input:disabled,textarea:disabled]:bg-faint has-[input:disabled,textarea:disabled]:text-disabled texture-disabled has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-2.5 has-[>[data-align=inline-start]]:[&>input]:pl-2.5",
         className,
       )}
       {...props}
@@ -26,7 +27,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 const inputGroupAddonVariants = cva(
-  "flex h-auto cursor-text items-center justify-center gap-2.5 py-1.5 text-ui font-medium text-muted-foreground select-none group-has-disabled/input-group:cursor-not-allowed group-has-disabled/input-group:text-disabled",
+  "flex h-auto cursor-text items-center justify-center gap-2.5 py-1.5 text-ui font-medium text-muted-foreground select-none group-has-[input:disabled,textarea:disabled]/input-group:cursor-not-allowed group-has-[input:disabled,textarea:disabled]/input-group:text-disabled",
   {
     variants: {
       align: {

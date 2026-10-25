@@ -1,45 +1,42 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { GlobalRegistrator } from "@happy-dom/global-registrator";
 import { act, type ReactNode } from "react";
+import { createRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
+import { Checkbox } from "@/components/superthread/ui/checkbox";
+import { Input } from "@/components/superthread/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "@/components/superthread/ui/input-group";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/superthread/ui/select";
+import { Textarea } from "@/components/superthread/ui/textarea";
 import { catalog } from "../items/catalog.ts";
 
-// S1.4a's fields: steer 4's one focus state for every field (GATE.md, "the field focus rule"), the texture each
-// item claims, and the classes no field may carry. The select popup is portaled, so it renders through
-// react-dom/client into happy-dom (GATE.md build ruling 5); everything else renders with renderToString. The items
-// and react-dom/client load after happy-dom registers, because Base UI picks its layout effect on import by whether
-// a document exists.
+// The fields: steer 4's one focus state for every field (GATE.md, "the field focus rule"), the texture each item
+// claims, and the classes no field may carry. The select popup is portaled, so it renders through react-dom/client
+// into happy-dom (GATE.md build ruling 5); everything else renders with renderToString. The package's test preload
+// owns the DOM and act()'s globals: it registers happy-dom before any test file loads, because Base UI picks its
+// layout effect on import by whether a document exists, and Bun shares that module across files. This file
+// registers nothing; it cleans up each render it mounts.
 
 const root = join(import.meta.dir, "..");
 const details = JSON.parse(readFileSync(join(root, "tokens/details.json"), "utf8")) as { DETAILS: { key: string }[] };
 const DETAIL_UTILITIES = new Set(details.DETAILS.map((d) => `texture-${d.key}`));
 const css = readFileSync(join(root, "dist/v2/superthread.css"), "utf8");
-
-let ui: {
-  checkbox: typeof import("@/components/superthread/ui/checkbox");
-  input: typeof import("@/components/superthread/ui/input");
-  select: typeof import("@/components/superthread/ui/select");
-  textarea: typeof import("@/components/superthread/ui/textarea");
-};
-let createRoot: typeof import("react-dom/client").createRoot;
-
-beforeAll(async () => {
-  GlobalRegistrator.register();
-  (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
-  ({ createRoot } = await import("react-dom/client"));
-  ui = {
-    checkbox: await import("@/components/superthread/ui/checkbox"),
-    input: await import("@/components/superthread/ui/input"),
-    select: await import("@/components/superthread/ui/select"),
-    textarea: await import("@/components/superthread/ui/textarea"),
-  };
-});
-afterAll(async () => {
-  delete (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT;
-  await GlobalRegistrator.unregister();
-});
 
 // A class split at its top-level colons: the variants, then the utility (`-` and `!` stripped).
 function parts(cls: string): { variants: string[]; utility: string } {
@@ -99,6 +96,7 @@ function one(scope: ParentNode, selector: string): Rendered {
 // No field draws focus with :focus-within (it would frame the box for a button inside it), and none carries a class
 // that nulls or replaces the outline: outline-none and outline-hidden set outline-style none, which outline-2 reads
 // (GATE.md build ruling 2), and base-nova's rings come off. No dark: class either; the tokens carry the mode.
+// (Transitions that would fade a ring are checked for every shipped item in items-layers.test.tsx.)
 function forbidden(rendered: Rendered[]): string[] {
   const hits: string[] = [];
   for (const { el, classes } of rendered)
@@ -119,11 +117,23 @@ function forbidden(rendered: Rendered[]): string[] {
   return hits;
 }
 
-// The component-detail utilities (texture-<DETAILS key>) the rendered classes use. The five places' utilities
+// The item's own elements: those outside any descendant that carries another item's data-mk. A nested item (the
+// button inside an input-group) brings its own detail, so its classes never count against the item holding it.
+function own(rendered: Rendered[], item: string): Rendered[] {
+  return rendered.filter(({ el }) => {
+    for (let node: Element | null = el; node; node = node.parentElement) {
+      const mk = node.getAttribute("data-mk");
+      if (mk !== null && mk !== item) return false;
+    }
+    return true;
+  });
+}
+
+// The component-detail utilities (texture-<DETAILS key>) the item's own elements use. The five places' utilities
 // (texture-ramp, texture-line-<ship>) are not DETAILS keys, so they never count.
-function detailsUsed(rendered: Rendered[]): string[] {
+function detailsUsed(rendered: Rendered[], item: string): string[] {
   const used = new Set<string>();
-  for (const { classes } of rendered)
+  for (const { classes } of own(rendered, item))
     for (const cls of classes) {
       const { utility } = parts(cls);
       if (DETAIL_UTILITIES.has(utility)) used.add(utility);
@@ -144,7 +154,6 @@ const FX_PRIMARY = "[--fx:var(--primary)]";
 const ships = ["orbit", "quanta", "trisys"];
 
 function SelectSpecimen(props: { open?: boolean; disabled?: boolean; invalid?: boolean }) {
-  const { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } = ui.select;
   return (
     <Select defaultValue="trisys" open={props.open} disabled={props.disabled}>
       <SelectTrigger aria-label="ship" aria-invalid={props.invalid || undefined}>
@@ -168,9 +177,9 @@ describe("input", () => {
   const states: HTMLElement[] = [];
   beforeAll(() => {
     states.push(
-      server(<ui.input.Input placeholder="a ship name" />),
-      server(<ui.input.Input defaultValue="no such ship" aria-invalid />),
-      server(<ui.input.Input disabled defaultValue="7" />),
+      server(<Input placeholder="a ship name" />),
+      server(<Input defaultValue="no such ship" aria-invalid />),
+      server(<Input disabled defaultValue="7" />),
     );
   });
 
@@ -189,7 +198,7 @@ describe("input", () => {
 
   test("carries only texture-disabled, and no forbidden class in any state", () => {
     const rendered = states.flatMap(elements);
-    expect(detailsUsed(rendered)).toEqual(claim("input"));
+    expect(detailsUsed(rendered, "input")).toEqual(claim("input"));
     expect(claim("input")).toEqual(["texture-disabled"]);
     expect(forbidden(rendered)).toEqual([]);
   });
@@ -199,9 +208,9 @@ describe("textarea", () => {
   const states: HTMLElement[] = [];
   beforeAll(() => {
     states.push(
-      server(<ui.textarea.Textarea placeholder="what changed" />),
-      server(<ui.textarea.Textarea defaultValue="too short" aria-invalid />),
-      server(<ui.textarea.Textarea disabled />),
+      server(<Textarea placeholder="what changed" />),
+      server(<Textarea defaultValue="too short" aria-invalid />),
+      server(<Textarea disabled />),
     );
   });
 
@@ -220,7 +229,7 @@ describe("textarea", () => {
 
   test("carries only texture-disabled, and no forbidden class in any state", () => {
     const rendered = states.flatMap(elements);
-    expect(detailsUsed(rendered)).toEqual(claim("textarea"));
+    expect(detailsUsed(rendered, "textarea")).toEqual(claim("textarea"));
     expect(claim("textarea")).toEqual(["texture-disabled"]);
     expect(forbidden(rendered)).toEqual([]);
   });
@@ -302,7 +311,7 @@ describe("select", () => {
     test("the open select carries only texture-contact, and no forbidden class", () => {
       const rendered = [...states.flatMap(elements), ...elements(body)];
       expect(body.querySelectorAll("[role=option]").length).toBe(ships.length);
-      expect(detailsUsed(rendered)).toEqual(claim("select"));
+      expect(detailsUsed(rendered, "select")).toEqual(claim("select"));
       expect(claim("select")).toEqual(["texture-contact"]);
       expect(forbidden(rendered)).toEqual([]);
     });
@@ -313,11 +322,11 @@ describe("checkbox", () => {
   const states: HTMLElement[] = [];
   beforeAll(() => {
     states.push(
-      server(<ui.checkbox.Checkbox aria-label="include drafts" />),
-      server(<ui.checkbox.Checkbox aria-label="notify me" defaultChecked />),
-      server(<ui.checkbox.Checkbox aria-label="every ship" indeterminate />),
-      server(<ui.checkbox.Checkbox aria-label="locked" disabled defaultChecked />),
-      server(<ui.checkbox.Checkbox aria-label="required" aria-invalid />),
+      server(<Checkbox aria-label="include drafts" />),
+      server(<Checkbox aria-label="notify me" defaultChecked />),
+      server(<Checkbox aria-label="every ship" indeterminate />),
+      server(<Checkbox aria-label="locked" disabled defaultChecked />),
+      server(<Checkbox aria-label="required" aria-invalid />),
     );
   });
 
@@ -346,19 +355,20 @@ describe("checkbox", () => {
   test("carries only texture-mixed, and no forbidden class in any state", () => {
     const rendered = states.flatMap(elements);
     expect(one(states[2]!, "[role=checkbox]").classes).toContain("texture-mixed");
-    expect(detailsUsed(rendered)).toEqual(claim("checkbox"));
+    expect(detailsUsed(rendered, "checkbox")).toEqual(claim("checkbox"));
     expect(claim("checkbox")).toEqual(["texture-mixed"]);
     expect(forbidden(rendered)).toEqual([]);
   });
 });
 
-// Integration-only (process rule 3): input-group renders S1.4b's Button, which is half written while stage 4 runs.
-// The integration step runs these; a slice run leaves them out with -t '^(?!.*integration)'.
-describe("input-group (integration: renders S1.4b's button)", () => {
-  async function groups() {
-    const ui = await import("@/components/superthread/ui/input-group");
-    const { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea } = ui;
-    return [
+// The disabled state is the text control's: the box and its addons name a disabled input or textarea, never any
+// disabled descendant, so a disabled button inside the box leaves the box as it is (GATE.md, S1.F queue).
+const TEXT_DISABLED = "has-[input:disabled,textarea:disabled]";
+
+describe("input-group", () => {
+  const groups: HTMLElement[] = [];
+  beforeAll(() => {
+    groups.push(
       server(
         <InputGroup>
           <InputGroupAddon>
@@ -390,12 +400,19 @@ describe("input-group (integration: renders S1.4b's button)", () => {
           <InputGroupInput disabled defaultValue="7" aria-label="chapter number" />
         </InputGroup>,
       ),
-    ];
-  }
+      server(
+        <InputGroup>
+          <InputGroupInput defaultValue="orbit" aria-label="ship" />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton disabled>go</InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>,
+      ),
+    );
+  });
 
-  test("the wrapper is the box: data-slot, data-mk and --fx, its edge drawn while its text control holds focus (integration)", async () => {
-    const [rest, invalid] = await groups();
-    const box = one(rest!, "[data-slot=input-group]");
+  test("the wrapper is the box: data-slot, data-mk and --fx, its edge drawn while its text control holds focus", () => {
+    const box = one(groups[0]!, "[data-slot=input-group]");
     expect(box.el.getAttribute("data-mk")).toBe("input-group");
     expect(box.classes).toEqual(
       expect.arrayContaining([
@@ -408,14 +425,14 @@ describe("input-group (integration: renders S1.4b's button)", () => {
         "has-[[aria-invalid=true]]:border-error",
       ]),
     );
-    expect(one(invalid!, "[data-slot=input-group-control]").el.getAttribute("aria-invalid")).toBe("true");
+    expect(one(groups[1]!, "[data-slot=input-group-control]").el.getAttribute("aria-invalid")).toBe("true");
   });
 
-  test("the text controls inside carry outline-0 and caret-(--fx), and no edge, shadow, ring or other outline (integration)", async () => {
-    const controls = (await groups()).flatMap((group) =>
+  test("the text controls inside carry outline-0 and caret-(--fx), and no edge, shadow, ring or other outline", () => {
+    const controls = groups.flatMap((group) =>
       elements(group).filter(({ el }) => el.getAttribute("data-slot") === "input-group-control"),
     );
-    expect(controls.map(({ el }) => el.tagName).sort()).toEqual(["INPUT", "INPUT", "INPUT", "TEXTAREA"]);
+    expect(controls.map(({ el }) => el.tagName).sort()).toEqual(["INPUT", "INPUT", "INPUT", "INPUT", "TEXTAREA"]);
     for (const { el, classes } of controls) {
       expect(classes, el.tagName).toEqual(expect.arrayContaining(["outline-0", "caret-(--fx)"]));
       const drawn = classes.filter((cls) => {
@@ -427,9 +444,8 @@ describe("input-group (integration: renders S1.4b's button)", () => {
     }
   });
 
-  test("a button inside the box is a control: its ring is drawn inside it (integration)", async () => {
-    const [rest] = await groups();
-    const button = one(rest!, "button");
+  test("a button inside the box is a control: its ring is drawn inside it", () => {
+    const button = one(groups[0]!, "button");
     expect(button.classes).toEqual(
       expect.arrayContaining([
         "focus-visible:outline-2",
@@ -439,11 +455,49 @@ describe("input-group (integration: renders S1.4b's button)", () => {
     );
   });
 
-  test("carries only texture-disabled, and no forbidden class in any state (integration)", async () => {
-    const all = await groups();
-    const rendered = all.flatMap(elements);
-    expect(one(all[3]!, "[data-slot=input-group]").classes).toContain("texture-disabled");
-    expect(detailsUsed(rendered)).toEqual(claim("input-group"));
+  test("the disabled state follows the text control, never a disabled button inside the box", () => {
+    const box = one(groups[3]!, "[data-slot=input-group]");
+    expect(box.classes).toEqual(
+      expect.arrayContaining([
+        `${TEXT_DISABLED}:bg-faint`,
+        `${TEXT_DISABLED}:text-disabled`,
+        `${TEXT_DISABLED}:cursor-not-allowed`,
+      ]),
+    );
+    expect(one(groups[3]!, "[data-slot=input-group-control]").el.hasAttribute("disabled")).toBe(true);
+    const addon = one(groups[0]!, "[data-slot=input-group-addon]");
+    expect(addon.classes).toEqual(expect.arrayContaining([`group-${TEXT_DISABLED}/input-group:text-disabled`]));
+    // the specimen with a disabled button keeps its text control enabled
+    expect(one(groups[4]!, "button").el.hasAttribute("disabled")).toBe(true);
+    expect(one(groups[4]!, "[data-slot=input-group-control]").el.hasAttribute("disabled")).toBe(false);
+    // every disabled variant the group's own elements carry names the text control: its own disabled:, or the
+    // box's and addons' match on a disabled input or textarea; never has-disabled: or group-has-disabled:
+    const allowed = new Set(["disabled", TEXT_DISABLED, `group-${TEXT_DISABLED}/input-group`]);
+    const strays = groups
+      .flatMap((group) => own(elements(group), "input-group"))
+      .flatMap(({ el, classes }) =>
+        classes
+          .filter((cls) =>
+            parts(cls).variants.some(
+              (v) =>
+                v.includes("disabled") &&
+                (!allowed.has(v) || (v === "disabled" && el.getAttribute("data-slot") !== "input-group-control")),
+            ),
+          )
+          .map((cls) => `${el.getAttribute("data-slot") ?? el.tagName}: ${cls}`),
+      );
+    expect(strays).toEqual([]);
+  });
+
+  test("carries only texture-disabled, the nested button bringing its own, and no forbidden class in any state", () => {
+    const rendered = groups.flatMap(elements);
+    expect(one(groups[3]!, "[data-slot=input-group]").classes).toContain("texture-disabled");
+    // the inner button is another item: it carries data-mk="button" and its own texture-disabled, which is not
+    // counted for the group
+    const nested = rendered.filter(({ el }) => el.closest("[data-mk=button]"));
+    expect(nested.length).toBeGreaterThan(0);
+    expect(own(rendered, "input-group").filter((r) => nested.includes(r))).toEqual([]);
+    expect(detailsUsed(rendered, "input-group")).toEqual(claim("input-group"));
     expect(claim("input-group")).toEqual(["texture-disabled"]);
     expect(forbidden(rendered)).toEqual([]);
   });
