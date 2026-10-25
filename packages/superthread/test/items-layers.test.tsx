@@ -2,7 +2,7 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { act, type ReactNode } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import * as dialogItem from "@/components/superthread/ui/dialog";
 import { fleet } from "@/components/superthread/lib/fleet";
@@ -52,6 +52,10 @@ const exportsOf = (code: string) =>
   ].sort();
 const slotsOf = (code: string) =>
   new Set([...code.matchAll(/data-slot="([^"]+)"|\bslot:\s*"([^"]+)"/g)].map(([, a, b]) => (a ?? b)!));
+
+// The names an item exports beyond shadcn's: the toast's own list and icon, for a stack printed somewhere else.
+const ADDED: Partial<Record<Item, string[]>> = { toast: ["ToastIcon", "ToastList"] };
+const shadcnExports = (name: Item) => [...exportsOf(upstream(name)), ...(ADDED[name] ?? [])].sort();
 
 describe("the layer sources", () => {
   test("each item names exactly the component detail its catalog entry claims", () => {
@@ -106,7 +110,7 @@ describe("the layer sources", () => {
   test("each item marks its root, and keeps shadcn's exports and data-slots", () => {
     for (const name of ITEMS) expect(source(name)).toContain(`data-mk="${name}"`);
     for (const name of ["dialog", "toast", "sidebar"] as const) {
-      expect(exportsOf(source(name))).toEqual(exportsOf(upstream(name)));
+      expect(exportsOf(source(name))).toEqual(shadcnExports(name));
       const mine = slotsOf(source(name));
       expect([...slotsOf(upstream(name))].filter((slot) => !mine.has(slot))).toEqual([]);
     }
@@ -173,6 +177,34 @@ async function client(node: ReactNode) {
 
 // The path a pixel glyph draws, for comparing an item's icon with the one it names.
 const pathOf = (scope: ParentNode | null) => scope?.querySelector("svg path")?.getAttribute("d") ?? null;
+
+// What a reader hears that the item writes for them alone: sr-only text, aria-labels and titles.
+const labelsOf = (scope: ParentNode) => [
+  ...[...scope.querySelectorAll(".sr-only")].map((el) => el.textContent ?? ""),
+  ...[...scope.querySelectorAll("[aria-label]")].map((el) => el.getAttribute("aria-label")!),
+  ...[...scope.querySelectorAll("[title]")].map((el) => el.getAttribute("title")!),
+];
+
+// The properties a [transition-[...]] class names, and the utilities that set a transition at all.
+const transitioned = (classes: string[]) =>
+  classes.flatMap((c) => /^transition-\[(.+)\]$/.exec(utilityOf(c))?.[1]?.split(",") ?? []);
+const transitions = (classes: string[]) => classes.filter((c) => /^transition(?:-|$)/.test(utilityOf(c)));
+
+// A [clip-path:inset(...)] class as its four insets in percent, top, right, bottom, left, by CSS's shorthand.
+const insetOf = (cls: string | undefined) => {
+  const values = /\[clip-path:inset\(([^)]*)\)\]$/
+    .exec(cls ?? "")?.[1]
+    ?.split("_")
+    .map((v) => parseFloat(v));
+  if (!values) return null;
+  const [t = 0, r = t, b = t, l = r] = values;
+  return [t, r, b, l];
+};
+const clipsAway = ([t, r, b, l]: number[]) => r! + l! >= 100 || t! + b! >= 100;
+const BAR = "[@media(max-width:900px)]:";
+
+// The size happy-dom gives the window, and a way to change it.
+const viewport = (window as unknown as { happyDOM: { setViewport(size: { width: number }): void } }).happyDOM;
 
 const HREFS = {
   home: "/",
@@ -377,7 +409,10 @@ describe("the layers rendered", () => {
     expect(classesOf(popup)).toContain(LIFT.dialog!);
     expect(classesOf(popup)).toContain("shadow-sheet");
     expect(classesOf(popup.querySelector('[data-slot="dialog-title"]')!)).toContain("type-subtitle");
-    expect(document.body.querySelector('[data-slot="dialog-overlay"]')).not.toBeNull();
+    const overlay = document.body.querySelector('[data-slot="dialog-overlay"]');
+    expect(overlay).not.toBeNull();
+    // The sheet and the scrim fade by animation, which their duration sets, and transition nothing.
+    for (const el of [popup, overlay!]) expect(transitions(classesOf(el))).toEqual(["transition-none"]);
     // The texture's whole-pixel rule: the centring offsets round to whole pixels (the browser proof measures it).
     const placement = classesOf(popup).filter((c) =>
       /^(?:-?inset|-?top|-?left|-?right|-?bottom|-?translate|\[translate|m-auto|-?m[xy]?-)/.test(utilityOf(c)),
@@ -390,6 +425,8 @@ describe("the layers rendered", () => {
 
     const close = popup.querySelector('[data-slot="dialog-close"]');
     expect(pathOf(close)).toBe(pathOf(server(<Icon name="close" />)));
+    expect(labelsOf(popup)).toEqual(["close"]);
+    expect(popup.querySelector('[data-slot="dialog-footer"]')?.textContent).toBe("close");
     expect(nullsRing(document.body)).toEqual([]);
   });
 
@@ -427,12 +464,175 @@ describe("the layers rendered", () => {
     const plain = byTitle("plain toast");
     expect(plain.querySelector('[data-slot="toast-icon"]')).toBeNull();
     expect(plain.querySelector('[data-slot="toast-action"]')?.textContent).toBe("undo");
-    expect(plain.querySelector('[data-slot="toast-close"]')?.getAttribute("aria-label")).toBe("Close toast");
+    expect(plain.querySelector('[data-slot="toast-close"]')?.getAttribute("aria-label")).toBe("close toast");
     expect(nullsRing(document.body)).toEqual([]);
   });
 
-  test("the dialog and the toast export shadcn's names", () => {
-    expect(Object.keys(dialogItem).sort()).toEqual(exportsOf(upstream("dialog")));
-    expect(Object.keys(toastItem).sort()).toEqual(exportsOf(upstream("toast")));
+  test("the dialog and the toaster hand portalProps to their portals", async () => {
+    const pane = document.createElement("div");
+    pane.className = "dark";
+    document.body.append(pane);
+    mounted.push(async () => pane.remove());
+    const manager = toastItem.createToastManager();
+    await client(
+      <>
+        <dialogItem.Dialog defaultOpen>
+          <dialogItem.DialogContent portalProps={{ container: pane }}>
+            <dialogItem.DialogTitle>rename the ship</dialogItem.DialogTitle>
+          </dialogItem.DialogContent>
+        </dialogItem.Dialog>
+        <toastItem.Toaster toastManager={manager} timeout={0} portalProps={{ container: pane }} />
+      </>,
+    );
+    await act(async () => {
+      manager.add({ title: "or-412 picked up", type: "info" });
+    });
+
+    for (const slot of ["dialog-overlay", "dialog-content", "toast-viewport", "toast"])
+      expect([slot, pane.querySelectorAll(`[data-slot="${slot}"]`).length]).toEqual([slot, 1]);
+  });
+
+  test("ToastList prints a provider's toasts in a viewport of your own, each with its ToastIcon", async () => {
+    const manager = toastItem.createToastManager();
+    await client(
+      <toastItem.ToastProvider toastManager={manager}>
+        <toastItem.ToastViewport data-testid="own" className="relative">
+          <toastItem.ToastList />
+        </toastItem.ToastViewport>
+      </toastItem.ToastProvider>,
+    );
+    await act(async () => {
+      manager.add({ title: "artifacts is waiting", description: "a review needs you.", type: "warning", timeout: 0 });
+    });
+
+    const toasts = [...document.body.querySelectorAll('[data-testid="own"] [data-mk="toast"]')];
+    expect(toasts.map((el) => el.querySelector('[data-slot="toast-title"]')?.textContent)).toEqual([
+      "artifacts is waiting",
+    ]);
+    const waiting = pathOf(server(<StatusGlyph state="waiting" />));
+    expect(pathOf(toasts[0]!.querySelector('[data-slot="toast-icon"]'))).toBe(waiting);
+    expect(pathOf(server(<toastItem.ToastIcon type="warning" />))).toBe(waiting);
+    expect(server(<toastItem.ToastIcon type={undefined} />).innerHTML).toBe("");
+  });
+
+  test("the rail takes a className on the wrapper that paints the ground, merged with its own", () => {
+    const wrapper = server(<FleetRail current="orbit" className="st-frame min-h-0" />).querySelector(
+      '[data-mk="fleet-rail"]',
+    )!;
+    const classes = classesOf(wrapper);
+    for (const cls of ["st-frame", "min-h-0", "bg-sidebar"]) expect(classes).toContain(cls);
+    expect(classes).not.toContain("min-h-svh");
+  });
+
+  // The tab hides by its clip: drawn back to its left edge on the rail, up to its top edge on the bar. Crossing 900 px
+  // moves the clip from one form to the other, and halfway it uncovers a corner of the tab, a sliver beside every
+  // cell, unless the tab is also invisible while it is hidden.
+  test("the rail's hidden tab never shows as the viewport crosses 900 px, and each cell keeps its ship's name", () => {
+    const dom = server(<FleetRail current="orbit" hrefs={{ orbit: "/orbit" }} />);
+    const cells = [...dom.querySelectorAll('[data-slot="fleet-rail-cell"]')];
+    expect(cells.length).toBe(fleet.length);
+    for (const cell of cells) {
+      const classes = classesOf(cell.querySelector('[data-slot="fleet-rail-label"]')!);
+      const rail = insetOf(classes.find((c) => c.startsWith("[clip-path:")))!;
+      const bar = insetOf(classes.find((c) => c.startsWith(`${BAR}[clip-path:`))) ?? rail;
+      expect([clipsAway(rail), clipsAway(bar)]).toEqual([true, true]);
+      if (clipsAway(rail.map((v, i) => (v + bar[i]!) / 2))) continue;
+      expect(classes).toContain("invisible");
+      for (const shown of ["group-hover/cell:visible", "group-focus-visible/cell:visible"])
+        expect(classes).toContain(shown);
+      expect(transitioned(classes)).toEqual(expect.arrayContaining(["clip-path", "visibility"]));
+    }
+    // An invisible tab names nothing, so the cell names its ship.
+    expect(cells.map((cell) => cell.getAttribute("aria-label"))).toEqual(fleet.map((ship) => ship.name));
+  });
+
+  test("a menu skeleton draws the same bar on the server and in the client that hydrates it", async () => {
+    const tree = (
+      <s.SidebarProvider>
+        <s.SidebarMenu>
+          {[0, 1, 2].map((row) => (
+            <s.SidebarMenuItem key={row}>
+              <s.SidebarMenuSkeleton showIcon />
+            </s.SidebarMenuItem>
+          ))}
+        </s.SidebarMenu>
+      </s.SidebarProvider>
+    );
+    const widths = (scope: ParentNode) =>
+      [...scope.querySelectorAll('[data-sidebar="menu-skeleton-text"]')].map(
+        (el) => /--skeleton-width:\s*([^;]+)/.exec(el.getAttribute("style") ?? "")?.[1] ?? "",
+      );
+
+    // A drawn width would differ between renders: every draw here gives a new number.
+    const random = Math.random;
+    let draws = 0;
+    Math.random = () => (++draws * 0.37) % 1;
+    const errors: string[] = [];
+    const error = console.error;
+    try {
+      const html = renderToString(tree);
+      expect(renderToString(tree)).toBe(html);
+      const host = document.createElement("div");
+      host.innerHTML = html;
+      document.body.append(host);
+      console.error = (...args: unknown[]) => void errors.push(args.map(String).join(" "));
+      let hydrated: ReturnType<typeof hydrateRoot> | undefined;
+      await act(async () => {
+        hydrated = hydrateRoot(host, tree);
+      });
+      mounted.push(async () => {
+        await act(async () => hydrated?.unmount());
+        host.remove();
+      });
+      expect(errors.filter((message) => /hydrat/i.test(message))).toEqual([]);
+
+      const served = widths(host);
+      expect(served.length).toBe(3);
+      expect(served.every((w) => /^\d+%$/.test(w) && parseInt(w) >= 50 && parseInt(w) < 90)).toBe(true);
+      expect(new Set(served).size).toBeGreaterThan(1);
+    } finally {
+      Math.random = random;
+      console.error = error;
+    }
+  });
+
+  test("the sidebar names its trigger, its rail and its mobile sheet in lowercase", async () => {
+    const desktop = server(
+      <s.SidebarProvider>
+        <s.Sidebar collapsible="icon">
+          <s.SidebarRail />
+        </s.Sidebar>
+        <s.SidebarInset>
+          <s.SidebarTrigger />
+        </s.SidebarInset>
+      </s.SidebarProvider>,
+    );
+    expect(labelsOf(desktop)).toEqual(["toggle sidebar", "toggle sidebar", "toggle sidebar"]);
+
+    // A phone's window: the sidebar opens as a sheet, titled for a reader alone.
+    const width = window.innerWidth;
+    await act(async () => viewport.setViewport({ width: 500 }));
+    try {
+      await client(
+        <s.SidebarProvider>
+          <s.Sidebar>
+            <s.SidebarContent>runs</s.SidebarContent>
+          </s.Sidebar>
+          <s.SidebarTrigger />
+        </s.SidebarProvider>,
+      );
+      await act(async () => (document.body.querySelector('[data-slot="sidebar-trigger"]') as HTMLElement).click());
+      const sheet = document.body.querySelector('[data-slot="sidebar"][data-mobile="true"]');
+      expect(sheet).not.toBeNull();
+      const header = [...sheet!.querySelectorAll('[data-slot="sheet-title"], [data-slot="sheet-description"]')];
+      expect(header.map((el) => el.textContent)).toEqual(["sidebar", "displays the mobile sidebar."]);
+    } finally {
+      await act(async () => viewport.setViewport({ width }));
+    }
+  });
+
+  test("the dialog and the toast export shadcn's names, and the toast its list and icon", () => {
+    expect(Object.keys(dialogItem).sort()).toEqual(shadcnExports("dialog"));
+    expect(Object.keys(toastItem).sort()).toEqual(shadcnExports("toast"));
   });
 });

@@ -110,7 +110,7 @@ function ToastClose({
   return (
     <ToastPrimitive.Close
       data-slot="toast-close"
-      aria-label="Close toast"
+      aria-label="close toast"
       render={render}
       className={cn(
         "relative -mt-1 -mr-1 shrink-0 text-muted-foreground after:absolute after:-inset-2 after:content-[''] hover:bg-raised-hover hover:text-foreground",
@@ -146,6 +146,8 @@ function ToastIcon({ type }: { type: string | undefined }) {
   );
 }
 
+// The toasts of the nearest provider, as the Toaster prints them. Put it in a viewport of your own to print a stack
+// somewhere else, and use ToastIcon to build a list of your own.
 function ToastList() {
   const { toasts } = ToastPrimitive.useToastManager();
 
@@ -164,11 +166,17 @@ function ToastList() {
   ));
 }
 
-function Toaster({ children, toastManager = toast, ...props }: ToastPrimitive.Provider.Props) {
+// portalProps go to the stack's portal, for example a container that holds the page's mode.
+function Toaster({
+  children,
+  toastManager = toast,
+  portalProps,
+  ...props
+}: ToastPrimitive.Provider.Props & { portalProps?: ToastPrimitive.Portal.Props }) {
   return (
     <ToastProvider toastManager={toastManager} {...props}>
       {children}
-      <ToastPortal>
+      <ToastPortal {...portalProps}>
         <ToastViewport>
           <ToastList />
         </ToastViewport>
@@ -187,6 +195,8 @@ export {
   ToastClose,
   ToastContent,
   ToastDescription,
+  ToastIcon,
+  ToastList,
   ToastPortal,
   ToastProvider,
   ToastTitle,

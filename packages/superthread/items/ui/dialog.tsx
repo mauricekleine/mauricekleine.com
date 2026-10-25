@@ -21,13 +21,14 @@ function DialogClose({ ...props }: DialogPrimitive.Close.Props) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
-// The scrim: the world's --scrim, the key at 42 percent in light and black at 60 percent in dark. No blur.
+// The scrim: the world's --scrim, the key at 42 percent in light and black at 60 percent in dark. No blur. It and the
+// sheet fade in and out as animations, so nothing on either transitions.
 function DialogOverlay({ className, ...props }: DialogPrimitive.Backdrop.Props) {
   return (
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 isolate z-50 bg-scrim duration-(--duration-quick) ease-(--ease-brand) data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        "fixed inset-0 isolate z-50 bg-scrim transition-none duration-(--duration-quick) ease-(--ease-brand) data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
         className,
       )}
       {...props}
@@ -36,23 +37,26 @@ function DialogOverlay({ className, ...props }: DialogPrimitive.Backdrop.Props) 
 }
 
 // A square sheet on the sheet lift. Its centring offsets, the half-way point and the half size, each round to a whole
-// pixel, so at any viewport its edges and contact screen land on the pixel grid at 1x and 2x.
+// pixel, so at any viewport its edges and contact screen land on the pixel grid at 1x and 2x. portalProps go to its
+// portal, for example a container that holds the page's mode.
 function DialogContent({
   className,
   children,
   showCloseButton = true,
+  portalProps,
   ...props
 }: DialogPrimitive.Popup.Props & {
   showCloseButton?: boolean;
+  portalProps?: DialogPrimitive.Portal.Props;
 }) {
   return (
-    <DialogPortal>
+    <DialogPortal {...portalProps}>
       <DialogOverlay />
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         data-mk="dialog"
         className={cn(
-          "fixed top-[round(50%,1px)] left-[round(50%,1px)] z-50 grid w-full max-w-[calc(100%-2rem)] [translate:round(-50%,1px)_round(-50%,1px)] gap-6 border bg-popover px-7 pt-7 pb-6 text-ui text-popover-foreground shadow-sheet texture-contact [--contact-lift:var(--elevation-sheet-rake)] duration-(--duration-quick) ease-(--ease-brand) sm:max-w-[440px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+          "fixed top-[round(50%,1px)] left-[round(50%,1px)] z-50 grid w-full max-w-[calc(100%-2rem)] [translate:round(-50%,1px)_round(-50%,1px)] gap-6 border bg-popover px-7 pt-7 pb-6 text-ui text-popover-foreground shadow-sheet texture-contact [--contact-lift:var(--elevation-sheet-rake)] transition-none duration-(--duration-quick) ease-(--ease-brand) sm:max-w-[440px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
           className,
         )}
         {...props}
@@ -64,7 +68,7 @@ function DialogContent({
             render={<Button variant="ghost" className="absolute top-3 right-3 hover:bg-raised-hover" size="icon-sm" />}
           >
             <Icon name="close" />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">close</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>
@@ -91,7 +95,7 @@ function DialogFooter({
       {...props}
     >
       {children}
-      {showCloseButton && <DialogPrimitive.Close render={<Button variant="outline" />}>Close</DialogPrimitive.Close>}
+      {showCloseButton && <DialogPrimitive.Close render={<Button variant="outline" />}>close</DialogPrimitive.Close>}
     </div>
   );
 }

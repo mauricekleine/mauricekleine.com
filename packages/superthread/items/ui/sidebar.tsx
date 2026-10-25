@@ -192,8 +192,8 @@ function Sidebar({
           side={side}
         >
           <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+            <SheetTitle>sidebar</SheetTitle>
+            <SheetDescription>displays the mobile sidebar.</SheetDescription>
           </SheetHeader>
           <div className={cn("flex h-full w-full flex-col", ON_GROUND)}>{children}</div>
         </SheetContent>
@@ -267,7 +267,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
       {...props}
     >
       <Icon name="left" className="cn-rtl-flip" />
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only">toggle sidebar</span>
     </Button>
   );
 }
@@ -279,10 +279,10 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
     <button
       data-sidebar="rail"
       data-slot="sidebar-rail"
-      aria-label="Toggle Sidebar"
+      aria-label="toggle sidebar"
       tabIndex={-1}
       onClick={toggleSidebar}
-      title="Toggle Sidebar"
+      title="toggle sidebar"
       className={cn(
         "absolute inset-y-0 z-20 hidden w-4 transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] hover:after:bg-sidebar-border sm:flex ltr:-translate-x-1/2 rtl:-translate-x-1/2",
         "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
@@ -581,10 +581,12 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean;
 }) {
-  // Random width between 50 to 90%.
-  const [width] = React.useState(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  });
+  // A width between 50 and 89 percent, from the skeleton's id, so the server and the client draw the same bar and
+  // the rows of a list still differ.
+  const id = React.useId();
+  let hash = 7;
+  for (const char of id) hash = (hash * 31 + char.charCodeAt(0)) % 9973;
+  const width = `${50 + (hash % 40)}%`;
 
   return (
     <div
