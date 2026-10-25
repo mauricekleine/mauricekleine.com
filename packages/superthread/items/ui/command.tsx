@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/superthread/ui/dialog";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/superthread/ui/input-group";
+import { InputGroup, InputGroupAddon } from "@/components/superthread/ui/input-group";
 import { Icon } from "@/components/superthread/ui/glyphs";
 
 // A flat command surface takes its lift from the page or the dialog that contains it.
@@ -55,19 +55,21 @@ function CommandDialog({
   );
 }
 
-// Search uses one input-group field box with the search glyph beside its text control.
+// Search uses one input-group field box with the search glyph beside its text control. cmdk's input takes the
+// input group's text-control classes itself: the shadcn CLI rewrites an asChild into a render prop on install, and
+// cmdk has no render prop.
 function CommandInput({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Input>) {
   return (
     <div data-slot="command-input-wrapper" className="p-1 pb-0">
       <InputGroup className="h-10">
         <CommandPrimitive.Input
           data-slot="command-input"
-          asChild
-          className={cn("w-full disabled:cursor-not-allowed disabled:text-disabled", className)}
+          className={cn(
+            "h-full w-full min-w-0 flex-1 self-stretch border-0 bg-transparent px-3 text-ui outline-0 caret-(--fx) placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:text-disabled",
+            className,
+          )}
           {...props}
-        >
-          <InputGroupInput />
-        </CommandPrimitive.Input>
+        />
         <InputGroupAddon>
           <Icon name="search" className="size-3 shrink-0 text-muted-foreground" />
         </InputGroupAddon>

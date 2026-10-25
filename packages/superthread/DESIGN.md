@@ -499,7 +499,7 @@ The current item, wherever it is (a sidebar entry, the fleet rail's cell, a chos
 ### Marks and icons
 
 - **Marks** sit on a 16 x 16 grid: a key tile with a 1 px notch cut from each corner, a paper silhouette that names the ship, and one region of the silhouette in the ship's spot as a 1 px checker at 50 percent. The `-dark` drawing swaps tile and silhouette and moves the spot to its dark value; dark chrome and the fleet rail on the deep ground take it. The spot pops at rail and fleet-row sizes (32 to 48 px); at 16 px the mark reads by its silhouette. Superthread's own mark is the home mark, with plum as its spot.
-- **Icons** are drawn as whole-pixel squares in the current colour on a 12 px grid: arrow, left, copy, check, chevron, search, close, trash and plus (`Icon`).
+- **Icons** are drawn as whole-pixel squares in the current colour on a 12 px grid: arrow, left, copy, check, chevron, search, close, trash, plus and more (`Icon`). `more` is superthread's own, drawn in `tokens/icons.json` beside the world's set.
 - **Status glyphs** are 14 px squares with the glyph knocked out: tick, i, pause, cross and dash (`StatusGlyph`). A field's error message leads with the bang glyph (`FieldErrorGlyph`).
 
 **The Square Rule.** Nothing is rounded: no item carries a literal radius, and every radius token is 0.
