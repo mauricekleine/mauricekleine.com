@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "superthread",
+  "homepage": "https://www.mauricekleine.com/superthread",
+  "items": [
+    {
+      "name": "superthread",
+      "type": "registry:style",
+      "title": "superthread",
+      "files": [
+        {
+          "path": "packages/superthread/dist/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        }
+      ]
+    },
+    {
+      "name": "fleet-rail",
+      "type": "registry:ui",
+      "title": "fleet rail",
+      "registryDependencies": ["sidebar", "tooltip"],
+      "files": [
+        {
+          "path": "packages/superthread/registry/ui/fleet-rail.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/fleet-rail.tsx"
+        }
+      ]
+    }
+  ]
+}

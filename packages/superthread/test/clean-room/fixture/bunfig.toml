@@ -1,0 +1,3 @@
+[install]
+# The same gate as the repository: only versions published at least 3 days ago.
+minimumReleaseAge = 259200

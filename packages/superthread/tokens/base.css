@@ -1,0 +1,44 @@
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--selection);
+    color: var(--foreground);
+  }
+
+  /* buttons, tabs, links and rail cells keep a 2 px ring at 2 px; fields own their focus in their skins */
+  :where(a, button, summary, [role="tab"], [role="button"]):where(:not([data-slot="select-trigger"])):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* states stay, travel goes: unlayered, so it outranks the token vars and every utility */
+@media (prefers-reduced-motion: reduce) {
+  :root,
+  .light {
+    --duration-instant: 0ms;
+    --duration-quick: 0ms;
+    --duration-travel: 0ms;
+  }
+
+  *,
+  ::before,
+  ::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

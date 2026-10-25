@@ -1,0 +1,761 @@
+{
+  "LEVELS": {
+    "b50": 50,
+    "b19": 18.75
+  },
+  "CONTACT": {
+    "x": 3,
+    "y": 2,
+    "pct": 50,
+    "on": true
+  },
+  "DETAILS": [
+    {
+      "key": "contact",
+      "component": "raised layers: select list, toast, dialog",
+      "detail": "contact edge",
+      "job": "draws where a floating layer meets the page, under its soft lift",
+      "screen": "light only: the contact shadow as the shadow ink (the key printed twice) at 50 percent, 3 px right of the layer and 2 px below it at every lift, inside the quarterly's soft rake; an edge, never a field, so no dots fall on the words beyond it. in dark it would print black on key, so dark layers keep the soft contact and lift by their stock and 1 px edge",
+      "where": "(c) select, toast, dialog; (d) layers over the board; (h) elevation, on stock"
+    },
+    {
+      "key": "mixed",
+      "component": "checkbox",
+      "detail": "mixed",
+      "job": "some, not all: the classic half",
+      "screen": "the house ink at 50 percent inside the box's house edge",
+      "where": "(c) checkbox"
+    },
+    {
+      "key": "tabhover",
+      "component": "tabs",
+      "detail": "hover bar",
+      "job": "previews the current bar at half",
+      "screen": "a 2 px bar of the house ink at 50 percent",
+      "where": "(c) tabs, (d) the board's filters"
+    },
+    {
+      "key": "rowedge",
+      "component": "table",
+      "detail": "row edge",
+      "job": "marks the row under the pointer, beside its cells",
+      "screen": "a 4 px strip of the house ink at 50 percent at the row's left edge, inside the first cell's 16 px of left padding, so it sits inside the table's box (a scrolling wrapper cannot clip it) and 12 px clear of the cell's content; solid when the row is selected",
+      "where": "(c) table, (d) board"
+    },
+    {
+      "key": "disabled",
+      "component": "disabled button and field",
+      "detail": "disabled edge",
+      "job": "screened back: there, but not available now",
+      "screen": "the input edge ink at 50 percent as the 1 px edge; the fill stays flat and the label plain",
+      "where": "(c) button, input"
+    },
+    {
+      "key": "skeleton",
+      "component": "skeleton",
+      "detail": "loading rows",
+      "job": "the rows take shape before their words arrive",
+      "screen": "the first ink at 18.75 percent, the empty wedge's top step, on whole-pixel bars",
+      "where": "(c) empty and loading"
+    }
+  ],
+  "BY_KEY": {
+    "contact": {
+      "key": "contact",
+      "component": "raised layers: select list, toast, dialog",
+      "detail": "contact edge",
+      "job": "draws where a floating layer meets the page, under its soft lift",
+      "screen": "light only: the contact shadow as the shadow ink (the key printed twice) at 50 percent, 3 px right of the layer and 2 px below it at every lift, inside the quarterly's soft rake; an edge, never a field, so no dots fall on the words beyond it. in dark it would print black on key, so dark layers keep the soft contact and lift by their stock and 1 px edge",
+      "where": "(c) select, toast, dialog; (d) layers over the board; (h) elevation, on stock"
+    },
+    "mixed": {
+      "key": "mixed",
+      "component": "checkbox",
+      "detail": "mixed",
+      "job": "some, not all: the classic half",
+      "screen": "the house ink at 50 percent inside the box's house edge",
+      "where": "(c) checkbox"
+    },
+    "tabhover": {
+      "key": "tabhover",
+      "component": "tabs",
+      "detail": "hover bar",
+      "job": "previews the current bar at half",
+      "screen": "a 2 px bar of the house ink at 50 percent",
+      "where": "(c) tabs, (d) the board's filters"
+    },
+    "rowedge": {
+      "key": "rowedge",
+      "component": "table",
+      "detail": "row edge",
+      "job": "marks the row under the pointer, beside its cells",
+      "screen": "a 4 px strip of the house ink at 50 percent at the row's left edge, inside the first cell's 16 px of left padding, so it sits inside the table's box (a scrolling wrapper cannot clip it) and 12 px clear of the cell's content; solid when the row is selected",
+      "where": "(c) table, (d) board"
+    },
+    "disabled": {
+      "key": "disabled",
+      "component": "disabled button and field",
+      "detail": "disabled edge",
+      "job": "screened back: there, but not available now",
+      "screen": "the input edge ink at 50 percent as the 1 px edge; the fill stays flat and the label plain",
+      "where": "(c) button, input"
+    },
+    "skeleton": {
+      "key": "skeleton",
+      "component": "skeleton",
+      "detail": "loading rows",
+      "job": "the rows take shape before their words arrive",
+      "screen": "the first ink at 18.75 percent, the empty wedge's top step, on whole-pixel bars",
+      "where": "(c) empty and loading"
+    }
+  },
+  "REJECTED": {
+    "switch track": "the on state must read as settled ink at a glance, and the 18 px of track beside the knob is too short to carry a ramp",
+    "slider fill": "no fleet surface has a slider yet, and a thumb marks an exact value: a dithered edge would blur the number it sets. progress stays the one quantity in motion",
+    "sideways table fade": "the fade would sit on the cells it cuts, so on data",
+    "drop zone": "no fleet surface takes uploads yet, and a screened edge already means disabled"
+  },
+  "tiles_css": "--b50:url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0IDQiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIHNoYXBlLXJlbmRlcmluZz0iY3Jpc3BFZGdlcyI+PHBhdGggZD0iTTAgMGgxdjFoLTF6TTIgMGgxdjFoLTF6TTEgMWgxdjFoLTF6TTMgMWgxdjFoLTF6TTAgMmgxdjFoLTF6TTIgMmgxdjFoLTF6TTEgM2gxdjFoLTF6TTMgM2gxdjFoLTF6Ii8+PC9zdmc+\");--b19:url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0IDQiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIHNoYXBlLXJlbmRlcmluZz0iY3Jpc3BFZGdlcyI+PHBhdGggZD0iTTAgMGgxdjFoLTF6TTIgMGgxdjFoLTF6TTIgMmgxdjFoLTF6Ii8+PC9zdmc+\");--rake-contact:url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0IDQiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIHNoYXBlLXJlbmRlcmluZz0iY3Jpc3BFZGdlcyI+PHBhdGggZD0iTTAgMGgxdjFoLTF6TTIgMGgxdjFoLTF6TTEgMWgxdjFoLTF6TTMgMWgxdjFoLTF6TTAgMmgxdjFoLTF6TTIgMmgxdjFoLTF6TTEgM2gxdjFoLTF6TTMgM2gxdjFoLTF6Ii8+PC9zdmc+\")",
+  "tiles": {
+    "b50": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 4 4\" width=\"4\" height=\"4\" shape-rendering=\"crispEdges\"><path d=\"M0 0h1v1h-1zM2 0h1v1h-1zM1 1h1v1h-1zM3 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM1 3h1v1h-1zM3 3h1v1h-1z\"/></svg>",
+    "b19": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 4 4\" width=\"4\" height=\"4\" shape-rendering=\"crispEdges\"><path d=\"M0 0h1v1h-1zM2 0h1v1h-1zM2 2h1v1h-1z\"/></svg>",
+    "rake-contact": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 4 4\" width=\"4\" height=\"4\" shape-rendering=\"crispEdges\"><path d=\"M0 0h1v1h-1zM2 0h1v1h-1zM1 1h1v1h-1zM3 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM1 3h1v1h-1zM3 3h1v1h-1z\"/></svg>"
+  },
+  "ramp": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCA4IiB3aWR0aD0iMjQiIGhlaWdodD0iOCIgc2hhcGUtcmVuZGVyaW5nPSJjcmlzcEVkZ2VzIj48cGF0aCBkPSJNMCAwaDF2MWgtMXpNMSAwaDF2MWgtMXpNMiAwaDF2MWgtMXpNMyAwaDF2MWgtMXpNNCAwaDF2MWgtMXpNNSAwaDF2MWgtMXpNNiAwaDF2MWgtMXpNNyAwaDF2MWgtMXpNOCAwaDF2MWgtMXpNOSAwaDF2MWgtMXpNMTAgMGgxdjFoLTF6TTEyIDBoMXYxaC0xek0xNCAwaDF2MWgtMXpNMTYgMGgxdjFoLTF6TTE4IDBoMXYxaC0xek0yMCAwaDF2MWgtMXpNMCAxaDF2MWgtMXpNMSAxaDF2MWgtMXpNMyAxaDF2MWgtMXpNNCAxaDF2MWgtMXpNNSAxaDF2MWgtMXpNNyAxaDF2MWgtMXpNOSAxaDF2MWgtMXpNMTEgMWgxdjFoLTF6TTEzIDFoMXYxaC0xek0wIDJoMXYxaC0xek0xIDJoMXYxaC0xek0yIDJoMXYxaC0xek0zIDJoMXYxaC0xek00IDJoMXYxaC0xek01IDJoMXYxaC0xek02IDJoMXYxaC0xek03IDJoMXYxaC0xek04IDJoMXYxaC0xek0xMCAyaDF2MWgtMXpNMTIgMmgxdjFoLTF6TTE0IDJoMXYxaC0xek0xNiAyaDF2MWgtMXpNMTggMmgxdjFoLTF6TTAgM2gxdjFoLTF6TTEgM2gxdjFoLTF6TTIgM2gxdjFoLTF6TTMgM2gxdjFoLTF6TTUgM2gxdjFoLTF6TTcgM2gxdjFoLTF6TTkgM2gxdjFoLTF6TTExIDNoMXYxaC0xek0xNSAzaDF2MWgtMXpNMCA0aDF2MWgtMXpNMSA0aDF2MWgtMXpNMiA0aDF2MWgtMXpNMyA0aDF2MWgtMXpNNCA0aDF2MWgtMXpNNSA0aDF2MWgtMXpNNiA0aDF2MWgtMXpNNyA0aDF2MWgtMXpNOCA0aDF2MWgtMXpNOSA0aDF2MWgtMXpNMTAgNGgxdjFoLTF6TTEyIDRoMXYxaC0xek0xNCA0aDF2MWgtMXpNMTYgNGgxdjFoLTF6TTE4IDRoMXYxaC0xek0yMCA0aDF2MWgtMXpNMCA1aDF2MWgtMXpNMSA1aDF2MWgtMXpNMyA1aDF2MWgtMXpNNCA1aDF2MWgtMXpNNSA1aDF2MWgtMXpNNyA1aDF2MWgtMXpNOSA1aDF2MWgtMXpNMTEgNWgxdjFoLTF6TTEzIDVoMXYxaC0xek0wIDZoMXYxaC0xek0xIDZoMXYxaC0xek0yIDZoMXYxaC0xek0zIDZoMXYxaC0xek00IDZoMXYxaC0xek01IDZoMXYxaC0xek02IDZoMXYxaC0xek03IDZoMXYxaC0xek04IDZoMXYxaC0xek0xMCA2aDF2MWgtMXpNMTIgNmgxdjFoLTF6TTE0IDZoMXYxaC0xek0xNiA2aDF2MWgtMXpNMTggNmgxdjFoLTF6TTAgN2gxdjFoLTF6TTEgN2gxdjFoLTF6TTIgN2gxdjFoLTF6TTMgN2gxdjFoLTF6TTUgN2gxdjFoLTF6TTcgN2gxdjFoLTF6TTkgN2gxdjFoLTF6TTExIDdoMXYxaC0xek0xNSA3aDF2MWgtMXoiLz48L3N2Zz4=",
+  "screens": {
+    "0": {
+      "w": 4,
+      "h": 4,
+      "on": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ]
+      ]
+    },
+    "27": {
+      "w": 8,
+      "h": 4,
+      "on": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          7,
+          3
+        ]
+      ]
+    },
+    "45": {
+      "w": 4,
+      "h": 4,
+      "on": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          3
+        ]
+      ]
+    },
+    "63": {
+      "w": 4,
+      "h": 8,
+      "on": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          7
+        ]
+      ]
+    },
+    "90": {
+      "w": 4,
+      "h": 4,
+      "on": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    "117": {
+      "w": 4,
+      "h": 8,
+      "on": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          7
+        ]
+      ]
+    },
+    "135": {
+      "w": 4,
+      "h": 4,
+      "on": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          3
+        ]
+      ]
+    }
+  },
+  "plate_inputs": {
+    "build_sketch": {
+      "W": 696,
+      "H": 196
+    },
+    "build_reach": {
+      "BAND_W": 1104,
+      "BAND_H": 208,
+      "FIG_W": 520,
+      "FIG_PW": 326,
+      "FIG_H": 150,
+      "EMPTY_W": [
+        608,
+        326
+      ]
+    },
+    "fields": {
+      "SKETCH_PATH": [
+        [
+          0,
+          0.25
+        ],
+        [
+          0.22,
+          0.17
+        ],
+        [
+          0.46,
+          0.2
+        ],
+        [
+          0.66,
+          0.22
+        ],
+        [
+          0.8,
+          0.28
+        ],
+        [
+          0.9,
+          0.62
+        ],
+        [
+          1,
+          0.72
+        ]
+      ],
+      "REACH_PATH": [
+        [
+          0,
+          0.22
+        ],
+        [
+          0.2,
+          0.17
+        ],
+        [
+          0.42,
+          0.24
+        ],
+        [
+          0.6,
+          0.3
+        ],
+        [
+          0.74,
+          0.56
+        ],
+        [
+          0.88,
+          0.66
+        ],
+        [
+          1,
+          0.42
+        ]
+      ],
+      "PHONE_PATH": [
+        [
+          0,
+          0.22
+        ],
+        [
+          0.25,
+          0.15
+        ],
+        [
+          0.5,
+          0.2
+        ],
+        [
+          0.66,
+          0.38
+        ],
+        [
+          0.8,
+          0.66
+        ],
+        [
+          0.92,
+          0.72
+        ],
+        [
+          1,
+          0.58
+        ]
+      ],
+      "PHONE_W": 342,
+      "PHONE_H": 200,
+      "PHONE_WIDTH": 44
+    }
+  }
+}

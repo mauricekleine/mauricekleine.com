@@ -12,10 +12,11 @@
     "deploy:verify": "node apps/web/tools/deploy-verify.mjs",
     "dev": "bun run registry && bun run site:css && bun run specimen:css && bun run buttons && bun run --filter @mauricekleine/web dev",
     "prepare": "husky",
-    "registry": "bun run --cwd packages/superthread build && shadcn build packages/superthread/registry.json --output apps/web/public/r",
+    "registry": "bun packages/superthread/scripts/publish-v1.ts --out apps/web/public/r",
     "site:css": "tailwindcss -i apps/web/src/styles/site.css -o apps/web/public/style.css --minify",
     "specimen:css": "tailwindcss -i apps/web/src/styles/superthread-specimen.css -o apps/web/public/superthread/specimen.css --minify",
-    "test": "bun run --cwd packages/superthread test && bun run --cwd apps/web test && bun run --cwd apps/share test"
+    "test": "bun run --cwd packages/superthread test && bun run --cwd apps/web test && bun run --cwd apps/share test",
+    "test:clean-room": "bun run --cwd packages/superthread clean-room"
   },
   "devDependencies": {
     "@tailwindcss/cli": "~4.3.3",

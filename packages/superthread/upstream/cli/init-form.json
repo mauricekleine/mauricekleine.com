@@ -1,0 +1,15 @@
+{
+  "cli": "4.22.1",
+  "form": "existing-app",
+  "args": [
+    "init",
+    "<base>/r/init.json",
+    "--base",
+    "base",
+    "-y"
+  ],
+  "env": {
+    "npm_config_user_agent": "bun/1.4.4",
+    "SHADCN_TEMPLATE_DIR": "upstream/templates"
+  }
+}

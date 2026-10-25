@@ -1,0 +1,60 @@
+{
+  "cli": "4.22.1",
+  "origin": "https://ui.shadcn.com",
+  "requests": [
+    {
+      "path": "/upstream/init?base=base&style=nova&baseColor=neutral&theme=neutral&iconLibrary=lucide&font=geist&rtl=false&menuAccent=subtle&menuColor=default&radius=default&template=start&track=1",
+      "file": "init@fec0a7bda6e54a27",
+      "status": 200,
+      "type": "application/json"
+    },
+    {
+      "path": "/upstream/init?base=base&style=nova&baseColor=neutral&theme=neutral&iconLibrary=lucide&font=geist&rtl=false&menuAccent=subtle&menuColor=default&radius=default&track=1",
+      "file": "init@8fa5514b942d8d30",
+      "status": 200,
+      "type": "application/json"
+    },
+    {
+      "path": "/upstream/r/colors/neutral.json",
+      "file": "r/colors/neutral.json",
+      "status": 200,
+      "type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/upstream/r/registries.json",
+      "file": "r/registries.json",
+      "status": 200,
+      "type": "application/json"
+    },
+    {
+      "path": "/upstream/r/styles/base-nova/font-geist.json",
+      "file": "r/styles/base-nova/font-geist.json",
+      "status": 200,
+      "type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/upstream/r/styles/base-nova/utils.json",
+      "file": "r/styles/base-nova/utils.json",
+      "status": 200,
+      "type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/upstream/r/styles/index.json",
+      "file": "r/styles/index.json",
+      "status": 200,
+      "type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/upstream/r/styles/new-york-v4/font-geist.json",
+      "file": "r/styles/new-york-v4/font-geist.json",
+      "status": 200,
+      "type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/upstream/r/styles/new-york-v4/utils.json",
+      "file": "r/styles/new-york-v4/utils.json",
+      "status": 200,
+      "type": "application/json; charset=utf-8"
+    }
+  ]
+}

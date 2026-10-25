@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "extends": "none",
+  "name": "init",
+  "title": "init",
+  "description": "sets up an app for @mk: the base-nova style, the tokens, utils and the button",
+  "dependencies": [
+    "@base-ui/react@^1.8.0",
+    "class-variance-authority@^0.7.1",
+    "@phosphor-icons/react@^2.1.10"
+  ],
+  "registryDependencies": [
+    "@mk/utils",
+    "@mk/tokens",
+    "@mk/button"
+  ],
+  "meta": {
+    "version": "2.0.0-next.1",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "tier": "style",
+    "upstream": null
+  },
+  "type": "registry:base",
+  "config": {
+    "style": "base-nova",
+    "rsc": false,
+    "tsx": true,
+    "iconLibrary": "phosphor",
+    "registries": {
+      "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0-next.1/{name}.json"
+    }
+  }
+}

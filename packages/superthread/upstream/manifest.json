@@ -1,0 +1,28 @@
+{
+  "cli": "4.22.1",
+  "fetched": "2026-10-24",
+  "url": "https://ui.shadcn.com/r/styles/base-nova/{name}.json",
+  "files": {
+    "badge": "ccc20021cdcbf0fb23c0d4d28f1da4adde8e51ba59f4b11dd2722ed97a5ee3a4",
+    "button": "9ba7e870178813f0552b818a913a2792fb500c779e36395740b4973e3025d427",
+    "card": "e73e3fe00ab2e14c4db1dccb1ff5c67041a94c0926ac3216c1dc6dd6dee9d7e0",
+    "checkbox": "e6df7b595f25a7ee97c3fb94e0ddc35998f74c98b990d3030e485905ec677178",
+    "dialog": "40fc321d25eb9590d07db54b00d9bc1a74274a549aa06d5915a34ba302ed8b94",
+    "input": "bbad1bba130ac9750a61844eeb8f043e8a710846e07689fa85398b80a46c2741",
+    "input-group": "acf9c5497a6c844dee87fbd4afefb6cd8be9ce50d050d14d58a340d955e517a1",
+    "label": "89b01e14fd39dceece9fa421e71e78ea83286bd43a2ca1c2f55d2e8d3958fff2",
+    "progress": "359e72beff723311ec2e4d5154a0f80dedd253bd6b16959a4db0773714ceab52",
+    "select": "425e9b0a28b72617f18fabd75384050113295b88e7ba01c35bede2c72bd5d476",
+    "separator": "3ad65962485f464592201cb90017b3d52a5c9fe272ce41ee049485b4c42e0d76",
+    "sheet": "72b36d92af7fcbc9bd2d1d4ef0cbc65f4fc8178f7bb2bedaf657460f15011cf4",
+    "sidebar": "02b1ea430fb246da062048f0161a01d1b34a2c787f6974958c9b20a3142120a6",
+    "skeleton": "85692a09912f518ffd64c540dfcf098fe748a807baf288c107cf8126496cf886",
+    "table": "054c89df40058a96723c9ed8cde6308e738f3a303fd19301ce94ade032306b60",
+    "tabs": "b4552a0329dd9a6e2bfaf03405c133874df5a4930c7bb3dd84c9ab5c45b89402",
+    "textarea": "8f01f6bc4ee556263bae7644e8b527022fa77ff203f33a258bb47142ef7d9c81",
+    "toast": "161ed77c409fe7345ee6308f7cf66f7bcf2717d8d5e1a8b36a7f8e8fa0df745e",
+    "tooltip": "2f55867faecee2d3616cfd8c6a80b538909a21e62fdfa2788b1ead56093e5395",
+    "use-mobile": "f4bfd840445a84352265d7cf66fcd886454b6a2f3834f7caf29d00f68620f87d",
+    "utils": "74f5bc88a74dfc19f7cbfaa0c152a5e9b9d3a62823b32b48677652968b442593"
+  }
+}

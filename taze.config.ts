@@ -18,6 +18,9 @@ export default defineConfig({
   requestTimeout: 30_000,
   maturityPeriod: (gated ? install.minimumReleaseAge : 259_200) / 86_400,
   maturityPeriodExclude: gated ? (install.minimumReleaseAgeExcludes ?? []) : [],
+  // The clean-room fixture keeps its own lock, and the template is upstream's pinned copy.
+  // When web's pins move, refresh the fixture lock with `bun run test:clean-room -- --refresh-lock`.
+  ignorePaths: ["packages/superthread/test/clean-room/fixture/**", "packages/superthread/upstream/templates/**"],
   // Holds: `name` or `name@range` (e.g. 'typescript@7'), each with its reason above it.
   exclude: [],
 });
