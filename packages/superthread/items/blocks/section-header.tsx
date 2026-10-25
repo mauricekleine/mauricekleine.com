@@ -7,6 +7,7 @@ import { Icon } from "@/components/superthread/ui/glyphs";
 const SectionContext = createContext<string | undefined>(undefined);
 
 // A section names itself through its title. The first starts in place; the next leaves 48 px above its head.
+// It owns its title's id, so the section keeps its name; pass titleId when the app needs a known id.
 function Section({
   className,
   titleId: suppliedTitleId,
@@ -40,15 +41,15 @@ function SectionHeader({ className, ...props }: React.ComponentProps<"header">) 
 }
 
 // The title supplies the section's accessible name without making the app wire ids by hand.
-function SectionTitle({ className, id, ...props }: React.ComponentProps<"h2">) {
+function SectionTitle({ className, ...props }: Omit<React.ComponentProps<"h2">, "id">) {
   const titleId = useContext(SectionContext);
   return (
     <h2
       data-mk="section-header"
       data-slot="section-title"
-      id={id ?? titleId}
       className={cn("min-w-0 type-title break-words", className)}
       {...props}
+      id={titleId}
     />
   );
 }
