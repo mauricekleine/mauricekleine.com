@@ -1,7 +1,7 @@
 import { tokens } from "@/components/superthread/lib/tokens";
 
 // which roles sit on each step of the wedge, per mode, as the master's sketch prints them; an unnamed step is a
-// print step only, struck through
+// print step only, labelled in an <s> that shell.css sets in the muted ink
 const roles = {
   light: {
     100: "text, rules, code, destructive",
