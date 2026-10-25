@@ -3,7 +3,7 @@
 
 export type Layout = "docs" | "app";
 
-export type NavSection = "overview" | "foundations" | "components" | "mock pages" | "install";
+export type NavSection = "overview" | "foundations" | "components" | "compositions" | "mock pages" | "install";
 
 export type NavEntry = {
   path: string;
@@ -29,6 +29,14 @@ const component = (item: string, title = item.replaceAll("-", " ")): NavEntry =>
   item,
 });
 
+const composition = (item: string, title = item.replaceAll("-", " ")): NavEntry => ({
+  path: `/compositions/${item}`,
+  title,
+  section: "compositions",
+  layout: "docs",
+  item,
+});
+
 const mock = (slug: string): NavEntry => ({ path: `/mock/${slug}`, title: slug, section: "mock pages", layout: "app" });
 
 export const nav: readonly NavEntry[] = [
@@ -40,27 +48,58 @@ export const nav: readonly NavEntry[] = [
   foundation("marks"),
   foundation("texture"),
   component("button"),
+  component("button-group"),
+  component("toggle"),
+  component("toggle-group"),
   component("badge"),
+  component("kbd"),
   component("input"),
   component("input-group"),
   component("textarea"),
+  component("field"),
   component("select"),
+  component("native-select"),
+  component("combobox"),
   component("checkbox"),
+  component("radio-group"),
+  component("switch"),
+  component("slider"),
   component("dialog"),
+  component("alert-dialog"),
+  component("dropdown-menu"),
+  component("command"),
   component("tabs"),
+  component("accordion"),
+  component("breadcrumb"),
   component("table"),
   component("progress"),
   component("toast"),
+  component("sonner"),
   component("sidebar"),
   component("fleet-rail"),
+  component("resizable"),
   component("glyphs"),
   component("card"),
+  component("collapsible"),
   component("label"),
   component("separator"),
   component("sheet"),
   component("skeleton"),
   component("tooltip"),
   component("use-mobile", "use-mobile"),
+  composition("app-shell"),
+  composition("page-header"),
+  composition("section-header"),
+  composition("collection-toolbar"),
+  composition("list-rows"),
+  composition("item-cards"),
+  composition("data-table"),
+  composition("facts"),
+  composition("form-section"),
+  composition("quick-add"),
+  composition("notice"),
+  composition("states"),
+  composition("search-palette"),
   mock("board"),
   mock("orbit"),
   mock("reading"),
@@ -68,7 +107,14 @@ export const nav: readonly NavEntry[] = [
 ];
 
 // the nav's groups, in order; overview and install stand alone
-export const navSections: readonly NavSection[] = ["overview", "foundations", "components", "mock pages", "install"];
+export const navSections: readonly NavSection[] = [
+  "overview",
+  "foundations",
+  "components",
+  "compositions",
+  "mock pages",
+  "install",
+];
 
 // the groups the docs nav holds at its foot, above the mode control, so the mock pages and install stay in view
 // while the rest of the list scrolls
