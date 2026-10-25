@@ -119,7 +119,13 @@ async function main() {
         await mkdir(dirname(join(stage, file.path)), { recursive: true });
         await writeFile(join(stage, file.path), file.content);
       }
-      const meta = { version, sha256: filesSha(stamped), tier: item.tier, upstream: await upstreamOf(item) };
+      const meta = {
+        version,
+        sha256: filesSha(stamped),
+        tier: item.tier,
+        upstream: await upstreamOf(item),
+        ...(item.serves ? { serves: item.serves } : {}),
+      };
       metas.set(item.name, meta);
       entries.push({
         name: item.name,

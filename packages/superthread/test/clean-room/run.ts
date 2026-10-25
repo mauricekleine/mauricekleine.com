@@ -686,13 +686,14 @@ async function main(): Promise<boolean> {
     });
 
     // 8. every item but init, and /all
-    await step(8, "add every item and build /all", [4], async (detail) => {
+    await step(8, "add every item and build /all and /blocks", [4], async (detail) => {
       const names = catalog.map((entry) => entry.name).filter((name) => name !== "init");
       await expectOk(await shadcn(["add", ...names.map((name) => `@mk/${name}`), "-y"], app, "add-all"), "add");
       const items = await closure(names);
       allFiles = checkPresent(app, items);
       ready.add(8);
       await cp(join(here, "all-items.tsx"), join(app, "src/routes/all.tsx"));
+      await cp(join(here, "all-blocks.tsx"), join(app, "src/routes/blocks.tsx"));
       try {
         await build(app, "build-all");
       } finally {
@@ -703,7 +704,7 @@ async function main(): Promise<boolean> {
           detail.kept = relative(pkg, kept);
         }
       }
-      const html = await page(app, "all.html");
+      const html = (await page(app, "all.html")) + (await page(app, "blocks.html"));
       const js = await builtJs(app);
       const marks = await declaredMarks(app, allFiles);
       const clientOnly: string[] = [];
@@ -714,7 +715,7 @@ async function main(): Promise<boolean> {
         if (['"', "'", "`"].some((q) => js.includes(`"data-mk":${q}${mark}${q}`))) clientOnly.push(mark);
         else absent.push(mark);
       }
-      check(absent.length === 0, `/all carries no data-mk for: ${absent.join(", ")}`);
+      check(absent.length === 0, `/all and /blocks carry no data-mk for: ${absent.join(", ")}`);
       detail.items = names.length;
       detail.files = allFiles.length;
       detail.dataMk = { declared: marks, prerendered: marks.filter((mark) => !clientOnly.includes(mark)), clientOnly };

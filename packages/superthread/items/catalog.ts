@@ -3,12 +3,15 @@
 // Only init and tokens list dependencies by hand: init has no files, and tokens' css imports
 // packages that no TS file imports. Sources mirror their install targets under items/.
 
-export type Tier = "style" | "brand" | "pass" | "lib";
+export type Tier = "style" | "brand" | "pass" | "lib" | "block";
+
+// The apps a composition serves: the fleet apps whose screens repeat it.
+export type App = "constellation" | "quanta" | "trisys" | "orbit" | "artifacts" | "www";
 
 // The DETAILS keys in tokens/details.json (steer 4's component details), at most one per item.
 export type TextureKey = "contact" | "mixed" | "tabhover" | "rowedge" | "disabled" | "skeleton";
 
-export type FileType = "registry:file" | "registry:lib" | "registry:ui" | "registry:hook";
+export type FileType = "registry:file" | "registry:lib" | "registry:ui" | "registry:hook" | "registry:component";
 
 export type CatalogFile = {
   // relative to packages/superthread
@@ -43,6 +46,8 @@ export type CatalogItem = {
   // the base-nova item it is seeded from, or null
   upstream: string | null;
   texture?: TextureKey;
+  // a block's apps, which build-registry.ts serves in its meta
+  serves?: App[];
   extends?: "none";
   dependencies?: string[];
   registryDependencies?: string[];
@@ -54,6 +59,12 @@ const ui = (name: string): CatalogFile => ({
   path: `items/ui/${name}.tsx`,
   type: "registry:ui",
   target: `@components/superthread/ui/${name}.tsx`,
+});
+
+const block = (name: string): CatalogFile => ({
+  path: `items/blocks/${name}.tsx`,
+  type: "registry:component",
+  target: `@components/superthread/blocks/${name}.tsx`,
 });
 
 const lib = (name: string): CatalogFile => ({
@@ -518,5 +529,26 @@ export const catalog: CatalogItem[] = [
     ],
     tier: "pass",
     upstream: "use-mobile",
+  },
+  // compositions: the patterns the fleet's apps repeat, composed from the items above
+  {
+    name: "page-header",
+    type: "registry:block",
+    title: "page header",
+    description: "a page's title, with a way back, a lede, its meta and its actions",
+    files: [block("page-header")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "quanta", "trisys", "orbit", "artifacts", "www"],
+  },
+  {
+    name: "states",
+    type: "registry:block",
+    title: "states",
+    description: "what a collection shows while it loads, when it fails and when it is empty",
+    files: [block("states")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "quanta", "trisys", "orbit", "artifacts"],
   },
 ];

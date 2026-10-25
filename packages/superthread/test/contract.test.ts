@@ -17,7 +17,7 @@ type Item = {
   registryDependencies?: string[];
   files?: File[];
   css?: Record<string, unknown>;
-  meta?: { version: string; sha256: string; tier: string; upstream: unknown };
+  meta?: { version: string; sha256: string; tier: string; upstream: unknown; serves?: string[] };
   [key: string]: unknown;
 };
 
@@ -182,6 +182,7 @@ test("meta is present and correct", async () => {
     expect(item.meta!.version).toBe(pkg.version);
     expect(item.meta!.sha256, item.name).toBe(sha);
     expect(item.meta!.tier).toBe(entry.tier);
+    expect(item.meta!.serves).toEqual(entry.serves);
     if (entry.upstream === null) expect(item.meta!.upstream).toBeNull();
     else
       expect(item.meta!.upstream).toEqual({
