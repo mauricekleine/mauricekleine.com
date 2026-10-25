@@ -223,6 +223,11 @@ describe("every shipped item, as served", () => {
     test(`${path}: names no style hook, brand item or pass item`, () => {
       expect(styleHooks(served(path))).toEqual([]);
     });
+
+    // the shadcn CLI rewrites asChild into Base UI's render prop on install, which breaks a primitive that has none
+    test(`${path}: passes no asChild`, () => {
+      expect(served(path)).not.toMatch(/\basChild\b/);
+    });
   }
 
   test("the scan covers every component the catalog ships", () => {

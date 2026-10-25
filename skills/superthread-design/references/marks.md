@@ -45,7 +45,7 @@ In the mauricekleine.com repo, `apps/superthread/public/marks/` holds byte copie
 
 Interface icons are pixel icons too, from `@mk/glyphs`, drawn as whole-pixel squares:
 
-- `Icon` (12-cell grid): arrow, left, copy, check, chevron, search, close, trash, plus.
+- `Icon` (12-cell grid): arrow, left, copy, check, chevron, search, close, trash, plus, more.
 - `StatusGlyph` (14-cell grid): tick, i, pause, cross and dash, one per status.
 - `FieldErrorGlyph`: bang, which leads a field's error message.
 

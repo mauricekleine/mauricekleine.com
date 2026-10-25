@@ -8,8 +8,38 @@ import { type ReactNode, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { fleet } from "@/components/superthread/lib/fleet";
 import { cn } from "@/components/superthread/lib/utils";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/superthread/ui/accordion";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/superthread/ui/breadcrumb";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from "@/components/superthread/ui/field";
+import { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "@/components/superthread/ui/native-select";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/superthread/ui/resizable";
 import { Badge } from "@/components/superthread/ui/badge";
 import { Button } from "@/components/superthread/ui/button";
+import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from "@/components/superthread/ui/button-group";
+import { Kbd, KbdGroup } from "@/components/superthread/ui/kbd";
+import { RadioGroup, RadioGroupItem } from "@/components/superthread/ui/radio-group";
+import { Slider } from "@/components/superthread/ui/slider";
+import { Toggle } from "@/components/superthread/ui/toggle";
+import { ToggleGroup, ToggleGroupItem } from "@/components/superthread/ui/toggle-group";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import {
   Dialog,
@@ -70,6 +100,63 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/superthread/ui/tabs";
 import { createToastManager, Toaster } from "@/components/superthread/ui/toast";
 import { Textarea } from "@/components/superthread/ui/textarea";
+
+import { toast as sonnerToast } from "sonner";
+import { Toaster as SonnerToaster } from "@/components/superthread/ui/sonner";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from "@/components/superthread/ui/dropdown-menu";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxGroup,
+  ComboboxLabel,
+  ComboboxEmpty,
+  ComboboxItem,
+  ComboboxChips,
+  ComboboxChip,
+  ComboboxChipsInput,
+  ComboboxValue,
+  useComboboxAnchor,
+} from "@/components/superthread/ui/combobox";
+import {
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandGroup,
+  CommandItem,
+  CommandEmpty,
+  CommandShortcut,
+  CommandSeparator,
+} from "@/components/superthread/ui/command";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogMedia,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "@/components/superthread/ui/alert-dialog";
 
 export const Route = createFileRoute("/all")({ component: AllItems });
 
@@ -405,9 +492,255 @@ function Sink({ mode }: { mode: Mode }) {
         </div>
       </Part>
 
+      <Part name="radio-group">
+        <RadioGroup defaultValue="orbit" aria-label="ship">
+          <label className="flex items-center gap-3">
+            <RadioGroupItem value="orbit" />
+            orbit
+          </label>
+          <label className="flex items-center gap-3">
+            <RadioGroupItem value="quanta" />
+            quanta
+          </label>
+          <label className="flex items-center gap-3">
+            <RadioGroupItem value="locked" disabled />
+            unavailable
+          </label>
+        </RadioGroup>
+        <RadioGroup defaultValue="locked" disabled aria-label="locked ship">
+          <RadioGroupItem value="locked" aria-label="locked" />
+        </RadioGroup>
+      </Part>
+
+      <Part name="slider">
+        <div className="grid max-w-md gap-6">
+          <Slider defaultValue={[40]} aria-label="volume" />
+          <Slider defaultValue={[20, 80]} aria-label="range" />
+          <Slider defaultValue={[40]} disabled aria-label="locked volume" />
+          <Slider defaultValue={[40]} orientation="vertical" className="h-40" aria-label="vertical volume" />
+        </div>
+      </Part>
+
+      <Part name="toggle">
+        <div className="flex flex-wrap items-center gap-3">
+          <Toggle>off</Toggle>
+          <Toggle defaultPressed>on</Toggle>
+          <Toggle variant="outline" size="sm">
+            small
+          </Toggle>
+          <Toggle variant="outline" size="lg" defaultPressed>
+            large
+          </Toggle>
+          <Toggle variant="outline" disabled>
+            disabled
+          </Toggle>
+        </div>
+      </Part>
+
+      <Part name="toggle-group">
+        <ToggleGroup variant="outline" defaultValue={["day"]} aria-label="period">
+          <ToggleGroupItem value="day">day</ToggleGroupItem>
+          <ToggleGroupItem value="week">week</ToggleGroupItem>
+        </ToggleGroup>
+        <ToggleGroup variant="outline" spacing={3} size="sm" aria-label="view">
+          <ToggleGroupItem value="list">list</ToggleGroupItem>
+          <ToggleGroupItem value="grid">grid</ToggleGroupItem>
+        </ToggleGroup>
+        <ToggleGroup variant="outline" orientation="vertical" defaultValue={["runs"]} aria-label="section">
+          <ToggleGroupItem value="runs">runs</ToggleGroupItem>
+          <ToggleGroupItem value="logs">logs</ToggleGroupItem>
+        </ToggleGroup>
+      </Part>
+
+      <Part name="button-group">
+        <ButtonGroup aria-label="run actions">
+          <ButtonGroupText>run</ButtonGroupText>
+          <Button variant="outline">start</Button>
+          <ButtonGroupSeparator />
+          <Button variant="outline">stop</Button>
+        </ButtonGroup>
+        <ButtonGroup orientation="vertical" aria-label="log actions">
+          <Button variant="outline">copy</Button>
+          <Button variant="outline">download</Button>
+        </ButtonGroup>
+      </Part>
+
+      <Part name="kbd">
+        <KbdGroup>
+          <Kbd>ctrl</Kbd>
+          <Kbd>k</Kbd>
+        </KbdGroup>
+      </Part>
+
       {/* 2.0: layers */}
+      <Part name="dropdown-menu">
+        <DropdownMenu>
+          <DropdownMenuTrigger render={<Button variant="outline" />}>run actions</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>run</DropdownMenuLabel>
+              <DropdownMenuItem>
+                open<DropdownMenuShortcut>⌘o</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem variant="destructive">
+                <Icon name="trash" />
+                delete
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled>locked</DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuCheckboxItem defaultChecked>notify</DropdownMenuCheckboxItem>
+            <DropdownMenuRadioGroup defaultValue="orbit">
+              <DropdownMenuRadioItem value="orbit">orbit</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="quanta">quanta</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>more</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>inspect</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </Part>
+      <Part name="combobox">
+        <ComboboxSink />
+      </Part>
+      <Part name="command">
+        <CommandSink />
+        <CommandDialogSink />
+      </Part>
+      <Part name="alert-dialog">
+        <AlertDialog>
+          <AlertDialogTrigger render={<Button variant="outline" />}>delete run</AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogMedia>
+                <Icon name="trash" />
+              </AlertDialogMedia>
+              <AlertDialogTitle>delete run?</AlertDialogTitle>
+              <AlertDialogDescription>this removes the run</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>cancel</AlertDialogCancel>
+              <AlertDialogAction>delete</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </Part>
+      <Part name="sonner">
+        <SonnerSink mode={mode} />
+      </Part>
 
       {/* 2.0: forms */}
+      <Part name="field">
+        <FieldSet className="max-w-md">
+          <FieldLegend>notifications</FieldLegend>
+          <FieldGroup>
+            <Field data-invalid="true">
+              <FieldLabel htmlFor={`field-email-${mode}`}>email</FieldLabel>
+              <Input
+                id={`field-email-${mode}`}
+                defaultValue="maurice"
+                aria-invalid
+                aria-describedby={`field-error-${mode}`}
+              />
+              <FieldDescription>
+                read the <a href="#preferences">preferences</a> before saving.
+              </FieldDescription>
+              <FieldError
+                id={`field-error-${mode}`}
+                errors={[{ message: "enter a complete email address" }, { message: "use your work address" }]}
+              />
+            </Field>
+            <FieldSeparator>or</FieldSeparator>
+            <FieldLabel>
+              <Field orientation="horizontal">
+                <Checkbox defaultChecked />
+                <FieldContent>
+                  <FieldTitle>send updates</FieldTitle>
+                  <FieldDescription>a weekly digest of completed runs.</FieldDescription>
+                </FieldContent>
+              </Field>
+            </FieldLabel>
+          </FieldGroup>
+        </FieldSet>
+      </Part>
+      <Part name="native-select">
+        <div className="flex flex-wrap gap-4">
+          <NativeSelect aria-label="ship" defaultValue="orbit">
+            <NativeSelectOptGroup label="ships">
+              <NativeSelectOption value="orbit">orbit</NativeSelectOption>
+              <NativeSelectOption value="quanta">quanta</NativeSelectOption>
+            </NativeSelectOptGroup>
+          </NativeSelect>
+          <NativeSelect aria-label="small ship" size="sm">
+            <NativeSelectOption>orbit</NativeSelectOption>
+          </NativeSelect>
+          <NativeSelect aria-label="invalid ship" aria-invalid>
+            <NativeSelectOption>choose a ship</NativeSelectOption>
+          </NativeSelect>
+          <NativeSelect aria-label="locked ship" disabled>
+            <NativeSelectOption>orbit</NativeSelectOption>
+          </NativeSelect>
+        </div>
+      </Part>
+      <Part name="accordion">
+        <Accordion defaultValue={["details"]} className="max-w-md">
+          <AccordionItem value="details">
+            <AccordionTrigger>run details</AccordionTrigger>
+            <AccordionContent>
+              read the <a href="#run">run log</a> for the full output.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="history">
+            <AccordionTrigger>history</AccordionTrigger>
+            <AccordionContent>no earlier runs.</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="locked" disabled>
+            <AccordionTrigger>locked run</AccordionTrigger>
+            <AccordionContent>unavailable.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Part>
+      <Part name="breadcrumb">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="#home">home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbEllipsis />
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>runs</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </Part>
+      <Part name="resizable">
+        <div className="h-48 max-w-lg border border-border">
+          <ResizablePanelGroup>
+            <ResizablePanel defaultSize="40%">
+              <div className="p-4">runs</div>
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize="60%">
+              <ResizablePanelGroup orientation="vertical">
+                <ResizablePanel defaultSize="50%">
+                  <div className="p-4">output</div>
+                </ResizablePanel>
+                <ResizableHandle />
+                <ResizablePanel defaultSize="50%">
+                  <div className="p-4">details</div>
+                </ResizablePanel>
+              </ResizablePanelGroup>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </div>
+      </Part>
     </section>
   );
 }
@@ -449,5 +782,117 @@ function ToastSink({ mode }: { mode: Mode }) {
         </Button>
       </div>
     </Toaster>
+  );
+}
+
+const SHIPS = ["orbit", "quanta", "trisys"];
+
+function ComboboxSink() {
+  const anchor = useComboboxAnchor();
+  return (
+    <div className="grid gap-4">
+      <Combobox items={SHIPS} defaultValue="orbit">
+        <ComboboxInput aria-label="ship" showClear />
+        <ComboboxContent>
+          <ComboboxEmpty>no ships</ComboboxEmpty>
+          <ComboboxList>
+            <ComboboxGroup>
+              <ComboboxLabel>ships</ComboboxLabel>
+              {SHIPS.map((ship) => (
+                <ComboboxItem key={ship} value={ship}>
+                  {ship}
+                </ComboboxItem>
+              ))}
+            </ComboboxGroup>
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+      <Combobox multiple items={SHIPS} defaultValue={["orbit", "quanta"]}>
+        <ComboboxChips ref={anchor}>
+          <ComboboxValue>
+            {(values: string[]) => (
+              <>
+                {values.map((value) => (
+                  <ComboboxChip key={value}>{value}</ComboboxChip>
+                ))}
+                <ComboboxChipsInput aria-label="add ship" />
+              </>
+            )}
+          </ComboboxValue>
+        </ComboboxChips>
+        <ComboboxContent anchor={anchor}>
+          <ComboboxEmpty>no ships</ComboboxEmpty>
+          <ComboboxList>
+            {SHIPS.map((ship) => (
+              <ComboboxItem key={ship} value={ship}>
+                {ship}
+              </ComboboxItem>
+            ))}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+    </div>
+  );
+}
+
+function CommandSink() {
+  return (
+    <Command>
+      <CommandInput placeholder="search commands" />
+      <CommandList>
+        <CommandEmpty>no commands</CommandEmpty>
+        <CommandGroup heading="run">
+          <CommandItem>
+            open<CommandShortcut>⌘o</CommandShortcut>
+          </CommandItem>
+          <CommandItem disabled>locked</CommandItem>
+        </CommandGroup>
+        <CommandSeparator />
+        <CommandGroup heading="ship">
+          <CommandItem>inspect</CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  );
+}
+
+function CommandDialogSink() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button variant="outline" onClick={() => setOpen(true)}>
+        command palette
+      </Button>
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandSink />
+      </CommandDialog>
+    </>
+  );
+}
+
+function SonnerSink({ mode }: { mode: Mode }) {
+  const id = `sonner-${mode}`;
+  return (
+    <>
+      <SonnerToaster id={id} />
+      <div className="flex flex-wrap gap-3">
+        {(["success", "info", "loading", "warning", "error"] as const).map((kind) => (
+          <Button
+            key={kind}
+            variant="outline"
+            onClick={() =>
+              sonnerToast[kind](kind, {
+                toasterId: id,
+                description: "synthetic notification",
+                action: { label: "undo", onClick: () => {} },
+                cancel: { label: "cancel", onClick: () => {} },
+              })
+            }
+          >
+            {kind}
+          </Button>
+        ))}
+      </div>
+    </>
   );
 }

@@ -1,24 +1,16 @@
-import { Slider as SliderPrimitive } from "@base-ui/react/slider"
-import { cn } from "@/components/superthread/lib/utils"
+import { Slider as SliderPrimitive } from "@base-ui/react/slider";
+import { cn } from "@/components/superthread/lib/utils";
 
-function Slider({
-  className,
-  defaultValue,
-  value,
-  min = 0,
-  max = 100,
-  ...props
-}: SliderPrimitive.Root.Props) {
-  const _values = Array.isArray(value)
-    ? value
-    : Array.isArray(defaultValue)
-      ? defaultValue
-      : [min, max]
+// A flat house-ink range on an 8 px ruled track. The 16 px thumbs are square controls with outside focus.
+function Slider({ className, defaultValue, value, min = 0, max = 100, ...props }: SliderPrimitive.Root.Props) {
+  const values = value ?? defaultValue ?? [min, max];
+  const thumbCount = Array.isArray(values) ? values.length : 1;
 
   return (
     <SliderPrimitive.Root
       className={cn("data-horizontal:w-full data-vertical:h-full", className)}
       data-slot="slider"
+      data-mk="slider"
       defaultValue={defaultValue}
       value={value}
       min={min}
@@ -26,26 +18,26 @@ function Slider({
       thumbAlignment="edge"
       {...props}
     >
-      <SliderPrimitive.Control className="relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col">
+      <SliderPrimitive.Control className="relative flex w-full touch-none items-center select-none data-disabled:cursor-not-allowed data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col">
         <SliderPrimitive.Track
           data-slot="slider-track"
-          className="relative grow overflow-hidden rounded-full bg-muted select-none data-horizontal:h-1 data-horizontal:w-full data-vertical:h-full data-vertical:w-1"
+          className="relative grow overflow-hidden border border-input bg-background select-none data-horizontal:h-2 data-horizontal:w-full data-vertical:h-full data-vertical:w-2 data-disabled:border-disabled data-disabled:bg-faint"
         >
           <SliderPrimitive.Indicator
             data-slot="slider-range"
-            className="bg-primary select-none data-horizontal:h-full data-vertical:w-full"
+            className="bg-primary select-none data-horizontal:h-full data-vertical:w-full data-disabled:bg-disabled"
           />
         </SliderPrimitive.Track>
-        {Array.from({ length: _values.length }, (_, index) => (
+        {Array.from({ length: thumbCount }, (_, index) => (
           <SliderPrimitive.Thumb
             data-slot="slider-thumb"
             key={index}
-            className="relative block size-3 shrink-0 rounded-full border border-ring bg-white transition-[color,box-shadow] select-none after:absolute after:-inset-2 disabled:pointer-events-none disabled:opacity-50"
+            className="relative block size-4 shrink-0 border border-primary bg-background transition-[background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none after:absolute after:-inset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-(--ring) not-data-disabled:hover:bg-accent data-dragging:bg-accent data-disabled:pointer-events-none data-disabled:border-disabled"
           />
         ))}
       </SliderPrimitive.Control>
     </SliderPrimitive.Root>
-  )
+  );
 }
 
-export { Slider }
+export { Slider };
