@@ -4,6 +4,9 @@ export const Route = createRootRoute({
   component: RootDocument,
 });
 
+// The Worker serves the prerendered /404 at every path the site does not have. Hydrating it there, the client router
+// would match that path instead of /404, and React would render the whole page again: TanStack's bare "Not Found" over
+// blank sky canvases. The lost page is plain markup, so its document ships no client entry. lost-page.test.tsx holds it.
 function RootDocument() {
   const pathname = useLocation({ select: (location) => location.pathname });
   const essayPage = pathname === "/essays" || pathname.startsWith("/essays/");
@@ -25,7 +28,7 @@ function RootDocument() {
         {!lost && !specimen && <script src="/webmcp.js" />}
         {essayPage && <script src="/subscribe.js" />}
         <script async src="https://api.mauricekleine.com/latest.js" />
-        <Scripts />
+        {!lost && <Scripts />}
       </body>
     </html>
   );
