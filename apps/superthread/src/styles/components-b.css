@@ -55,12 +55,6 @@
     font: 400 11px/14px var(--font-mono);
   }
 
-  /* a printed focus: the base layer's ring, which no data-demo variant reaches, written out as the base layer has it */
-  :is([data-slot="button"], [data-slot="tabs-trigger"])[data-demo~="focus-visible"] {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-  }
-
   /* tabs */
   .st-b-panel {
     padding-top: 4px;
@@ -91,9 +85,16 @@
     gap: 28px;
   }
 
-  /* table: a ship's name with its mark; the mark that matches the mode around it shows */
+  /* table: the last run column stands 32 px off the figures, as the world's runs table does (12 px at 900 px and
+     below) */
+  .st-b-lr {
+    padding-left: 32px;
+  }
+
+  /* table: a ship's name with its mark, a flex box as the world's .who is, so the cell centres it and the 16 px mark
+     lands on a whole pixel; the mark that matches the mode around it shows */
   .st-b-ship {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 10px;
   }
@@ -120,5 +121,48 @@
     gap: 12px;
     height: 49px;
     border-bottom: 1px solid var(--border);
+  }
+
+  /* empty: the wedge plate at its own size inside crop marks, 16 px clear of the pane for the marks, with the line
+     knocked out of the screen onto the stock at its lower left */
+  .st-b-empty {
+    position: relative;
+    max-width: var(--empty-w);
+    margin: 34px 16px 16px;
+  }
+  .st-b-empty p {
+    position: absolute;
+    left: 20px;
+    bottom: 16px;
+    padding: 6px 10px;
+    background: var(--background);
+    font: 400 13px/20px var(--font-sans);
+    text-wrap: pretty;
+  }
+  .st-b-empty b {
+    display: block;
+    font-weight: 500;
+  }
+
+  @media (max-width: 900px) {
+    .st-b-lr {
+      padding-left: 12px;
+    }
+  }
+
+  /* at phone widths a table, the loading rows and the empty field get the room the world gives them: their pair runs
+     out past the main column's phone padding (32 px left, 16 px right) to both window edges, and each pane keeps
+     16 px inside, so the runs table prints its four columns with whole badges and the phone wedge prints whole */
+  @media (max-width: 600px) {
+    .st-b-stack:has([data-slot="table-container"], .st-b-skel, .st-b-empty) {
+      margin-inline: -32px -16px;
+      border-inline: 0;
+    }
+    .st-b-stack:has([data-slot="table-container"], .st-b-skel, .st-b-empty) > .st-modepair-pane {
+      padding-inline: 16px;
+    }
+    .st-b-empty {
+      max-width: var(--empty-phone-w);
+    }
   }
 }

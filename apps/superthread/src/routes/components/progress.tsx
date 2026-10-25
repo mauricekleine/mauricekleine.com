@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProgressEdges, ProgressExample } from "@/examples/progress";
+import { Caption } from "@/site/Caption";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -43,10 +44,7 @@ function Page() {
         <ModePair className="st-b-stack">
           <ProgressEdges />
         </ModePair>
-        <p className="st-caption">
-          <span className="type-meta">progress edge</span>
-          <span>the fill&apos;s leading 24&nbsp;px, screened from solid to the stock</span>
-        </p>
+        <Caption detail="ramp" />
       </Section>
     </>
   );

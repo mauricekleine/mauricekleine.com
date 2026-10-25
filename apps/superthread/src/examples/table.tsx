@@ -34,7 +34,8 @@ const runs: readonly { ship: ShipId; runs: number; median: string; last: State }
   { ship: "artifacts", runs: 13, median: "2m 30s", last: "failed" },
 ];
 
-// The world's runs table: constellation prints as the row under the pointer, quanta as the selected row.
+// The world's runs table: constellation prints as the row under the pointer, quanta as the selected row. The last
+// run column stands off the figures by the world's gap, which tightens at 900 px and below (st-b-lr).
 export function TableRuns() {
   return (
     <Table>
@@ -44,7 +45,7 @@ export function TableRuns() {
           <TableHead>ship</TableHead>
           <TableHead kind="number">runs</TableHead>
           <TableHead kind="number">median</TableHead>
-          <TableHead>last run</TableHead>
+          <TableHead className="st-b-lr">last run</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -59,7 +60,7 @@ export function TableRuns() {
             </TableCell>
             <TableCell kind="number">{row.runs}</TableCell>
             <TableCell kind="number">{row.median}</TableCell>
-            <TableCell>
+            <TableCell className="st-b-lr">
               <Badge variant={row.last} />
             </TableCell>
           </TableRow>

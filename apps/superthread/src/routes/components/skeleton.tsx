@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SkeletonRows, SkeletonTable } from "@/examples/skeleton";
+import { EmptyRuns, SkeletonRows, SkeletonTable } from "@/examples/skeleton";
 import { Caption } from "@/site/Caption";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -11,6 +11,7 @@ export const Route = createFileRoute("/components/skeleton")({
     sections: [
       { id: "rows", title: "loading rows" },
       { id: "table", title: "in a table" },
+      { id: "empty", title: "empty" },
     ],
   },
   component: Page,
@@ -43,6 +44,15 @@ function Page() {
         </p>
         <ModePair className="st-b-stack">
           <SkeletonTable />
+        </ModePair>
+      </Section>
+
+      <Section id="empty" title="empty">
+        <p className="st-b-copy">
+          with nothing to load, the list prints the empty wedge in crop marks and says what lands there.
+        </p>
+        <ModePair className="st-b-stack">
+          <EmptyRuns />
         </ModePair>
       </Section>
     </>
