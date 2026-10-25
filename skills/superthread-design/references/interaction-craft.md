@@ -1,8 +1,10 @@
 # interaction craft
 
-apply this guidance when configuring existing primitives or building app-authored
-interactions. use the primitive's behavior first. keep stock shadcn behavior and
-the current design system's motion and accessibility rules.
+apply this guidance when configuring the items' Base UI primitives or building app-authored
+interactions. use the primitive's behavior first. motion stays on superthread's three
+durations (120, 180 and 240 ms) and `--ease-brand`, every duration drops to zero under
+reduced motion, and focus follows the ring and field rules in
+[type and layout](type-and-layout.md).
 
 ## core rules
 
@@ -28,9 +30,11 @@ the current design system's motion and accessibility rules.
 
 ## hover feedback
 
-hover never changes a label's width. keep its font metrics stable through hover
-and selection; use the existing color, surface, underline or focus treatment for
-feedback.
+hover keeps a label's width: its font metrics stay the same through hover and
+selection. feedback comes from the control's own hover role (`--primary-hover`,
+`--control-hover` and the rest), the tabs' screened hover bar, the table's row
+edge or the fleet rail's inverted cell. a transition carries the fill, edge and
+label colours only, so the focus ring appears at once.
 
 ## when a custom gesture reaches a boundary (F7)
 
@@ -49,4 +53,5 @@ library's existing handling first.
 
 keep continuous values outside react's render cycle. update the moving element
 or the existing motion value directly; avoid changing an inherited variable on a
-large parent every frame. keep semantic theme values in the theme.
+large parent every frame. keep semantic theme values in the theme, and keep every
+screen still: texture never animates.
