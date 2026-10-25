@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label",
+  "title": "label",
+  "description": "base-nova's label, on the superthread tokens",
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/label.tsx",
+      "content": "import * as React from \"react\"\nimport { cn } from \"@/components/superthread/lib/utils\"\n// @mk/label 2.1.0\n\nfunction Label({ className, ...props }: React.ComponentProps<\"label\">) {\n  return (\n    <label\n      data-slot=\"label\"\n      className={cn(\n        \"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Label }\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/label.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.1.0",
+    "sha256": "fa610a3d480838f0a77d6057452592ff61ee24a3cf071ac973003fae85925a17",
+    "tier": "pass",
+    "upstream": {
+      "style": "base-nova",
+      "item": "label",
+      "sha256": "89b01e14fd39dceece9fa421e71e78ea83286bd43a2ca1c2f55d2e8d3958fff2",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

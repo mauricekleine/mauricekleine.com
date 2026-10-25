@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sonner",
+  "title": "sonner",
+  "description": "sonner's toaster in the toast's dress: the leaf lift and a status glyph for each kind",
+  "dependencies": [
+    "sonner@^2.0.8"
+  ],
+  "registryDependencies": [
+    "@mk/button",
+    "@mk/glyphs",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/sonner.tsx",
+      "content": "import { Toaster as Sonner, type ToasterProps } from \"sonner\";\nimport { cn } from \"@/components/superthread/lib/utils\";\nimport { buttonVariants } from \"@/components/superthread/ui/button\";\nimport { Icon, StatusGlyph } from \"@/components/superthread/ui/glyphs\";\n// @mk/sonner 2.1.0\n\n// Sonner drops arbitrary data attributes, so the wrapper marks the item. Toasts keep sonner's toast() API and\n// placement, but print unstyled on our leaf lift. Important utilities override sonner's unlayered structural CSS,\n// including its ::after hit area, which otherwise covers the contact edge. Expanded stacks never scale a toast.\nfunction Toaster({ className, toastOptions, icons, expand = true, ...props }: ToasterProps) {\n  return (\n    <div data-slot=\"sonner\" data-mk=\"sonner\">\n      <Sonner\n        theme=\"system\"\n        expand={expand}\n        gap={12}\n        containerAriaLabel=\"notifications\"\n        customAriaLabel=\"notifications\"\n        className={cn(\n          \"font-sans! transition-[transform]! duration-(--duration-travel)! ease-(--ease-brand)!\",\n          className,\n        )}\n        icons={{\n          success: <StatusGlyph state=\"done\" />,\n          info: <StatusGlyph state=\"running\" />,\n          warning: <StatusGlyph state=\"waiting\" />,\n          error: <StatusGlyph state=\"failed\" />,\n          loading: <StatusGlyph state=\"running\" />,\n          close: <Icon name=\"close\" />,\n          ...icons,\n        }}\n        toastOptions={{\n          ...toastOptions,\n          unstyled: true,\n          closeButtonAriaLabel: toastOptions?.closeButtonAriaLabel ?? \"close toast\",\n          classNames: {\n            toast:\n              \"isolate flex w-full flex-wrap items-start gap-3 border border-border bg-popover p-4 text-popover-foreground shadow-leaf! texture-contact! [--contact-lift:var(--elevation-leaf-rake)] transition-[transform,opacity,height]! duration-(--duration-travel)! ease-(--ease-brand)! focus-visible:outline-2! focus-visible:outline-offset-2! focus-visible:outline-(--ring)!\",\n            icon: \"mt-[3px] flex size-3.5 shrink-0 items-center justify-center\",\n            loader: \"relative! top-auto! left-auto! transform-none! transition-none! [&[data-visible=false]]:hidden\",\n            content: \"flex min-w-[min(100%,12rem)] flex-1 flex-col gap-1\",\n            title: \"text-ui font-medium\",\n            description: \"type-instrument text-muted-foreground!\",\n            // The toast owns the contact detail; its actions keep the button look with a flat disabled edge. When the\n            // words need the width, the actions wrap below them and keep to the end.\n            actionButton: cn(\n              buttonVariants({ size: \"sm\" }).replace(\"texture-disabled\", \"\"),\n              \"ml-auto [[data-cancel]+&]:ml-0\",\n              \"focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)\",\n            ),\n            cancelButton: cn(\n              buttonVariants({ variant: \"outline\", size: \"sm\" }).replace(\"texture-disabled\", \"\"),\n              \"ml-auto\",\n              \"focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)\",\n            ),\n            closeButton:\n              \"absolute top-1 right-1 flex size-6 items-center justify-center border border-transparent! bg-popover! text-muted-foreground! hover:bg-raised-hover! hover:text-foreground! focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)\",\n            ...toastOptions?.classNames,\n          },\n        }}\n        {...props}\n      />\n    </div>\n  );\n}\n\nexport { Toaster };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/sonner.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.1.0",
+    "sha256": "fc8bb630c7e759fd40f6fe1d133ccc99caf3368488038829be8ecd6f2ed35431",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "sonner",
+      "sha256": "831967f80f645ac3908b356a44748698a9ceed1c6a51b232dd5e87c52a54d7c3",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

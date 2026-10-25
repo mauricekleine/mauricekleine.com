@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "title": "skeleton",
+  "description": "loading rows, screened on whole-pixel bars",
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/skeleton.tsx",
+      "content": "import { cn } from \"@/components/superthread/lib/utils\";\n// @mk/skeleton 2.1.0\n\n// A placeholder prints the first ink through the 18.75 percent screen (texture-skeleton), still, on whole-pixel bars:\n// 12 px tall unless sized, and square.\nfunction Skeleton({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"skeleton\" data-mk=\"skeleton\" className={cn(\"h-3 texture-skeleton\", className)} {...props} />;\n}\n\nexport { Skeleton };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/skeleton.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.1.0",
+    "sha256": "6db5bbfc57085c4303e39c586eeb42e00a0d62cbc20caf5e6fb306df7297fd9a",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "skeleton",
+      "sha256": "85692a09912f518ffd64c540dfcf098fe748a807baf288c107cf8126496cf886",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}
