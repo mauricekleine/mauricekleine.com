@@ -1,0 +1,162 @@
+/* The field pages: input, input group, textarea, select and checkbox. Fields are set as the world's component sheet
+   sets them (reach.html, section c): the label 8 px above the box, the hint or error 8 px below, fields 32 px apart
+   in two columns, printed states 184 px wide with an 11/14 mono note under each. Nothing sits within 8 px of a
+   field box, so the focus check reads only the box's own frame. In the components layer, so an item's own utilities
+   still win inside a specimen. */
+
+@layer components {
+  /* a section's few lines of prose */
+  .st-a-copy {
+    max-width: 72ch;
+    color: var(--muted-foreground);
+    font: 400 15px/24px var(--font-sans);
+  }
+  .st-a-copy + .st-a-copy {
+    margin-top: 12px;
+  }
+  .st-a-copy code {
+    color: var(--foreground);
+    font: 400 13px/24px var(--font-mono);
+  }
+  .st-a-copy + * {
+    margin-top: 24px;
+  }
+
+  /* a mode pair whose fields want the whole column: light above dark at every width, each pane as wide as the
+     world's */
+  .st-modepair.st-a-stack {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .st-a-stack > .st-modepair-pane + .st-modepair-pane {
+    border-top: 1px solid var(--rule);
+    border-left: 0;
+  }
+
+  /* fields in two columns, one on a phone */
+  .st-a-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    align-items: start;
+    gap: 28px 32px;
+  }
+  .st-a-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+  .st-a-label {
+    color: var(--foreground);
+    font: 500 13px/16px var(--font-sans);
+  }
+  .st-a-hint,
+  .st-a-error {
+    font: 400 13px/18px var(--font-sans);
+  }
+  .st-a-hint {
+    color: var(--muted-foreground);
+  }
+  .st-a-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: var(--error);
+  }
+  .st-a-error svg {
+    flex: none;
+    margin-top: 2px;
+  }
+
+  /* printed states: a row of boxes at the world's 184 px, each with its note */
+  .st-a-states {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 24px 16px;
+  }
+  .st-a-state {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: min(100%, 184px);
+  }
+  .st-a-state.st-a-wide {
+    width: min(100%, 240px);
+  }
+  .st-a-note {
+    color: var(--muted-foreground);
+    font: 400 11px/14px var(--font-mono);
+  }
+
+  /* a ship's 16 px mark: the key tile on a light ground, the paper tile on a dark one, whichever mode the page is in */
+  .st-a-mark {
+    flex: none;
+    align-self: center;
+    display: block;
+    width: 16px;
+    height: 16px;
+  }
+  .st-a-mark img {
+    display: block;
+  }
+  .st-a-mark .st-a-mark-dark,
+  .st-a-mark .st-a-mark-light:is(.dark *):not(.light *) {
+    display: none;
+  }
+  .st-a-mark .st-a-mark-dark:is(.dark *):not(.light *) {
+    display: block;
+  }
+
+  /* the select's list, printed open: the trigger 8 px under its label, the list 6 px under the trigger as the
+     world prints it, with room right and below for the lift */
+  .st-a-open {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 307px;
+    padding-bottom: 24px;
+  }
+  .st-a-open > .st-a-print {
+    margin-top: -2px;
+  }
+
+  /* checkboxes: a box and its words on one line, 16 px between lines; the ships under "every ship" step in */
+  .st-a-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .st-a-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    color: var(--foreground);
+    font: 400 14px/21px var(--font-sans);
+    cursor: pointer;
+  }
+  .st-a-check:has([data-disabled]) {
+    color: var(--disabled);
+    cursor: not-allowed;
+  }
+  .st-a-check .st-a-count {
+    color: var(--muted-foreground);
+  }
+  .st-a-children {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    margin-top: -4px;
+    padding-left: 28px;
+  }
+  .st-a-checkstates {
+    gap: 24px 28px;
+  }
+  .st-a-checkstates .st-a-state {
+    width: auto;
+    min-width: 88px;
+  }
+  .st-a-checkstates .st-a-state > :first-child {
+    margin: 4px;
+  }
+}
