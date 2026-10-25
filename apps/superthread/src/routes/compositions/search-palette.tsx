@@ -57,6 +57,7 @@ function Live({ mode }: { mode: "light" | "dark" }) {
         <SearchPaletteTrigger placeholder="search fleet pages" />
         <SearchPaletteContent
           className={mode}
+          portalProps={{ className: mode }}
           title="search fleet pages"
           description="pick a sample fleet page"
           placeholder="search fleet pages"
