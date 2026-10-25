@@ -59,10 +59,13 @@ function store(mode: Mode) {
   js(`localStorage.setItem(${JSON.stringify(themeKey)}, ${JSON.stringify(mode)})`);
 }
 
-// opens a page and waits for its fonts and for the theme script's mode
+// opens a page and waits for its fonts and for the theme script's mode, then lets it settle: on the dev server the
+// router resets the scroll position after hydration, which lands after the fonts and would undo a field's
+// scrollIntoView before its first shot
 function visit(path: string, mode: Mode) {
   ab("open", base + path);
   ab("wait", "--fn", `document.fonts.status === "loaded" && document.documentElement.dataset.theme === "${mode}"`);
+  ab("wait", "500");
 }
 
 const slug = (path: string) => (path === "/" ? "index" : path.slice(1).replaceAll("/", "-"));
@@ -312,9 +315,15 @@ function shootFocus() {
         reset();
         ab("click", sel(field.cid));
         if (field.select) {
-          // the click opens the list; Escape closes it and hands focus back to the trigger
+          // the click opens the list; Escape closes it and hands focus back to the trigger. Base UI keeps a closed
+          // list mounted inside a [hidden] positioner once its trigger has had focus, so wait until no list is left
+          // outside one.
           ab("press", "Escape");
-          ab("wait", "--fn", `!document.querySelector('[data-slot="select-content"]')`);
+          ab(
+            "wait",
+            "--fn",
+            `![...document.querySelectorAll('[data-slot="select-content"]')].some((e) => !e.closest("[hidden]"))`,
+          );
           shot("click", true);
         } else {
           shot("click", true);
