@@ -590,6 +590,26 @@ The column of ship marks down the left of every ship surface, on the deep ground
 
 Pass items: base-nova's card, label and separator on the tokens, square and ruled like the rest.
 
+### field
+
+Fieldsets keep their upstream parts and orientation variants. Legends set in mono caps, labels and titles at the UI step, and descriptions at the instrument step. Invalid labels take the error ink, disabled labels the disabled ink. A checked choice card is boxed in plum on the accent fill with 16 px padding. Every error message leads with the bang square, including each line of a list; separators carry a meta label on the stock over a 1 px rule.
+
+### native-select
+
+The native select is a flat 40 px field box, or 32 px at the small size, with the input edge and the same inside focus edge as the select trigger. Invalid changes the edge and focus ink together; disabled uses the faint fill and disabled label. A pixel chevron sits at the right without taking pointer input, and options keep native platform semantics.
+
+### accordion
+
+Rows run between full-width 1 px rules. The 48 px trigger keeps its focus ring inside and turns one pixel chevron on the quick duration. The panel's measured height travels on the same duration and brand ease; its muted UI copy keeps 16 px below it, with links in the house ink.
+
+### breadcrumb
+
+A wrapping path at the instrument step, with muted links that take foreground ink on hover and the control ring on keyboard focus. The current page prints in foreground ink. Right-facing pixel chevrons separate the items, and a 20 px square holds the more glyph for an omitted stretch.
+
+### resizable
+
+A 1 px rule separates full-size panels, with an invisible 8 px hit area; hover and drag turn the rule plum. With a handle, a 6 by 16 px grip holds two whole-pixel lines and draws the focus ring inside its box. Without a grip the ring has zero offset around the rule, which has no room for an inside ring. Vertical groups mirror the layout; the installed v4 primitive supplies the hover, active and disabled states.
+
 ### Motion
 
 Three durations on one ease. `--duration-instant` (120 ms) times hover and press colour on buttons, badges and tabs, and the select list's entry; `--duration-quick` (180 ms) times the rail's cell and tab, the sidebar's items and the dialog's fade; `--duration-travel` (240 ms) times anything that crosses the page: the progress width, the toast stack and the sidebar's collapse. Every brand transition uses `--ease-brand`, `cubic-bezier(0.22, 1, 0.36, 1)`: changes start fast and ease into place. Transitions name their properties (`transition-[color,background-color,border-color]`), so a focus ring snaps on instead of fading. Motion answers an action or an event; nothing loops, and no screen ever moves. Under `prefers-reduced-motion: reduce` the three durations become 0 and every transition and animation 0.01 ms: states still change, at once.
