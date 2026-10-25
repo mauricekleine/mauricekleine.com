@@ -2,14 +2,6 @@
    The composition blocks own the frame, panels, heads, controls, rows, cards, states and forms. */
 
 @layer components {
-  /* AppShellGround is main-only; the docs shell already owns main, so this ground remains a div. */
-  .mock-ground {
-    flex: 1;
-    min-width: 0;
-    padding: 16px 48px 72px 32px;
-    color: var(--ground-foreground);
-  }
-
   /* a ship's mark, its light file on a light page and its dark file on a dark one */
   .mock-mark {
     display: inline-flex;
@@ -361,9 +353,6 @@
   }
 
   @media (max-width: 900px) {
-    .mock-ground {
-      padding: 0 12px 40px;
-    }
     /* the board's rows keep id, title, status and age */
     .mock-agent {
       display: none;

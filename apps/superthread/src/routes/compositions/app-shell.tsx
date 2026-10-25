@@ -57,7 +57,7 @@ function Workspace({ printed = false }: { printed?: boolean }) {
         </AppShellNav>
       }
     >
-      <AppShellGround aria-label="orbit specimen workspace">
+      <AppShellGround render={<div />}>
         <AppShellPanel>
           <h1 className="type-section">{page}</h1>
           <p className="st-ca-panel-copy">
@@ -173,7 +173,8 @@ function Page() {
             <code>AppShellGround</code>
           </dt>
           <dd>
-            names the workspace and leaves the gutter around <code>AppShellPanel</code>, the raised working surface.
+            is the page's main, named workspace, and leaves the gutter around <code>AppShellPanel</code>, the raised
+            working surface. inside a layout that already owns main, it renders a div, as these specimens do.
           </dd>
         </dl>
       </Section>

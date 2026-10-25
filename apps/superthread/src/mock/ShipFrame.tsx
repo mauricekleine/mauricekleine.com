@@ -1,12 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { AppShell, AppShellNav, AppShellNavItem } from "@/components/superthread/blocks/app-shell";
+import { AppShell, AppShellGround, AppShellNav, AppShellNavItem } from "@/components/superthread/blocks/app-shell";
 import type { ShipNavItem } from "./data";
 
 // Only the ships with mock pages open here; the other rail cells remain unavailable.
 const hrefs = { home: "/", orbit: "/mock/board", quanta: "/mock/reading" };
 
-// The docs shell already owns main. Keep a div for the ground until AppShellGround can render another element.
+// The docs shell already owns main, so the ground renders a div.
 export function ShipFrame({
   ship,
   nav,
@@ -39,7 +39,7 @@ export function ShipFrame({
         </AppShellNav>
       }
     >
-      <div className="mock-ground">{children}</div>
+      <AppShellGround render={<div />}>{children}</AppShellGround>
     </AppShell>
   );
 }

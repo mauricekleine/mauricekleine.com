@@ -1,4 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@/components/superthread/lib/utils";
 import { FleetRail } from "@/components/superthread/ui/fleet-rail";
 import {
@@ -82,19 +84,22 @@ function AppShellNavItem({
 }
 
 // The app's ground starts level with the frame and keeps 12 px beside the working panel below 900 px.
-function AppShellGround({ className, ...props }: ComponentProps<"main">) {
-  return (
-    <main
-      data-mk="app-shell"
-      data-slot="app-shell-ground"
-      aria-label="workspace"
-      className={cn(
-        "min-w-0 flex-1 pt-4 pr-12 pb-[72px] pl-8 text-ground-foreground [@media(max-width:900px)]:px-3 [@media(max-width:900px)]:pt-0 [@media(max-width:900px)]:pb-10",
-        className,
-      )}
-      {...props}
-    />
-  );
+// It is the page's main, named workspace; render a div when the app's layout already owns main.
+function AppShellGround({ className, render, ...props }: useRender.ComponentProps<"main">) {
+  return useRender({
+    render: render ?? <main />,
+    state: { slot: "app-shell-ground", mk: "app-shell" },
+    props: mergeProps<"main">(
+      {
+        "aria-label": render ? undefined : "workspace",
+        className: cn(
+          "min-w-0 flex-1 pt-4 pr-12 pb-[72px] pl-8 text-ground-foreground [@media(max-width:900px)]:px-3 [@media(max-width:900px)]:pt-0 [@media(max-width:900px)]:pb-10",
+          className,
+        ),
+      },
+      props,
+    ),
+  });
 }
 
 // The working panel takes the sheet lift on the deep ground, with the board's measure and phone padding.
