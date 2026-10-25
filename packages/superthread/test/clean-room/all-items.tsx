@@ -101,6 +101,63 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/superthre
 import { createToastManager, Toaster } from "@/components/superthread/ui/toast";
 import { Textarea } from "@/components/superthread/ui/textarea";
 
+import { toast as sonnerToast } from "sonner";
+import { Toaster as SonnerToaster } from "@/components/superthread/ui/sonner";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from "@/components/superthread/ui/dropdown-menu";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxGroup,
+  ComboboxLabel,
+  ComboboxEmpty,
+  ComboboxItem,
+  ComboboxChips,
+  ComboboxChip,
+  ComboboxChipsInput,
+  ComboboxValue,
+  useComboboxAnchor,
+} from "@/components/superthread/ui/combobox";
+import {
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandGroup,
+  CommandItem,
+  CommandEmpty,
+  CommandShortcut,
+  CommandSeparator,
+} from "@/components/superthread/ui/command";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogMedia,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "@/components/superthread/ui/alert-dialog";
+
 export const Route = createFileRoute("/all")({ component: AllItems });
 
 type Mode = "light" | "dark";
@@ -516,6 +573,64 @@ function Sink({ mode }: { mode: Mode }) {
       </Part>
 
       {/* 2.0: layers */}
+      <Part name="dropdown-menu">
+        <DropdownMenu>
+          <DropdownMenuTrigger render={<Button variant="outline" />}>run actions</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>run</DropdownMenuLabel>
+              <DropdownMenuItem>
+                open<DropdownMenuShortcut>⌘o</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem variant="destructive">
+                <Icon name="trash" />
+                delete
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled>locked</DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuCheckboxItem defaultChecked>notify</DropdownMenuCheckboxItem>
+            <DropdownMenuRadioGroup defaultValue="orbit">
+              <DropdownMenuRadioItem value="orbit">orbit</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="quanta">quanta</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>more</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>inspect</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </Part>
+      <Part name="combobox">
+        <ComboboxSink />
+      </Part>
+      <Part name="command">
+        <CommandSink />
+        <CommandDialogSink />
+      </Part>
+      <Part name="alert-dialog">
+        <AlertDialog>
+          <AlertDialogTrigger render={<Button variant="outline" />}>delete run</AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogMedia>
+                <Icon name="trash" />
+              </AlertDialogMedia>
+              <AlertDialogTitle>delete run?</AlertDialogTitle>
+              <AlertDialogDescription>this removes the run</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>cancel</AlertDialogCancel>
+              <AlertDialogAction>delete</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </Part>
+      <Part name="sonner">
+        <SonnerSink mode={mode} />
+      </Part>
 
       {/* 2.0: forms */}
       <Part name="field">
@@ -667,5 +782,117 @@ function ToastSink({ mode }: { mode: Mode }) {
         </Button>
       </div>
     </Toaster>
+  );
+}
+
+const SHIPS = ["orbit", "quanta", "trisys"];
+
+function ComboboxSink() {
+  const anchor = useComboboxAnchor();
+  return (
+    <div className="grid gap-4">
+      <Combobox items={SHIPS} defaultValue="orbit">
+        <ComboboxInput aria-label="ship" showClear />
+        <ComboboxContent>
+          <ComboboxEmpty>no ships</ComboboxEmpty>
+          <ComboboxList>
+            <ComboboxGroup>
+              <ComboboxLabel>ships</ComboboxLabel>
+              {SHIPS.map((ship) => (
+                <ComboboxItem key={ship} value={ship}>
+                  {ship}
+                </ComboboxItem>
+              ))}
+            </ComboboxGroup>
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+      <Combobox multiple items={SHIPS} defaultValue={["orbit", "quanta"]}>
+        <ComboboxChips ref={anchor}>
+          <ComboboxValue>
+            {(values: string[]) => (
+              <>
+                {values.map((value) => (
+                  <ComboboxChip key={value}>{value}</ComboboxChip>
+                ))}
+                <ComboboxChipsInput aria-label="add ship" />
+              </>
+            )}
+          </ComboboxValue>
+        </ComboboxChips>
+        <ComboboxContent anchor={anchor}>
+          <ComboboxEmpty>no ships</ComboboxEmpty>
+          <ComboboxList>
+            {SHIPS.map((ship) => (
+              <ComboboxItem key={ship} value={ship}>
+                {ship}
+              </ComboboxItem>
+            ))}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+    </div>
+  );
+}
+
+function CommandSink() {
+  return (
+    <Command>
+      <CommandInput placeholder="search commands" />
+      <CommandList>
+        <CommandEmpty>no commands</CommandEmpty>
+        <CommandGroup heading="run">
+          <CommandItem>
+            open<CommandShortcut>⌘o</CommandShortcut>
+          </CommandItem>
+          <CommandItem disabled>locked</CommandItem>
+        </CommandGroup>
+        <CommandSeparator />
+        <CommandGroup heading="ship">
+          <CommandItem>inspect</CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  );
+}
+
+function CommandDialogSink() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button variant="outline" onClick={() => setOpen(true)}>
+        command palette
+      </Button>
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandSink />
+      </CommandDialog>
+    </>
+  );
+}
+
+function SonnerSink({ mode }: { mode: Mode }) {
+  const id = `sonner-${mode}`;
+  return (
+    <>
+      <SonnerToaster id={id} />
+      <div className="flex flex-wrap gap-3">
+        {(["success", "info", "loading", "warning", "error"] as const).map((kind) => (
+          <Button
+            key={kind}
+            variant="outline"
+            onClick={() =>
+              sonnerToast[kind](kind, {
+                toasterId: id,
+                description: "synthetic notification",
+                action: { label: "undo", onClick: () => {} },
+                cancel: { label: "cancel", onClick: () => {} },
+              })
+            }
+          >
+            {kind}
+          </Button>
+        ))}
+      </div>
+    </>
   );
 }
