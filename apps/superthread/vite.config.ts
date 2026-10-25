@@ -47,6 +47,8 @@ export default defineConfig(({ command }) => ({
   resolve: {
     // the site renders the registry's own item sources, under the alias consumers install them to
     alias: [
+      // the catalog is the registry's index, not a served item, so it always comes from the source
+      { find: "@/components/superthread/catalog", replacement: local("../../packages/superthread/items/catalog.ts") },
       { find: "@/components/superthread", replacement: items(command) },
       { find: "@", replacement: local("./src") },
     ],
