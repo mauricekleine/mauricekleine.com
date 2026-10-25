@@ -98,7 +98,7 @@ www's `/r/` is v1, frozen, and a separate registry: `https://www.mauricekleine.c
 
 | path                                                                          | what                                                                                                                                        |
 | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tokens/master.json`                                                          | a byte copy of the master world's `tokens.json`. Never hand-edited                                                                          |
+| `tokens/master.json`                                                          | the master world's `tokens.json`, with the vendor's added keys (`desc`, from `build_reach.py`) after its last key. Never hand-edited        |
 | `tokens/{details,glyphs,check}.json`, `tokens/master.source.json`             | data dumped from the world, and the sha256 of every file it came from                                                                       |
 | `tokens/roles.ts`, `tokens/scale.ts`, `tokens/base.css`, `tokens/texture.css` | the role map, the type and motion scale, the base layer and the texture utilities, by hand                                                  |
 | `fonts.ts`                                                                    | the face manifest                                                                                                                           |

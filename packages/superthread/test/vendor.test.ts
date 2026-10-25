@@ -30,15 +30,38 @@ function python(code: string, dir = vendored) {
   return JSON.parse(run.stdout.toString());
 }
 
-test("every vendored file hashes to its master.source.json entry", () => {
+test("every vendored module hashes to its master.source.json entry", () => {
   const source = json("tokens/master.source.json");
   expect(source.from).toBe("worlds/master");
-  const copies: [string, string][] = [
-    ["tokens/master.json", "tokens.json"],
-    ...modules.map((m): [string, string] => [`scripts/texture/master/${m}`, `src/${m}`]),
-  ];
-  for (const [file, from] of copies)
-    expect({ file, sha256: sha256(file) }).toEqual({ file, sha256: source.files[from] });
+  for (const m of modules) {
+    const file = `scripts/texture/master/${m}`;
+    expect({ file, sha256: sha256(file) }).toEqual({ file, sha256: source.files[`src/${m}`] });
+  }
+});
+
+test("master.json is the world's tokens.json with the added keys after its last key, and nothing else moved", () => {
+  const source = json("tokens/master.source.json");
+  const added = Object.keys(source.added ?? {});
+  expect(added).not.toEqual([]);
+  // the world writes tokens.json with json.dumps(indent=2), so dropping the added keys and dumping again gives back
+  // its bytes, which master.source.json hashes
+  const back = python(`import hashlib
+raw = open(${JSON.stringify(join(root, "tokens/master.json"))}).read()
+master = json.loads(raw)
+keys = list(master)
+for key in ${JSON.stringify(added)}:
+    del master[key]
+print(json.dumps({"canonical": json.dumps(json.loads(raw), indent=2) + "\\n" == raw, "last": keys[-${added.length}:],
+                  "sha256": hashlib.sha256((json.dumps(master, indent=2) + "\\n").encode()).hexdigest()}))`);
+  expect(back).toEqual({ canonical: true, last: added, sha256: source.files["tokens.json"] });
+});
+
+test("master.json gives every ship in the fleet a one-line lowercase descriptor, in fleet order", () => {
+  const master = json("tokens/master.json");
+  expect(json("tokens/master.source.json").added.desc).toBe("src/build_reach.py DESC");
+  expect(Object.keys(master.desc)).toEqual(master.fleet);
+  for (const [ship, desc] of Object.entries(master.desc as Record<string, string>))
+    expect({ ship, ok: /^[a-z][a-z ,']*[a-z]$/.test(desc) }).toEqual({ ship, ok: true });
 });
 
 test("the vendored modules import nothing but each other and the stdlib", () => {

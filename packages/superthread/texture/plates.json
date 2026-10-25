@@ -111,6 +111,15 @@
         "empty-phone-light": ["empty-light-phone.png"],
         "empty-phone-dark": ["empty-dark-phone.png"]
       }
+    },
+    "empty-column": {
+      "job": "the empty place in a board column; new, so its hash is recorded, not compared",
+      "function": "fields.wedge",
+      "form": "composite",
+      "w": 112,
+      "w_from": "the board column's empty field from 1280 px up. the world draws the wedge whole at the width it shows, so the column carries all three steps instead of a crop of the first",
+      "h": 120,
+      "modes": ["light", "dark"]
     }
   }
 }

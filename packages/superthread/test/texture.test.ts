@@ -109,11 +109,47 @@ test("master-plates.json records each master plate's form from the file", () => 
   }
 });
 
+// the plates fields.wedge draws: the empty and loading place at each width it shows
+const wedges = () =>
+  Object.entries(json("texture/plates.json").plates as { [name: string]: Plate })
+    .filter(([, plate]) => plate.function === "fields.wedge")
+    .map(([name]) => name)
+    .sort();
+
 test("the light and dark wedges hash apart", () => {
-  for (const base of ["empty", "empty-phone"])
+  for (const base of wedges())
     expect(records[files.get(`${base}-light`)!]!.pixels_sha256).not.toBe(
       records[files.get(`${base}-dark`)!]!.pixels_sha256,
     );
+});
+
+test("every wedge prints the world's three steps whole at its width, the board column's 112 x 120 among them", () => {
+  expect(wedges()).toContain("empty-column");
+  for (const mode of ["light", "dark"])
+    expect(records[files.get(`empty-column-${mode}`)!]).toMatchObject({ w: 112, h: 120 });
+  // the world's note: a ramp "which bayer 4 x 4 prints as three steps (6.25, 12.5 and 18.75 percent), drawn at the
+  // width it shows", so a plate cropped to a narrower field shows only its first step
+  const uses: string[] = json("tokens/master.json").texture.dither.use;
+  const note = uses.find((use) => use.startsWith("empty and loading:"))!;
+  const steps = [.../three steps \(([^)]*)\)/.exec(note)![1]!.matchAll(/\d+(?:\.\d+)?/g)].map((m) => Number(m[0]));
+  expect(steps).toHaveLength(3);
+  // each plate's coverage in percent over its whole 4 x 4 cells; fields.wedge writes the palette [stock, ink]
+  const stems = wedges().flatMap((name) => ["light", "dark"].map((mode) => `${name}-${mode}`));
+  const coverage: { [file: string]: number[] } = python(
+    `import pathlib
+out = {}
+for p in map(pathlib.Path, sys.argv[1:]):
+    w, h, depth, ctype, palette, trns, rows = build.decode(p)
+    out[p.name] = sorted({sum(rows[y][x] for y in range(y0, y0 + 4) for x in range(x0, x0 + 4)) * 100 / 16
+                          for x0 in range(0, w - 3, 4) for y0 in range(0, h - 3, 4)})
+print(json.dumps(out))`,
+    ...stems.map((stem) => join(out, files.get(stem)!)),
+  );
+  for (const stem of stems)
+    expect({ stem, missing: steps.filter((step) => !coverage[files.get(stem)!]!.includes(step)) }).toEqual({
+      stem,
+      missing: [],
+    });
 });
 
 test("every plate carries a Source chunk: generator, function, plate, params and the module's master sha, no version", () => {

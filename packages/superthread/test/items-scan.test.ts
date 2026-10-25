@@ -1,11 +1,14 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { act, createElement } from "react";
+import { createRoot } from "react-dom/client";
 import { catalog } from "../items/catalog.ts";
 
 // Scans every shipped component source, the brand items and the pass items regen writes, as it is served: through
 // Bun's transpiler first, so types and comments are gone and JSX text arrives as string children. One test per file,
-// so a file's own owner can run its row.
+// so a file's own owner can run its row. Labels a primitive supplies itself never reach the source, so the toast
+// viewport, whose Base UI part names itself, is also rendered (into the preload's happy-dom) and its labels read.
 
 const root = join(import.meta.dir, "..");
 const FILES = [
@@ -101,6 +104,34 @@ function servedWords(code: string): string[] {
   return out.map((words) => words.replace(/\$\{[^}]*\}/g, "").trim()).filter(Boolean);
 }
 
+// ---------- style hooks ----------
+
+/** Upstream's style hooks in a source's strings: `cn-*` classes, which only shadcn's own style sheet defines. */
+const styleHooks = (code: string) => [
+  ...new Set(
+    literals(code)
+      .flatMap((literal) => text(literal).split(/\s+/))
+      .filter((word) => split(word).utility.startsWith("cn-")),
+  ),
+];
+
+// ---------- rendered labels ----------
+
+/** What a reader hears that is written for them alone: the label attributes and sr-only text, as rendered. */
+const LABEL_ATTRIBUTES = [
+  "aria-label",
+  "aria-description",
+  "aria-roledescription",
+  "aria-valuetext",
+  "title",
+  "alt",
+  "placeholder",
+];
+const renderedLabels = (scope: ParentNode) => [
+  ...[...scope.querySelectorAll(".sr-only")].map((el) => el.textContent ?? ""),
+  ...LABEL_ATTRIBUTES.flatMap((name) => [...scope.querySelectorAll(`[${name}]`)].map((el) => el.getAttribute(name)!)),
+];
+
 // ---------- the scans ----------
 
 describe("the scanners", () => {
@@ -123,6 +154,16 @@ const c = <button aria-label="Close toast" title={"Toggle"}>x<Icon name="close" 
     );
     expect(servedWords(code).sort()).toEqual(["Close", "Close toast", "Sidebar", "Toggle", "nav", "shows the", "x"]);
   });
+
+  test("style hooks: a cn-* class is found under any variant, the cn() call and other classes are not", () => {
+    const code = served(
+      "items/probe.tsx",
+      `const a = <Icon name="left" className="cn-rtl-flip size-4" />;
+const b = cn("px-2 data-open:cn-menu-target", c);`,
+    );
+    expect(styleHooks(code).sort()).toEqual(["cn-rtl-flip", "data-open:cn-menu-target"]);
+    expect(styleHooks(served("items/probe.tsx", `const c = cn("rtl:rotate-180 px-2");`))).toEqual([]);
+  });
 });
 
 describe("every shipped item, as served", () => {
@@ -137,11 +178,44 @@ describe("every shipped item, as served", () => {
     test(`${path}: every word it serves is lowercase`, () => {
       expect(servedWords(served(path)).filter((words) => /[A-Z]/.test(words))).toEqual([]);
     });
+
+    test(`${path}: names no style hook, brand item or pass item`, () => {
+      expect(styleHooks(served(path))).toEqual([]);
+    });
   }
 
   test("the scan covers every component the catalog ships", () => {
     expect(FILES.length).toBeGreaterThan(20);
     expect(FILES).toContain("items/ui/sheet.tsx");
     expect(FILES).toContain("items/hooks/use-mobile.ts");
+  });
+});
+
+describe("labels a primitive supplies, rendered", () => {
+  test("items/ui/toast.tsx: every label on the viewport and its toasts is lowercase, Base UI's own included", async () => {
+    // imported here, so a broken toast fails this row alone
+    const toast = await import("@/components/superthread/ui/toast");
+    const manager = toast.createToastManager();
+    const host = document.createElement("div");
+    document.body.append(host);
+    const reactRoot = createRoot(host);
+    try {
+      await act(async () => reactRoot.render(createElement(toast.Toaster, { toastManager: manager, timeout: 0 })));
+      await act(async () => {
+        manager.add({
+          title: "run done",
+          description: "synthetic",
+          type: "success",
+          actionProps: { children: "undo" },
+        });
+      });
+      const viewport = document.body.querySelector('[data-slot="toast-viewport"]');
+      expect(viewport?.getAttribute("aria-label")).toBeTruthy();
+      expect(document.body.querySelector('[data-slot="toast"]')).not.toBeNull();
+      expect(renderedLabels(document.body).filter((label) => /[A-Z]/.test(label))).toEqual([]);
+    } finally {
+      await act(async () => reactRoot.unmount());
+      host.remove();
+    }
   });
 });

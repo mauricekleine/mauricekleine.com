@@ -41,6 +41,8 @@ type Ship = { angle: number; light: { spot: string }; dark: { spot: string }; ma
 export type Master = {
   fleet: string[];
   ships: Record<string, Ship>;
+  // each ship's one-line descriptor, which the vendor appends from the world's build_reach.py
+  desc: Record<string, string>;
   status: { states: Record<string, Status>; "input error glyph": string };
   space: { base: number; steps: number[] };
   texture: { places: string[] };
@@ -81,6 +83,13 @@ export function hexOf(master: Master, source: Source): string | null {
 export function cssOf(master: Master, source: Source): string {
   const hex = hexOf(master, source);
   return hex === null ? (source as { css: string }).css : oklchCss(hex, alphaOf(source));
+}
+
+// A ship's descriptor, which every ship in the fleet must have.
+function descOf(master: Master, id: string): string {
+  const desc = master.desc?.[id];
+  if (typeof desc !== "string" || desc === "") throw new Error(`tokens/master.json desc has no line for ${id}`);
+  return desc;
 }
 
 // ---------- the pieces ----------
@@ -510,6 +519,7 @@ export function build(): Map<string, string> {
   const ships = master.fleet.map((id) => ({
     id,
     name: id,
+    desc: descOf(master, id),
     angle: master.ships[id].angle,
     // file names under the consumer's markBase
     mark: {
@@ -529,7 +539,7 @@ export function build(): Map<string, string> {
     ],
     [
       OUTPUTS.fleet,
-      `// the fleet, in its order: ${said}\n// Each mark is a file name under the consumer's mark base; hrefs are the consumer's.\n\nexport const fleet = ${JSON.stringify(ships, null, 2)} as const\n\nexport type Ship = (typeof fleet)[number]\nexport type ShipId = Ship["id"]\n`,
+      `// the fleet, in its order: ${said}\n// desc is the line under a ship's name in the rail's tab. Each mark is a file name under the consumer's mark base;\n// hrefs are the consumer's.\n\nexport const fleet = ${JSON.stringify(ships, null, 2)} as const\n\nexport type Ship = (typeof fleet)[number]\nexport type ShipId = Ship["id"]\n`,
     ],
     [OUTPUTS.glyphs, glyphsTsx(glyphs, master, `// the pixel icons and status glyphs: ${said}`)],
   ]);

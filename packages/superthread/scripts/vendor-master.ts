@@ -1,10 +1,11 @@
 // Vendors the master world into the package: `bun scripts/vendor-master.ts <M> [--check]`.
 //
-// It checks the world against the hashes the stage 0 gate recorded, copies `M/tokens.json` to `tokens/master.json`
-// and the import closure of `details.py` and `fields.py` to `scripts/texture/master/` byte for byte, dumps the data
-// tests need into `tokens/{glyphs,details,check}.json` with one `python3 -I -c` run, and records every source file's
-// sha256 in `tokens/master.source.json`. `--check` reruns all of it into $TMPDIR, compares files only (ignoring the
-// source map's `at`), then runs `build.py master --check` against `M/build`. It reads `M`, so it never runs in CI.
+// It checks the world against the hashes the stage 0 gate recorded, writes `M/tokens.json` to `tokens/master.json`
+// with the values in ADDED appended after its last key (every byte before them is the world's), copies the import
+// closure of `details.py` and `fields.py` to `scripts/texture/master/` byte for byte, dumps the data tests need into
+// `tokens/{glyphs,details,check}.json` with one `python3 -I -c` run, and records every source file's sha256 and the
+// added keys in `tokens/master.source.json`. `--check` reruns all of it into $TMPDIR, compares files only (ignoring
+// the source map's `at`), then runs `build.py master --check` against `M/build`. It reads `M`, so it never runs in CI.
 import { createHash } from "node:crypto";
 import {
   copyFileSync,
@@ -29,6 +30,9 @@ const GATE: Record<string, string> = {
 // the closure of the two roots, as the gate recorded it; the scan must find exactly these
 const ROOTS = ["details", "fields"];
 const GATE_CLOSURE = ["details", "fields", "ink", "opener", "palette", "png", "screen"];
+// Values the world prints but tokens.json lacks, appended to tokens/master.json under these keys, each with its
+// source. desc: each ship's one-line descriptor, the line under its name in the rail's tab, keyed in fleet order.
+const ADDED: Record<string, string> = { desc: "src/build_reach.py DESC" };
 // read for the dumps without being vendored: provenance only
 const DUMPED_FROM = [
   "src/details.py",
@@ -92,6 +96,7 @@ const dumpCode = (master: string) => String.raw`import sys; sys.path.insert(0, $
 import ast, base64, contextlib, io, json, re
 
 MASTER = ${JSON.stringify(master)}
+ADDED = ${JSON.stringify(Object.keys(ADDED))}
 REAL = sys.stdout
 sys.stdout = io.StringIO()
 import build_reach, build_sketch, chart, check, common, details, fields, palette, tokens
@@ -125,6 +130,17 @@ def is_json(v):
         return all(is_json(x) for x in v)
     return isinstance(v, dict) and all(isinstance(k, str) and is_json(x) for k, x in v.items())
 
+
+# master.json: tokens.json as the world writes it (json.dumps, indent 2), then the ADDED keys after its last key, so
+# dropping them gives back the world's bytes
+raw = open(MASTER + "/tokens.json").read()
+world = json.loads(raw)
+assert json.dumps(world, indent=2) + "\n" == raw, "tokens.json is not in json.dumps(indent=2) form: appending would move its bytes"
+assert set(build_reach.DESC) == set(world["fleet"]), f"build_reach.DESC names {sorted(build_reach.DESC)}, the fleet is {world['fleet']}"
+added = {"desc": {ship: build_reach.DESC[ship] for ship in world["fleet"]}}
+assert list(added) == ADDED, f"the dump adds {list(added)}, vendor-master.ts ADDED names {ADDED}"
+assert not set(added) & set(world), f"tokens.json already has {sorted(set(added) & set(world))}"
+master_text = json.dumps({**world, **added}, indent=2) + "\n"
 
 # details.json: the module's data, its tiles (decoded), the progress ramp, the chart's line screens and the plate inputs
 out = {k: getattr(details, k) for k in own_constants(details) if is_json(getattr(details, k))}
@@ -225,20 +241,20 @@ check_json = {
     "printed": {"--gnd-h": gnd},
 }
 
-REAL.write(json.dumps({"glyphs": {"ICONS": common.ICONS, "GLYPHS": common.GLYPHS}, "details": details_json,
-                       "check": check_json}, allow_nan=False))
+REAL.write(json.dumps({"master": master_text, "glyphs": {"ICONS": common.ICONS, "GLYPHS": common.GLYPHS},
+                       "details": details_json, "check": check_json}, allow_nan=False))
 `;
 
 /** Writes everything the vendor produces into `out`, laid out as in the package. */
 function build(master: string, modules: string[], out: string) {
   mkdirSync(join(out, "tokens"), { recursive: true });
   mkdirSync(join(out, MODULES), { recursive: true });
-  copyFileSync(join(master, "tokens.json"), join(out, "tokens/master.json"));
   for (const name of modules) copyFileSync(join(master, "src", `${name}.py`), join(out, MODULES, `${name}.py`));
 
   const run = Bun.spawnSync(["python3", "-I", "-B", "-c", dumpCode(master)], { cwd: out });
   if (run.exitCode !== 0) throw new Error(`the python dump failed:\n${run.stderr.toString()}`);
   const dump = JSON.parse(run.stdout.toString());
+  writeFileSync(join(out, "tokens/master.json"), dump.master);
   writeJson(join(out, "tokens/glyphs.json"), dump.glyphs);
   writeJson(join(out, "tokens/details.json"), dump.details);
   writeJson(join(out, "tokens/check.json"), dump.check);
@@ -248,7 +264,7 @@ function build(master: string, modules: string[], out: string) {
     .map((f) => `build/${f}`);
   const sources = [...new Set(["tokens.json", ...modules.map((m) => `src/${m}.py`), ...DUMPED_FROM, ...pngs])].sort();
   const files = Object.fromEntries(sources.map((f) => [f, sha256(join(master, f))]));
-  writeJson(join(out, SOURCE), { from: "worlds/master", at: new Date().toISOString(), files });
+  writeJson(join(out, SOURCE), { from: "worlds/master", at: new Date().toISOString(), files, added: ADDED });
 }
 
 /** Package-relative paths whose staged copy differs from the package's. */
@@ -260,7 +276,12 @@ function differences(stage: string): string[] {
   });
   const committed = existsSync(join(pkg, SOURCE)) ? JSON.parse(readFileSync(join(pkg, SOURCE), "utf8")) : {};
   const fresh = JSON.parse(readFileSync(join(stage, SOURCE), "utf8"));
-  if (committed.from !== fresh.from || !Bun.deepEquals(committed.files, fresh.files)) diffs.push(SOURCE);
+  if (
+    committed.from !== fresh.from ||
+    !Bun.deepEquals(committed.files, fresh.files) ||
+    !Bun.deepEquals(committed.added, fresh.added)
+  )
+    diffs.push(SOURCE);
   return diffs;
 }
 

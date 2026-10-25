@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { DARK, FONT_BASE, OUTPUTS, plainTexture, root } from "../scripts/generate.ts";
 import { fonts } from "../fonts.ts";
+import { fleet } from "../items/lib/fleet.ts";
 import { steps } from "../tokens/scale.ts";
 
 const read = (path: string) => readFileSync(join(root, path), "utf8");
@@ -37,6 +38,12 @@ describe("generate", () => {
     // the tiles ship base64, so the svg namespace url never reaches the css: the font host is the only host
     const hosts = new Set([...css.matchAll(/\bhttps?:\/\/([^/"')\s]+)/g)].map((m) => m[1]));
     expect(hosts).toEqual(new Set([new URL(FONT_BASE.package).hostname]));
+  });
+
+  test("items/lib/fleet.ts gives each ship its descriptor from master.json, for the rail's tab", () => {
+    const master = JSON.parse(read("tokens/master.json")) as { fleet: string[]; desc: Record<string, string> };
+    const descs: string[][] = fleet.map((ship) => [ship.id, ship.desc]);
+    expect(descs).toEqual(master.fleet.map((id) => [id, master.desc[id]!]));
   });
 
   test("items/lib/utils.ts merges exactly the type steps as font sizes", () => {

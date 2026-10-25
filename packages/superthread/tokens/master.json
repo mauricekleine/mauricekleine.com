@@ -1283,5 +1283,13 @@
     "default": "the spot region dithered at 50 percent; the pop lives at rail and fleet sizes (32 to 48 px) and in the chart",
     "option": "the spot region solid at 16 px, light chrome only: on dark chrome's paper tile a solid spot drops to about 2 to 3:1",
     "files": "marks/<ship>.svg and marks/<ship>-dark.svg; the solid option is drawn by common.mark_svg(solid=True)"
+  },
+  "desc": {
+    "orbit": "tasks, direction and the agents' board",
+    "quanta": "learning chapters",
+    "trisys": "essays and decks",
+    "constellation": "a personal graph",
+    "artifacts": "reports and documents",
+    "soliton": "the server"
   }
 }
