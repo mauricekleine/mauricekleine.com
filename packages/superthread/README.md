@@ -117,18 +117,19 @@ www's `/r/` is v1, frozen, and a separate registry: `https://www.mauricekleine.c
 
 Run them from the repo root as `bun run --cwd packages/superthread <script>`.
 
-| script       | what it does                                                                                                                                    |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `build`      | generates `dist/v2/`, `items/lib/tokens.ts`, `items/lib/fleet.ts` and `items/ui/glyphs.tsx`                                                     |
-| `check`      | fails when a generated file or `texture/tiles.json` is stale                                                                                    |
-| `texture`    | rebuilds `texture/tiles.json`                                                                                                                   |
-| `registry`   | builds the latest registry into `out/r/`. `--out <dir>` moves it; `--base-url <url>` (or `SUPERTHREAD_BASE_URL`) sets the `@mk` URL init writes |
-| `snapshot`   | writes `versions/<version>/r/` at the production base                                                                                           |
-| `upstream`   | `fetch`, `regen [--check]`, `print <name>` and `diff`: the base-nova mirror, the pass items and the brand seeds                                 |
-| `vendor`     | `vendor <path to the master world> [--check]`: vendors the world. The path is required                                                          |
-| `clean-room` | the clean room; `bun run test:clean-room` at the root runs the same                                                                             |
-| `test`       | `bun test && bun --check`                                                                                                                       |
-| `lint`       | `designmd lint DESIGN.md` with the pinned local copy                                                                                            |
+| script       | what it does                                                                                                                                                   |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `build`      | generates `dist/v2/`, `items/lib/tokens.ts`, `items/lib/fleet.ts` and `items/ui/glyphs.tsx`                                                                    |
+| `check`      | fails when a generated file or `texture/tiles.json` is stale                                                                                                   |
+| `texture`    | rebuilds `texture/tiles.json`                                                                                                                                  |
+| `registry`   | builds the latest registry into `out/r/`. `--out <dir>` moves it; `--base-url <url>` (or `SUPERTHREAD_BASE_URL`) sets the `@mk` URL init writes                |
+| `snapshot`   | writes `versions/<version>/r/` at the production base                                                                                                          |
+| `upstream`   | `fetch`, `regen [--check]`, `print <name>` and `diff`: the base-nova mirror, the pass items and the brand seeds                                                |
+| `vendor`     | `vendor <path to the master world> [--check]`: vendors the world. The path is required                                                                         |
+| `clean-room` | the clean room; `bun run test:clean-room` at the root runs the same                                                                                            |
+| `test`       | `bun test && bun --check`                                                                                                                                      |
+| `marks`      | `new <id> [--target soliton\|cloudflare] [--url URL\|none]` allocates a star mark; `check` verifies the fleet; `sheet [--out FILE]` renders a standalone sheet |
+| `lint`       | `designmd lint DESIGN.md` with the pinned local copy                                                                                                           |
 
 At the root, `bun run registry` copies v1's JSON into `apps/web/public/r/`, and `bun run test` runs this package's tests with those of the web, share and superthread apps.
 
@@ -157,7 +158,7 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 ## Versions and stamps
 
-- **Version.** `package.json` `version` is the one source for every item, `2.0.0` now. A fix to a served item ships as the next patch, a new item or variant as the next minor, and a changed API as the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
+- **Version.** `package.json` `version` is the one source for every item, `2.1.0` now. A fix to a served item ships as the next patch, a new item or variant as the next minor, and a changed API as the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
 - **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. In CSS, `/* @mk/<item> <version> */` is line 1.
 - **Meta.** Each built item JSON carries `meta: { version, sha256, tier, upstream }`: the hash of its targets and contents, its tier, and the base-nova item and CLI it was seeded from. A block's meta adds `serves`, the apps it serves. Meta stays in the registry and never reaches an installed file.
 - **Paths.** Latest: `/r/<name>.json` and `/r/registry.json`. Pinned: `/r/v/<version>/<name>.json` and `/r/v/<version>/registry.json`. Index: `/r/versions.json`, `{ latest, versions }`.

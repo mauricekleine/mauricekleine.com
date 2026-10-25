@@ -39,7 +39,7 @@ https://superthread.mauricekleine.com/marks/<id>/<id>-dark.svg
 
 `FleetRail` reads them from its `markBase` prop, which defaults to `https://superthread.mauricekleine.com/marks`. A surface that hosts its own copies passes its own folder. `@mk/fleet` (`lib/fleet.ts`) lists the ships in rail order, each with its id, name, line-screen angle and mark file names.
 
-In the mauricekleine.com repo, `apps/superthread/public/marks/` holds byte copies of the master world's marks, and `PROVENANCE.json` beside them records each file's source and sha256.
+In the mauricekleine.com repo, `packages/superthread/marks/fleet.json` owns fleet membership and new star marks. `apps/superthread/public/marks/` keeps the original master marks as byte copies alongside generated marks. `PROVENANCE.json` records each file's source and sha256.
 
 ## icons
 
@@ -53,11 +53,8 @@ An icon is decorative until it gets an `aria-label`. A surface uses these icons 
 
 ## adding a ship or redrawing a mark
 
-Marks, spots and glyphs come from the master world. A new ship goes in there first, with:
+Run `bun run --cwd packages/superthread marks new <id> [--target soliton|cloudflare] [--url URL|none]` in the mauricekleine.com repo. It allocates a distinct spot and line-screen angle, draws a star in both chromes, and updates the manifest, fleet item and provenance. A star is one dot on a screened hue tile until its glyph is drawn.
 
-- a silhouette that names the ship on the 16 x 16 grid
-- a bright spot at oklch lightness 0.60 to 0.80, at least 10 from plum (oklab delta E x 100)
-- a dithered region that clears 3:1 on both tiles
-- a line-screen angle of its own for its chart series
+`marks check` verifies the 16 px geometry, contrast, colour separation and provenance. `marks sheet --out <file.html>` renders every mark at 16, 32 and 48 px in both chromes.
 
-Then, in the mauricekleine.com repo, `bun run --cwd packages/superthread vendor <path to the master world>` copies the world's values, `build` regenerates `lib/fleet.ts`, the glyphs and the CSS, and the new mark files are copied into `apps/superthread/public/marks/` with their provenance. A changed item ships as the next registry version.
+Theme values and original glyphs still come from the master world through `vendor`. A redrawn mark uses the same grid and checks, with its source recorded in provenance. A changed fleet item ships as the next registry version.
