@@ -11,7 +11,8 @@
 @import "./components-d.css";
 @import "./mock.css";
 
-/* the site renders the registry's own item sources, so their classes are scanned from there */
+/* a build renders the registry's payloads and dev their sources, so classes are scanned from both */
+@source "../../.payload";
 @source "../../../../packages/superthread/items";
 
 /* Site-only state variants. Each matches the real state and a printed one, [data-demo~="<state>"], so a static

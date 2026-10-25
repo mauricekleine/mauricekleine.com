@@ -15,7 +15,7 @@ bun apps/superthread/tools/shoot.ts --base http://127.0.0.1:3001 --tag <name>
 bun apps/superthread/tools/shoot.ts --focus --base http://127.0.0.1:3001 --tag <name>
 ```
 
-`build:superthread` stamps `public/api/deploy.json`, regenerates the v2 CSS in `packages/superthread`, writes the registry into `public/r/` (both gitignored), then runs the app's `build`: `vite build`, `bun --check` and `tools/check-build.mjs`. The build output is `.cloudflare/output/v0/workers/default/assets`. `SUPERTHREAD_BASE_URL` changes the `@mk` URL in `r/init.json` and nothing else. `deploy:superthread` deploys that output, and only Maurice runs it.
+`build:superthread` stamps `public/api/deploy.json`, regenerates the v2 CSS in `packages/superthread`, writes the registry into `public/r/`, writes every item's files from those payloads into `.payload/` (`tools/payload.mjs`; all three gitignored), then runs the app's `build`: `vite build`, `bun --check` and `tools/check-build.mjs`. A build renders the items from `.payload/`, so each page shows the bytes an app installs; `dev:superthread` writes it too, but dev renders the item sources so an edit reloads at once. The build output is `.cloudflare/output/v0/workers/default/assets`. `SUPERTHREAD_BASE_URL` changes the `@mk` URL in `r/init.json` and nothing else. `deploy:superthread` deploys that output, and only Maurice runs it.
 
 ## Layout
 
@@ -37,7 +37,7 @@ bun apps/superthread/tools/shoot.ts --focus --base http://127.0.0.1:3001 --tag <
 
 ## Checks
 
-- `build` ends in `tools/check-build.mjs`, which lists its eight checks at the top: every page prerendered with the theme script first, the served words, the contract's prose, provenance, plates, the registry against the snapshots in `PUBLISHED_VERSIONS` and its base, the deploy stamp, and the mock pages' imports. A failure names the file; fix that file. A new snapshot version goes into `PUBLISHED_VERSIONS` in the change that cuts it.
+- `build` ends in `tools/check-build.mjs`, which lists its nine checks at the top: every page prerendered with the theme script first, the served words, the contract's prose, provenance, plates, the registry against the snapshots in `PUBLISHED_VERSIONS` and its base, the deploy stamp, the mock pages' imports, and `.payload/` against the served payloads. A failure names the file; fix that file. A new snapshot version goes into `PUBLISHED_VERSIONS` in the change that cuts it.
 - `test` runs `tools/test-worker.mjs` (the Worker's headers and font origins), `bun test src`, `tools/check-fonts.mjs` (`public/fonts/` against `packages/superthread/fonts.ts`) and `build.py verify` over `public/texture/`.
 - `tools/shoot.ts --focus` shoots each field on the field pages and the masthead search at rest, after Tab, after a click and after typing, in both modes at 2x. `tools/focus_frames.py` counts the frames in each crop, and the run exits 1 when any field fails.
 - The clean room can install from a built site instead of a local registry build. Build with the preview's base, serve it, run the clean room against it, then rebuild:
