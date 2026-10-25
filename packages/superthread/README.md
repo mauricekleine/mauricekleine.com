@@ -7,7 +7,7 @@ The design system for Maurice's fleet, as a shadcn registry. This package holds 
 
 ## Install v2
 
-The registry is served at `https://superthread.mauricekleine.com/r/` once the site deploys. In a TanStack Start app on Tailwind 4, set up `@mk` with init, then add what you need:
+The registry is served at `https://superthread.mauricekleine.com/r/`. In a TanStack Start app on Tailwind 4, set up `@mk` with init, then add what you need:
 
 ```sh
 bunx --bun shadcn@latest init https://superthread.mauricekleine.com/r/init.json --base base -y
@@ -41,7 +41,7 @@ Only the Start layout is tested. For a surface without Tailwind, `@mk/tokens-pla
 
 - `:root` and `.light` are light; `.dark` on an ancestor is dark. A `.light` inside a dark page renders light again, so specimens can sit side by side.
 - Raised layers (dialog, select list, toast) portal to the end of `<body>` and take the document's mode, so put `.dark` on `<html>`.
-- The tokens load their nine faces from `https://superthread.mauricekleine.com/fonts/`. Until that host serves them, apps fall back to system fonts. `fonts.ts` is the face manifest.
+- The tokens load their nine faces from `https://superthread.mauricekleine.com/fonts/`. Unbounded and Fragment Mono (OFL) load on any origin; Supreme and Erode (ITF) load only on `*.mauricekleine.com`, `mk.wtf` and localhost, and other origins fall back to system fonts for them. `fonts.ts` is the face manifest and holds each face's rule.
 - The fleet rail ships no hostnames. Pass `hrefs` for the ships (and `home`), and `markBase` if the marks live somewhere other than `https://superthread.mauricekleine.com/marks`.
 
 ### pinning a version
@@ -75,6 +75,25 @@ Brand items keep shadcn's Base UI API (exports, props, `data-slot`, variants) an
 - No `outline-none` or `outline-hidden`: in Tailwind 4 both remove the focus ring. No `dark:` classes: the tokens carry the mode.
 - At most one screened detail per component, from the master world's list: `texture-contact` (select list, dialog, toast, light mode only), `texture-mixed` (checkbox), `texture-tabhover` (tabs), `texture-rowedge` (table), `texture-disabled` (button and fields) and `texture-skeleton`. `texture-ramp` (the progress edge) and `texture-line-<ship>` (charts) are places, not details.
 
+## The site
+
+superthread.mauricekleine.com is v2's home. It renders every item from its source in `items/`:
+
+- the overview, then the foundations: colour, type, space, motion, marks and texture
+- a page for every item, with its install line
+- `/mock/board`, `/mock/reading` and `/mock/orbit`: a task board, a reading page and an agents dashboard, built only from the items
+- `/install`: init, adding an item, the css entry, pinning a version, and every item
+
+It serves the `@mk` registry beside the pages. Init maps `@mk` to `https://superthread.mauricekleine.com/r/{name}.json`, so after the init line in [Install v2](#install-v2), `bunx --bun shadcn@latest add @mk/<item>` installs any item.
+
+- `/r/<name>.json`, `/r/registry.json` and `/r/init.json`: the latest version
+- `/r/v/<version>/<name>.json`: the snapshot committed in `versions/<version>/r/`, which never changes once it is on main; `/r/versions.json` lists the versions
+- `/fonts/`, `/marks/` and `/texture/`: the faces the tokens load, the ship marks the fleet rail loads by default, and the plates the site prints
+
+www's `/r/` is v1, frozen, and a separate registry: `https://www.mauricekleine.com/r/superthread.json` and `/r/fleet-rail.json` keep serving v1's bytes until the fleet rollout. Nothing the site serves changes them.
+
+`apps/superthread/` holds the site. From the repo root, `bun run dev:superthread` serves it on port 3001, `bun run build:superthread` builds it with the registry, and `bun run deploy:superthread` deploys it. `apps/superthread/AGENTS.md` has the rest.
+
 ## Where things live
 
 | path                                                                          | what                                                                                                                                        |
@@ -85,7 +104,7 @@ Brand items keep shadcn's Base UI API (exports, props, `data-slot`, variants) an
 | `fonts.ts`                                                                    | the face manifest                                                                                                                           |
 | `scripts/texture/master/`                                                     | the world's own Python modules, vendored by name and unchanged                                                                              |
 | `scripts/texture/build.py`                                                    | tiles, plates and pixel checks, run with those modules (stdlib only)                                                                        |
-| `texture/`                                                                    | `tiles.json` (generated), `plates.json` (the plate spec) and `plates.sha256` (pixel hashes)                                                 |
+| `texture/`                                                                    | `tiles.json` (generated), `plates.json` (the plate spec), `plates.sha256` (pixel hashes) and `places.json` (the places' caption keys)       |
 | `dist/v2/`                                                                    | the generated CSS and `tokens.json`                                                                                                         |
 | `items/`                                                                      | item sources, at the paths they install to. `catalog.ts` lists the items. `lib/tokens.ts`, `lib/fleet.ts` and `ui/glyphs.tsx` are generated |
 | `upstream/`                                                                   | base-nova as fetched, with its manifest; the recorded CLI mirror (`cli/`); the pinned Start template; shadcn's licence                      |
@@ -130,6 +149,8 @@ When the master world moves, run `vendor` against it, then regenerate. The tests
 8. every upstream request came from the mirror, and none missed
 
 The report lands in `test/clean-room/.out/report.json`. Flags: `--record` re-records the mirror and the init form (network; rerun when the CLI pin moves or a run misses on `/upstream`), `--keep <name>` keeps the app with every item installed, `--overlay <file...>` builds from `HEAD` plus only the named files, `--registry <url>` installs from a running site, `--cli latest` runs `shadcn@latest`, and `--refresh-lock` refreshes the fixture's lock when web's pins move.
+
+To look at a kept app in a browser, run `bun test/clean-room/serve.ts <name>` from this directory. It serves the app on a free port on 127.0.0.1 in its own process group and writes the group and port to `test/clean-room/.out/`; `bun test/clean-room/serve.ts <name> --stop` stops that group. Run it directly, not through hyperspeed-run, which stops what its command started when the command exits.
 
 This package pins its own shadcn (4.22.1) for the registry build, the mirror and the clean room. The root keeps 4.21.0, because www imports the root copy's `shadcn/tailwind.css`.
 
