@@ -178,6 +178,11 @@ describe.each(Object.keys(items))("%s", (name) => {
     for (const slot of slots) expect(html).toContain(`data-slot="${slot}"`);
   });
 
+  // the clean room's source scan and a consumer's grep look for the attribute as written
+  test("the source declares its data-mk", () => {
+    expect(readFileSync(join(root, "items/ui", `${name}.tsx`), "utf8")).toContain(`data-mk="${name}"`);
+  });
+
   test("nothing silences focus, and there is no ring, no dark: and no rounding", () => {
     for (const token of tokens) {
       expect(utility(token)).not.toMatch(/^outline-(none|hidden)$/);
@@ -187,11 +192,12 @@ describe.each(Object.keys(items))("%s", (name) => {
     }
   });
 
-  test("motion uses the brand durations and ease", () => {
+  // transition-colors and transition-all also carry outline-color, which would fade the base ring in from the label ink
+  test("motion uses the brand durations and ease, and never fades the ring", () => {
     for (const token of tokens.map(utility)) {
       if (token.startsWith("duration-")) expect(token).toMatch(/^duration-\(--duration-(instant|quick|travel)\)$/);
       if (token.startsWith("ease-")) expect(token).toBe("ease-(--ease-brand)");
-      expect(token).not.toBe("transition-all");
+      expect(token).not.toMatch(/^transition-(all|colors)$/);
     }
   });
 
@@ -202,7 +208,7 @@ describe.each(Object.keys(items))("%s", (name) => {
   });
 });
 
-// transition-colors and transition-all also carry outline-color, which would fade the base ring in from the label ink
+// the items that take focus move their colours and leave outline-color out
 test.each(["button", "badge", "tabs"])("%s: the focus ring snaps on", (name) => {
   const transitions = classes(items[name]!.html).filter((token) => utility(token).startsWith("transition"));
   expect(transitions.length).toBeGreaterThan(0);
@@ -305,6 +311,15 @@ describe("badge", () => {
 
   test("shadcn's variants print no glyph", () => {
     expect(renderToString(<Badge variant="secondary">beta</Badge>)).not.toContain("<svg");
+  });
+
+  test("the root is a span, and an element the caller renders keeps the mark", () => {
+    expect(rootTag(renderToString(<Badge>beta</Badge>))).toStartWith("<span ");
+    const link = rootTag(renderToString(<Badge variant="running" render={<a href="/runs" />} />));
+    expect(link).toStartWith("<a ");
+    expect(link).toContain('href="/runs"');
+    expect(link).toContain('data-mk="badge"');
+    expect(link).toContain('data-slot="badge"');
   });
 });
 

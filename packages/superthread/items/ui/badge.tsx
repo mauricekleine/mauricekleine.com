@@ -38,16 +38,17 @@ const isState = (variant: string): variant is StatusState => STATES.includes(var
 
 // A status variant prints its glyph square before the word, and the state's own name when it is given no word.
 // On the failed solid the square takes the label ink, so its cross still knocks out to the solid.
+// The default element declares data-mk in the source, as every other item does, so a grep finds it; the state's mk
+// keeps the mark on an element the caller renders instead.
 function Badge({
   className,
   variant = "default",
-  render,
+  render = <span data-mk="badge" />,
   children,
   ...props
 }: useRender.ComponentProps<"span"> & VariantProps<typeof badgeVariants>) {
   const state = variant != null && isState(variant) ? variant : null;
   return useRender({
-    defaultTagName: "span",
     props: mergeProps<"span">(
       {
         className: cn(badgeVariants({ variant }), className),
