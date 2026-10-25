@@ -1,7 +1,7 @@
 ---
 version: 1
 slug: "apps-superthread-src-routes-index-tsx"
-primary_target: "apps/superthread/src/routes/index.tsx"
+primary_target: "src/routes/index.tsx"
 related_targets: []
 ---
 
