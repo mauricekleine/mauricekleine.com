@@ -45,7 +45,7 @@ function Drawings({ mode, list = ships }: { mode: Mode; list?: readonly Entry[] 
           <MarkDrawing
             id={mark.id}
             mode={mode}
-            label={`${mark.name}'s mark${mode === "dark" ? " for dark chrome" : ""}`}
+            label={`the ${mark.name} mark${mode === "dark" ? " for dark chrome" : ""}`}
           />
           {mode === "light" && <MarkChromes id={mark.id} />}
           <b>{mark.name}</b>

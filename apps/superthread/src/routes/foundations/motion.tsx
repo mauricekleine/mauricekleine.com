@@ -58,7 +58,7 @@ function Page() {
     <>
       <PageHead
         title="motion"
-        lede="three durations and one ease. state changes are quick and settle hard, and nothing moves on its own."
+        lede="three durations and one ease. changes start fast and ease into place, and nothing moves on its own."
       />
 
       <Section id="durations" title="durations">
@@ -99,8 +99,8 @@ function Page() {
 
       <Section id="reduced" title="reduced motion">
         <Copy>
-          with reduced motion on, every duration drops to zero: states still change, nothing travels. turn it on in your
-          system settings and press play again to see the bars jump. screens and textures never move in either case.
+          with reduced motion on, every duration is zero, so a change happens at once. turn it on in your system
+          settings and press play again to see the bars jump. screens and textures never move in either case.
         </Copy>
       </Section>
     </>

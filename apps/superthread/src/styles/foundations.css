@@ -54,6 +54,11 @@
     font-size: 13px;
     line-height: 18px;
   }
+  /* a quantity inside words, a ratio in a note: mono with tabular figures, as the world sets every measured value */
+  .st-f-q {
+    font: 400 12px/16px var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
 
   /* a reference table: caps legends over a rule in the foreground ink, 1 px rules between rows */
   .st-f-scroll {
@@ -178,13 +183,13 @@
     gap: 8px;
   }
 
-  /* colour: each ship's mark, name, spot, line screen and hex */
+  /* colour: each ship's mark, name, spot, line screen and hex, then its proofs under them */
   .st-f-ships li {
     display: grid;
     grid-template-columns: 16px minmax(0, 1fr) auto;
     align-items: center;
-    gap: 12px;
-    padding: 10px 0;
+    gap: 10px 12px;
+    padding: 12px 0 14px;
     border-bottom: 1px solid var(--border);
   }
   .st-f-ships li:first-child {
@@ -214,6 +219,29 @@
   .st-f-ship-inks code {
     margin-left: 6px;
     font: 400 12px/16px var(--font-mono);
+  }
+  /* the proofs: caps legends over mono values. Each legend is wider than its value, so the three line up from ship
+     to ship; on a pane too narrow for all three, the last wraps rather than run past the rule */
+  .st-f-ship-proof {
+    display: flex;
+    flex-wrap: wrap;
+    grid-column: 2 / -1;
+    gap: 6px 16px;
+  }
+  .st-f-ship-proof div {
+    display: grid;
+    gap: 2px;
+  }
+  .st-f-ship-proof dt {
+    color: var(--muted-foreground);
+    font: 400 11px/14px var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .st-f-ship-proof dd {
+    font: 400 12px/16px var(--font-mono);
+    font-variant-numeric: tabular-nums;
   }
 
   /* colour: each state's badge and inks, with the ratios that hold them */
@@ -801,6 +829,11 @@
     .st-f-roles tbody th {
       width: 30%;
       overflow-wrap: anywhere;
+    }
+    /* the proofs take the whole row under the mark, so all three still fit on one line at 390 */
+    .st-f-ship-proof {
+      grid-column: 1 / -1;
+      column-gap: 12px;
     }
     /* the files table stands up: each mark's name, then its two files, one per line */
     .st-f-files,

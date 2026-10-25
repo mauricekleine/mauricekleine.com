@@ -5,7 +5,16 @@ import { Badge } from "@/components/superthread/ui/badge";
 import { Button } from "@/components/superthread/ui/button";
 import { inkOn, ratio } from "@/foundations/colour";
 import { lineScreen, markUrl } from "@/foundations/marks";
-import { hexOf, modes, recipes, spotName, type Mode } from "@/foundations/master";
+import {
+  hexOf,
+  modes,
+  nearestHouse,
+  recipes,
+  regionOnTile,
+  spotFloor,
+  spotName,
+  type Mode,
+} from "@/foundations/master";
 import { Copy, Ink, Legend } from "@/foundations/parts";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -89,25 +98,45 @@ function House({ mode }: { mode: Mode }) {
   );
 }
 
+// a ratio as a quantity: mono, beside the words that name it
+const Ratio = ({ of }: { of: string }) => <span className="st-f-q">{of}:1</span>;
+
+// each ship's spot in one mode, with the master's proofs for it: its screen angle, its distance from the house ink
+// and the contrast its mark's dithered region keeps on the tile
 function Ships({ mode }: { mode: Mode }) {
   return (
     <ul className="st-f-ships">
-      {fleet.map((ship) => (
-        <li key={ship.id}>
-          <img src={markUrl(ship.id, mode)} alt="" width={16} height={16} />
-          <span className="st-f-ship-name">
-            <b>{ship.name}</b>
-            <small>
-              {spotName(ship.id)} · {ship.angle}°
-            </small>
-          </span>
-          <span className="st-f-ship-inks">
-            <i style={{ background: `var(--ship-${ship.id})` }} aria-hidden="true" />
-            <i className={lineScreen[ship.id]} aria-hidden="true" />
-            <code>{tokens.ships[ship.id][mode].hex}</code>
-          </span>
-        </li>
-      ))}
+      {fleet.map((ship) => {
+        const near = nearestHouse(ship.id, mode);
+        return (
+          <li key={ship.id}>
+            <img src={markUrl(ship.id, mode)} alt="" width={16} height={16} />
+            <span className="st-f-ship-name">
+              <b>{ship.name}</b>
+              <small>{spotName(ship.id)}</small>
+            </span>
+            <span className="st-f-ship-inks">
+              <i style={{ background: `var(--ship-${ship.id})` }} aria-hidden="true" />
+              <i className={lineScreen[ship.id]} aria-hidden="true" />
+              <code>{tokens.ships[ship.id][mode].hex}</code>
+            </span>
+            <dl className="st-f-ship-proof">
+              <div>
+                <dt>angle</dt>
+                <dd>{ship.angle}°</dd>
+              </div>
+              <div>
+                <dt>from {near.ink}</dt>
+                <dd>{near.distance.toFixed(1)}</dd>
+              </div>
+              <div>
+                <dt>region on tile</dt>
+                <dd>{regionOnTile(ship.id, mode).toFixed(2)}:1</dd>
+              </div>
+            </dl>
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -136,7 +165,14 @@ function States({ mode }: { mode: Mode }) {
                     <dd>
                       <Ink
                         hex={tokens[mode]["error-solid"].hex}
-                        note={`label ${ratio(tokens[mode]["error-solid-foreground"].hex, tokens[mode]["error-solid"].hex)}:1`}
+                        note={
+                          <>
+                            label{" "}
+                            <Ratio
+                              of={ratio(tokens[mode]["error-solid-foreground"].hex, tokens[mode]["error-solid"].hex)}
+                            />
+                          </>
+                        }
                       />
                     </dd>
                   </div>
@@ -145,7 +181,11 @@ function States({ mode }: { mode: Mode }) {
                     <dd>
                       <Ink
                         hex={ink.glyph.hex}
-                        note={`on the page ${ratio(ink.glyph.hex, tokens[mode].background.hex)}:1`}
+                        note={
+                          <>
+                            on the page <Ratio of={ratio(ink.glyph.hex, tokens[mode].background.hex)} />
+                          </>
+                        }
                       />
                     </dd>
                   </div>
@@ -154,7 +194,11 @@ function States({ mode }: { mode: Mode }) {
                     <dd>
                       <Ink
                         hex={ink.text.hex}
-                        note={`on the page ${ratio(ink.text.hex, tokens[mode].background.hex)}:1`}
+                        note={
+                          <>
+                            on the page <Ratio of={ratio(ink.text.hex, tokens[mode].background.hex)} />
+                          </>
+                        }
                       />
                     </dd>
                   </div>
@@ -164,13 +208,13 @@ function States({ mode }: { mode: Mode }) {
                   <div>
                     <dt>glyph</dt>
                     <dd>
-                      <Ink hex={ink.glyph.hex} note={`${ratio(ink.glyph.hex, ink.fill.hex)}:1`} />
+                      <Ink hex={ink.glyph.hex} note={<Ratio of={ratio(ink.glyph.hex, ink.fill.hex)} />} />
                     </dd>
                   </div>
                   <div>
                     <dt>word</dt>
                     <dd>
-                      <Ink hex={ink.text.hex} note={`${ratio(ink.text.hex, ink.fill.hex)}:1`} />
+                      <Ink hex={ink.text.hex} note={<Ratio of={ratio(ink.text.hex, ink.fill.hex)} />} />
                     </dd>
                   </div>
                   <div>
@@ -261,6 +305,8 @@ function Page() {
         <Copy>
           a ship's spot is its identity, never a control. it fills the one dithered region of the ship's mark and the
           ship's series in a chart, where a line screen at the ship's own angle keeps the series apart without colour.
+          each spot stays at least {spotFloor} from plum (oklab delta e x 100), and its mark's dithered region keeps 3:1
+          on its tile.
         </Copy>
         <Legend>spot, line screen, hex</Legend>
         <ModePair light={<Ships mode="light" />} dark={<Ships mode="dark" />} />

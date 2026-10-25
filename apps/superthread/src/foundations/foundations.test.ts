@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { fleet } from "@/components/superthread/lib/fleet";
 import { contrast, inkOn, luminance, ratio } from "./colour";
 import { markFile, type MarkId } from "./marks";
-import { hexOf, modes, recipes } from "./master";
+import { hexOf, modes, nearestHouse, recipes, regionOnTile, spotFloor } from "./master";
 
 describe("colour arithmetic", () => {
   test("contrast runs from 1 for one ink to 21 for black on white, in either order", () => {
@@ -37,6 +37,21 @@ describe("the roles table", () => {
         .map((role) => `${mode} ${role}`),
     );
     expect(missing).toEqual([]);
+  });
+});
+
+describe("the ship spots' proofs", () => {
+  // the colour page's copy says each spot stays at least the floor from plum and each region keeps 3:1 on its tile
+  test("every spot, in both modes, names plum as its nearest house ink and clears the copy's two floors", () => {
+    const short = fleet.flatMap((ship) =>
+      modes.flatMap((mode) => {
+        const near = nearestHouse(ship.id, mode);
+        return near.ink === "plum" && near.distance >= spotFloor && regionOnTile(ship.id, mode) >= 3
+          ? []
+          : [`${mode} ${ship.id}`];
+      }),
+    );
+    expect(short).toEqual([]);
   });
 });
 

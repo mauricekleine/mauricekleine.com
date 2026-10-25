@@ -23,7 +23,7 @@ const families: readonly { name: string; family: Family; role: string; use: stri
     family: "display",
     role: "display",
     use: "titles, section heads and the board, at 300; the wordmark at 400",
-    sample: "six ships, one sheet",
+    sample: "runs this week",
   },
   {
     name: "Supreme",
