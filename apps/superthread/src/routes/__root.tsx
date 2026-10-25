@@ -1,6 +1,6 @@
 import { fonts } from "@mauricekleine/superthread/fonts";
 import { createRootRoute, HeadContent, Link, Outlet, Scripts } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { AppShell } from "@/site/AppShell";
 import { useEntry } from "@/site/layout";
 import { entryFor, notFound } from "@/site/nav";
@@ -47,7 +47,7 @@ export const Route = createRootRoute({
     };
   },
   component: RootDocument,
-  notFoundComponent: NotFoundPage,
+  notFoundComponent: UnknownPath,
 });
 
 // The theme script is not rendered here: React would hoist the charset, the viewport and the stylesheet ahead of it,
@@ -83,5 +83,17 @@ export function NotFoundPage(): ReactNode {
         </>
       }
     />
+  );
+}
+
+// A path the router does not know renders here, straight from the root's <Outlet />; /404 is a child route, which that
+// <Outlet /> wraps in a Suspense boundary. The Worker serves the prerendered /404 at every unknown path, so the page
+// sits in the same boundary here. Without it the client's tree lacks a node the document has, and React renders the
+// whole document again, which strips the mode the theme script set on <html>. not-found.test.tsx holds the two equal.
+function UnknownPath(): ReactNode {
+  return (
+    <Suspense>
+      <NotFoundPage />
+    </Suspense>
   );
 }
