@@ -58,6 +58,8 @@ Nested dependencies resolve through the same mapping, so every item comes from t
 
 Apps in this repo can import the package directly: `@mauricekleine/superthread/v2/theme.css`, `/v2/plain.css`, `/v2/tokens`, `/v2/tokens.json`, `/fleet` and `/fonts`. `/theme.css` is v1.
 
+`AppShellNav` is the page's banner by default. When embedding a shell inside another landmark, pass `role="group"` to `AppShellNav`. If that layout already owns main, also pass `render={<div />}` to `AppShellGround`. The ship's navigation keeps its accessible name.
+
 ## What v2 holds
 
 | tier  | items                                                                                                                                                                                                                                                                                                                                                                                                                               |

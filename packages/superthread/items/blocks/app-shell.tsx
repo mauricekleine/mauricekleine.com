@@ -92,6 +92,7 @@ function AppShellNavItem({
 
 // The app's ground starts level with the frame and keeps 12 px beside the working panel below 900 px.
 // It is the page's main, named workspace; render a div when the app's layout already owns main.
+// Inside another landmark, pass role="group" to AppShellNav.
 function AppShellGround({ className, render, ...props }: useRender.ComponentProps<"main">) {
   return useRender({
     render: render ?? <main />,

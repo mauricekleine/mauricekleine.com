@@ -6,7 +6,7 @@ import type { ShipNavItem } from "./data";
 // Only the ships with mock pages open here; the other rail cells remain unavailable.
 const hrefs = { home: "/", orbit: "/mock/board", quanta: "/mock/reading" };
 
-// The docs shell already owns main, so the ground renders a div.
+// The docs shell already owns main and the banner, so the embedded shell uses a div and a group.
 export function ShipFrame({
   ship,
   nav,
@@ -25,7 +25,7 @@ export function ShipFrame({
       hrefs={hrefs}
       className="min-h-[calc(100svh-32px)]"
       sidebar={
-        <AppShellNav ship={ship}>
+        <AppShellNav ship={ship} role="group">
           {nav.map((item) => (
             <AppShellNavItem
               key={item.label}
