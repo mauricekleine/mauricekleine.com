@@ -86,6 +86,7 @@ function Page() {
   );
 }
 
+// ship, agent and started drop out below 600 px, so run, task, status and took fit the sheet, as on the board
 function RunsTable({ runs, loading = 0 }: { runs: readonly Run[]; loading?: number }) {
   return (
     <Table>
@@ -93,10 +94,12 @@ function RunsTable({ runs, loading = 0 }: { runs: readonly Run[]; loading?: numb
         <TableRow>
           <TableHead kind="id">run</TableHead>
           <TableHead>task</TableHead>
-          <TableHead>ship</TableHead>
-          <TableHead>agent</TableHead>
+          <TableHead className="mock-phone-off">ship</TableHead>
+          <TableHead className="mock-phone-off">agent</TableHead>
           <TableHead>status</TableHead>
-          <TableHead kind="number">started</TableHead>
+          <TableHead kind="number" className="mock-phone-off">
+            started
+          </TableHead>
           <TableHead kind="number">took</TableHead>
         </TableRow>
       </TableHeader>
@@ -106,20 +109,20 @@ function RunsTable({ runs, loading = 0 }: { runs: readonly Run[]; loading?: numb
             <TableCell kind="id" className="text-instrument text-muted-foreground">
               {run.id}
             </TableCell>
-            <TableCell className="min-w-56 whitespace-normal">
+            <TableCell className="mock-task whitespace-normal">
               <span className="mock-id">{run.task}</span> {run.title}
             </TableCell>
-            <TableCell>
+            <TableCell className="mock-phone-off">
               <span className="mock-ship">
                 <ShipMark ship={run.ship} size={16} />
                 {run.ship}
               </span>
             </TableCell>
-            <TableCell className="text-muted-foreground">{run.agent}</TableCell>
+            <TableCell className="mock-phone-off text-muted-foreground">{run.agent}</TableCell>
             <TableCell>
               <Badge variant={run.state} />
             </TableCell>
-            <TableCell kind="number" className="text-instrument text-muted-foreground">
+            <TableCell kind="number" className="mock-phone-off text-instrument text-muted-foreground">
               {run.started}
             </TableCell>
             <TableCell kind="number" className="text-instrument text-muted-foreground">
@@ -133,18 +136,18 @@ function RunsTable({ runs, loading = 0 }: { runs: readonly Run[]; loading?: numb
               <Skeleton className="w-12" />
             </TableCell>
             <TableCell>
-              <Skeleton className={row === 1 ? "w-40" : "w-56"} />
+              <Skeleton className={row === 1 ? "w-full max-w-40" : "w-full max-w-56"} />
             </TableCell>
-            <TableCell>
+            <TableCell className="mock-phone-off">
               <Skeleton className="w-16" />
             </TableCell>
-            <TableCell>
+            <TableCell className="mock-phone-off">
               <Skeleton className="w-14" />
             </TableCell>
             <TableCell>
               <Skeleton className="w-18" />
             </TableCell>
-            <TableCell>
+            <TableCell className="mock-phone-off">
               <Skeleton className="ml-auto w-10" />
             </TableCell>
             <TableCell>

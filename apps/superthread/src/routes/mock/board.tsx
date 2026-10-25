@@ -50,7 +50,7 @@ function Page() {
   const add = () => {
     const id = `or-${Math.max(...tasks.map((task) => Number(task.id.slice(3)))) + 1}`;
     setTasks((list) => [...list, { id, title: "untitled task", state: "queued", agent: "unassigned", age: "now" }]);
-    toast.add({ title: `${id} queued`, description: "it waits in queued until an agent picks it up." });
+    toast.add({ title: `${id} queued`, description: "it stays queued until an agent picks it up." });
   };
 
   return (

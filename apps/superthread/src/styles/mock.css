@@ -320,6 +320,9 @@
     align-items: center;
     gap: 8px;
   }
+  .mock-task {
+    min-width: 224px;
+  }
   .mock-after {
     margin-top: 20px;
   }
@@ -531,6 +534,16 @@
     }
     .mock-form {
       grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 599px) {
+    /* the agents page's runs keep run, task, status and took, and the task wraps to the width left */
+    .mock-phone-off {
+      display: none;
+    }
+    .mock-task {
+      min-width: 0;
     }
   }
 }
