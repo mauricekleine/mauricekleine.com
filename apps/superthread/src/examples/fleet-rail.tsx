@@ -26,11 +26,19 @@ const hrefs = { ...withoutTrisys, trisys: marks };
 // The site serves the marks itself, under /marks/<id>/.
 const markBase = "/marks";
 
+// The rail in a specimen: the ground is as tall as the rail, not the viewport the provider holds (min-h-svh), and
+// on the bar it runs under the whole bar. On a phone the frame's side inset drops to 10 px and the ground runs to the
+// pane's edges (components-c.css), so the home cell and all six ships fit the pane at 390 px.
+const specimen =
+  "min-h-0 [@media(max-width:900px)]:min-w-max [@media(max-width:600px)]:[&>[data-slot=fleet-rail-frame]]:px-2.5";
+// and on the bar it leaves room below for a cell's dropped name
+const withTab = `${specimen} [@media(max-width:900px)]:pb-10`;
+
 // Orbit's rail, every cell a link.
 export function RailLive() {
   return (
-    <div className="st-c-ground st-c-ground-tab">
-      <FleetRail current="orbit" hrefs={hrefs} markBase={markBase} />
+    <div className="st-c-ground">
+      <FleetRail current="orbit" hrefs={hrefs} markBase={markBase} className={withTab} />
     </div>
   );
 }
@@ -47,9 +55,9 @@ export function RailStates() {
     cells?.[4]?.setAttribute("data-demo", "focus-visible");
   }, []);
   return (
-    <div className="st-c-ground st-c-ground-tab st-c-print">
+    <div className="st-c-ground st-c-print">
       <div ref={print} inert>
-        <FleetRail current="orbit" hrefs={withoutTrisys} markBase={markBase} />
+        <FleetRail current="orbit" hrefs={withoutTrisys} markBase={markBase} className={withTab} />
       </div>
     </div>
   );
@@ -85,7 +93,7 @@ function OrbitNav() {
 export function RailWithNav() {
   return (
     <div className="st-c-ground">
-      <FleetRail current="orbit" hrefs={hrefs} markBase={markBase} sidebar={<OrbitNav />} />
+      <FleetRail current="orbit" hrefs={hrefs} markBase={markBase} className={specimen} sidebar={<OrbitNav />} />
     </div>
   );
 }

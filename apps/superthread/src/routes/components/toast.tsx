@@ -53,7 +53,7 @@ function Page() {
 
       <Section id="parts" title="parts">
         <p className="st-c-copy">
-          base-nova&rsquo;s toast, on Base UI&rsquo;s toast manager. put <code>&lt;Toaster /&gt;</code> near the root
+          base-nova&rsquo;s toast, on base ui&rsquo;s toast manager. put <code>&lt;Toaster /&gt;</code> near the root
           once, then call <code>toast</code> from anywhere.
         </p>
         <dl className="st-c-parts">
@@ -89,6 +89,20 @@ function Page() {
             the parts the stack is built from, with <code>ToastContent</code>, <code>ToastTitle</code>,{" "}
             <code>ToastDescription</code>, <code>ToastAction</code> and <code>ToastClose</code>, for a stack of your own
             under <code>ToastProvider</code> and <code>ToastViewport</code>, as this page prints one above.
+          </dd>
+          <dt>
+            <code>ToastList</code>
+          </dt>
+          <dd>
+            the provider&rsquo;s toasts as <code>Toaster</code> prints them. put it in a viewport of your own to show
+            the stack somewhere else.
+          </dd>
+          <dt>
+            <code>ToastIcon</code>
+          </dt>
+          <dd>
+            the status glyph for a toast&rsquo;s <code>type</code>. the stack above uses it in a list of its own, to add
+            a ghost <code>undo</code> beside the action.
           </dd>
         </dl>
       </Section>

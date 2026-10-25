@@ -33,12 +33,6 @@
     border-left: 0;
   }
 
-  /* a printed focus: the base layer's ring, which no data-demo variant reaches, written out as the base layer has it */
-  .st-c-print [data-demo~="focus-visible"] {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-  }
-
   /* controls to try a live specimen */
   .st-c-tools {
     display: flex;
@@ -133,7 +127,16 @@
   }
 
   @media (max-width: 600px) {
-    /* on a phone the dialog's footer stacks its buttons */
+    /* on a phone the bar's ground runs out through its pane's 24 px inset to the pane's edges, so the home cell and
+       all six ships fit at 390 px. The inset is set here too, so the two numbers move together. */
+    .st-modepair-pane:has(.st-c-ground) {
+      padding-inline: 24px;
+    }
+    .st-c-ground {
+      margin-inline: -24px;
+    }
+
+    /* the dialog's footer stacks its buttons */
     .st-c-screen {
       height: 404px;
     }
@@ -153,20 +156,5 @@
       white-space: normal;
       overflow-wrap: anywhere;
     }
-  }
-}
-
-/* Unlayered, to outrank the rail's own utilities: FleetRail takes no className, and its provider holds a full
-   viewport's height (min-h-svh). In a specimen the ground is as tall as the rail. */
-.st-c-ground [data-mk="fleet-rail"] {
-  min-height: 0;
-}
-@media (max-width: 900px) {
-  /* on the bar the ground runs under the whole bar, and leaves room below it for a cell's dropped name */
-  .st-c-ground [data-mk="fleet-rail"] {
-    min-width: max-content;
-  }
-  .st-c-ground-tab [data-mk="fleet-rail"] {
-    padding-bottom: 40px;
   }
 }

@@ -54,7 +54,7 @@ function Page() {
 
       <Section id="parts" title="parts">
         <p className="st-c-copy">
-          the names and props are shadcn&rsquo;s, from base-nova, on Base UI&rsquo;s dialog. markup written for
+          the names and props are shadcn&rsquo;s, from base-nova, on base ui&rsquo;s dialog. markup written for
           shadcn&rsquo;s dialog works unchanged.
         </p>
         <dl className="st-c-parts">

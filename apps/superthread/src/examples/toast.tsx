@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/superthread/ui/button";
-import { StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
 import {
   Toast,
   ToastAction,
   ToastClose,
   ToastContent,
   ToastDescription,
+  ToastIcon,
   ToastProvider,
   ToastTitle,
   ToastViewport,
@@ -16,45 +16,40 @@ import {
   useToastManager,
 } from "@/components/superthread/ui/toast";
 
-// the item's own map from a toast's type to the status glyph it prints
-const glyphs: Partial<Record<string, StatusState>> = {
-  success: "done",
-  info: "running",
-  warning: "waiting",
-  error: "failed",
-  loading: "running",
-};
+// what a printed toast can carry beyond the item's options: a second, ghost button beside its one action
+type Printed = { undo?: string };
 
-// The Toaster's list, built from the item's parts, for a stack that stays where it is printed.
+// A list of our own, built as the item's ToastList is, from its parts and its ToastIcon. ToastList prints one action
+// per toast; this one adds the ghost button a toast's data names.
 function PrintedList() {
-  const { toasts } = useToastManager();
-  return toasts.map((item) => {
-    const state = item.type ? glyphs[item.type] : undefined;
-    return (
-      <Toast key={item.id} toast={item}>
-        <ToastContent>
-          {state && (
-            <span className="mt-[3px] flex shrink-0">
-              <StatusGlyph state={state} />
-            </span>
-          )}
-          <div className="flex min-w-0 flex-1 flex-col gap-1">
-            <ToastTitle />
-            <ToastDescription />
-            <ToastAction className="mt-1.5" />
+  const { toasts } = useToastManager<Printed>();
+  return toasts.map((item) => (
+    <Toast key={item.id} toast={item}>
+      <ToastContent>
+        <ToastIcon type={item.type} />
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
+          <ToastTitle />
+          <ToastDescription />
+          <div className="mt-1.5 flex gap-2 empty:hidden">
+            <ToastAction />
+            {item.data?.undo && (
+              <Button variant="ghost" size="sm">
+                {item.data.undo}
+              </Button>
+            )}
           </div>
-          <ToastClose />
-        </ToastContent>
-      </Toast>
-    );
-  });
+        </div>
+        <ToastClose />
+      </ToastContent>
+    </Toast>
+  ));
 }
 
 // Three toasts, newest in front, on a manager of their own that never times out. The provider subscribes in its own
 // effect, which runs before this one, so the toasts land. The viewport leaves its fixed corner and sits in the page,
 // as tall as the front toast plus the two 12 px peeks. Inert: the stack never expands or pauses.
 export function ToastPrinted() {
-  const [manager] = useState(() => createToastManager());
+  const [manager] = useState(() => createToastManager<Printed>());
   useEffect(() => {
     const ids = [
       manager.add({
@@ -75,6 +70,7 @@ export function ToastPrinted() {
         type: "success",
         timeout: 0,
         actionProps: { children: "view chapter" },
+        data: { undo: "undo" },
       }),
     ];
     return () => {

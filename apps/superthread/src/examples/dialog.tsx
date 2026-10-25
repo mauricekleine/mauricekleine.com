@@ -7,7 +7,6 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogPortal,
   DialogTitle,
   DialogTrigger,
 } from "@/components/superthread/ui/dialog";
@@ -37,9 +36,9 @@ function Confirm() {
 }
 
 // The dialog as it stands open, printed inside a frame that plays the window. The frame is a containing block for
-// fixed boxes (contain: layout), so the scrim and the centred sheet land in it. DialogContent portals to the body on
-// its own; the outer portal hands it the frame instead, and the frame comes from state, so the portal waits for it.
-// Inert: nothing in the print takes focus or the pointer, and it stays open.
+// fixed boxes (contain: layout), so the scrim and the centred sheet land in it. DialogContent's portalProps hand its
+// portal the frame instead of the body, and the frame comes from state, so the portal waits for it (a null container
+// holds it back). Inert: nothing in the print takes focus or the pointer, and it stays open.
 export function DialogPrinted() {
   const [frame, setFrame] = useState<HTMLDivElement | null>(null);
   return (
@@ -57,11 +56,9 @@ export function DialogPrinted() {
         </ul>
       </div>
       <Dialog open modal={false}>
-        <DialogPortal container={frame}>
-          <DialogContent initialFocus={false} finalFocus={false}>
-            <Confirm />
-          </DialogContent>
-        </DialogPortal>
+        <DialogContent portalProps={{ container: frame }} initialFocus={false} finalFocus={false}>
+          <Confirm />
+        </DialogContent>
       </Dialog>
     </div>
   );
