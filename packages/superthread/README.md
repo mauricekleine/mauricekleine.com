@@ -78,11 +78,11 @@ Brand items keep shadcn's Base UI API (exports, props, `data-slot`, variants) an
 
 ## The site
 
-superthread.mauricekleine.com is v2's home. It renders every item from its source in `items/`:
+superthread.mauricekleine.com is v2's home. Its build renders every item from the files the registry serves, the same bytes an app installs (development renders the sources in `items/`):
 
 - the overview, then the foundations: colour, type, space, motion, marks and texture
-- a page for every item, with its install line
-- `/mock/board`, `/mock/reading` and `/mock/orbit`: a task board, a reading page and an agents dashboard, built only from the items
+- a page for every item and every composition, with its install line; a composition's page names the apps it serves
+- `/mock/board`, `/mock/reading` and `/mock/orbit`: a task board, a reading page and an agents dashboard, built only from the items and compositions
 - `/install`: init, adding an item, the css entry, pinning a version, and every item
 
 It serves the `@mk` registry beside the pages. Init maps `@mk` to `https://superthread.mauricekleine.com/r/{name}.json`, so after the init line in [Install v2](#install-v2), `bunx --bun shadcn@latest add @mk/<item>` installs any item.
