@@ -16,7 +16,8 @@ import type { ShipNavItem } from "./data";
 const hrefs = { home: "/", orbit: "/mock/board", quanta: "/mock/reading" };
 
 // An app inside the fleet: the rail and the ship's own nav on the deep ground, then the app's ground beside them.
-// At 900 px and below the rail is a bar and the nav a row of links above the app.
+// At 900 px and below the rail is a bar and the nav a row of links above the app. The frame fills the height left
+// under the 32 px docs strip, so the page adds no scroll of its own.
 export function ShipFrame({
   ship,
   nav,
@@ -34,6 +35,7 @@ export function ShipFrame({
       current={ship}
       markBase="/marks"
       hrefs={hrefs}
+      className="min-h-[calc(100svh-32px)]"
       sidebar={<ShipNav ship={ship} nav={nav} current={current} />}
     >
       <div className="mock-ground">{children}</div>

@@ -2,13 +2,6 @@
    file lays them out; every control's look is the item's own. Measures follow the master's board and reading page;
    the breakpoints are the master's (1279, 900 and 600). In the components layer, so an item's own utilities win. */
 
-/* FleetRail's provider holds the frame at the full viewport height; under the docs strip that would add 32 px of
-   scroll to every page, so the frame takes the height left below the strip. Unlayered, to outrank the provider's
-   min-h-svh utility. */
-.st-app-main > [data-mk="fleet-rail"] {
-  min-height: calc(100svh - 32px);
-}
-
 @layer components {
   /* the app's ground beside the frame: its top lines up with the rail's */
   .mock-ground {
@@ -66,6 +59,24 @@
   }
   .mock-tabs {
     margin-bottom: 32px;
+  }
+
+  /* the board's second row: the agent picker, and the quieter switch between the rows and the columns */
+  .mock-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 16px;
+    margin-bottom: 24px;
+  }
+  .mock-view {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .mock-view > .type-meta {
+    margin-right: 8px;
   }
 
   /* the board's columns: five across while each keeps about 140 px, one under another below that */
@@ -469,6 +480,10 @@
   @media (max-width: 900px) {
     .mock-ground {
       padding: 0 16px 40px;
+    }
+    /* the board's rows keep id, title, status and age */
+    .mock-agent {
+      display: none;
     }
   }
 

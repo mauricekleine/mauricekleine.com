@@ -67,7 +67,8 @@ function Page() {
             />
             <figcaption>
               <b>fig. 7.2</b>
-              the screen after many single photons: bright where the two paths add, dark where they cancel.
+              the screen after many single photons: bright where the two paths add, dark where they cancel. screened in
+              key and the house ink.
             </figcaption>
           </figure>
 

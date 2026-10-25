@@ -64,6 +64,19 @@ export const tasks: readonly Task[] = [
   { id: "or-406", title: "quanta chapter 7 footnotes render twice", state: "failed", agent: "codex 1", age: "2h" },
 ];
 
+// The board's two filters: the status tabs over its rows, and the agent picker, which lists every agent with a task
+// on the board (unassigned last).
+export const boardStatuses = ["all", "running", "waiting", "done"] as const;
+export type BoardStatus = (typeof boardStatuses)[number];
+
+export const anyone = "anyone";
+export const boardAgents: readonly string[] = [
+  anyone,
+  ...[...new Set(tasks.map((task) => task.agent))].sort((a, b) =>
+    a === "unassigned" ? 1 : b === "unassigned" ? -1 : a.localeCompare(b),
+  ),
+];
+
 // what an empty column says: what it holds and how a task gets there
 export const emptyColumn: Readonly<Record<StatusState, { readonly title: string; readonly body: string }>> = {
   queued: { title: "nothing queued", body: "new tasks wait here until an agent picks one up." },
