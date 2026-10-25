@@ -874,6 +874,48 @@
       },
       "module": "scripts/texture/master/fields.py",
       "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "empty-column-light.9f9a3553.png": {
+      "plate": "empty-column",
+      "mode": "light",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.wedge",
+      "params": {
+        "w": 112,
+        "h": 120,
+        "mode": "light"
+      },
+      "pixels_sha256": "9f9a3553275cb3e937b77cf4267dd2679b6df32d49145f89a15a886db3168b51",
+      "planes_sha256": [
+        "cfa07da7b08ed81ed066320f284ab5f3b64ba26acdb7d678a07849e7aba8a620",
+        "00b012eb4e071f929536f8e29e2ec2665a5a33df088ae2e09aa45349600426c4"
+      ],
+      "master": null,
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
+    },
+    "empty-column-dark.67b633a9.png": {
+      "plate": "empty-column",
+      "mode": "dark",
+      "plane": null,
+      "form": "composite",
+      "generator": "packages/superthread/scripts/texture/build.py",
+      "function": "fields.wedge",
+      "params": {
+        "w": 112,
+        "h": 120,
+        "mode": "dark"
+      },
+      "pixels_sha256": "67b633a9c2333575a6ff1294965a153b7b2c76e7659dd4ecf8ad6b5843fb7a06",
+      "planes_sha256": [
+        "cfa07da7b08ed81ed066320f284ab5f3b64ba26acdb7d678a07849e7aba8a620",
+        "00b012eb4e071f929536f8e29e2ec2665a5a33df088ae2e09aa45349600426c4"
+      ],
+      "master": null,
+      "module": "scripts/texture/master/fields.py",
+      "module_sha256": "df6964549b11a5eecc8b6067c501fdd636fce2993eb9f850c9a19eb609a626f7"
     }
   }
 }

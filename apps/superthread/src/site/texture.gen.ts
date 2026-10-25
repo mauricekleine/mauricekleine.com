@@ -85,6 +85,15 @@ export const plates = {
       "light": "/texture/empty-phone-light.1adcdca1.png",
       "dark": "/texture/empty-phone-dark.fb613cb3.png"
     }
+  },
+  "empty-column": {
+    "form": "composite",
+    "w": 112,
+    "h": 120,
+    "url": {
+      "light": "/texture/empty-column-light.9f9a3553.png",
+      "dark": "/texture/empty-column-dark.67b633a9.png"
+    }
   }
 } as const;
 
