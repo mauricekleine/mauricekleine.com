@@ -73,6 +73,28 @@ function motionProblems(classes: string): string[] {
   return problems;
 }
 
+// ---------- surfaces ----------
+
+// Tailwind's stock shadows; superthread's lifts are shadow-slip, -leaf, -sheet and -lifted
+const STOCK_SHADOW = /^shadow(?:-(?:2xs|xs|sm|md|lg|xl|2xl|inner))?$/;
+
+/**
+ * What a class string draws outside the system: a stock shadow instead of a lift, a blur (a layer sits on the
+ * world's scrim and never blurs what is under it), a literal radius (the radius tokens keep every corner square), or
+ * black or white ink instead of a role.
+ */
+function surfaceProblems(classes: string): string[] {
+  const problems: string[] = [];
+  for (const word of classes.split(/\s+/).filter(Boolean)) {
+    const { utility } = split(word);
+    if (STOCK_SHADOW.test(utility)) problems.push(`${word} is a stock shadow, not one of the lifts`);
+    else if (/^(?:backdrop-)?blur(?:-|$)/.test(utility)) problems.push(`${word} blurs`);
+    else if (/^rounded(?:-[a-z]+)?-\[/.test(utility)) problems.push(`${word} is a literal radius`);
+    else if (/^[a-z-]+-(?:black|white)(?:\/|$)/.test(utility)) problems.push(`${word} is a literal ink`);
+  }
+  return problems;
+}
+
 // ---------- words ----------
 
 /** The string at `at` and, when it opens an array, every string directly inside it. */
@@ -145,6 +167,18 @@ describe("the scanners", () => {
     expect(motionProblems("transition-[opacity,translate] duration-200 ease-in-out")).toEqual([]);
   });
 
+  test("surfaces: a stock shadow, a blur, a literal radius and a literal ink fail; lifts, the scrim and tokens do not", () => {
+    expect(
+      surfaceProblems("shadow-lg bg-black/10 supports-backdrop-filter:backdrop-blur-xs rounded-[2px]"),
+    ).toHaveLength(4);
+    expect(surfaceProblems("shadow active:shadow-xs blur-sm text-white/80 ring-offset-white")).toHaveLength(5);
+    expect(
+      surfaceProblems(
+        "shadow-sheet shadow-none active:shadow-[inset_0_0_0_1px_var(--key)] bg-scrim rounded-md rounded-t-xl bg-foreground",
+      ),
+    ).toEqual([]);
+  });
+
   test("words: text children, nested text and label props are found, class names are not", () => {
     const code = served(
       "items/probe.tsx",
@@ -171,6 +205,13 @@ describe("every shipped item, as served", () => {
     test(`${path}: every duration names its transition, and nothing transitions wholesale`, () => {
       const problems = literals(served(path)).flatMap((literal) =>
         motionProblems(text(literal)).map((problem) => `${literal.slice(0, 60)}: ${problem}`),
+      );
+      expect(problems).toEqual([]);
+    });
+
+    test(`${path}: draws with the lifts, the scrim, square corners and the role inks`, () => {
+      const problems = literals(served(path)).flatMap((literal) =>
+        surfaceProblems(text(literal)).map((problem) => `${literal.slice(0, 60)}: ${problem}`),
       );
       expect(problems).toEqual([]);
     });

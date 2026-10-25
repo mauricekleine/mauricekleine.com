@@ -10,8 +10,8 @@
 // `Icon` from our glyphs by the table below; `"use client"` goes; upstream's style hooks become our utilities; served
 // labels (an sr-only element's text, aria labels, titles, alt text, placeholders) go lowercase. `print` also strips
 // the focus classes the stage 0 gate rules off every seeded control (build ruling 2). `regen` also applies each pass
-// item's class table and fails on a style hook no rule maps. Anything a rule does not cover fails, so a new upstream
-// import, icon, prop or class is a decision, never a silent drop.
+// item's class table and portal rule, and fails on a style hook no rule maps. Anything a rule does not cover fails,
+// so a new upstream import, icon, prop or class is a decision, never a silent drop.
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -82,9 +82,31 @@ export const STYLE_HOOKS: Record<string, string[]> = {
  * fails `regen`, so the table cannot go stale silently.
  */
 export const PASS_CLASSES: Record<string, Record<string, string[]>> = {
-  // a bare `transition` also fades outline-color, so the close button's focus ring would fade in with the popup;
-  // the popup moves only these two
-  sheet: { transition: ["transition-[opacity,translate]"] },
+  sheet: {
+    // a bare `transition` also fades outline-color, so the close button's focus ring would fade in with the popup;
+    // the popup moves only these two
+    transition: ["transition-[opacity,translate]"],
+    // the overlay is the world's scrim, as the dialog's is, with no blur
+    "bg-black/10": ["bg-scrim"],
+    "supports-backdrop-filter:backdrop-blur-xs": [],
+    // the panel lifts as a sheet, as the dialog does
+    "shadow-lg": ["shadow-sheet"],
+  },
+  // corners come from the radius tokens, which are square; a literal radius would round the arrow alone
+  tooltip: { "rounded-[2px]": [] },
+};
+
+/** Where a pass item's layer takes `portalProps`: the component, the portal element it renders, and the props type. */
+export type PortalRule = { component: string; portal: string; props: string };
+
+/**
+ * Per pass item, the component whose portal takes `portalProps`, as the dialog, select and toast do: a container to
+ * render into, or a class such as the mode the layer should take. Each rule must find its component, that
+ * component's `...props` and exactly one portal in it, so an upstream reshape fails `regen`.
+ */
+export const PASS_PORTALS: Record<string, PortalRule> = {
+  sheet: { component: "SheetContent", portal: "SheetPortal", props: "SheetPrimitive.Portal.Props" },
+  tooltip: { component: "TooltipContent", portal: "TooltipPrimitive.Portal", props: "TooltipPrimitive.Portal.Props" },
 };
 
 /** JSX attributes whose string value is served as words. */
@@ -289,6 +311,35 @@ function mapClasses(src: string, where: string, pass: string | undefined): strin
   return out;
 }
 
+/**
+ * A pass item's layer takes `portalProps`: the component destructures them beside its `...props`, its type gains
+ * `portalProps?: <props>`, and its one portal element spreads them. Anything the rule does not find fails.
+ */
+export function forwardPortalProps(src: string, where: string, rule: PortalRule): string {
+  const fail = (why: string): never => {
+    throw new Error(`${where}: portalProps for ${rule.component}: ${why}`);
+  };
+  if (/\bportalProps\b/.test(src)) fail("upstream already names portalProps; drop the rule");
+  const head = `function ${rule.component}({\n`;
+  const start = src.indexOf(head);
+  if (start < 0 || src.indexOf(head, start + 1) >= 0) fail(`upstream no longer has one ${head.trim()}`);
+  const next = src.indexOf("\nfunction ", start + head.length);
+  const end = next < 0 ? src.length : next;
+  // the parameters, one per line and `...props` last, then the type, up to the `) {` that opens the body
+  const signature = /^(function \w+\(\{\n(?:[^\n]*\n)*?)([ \t]+)\.\.\.props\n\}: ([\s\S]*?)\) \{\n/;
+  let body = src.slice(start, end);
+  const m = body.match(signature) ?? fail("its parameters no longer end in ...props before the type");
+  const [all, params, indent, type] = m;
+  body =
+    `${params}${indent}portalProps,\n${indent}...props\n}: ${type} & { portalProps?: ${rule.props} }) {\n` +
+    body.slice(all.length);
+  const open = `<${rule.portal}>`;
+  const count = body.split(open).length - 1;
+  if (count !== 1) fail(`it renders ${open} ${count} times, not once`);
+  body = body.replace(open, `<${rule.portal} {...portalProps}>`);
+  return src.slice(0, start) + body + src.slice(end);
+}
+
 /** Served labels go lowercase: string values of the label attributes, and the text of an sr-only element. */
 function lowercaseLabels(src: string): string {
   const attribute = new RegExp(`(\\s(?:${LABEL_ATTRIBUTES.join("|")})=)(["'])([^"'\\n]*)\\2`, "g");
@@ -323,6 +374,8 @@ export function transform(content: string, where: string, opts: { seed?: boolean
   }
   src = src.replace(/^(["'])use client\1;?[ \t]*\n(?:[ \t]*\n)?/, "");
   src = mapClasses(src, where, opts.pass);
+  const portal = opts.pass ? PASS_PORTALS[opts.pass] : undefined;
+  if (portal) src = forwardPortalProps(src, where, portal);
   src = lowercaseLabels(src);
   if (opts.seed) src = stripFocusClasses(src);
 

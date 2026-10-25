@@ -1,10 +1,14 @@
 import { describe, expect, test } from "bun:test";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { act, createElement, Fragment } from "react";
+import { createRoot } from "react-dom/client";
 import {
+  forwardPortalProps,
   GENERATED,
   ICON_LIBRARIES,
   isStrippedFocusClass,
+  PASS_CLASSES,
   SEEDS,
   manifestDrift,
   passFiles,
@@ -12,11 +16,16 @@ import {
   UPSTREAM,
 } from "../scripts/upstream.ts";
 
-// The base-nova mirror: the vendored JSON, the pass-through files regen writes from it, and the brand seeds.
+// The base-nova mirror: the vendored JSON, the pass-through files regen writes from it, and the brand seeds. The pass
+// layers render through react-dom/client into the preload's happy-dom, because Base UI portals them.
 const root = join(import.meta.dir, "..");
 const read = (rel: string) => readFileSync(join(root, rel), "utf8");
 const upstreamFile = (name: string) =>
   (JSON.parse(read(`upstream/base-nova/${name}.json`)) as { files: { path: string; content: string }[] }).files[0]!;
+
+/** Every word of every one-line string literal: where class words live. */
+const classWords = (src: string) =>
+  new Set([...src.matchAll(/"[^"\n]*"|'[^'\n]*'/g)].flatMap(([literal]) => literal.slice(1, -1).split(/\s+/)));
 
 const seedFiles = [...SEEDS.map((name) => `items/ui/${name}.tsx`), "items/ui/fleet-rail.tsx"];
 const passPaths = [...passFiles().keys()];
@@ -142,9 +151,14 @@ describe("the transforms", () => {
   });
 
   test("regen applies a pass item's class table, and fails on a stale entry or a style hook with no rule", () => {
-    expect(transform(`const c = "transition duration-200"\n`, "probe", { pass: "sheet" })).toBe(
-      `const c = "transition-[opacity,translate] duration-200"\n`,
-    );
+    expect(Object.keys(PASS_CLASSES).sort()).toEqual(["sheet", "tooltip"]);
+    for (const [name, table] of Object.entries(PASS_CLASSES)) {
+      const words = classWords(transform(upstreamFile(name).content, name, { pass: name }));
+      for (const [word, replacement] of Object.entries(table)) {
+        expect(words.has(word), `${name}: ${word}`).toBe(false);
+        for (const replaced of replacement) expect(words.has(replaced), `${name}: ${replaced}`).toBe(true);
+      }
+    }
     expect(() => transform(`const c = "px-2"\n`, "probe", { pass: "sheet" })).toThrow(/no longer has/);
     expect(() => transform(`const c = "cn-menu-target px-2"\n`, "probe", { pass: "card" })).toThrow(
       /style hook cn-menu-target has no rule/,
@@ -155,6 +169,48 @@ describe("the transforms", () => {
     );
   });
 
+  test("a pass layer's portal takes portalProps, and a layer whose shape moved upstream fails", () => {
+    const rule = { component: "ProbeContent", portal: "ProbePortal", props: "Probe.Portal.Props" };
+    const probe = [
+      "function ProbeContent({",
+      "  className,",
+      "  ...props",
+      "}: Probe.Popup.Props & {",
+      "  side?: string",
+      "}) {",
+      "  return (",
+      "    <ProbePortal>",
+      "      <Probe.Popup className={className} {...props} />",
+      "    </ProbePortal>",
+      "  )",
+      "}",
+      "",
+    ].join("\n");
+    expect(forwardPortalProps(probe, "probe", rule)).toBe(
+      [
+        "function ProbeContent({",
+        "  className,",
+        "  portalProps,",
+        "  ...props",
+        "}: Probe.Popup.Props & {",
+        "  side?: string",
+        "} & { portalProps?: Probe.Portal.Props }) {",
+        "  return (",
+        "    <ProbePortal {...portalProps}>",
+        "      <Probe.Popup className={className} {...props} />",
+        "    </ProbePortal>",
+        "  )",
+        "}",
+        "",
+      ].join("\n"),
+    );
+    const fails = (src: string) => () => forwardPortalProps(src, "probe", rule);
+    expect(fails(probe.replace("ProbeContent", "ProbeBody"))).toThrow(/no longer has one function ProbeContent/);
+    expect(fails(probe.replace("  ...props\n", "  ...rest\n"))).toThrow(/no longer end in \.\.\.props/);
+    expect(fails(probe.replace("<ProbePortal>", "<Probe.Portal>"))).toThrow(/renders <ProbePortal> 0 times/);
+    expect(fails(probe.replace("{...props} />", "{...props} portalProps={p} />"))).toThrow(/already names portalProps/);
+  });
+
   test("an unmapped icon or an unknown icon prop fails instead of dropping silently", () => {
     const icon = (attrs: string) =>
       `import { IconPlaceholder } from "@/app/(create)/components/icon-placeholder"\nconst x = <IconPlaceholder ${attrs} />\n`;
@@ -162,5 +218,49 @@ describe("the transforms", () => {
     expect(() => transform(icon(`lucide="RocketIcon"`), "unmapped")).toThrow(/no glyph/);
     expect(() => transform(icon(`lucide="XIcon" size={16}`), "prop")).toThrow(/prop size/);
     expect(() => transform(`import { x } from "@/registry/base-nova/blocks/x"\n`, "path")).toThrow(/has no rule/);
+  });
+});
+
+describe("the pass layers regen writes, rendered", () => {
+  test("the sheet and the tooltip render into the container portalProps names, with its class on the portal", async () => {
+    // imported here, so a broken item fails this row alone
+    const sheet = await import("@/components/superthread/ui/sheet");
+    const tooltip = await import("@/components/superthread/ui/tooltip");
+    const container = document.createElement("div");
+    const host = document.createElement("div");
+    document.body.append(container, host);
+    const reactRoot = createRoot(host);
+    const portalProps = { container, className: "dark" };
+    try {
+      await act(async () =>
+        reactRoot.render(
+          createElement(
+            Fragment,
+            null,
+            createElement(
+              sheet.Sheet,
+              { open: true },
+              createElement(sheet.SheetContent, { portalProps }, createElement(sheet.SheetTitle, null, "or-412")),
+            ),
+            createElement(
+              tooltip.Tooltip,
+              { open: true },
+              createElement(tooltip.TooltipTrigger, null, "search"),
+              createElement(tooltip.TooltipContent, { portalProps }, "search the docs"),
+            ),
+          ),
+        ),
+      );
+      for (const slot of ["sheet-overlay", "sheet-content", "tooltip-content"]) {
+        const layer = container.querySelector(`[data-slot="${slot}"]`);
+        expect(layer, `${slot} renders into the container`).not.toBeNull();
+        expect(layer!.closest(".dark"), `${slot} sits in the portal that takes the class`).not.toBeNull();
+      }
+      expect(document.body.querySelectorAll("[portalprops]")).toHaveLength(0);
+    } finally {
+      await act(async () => reactRoot.unmount());
+      host.remove();
+      container.remove();
+    }
   });
 });
