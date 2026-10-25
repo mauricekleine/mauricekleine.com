@@ -1,6 +1,6 @@
 # registry
 
-`@mk` is a shadcn registry of Base UI items on the superthread tokens, served at https://superthread.mauricekleine.com/r/. The version is `2.0.0-next.3`. Each item's page on the site shows it in light and dark with its install line.
+`@mk` is a shadcn registry of Base UI items on the superthread tokens, served at https://superthread.mauricekleine.com/r/. The version is `2.0.0-next.4`. Each item's page on the site shows it in light and dark with its install line.
 
 ## items
 
@@ -74,7 +74,7 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0-next.3/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0-next.4/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions with a snapshot. A snapshot never changes once it is published.
