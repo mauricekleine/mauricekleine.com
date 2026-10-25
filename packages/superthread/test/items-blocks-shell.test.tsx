@@ -322,6 +322,23 @@ describe("search palette", () => {
     }
   });
 
+  test("portalProps mount the dialog inside the app's own container", async () => {
+    const scope = document.createElement("div");
+    scope.className = "dark";
+    document.body.append(scope);
+    const view = await client(
+      <SearchPalette defaultOpen>
+        <SearchPaletteContent portalProps={{ container: scope }} />
+      </SearchPalette>,
+    );
+    try {
+      expect(scope.querySelector('[data-slot="command-input"]')).not.toBeNull();
+    } finally {
+      await view.done();
+      scope.remove();
+    }
+  });
+
   test("filtering shows the default empty words and selecting runs the app callback and closes", async () => {
     const selected: string[] = [];
     function Controlled() {
