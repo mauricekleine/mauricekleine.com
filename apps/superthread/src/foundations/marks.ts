@@ -1,3 +1,4 @@
+import manifest from "../../../../packages/superthread/marks/fleet.json";
 import type { ShipId } from "@/components/superthread/lib/fleet";
 import type { Mode } from "./master";
 
@@ -11,7 +12,7 @@ export const markFile = (id: MarkId, mode: Mode): string => `${id}${mode === "da
 export const markUrl = (id: MarkId, mode: Mode): string => `${markBase}/${id}/${markFile(id, mode)}`;
 
 // what each drawing shows, and where its one spot region sits
-export const drawn: Record<MarkId, string> = {
+const originalDrawings: Partial<Record<MarkId, string>> = {
   superthread: "a printer's registration target; its centre takes the spot, in the house ink",
   orbit: "a lit planet with a small moon above it; the planet's night side takes the spot",
   quanta: "an open book; the right-hand page, the one being read, takes the spot",
@@ -21,8 +22,23 @@ export const drawn: Record<MarkId, string> = {
   soliton: "one solitary wave; the water under its crest takes the spot",
 };
 
+// New ships live in the marks manifest until their glyph is drawn; the master stays immutable.
+export const markShip = (id: MarkId) => {
+  const ship = manifest.fleet.find((entry) => entry.id === id);
+  if (!ship) throw new Error(`no mark for ${id}`);
+  return ship;
+};
+export const shipSpot = (id: MarkId, mode: Mode): string => markShip(id).spot[mode];
+export const drawn = Object.fromEntries(
+  manifest.fleet.map((ship) => [
+    ship.id,
+    originalDrawings[ship.id as MarkId] ??
+      (ship.kind === "star" ? "a single dot in its screened hue tile, until its glyph is drawn" : ship.desc),
+  ]),
+) as Record<MarkId, string>;
+
 // a chart series' line screen per ship, written out so Tailwind finds each class in this source
-export const lineScreen: Record<ShipId, string> = {
+export const lineScreen: Partial<Record<ShipId, string>> = {
   orbit: "texture-line-orbit",
   quanta: "texture-line-quanta",
   trisys: "texture-line-trisys",

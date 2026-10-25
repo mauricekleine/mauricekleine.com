@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch",
+  "title": "switch",
+  "description": "a square switch: the house ink when on, a key square that crosses the track",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/switch.tsx",
+      "content": "import { Switch as SwitchPrimitive } from \"@base-ui/react/switch\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/switch 2.1.0\n\n// A square track with the input edge and a square thumb. Off, the thumb prints in the input ink at the start; on, the\n// track fills with the house ink and the thumb crosses to the end in the label ink on it, so on reads as settled. It\n// is a control, not a field: keyboard focus draws the 2 px house ring 2 px outside the track. The thumb moves on the\n// quick duration; reduced motion moves it at once. No screen: an 18 px track has no room for a ramp, and on is solid.\nfunction Switch({\n  className,\n  size = \"default\",\n  ...props\n}: SwitchPrimitive.Root.Props & {\n  size?: \"sm\" | \"default\";\n}) {\n  return (\n    <SwitchPrimitive.Root\n      data-slot=\"switch\"\n      data-mk=\"switch\"\n      data-size={size}\n      className={cn(\n        \"peer group/switch relative inline-flex shrink-0 cursor-pointer items-center border border-input bg-background transition-[background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) after:absolute after:-inset-x-3 after:-inset-y-2 not-data-disabled:hover:bg-control-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) aria-invalid:border-error data-[size=default]:h-[18px] data-[size=default]:w-8 data-[size=sm]:h-3.5 data-[size=sm]:w-6 data-checked:border-primary data-checked:bg-primary not-data-disabled:data-checked:hover:border-primary-hover not-data-disabled:data-checked:hover:bg-primary-hover data-disabled:cursor-not-allowed data-disabled:border-disabled data-disabled:bg-faint data-disabled:data-checked:border-disabled data-disabled:data-checked:bg-faint\",\n        className,\n      )}\n      {...props}\n    >\n      <SwitchPrimitive.Thumb\n        data-slot=\"switch-thumb\"\n        className=\"pointer-events-none block translate-x-0.5 bg-input transition-[translate,background-color] duration-(--duration-quick) ease-(--ease-brand) group-data-[size=default]/switch:size-3 group-data-[size=sm]/switch:size-2 group-data-[size=default]/switch:data-checked:translate-x-4 group-data-[size=sm]/switch:data-checked:translate-x-3 data-checked:bg-primary-foreground group-data-disabled/switch:bg-disabled group-data-disabled/switch:data-checked:bg-disabled\"\n      />\n    </SwitchPrimitive.Root>\n  );\n}\n\nexport { Switch };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/switch.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.1.0",
+    "sha256": "53bb3e69203f0806be1f0a05813ca4e583671c05f19af3de245fb80410849222",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "switch",
+      "sha256": "1f22350ccbf358a3aa198305c41d91e146abc0a7d5b18a9a23488b8d6b264ab4",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

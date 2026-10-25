@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group",
+  "title": "toggle group",
+  "description": "toggles joined on shared 1 px edges, one or several pressed",
+  "dependencies": [
+    "@base-ui/react@^1.8.0",
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "@mk/toggle",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/toggle-group.tsx",
+      "content": "import * as React from \"react\";\nimport { Toggle as TogglePrimitive } from \"@base-ui/react/toggle\";\nimport { ToggleGroup as ToggleGroupPrimitive } from \"@base-ui/react/toggle-group\";\nimport { type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n\nimport { toggleVariants } from \"@/components/superthread/ui/toggle\";\n// @mk/toggle-group 2.1.0\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number;\n    orientation?: \"horizontal\" | \"vertical\";\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n  orientation: \"horizontal\",\n});\n\n// Joined by default; a positive spacing gives each toggle its own edge and outside ring.\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  orientation = \"horizontal\",\n  children,\n  ...props\n}: ToggleGroupPrimitive.Props &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number;\n    orientation?: \"horizontal\" | \"vertical\";\n  }) {\n  return (\n    <ToggleGroupPrimitive\n      data-slot=\"toggle-group\"\n      data-mk=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      data-spacing={spacing}\n      data-orientation={orientation}\n      orientation={orientation}\n      style={{ \"--gap\": spacing } as React.CSSProperties}\n      className={cn(\n        \"group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-vertical:flex-col data-vertical:items-stretch\",\n        className,\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing, orientation }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive>\n  );\n}\n\n// Shared edges overlap by 1 px. The pressed edge rises above its neighbour; joined focus draws inside.\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant = \"default\",\n  size = \"default\",\n  ...props\n}: TogglePrimitive.Props & VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext);\n\n  return (\n    <TogglePrimitive\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      data-spacing={context.spacing}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"relative shrink-0 focus-visible:z-20 aria-pressed:z-10\",\n        context.spacing === 0 && \"focus-visible:-outline-offset-2\",\n        context.spacing === 0 && (context.orientation === \"vertical\" ? \"not-first:-mt-px\" : \"not-first:-ml-px\"),\n        className,\n      )}\n      {...props}\n    >\n      {children}\n    </TogglePrimitive>\n  );\n}\n\nexport { ToggleGroup, ToggleGroupItem };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/toggle-group.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.1.0",
+    "sha256": "d15baca74cf44fd6f2ce80af5b43ce8c6d505a8b9d869a66b215bca5181b5f2c",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "toggle-group",
+      "sha256": "9f103af4a048ec392cb09b886985ec733a360a0033cc7138349f1775851a89d4",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

@@ -197,15 +197,10 @@ const BAR = "[@media(max-width:900px)]:";
 // The size happy-dom gives the window, and a way to change it.
 const viewport = (window as unknown as { happyDOM: { setViewport(size: { width: number }): void } }).happyDOM;
 
-const HREFS = {
+const HREFS: Record<string, string> = {
   home: "/",
-  orbit: "/orbit",
-  quanta: "/quanta",
-  trisys: "/trisys",
-  constellation: "/constellation",
-  artifacts: "/artifacts",
-  soliton: "/soliton",
-} as const;
+  ...Object.fromEntries(fleet.map((ship) => [ship.id, `/${ship.id}`])),
+};
 
 // An element's accessible name, as far as these cells need: its label, the text it holds, or an image's alt.
 const nameOf = (el: Element) =>
@@ -219,7 +214,7 @@ describe("the layers rendered", () => {
     for (const done of mounted.splice(0).reverse()) await done();
   });
 
-  test("the fleet rail: six ships and home, the hrefs it is given, one current ship, a name on every cell", () => {
+  test("the fleet rail: every ship and home, the hrefs it is given, one current ship, a name on every cell", () => {
     const dom = server(<FleetRail current="quanta" hrefs={HREFS} markBase="/marks" />);
 
     const rail = dom.querySelector('nav[aria-label="fleet"]')!;

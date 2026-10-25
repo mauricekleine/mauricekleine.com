@@ -81,6 +81,9 @@ describe("/install", () => {
 describe("the fleet row", () => {
   test("each ship's spot ink has the master's name", () => {
     const master = readJson("tokens/master.json") as { ships: Record<string, { "spot name": string }> };
-    for (const ship of fleet) expect(spotNames[ship.id]).toBe(master.ships[ship.id]?.["spot name"]);
+    for (const ship of fleet) {
+      if (master.ships[ship.id]) expect(spotNames[ship.id]).toBe(master.ships[ship.id]!["spot name"]);
+      else expect(spotNames[ship.id]).toBe("new star");
+    }
   });
 });

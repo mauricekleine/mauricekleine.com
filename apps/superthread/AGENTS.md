@@ -54,7 +54,7 @@ bun apps/superthread/tools/shoot.ts --focus --base http://127.0.0.1:3001 --tag <
 ## Plates, marks and provenance
 
 - **Plates** are generated. From `apps/superthread/`, `python3 -I ../../packages/superthread/scripts/texture/build.py plates --out public/texture --ts src/site/texture.gen.ts` writes `<plate>.<hash8>.png` files, each with a tEXt `Source` chunk, plus `public/texture/PROVENANCE.json` and `texture.gen.ts`. It writes new files beside old ones, so remove the PNGs a change replaces; `verify`, `plates --check` and `check-build` fail on a file the spec no longer makes. A plate change starts in `packages/superthread/texture/plates.json`, with its pixel hashes rewritten into `texture/plates.sha256` (`--write-hashes`).
-- **Marks** in `public/marks/<id>/` are byte copies of the master world's marks, light and `-dark`, for the six ships and superthread's home mark, which is also the favicon. `public/marks/PROVENANCE.json` records each file's source and sha256. A new or redrawn mark comes from the world and lands here with its provenance entry.
+- **Marks** in `public/marks/<id>/` use the 16px master format, light and `-dark`; superthread's home mark is also the favicon. `packages/superthread/marks/fleet.json` owns fleet membership and new ships' spots. `bun run marks new <id>` allocates a distinct spot and draws a star until its glyph is drawn; `marks check` verifies geometry, contrast, separation and provenance, and `marks sheet` renders the fleet together. Original master marks remain byte copies. `public/marks/PROVENANCE.json` traces every served asset and the public manifest.
 - **Fonts** in `public/fonts/` are the woff2 faces in `packages/superthread/fonts.ts`, each family with its licence beside it.
 
 ## Never

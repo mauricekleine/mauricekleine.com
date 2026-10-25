@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-section",
+  "title": "form section",
+  "description": "a titled group of fields that saves or discards its changes",
+  "registryDependencies": [
+    "@mk/field",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/blocks/form-section.tsx",
+      "content": "import { createContext, useContext, useId } from \"react\";\nimport { cn } from \"@/components/superthread/lib/utils\";\nimport { FieldGroup } from \"@/components/superthread/ui/field\";\n// @mk/form-section 2.1.0\n\nconst FormSectionContext = createContext<string | undefined>(undefined);\n\n// A named form with room for its fields and a ruled save row. The app owns validation, saving and discarding.\n// It owns its title's id, so the form keeps its name; pass titleId when the app needs a known id.\nfunction FormSection({\n  className,\n  titleId: suppliedTitleId,\n  ...props\n}: React.ComponentProps<\"form\"> & { titleId?: string }) {\n  const id = useId();\n  const titleId = suppliedTitleId ?? `${id}-title`;\n  return (\n    <FormSectionContext.Provider value={titleId}>\n      <form\n        data-mk=\"form-section\"\n        data-slot=\"form-section\"\n        aria-labelledby={titleId}\n        className={cn(\"grid min-w-0 gap-6\", className)}\n        {...props}\n      />\n    </FormSectionContext.Provider>\n  );\n}\n\n// The title and its explanation stay together above the fields.\nfunction FormSectionHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"form-section-header\" className={cn(\"grid min-w-0 gap-2\", className)} {...props} />;\n}\n\n// The form's heading supplies its accessible name without a separate label.\nfunction FormSectionTitle({ className, ...props }: Omit<React.ComponentProps<\"h2\">, \"id\">) {\n  const titleId = useContext(FormSectionContext);\n  return (\n    <h2 data-slot=\"form-section-title\" className={cn(\"type-title text-balance\", className)} {...props} id={titleId} />\n  );\n}\n\n// A short explanation of what the fields change, on the summary step.\nfunction FormSectionDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"form-section-description\"\n      className={cn(\"type-summary text-pretty text-muted-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\n// Fields keep the item's own spacing and can be rearranged by the app.\nfunction FormSectionFields({ className, ...props }: React.ComponentProps<typeof FieldGroup>) {\n  return <FieldGroup data-slot=\"form-section-fields\" className={cn(\"min-w-0\", className)} {...props} />;\n}\n\n// A quiet rule separates the save controls, which wrap and align at the end.\nfunction FormSectionFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"form-section-footer\"\n      className={cn(\"flex flex-wrap items-center justify-end gap-2 border-t border-border pt-6\", className)}\n      {...props}\n    />\n  );\n}\n\n// The app says whether the form changed or saved; updates are read out beside the actions.\nfunction FormSectionStatus({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"form-section-status\"\n      aria-live=\"polite\"\n      className={cn(\"mr-auto type-instrument text-muted-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\nexport {\n  FormSection,\n  FormSectionHeader,\n  FormSectionTitle,\n  FormSectionDescription,\n  FormSectionFields,\n  FormSectionFooter,\n  FormSectionStatus,\n};\n",
+      "type": "registry:component",
+      "target": "@components/superthread/blocks/form-section.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.1.0",
+    "sha256": "c78cb7437b6bdb1698fd2bf5800c85eab6a37c9adaee08d770fca06efd397337",
+    "tier": "block",
+    "upstream": null,
+    "serves": [
+      "quanta",
+      "trisys",
+      "orbit",
+      "www"
+    ]
+  },
+  "type": "registry:block"
+}

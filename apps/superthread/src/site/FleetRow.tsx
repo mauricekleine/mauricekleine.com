@@ -1,16 +1,11 @@
 import type { CSSProperties } from "react";
 import { fleet, type ShipId } from "@/components/superthread/lib/fleet";
 
-// each ship's spot ink by name, as the master's tokens.json names it under ships.<id>["spot name"];
-// install.test.tsx holds the two equal
-export const spotNames: Readonly<Record<ShipId, string>> = {
-  orbit: "comet blue",
-  quanta: "quark green",
-  trisys: "flare orange",
-  constellation: "nova violet",
-  artifacts: "manila gold",
-  soliton: "canal indigo",
-};
+import { spotName } from "@/foundations/master";
+
+export const spotNames = Object.fromEntries(fleet.map((ship) => [ship.id, spotName(ship.id)])) as Readonly<
+  Record<ShipId, string>
+>;
 
 // the mark files a ship prints, from the I2 kit paths under /marks
 export function markUrls(id: ShipId): { light: string; dark: string } {
@@ -19,7 +14,7 @@ export function markUrls(id: ShipId): { light: string; dark: string } {
   return { light: `/marks/${id}/${ship.mark.light}`, dark: `/marks/${id}/${ship.mark.dark}` };
 }
 
-// The six ships in fleet order: each mark at 48 px (three screen pixels to a mark cell), its name and its spot ink.
+// The ships in fleet order: each mark at 48 px (three screen pixels to a mark cell), its name and its spot ink.
 // The mark is a CSS background keyed on the mode, so only the active mode's file loads.
 export function FleetRow() {
   return (
