@@ -1,6 +1,6 @@
 # superthread.mauricekleine.com
 
-`apps/superthread/` is the superthread design system's site and the home of v2: a TanStack Start app on Workers that renders the `@mk` registry's own item sources from `packages/superthread/items/` and serves the registry under `/r`, beside the faces (`/fonts/`), the ship marks (`/marks/`) and the plates it prints (`/texture/`). Its pages are the overview, the foundations (colour, type, space, motion, marks, texture), a page for every item, three mock app pages built only from the items, and `/install`. The Worker is `superthread`.
+`apps/superthread/` is the superthread design system's site and the home of v2: a TanStack Start app on Workers that renders the `@mk` registry's items as the registry serves them and serves the registry under `/r`, beside the faces (`/fonts/`), the ship marks (`/marks/`) and the plates it prints (`/texture/`). Its pages are the overview, the foundations (colour, type, space, motion, marks, texture), a page for every item, three mock app pages built only from the items, and `/install`. The Worker is `superthread`.
 
 ## Commands
 
