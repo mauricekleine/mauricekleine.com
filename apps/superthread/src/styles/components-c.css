@@ -95,7 +95,7 @@
   /* toast: the printed stack sits in the page, at the toaster's width. Its toasts arrive after hydration, so the
      box holds their height (the front toast and two peeks) from the first paint. */
   .st-c-toasts {
-    min-height: 149px;
+    min-height: 153px;
     padding-top: 4px;
   }
 

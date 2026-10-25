@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Dialog as SheetPrimitive } from "@base-ui/react/dialog";
 import { Badge } from "@/components/superthread/ui/badge";
 import { Button } from "@/components/superthread/ui/button";
 import {
@@ -43,9 +42,9 @@ function Run() {
 }
 
 // The sheet as it stands open, printed inside a frame that plays the window. The frame is a containing block for
-// fixed boxes (contain: layout), so the overlay and the sheet docked to the right land in it. SheetContent portals to
-// the body on its own; the outer portal, the sheet root's own, hands it the frame instead, and the frame comes from
-// state, so the portal waits for it. Inert: nothing in the print takes focus or the pointer, and it stays open.
+// fixed boxes (contain: layout), so the scrim and the sheet docked to the right land in it. SheetContent's portalProps
+// hand its portal the frame instead of the body, and the frame comes from state, so the portal waits for it (a null
+// container holds it back). Inert: nothing in the print takes focus or the pointer, and it stays open.
 export function SheetPrinted() {
   const [frame, setFrame] = useState<HTMLDivElement | null>(null);
   return (
@@ -62,24 +61,22 @@ export function SheetPrinted() {
         </ul>
       </div>
       <Sheet open modal={false}>
-        <SheetPrimitive.Portal container={frame}>
-          <SheetContent initialFocus={false} finalFocus={false}>
-            <Run />
-          </SheetContent>
-        </SheetPrimitive.Portal>
+        <SheetContent portalProps={{ container: frame }} initialFocus={false} finalFocus={false}>
+          <Run />
+        </SheetContent>
       </Sheet>
     </div>
   );
 }
 
-// The same sheet for real, from the right. It renders at the end of the page, outside its pane, so it takes the mode
-// it is given: each pane passes its own.
+// The same sheet for real, from the right. It renders at the end of the page, outside its pane, so each pane hands
+// its portal its own mode, and the scrim and the sheet both take it.
 export function SheetExample({ mode }: { mode: "light" | "dark" }) {
   return (
     <>
       <Sheet>
         <SheetTrigger render={<Button variant="outline" />}>open or-412</SheetTrigger>
-        <SheetContent className={mode}>
+        <SheetContent portalProps={{ className: mode }}>
           <Run />
         </SheetContent>
       </Sheet>

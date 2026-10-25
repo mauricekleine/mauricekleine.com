@@ -39,10 +39,16 @@ function Page() {
       </Section>
       <Section id="upstream" title="upstream">
         <p className="st-pass-prose">
-          base-nova&rsquo;s sheet, built on base ui&rsquo;s dialog. superthread changes its imports and draws its close
-          button with the close glyph; every class is upstream&rsquo;s. the sheet renders at the end of the page, so it
-          takes the page&rsquo;s mode unless you give it one:{" "}
-          <code>&lt;SheetContent className=&quot;dark&quot;&gt;</code>, as each pane under try it does.
+          base-nova&rsquo;s sheet, built on base ui&rsquo;s dialog. superthread changes its imports and draws the close
+          button with the close glyph, labelled in lowercase. a few classes change too. the sheet sits on the sheet lift
+          over the scrim, with no blur, as the dialog does. its title takes the display face, and only its opacity and
+          position animate.
+        </p>
+        <p className="st-pass-prose">
+          the sheet renders at the end of the page, so it takes the page&rsquo;s mode. to give it another, pass the mode
+          to its portal, as each pane under try it does:{" "}
+          <code>portalProps=&#123;&#123; className: &quot;dark&quot; &#125;&#125;</code>. a <code>container</code> there
+          renders it somewhere else; the frames above hold their sheets that way.
         </p>
       </Section>
     </>

@@ -11,6 +11,9 @@
     letter-spacing: var(--text-summary--letter-spacing);
     text-wrap: pretty;
   }
+  .st-pass-prose + .st-pass-prose {
+    margin-top: 12px;
+  }
   .st-pass-prose + .st-modepair {
     margin-top: 28px;
   }

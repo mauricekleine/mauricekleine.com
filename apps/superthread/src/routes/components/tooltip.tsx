@@ -39,10 +39,11 @@ function Page() {
       </Section>
       <Section id="upstream" title="upstream">
         <p className="st-pass-prose">
-          base-nova&rsquo;s tooltip on base ui, with only its imports changed. <code>TooltipProvider</code> opens a
-          group&rsquo;s tooltips with no delay, and the collapsed sidebar uses the tooltip to name its buttons. like the
-          sheet, it renders at the end of the page and takes the page&rsquo;s mode unless you pass one in{" "}
-          <code>className</code>.
+          base-nova&rsquo;s tooltip on base ui. superthread changes its imports and squares the arrow, which upstream
+          rounds by 2&nbsp;px. <code>TooltipProvider</code> opens a group&rsquo;s tooltips with no delay, and the
+          collapsed sidebar uses the tooltip to name its buttons. like the sheet, it renders at the end of the page and
+          takes the page&rsquo;s mode; pass another to its portal with{" "}
+          <code>portalProps=&#123;&#123; className: &quot;dark&quot; &#125;&#125;</code>.
         </p>
       </Section>
     </>

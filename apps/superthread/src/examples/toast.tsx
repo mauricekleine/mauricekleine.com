@@ -1,53 +1,37 @@
 import { useEffect, useState } from "react";
+import type { Toast as ToastPrimitive } from "@base-ui/react/toast";
 import { Button } from "@/components/superthread/ui/button";
 import {
-  Toast,
   ToastAction,
-  ToastClose,
-  ToastContent,
-  ToastDescription,
-  ToastIcon,
+  ToastList,
   ToastProvider,
-  ToastTitle,
   ToastViewport,
   Toaster,
   createToastManager,
   toast,
-  useToastManager,
 } from "@/components/superthread/ui/toast";
 
 // what a printed toast can carry beyond the item's options: a second, ghost button beside its one action
 type Printed = { undo?: string };
 
-// A list of our own, built as the item's ToastList is, from its parts and its ToastIcon. ToastList prints one action
-// per toast; this one adds the ghost button a toast's data names.
-function PrintedList() {
-  const { toasts } = useToastManager<Printed>();
-  return toasts.map((item) => (
-    <Toast key={item.id} toast={item}>
-      <ToastContent>
-        <ToastIcon type={item.type} />
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <ToastTitle />
-          <ToastDescription />
-          <div className="mt-1.5 flex gap-2 empty:hidden">
-            <ToastAction />
-            {item.data?.undo && (
-              <Button variant="ghost" size="sm">
-                {item.data.undo}
-              </Button>
-            )}
-          </div>
-        </div>
-        <ToastClose />
-      </ToastContent>
-    </Toast>
-  ));
+// The action row ToastList prints for each toast: its one action, then the ghost button the toast's data names.
+function printedActions(item: ToastPrimitive.Root.ToastObject<Printed>) {
+  return (
+    <>
+      <ToastAction />
+      {item.data?.undo && (
+        <Button variant="ghost" size="sm">
+          {item.data.undo}
+        </Button>
+      )}
+    </>
+  );
 }
 
-// Three toasts, newest in front, on a manager of their own that never times out. The provider subscribes in its own
-// effect, which runs before this one, so the toasts land. The viewport leaves its fixed corner and sits in the page,
-// as tall as the front toast plus the two 12 px peeks. Inert: the stack never expands or pauses.
+// Three toasts, newest in front, on a manager of their own that never times out, printed by the item's ToastList with
+// the action row above. The provider subscribes in its own effect, which runs before this one, so the toasts land.
+// The viewport leaves its fixed corner and sits in the page, as tall as the front toast plus the two 12 px peeks.
+// Inert: the stack never expands or pauses.
 export function ToastPrinted() {
   const [manager] = useState(() => createToastManager<Printed>());
   useEffect(() => {
@@ -82,7 +66,7 @@ export function ToastPrinted() {
     <div className="st-c-toasts" inert>
       <ToastProvider toastManager={manager}>
         <ToastViewport className="relative inset-auto z-auto mx-0 h-[calc(var(--toast-frontmost-height,0px)+24px)] w-full max-w-[420px] sm:inset-auto">
-          <PrintedList />
+          <ToastList actions={printedActions} />
         </ToastViewport>
       </ToastProvider>
     </div>

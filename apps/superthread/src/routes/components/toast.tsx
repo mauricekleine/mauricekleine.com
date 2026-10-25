@@ -88,21 +88,22 @@ function Page() {
           <dd>
             the parts the stack is built from, with <code>ToastContent</code>, <code>ToastTitle</code>,{" "}
             <code>ToastDescription</code>, <code>ToastAction</code> and <code>ToastClose</code>, for a stack of your own
-            under <code>ToastProvider</code> and <code>ToastViewport</code>, as this page prints one above.
+            under <code>ToastProvider</code> and <code>ToastViewport</code>.
           </dd>
           <dt>
             <code>ToastList</code>
           </dt>
           <dd>
             the provider&rsquo;s toasts as <code>Toaster</code> prints them. put it in a viewport of your own to show
-            the stack somewhere else.
+            the stack somewhere else, as this page does above. <code>actions</code> takes each toast and returns its
+            action row, so a toast can carry more than its one action: the front toast above adds a ghost{" "}
+            <code>undo</code>, named in its <code>data</code>. by default the row holds the one action.
           </dd>
           <dt>
             <code>ToastIcon</code>
           </dt>
           <dd>
-            the status glyph for a toast&rsquo;s <code>type</code>. the stack above uses it in a list of its own, to add
-            a ghost <code>undo</code> beside the action.
+            the status glyph for a toast&rsquo;s <code>type</code>, for a toast you build from the parts.
           </dd>
         </dl>
       </Section>
