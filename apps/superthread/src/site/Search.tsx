@@ -7,17 +7,22 @@ import { nav, type NavEntry } from "./nav";
 
 const limit = 8;
 
+// a query and a page split the same way, so an item's exact name ("input-group") finds it as its words do
+function wordsOf(text: string): string[] {
+  return text
+    .toLowerCase()
+    .split(/[\s-]+/)
+    .filter(Boolean);
+}
+
 // Every word of the query must start a word of the page's title, section or item name; title matches rank first.
 export function searchNav(query: string): NavEntry[] {
-  const words = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const words = wordsOf(query);
   if (words.length === 0) return [];
   const scored: [number, number, NavEntry][] = [];
   nav.forEach((entry, order) => {
-    const title = entry.title.toLowerCase().split(/[\s-]+/);
-    const rest = [entry.section, entry.item ?? ""]
-      .join(" ")
-      .toLowerCase()
-      .split(/[\s-]+/);
+    const title = wordsOf(entry.title);
+    const rest = wordsOf(`${entry.section} ${entry.item ?? ""}`);
     let score = 0;
     for (const word of words) {
       if (title.some((part) => part.startsWith(word))) score += 2;
