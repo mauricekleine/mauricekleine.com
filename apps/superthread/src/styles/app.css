@@ -13,6 +13,7 @@
 @import "./components-f.css";
 @import "./mock.css";
 @import "./compositions-a.css";
+@import "./compositions-b.css";
 
 /* a build renders the registry's payloads and dev their sources, so classes are scanned from both */
 @source "../../.payload";
