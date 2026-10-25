@@ -29,9 +29,8 @@ function Page() {
 
       <Section id="example" title="example">
         <p className="st-a-copy">
-          pick with the pointer, or focus the trigger and use the arrow keys, or type a ship's first letters. the last
-          select has no ship yet, so it holds the error ink until you pick one. a disabled trigger keeps a flat fill and
-          its full edge.
+          pick with the pointer, or focus the trigger and use the arrow keys, or type a ship&rsquo;s first letters. the
+          second select has no ship yet, so it holds the error ink until you pick one.
         </p>
         <ModePair className="st-a-stack" light={<SelectExample mode="light" />} dark={<SelectExample mode="dark" />} />
       </Section>
@@ -48,8 +47,8 @@ function Page() {
 
       <Section id="states" title="states">
         <p className="st-a-copy">
-          the trigger draws the input's frame: 1 px at rest and 2 px inside on focus, by tab or by click, in the error
-          ink while nothing is picked.
+          the trigger draws the input&rsquo;s frame: 1 px at rest and 2 px inside on focus, by tab or by click, in the
+          error ink while nothing is picked. a disabled trigger keeps a flat fill and its full edge.
         </p>
         <ModePair className="st-a-stack" light={<SelectStates mode="light" />} dark={<SelectStates mode="dark" />} />
       </Section>

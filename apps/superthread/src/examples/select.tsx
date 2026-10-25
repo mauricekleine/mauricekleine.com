@@ -1,4 +1,4 @@
-import { useCallback, useId, useState } from "react";
+import { useId, useState } from "react";
 import { fleet, type Ship, type ShipId } from "@/components/superthread/lib/fleet";
 import { cn } from "@/components/superthread/lib/utils";
 import { Icon } from "@/components/superthread/ui/glyphs";
@@ -39,14 +39,8 @@ function shipValue(value: ShipId | null) {
 // The list. It opens under the trigger, not over it, as the world draws it. Base UI portals it to the body, outside
 // the mode pair's pane, so the portal takes the pane's mode class and the list reads that pane's tokens.
 function ShipList({ mode }: { mode: Mode }) {
-  const scope = useCallback(
-    (popup: HTMLDivElement | null) => {
-      popup?.closest("[data-base-ui-portal]")?.classList.add(mode);
-    },
-    [mode],
-  );
   return (
-    <SelectContent ref={scope} alignItemWithTrigger={false}>
+    <SelectContent portalProps={{ className: mode }} alignItemWithTrigger={false}>
       <SelectGroup>
         {fleet.map((ship) => (
           <SelectItem key={ship.id} value={ship.id}>
@@ -67,14 +61,12 @@ function ShipField({
   hint,
   initial = null,
   required = false,
-  disabled = false,
 }: {
   mode: Mode;
   label: string;
   hint?: string;
   initial?: ShipId | null;
   required?: boolean;
-  disabled?: boolean;
 }) {
   const id = useId();
   const [ship, setShip] = useState<ShipId | null>(initial);
@@ -84,7 +76,7 @@ function ShipField({
       <span id={`${id}-label`} className="st-a-label">
         {label}
       </span>
-      <Select value={ship} onValueChange={(value) => setShip(value)} disabled={disabled}>
+      <Select value={ship} onValueChange={(value) => setShip(value)}>
         <SelectTrigger
           className="w-full"
           aria-labelledby={`${id}-label ${id}-value`}
@@ -104,13 +96,11 @@ function ShipField({
   );
 }
 
-// The disabled select sits between live ones, never last: the focus check's Tab attempt on it lands on the next
-// field, which keeps it in view.
+// Two live selects: one with a ship picked, and one that is required and has none yet.
 export function SelectExample({ mode }: { mode: Mode }) {
   return (
     <div className="st-a-grid">
       <ShipField mode={mode} label="ship" hint="the ship this run belongs to" initial="trisys" />
-      <ShipField mode={mode} label="board" hint="set by the board this run came from" initial="orbit" disabled />
       <ShipField mode={mode} label="ship" required />
     </div>
   );
@@ -118,7 +108,7 @@ export function SelectExample({ mode }: { mode: Mode }) {
 
 // The list printed open under a closed trigger, row for row as the item draws it: quanta under the pointer, trisys
 // chosen. It is a picture, so it stays out of the accessibility tree; the trigger above it is a real select whose
-// list opens 4 px below it, the item's default. The print sits at the world's 6 px.
+// list opens at the item's default, the world's 6 px, where the print sits too.
 export function SelectOpen({ mode }: { mode: Mode }) {
   const id = useId();
   return (
@@ -164,8 +154,9 @@ export function SelectOpen({ mode }: { mode: Mode }) {
   );
 }
 
-// The trigger's states, printed through data-demo. A select's state label never says "invalid": the focus check
-// adds that ending itself after the select's own, and reads it as the field's error ink.
+// The trigger's states, printed through data-demo, then disabled, the real disabled select. A select's state label
+// never says "invalid": the focus check adds that ending itself after the select's own, and reads it as the field's
+// error ink.
 type PrintedState = {
   name: string;
   label: string;
@@ -173,6 +164,7 @@ type PrintedState = {
   value: ShipId | null;
   demo?: boolean;
   invalid?: boolean;
+  disabled?: boolean;
 };
 
 const states: PrintedState[] = [
@@ -187,6 +179,7 @@ const states: PrintedState[] = [
     demo: true,
     invalid: true,
   },
+  { name: "disabled", label: "ship, disabled", note: "flat fill, full edge", value: "trisys", disabled: true },
 ];
 
 export function SelectStates({ mode }: { mode: Mode }) {
@@ -194,7 +187,7 @@ export function SelectStates({ mode }: { mode: Mode }) {
     <States>
       {states.map((state) => (
         <State key={state.name} name={state.name} note={state.note}>
-          <Select defaultValue={state.value}>
+          <Select defaultValue={state.value} disabled={state.disabled}>
             <SelectTrigger
               className="w-full"
               tabIndex={-1}

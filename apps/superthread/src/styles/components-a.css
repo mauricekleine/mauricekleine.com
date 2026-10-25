@@ -88,6 +88,55 @@
     font: 400 11px/14px var(--font-mono);
   }
 
+  /* a printed typing state: a copy of the field's text in no ink, laid over the control on the control's own
+     metrics, ends in the 1 px caret the browser draws there, in --fx: the house ink, or the error ink when the field
+     is invalid. A grid holds the control as a block, so no line gap stretches the copy past the box. The copy steps
+     aside while the field holds real focus, where the real caret draws. */
+  .st-a-typing {
+    --fx: var(--primary);
+    position: relative;
+    display: grid;
+  }
+  .st-a-typing:has([aria-invalid="true"]) {
+    --fx: var(--error);
+  }
+  .st-a-ghost {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border: 1px solid transparent;
+    padding: 0 12px;
+    color: transparent;
+    pointer-events: none;
+    user-select: none;
+  }
+  .st-a-typing:has(:focus) .st-a-ghost {
+    visibility: hidden;
+  }
+  /* an input's one line: the browser centres its 21 px line in the 38 px inside the edge and lands it 10 px down,
+     on a whole pixel */
+  .st-a-ghost-line {
+    padding-top: 9px;
+    white-space: pre;
+  }
+  /* a textarea's lines, from its top padding, wrapping where it wraps */
+  .st-a-ghost-area {
+    padding-block: 9px;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+  /* an input group's text addon at the addon's weight, then the text control's 10 px inset */
+  .st-a-ghost-prefix {
+    padding-right: 10px;
+    font-weight: 500;
+  }
+  /* an empty inline box spans the font's ascent and descent, the height of the browser's own caret. The 1 px bar
+     centres on the text's end, so it prints on the whole pixel the browser's caret takes there. */
+  .st-a-caret {
+    margin-left: -0.5px;
+    border-left: 1px solid var(--fx);
+  }
+
   /* a ship's 16 px mark: the key tile on a light ground, the paper tile on a dark one, whichever mode the page is in */
   .st-a-mark {
     flex: none;
@@ -108,16 +157,16 @@
   }
 
   /* the select's list, printed open: the trigger 8 px under its label, the list 6 px under the trigger as the
-     world prints it, with room right and below for the lift */
+     world prints it and the item opens it, with room right and below for the lift */
   .st-a-open {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     max-width: 307px;
     padding-bottom: 24px;
   }
-  .st-a-open > .st-a-print {
-    margin-top: -2px;
+  .st-a-open > .st-a-label {
+    margin-bottom: 2px;
   }
 
   /* checkboxes: a box and its words on one line, 16 px between lines; the ships under "every ship" step in */

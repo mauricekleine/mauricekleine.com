@@ -1,5 +1,6 @@
 import { useId, useState, type ReactNode } from "react";
 import { cn } from "@/components/superthread/lib/utils";
+import { FieldErrorGlyph } from "@/components/superthread/ui/glyphs";
 import { Input } from "@/components/superthread/ui/input";
 
 // The field pages' shared parts (input, input group, textarea, select, checkbox), then the input's own examples.
@@ -44,31 +45,51 @@ export function Hint({ id, children }: { id?: string; children: ReactNode }) {
   );
 }
 
-// An input error: the bang in its glyph square, in the failed glyph ink, then what is wrong and how to fix it.
+// An input error: the item's field-error glyph, the bang knocked out of its square in the failed glyph ink, then
+// what is wrong and how to fix it.
 export function FieldError({ id, children }: { id?: string; children: ReactNode }) {
   return (
     <p id={id} className="st-a-error">
-      <BangGlyph />
+      <FieldErrorGlyph />
       <span>{children}</span>
     </p>
   );
 }
 
-// The world's input error glyph: the 14 px glyph square, corners notched, the bang knocked out. The registry's
-// glyphs carry the bang only as a bare stroke, so the square is drawn here.
-function BangGlyph() {
+// A printed typing state: the field as it draws focus, plus the caret the browser draws after the text. A copy of
+// the text in no ink sits over the control on the control's own metrics and ends in a 1 px bar in --fx, so the bar
+// lands where the real caret would. "line" copies an input's centred line, "area" a textarea's top-aligned lines,
+// and a prefix copies an input group's text addon. While the field holds real focus the copy steps aside for the
+// real caret, and it follows what is typed, so the printed caret is right again when focus leaves.
+export function Typing({
+  kind,
+  text,
+  prefix,
+  children,
+}: {
+  kind: "line" | "area";
+  text: string;
+  prefix?: string;
+  children: ReactNode;
+}) {
+  const [typed, setTyped] = useState(text);
   return (
-    <svg
-      viewBox="0 0 14 14"
-      width={14}
-      height={14}
-      shapeRendering="crispEdges"
-      fill="currentColor"
-      className="text-error-glyph"
-      aria-hidden="true"
+    <div
+      className="st-a-typing"
+      onInput={(event) => setTyped((event.target as HTMLInputElement | HTMLTextAreaElement).value)}
     >
-      <path d="M1 0h12v1h-12zM0 1h14v1h-14zM0 2h6v1h-6zM8 2h6v1h-6zM0 3h6v1h-6zM8 3h6v1h-6zM0 4h6v1h-6zM8 4h6v1h-6zM0 5h6v1h-6zM8 5h6v1h-6zM0 6h6v1h-6zM8 6h6v1h-6zM0 7h6v1h-6zM8 7h6v1h-6zM0 8h6v1h-6zM8 8h6v1h-6zM0 9h14v1h-14zM0 10h6v1h-6zM8 10h6v1h-6zM0 11h6v1h-6zM8 11h6v1h-6zM0 12h14v1h-14zM1 13h12v1h-12z" />
-    </svg>
+      {children}
+      <span
+        className={cn("st-a-ghost text-ui", kind === "area" ? "st-a-ghost-area leading-5" : "st-a-ghost-line")}
+        aria-hidden="true"
+      >
+        <span>
+          {prefix && <span className="st-a-ghost-prefix">{prefix}</span>}
+          {typed}
+          <span className="st-a-caret" />
+        </span>
+      </span>
+    </div>
   );
 }
 
@@ -128,18 +149,12 @@ function Slug({ initial }: { initial: string }) {
   );
 }
 
-// A disabled field sits between live ones, never last: the focus check's Tab attempt on it lands on the next field,
-// which keeps it in view.
 export function InputExample() {
   const title = useId();
-  const chapter = useId();
   return (
     <div className="st-a-grid">
       <Field id={title} label="chapter title" hint="shown in the running head">
         <Input id={title} defaultValue="one photon at a time" aria-describedby={noteId(title)} />
-      </Field>
-      <Field id={chapter} label="chapter number" hint="set by the chapter's place in the book">
-        <Input id={chapter} defaultValue="7" disabled aria-describedby={noteId(chapter)} />
       </Field>
       <Slug initial="one-photon" />
       <Slug initial="One Photon!" />
@@ -147,34 +162,85 @@ export function InputExample() {
   );
 }
 
-// The states, printed through data-demo, which the site's variants read as the real state. Printed states stay out
-// of the tab order; click one and it takes real focus, which draws the same single frame. An invalid state's label
-// ends in "invalid": the focus check reads that ending as the field's error ink.
+// A row of printed states: the house ink's three, then the error ink's three, then disabled.
+export type PrintedState = {
+  name: string;
+  // the accessible name's state, when it differs from the name
+  label?: string;
+  note: string;
+  value: string;
+  demo?: boolean;
+  typing?: boolean;
+  invalid?: boolean;
+  disabled?: boolean;
+};
+
+export function printedStates(values: { valid: string; typed: string; invalid: string; typedInvalid: string }) {
+  const states: PrintedState[] = [
+    { name: "rest", note: "1 px input edge", value: values.valid },
+    { name: "focus", note: "2 px house edge, inside", value: values.valid, demo: true },
+    { name: "typing", note: "same edge, caret in its ink", value: values.typed, demo: true, typing: true },
+    { name: "invalid", note: "1 px error edge", value: values.invalid, invalid: true },
+    {
+      name: "invalid, focus",
+      label: "focus, invalid",
+      note: "2 px error edge, inside",
+      value: values.invalid,
+      demo: true,
+      invalid: true,
+    },
+    {
+      name: "invalid, typing",
+      label: "typing, invalid",
+      note: "same edge, caret in its ink",
+      value: values.typedInvalid,
+      demo: true,
+      typing: true,
+      invalid: true,
+    },
+    { name: "disabled", note: "flat fill, screened edge", value: values.valid, disabled: true },
+  ];
+  return states;
+}
+
+const inputStates = printedStates({
+  valid: "one-photon",
+  typed: "one-pho",
+  invalid: "One Photon!",
+  typedInvalid: "One Phot",
+});
+
+// The states, printed through data-demo, which the site's variants read as the real state; a typing state adds the
+// printed caret, and disabled is the real disabled field. Printed states stay out of the tab order; click one and it
+// takes real focus, which draws the same single frame. An invalid state carries aria-invalid, which draws the error
+// ink, and its label ends in "invalid", so a screen reader hears it too.
 export function InputStates() {
   return (
     <States>
-      <State name="rest" note="1 px input edge">
-        <Input defaultValue="one-photon" tabIndex={-1} aria-label="slug, rest" spellCheck={false} />
-      </State>
-      <State name="focus" note="2 px house edge, inside">
-        <Input defaultValue="one-photon" tabIndex={-1} aria-label="slug, focus" spellCheck={false} data-demo="focus" />
-      </State>
-      <State name="typing" note="same edge, caret in its ink">
-        <Input defaultValue="one-pho" tabIndex={-1} aria-label="slug, typing" spellCheck={false} data-demo="focus" />
-      </State>
-      <State name="invalid" note="1 px error edge">
-        <Input defaultValue="One Photon!" tabIndex={-1} aria-label="slug, invalid" spellCheck={false} aria-invalid />
-      </State>
-      <State name="invalid, focus" note="2 px error edge, inside">
-        <Input
-          defaultValue="One Photon!"
-          tabIndex={-1}
-          aria-label="slug, focus, invalid"
-          spellCheck={false}
-          aria-invalid
-          data-demo="focus"
-        />
-      </State>
+      {inputStates.map((state) => {
+        const input = (
+          <Input
+            defaultValue={state.value}
+            tabIndex={-1}
+            aria-label={`slug, ${state.label ?? state.name}`}
+            spellCheck={false}
+            aria-invalid={state.invalid || undefined}
+            disabled={state.disabled}
+            data-demo={state.demo ? "focus" : undefined}
+          />
+        );
+        return (
+          <State key={state.name} name={state.name} note={state.note}>
+            {state.typing ? (
+              <Typing kind="line" text={state.value}>
+                {input}
+              </Typing>
+            ) : (
+              input
+            )}
+          </State>
+        );
+      })}
     </States>
   );
 }

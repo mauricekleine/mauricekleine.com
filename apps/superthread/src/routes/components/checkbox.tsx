@@ -28,8 +28,8 @@ function Page() {
 
       <Section id="example" title="example">
         <p className="st-a-copy">
-          the box sits inside its label, so a click on the words checks it too. every ship is the parent of the six
-          under it: pick a few and it turns mixed, check it and it picks them all.
+          the box sits inside its label, so a click on the words checks it too. the box named &ldquo;every ship&rdquo;
+          is the parent of the six under it: pick a few and it turns mixed, check it and it picks them all.
         </p>
         <ModePair className="st-a-stack">
           <CheckboxExample />
@@ -40,7 +40,7 @@ function Page() {
       <Section id="states" title="states">
         <p className="st-a-copy">
           a checkbox is a control, not a field, so keyboard focus draws the 2 px house ring 2 px outside the box, as a
-          button's does.
+          button&rsquo;s does.
         </p>
         <ModePair className="st-a-stack">
           <CheckboxStates />
