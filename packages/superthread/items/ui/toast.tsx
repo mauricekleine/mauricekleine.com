@@ -27,15 +27,18 @@ function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
   );
 }
 
+// The stack moves its toasts by whole pixels and never scales them, so each contact screen keeps its 1 px cells: a
+// toast behind the front one peeks 12 px higher per place, and the expanded stack sets them 12 px apart. Base UI's
+// heights are whole pixels, so every settled offset is too.
 function Toast({ className, ...props }: ToastPrimitive.Root.Props) {
   return (
     <ToastPrimitive.Root
       data-slot="toast"
       data-mk="toast"
       className={cn(
-        "group/toast pointer-events-auto absolute right-0 bottom-0 z-[calc(1000-var(--toast-index))] w-full origin-bottom border bg-popover text-popover-foreground shadow-leaf texture-contact [--contact-lift:var(--elevation-leaf-rake)] will-change-transform select-none",
-        "[--gap:0.75rem] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc(var(--toast-offset-y)*-1+calc(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y))] [--peek:0.75rem] [--scale:calc(max(0,1-(var(--toast-index)*0.1)))] [--shrink:calc(1-var(--scale))]",
-        "h-(--height) [transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))] transition-[transform,opacity,height] duration-(--duration-travel) ease-(--ease-brand)",
+        "group/toast pointer-events-auto absolute right-0 bottom-0 z-[calc(1000-var(--toast-index))] w-full border bg-popover text-popover-foreground shadow-leaf texture-contact [--contact-lift:var(--elevation-leaf-rake)] will-change-transform select-none",
+        "[--gap:12px] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc(var(--toast-offset-y)*-1+calc(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y))] [--peek:12px]",
+        "h-(--height) [transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))))] transition-[transform,opacity,height] duration-(--duration-travel) ease-(--ease-brand)",
         // The hover bridge to the toast below sits on ::before: the contact screen owns ::after.
         "before:absolute before:top-full before:left-0 before:h-[calc(var(--gap)+1px)] before:w-full before:content-['']",
         "data-expanded:h-(--toast-height) data-expanded:[transform:translateX(var(--toast-swipe-movement-x))_translateY(var(--offset-y))]",

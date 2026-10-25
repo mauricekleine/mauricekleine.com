@@ -1,18 +1,22 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { afterEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { GlobalRegistrator } from "@happy-dom/global-registrator";
 import { act, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
+import * as dialogItem from "@/components/superthread/ui/dialog";
+import { fleet } from "@/components/superthread/lib/fleet";
+import { FleetRail } from "@/components/superthread/ui/fleet-rail";
+import { Icon, StatusGlyph } from "@/components/superthread/ui/glyphs";
+import * as s from "@/components/superthread/ui/sidebar";
+import * as toastItem from "@/components/superthread/ui/toast";
 import { catalog } from "../items/catalog.ts";
 
-// S1.4c's layers and frames: dialog, toast, sidebar and the fleet rail. "the layer sources" reads only these four
-// files and committed sources, so it runs while stage 4's siblings write. "the layers rendered" imports the items,
-// which reach S1.4a's input and S1.4b's button and skeleton, so it is integration-only until stage 4 integrates.
-// The dialog popup and the toasts are portaled: they render through react-dom/client into happy-dom
-// (GATE.md build ruling 5), and the items load after it registers, because Base UI picks its layout effect on
-// import by whether a document exists.
+// The layers and frames: dialog, toast, sidebar and the fleet rail. The dialog popup and the toasts are portaled, so
+// they render through react-dom/client into happy-dom (GATE.md build ruling 5); everything else renders with
+// renderToString. The package's test preload owns the DOM and act()'s globals: it registers happy-dom before any test
+// file loads, because Base UI picks its layout effect on import by whether a document exists, and Bun shares that
+// module across files. This file registers nothing; it cleans up each render it mounts.
 
 const root = join(import.meta.dir, "..");
 const read = (rel: string) => readFileSync(join(root, rel), "utf8");
@@ -110,8 +114,18 @@ describe("the layer sources", () => {
   });
 });
 
+// A focus ring snaps on: `transition-colors` and `transition-all` would also fade outline-color, so no shipped item
+// transitions more than the colours it changes on hover (button, tabs and the rail name theirs).
+test("no shipped item transitions colours or everything wholesale", () => {
+  const files = [...new Set(catalog.flatMap((item) => item.files.map((file) => file.path)))];
+  expect(files.length).toBeGreaterThan(20);
+  const hits = files.flatMap((path) =>
+    [...read(path).matchAll(/(?<![\w-])transition-(?:colors|all)(?![\w-])/g)].map(([hit]) => `${path}: ${hit}`),
+  );
+  expect(hits).toEqual([]);
+});
+
 // ---------------------------------------------------------------------------------------------------------------
-// Integration-only in W1: everything below imports the items.
 
 type Rendered = { el: Element; classes: string[] };
 const classesOf = (el: Element) => (el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean);
@@ -136,6 +150,8 @@ const nullsRing = (scope: ParentNode) =>
       .map((c) => `${el.getAttribute("data-slot") ?? el.tagName}: ${c}`),
   );
 const textures = (el: Element) => classesOf(el).filter((c) => /^texture-/.test(utilityOf(c)) && !exempt(c));
+// The dark scope an element prints in, if any: the nearest element carrying the mode class.
+const darkScope = (el: Element | null | undefined) => el?.closest(".dark") ?? null;
 
 function server(node: ReactNode): HTMLElement {
   const host = document.createElement("div");
@@ -175,19 +191,12 @@ const nameOf = (el: Element) =>
     (el.textContent?.trim() || [...el.querySelectorAll("img[alt]")].map((img) => img.getAttribute("alt")).join(" "))
   ).trim();
 
-describe("the layers rendered (integration)", () => {
-  beforeAll(() => {
-    GlobalRegistrator.register();
-    (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
-  });
-  afterAll(async () => {
-    for (const done of mounted.reverse()) await done();
-    await GlobalRegistrator.unregister();
+describe("the layers rendered", () => {
+  afterEach(async () => {
+    for (const done of mounted.splice(0).reverse()) await done();
   });
 
-  test("the fleet rail: six ships and home, the hrefs it is given, one current ship, a name on every cell", async () => {
-    const { FleetRail } = await import("@/components/superthread/ui/fleet-rail");
-    const { fleet } = await import("@/components/superthread/lib/fleet");
+  test("the fleet rail: six ships and home, the hrefs it is given, one current ship, a name on every cell", () => {
     const dom = server(<FleetRail current="quanta" hrefs={HREFS} markBase="/marks" />);
 
     const rail = dom.querySelector('nav[aria-label="fleet"]')!;
@@ -208,9 +217,7 @@ describe("the layers rendered (integration)", () => {
     expect(dom.querySelector('[data-mk="sidebar"]')).toBeNull();
   });
 
-  test("markBase prefixes every mark, the dark mark at rest and the light one for the inverted cell", async () => {
-    const { FleetRail } = await import("@/components/superthread/ui/fleet-rail");
-    const { fleet } = await import("@/components/superthread/lib/fleet");
+  test("markBase prefixes every mark, the dark mark at rest and the light one for the inverted cell", () => {
     const srcs = (node: ReactNode) => [...server(node).querySelectorAll("img")].map((img) => img.getAttribute("src")!);
 
     const local = srcs(<FleetRail current="orbit" hrefs={HREFS} markBase="/marks" />);
@@ -226,9 +233,7 @@ describe("the layers rendered (integration)", () => {
     expect(remote.every((src) => src.startsWith("https://superthread.mauricekleine.com/marks/"))).toBe(true);
   });
 
-  test("with no hrefs the rail links nowhere: every ship is a disabled cell that keeps its name", async () => {
-    const { FleetRail } = await import("@/components/superthread/ui/fleet-rail");
-    const { fleet } = await import("@/components/superthread/lib/fleet");
+  test("with no hrefs the rail links nowhere: every ship is a disabled cell that keeps its name", () => {
     const dom = server(<FleetRail current="orbit" label="ships" />);
 
     // React hoists a preload link for each image, so look inside the frame.
@@ -241,36 +246,44 @@ describe("the layers rendered (integration)", () => {
     expect([...dom.querySelectorAll("[aria-current]")].map(nameOf)).toEqual(["orbit"]);
   });
 
-  test("the rail holds the ship's sidebar and the page beside it, and names no detail", async () => {
-    const { FleetRail } = await import("@/components/superthread/ui/fleet-rail");
-    const { SidebarContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } =
-      await import("@/components/superthread/ui/sidebar");
+  // The world's `gutter dk`: on the deep ground the frame (the rail and the ship's sidebar) prints in the dark palette
+  // in both modes, and the page beside it keeps the page's mode. The pixels (the ground kept, the inks) are the
+  // browser proof's.
+  test("the rail holds the ship's sidebar in its dark frame and the page beside it, and names no detail", () => {
     const dom = server(
       <FleetRail
         current="orbit"
         hrefs={HREFS}
         sidebar={
-          <SidebarContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton isActive>board</SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarContent>
+          <s.SidebarContent>
+            <s.SidebarMenu>
+              <s.SidebarMenuItem>
+                <s.SidebarMenuButton isActive>board</s.SidebarMenuButton>
+              </s.SidebarMenuItem>
+            </s.SidebarMenu>
+          </s.SidebarContent>
         }
       >
         <main>the board</main>
       </FleetRail>,
     );
-    const frame = dom.querySelector('[data-mk="fleet-rail"]')!;
-    expect(frame.querySelector('[data-slot="sidebar"] [data-slot="sidebar-menu-button"]')?.textContent).toBe("board");
-    expect(frame.querySelector("main")?.textContent).toBe("the board");
-    expect(rendered(frame).flatMap(({ el }) => textures(el))).toEqual([]);
+    const wrapper = dom.querySelector('[data-mk="fleet-rail"]')!;
+    const frame = wrapper.querySelector('[data-slot="fleet-rail-frame"]')!;
+    const button = frame.querySelector('[data-slot="sidebar"] [data-slot="sidebar-menu-button"]');
+    expect(button?.textContent).toBe("board");
+    expect(wrapper.querySelector("main")?.textContent).toBe("the board");
+    expect(rendered(wrapper).flatMap(({ el }) => textures(el))).toEqual([]);
     expect(nullsRing(dom)).toEqual([]);
+
+    expect(darkScope(wrapper)).toBeNull();
+    expect(darkScope(frame)).toBe(frame);
+    const cells = [...frame.querySelectorAll('[data-slot="fleet-rail-cell"], [data-slot="fleet-rail-home"]')];
+    expect(cells.length).toBe(fleet.length + 1);
+    for (const el of [...cells, button]) expect(frame.contains(darkScope(el))).toBe(true);
+    expect(darkScope(wrapper.querySelector("main"))).toBeNull();
   });
 
-  test("the sidebar marks its wrapper, keeps its slots, and names no detail on its own parts", async () => {
-    const s = await import("@/components/superthread/ui/sidebar");
+  test("the sidebar marks its wrapper, keeps its slots, and names no detail on its own parts", () => {
     const menu = (
       <s.SidebarContent>
         <s.SidebarGroup>
@@ -325,21 +338,35 @@ describe("the layers rendered (integration)", () => {
     expect(own.length).toBeGreaterThan(20);
     expect(own.flatMap(({ el }) => textures(el))).toEqual([]);
     expect(nullsRing(dom)).toEqual([]);
+
+    // The world's `gutter dk` again: what the sidebar holds prints in the dark palette, inside the element that
+    // paints the ground, which keeps the page's mode, as do the wrapper and the page.
+    const grounds = [
+      dom.querySelector('[data-slot="sidebar"]:not([data-state])')!,
+      dom.querySelector('[data-slot="sidebar-inner"]')!,
+    ];
+    for (const ground of grounds) {
+      expect(darkScope(ground)).toBeNull();
+      const parts = ground.querySelectorAll('[data-slot^="sidebar-"]');
+      expect(parts.length).toBeGreaterThan(10);
+      for (const part of parts) expect(ground.contains(darkScope(part))).toBe(true);
+    }
+    for (const el of [...wrappers, dom.querySelector('[data-slot="sidebar-inset"]')!]) expect(darkScope(el)).toBeNull();
   });
 
   test("the open dialog: a square sheet on the contact lift, a subtitle and the close glyph", async () => {
-    const d = await import("@/components/superthread/ui/dialog");
-    const { Icon } = await import("@/components/superthread/ui/glyphs");
     await client(
-      <d.Dialog defaultOpen>
-        <d.DialogContent>
-          <d.DialogHeader>
-            <d.DialogTitle>delete the run</d.DialogTitle>
-            <d.DialogDescription>the run and its three logs go. this cannot be undone.</d.DialogDescription>
-          </d.DialogHeader>
-          <d.DialogFooter showCloseButton />
-        </d.DialogContent>
-      </d.Dialog>,
+      <dialogItem.Dialog defaultOpen>
+        <dialogItem.DialogContent>
+          <dialogItem.DialogHeader>
+            <dialogItem.DialogTitle>delete the run</dialogItem.DialogTitle>
+            <dialogItem.DialogDescription>
+              the run and its three logs go. this cannot be undone.
+            </dialogItem.DialogDescription>
+          </dialogItem.DialogHeader>
+          <dialogItem.DialogFooter showCloseButton />
+        </dialogItem.DialogContent>
+      </dialogItem.Dialog>,
     );
 
     const popups = [...document.body.querySelectorAll('[data-mk="dialog"]')];
@@ -351,6 +378,15 @@ describe("the layers rendered (integration)", () => {
     expect(classesOf(popup)).toContain("shadow-sheet");
     expect(classesOf(popup.querySelector('[data-slot="dialog-title"]')!)).toContain("type-subtitle");
     expect(document.body.querySelector('[data-slot="dialog-overlay"]')).not.toBeNull();
+    // The texture's whole-pixel rule: the centring offsets round to whole pixels (the browser proof measures it).
+    const placement = classesOf(popup).filter((c) =>
+      /^(?:-?inset|-?top|-?left|-?right|-?bottom|-?translate|\[translate|m-auto|-?m[xy]?-)/.test(utilityOf(c)),
+    );
+    expect(placement.sort()).toEqual([
+      "[translate:round(-50%,1px)_round(-50%,1px)]",
+      "left-[round(50%,1px)]",
+      "top-[round(50%,1px)]",
+    ]);
 
     const close = popup.querySelector('[data-slot="dialog-close"]');
     expect(pathOf(close)).toBe(pathOf(server(<Icon name="close" />)));
@@ -358,10 +394,8 @@ describe("the layers rendered (integration)", () => {
   });
 
   test("toasts: each on the contact lift with its kind's status glyph, warning on the pause", async () => {
-    const t = await import("@/components/superthread/ui/toast");
-    const { StatusGlyph } = await import("@/components/superthread/ui/glyphs");
-    const manager = t.createToastManager();
-    await client(<t.Toaster toastManager={manager} limit={10} timeout={0} />);
+    const manager = toastItem.createToastManager();
+    await client(<toastItem.Toaster toastManager={manager} limit={10} timeout={0} />);
     const kinds = {
       success: "done",
       info: "running",
@@ -381,6 +415,8 @@ describe("the layers rendered (integration)", () => {
       expect(textures(toast)).toEqual(claim("toast"));
       expect(classesOf(toast)).toContain(LIFT.toast!);
       expect(classesOf(toast)).toContain("shadow-leaf");
+      // The stack moves a textured root only by translation: a scale would resample its contact screen.
+      expect(classesOf(toast).filter((c) => /scale/.test(c))).toEqual([]);
     }
     const byTitle = (title: string) =>
       toasts.find((toast) => toast.querySelector('[data-slot="toast-title"]')?.textContent === title)!;
@@ -395,10 +431,8 @@ describe("the layers rendered (integration)", () => {
     expect(nullsRing(document.body)).toEqual([]);
   });
 
-  test("the dialog and the toast export shadcn's names", async () => {
-    const dialog = await import("@/components/superthread/ui/dialog");
-    const toast = await import("@/components/superthread/ui/toast");
-    expect(Object.keys(dialog).sort()).toEqual(exportsOf(upstream("dialog")));
-    expect(Object.keys(toast).sort()).toEqual(exportsOf(upstream("toast")));
+  test("the dialog and the toast export shadcn's names", () => {
+    expect(Object.keys(dialogItem).sort()).toEqual(exportsOf(upstream("dialog")));
+    expect(Object.keys(toastItem).sort()).toEqual(exportsOf(upstream("toast")));
   });
 });
