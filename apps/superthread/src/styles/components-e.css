@@ -1,0 +1,81 @@
+/* Controls and field specimens: layout only. The registry items own every edge, ink and state. */
+@layer components {
+  .st-e-copy {
+    max-width: 72ch;
+    color: var(--muted-foreground);
+    font: 400 15px/24px var(--font-sans);
+  }
+  .st-e-copy + * {
+    margin-top: 24px;
+  }
+  .st-e-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+    min-width: 0;
+  }
+  .st-e-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+  .st-e-control {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: fit-content;
+    min-height: 32px;
+    font: 400 14px/20px var(--font-sans);
+  }
+  .st-e-hint {
+    color: var(--muted-foreground);
+    font: 400 13px/20px var(--font-sans);
+  }
+  .st-e-label {
+    font: 500 14px/20px var(--font-sans);
+  }
+  .st-e-fixed-label {
+    min-width: max-content;
+  }
+  .st-e-states {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 32px 24px;
+  }
+  .st-modepair.st-e-wide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .st-e-wide > .st-modepair-pane + .st-modepair-pane {
+    border-top: 1px solid var(--rule);
+    border-left: 0;
+  }
+  .st-e-vertical {
+    height: 208px;
+    display: flex;
+  }
+  .st-e-vertical > .st-e-stack {
+    align-items: flex-start;
+  }
+  .st-e-narrow {
+    width: min(100%, 280px);
+    display: grid;
+    gap: 20px;
+  }
+  .st-e-tooltip {
+    position: relative;
+    contain: layout paint;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 64px;
+    min-height: 128px;
+  }
+  @media (max-width: 600px) {
+    .st-e-stack {
+      gap: 16px;
+    }
+  }
+}
