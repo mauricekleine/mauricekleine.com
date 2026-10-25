@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert-dialog",
+  "title": "alert dialog",
+  "description": "a dialog that asks before an action, on the sheet lift",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/button",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/alert-dialog.tsx",
+      "content": "import * as React from \"react\";\nimport { AlertDialog as AlertDialogPrimitive } from \"@base-ui/react/alert-dialog\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n\nimport { Button } from \"@/components/superthread/ui/button\";\n// @mk/alert-dialog 2.0.0-next.3\n\n// The root keeps Base UI's modal confirmation behaviour.\nfunction AlertDialog({ ...props }: AlertDialogPrimitive.Root.Props) {\n  return <AlertDialogPrimitive.Root data-slot=\"alert-dialog\" data-mk=\"alert-dialog\" {...props} />;\n}\n\n// The trigger is a control with the house ring outside it.\nfunction AlertDialogTrigger({ className, ...props }: AlertDialogPrimitive.Trigger.Props) {\n  return (\n    <AlertDialogPrimitive.Trigger\n      data-slot=\"alert-dialog-trigger\"\n      className={cn(\"focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)\", className)}\n      {...props}\n    />\n  );\n}\n\n// A portal for callers composing a confirmation sheet.\nfunction AlertDialogPortal({ ...props }: AlertDialogPrimitive.Portal.Props) {\n  return <AlertDialogPrimitive.Portal data-slot=\"alert-dialog-portal\" {...props} />;\n}\n\n// The scrim fades on keyframes at the quick duration, with no blur.\nfunction AlertDialogOverlay({ className, ...props }: AlertDialogPrimitive.Backdrop.Props) {\n  return (\n    <AlertDialogPrimitive.Backdrop\n      data-slot=\"alert-dialog-overlay\"\n      className={cn(\n        \"fixed inset-0 isolate z-50 bg-scrim transition-none duration-(--duration-quick) ease-(--ease-brand) data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// A whole-pixel centred sheet keeps its contact edge visible. The small size keeps the compact upstream width.\nfunction AlertDialogContent({\n  className,\n  size = \"default\",\n  portalProps,\n  ...props\n}: AlertDialogPrimitive.Popup.Props & {\n  portalProps?: AlertDialogPrimitive.Portal.Props;\n  size?: \"default\" | \"sm\";\n}) {\n  return (\n    <AlertDialogPortal {...portalProps}>\n      <AlertDialogOverlay />\n      <AlertDialogPrimitive.Popup\n        data-slot=\"alert-dialog-content\"\n        data-mk=\"alert-dialog\"\n        data-size={size}\n        className={cn(\n          \"group/alert-dialog-content fixed isolate top-[round(50%,1px)] left-[round(50%,1px)] z-50 w-full max-w-[calc(100%-2rem)] [translate:round(-50%,1px)_round(-50%,1px)] border border-border bg-popover p-7 text-ui text-popover-foreground shadow-sheet texture-contact [--contact-lift:var(--elevation-sheet-rake)] transition-none duration-(--duration-quick) ease-(--ease-brand) sm:max-w-[440px] data-[size=sm]:max-w-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0\",\n          className,\n        )}\n        {...props}\n      />\n    </AlertDialogPortal>\n  );\n}\n\n// The title and explanation form one left-aligned group.\nfunction AlertDialogHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"alert-dialog-header\" className={cn(\"flex flex-col gap-2 text-left\", className)} {...props} />;\n}\n\n// Actions align right, 24 px below the explanation.\nfunction AlertDialogFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"alert-dialog-footer\" className={cn(\"mt-6 flex justify-end gap-2\", className)} {...props} />;\n}\n\n// A 40 px secondary square holds a caller's confirmation glyph.\nfunction AlertDialogMedia({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"alert-dialog-media\"\n      className={cn(\"mb-2 inline-flex size-10 items-center justify-center bg-secondary [&_svg]:size-6\", className)}\n      {...props}\n    />\n  );\n}\n\n// The confirmation title prints at Supreme's subtitle step.\nfunction AlertDialogTitle({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Title>) {\n  return (\n    <AlertDialogPrimitive.Title data-slot=\"alert-dialog-title\" className={cn(\"type-subtitle\", className)} {...props} />\n  );\n}\n\n// The explanation prints at the UI step in the muted ink.\nfunction AlertDialogDescription({\n  className,\n  ...props\n}: React.ComponentProps<typeof AlertDialogPrimitive.Description>) {\n  return (\n    <AlertDialogPrimitive.Description\n      data-slot=\"alert-dialog-description\"\n      className={cn(\n        \"text-ui text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// The action keeps our button API, variants and control states.\nfunction AlertDialogAction({ className, ...props }: React.ComponentProps<typeof Button>) {\n  return <Button data-slot=\"alert-dialog-action\" className={cn(className)} {...props} />;\n}\n\n// Cancel closes the sheet through an outline button.\nfunction AlertDialogCancel({\n  className,\n  variant = \"outline\",\n  size = \"default\",\n  ...props\n}: AlertDialogPrimitive.Close.Props & Pick<React.ComponentProps<typeof Button>, \"variant\" | \"size\">) {\n  return (\n    <AlertDialogPrimitive.Close\n      data-slot=\"alert-dialog-cancel\"\n      className={cn(className)}\n      render={<Button variant={variant} size={size} />}\n      {...props}\n    />\n  );\n}\n\nexport {\n  AlertDialog,\n  AlertDialogAction,\n  AlertDialogCancel,\n  AlertDialogContent,\n  AlertDialogDescription,\n  AlertDialogFooter,\n  AlertDialogHeader,\n  AlertDialogMedia,\n  AlertDialogOverlay,\n  AlertDialogPortal,\n  AlertDialogTitle,\n  AlertDialogTrigger,\n};\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/alert-dialog.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.0.0-next.3",
+    "sha256": "521a46544d8c0ac618f5d314bc093fa84186870b6b59bc109dbcffebda723bb2",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "alert-dialog",
+      "sha256": "974543244faee02eb4ea40264b7e0bbda2b01c3f2c369de965d2ac771c57a8af",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

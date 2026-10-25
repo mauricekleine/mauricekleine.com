@@ -3,7 +3,7 @@
 The design system for Maurice's fleet, as a shadcn registry. This package holds two versions side by side:
 
 - **v1, frozen.** The theme www and the share Worker import (`dist/superthread.css`) and the two items www serves at `/r`. Nothing regenerates it.
-- **v2.** Tokens generated from the master world, and the versioned `@mk` registry of Base UI items built on them. The version is `2.0.0-next.2`.
+- **v2.** Tokens generated from the master world, and the versioned `@mk` registry of Base UI items built on them. The version is `2.0.0-next.3`.
 
 ## Install v2
 
@@ -49,7 +49,7 @@ Only the Start layout is tested. For a surface without Tailwind, `@mk/tokens-pla
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0-next.2/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0-next.3/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions that have a snapshot.
@@ -157,7 +157,7 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 ## Versions and stamps
 
-- **Version.** `package.json` `version` is the one source for every item: `2.0.0-next.2` now, `2.0.0` at the fleet rollout.
+- **Version.** `package.json` `version` is the one source for every item: `2.0.0-next.3` now, `2.0.0` at the fleet rollout.
 - **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. In CSS, `/* @mk/<item> <version> */` is line 1.
 - **Meta.** Each built item JSON carries `meta: { version, sha256, tier, upstream }`: the hash of its targets and contents, its tier, and the base-nova item and CLI it was seeded from. A block's meta adds `serves`, the apps it serves. Meta stays in the registry and never reaches an installed file.
 - **Paths.** Latest: `/r/<name>.json` and `/r/registry.json`. Pinned: `/r/v/<version>/<name>.json` and `/r/v/<version>/registry.json`. Index: `/r/versions.json`, `{ latest, versions }`.

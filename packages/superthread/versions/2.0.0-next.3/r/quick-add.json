@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "quick-add",
+  "title": "quick add",
+  "description": "one field and its button, for adding a thing by its name",
+  "registryDependencies": [
+    "@mk/field",
+    "@mk/glyphs",
+    "@mk/input-group",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/blocks/quick-add.tsx",
+      "content": "import { useId, useRef, useState } from \"react\";\nimport { cn } from \"@/components/superthread/lib/utils\";\nimport { FieldError, FieldLabel } from \"@/components/superthread/ui/field\";\nimport { Icon } from \"@/components/superthread/ui/glyphs\";\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupInput,\n} from \"@/components/superthread/ui/input-group\";\n// @mk/quick-add 2.0.0-next.3\n\ntype QuickAddProps = Omit<React.ComponentProps<\"form\">, \"onSubmit\" | \"children\"> & {\n  label: string;\n  placeholder?: string;\n  submitLabel?: string;\n  hideLabel?: boolean;\n  onAdd: (value: string) => void | Promise<void>;\n  inputProps?: Omit<\n    React.ComponentProps<typeof InputGroupInput>,\n    \"value\" | \"defaultValue\" | \"onChange\" | \"ref\" | \"placeholder\" | \"children\"\n  >;\n};\n\n// One named field and its submit control. A failed add keeps the draft; a successful add clears it and returns focus.\nfunction QuickAdd({\n  className,\n  label,\n  placeholder,\n  submitLabel = \"add\",\n  hideLabel = false,\n  onAdd,\n  inputProps = {},\n  ...props\n}: QuickAddProps) {\n  const id = useId();\n  const inputId = inputProps.id ?? `${id}-input`;\n  const errorId = `${id}-error`;\n  const input = useRef<HTMLInputElement>(null);\n  const pending = useRef(false);\n  const [value, setValue] = useState(\"\");\n  const [busy, setBusy] = useState(false);\n  const [error, setError] = useState<string | null>(null);\n\n  async function submit(event: React.SubmitEvent<HTMLFormElement>) {\n    event.preventDefault();\n    const draft = input.current?.value ?? value;\n    const text = draft.trim();\n    if (!text || pending.current || inputProps.disabled) return;\n    pending.current = true;\n    setBusy(true);\n    setError(null);\n    try {\n      await onAdd(text);\n      // Keep any newer draft typed while the previous add was in flight.\n      setValue((current) => (current === draft ? \"\" : current));\n      input.current?.focus();\n    } catch (cause) {\n      const message = cause instanceof Error ? cause.message : typeof cause === \"string\" ? cause : \"\";\n      setError(message.trim() || \"could not add. try again.\");\n    } finally {\n      pending.current = false;\n      setBusy(false);\n    }\n  }\n\n  return (\n    <form\n      {...props}\n      data-mk=\"quick-add\"\n      data-slot=\"quick-add\"\n      aria-label={props[\"aria-label\"] ?? label}\n      aria-busy={busy}\n      className={cn(\"grid min-w-0 gap-2\", className)}\n      onSubmit={submit}\n    >\n      <FieldLabel htmlFor={inputId} className={hideLabel ? \"sr-only\" : undefined}>\n        {label}\n      </FieldLabel>\n      <InputGroup aria-label={label}>\n        <InputGroupInput\n          {...inputProps}\n          ref={input}\n          id={inputId}\n          placeholder={placeholder}\n          value={value}\n          onChange={(event) => setValue(event.target.value)}\n          aria-invalid={error ? true : inputProps[\"aria-invalid\"]}\n          aria-describedby={\n            [inputProps[\"aria-describedby\"], error ? errorId : undefined].filter(Boolean).join(\" \") || undefined\n          }\n        />\n        <InputGroupAddon align=\"inline-end\">\n          <InputGroupButton\n            type=\"submit\"\n            variant=\"default\"\n            size=\"sm\"\n            disabled={busy || !value.trim() || inputProps.disabled}\n          >\n            <Icon name=\"plus\" />\n            {submitLabel}\n          </InputGroupButton>\n        </InputGroupAddon>\n      </InputGroup>\n      {error && <FieldError id={errorId}>{error}</FieldError>}\n    </form>\n  );\n}\n\nexport { QuickAdd };\n",
+      "type": "registry:component",
+      "target": "@components/superthread/blocks/quick-add.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.0.0-next.3",
+    "sha256": "3b1ae279d672e68d5b65c8675cdaf43a72cf919c1c18434eda9d919516495b42",
+    "tier": "block",
+    "upstream": null,
+    "serves": [
+      "trisys",
+      "orbit",
+      "www"
+    ]
+  },
+  "type": "registry:block"
+}
