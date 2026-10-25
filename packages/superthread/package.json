@@ -14,9 +14,10 @@
   },
   "scripts": {
     "build": "bun scripts/generate.ts",
-    "check": "bun scripts/generate.ts --check && python3 -I scripts/texture/build.py tiles --check",
+    "check": "bun scripts/generate.ts --check && bun run marks check && python3 -I scripts/texture/build.py tiles --check",
     "clean-room": "bun test/clean-room/run.ts",
     "lint": "designmd lint DESIGN.md",
+    "marks": "bun scripts/marks.ts",
     "registry": "bun scripts/build-registry.ts",
     "snapshot": "bun scripts/build-registry.ts --snapshot --base-url https://superthread.mauricekleine.com",
     "test": "bun test && bun --check",

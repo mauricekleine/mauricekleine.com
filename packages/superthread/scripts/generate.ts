@@ -10,6 +10,7 @@ import { fontFaces, fonts } from "../fonts.ts";
 import { alphaOf, ELEVATIONS, KEY, MODES, PAPER, roles, type Mode, type Role, type Source } from "../tokens/roles.ts";
 import * as scale from "../tokens/scale.ts";
 import { oklchCss, tint } from "./color.ts";
+import { fleetSource, loadFleet } from "./marks.ts";
 
 export const root = join(import.meta.dir, "..");
 const read = (path: string) => readFileSync(join(root, path), "utf8");
@@ -83,13 +84,6 @@ export function hexOf(master: Master, source: Source): string | null {
 export function cssOf(master: Master, source: Source): string {
   const hex = hexOf(master, source);
   return hex === null ? (source as { css: string }).css : oklchCss(hex, alphaOf(source));
-}
-
-// A ship's descriptor, which every ship in the fleet must have.
-function descOf(master: Master, id: string): string {
-  const desc = master.desc?.[id];
-  if (typeof desc !== "string" || desc === "") throw new Error(`tokens/master.json desc has no line for ${id}`);
-  return desc;
 }
 
 // ---------- the pieces ----------
@@ -527,17 +521,6 @@ export function build(): Map<string, string> {
   };
 
   const data = tokenData(master, all, texture, details);
-  const ships = master.fleet.map((id) => ({
-    id,
-    name: id,
-    desc: descOf(master, id),
-    angle: master.ships[id].angle,
-    // file names under the consumer's markBase
-    mark: {
-      light: master.ships[id].mark.light.replace(/^marks\//, ""),
-      dark: master.ships[id].mark.dark.replace(/^marks\//, ""),
-    },
-  }));
 
   return new Map([
     [OUTPUTS.css, css(FONT_BASE.package, false)],
@@ -548,10 +531,7 @@ export function build(): Map<string, string> {
       OUTPUTS.tokens,
       `// superthread v2 tokens as typed values: ${said}\n\nexport const tokens = ${JSON.stringify(data, null, 2)} as const\n\nexport type Tokens = typeof tokens\n`,
     ],
-    [
-      OUTPUTS.fleet,
-      `// the fleet, in its order: ${said}\n// desc is the line under a ship's name in the rail's tab. Each mark is a file name under the consumer's mark base;\n// hrefs are the consumer's.\n\nexport const fleet = ${JSON.stringify(ships, null, 2)} as const\n\nexport type Ship = (typeof fleet)[number]\nexport type ShipId = Ship["id"]\n`,
-    ],
+    [OUTPUTS.fleet, fleetSource(loadFleet())],
     [OUTPUTS.glyphs, glyphsTsx(glyphs, master, `// the pixel icons and status glyphs: ${said}`)],
   ]);
 }

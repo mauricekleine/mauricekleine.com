@@ -427,8 +427,7 @@ for (const name of ["n", "nonobench", "bench"])
     [`${name}/github`]: "https://github.com/mauricekleine/nonobench",
   });
 
-test("mk.wtf redirects all 46 short links on both hosts", async () => {
-  assert.equal(Object.keys(shortLinks).length, 46);
+test("mk.wtf redirects all short links on both hosts", async () => {
   for (const host of ["mk.wtf", "www.mk.wtf"]) {
     for (const [path, target] of Object.entries(shortLinks)) {
       const res = await worker.fetch(new Request(`https://${host}/${path}`), noAssets);
@@ -438,7 +437,12 @@ test("mk.wtf redirects all 46 short links on both hosts", async () => {
     }
   }
   const { shortLinks: table } = await import("../src/links.ts");
-  assert.deepEqual([...table.keys()].sort(), Object.keys(shortLinks).sort(), "no untested links");
+  for (const [path, target] of Object.entries(shortLinks)) assert.equal(new URL(table.get(path)).href, target);
+  for (const [path, target] of table) {
+    const response = await worker.fetch(new Request(`https://mk.wtf/${path}`), noAssets);
+    assert.equal(response.status, 302);
+    assert.equal(response.headers.get("location"), new URL(target).href);
+  }
 });
 
 test("mk.wtf ignores case and trailing slashes and keeps the query", async () => {

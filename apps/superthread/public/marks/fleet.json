@@ -1,0 +1,142 @@
+{
+  "schema": 1,
+  "fleet": [
+    {
+      "id": "orbit",
+      "name": "orbit",
+      "desc": "tasks, direction and the agents' board",
+      "target": "soliton",
+      "url": "https://orbit.mauricekleine.com",
+      "angle": 45,
+      "spot": {
+        "light": "#2d9ff2",
+        "dark": "#55acf3"
+      },
+      "mark": {
+        "light": "orbit.svg",
+        "dark": "orbit-dark.svg"
+      },
+      "kind": "master"
+    },
+    {
+      "id": "quanta",
+      "name": "quanta",
+      "desc": "learning chapters",
+      "target": "soliton",
+      "url": "https://quanta.mauricekleine.com",
+      "angle": 90,
+      "spot": {
+        "light": "#39b357",
+        "dark": "#4ec769"
+      },
+      "mark": {
+        "light": "quanta.svg",
+        "dark": "quanta-dark.svg"
+      },
+      "kind": "master"
+    },
+    {
+      "id": "trisys",
+      "name": "trisys",
+      "desc": "essays and decks",
+      "target": "soliton",
+      "url": "https://trisys.mauricekleine.com",
+      "angle": 27,
+      "spot": {
+        "light": "#e9772a",
+        "dark": "#f38745"
+      },
+      "mark": {
+        "light": "trisys.svg",
+        "dark": "trisys-dark.svg"
+      },
+      "kind": "master"
+    },
+    {
+      "id": "constellation",
+      "name": "constellation",
+      "desc": "a personal graph",
+      "target": "soliton",
+      "url": "https://constellation.mauricekleine.com",
+      "angle": 63,
+      "spot": {
+        "light": "#a970f0",
+        "dark": "#b085ec"
+      },
+      "mark": {
+        "light": "constellation.svg",
+        "dark": "constellation-dark.svg"
+      },
+      "kind": "master"
+    },
+    {
+      "id": "artifacts",
+      "name": "artifacts",
+      "desc": "reports and documents",
+      "target": "soliton",
+      "url": "https://artifacts.mauricekleine.com",
+      "angle": 135,
+      "spot": {
+        "light": "#e3ae34",
+        "dark": "#e7b546"
+      },
+      "mark": {
+        "light": "artifacts.svg",
+        "dark": "artifacts-dark.svg"
+      },
+      "kind": "master"
+    },
+    {
+      "id": "soliton",
+      "name": "soliton",
+      "desc": "the server",
+      "target": "soliton",
+      "url": null,
+      "angle": 117,
+      "spot": {
+        "light": "#6272e9",
+        "dark": "#6a7be5"
+      },
+      "mark": {
+        "light": "soliton.svg",
+        "dark": "soliton-dark.svg"
+      },
+      "kind": "master"
+    },
+    {
+      "id": "superthread",
+      "name": "superthread",
+      "desc": "the design system",
+      "target": "cloudflare",
+      "url": "https://superthread.mauricekleine.com",
+      "angle": 0,
+      "spot": {
+        "light": "#aa337a",
+        "dark": "#c074a1"
+      },
+      "mark": {
+        "light": "superthread.svg",
+        "dark": "superthread-dark.svg"
+      },
+      "kind": "master",
+      "home": true
+    },
+    {
+      "id": "pilot",
+      "name": "pilot",
+      "desc": "a new star",
+      "target": "cloudflare",
+      "url": "https://pilot.mauricekleine.com",
+      "angle": 1,
+      "spot": {
+        "light": "#00c4a8",
+        "dark": "#00b39c"
+      },
+      "mark": {
+        "light": "pilot.svg",
+        "dark": "pilot-dark.svg"
+      },
+      "kind": "star"
+    }
+  ]
+}

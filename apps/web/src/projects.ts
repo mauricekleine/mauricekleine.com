@@ -22,6 +22,14 @@ export const philosophy =
   "life is a series of experiments. some of them end, and that's fine, as long as you keep learning.";
 
 export const sideQuests = {
+  pilot: {
+    name: "pilot",
+    url: "https://pilot.mauricekleine.com",
+    status: "active",
+    description: "a small app built with superthread",
+    profiles: { github: "https://github.com/mauricekleine/pilot" },
+    credit: "none",
+  },
   mockly: {
     name: "mockly",
     url: "https://www.getmockly.com",

@@ -14,6 +14,7 @@
     "deploy:verify": "node apps/web/tools/deploy-verify.mjs",
     "dev": "bun run registry && bun run site:css && bun run buttons && bun run --filter @mauricekleine/web dev",
     "dev:superthread": "bun run --cwd packages/superthread build && bun run --cwd packages/superthread registry --out ../../apps/superthread/public && node apps/superthread/tools/payload.mjs && bun run --filter @mauricekleine/superthread-site dev",
+    "marks": "bun run --cwd packages/superthread marks",
     "prepare": "husky",
     "registry": "bun packages/superthread/scripts/publish-v1.ts --out apps/web/public/r",
     "site:css": "tailwindcss -i apps/web/src/styles/site.css -o apps/web/public/style.css --minify",
