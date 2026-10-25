@@ -4,7 +4,7 @@ import { tokens } from "@/components/superthread/lib/tokens";
 import { Badge } from "@/components/superthread/ui/badge";
 import { Button } from "@/components/superthread/ui/button";
 import { inkOn, ratio } from "@/foundations/colour";
-import { lineScreen, markUrl } from "@/foundations/marks";
+import { lineScreen, markUrl, shipSpot } from "@/foundations/marks";
 import {
   hexOf,
   modes,
@@ -116,9 +116,9 @@ function Ships({ mode }: { mode: Mode }) {
               <small>{spotName(ship.id)}</small>
             </span>
             <span className="st-f-ship-inks">
-              <i style={{ background: `var(--ship-${ship.id})` }} aria-hidden="true" />
+              <i style={{ background: shipSpot(ship.id, mode) }} aria-hidden="true" />
               <i className={lineScreen[ship.id]} aria-hidden="true" />
-              <code>{tokens.ships[ship.id][mode].hex}</code>
+              <code>{shipSpot(ship.id, mode)}</code>
             </span>
             <dl className="st-f-ship-proof">
               <div>

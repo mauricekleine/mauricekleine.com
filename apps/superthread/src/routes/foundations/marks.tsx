@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { fleet } from "@/components/superthread/lib/fleet";
 import { tokens } from "@/components/superthread/lib/tokens";
 import { MarkChromes, MarkDrawing } from "@/foundations/Mark";
-import { drawn, markBase, markFile, markUrl, tabColor, type MarkId } from "@/foundations/marks";
+import { drawn, markBase, markFile, markUrl, shipSpot, tabColor, type MarkId } from "@/foundations/marks";
 import { modes, spotName, type Mode } from "@/foundations/master";
 import { Copy, Legend } from "@/foundations/parts";
 import { PageHead } from "@/site/PageHead";
@@ -27,7 +27,7 @@ const ships: readonly Entry[] = fleet.map((ship) => ({
   id: ship.id,
   name: ship.name,
   spot: spotName(ship.id),
-  hex: { light: tokens.ships[ship.id].light.hex, dark: tokens.ships[ship.id].dark.hex },
+  hex: { light: shipSpot(ship.id, "light"), dark: shipSpot(ship.id, "dark") },
 }));
 const home: Entry = {
   id: "superthread",

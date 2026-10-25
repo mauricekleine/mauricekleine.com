@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { contrast, de, hexToOklch, oklchToHex, tint } from "./color.ts";
 
 const pkg = resolve(import.meta.dir, "..");
@@ -30,7 +30,7 @@ type Provenance = { files: Record<string, { source: string; sha256: string }>; [
 const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 const sha = (value: string) => createHash("sha256").update(value).digest("hex");
 const read = (file: string) => readFileSync(file, "utf8");
-const slug = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
+const slug = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function baseUrl(value: string): string {
   const url = new URL(value);
@@ -46,7 +46,8 @@ export function loadFleet(): Manifest {
   const ids = new Set<string>();
   const angles = new Set<number>();
   for (const ship of manifest.fleet) {
-    if (!slug.test(ship.id) || ids.has(ship.id)) throw new Error(`invalid or duplicate ship id: ${ship.id}`);
+    if (!slug.test(ship.id) || ship.id.length > 63 || ids.has(ship.id))
+      throw new Error(`invalid or duplicate ship id: ${ship.id}`);
     ids.add(ship.id);
     if (!ship.name?.trim() || !ship.desc?.trim()) throw new Error(`${ship.id}: name and desc are required`);
     if (!["soliton", "cloudflare"].includes(ship.target)) throw new Error(`${ship.id}: invalid target`);
@@ -175,8 +176,11 @@ function check(manifest: Manifest): void {
   validate(manifest);
   if (read(fleetPath) !== fleetSource(manifest))
     throw new Error("items/lib/fleet.ts is stale; run bun run build in packages/superthread");
-  if (read(join(publicMarks, "fleet.json")) !== read(manifestPath))
-    throw new Error("public marks/fleet.json differs from manifest");
+  const published = read(join(publicMarks, "fleet.json"));
+  if (published !== read(manifestPath)) throw new Error("public marks/fleet.json differs from manifest");
+  const provenance = JSON.parse(read(join(publicMarks, "PROVENANCE.json"))) as Provenance;
+  if (provenance.files["fleet.json"]?.sha256 !== sha(published))
+    throw new Error("public marks/fleet.json provenance differs");
 }
 
 function write(file: string, content: string): void {
@@ -212,25 +216,31 @@ function newShip(manifest: Manifest, id: string, options: Map<string, string>): 
     emitReceipt(existing, options.get("--receipt"));
     return;
   }
-  // Fixed 15-degree slots make allocation reproducible. Revisit the palette when all valid slots are occupied.
+  // Fixed hue slots and lightness/chroma bands keep allocation reproducible as the fleet grows.
   let spot: Pair | undefined;
-  for (let hue = 0; hue < 360; hue += 15) {
-    const candidate = { light: oklchToHex(0.72, 0.16, hue), dark: oklchToHex(0.68, 0.14, hue) };
-    if (
-      modes.every((mode) => {
-        const L = hexToOklch(candidate[mode])[0];
-        return (
-          L >= 0.6 &&
-          L <= 0.8 &&
-          contrast(tint(candidate[mode], mode === "light" ? PAPER : KEY, 50), mode === "light" ? KEY : PAPER) >= 3 &&
-          manifest.fleet.every((ship) => de(candidate[mode], ship.spot[mode]) >= 10)
-        );
-      })
-    ) {
-      spot = candidate;
-      break;
+  slots: for (const [lightL, darkL, lightC, darkC] of [
+    [0.72, 0.68, 0.16, 0.14],
+    [0.63, 0.62, 0.23, 0.22],
+    [0.79, 0.72, 0.2, 0.2],
+    [0.63, 0.61, 0.15, 0.13],
+  ] as const)
+    for (let hue = 0; hue < 360; hue += 15) {
+      const candidate = { light: oklchToHex(lightL, lightC, hue), dark: oklchToHex(darkL, darkC, hue) };
+      if (
+        modes.every((mode) => {
+          const L = hexToOklch(candidate[mode])[0];
+          return (
+            L >= 0.6 &&
+            L <= 0.8 &&
+            contrast(tint(candidate[mode], mode === "light" ? PAPER : KEY, 50), mode === "light" ? KEY : PAPER) >= 3 &&
+            manifest.fleet.every((ship) => de(candidate[mode], ship.spot[mode]) >= 10)
+          );
+        })
+      ) {
+        spot = candidate;
+        break slots;
+      }
     }
-  }
   if (!spot) throw new Error("no distinct hue slot remains; draw a glyph and extend the palette deliberately");
   const angle = Array.from({ length: 180 }, (_, i) => i).find((n) => !manifest.fleet.some((s) => s.angle === n))!;
   const ship: MarkShip = {
@@ -254,6 +264,7 @@ function newShip(manifest: Manifest, id: string, options: Map<string, string>): 
     write(join(publicMarks, file), svg);
     provenance.files[file] = { source: "packages/superthread/marks/fleet.json (scripts/marks.ts)", sha256: sha(svg) };
   }
+  provenance.files["fleet.json"] = { source: "packages/superthread/marks/fleet.json", sha256: sha(json(next)) };
   write(fleetPath, fleetSource(next));
   write(join(publicMarks, "PROVENANCE.json"), json(provenance));
   write(join(publicMarks, "fleet.json"), json(next));
@@ -282,6 +293,12 @@ function sheet(manifest: Manifest, out: string): void {
     out,
     `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>fleet marks</title><style>body{margin:24px;background:#fff;color:#16181d;font:16px system-ui}h1{font-size:24px;font-weight:500}table{border-collapse:collapse}th,td{border:1px solid #888;padding:16px;text-align:left}small{display:block;font-size:12px;font-weight:400;margin-top:8px}td{white-space:nowrap}.light{background:#fff}.dark{background:#16181d}img{vertical-align:middle;image-rendering:pixelated;margin-right:20px}img:last-child{margin:0}</style><h1>fleet marks</h1><p>16, 32 and 48 pixels in both chromes. new ships start as one dot on a hue tile.</p><table><thead><tr><th>ship</th><th>light</th><th>dark</th></tr></thead><tbody>${rows}</tbody></table></html>\n`,
   );
+  const local = relative(publicMarks, out);
+  if (local && !local.startsWith("..") && !local.startsWith("/")) {
+    const provenance = JSON.parse(read(join(publicMarks, "PROVENANCE.json"))) as Provenance;
+    provenance.files[local] = { source: "scripts/marks.ts sheet", sha256: sha(read(out)) };
+    write(join(publicMarks, "PROVENANCE.json"), json(provenance));
+  }
   console.log(out);
 }
 

@@ -66,6 +66,10 @@
     "pilot/pilot-dark.svg": {
       "source": "packages/superthread/marks/fleet.json (scripts/marks.ts)",
       "sha256": "f0c2c06a2546fc3446d2b2b4a4e6a483eabfc38f0def54d0cfe775cee5c42724"
+    },
+    "fleet.json": {
+      "source": "packages/superthread/marks/fleet.json",
+      "sha256": "ebc84ee63c35d5904a72e1f6e64071fa43adc64f7eb4172e6c175cdacd02e9e8"
     }
   }
 }

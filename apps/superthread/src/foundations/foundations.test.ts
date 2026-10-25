@@ -64,7 +64,11 @@ describe("the served marks", () => {
 
   test("each mark has a light and a dark file, byte for byte the source its provenance records", () => {
     const paths = ids.flatMap((id) => modes.map((mode) => `${id}/${markFile(id, mode)}`));
-    expect(Object.keys(record.files).sort()).toEqual([...paths].sort());
+    expect(
+      Object.keys(record.files)
+        .filter((file) => file.endsWith(".svg"))
+        .sort(),
+    ).toEqual([...paths].sort());
     for (const path of paths) {
       const sha = createHash("sha256")
         .update(readFileSync(join(dir, path)))

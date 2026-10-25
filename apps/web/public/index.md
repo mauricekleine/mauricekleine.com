@@ -14,6 +14,7 @@ that's the day job. everything below happens after dinner, and these days a flee
 
 ## side quests
 
+- [pilot](https://pilot.mauricekleine.com) - a small app built with superthread
 - [mockly](https://www.getmockly.com) - fake chat screenshots for 17+ platforms. built it in a weekend, [techcrunch](https://techcrunch.com/2025/07/10/mockly-made-a-fake-dm-generator-thats-actually-user-friendly/) wrote about it, 10k people use it. now i run it with [jasper](https://x.com/jasperdeboer). i still can't believe this is legal
 - [fluncle](https://www.fluncle.com) - drum & bass bangers from another dimension. it has a radio, an api, and an ssh rave terminal
 - [hackadam](https://hackadam.nl) - monthly meetup in amsterdam for indie makers building their own stuff. co-organized with [abner](https://x.com/AbnerHout)

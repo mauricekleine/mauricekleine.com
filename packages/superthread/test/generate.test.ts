@@ -40,9 +40,11 @@ describe("generate", () => {
     expect(hosts).toEqual(new Set([new URL(FONT_BASE.package).hostname]));
   });
 
-  test("items/lib/fleet.ts gives each ship its descriptor from master.json, for the rail's tab", () => {
+  test("items/lib/fleet.ts keeps the master ships' descriptors as the fleet grows", () => {
     const master = JSON.parse(read("tokens/master.json")) as { fleet: string[]; desc: Record<string, string> };
-    const descs: string[][] = fleet.map((ship) => [ship.id, ship.desc]);
+    const descs: string[][] = fleet
+      .filter((ship) => master.fleet.includes(ship.id))
+      .map((ship) => [ship.id, ship.desc]);
     expect(descs).toEqual(master.fleet.map((id) => [id, master.desc[id]!]));
   });
 
