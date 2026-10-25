@@ -389,13 +389,6 @@
   .st-pagehead > .st-pagehead-title {
     margin-top: 28px;
   }
-  /* a long single-word title (breadcrumb, collapsible) steps down with the phone's width rather than overflow it */
-  @media (max-width: 600px) {
-    .st-pagehead > .st-pagehead-title {
-      font-size: min(var(--text-hero), 12.5vw);
-      line-height: 1.1;
-    }
-  }
   .st-pagehead > .st-lede {
     margin-top: 36px;
   }
@@ -829,5 +822,14 @@
     .st-code button span {
       display: none;
     }
+  }
+}
+
+/* Outside the layer, so it outranks type-hero's own 52 px phone step: a long single-word title (breadcrumb,
+   collapsible) steps down with a phone's width rather than run off it. */
+@media (max-width: 600px) {
+  .st-pagehead > .st-pagehead-title {
+    font-size: min(52px, 11vw);
+    line-height: 1.08;
   }
 }
