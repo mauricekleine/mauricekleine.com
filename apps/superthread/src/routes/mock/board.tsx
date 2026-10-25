@@ -199,22 +199,34 @@ function Column({ state, agent, tasks }: { state: StatusState; agent: string; ta
           ))}
         </ul>
       ) : (
-        <Empty state={state} agent={agent} />
+        <Empty state={state} agent={agent} column />
       )}
     </section>
   );
 }
 
-// The empty wedge in its crop marks, and what the empty place holds. Narrowed to one agent, it says how to see the
-// rest instead.
-function Empty({ state, agent }: { state?: StatusState; agent: string }) {
+// The empty wedge in its crop marks, and what the empty place holds. The wedge prints whole at the width it shows, so
+// the place carries each plate it may need and mock.css shows one: the column plate in a column of the five-across
+// board, the wide plate where the field holds 608 px, the phone plate where it does not. Narrowed to one agent, it
+// says how to see the rest instead.
+function Empty({ state, agent, column = false }: { state?: StatusState; agent: string; column?: boolean }) {
   const words =
     agent === anyone && state
       ? emptyColumn[state]
       : { title: "nothing for this agent", body: `set agent to anyone to see every ${state ? `${state} ` : ""}task.` };
   return (
     <div className="mock-empty">
-      <PlateField name="empty" phone="empty-phone" width={608} phoneWidth={326} height={120} />
+      {column && (
+        <div className="mock-plate" data-fit="column">
+          <PlateField name="empty-column" width={112} height={120} />
+        </div>
+      )}
+      <div className="mock-plate" data-fit="wide">
+        <PlateField name="empty" width={608} height={120} />
+      </div>
+      <div className="mock-plate" data-fit="phone">
+        <PlateField name="empty-phone" width={326} height={120} />
+      </div>
       <p>
         <b>{words.title}</b>
         {words.body}

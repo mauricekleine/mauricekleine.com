@@ -79,15 +79,16 @@
     margin-right: 8px;
   }
 
-  /* the board's columns: five across while each keeps about 140 px, one under another below that */
+  /* the board's columns: five across while each keeps 144 px, so an empty column's field holds the 112 px column
+     plate with 16 px either side for its crop marks; one under another below that */
   .mock-columns-pane {
-    container-type: inline-size;
+    container: board / inline-size;
   }
   .mock-columns {
     display: grid;
     gap: 32px;
   }
-  @container (min-width: 740px) {
+  @container board (width >= 784px) {
     .mock-columns {
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 16px;
@@ -126,10 +127,35 @@
     color: var(--muted-foreground);
   }
   .mock-empty {
+    container: empty / inline-size;
     display: flex;
     flex-direction: column;
     gap: 28px;
     padding: 28px 16px 0;
+  }
+  /* the empty wedge prints whole at the width it shows: the wide plate where the field holds its 608 px, the phone
+     plate where it does not, and the column plate in a column of the five-across board */
+  .mock-plate {
+    display: none;
+  }
+  .mock-plate[data-fit="wide"] {
+    display: block;
+  }
+  @container empty (width < 608px) {
+    .mock-plate[data-fit="wide"] {
+      display: none;
+    }
+    .mock-plate[data-fit="phone"] {
+      display: block;
+    }
+  }
+  @container board (width >= 784px) {
+    .mock-column .mock-plate {
+      display: none;
+    }
+    .mock-column .mock-plate[data-fit="column"] {
+      display: block;
+    }
   }
   .mock-empty p {
     font-size: var(--text-instrument);
