@@ -58,6 +58,7 @@ const tiers: readonly { tier: Tier; title: string }[] = [
   { tier: "lib", title: "code" },
   { tier: "brand", title: "branded components" },
   { tier: "pass", title: "base-nova on the tokens" },
+  { tier: "block", title: "compositions" },
 ];
 
 // every catalog item under its tier, in catalog order

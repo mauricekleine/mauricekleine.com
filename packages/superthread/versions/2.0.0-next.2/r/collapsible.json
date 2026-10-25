@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collapsible",
+  "title": "collapsible",
+  "description": "base-nova's collapsible, on the superthread tokens",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "files": [
+    {
+      "path": "items/ui/collapsible.tsx",
+      "content": "import { Collapsible as CollapsiblePrimitive } from \"@base-ui/react/collapsible\"\n// @mk/collapsible 2.0.0-next.2\n\nfunction Collapsible({ ...props }: CollapsiblePrimitive.Root.Props) {\n  return <CollapsiblePrimitive.Root data-slot=\"collapsible\" {...props} />\n}\n\nfunction CollapsibleTrigger({ ...props }: CollapsiblePrimitive.Trigger.Props) {\n  return (\n    <CollapsiblePrimitive.Trigger data-slot=\"collapsible-trigger\" {...props} />\n  )\n}\n\nfunction CollapsibleContent({ ...props }: CollapsiblePrimitive.Panel.Props) {\n  return (\n    <CollapsiblePrimitive.Panel data-slot=\"collapsible-content\" {...props} />\n  )\n}\n\nexport { Collapsible, CollapsibleTrigger, CollapsibleContent }\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/collapsible.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.0.0-next.2",
+    "sha256": "80fb982a4e5dc3ec9e72fc253143f72cb5fa7321354b0cc44919966f537a26eb",
+    "tier": "pass",
+    "upstream": {
+      "style": "base-nova",
+      "item": "collapsible",
+      "sha256": "74f78cd88a30185243847968977cf1de9ffbf576547f2ec1f14b5ef55505b90d",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

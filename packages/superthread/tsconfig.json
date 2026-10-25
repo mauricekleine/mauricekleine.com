@@ -13,5 +13,5 @@
     "paths": { "@/components/superthread/*": ["./items/*"] }
   },
   "include": ["items", "scripts", "test", "tokens", "fonts.ts"],
-  "exclude": ["test/clean-room/fixture/**", "test/clean-room/all-items.tsx"]
+  "exclude": ["test/clean-room/fixture/**", "test/clean-room/all-items.tsx", "test/clean-room/all-blocks.tsx"]
 }
