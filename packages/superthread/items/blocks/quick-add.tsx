@@ -56,7 +56,7 @@ function QuickAdd({
       input.current?.focus();
     } catch (cause) {
       const message = cause instanceof Error ? cause.message : typeof cause === "string" ? cause : "";
-      setError(message.trim() ? message.toLowerCase().replaceAll("—", ", ") : "could not add. try again.");
+      setError(message.trim() || "could not add. try again.");
     } finally {
       pending.current = false;
       setBusy(false);
@@ -89,7 +89,7 @@ function QuickAdd({
             [inputProps["aria-describedby"], error ? errorId : undefined].filter(Boolean).join(" ") || undefined
           }
         />
-        <InputGroupAddon align="inline-end" aria-label="submit">
+        <InputGroupAddon align="inline-end">
           <InputGroupButton
             type="submit"
             variant="default"

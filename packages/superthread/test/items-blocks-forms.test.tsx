@@ -255,8 +255,8 @@ describe("quick add", () => {
           onAdd={() => {
             attempts++;
             if (attempts === 1) {
-              if (asyncFailure) return Promise.reject(new Error("Could not save"));
-              throw new Error("Could not save");
+              if (asyncFailure) return Promise.reject(new Error("could not save"));
+              throw new Error("could not save");
             }
           }}
         />,
