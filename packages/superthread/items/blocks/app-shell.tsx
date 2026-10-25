@@ -21,9 +21,16 @@ function AppShell(props: ComponentProps<typeof FleetRail>) {
 }
 
 // The ship's name lines up with home in the rail. Below 900 px the name yields to a wrapped row of links.
-function AppShellNav({ ship, children, className, ...props }: ComponentProps<"div"> & { ship: string }) {
+// Its banner keeps the ship's name and named navigation in one landmark.
+function AppShellNav({
+  ship,
+  children,
+  className,
+  role = "banner",
+  ...props
+}: ComponentProps<"div"> & { ship: string }) {
   return (
-    <div data-mk="app-shell" data-slot="app-shell-nav" className={cn("min-w-0", className)} {...props}>
+    <div data-mk="app-shell" data-slot="app-shell-nav" role={role} className={cn("min-w-0", className)} {...props}>
       <SidebarHeader className="h-[59px] justify-center border-b border-sidebar-border px-2.5 py-0 type-subtitle [@media(max-width:900px)]:hidden">
         {ship}
       </SidebarHeader>
