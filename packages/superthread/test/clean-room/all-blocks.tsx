@@ -4,6 +4,25 @@
 import { type ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
+  AppShell,
+  AppShellGround,
+  AppShellNav,
+  AppShellNavItem,
+  AppShellPanel,
+} from "@/components/superthread/blocks/app-shell";
+import {
+  Section,
+  SectionAction,
+  SectionCount,
+  SectionHeader,
+  SectionTitle,
+} from "@/components/superthread/blocks/section-header";
+import {
+  SearchPalette,
+  SearchPaletteContent,
+  SearchPaletteTrigger,
+} from "@/components/superthread/blocks/search-palette";
+import {
   PageHeader,
   PageHeaderActions,
   PageHeaderBack,
@@ -65,6 +84,7 @@ import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { Icon } from "@/components/superthread/ui/glyphs";
 import { Badge } from "@/components/superthread/ui/badge";
 import { TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/superthread/ui/table";
+import { CommandGroup, CommandItem, CommandShortcut } from "@/components/superthread/ui/command";
 
 export const Route = createFileRoute("/blocks")({ component: AllBlocks });
 
@@ -113,6 +133,51 @@ function Sink({ mode }: { mode: Mode }) {
       </Part>
 
       {/* blocks: shell */}
+      <Part name="app-shell">
+        <AppShell
+          current="orbit"
+          markBase="/marks"
+          hrefs={{ home: "#home", orbit: "#orbit" }}
+          sidebar={
+            <AppShellNav ship="orbit">
+              <AppShellNavItem isActive number="01" count={12} render={<a href="#board" />}>
+                board
+              </AppShellNavItem>
+              <AppShellNavItem number="02" render={<a href="#runs" />}>
+                runs
+              </AppShellNavItem>
+            </AppShellNav>
+          }
+        >
+          <AppShellGround>
+            <AppShellPanel>the working panel</AppShellPanel>
+          </AppShellGround>
+        </AppShell>
+      </Part>
+      <Part name="section-header">
+        <Section>
+          <SectionHeader>
+            <SectionTitle>recent runs</SectionTitle>
+            <SectionCount>12</SectionCount>
+            <SectionAction href="#runs" />
+          </SectionHeader>
+          <p>runs appear here.</p>
+        </Section>
+      </Part>
+      <Part name="search-palette">
+        <SearchPalette>
+          <SearchPaletteTrigger />
+          <SearchPaletteContent onSelect={() => {}}>
+            {(select) => (
+              <CommandGroup heading="pages">
+                <CommandItem value="board" onSelect={select}>
+                  board<CommandShortcut>b</CommandShortcut>
+                </CommandItem>
+              </CommandGroup>
+            )}
+          </SearchPaletteContent>
+        </SearchPalette>
+      </Part>
       {/* blocks: collections */}
       <Part name="collection-toolbar">
         <CollectionToolbar label="task controls">
