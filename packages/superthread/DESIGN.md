@@ -499,7 +499,7 @@ The current item, wherever it is (a sidebar entry, the fleet rail's cell, a chos
 ### Marks and icons
 
 - **Marks** sit on a 16 x 16 grid: a key tile with a 1 px notch cut from each corner, a paper silhouette that names the ship, and one region of the silhouette in the ship's spot as a 1 px checker at 50 percent. The `-dark` drawing swaps tile and silhouette and moves the spot to its dark value; dark chrome and the fleet rail on the deep ground take it. The spot pops at rail and fleet-row sizes (32 to 48 px); at 16 px the mark reads by its silhouette. Superthread's own mark is the home mark, with plum as its spot.
-- **Icons** are drawn as whole-pixel squares in the current colour on a 12 px grid: arrow, left, copy, check, chevron, search, close, trash and plus (`Icon`).
+- **Icons** are drawn as whole-pixel squares in the current colour on a 12 px grid: arrow, left, copy, check, chevron, search, close, trash, plus and more (`Icon`). `more` is superthread's own, drawn in `tokens/icons.json` beside the world's set.
 - **Status glyphs** are 14 px squares with the glyph knocked out: tick, i, pause, cross and dash (`StatusGlyph`). A field's error message leads with the bang glyph (`FieldErrorGlyph`).
 
 **The Square Rule.** Nothing is rounded: no item carries a literal radius, and every radius token is 0.
@@ -508,16 +508,16 @@ The current item, wherever it is (a sidebar entry, the fleet rail's cell, a chos
 
 ## Components
 
-Every `@mk` item is a branded skin on base-nova, shadcn's Base UI style: shadcn's API, exports and `data-slot` attributes stay, and the craft lives in the classes. Each brand item's root carries `data-mk="<item>"`. Install with `bunx --bun shadcn@latest add @mk/<item>`; `shadcn init` with the registry's `init` item sets an app up with the style, the tokens, `utils` and the button. Brand items carry the system's rules; pass items (`card`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile`) are base-nova on the tokens. Each brand item carries at most one texture detail:
+Every `@mk` item is a branded skin on base-nova, shadcn's Base UI style: shadcn's API, exports and `data-slot` attributes stay, and the craft lives in the classes. Each brand item's root carries `data-mk="<item>"`. Install with `bunx --bun shadcn@latest add @mk/<item>`; `shadcn init` with the registry's `init` item sets an app up with the style, the tokens, `utils` and the button. Brand items carry the system's rules; pass items (`card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile`) are base-nova on the tokens. Each brand item carries at most one texture detail:
 
-| detail    | utility            | item                                 | what prints                                                                           |
-| --------- | ------------------ | ------------------------------------ | ------------------------------------------------------------------------------------- |
-| contact   | `texture-contact`  | select list, toast, dialog           | light only: the contact shadow as a 50 percent screen                                 |
-| mixed     | `texture-mixed`    | checkbox                             | a 12 px plum square at 50 percent inside the box's plum edge                          |
-| tab hover | `texture-tabhover` | tabs                                 | a 2 px plum bar at 50 percent, previewing the current bar                             |
-| row edge  | `texture-rowedge`  | table                                | a 4 px plum strip at 50 percent beside the row under the pointer; solid when selected |
-| disabled  | `texture-disabled` | button, input, textarea, input group | the 1 px edge in the input ink at 50 percent; the fill stays flat, the label plain    |
-| loading   | `texture-skeleton` | skeleton                             | the first ink at 18.75 percent on whole-pixel bars                                    |
+| detail    | utility            | item                                                                      | what prints                                                                           |
+| --------- | ------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| contact   | `texture-contact`  | select list, toast, dialog, dropdown menu, combobox, alert dialog, sonner | light only: the contact shadow as a 50 percent screen                                 |
+| mixed     | `texture-mixed`    | checkbox                                                                  | a 12 px plum square at 50 percent inside the box's plum edge                          |
+| tab hover | `texture-tabhover` | tabs                                                                      | a 2 px plum bar at 50 percent, previewing the current bar                             |
+| row edge  | `texture-rowedge`  | table                                                                     | a 4 px plum strip at 50 percent beside the row under the pointer; solid when selected |
+| disabled  | `texture-disabled` | button, input, textarea, input group                                      | the 1 px edge in the input ink at 50 percent; the fill stays flat, the label plain    |
+| loading   | `texture-skeleton` | skeleton                                                                  | the first ink at 18.75 percent on whole-pixel bars                                    |
 
 ### Buttons
 
@@ -589,6 +589,74 @@ The column of ship marks down the left of every ship surface, on the deep ground
 ### Card, label and separator
 
 Pass items: base-nova's card, label and separator on the tokens, square and ruled like the rest.
+
+### Switch
+
+A square track with the input edge on the stock and an input-ink square inside it. On, the track fills with plum and the square crosses to the right in the stock ink, on the quick duration; hover overprints the fill. The track is a control, with the outside ring. Disabled, the track and its square take the disabled ink on faint stock. The world rejected a screened track: on must read as settled.
+
+### Radio group
+
+An 18 px stock square with the input edge and an outside control ring. Chosen, a plum edge encloses an 8 px plum square; disabled, the edge and square take the disabled ink on faint stock. The grid leaves 12 px between choices.
+
+### Slider
+
+An 8 px ruled stock track holds a flat plum range, with no screen. The 16 px square thumbs keep their outside control ring when the range input takes keyboard focus, and take the accent fill on hover or drag. Vertical tracks mirror the same dimensions; disabled tracks and thumbs use the disabled edge and range ink.
+
+### Toggle
+
+The button's 40 px height, with 32 and 48 px sizes, Supreme 500 at 14 px, and an outside control ring. Default rests without a visible edge; outline draws the input edge. Pressed is boxed in plum on the accent fill. Only fill, edge and label transition, at the instant duration.
+
+### Toggle group
+
+Joined by default at spacing 0, with neighbouring 1 px edges overlapping. The pressed item rises so all four plum edges show, and joined keyboard focus sits inside the item. Positive spacing separates the controls and restores the outside ring; vertical groups share horizontal edges instead.
+
+### Button group
+
+Actions join on shared 1 px edges, horizontally or vertically, and the focused child rises above its neighbours. The text addon is a 40 px secondary-stock box with an input edge and muted UI words. A separator stretches in the input ink.
+
+### Kbd
+
+A 20 px keycap, at least 20 px wide, with a quiet edge on muted stock. Keys set in Fragment Mono at 11 px without caps or tracking. Inside a tooltip they take the inverted stock ink, with an opaque foreground fill and a muted edge; groups leave 4 px between keys.
+
+### Field
+
+Fieldsets keep their upstream parts and orientation variants. Legends set in mono caps, labels and titles at the UI step, and descriptions at the instrument step. Invalid labels take the error ink, disabled labels the disabled ink. A checked choice card is boxed in plum on the accent fill with 16 px padding. Every error message leads with the bang square, including each line of a list; separators carry a meta label on the stock over a 1 px rule.
+
+### Native select
+
+The native select is a flat 40 px field box, or 32 px at the small size, with the input edge and the same inside focus edge as the select trigger. Invalid changes the edge and focus ink together; disabled uses the faint fill and disabled label. A pixel chevron sits at the right without taking pointer input, and options keep native platform semantics.
+
+### Accordion
+
+Rows run between full-width 1 px rules. The 48 px trigger keeps its focus ring inside and turns one pixel chevron on the quick duration. The panel's measured height travels on the same duration and brand ease; its muted UI copy keeps 16 px below it, with links in the house ink.
+
+### Breadcrumb
+
+A wrapping path at the instrument step, with muted links that take foreground ink on hover and the control ring on keyboard focus. The current page prints in foreground ink. Right-facing pixel chevrons separate the items, and a 20 px square holds the more glyph for an omitted stretch.
+
+### Resizable
+
+A 1 px rule separates full-size panels, with an invisible 8 px hit area; hover and drag turn the rule plum. With a handle, a 6 by 16 px grip holds two whole-pixel lines and draws the focus ring inside its box. Without a grip the ring has zero offset around the rule, which has no room for an inside ring. Vertical groups mirror the layout; the installed v4 primitive supplies the hover, active and disabled states.
+
+### Dropdown menu
+
+The menu and its submenus are leaf lists with the contact edge, 6 px from their triggers. Only the inner list scrolls. Rows are 36 px tall, highlight in the raised hover fill and draw keyboard focus inside; destructive stays in the key ink. Checks and 6 px house squares occupy the left indicator column. Group labels and mono shortcuts keep the list hierarchy.
+
+### Combobox
+
+The input is an input group whose field box owns focus; trigger and clear keep their own inside control rings. The popup takes the select's leaf lift and contact edge, with the chosen option boxed on aria-selected and the check at the end. Multiple values print as 24 px secondary chips with named 16 px ghost remove controls; the chips box thickens only while its text control holds focus.
+
+### Command
+
+The cmdk surface stays flat, with a 40 px input group and a scroll list of 36 px rows. cmdk's selected state means the pointer or keys position, so it takes the raised hover fill rather than the chosen box. Group headings use the meta step and shortcuts use Fragment Mono. The palette uses the dialog's sheet and contact edge, with its lowercase accessible title and description inside it.
+
+### Alert dialog
+
+The confirmation is a whole-pixel centred sheet on the popover fill, with a 1 px edge, 28 px padding, the sheet lift and its contact edge. Default width stops at 440 px; small keeps the compact 320 px width. The title uses the subtitle step, media sits in a 40 px secondary square, and house buttons align right 24 px below the explanation. The plain scrim and sheet fade at the quick duration.
+
+### Sonner
+
+Sonner's toast API prints unstyled on the toast's popover fill, 1 px edge and leaf lift with the contact edge, padded 16 px. Every kind uses its 14 px status glyph, including a static i for loading. Titles use UI medium over muted instrument descriptions; actions and cancels take the small default and outline button looks with flat edges. The stack expands by default so toasts never scale. A wrapper carries data-slot and data-mk because sonner drops arbitrary attributes; the viewport label is "notifications".
 
 ### Motion
 

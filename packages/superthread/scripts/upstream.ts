@@ -38,9 +38,26 @@ export const SEEDS = [
   "sidebar",
   "checkbox",
   "skeleton",
+  "accordion",
+  "alert-dialog",
+  "breadcrumb",
+  "button-group",
+  "combobox",
+  "command",
+  "dropdown-menu",
+  "field",
+  "kbd",
+  "native-select",
+  "radio-group",
+  "resizable",
+  "slider",
+  "sonner",
+  "switch",
+  "toggle",
+  "toggle-group",
 ] as const;
 /** Pass-through items. `utils` is vendored for provenance only: `items/lib/utils.ts` is written by hand. */
-export const PASS = ["card", "label", "separator", "sheet", "tooltip", "use-mobile", "utils"] as const;
+export const PASS = ["card", "collapsible", "label", "separator", "sheet", "tooltip", "use-mobile", "utils"] as const;
 /** What `regen` writes. */
 export const GENERATED = PASS.filter((name) => name !== "utils");
 export const UPSTREAM = [...SEEDS, ...PASS];
@@ -57,6 +74,7 @@ export const ICON_MAP: Record<string, { glyph: string; add?: string; drop?: stri
   ChevronRightIcon: { glyph: "chevron", add: "-rotate-90" },
   ChevronLeftIcon: { glyph: "left" },
   PanelLeftIcon: { glyph: "left" }, // no new drawing
+  MoreHorizontalIcon: { glyph: "more" },
   SearchIcon: { glyph: "search" },
   PlusIcon: { glyph: "plus" },
   CopyIcon: { glyph: "copy" },
@@ -134,7 +152,8 @@ const urlOf = (name: string) => URL_TEMPLATE.replace("{name}", name);
 /** The glyph names the generated `glyphs.tsx` draws, from the vendored master. */
 function glyphNames(): Set<string> {
   const glyphs = JSON.parse(readFileSync(join(pkg, "tokens/glyphs.json"), "utf8"));
-  return new Set([...Object.keys(glyphs.ICONS), ...Object.keys(glyphs.GLYPHS)]);
+  const own = JSON.parse(readFileSync(join(pkg, "tokens/icons.json"), "utf8"));
+  return new Set([...Object.keys(glyphs.ICONS), ...Object.keys(own), ...Object.keys(glyphs.GLYPHS)]);
 }
 
 // ---- transforms ----
@@ -222,8 +241,11 @@ function replaceIcons(src: string, where: string, glyphs: Set<string>): string {
     for (const a of attrs) {
       if (ICON_LIBRARIES.includes(a.name)) continue;
       if (a.name === "className") className = a;
-      else if (a.name.startsWith("aria-")) kept.push(writeAttr(a));
-      else throw new Error(`${where}: IconPlaceholder prop ${a.name} is neither an icon library, className nor aria-*`);
+      else if (a.name.startsWith("aria-") || a.name.startsWith("data-")) kept.push(writeAttr(a));
+      else
+        throw new Error(
+          `${where}: IconPlaceholder prop ${a.name} is neither an icon library, className, aria-* nor data-*`,
+        );
     }
     let cls = "";
     if (className?.expr !== undefined) {

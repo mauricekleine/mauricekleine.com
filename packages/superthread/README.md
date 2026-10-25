@@ -3,7 +3,7 @@
 The design system for Maurice's fleet, as a shadcn registry. This package holds two versions side by side:
 
 - **v1, frozen.** The theme www and the share Worker import (`dist/superthread.css`) and the two items www serves at `/r`. Nothing regenerates it.
-- **v2.** Tokens generated from the master world, and the versioned `@mk` registry of Base UI items built on them. The version is `2.0.0-next.1`.
+- **v2.** Tokens generated from the master world, and the versioned `@mk` registry of Base UI items built on them. The version is `2.0.0-next.2`.
 
 ## Install v2
 
@@ -49,7 +49,7 @@ Only the Start layout is tested. For a surface without Tailwind, `@mk/tokens-pla
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0-next.1/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0-next.2/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions that have a snapshot.
@@ -60,12 +60,12 @@ Apps in this repo can import the package directly: `@mauricekleine/superthread/v
 
 ## What v2 holds
 
-| tier  | items                                                                                                                                                                      |
-| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| style | `init`, `tokens`                                                                                                                                                           |
-| lib   | `tokens-plain`, `utils`, `fleet`                                                                                                                                           |
-| brand | `glyphs`, `button`, `badge`, `input`, `input-group`, `textarea`, `select`, `checkbox`, `dialog`, `toast`, `tabs`, `table`, `progress`, `skeleton`, `sidebar`, `fleet-rail` |
-| pass  | `card`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile`: base-nova's items on the superthread tokens                                                                |
+| tier  | items                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| style | `init`, `tokens`                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| lib   | `tokens-plain`, `utils`, `fleet`                                                                                                                                                                                                                                                                                                                                                                                                    |
+| brand | `glyphs`; controls `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`; fields `input`, `input-group`, `textarea`, `field`, `select`, `native-select`; layers `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`; structure `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
+| pass  | `card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile`: base-nova's items on the superthread tokens                                                                                                                                                                                                                                                                                                          |
 
 The tokens carry shadcn's colour roles plus the deep ground (the sidebar roles, `--ground`), status roles, code, control states and the ship spots; four lifts (`shadow-slip`, `-leaf`, `-sheet`, `-lifted`); the type steps as `type-<step>` utilities, from `type-meta` to `type-display`; three durations and one ease (`--ease-brand`); square corners; and the texture utilities. Two names differ from shadcn's habits: `--destructive` is the key ink, not red, and a status role's `-foreground` (`--success-foreground`) is the word ink, not a colour to print on `--success`.
 
@@ -156,7 +156,7 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 ## Versions and stamps
 
-- **Version.** `package.json` `version` is the one source for every item: `2.0.0-next.1` now, `2.0.0` at the fleet rollout.
+- **Version.** `package.json` `version` is the one source for every item: `2.0.0-next.2` now, `2.0.0` at the fleet rollout.
 - **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. In CSS, `/* @mk/<item> <version> */` is line 1.
 - **Meta.** Each built item JSON carries `meta: { version, sha256, tier, upstream }`: the hash of its targets and contents, its tier, and the base-nova item and CLI it was seeded from. Meta stays in the registry and never reaches an installed file.
 - **Paths.** Latest: `/r/<name>.json` and `/r/registry.json`. Pinned: `/r/v/<version>/<name>.json` and `/r/v/<version>/registry.json`. Index: `/r/versions.json`, `{ latest, versions }`.
