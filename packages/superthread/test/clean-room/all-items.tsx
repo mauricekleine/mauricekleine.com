@@ -10,6 +10,12 @@ import { fleet } from "@/components/superthread/lib/fleet";
 import { cn } from "@/components/superthread/lib/utils";
 import { Badge } from "@/components/superthread/ui/badge";
 import { Button } from "@/components/superthread/ui/button";
+import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from "@/components/superthread/ui/button-group";
+import { Kbd, KbdGroup } from "@/components/superthread/ui/kbd";
+import { RadioGroup, RadioGroupItem } from "@/components/superthread/ui/radio-group";
+import { Slider } from "@/components/superthread/ui/slider";
+import { Toggle } from "@/components/superthread/ui/toggle";
+import { ToggleGroup, ToggleGroupItem } from "@/components/superthread/ui/toggle-group";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import {
   Dialog,
@@ -403,6 +409,86 @@ function Sink({ mode }: { mode: Mode }) {
           <Switch aria-label="disabled" disabled defaultChecked />
           <Switch aria-label="invalid" aria-invalid />
         </div>
+      </Part>
+
+      <Part name="radio-group">
+        <RadioGroup defaultValue="orbit" aria-label="ship">
+          <label className="flex items-center gap-3">
+            <RadioGroupItem value="orbit" />
+            orbit
+          </label>
+          <label className="flex items-center gap-3">
+            <RadioGroupItem value="quanta" />
+            quanta
+          </label>
+          <label className="flex items-center gap-3">
+            <RadioGroupItem value="locked" disabled />
+            unavailable
+          </label>
+        </RadioGroup>
+        <RadioGroup defaultValue="locked" disabled aria-label="locked ship">
+          <RadioGroupItem value="locked" aria-label="locked" />
+        </RadioGroup>
+      </Part>
+
+      <Part name="slider">
+        <div className="grid max-w-md gap-6">
+          <Slider defaultValue={[40]} aria-label="volume" />
+          <Slider defaultValue={[20, 80]} aria-label="range" />
+          <Slider defaultValue={[40]} disabled aria-label="locked volume" />
+          <Slider defaultValue={[40]} orientation="vertical" className="h-40" aria-label="vertical volume" />
+        </div>
+      </Part>
+
+      <Part name="toggle">
+        <div className="flex flex-wrap items-center gap-3">
+          <Toggle>off</Toggle>
+          <Toggle defaultPressed>on</Toggle>
+          <Toggle variant="outline" size="sm">
+            small
+          </Toggle>
+          <Toggle variant="outline" size="lg" defaultPressed>
+            large
+          </Toggle>
+          <Toggle variant="outline" disabled>
+            disabled
+          </Toggle>
+        </div>
+      </Part>
+
+      <Part name="toggle-group">
+        <ToggleGroup variant="outline" defaultValue={["day"]} aria-label="period">
+          <ToggleGroupItem value="day">day</ToggleGroupItem>
+          <ToggleGroupItem value="week">week</ToggleGroupItem>
+        </ToggleGroup>
+        <ToggleGroup variant="outline" spacing={3} size="sm" aria-label="view">
+          <ToggleGroupItem value="list">list</ToggleGroupItem>
+          <ToggleGroupItem value="grid">grid</ToggleGroupItem>
+        </ToggleGroup>
+        <ToggleGroup variant="outline" orientation="vertical" defaultValue={["runs"]} aria-label="section">
+          <ToggleGroupItem value="runs">runs</ToggleGroupItem>
+          <ToggleGroupItem value="logs">logs</ToggleGroupItem>
+        </ToggleGroup>
+      </Part>
+
+      <Part name="button-group">
+        <ButtonGroup aria-label="run actions">
+          <ButtonGroupText>run</ButtonGroupText>
+          <Button variant="outline">start</Button>
+          <ButtonGroupSeparator />
+          <Button variant="outline">stop</Button>
+        </ButtonGroup>
+        <ButtonGroup orientation="vertical" aria-label="log actions">
+          <Button variant="outline">copy</Button>
+          <Button variant="outline">download</Button>
+        </ButtonGroup>
+      </Part>
+
+      <Part name="kbd">
+        <KbdGroup>
+          <Kbd>ctrl</Kbd>
+          <Kbd>k</Kbd>
+        </KbdGroup>
       </Part>
 
       {/* 2.0: layers */}

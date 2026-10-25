@@ -590,6 +590,30 @@ The column of ship marks down the left of every ship surface, on the deep ground
 
 Pass items: base-nova's card, label and separator on the tokens, square and ruled like the rest.
 
+### radio-group
+
+An 18 px stock square with the input edge and an outside control ring. Chosen, a plum edge encloses an 8 px plum square; disabled, the edge and square take the disabled ink on faint stock. The grid leaves 12 px between choices.
+
+### slider
+
+An 8 px ruled stock track holds a flat plum range, with no screen. The 16 px square thumbs keep their outside control ring when the range input takes keyboard focus, and take the accent fill on hover or drag. Vertical tracks mirror the same dimensions; disabled tracks and thumbs use the disabled edge and range ink.
+
+### toggle
+
+The button's 40 px height, with 32 and 48 px sizes, Supreme 500 at 14 px, and an outside control ring. Default rests without a visible edge; outline draws the input edge. Pressed is boxed in plum on the accent fill. Only fill, edge and label transition, at the instant duration.
+
+### toggle-group
+
+Joined by default at spacing 0, with neighbouring 1 px edges overlapping. The pressed item rises so all four plum edges show, and joined keyboard focus sits inside the item. Positive spacing separates the controls and restores the outside ring; vertical groups share horizontal edges instead.
+
+### button-group
+
+Actions join on shared 1 px edges, horizontally or vertically, and the focused child rises above its neighbours. The text addon is a 40 px secondary-stock box with an input edge and muted UI words. A separator stretches in the input ink.
+
+### kbd
+
+A 20 px keycap, at least 20 px wide, with a quiet edge on muted stock. Keys set in Fragment Mono at 11 px without caps or tracking. Inside a tooltip they take the inverted stock ink, with an opaque foreground fill and a muted edge; groups leave 4 px between keys.
+
 ### Motion
 
 Three durations on one ease. `--duration-instant` (120 ms) times hover and press colour on buttons, badges and tabs, and the select list's entry; `--duration-quick` (180 ms) times the rail's cell and tab, the sidebar's items and the dialog's fade; `--duration-travel` (240 ms) times anything that crosses the page: the progress width, the toast stack and the sidebar's collapse. Every brand transition uses `--ease-brand`, `cubic-bezier(0.22, 1, 0.36, 1)`: changes start fast and ease into place. Transitions name their properties (`transition-[color,background-color,border-color]`), so a focus ring snaps on instead of fading. Motion answers an action or an event; nothing loops, and no screen ever moves. Under `prefers-reduced-motion: reduce` the three durations become 0 and every transition and animation 0.01 ms: states still change, at once.
