@@ -485,7 +485,7 @@
       ],
       "meta": {
         "version": "2.0.0-next.1",
-        "sha256": "33aa196a4ebf3bc3a03b260e4f1909e2b150ca07517e99b3b5612fbe258ea8b4",
+        "sha256": "a45c2da10100f91a81546b5515acc6009fd337feddf65e94f48d7efd8fe1bf87",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -723,7 +723,7 @@
       ],
       "meta": {
         "version": "2.0.0-next.1",
-        "sha256": "6424479bc5782705a665c1154e948dec933ab816197fefdc9af631bea2cef7c8",
+        "sha256": "bda7399b5d8fd09193805305db0ea4a4b1ea24cab3e0b4a69addd820df4e5125",
         "tier": "pass",
         "upstream": {
           "style": "base-nova",
@@ -753,7 +753,7 @@
       ],
       "meta": {
         "version": "2.0.0-next.1",
-        "sha256": "65e12b34a7e9eb566fdaf6737fa1e3e82fc1f0c210d4c7c58ba5f1bbedbeb171",
+        "sha256": "e5bc48311705dff85960ad047c7f05e372a0e16022610d9fbc13abde81bdffa7",
         "tier": "pass",
         "upstream": {
           "style": "base-nova",
