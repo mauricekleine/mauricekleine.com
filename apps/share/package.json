@@ -7,7 +7,7 @@
     "dev": "node tools/dev.mjs",
     "test": "bun run build && bun run typecheck && node --test test/worker.test.mjs",
     "typecheck": "cf workers types && bun --check",
-    "deploy": "cf deploy --prebuilt"
+    "deploy": "PATH=\"$HOME/.local/bin:$PATH\" cf deploy --prebuilt"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "~1.62.3",
