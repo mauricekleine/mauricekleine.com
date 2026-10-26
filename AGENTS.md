@@ -16,7 +16,7 @@ The pre-commit hook runs `bun fmt --staged` with the pinned Bun release, then `b
 
 Keep Maurice's voice lowercase and understated. No em dashes in new copy.
 
-Superthread v1 is frozen: www and the share Worker import `packages/superthread/dist/superthread.css`, and `bun run registry` copies the frozen v1 items into `apps/web/public/r/` and never regenerates them. v2 theme values live in `packages/superthread/tokens/master.json`, vendored from the master world with `bun run --cwd packages/superthread vendor <path to the master world>`, and are never hand-edited. `bun run --cwd packages/superthread build` generates the v2 CSS from them, and `bun run test:clean-room` installs the `@mk` items into a fresh app. `packages/superthread/DESIGN.md` documents the v2 values. Fleet membership and new star marks live in `packages/superthread/marks/fleet.json`; `bun run marks new <id>` generates them and `bun run marks check` verifies them.
+www and the share Worker import the frozen v1 CSS at `packages/superthread/dist/superthread.css`. The `@mk` v2 registry and fleet marks are served by superthread.mauricekleine.com. v2 theme values live in `packages/superthread/tokens/master.json`, vendored from the master world with `bun run --cwd packages/superthread vendor <path to the master world>`, and are never hand-edited. `bun run --cwd packages/superthread build` generates the v2 CSS from them, and `bun run test:clean-room` installs the `@mk` items into a fresh app. `packages/superthread/DESIGN.md` documents the v2 values. Fleet membership and new star marks live in `packages/superthread/marks/fleet.json`; `bun run marks new <id>` generates them and `bun run marks check` verifies them.
 
 ## Dependencies
 

@@ -93,7 +93,7 @@ It serves the `@mk` registry beside the pages. Init maps `@mk` to `https://super
 - `/r/v/<version>/<name>.json`: the snapshot committed in `versions/<version>/r/`, which never changes once it is on main; `/r/versions.json` lists the versions
 - `/fonts/`, `/marks/` and `/texture/`: the faces the tokens load, the ship marks the fleet rail loads by default, and the plates the site prints
 
-www's `/r/` is v1, frozen, and a separate registry: `https://www.mauricekleine.com/r/superthread.json` and `/r/fleet-rail.json` keep serving v1's bytes until the fleet rollout. Nothing the site serves changes them.
+fleet apps pin `@mk` to `https://superthread.mauricekleine.com/r/v/<version>/{name}.json`. their fleet rails load marks from `https://superthread.mauricekleine.com/marks` by default.
 
 `apps/superthread/` holds the site. From the repo root, `bun run dev:superthread` serves it on port 3001, `bun run build:superthread` builds it with the registry, and `bun run deploy:superthread` deploys it. `apps/superthread/AGENTS.md` has the rest.
 
@@ -112,7 +112,6 @@ www's `/r/` is v1, frozen, and a separate registry: `https://www.mauricekleine.c
 | `items/`                                                                      | item sources, at the paths they install to. `catalog.ts` lists the items. `lib/tokens.ts`, `lib/fleet.ts` and `ui/glyphs.tsx` are generated |
 | `upstream/`                                                                   | base-nova as fetched, with its manifest; the recorded CLI mirror (`cli/`); the pinned Start template; shadcn's licence                      |
 | `versions/<version>/r/`                                                       | committed snapshots                                                                                                                         |
-| `v1/r/`                                                                       | v1's served JSON                                                                                                                            |
 | `test/clean-room/`                                                            | the clean room, its fixture app and the page that renders every item                                                                        |
 
 ## Scripts
@@ -133,7 +132,7 @@ Run them from the repo root as `bun run --cwd packages/superthread <script>`.
 | `marks`      | `new <id> [--target soliton\|cloudflare] [--url URL\|none]` allocates a star mark; `check` verifies the fleet; `sheet [--out FILE]` renders a standalone sheet |
 | `lint`       | `designmd lint DESIGN.md` with the pinned local copy                                                                                                           |
 
-At the root, `bun run registry` copies v1's JSON into `apps/web/public/r/`, and `bun run test` runs this package's tests with those of the web, share and superthread apps.
+At the root, `bun run test` runs this package's tests with those of the web, share and superthread apps.
 
 After editing an input, regenerate in this order: `texture`, `build`, then `upstream regen`. When `texture/plates.json` changes, also rewrite the pixel hashes from this directory: `python3 -I scripts/texture/build.py plates --out "$TMPDIR/plates" --write-hashes texture/plates.sha256`. Builds copy committed outputs and never run Python; `check`, `texture` and the tests run `python3 -I` with the standard library only.
 
@@ -175,9 +174,6 @@ Any change to a served item after its version reaches main ships as the next ver
 3. Run `bun run test` and `bun run test:clean-room`, whose pinned step now installs from the new snapshot.
 4. Commit the snapshot as the pull request's last commit. If an item changes again before the merge, retake it: the script replaces a snapshot that is not on main yet.
 
-## v1, frozen
+## frozen v1 CSS
 
-- `dist/superthread.css`, `registry.json` and `registry/ui/fleet-rail.tsx` stay byte-identical at their paths. www's `site.css`, the share Worker's pin page and `apps/web/tools/test-projects.mjs` read them.
-- `v1/r/*.json` are the bytes www serves at `/r/superthread.json`, `/r/fleet-rail.json` and `/r/registry.json`, captured from the last v1 build. Root `bun run registry` copies them with `scripts/publish-v1.ts`. No shadcn build runs for v1, so a CLI upgrade cannot change them.
-- `test/v1-frozen.test.ts` pins the sha256 of every one of these files.
-- www's `/r` stays v1 until the fleet rollout. Existing consumers keep installing `https://www.mauricekleine.com/r/superthread.json` and `/r/fleet-rail.json`.
+www's `site.css` and the share Worker's pin page import `dist/superthread.css` directly. `test/v1-frozen.test.ts` pins its sha256. v2 builds leave it unchanged.

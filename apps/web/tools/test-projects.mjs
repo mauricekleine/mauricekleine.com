@@ -17,16 +17,6 @@ test("markdown twins link each side quest at its manifest url", () => {
   }
 });
 
-// the fleet rail ships as a copied registry component, so it can't import the manifest
-test("the fleet rail links public side quests at their manifest urls", () => {
-  for (const rail of ["../../../packages/superthread/registry/ui/fleet-rail.tsx"]) {
-    const entries = [...read(rail).matchAll(/name: ["']([a-z]+)\.com["'],\s*href: ["']([^"']+)["']/g)];
-    const checked = entries.filter(([, name]) => name in sideQuests);
-    assert.ok(checked.length > 0, `${rail} has no side quests`);
-    for (const [, name, href] of checked) assert.equal(href, sideQuests[name].url, `${rail} links ${name}`);
-  }
-});
-
 const { anchorHrefs, canonicalHref, jsonLdIds } = await import("./drift-parse.mjs");
 
 test("drift parsing reads attributes in any order", () => {
