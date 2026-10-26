@@ -38,6 +38,7 @@ test("verified HTML aliases become permanent and retain queries and headers", as
 test("unrelated redirects, methods, assets and missing pages retain their response", async () => {
   for (const [path, method, status, location] of [
     ["/missing.html", "GET", 404, null],
+    ["/r/superthread.json", "GET", 404, null],
     ["/fonts/", "GET", 404, null],
     ["/about.html", "POST", 307, "/about"],
     ["/about.html", "GET", 302, "/about"],
@@ -503,12 +504,15 @@ test("every other way to the buttons page leads to mk.wtf/buttons", async () => 
   }
 });
 
-test("/superthread moves to superthread.mauricekleine.com, and its marks stay", async () => {
+test("/superthread and its assets move to superthread.mauricekleine.com", async () => {
   for (const method of ["GET", "HEAD"]) {
     for (const [path, location] of [
       ["/superthread", "https://superthread.mauricekleine.com/"],
       ["/superthread/", "https://superthread.mauricekleine.com/"],
       ["/superthread?ref=x", "https://superthread.mauricekleine.com/?ref=x"],
+      ["/superthread/marks/orbit.svg", "https://superthread.mauricekleine.com/marks/orbit.svg"],
+      ["/superthread/marks/orbit.svg?ref=x", "https://superthread.mauricekleine.com/marks/orbit.svg?ref=x"],
+      ["/superthread/nonobench-mark.svg", "https://superthread.mauricekleine.com/nonobench-mark.svg"],
     ]) {
       const res = await worker.fetch(new Request(origin + path, { method }), noAssets);
       assert.equal(res.status, 301, `${method} ${path}`);
@@ -523,8 +527,7 @@ test("/superthread moves to superthread.mauricekleine.com, and its marks stay", 
     ASSETS: { fetch: async (request) => new Response(`asset ${new URL(request.url).pathname}`) },
   };
   for (const [path, method] of [
-    ["/superthread/marks/orbit.svg", "GET"],
-    ["/superthread/nonobench-mark.svg", "GET"],
+    ["/superthreadish", "GET"],
     ["/superthread", "POST"],
   ]) {
     const res = await worker.fetch(new Request(origin + path, { method }), assets);

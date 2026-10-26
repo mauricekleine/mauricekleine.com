@@ -96,6 +96,6 @@ Brand items hold these rules, and the package's item tests enforce them:
 
 `packages/superthread/README.md` covers the scripts, the clean room that installs every item into a fresh app, snapshots and cutting the next version.
 
-## v1
+## fleet installs
 
-www's `/r` serves v1, frozen: `https://www.mauricekleine.com/r/superthread.json` and `/r/fleet-rail.json`. It is a separate registry, and a surface installs from one or the other.
+fleet apps install `@mk` v2 from `https://superthread.mauricekleine.com/r/v/<version>/{name}.json`. fleet rails load marks from `https://superthread.mauricekleine.com/marks` by default.

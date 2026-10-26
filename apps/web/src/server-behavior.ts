@@ -25,7 +25,7 @@ type SubscribePage = {
 // 3. essay email signup with double opt-in: POST /subscribe, GET /subscribe/confirm
 // 4. the mk.wtf short links (src/links.ts)
 // 5. mk.wtf/buttons, the one page on mk.wtf (apps/buttons builds it into public/)
-// 6. /superthread, now a 301 to superthread.mauricekleine.com; its marks stay here
+// 6. /superthread and its subpaths redirect to superthread.mauricekleine.com
 
 // every html page has a hand-written .md twin next to it
 function markdownMirror(pathname: string): string | null {
@@ -629,13 +629,14 @@ export async function handleSiteRequest(
     return Response.redirect(url.toString(), 301);
   }
 
-  // the old specimen page moved to superthread's own site; its marks stay here
+  // superthread pages and assets live on their own host
   if (
     SITE_HOSTS.includes(url.hostname) &&
-    (url.pathname === "/superthread" || url.pathname === "/superthread/") &&
+    (url.pathname === "/superthread" || url.pathname.startsWith("/superthread/")) &&
     (request.method === "GET" || request.method === "HEAD")
   ) {
-    return Response.redirect(`${SUPERTHREAD_ORIGIN}/${url.search}`, 301);
+    const path = url.pathname.slice("/superthread".length) || "/";
+    return Response.redirect(`${SUPERTHREAD_ORIGIN}${path}${url.search}`, 301);
   }
 
   if (url.pathname === "/subscribe" && request.method === "POST") {
