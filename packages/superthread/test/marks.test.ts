@@ -237,7 +237,34 @@ test("check rejects geometry, contrast, chromes, colour collisions, and stale pr
       (f) => writeFileSync(join(f.publicMarks, "fleet.json"), "{}\n"),
       "public marks/fleet.json differs",
     ],
-    ["retired mark removed", (f) => rmSync(join(f.publicMarks, "pilot/pilot.svg")), "retired mark is missing"],
+    [
+      "retired light mark removed",
+      (f) => rmSync(join(f.publicMarks, "pilot/pilot.svg")),
+      "pilot/pilot.svg: retired mark is missing",
+    ],
+    [
+      "retired dark mark removed",
+      (f) => rmSync(join(f.publicMarks, "pilot/pilot-dark.svg")),
+      "pilot/pilot-dark.svg: retired mark is missing",
+    ],
+    [
+      "retired mark drift",
+      (f) => {
+        const file = join(f.publicMarks, "pilot/pilot-dark.svg");
+        writeFileSync(file, read(file) + "\n");
+      },
+      "pilot/pilot-dark.svg: retired mark provenance differs",
+    ],
+    [
+      "retired ship back in the fleet",
+      (f) => {
+        const provenanceFile = join(f.publicMarks, "PROVENANCE.json");
+        const provenance = readJson(provenanceFile);
+        provenance.retired = { ...provenance.retired, orbit: "test" };
+        writeJson(provenanceFile, provenance);
+      },
+      "orbit: retired but still in the fleet",
+    ],
     [
       "generated fleet drift",
       (f) => writeFileSync(join(f.root, "items/lib/fleet.ts"), ""),
