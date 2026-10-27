@@ -279,7 +279,8 @@ export const catalog: CatalogItem[] = [
     name: "fleet-rail",
     type: "registry:block",
     title: "fleet rail",
-    description: "the rail of ship marks for moving between fleet surfaces; you pass the hrefs",
+    description:
+      "the rail of ship marks for moving between fleet surfaces; each ship links to its fleet url unless you pass an href",
     files: [ui("fleet-rail")],
     tier: "brand",
     upstream: null,

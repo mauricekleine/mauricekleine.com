@@ -1,10 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { fleet } from "@/components/superthread/lib/fleet";
 import { AppShell, AppShellGround, AppShellNav, AppShellNavItem } from "@/components/superthread/blocks/app-shell";
 import type { ShipNavItem } from "./data";
 
-// Only the ships with mock pages open here; the other rail cells remain unavailable.
-const hrefs = { home: "/", orbit: "/mock/board", quanta: "/mock/reading" };
+// Only the ships with mock pages open here; null keeps the other cells off their fleet urls, so they remain unavailable.
+const hrefs = {
+  ...Object.fromEntries(fleet.map((ship) => [ship.id, null])),
+  home: "/",
+  orbit: "/mock/board",
+  quanta: "/mock/reading",
+};
 
 // The docs shell already owns main and the banner, so the embedded shell uses a div and a group.
 export function ShipFrame({

@@ -59,8 +59,10 @@ describe("the served marks", () => {
   const dir = join(import.meta.dir, "../../public/marks");
   const record = JSON.parse(readFileSync(join(dir, "PROVENANCE.json"), "utf8")) as {
     files: Record<string, { sha256: string }>;
+    retired?: Record<string, string>;
   };
-  const ids: MarkId[] = ["superthread", ...fleet.map((ship) => ship.id)];
+  // a retired ship's marks stay served for the published snapshots that still list it
+  const ids = ["superthread", ...fleet.map((ship) => ship.id), ...Object.keys(record.retired ?? {})] as MarkId[];
 
   test("each mark has a light and a dark file, byte for byte the source its provenance records", () => {
     const paths = ids.flatMap((id) => modes.map((mode) => `${id}/${markFile(id, mode)}`));

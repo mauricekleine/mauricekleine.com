@@ -69,7 +69,10 @@
     },
     "fleet.json": {
       "source": "packages/superthread/marks/fleet.json",
-      "sha256": "ebc84ee63c35d5904a72e1f6e64071fa43adc64f7eb4172e6c175cdacd02e9e8"
+      "sha256": "08032799080d6c1888b09736603f902d747249e6cb084bf0464ce73eece079df"
     }
+  },
+  "retired": {
+    "pilot": "left the fleet in 2.2.0; its marks stay served for the 2.1.x snapshots that list it"
   }
 }

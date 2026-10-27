@@ -26,7 +26,12 @@ export type MarkShip = {
   home?: boolean;
 };
 type Manifest = { schema: 1; fleet: MarkShip[] };
-type Provenance = { files: Record<string, { source: string; sha256: string }>; [key: string]: unknown };
+type Provenance = {
+  files: Record<string, { source: string; sha256: string }>;
+  // ships that left the fleet, whose marks stay served for the published snapshots that still list them
+  retired?: Record<string, string>;
+  [key: string]: unknown;
+};
 const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 const sha = (value: string) => createHash("sha256").update(value).digest("hex");
 const read = (file: string) => readFileSync(file, "utf8");
@@ -66,12 +71,14 @@ export function loadFleet(): Manifest {
   return manifest;
 }
 
-// Hosts belong to the manifest, not to a registry item installed in somebody else's app.
+// Each ship carries its url, the rail's default link for its cell; soliton has none, so its cell stays disabled. The
+// home ship (superthread) is left out of the fleet and exported on its own for the rail's home mark.
 export function fleetSource(manifest: Manifest): string {
   const fleet = manifest.fleet
     .filter((ship) => !ship.home)
-    .map(({ id, name, desc, angle, mark }) => ({ id, name, desc, angle, mark }));
-  return `// the fleet, in its order: generated from marks/fleet.json; edit the manifest, then run bun run build in packages/superthread\n// desc is the line under a ship's name in the rail's tab. Each mark is a file name under the consumer's mark base;\n// hrefs are the consumer's.\n\nexport const fleet = ${JSON.stringify(fleet, null, 2)} as const\n\nexport type Ship = (typeof fleet)[number]\nexport type ShipId = Ship["id"]\n`;
+    .map(({ id, name, desc, url, angle, mark }) => ({ id, name, desc, url, angle, mark }));
+  const { id, name, url } = manifest.fleet.find((ship) => ship.home)!;
+  return `// the fleet, in its order: generated from marks/fleet.json; edit the manifest, then run bun run build in packages/superthread\n// desc is the line under a ship's name in the rail's tab. Each mark is a file name under the consumer's mark base.\n// url is where the rail links a ship by default (null: no link); the consumer's hrefs win over it.\n\nexport const fleet = ${JSON.stringify(fleet, null, 2)} as const\n\nexport const home = ${JSON.stringify({ id, name, url }, null, 2)} as const\n\nexport type Ship = (typeof fleet)[number]\nexport type ShipId = Ship["id"]\n`;
 }
 
 // Same integer run paths as the master world's common.mark_svg. A new star is a screened hue tile with one dot.
@@ -181,6 +188,14 @@ function check(manifest: Manifest): void {
   const provenance = JSON.parse(read(join(publicMarks, "PROVENANCE.json"))) as Provenance;
   if (provenance.files["fleet.json"]?.sha256 !== sha(published))
     throw new Error("public marks/fleet.json provenance differs");
+  for (const id of Object.keys(provenance.retired ?? {})) {
+    if (manifest.fleet.some((ship) => ship.id === id)) throw new Error(`${id}: retired but still in the fleet`);
+    for (const file of [`${id}/${id}.svg`, `${id}/${id}-dark.svg`]) {
+      if (!existsSync(join(publicMarks, file))) throw new Error(`${file}: retired mark is missing`);
+      if (provenance.files[file]?.sha256 !== sha(read(join(publicMarks, file))))
+        throw new Error(`${file}: retired mark provenance differs`);
+    }
+  }
 }
 
 function write(file: string, content: string): void {

@@ -251,17 +251,38 @@ describe("the layers rendered", () => {
     expect(remote.every((src) => src.startsWith("https://superthread.mauricekleine.com/marks/"))).toBe(true);
   });
 
-  test("with no hrefs the rail links nowhere: every ship is a disabled cell that keeps its name", () => {
-    const dom = server(<FleetRail current="orbit" label="ships" />);
+  test("a ship the hrefs leave out links to its fleet url; a ship with no url stays a disabled cell", () => {
+    // trisys's own call: only its own ship is given
+    const dom = server(<FleetRail current="trisys" hrefs={{ trisys: "/" }} />);
+    const rail = dom.querySelector('nav[aria-label="fleet"]')!;
+    const links = (el: Element) => [nameOf(el), el.getAttribute("href"), el.getAttribute("aria-disabled")];
+    expect(links(rail.querySelector('[data-slot="fleet-rail-home"]')!)).toEqual([
+      "superthread",
+      "https://superthread.mauricekleine.com",
+      null,
+    ]);
+    expect([...rail.querySelectorAll('[data-slot="fleet-rail-cell"]')].map(links)).toEqual([
+      ["orbit", "https://orbit.mauricekleine.com", null],
+      ["quanta", "https://quanta.mauricekleine.com", null],
+      ["trisys", "/", null],
+      ["constellation", "https://constellation.mauricekleine.com", null],
+      ["artifacts", "https://artifacts.mauricekleine.com", null],
+      ["soliton", null, "true"],
+    ]);
+    expect([...dom.querySelectorAll("[aria-current]")].map(nameOf)).toEqual(["trisys"]);
+  });
 
-    // React hoists a preload link for each image, so look inside the frame.
-    expect(dom.querySelector('[data-mk="fleet-rail"]')!.querySelector("a, [href]")).toBeNull();
+  test("an href of null unlinks a cell or the home mark, and an href given wins over the fleet url", () => {
+    const dom = server(
+      <FleetRail current="orbit" label="ships" hrefs={{ home: null, orbit: "/orbit", quanta: null }} />,
+    );
     const rail = dom.querySelector('nav[aria-label="ships"]')!;
-    const cells = [...rail.querySelectorAll('[data-slot="fleet-rail-cell"]')];
-    expect(cells.map(nameOf)).toEqual(fleet.map((ship) => ship.name));
-    expect(cells.every((cell) => cell.getAttribute("aria-disabled") === "true")).toBe(true);
-    expect(nameOf(rail.querySelector('[data-slot="fleet-rail-home"]')!)).toBe("superthread");
-    expect([...dom.querySelectorAll("[aria-current]")].map(nameOf)).toEqual(["orbit"]);
+    const home = rail.querySelector('[data-slot="fleet-rail-home"]')!;
+    expect([home.tagName, home.hasAttribute("href"), nameOf(home)]).toEqual(["SPAN", false, "superthread"]);
+    const cell = (name: string) => rail.querySelector(`[data-slot="fleet-rail-cell"][aria-label="${name}"]`)!;
+    expect(cell("orbit").getAttribute("href")).toBe("/orbit");
+    expect([cell("quanta").tagName, cell("quanta").getAttribute("aria-disabled")]).toEqual(["SPAN", "true"]);
+    expect(cell("trisys").getAttribute("href")).toBe("https://trisys.mauricekleine.com");
   });
 
   // The world's `gutter dk`: on the deep ground the frame (the rail and the ship's sidebar) prints in the dark palette
