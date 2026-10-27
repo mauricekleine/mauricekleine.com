@@ -194,10 +194,16 @@ test("meta is present and correct", async () => {
   }
 });
 
-test("hosts: no private or foreign host in any file's content", () => {
-  const allowed = new URL(production).hostname;
+test("hosts: no private or foreign host in any file's content", async () => {
+  const own = new URL(production).hostname;
+  // the fleet item carries each ship's public url from the marks manifest, the rail's default links
+  const manifest = JSON.parse(await readFile(join(root, "marks/fleet.json"), "utf8")) as {
+    fleet: { url: string | null }[];
+  };
+  const shipHosts = manifest.fleet.flatMap((ship) => (ship.url ? [new URL(ship.url).hostname] : []));
   for (const { item, file } of files) {
     const where = `${item.name} ${file.target}`;
+    const hosts = item.name === "fleet" ? [own, ...shipHosts] : [own];
     const code = file.content;
     // comments go first, so a reference link in a comment is allowed but a live http:// is not
     const live = code.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|\s)\/\/.*$/gm, "$1");
@@ -205,9 +211,9 @@ test("hosts: no private or foreign host in any file's content", () => {
     expect(code.includes(".ts.net"), `${where}: .ts.net`).toBe(false);
     expect(code.includes("localhost"), `${where}: localhost`).toBe(false);
     for (const [, host] of code.matchAll(/\b[a-z][a-z0-9+.-]*:\/\/([^/\s"'`)<>]+)/gi))
-      expect(host, where).toBe(allowed);
+      expect(hosts, where).toContain(host);
     for (const [name] of code.matchAll(/\b(?:[a-z0-9-]+\.)+(?:com|net|org|io|dev|app|wtf|co|ai|sh)\b/gi))
-      expect(name, where).toBe(allowed);
+      expect(hosts, where).toContain(name);
   }
 });
 
