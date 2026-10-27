@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge",
+  "title": "badge",
+  "description": "a badge, with a status variant for each state: done, running, waiting, failed and queued",
+  "dependencies": [
+    "@base-ui/react@^1.8.0",
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "@mk/glyphs",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/badge.tsx",
+      "content": "import { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/components/superthread/lib/utils\";\nimport { StatusGlyph, type StatusState } from \"@/components/superthread/ui/glyphs\";\n// @mk/badge 2.2.0\n\n// Square, 1 px edge, 13 px words. A status badge is the sanctioned exception to one colour, at badge scale only: a\n// fill near the stock, the edge at about half strength, the 14 px glyph square at full strength and the word.\n// failed is the one solid badge, so it is the most urgent by its form, not by a louder ink.\nconst badgeVariants = cva(\n  \"group/badge inline-flex h-[30px] w-fit shrink-0 items-center justify-center gap-2 overflow-hidden border border-transparent px-[11px] text-instrument leading-none font-medium whitespace-nowrap transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) has-data-[icon=inline-end]:pr-[7px] has-data-[icon=inline-start]:pl-[7px] aria-invalid:border-error [&>svg]:pointer-events-none [&>svg]:shrink-0\",\n  {\n    variants: {\n      variant: {\n        default:\n          \"border-primary bg-primary text-primary-foreground [a]:hover:border-primary-hover [a]:hover:bg-primary-hover\",\n        secondary: \"bg-secondary text-secondary-foreground [a]:hover:bg-secondary-hover\",\n        destructive: \"bg-destructive text-destructive-foreground [a]:hover:bg-destructive-hover\",\n        outline: \"border-current [a]:hover:bg-control-hover\",\n        ghost: \"hover:bg-control-hover\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n        done: \"border-success-edge bg-success-wash pl-[7px] text-success-foreground\",\n        running: \"border-info-edge bg-info-wash pl-[7px] text-info-foreground\",\n        waiting: \"border-warning-edge bg-warning-wash pl-[7px] text-warning-foreground\",\n        failed: \"border-error-solid bg-error-solid pl-[7px] text-error-solid-foreground\",\n        queued: \"border-neutral-edge bg-neutral-wash pl-[7px] text-neutral-foreground\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  },\n);\n\nconst STATES: readonly string[] = [\"done\", \"running\", \"waiting\", \"failed\", \"queued\"] satisfies StatusState[];\n\nconst isState = (variant: string): variant is StatusState => STATES.includes(variant);\n\n// A status variant prints its glyph square before the word, and the state's own name when it is given no word.\n// On the failed solid the square takes the label ink, so its cross still knocks out to the solid.\n// The default element declares data-mk in the source, as every other item does, so a grep finds it; the state's mk\n// keeps the mark on an element the caller renders instead.\nfunction Badge({\n  className,\n  variant = \"default\",\n  render = <span data-mk=\"badge\" />,\n  children,\n  ...props\n}: useRender.ComponentProps<\"span\"> & VariantProps<typeof badgeVariants>) {\n  const state = variant != null && isState(variant) ? variant : null;\n  return useRender({\n    props: mergeProps<\"span\">(\n      {\n        className: cn(badgeVariants({ variant }), className),\n        children: state ? (\n          <>\n            <StatusGlyph state={state} className={state === \"failed\" ? \"text-error-solid-foreground\" : undefined} />\n            {children ?? state}\n          </>\n        ) : (\n          children\n        ),\n      },\n      props,\n    ),\n    render,\n    state: {\n      slot: \"badge\",\n      mk: \"badge\",\n      variant,\n    },\n  });\n}\n\nexport { Badge, badgeVariants };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/badge.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.2.0",
+    "sha256": "8975babcbdf00b5e9fabefb1bc281f22e0fae75c27af3272fc651fe6c192da0f",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "badge",
+      "sha256": "ccc20021cdcbf0fb23c0d4d28f1da4adde8e51ba59f4b11dd2722ed97a5ee3a4",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slider",
+  "title": "slider",
+  "description": "a slider on a ruled track, with a flat house-ink range and a square thumb",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/slider.tsx",
+      "content": "import { Slider as SliderPrimitive } from \"@base-ui/react/slider\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/slider 2.2.0\n\n// A flat house-ink range on an 8 px ruled track. The 16 px thumbs are square controls with outside focus.\nfunction Slider({ className, defaultValue, value, min = 0, max = 100, ...props }: SliderPrimitive.Root.Props) {\n  const values = value ?? defaultValue ?? [min, max];\n  const thumbCount = Array.isArray(values) ? values.length : 1;\n\n  return (\n    <SliderPrimitive.Root\n      className={cn(\"data-horizontal:w-full data-vertical:h-full\", className)}\n      data-slot=\"slider\"\n      data-mk=\"slider\"\n      defaultValue={defaultValue}\n      value={value}\n      min={min}\n      max={max}\n      thumbAlignment=\"edge\"\n      {...props}\n    >\n      <SliderPrimitive.Control className=\"relative flex w-full touch-none items-center select-none data-disabled:cursor-not-allowed data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col\">\n        <SliderPrimitive.Track\n          data-slot=\"slider-track\"\n          className=\"relative grow overflow-hidden border border-input bg-background select-none data-horizontal:h-2 data-horizontal:w-full data-vertical:h-full data-vertical:w-2 data-disabled:border-disabled data-disabled:bg-faint\"\n        >\n          <SliderPrimitive.Indicator\n            data-slot=\"slider-range\"\n            className=\"bg-primary select-none data-horizontal:h-full data-vertical:w-full data-disabled:bg-disabled\"\n          />\n        </SliderPrimitive.Track>\n        {Array.from({ length: thumbCount }, (_, index) => (\n          <SliderPrimitive.Thumb\n            data-slot=\"slider-thumb\"\n            key={index}\n            className=\"relative block size-4 shrink-0 border border-primary bg-background transition-[background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none after:absolute after:-inset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-(--ring) not-data-disabled:hover:bg-accent data-dragging:bg-accent data-disabled:pointer-events-none data-disabled:border-disabled\"\n          />\n        ))}\n      </SliderPrimitive.Control>\n    </SliderPrimitive.Root>\n  );\n}\n\nexport { Slider };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/slider.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.2.0",
+    "sha256": "546d2999095e2677e6fd0c42537ea29ed67a9c7534df3fbb5e83e13401c14ae0",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "slider",
+      "sha256": "646bcd7913417b786bbf7578484f851bf89c81a62f70ef9c4f3522e2af80a951",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

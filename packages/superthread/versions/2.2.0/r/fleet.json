@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "fleet",
+  "title": "fleet",
+  "description": "the six ships: ids, names, one-line descriptors, line-screen angles and mark file names",
+  "files": [
+    {
+      "path": "items/lib/fleet.ts",
+      "content": "// the fleet, in its order: generated from marks/fleet.json; edit the manifest, then run bun run build in packages/superthread\n// desc is the line under a ship's name in the rail's tab. Each mark is a file name under the consumer's mark base.\n// url is where the rail links a ship by default (null: no link); the consumer's hrefs win over it.\n\nexport const fleet = [\n  {\n    \"id\": \"orbit\",\n    \"name\": \"orbit\",\n    \"desc\": \"tasks, direction and the agents' board\",\n    \"url\": \"https://orbit.mauricekleine.com\",\n    \"angle\": 45,\n    \"mark\": {\n      \"light\": \"orbit.svg\",\n      \"dark\": \"orbit-dark.svg\"\n    }\n  },\n  {\n    \"id\": \"quanta\",\n    \"name\": \"quanta\",\n    \"desc\": \"learning chapters\",\n    \"url\": \"https://quanta.mauricekleine.com\",\n    \"angle\": 90,\n    \"mark\": {\n      \"light\": \"quanta.svg\",\n      \"dark\": \"quanta-dark.svg\"\n    }\n  },\n  {\n    \"id\": \"trisys\",\n    \"name\": \"trisys\",\n    \"desc\": \"essays and decks\",\n    \"url\": \"https://trisys.mauricekleine.com\",\n    \"angle\": 27,\n    \"mark\": {\n      \"light\": \"trisys.svg\",\n      \"dark\": \"trisys-dark.svg\"\n    }\n  },\n  {\n    \"id\": \"constellation\",\n    \"name\": \"constellation\",\n    \"desc\": \"a personal graph\",\n    \"url\": \"https://constellation.mauricekleine.com\",\n    \"angle\": 63,\n    \"mark\": {\n      \"light\": \"constellation.svg\",\n      \"dark\": \"constellation-dark.svg\"\n    }\n  },\n  {\n    \"id\": \"artifacts\",\n    \"name\": \"artifacts\",\n    \"desc\": \"reports and documents\",\n    \"url\": \"https://artifacts.mauricekleine.com\",\n    \"angle\": 135,\n    \"mark\": {\n      \"light\": \"artifacts.svg\",\n      \"dark\": \"artifacts-dark.svg\"\n    }\n  },\n  {\n    \"id\": \"soliton\",\n    \"name\": \"soliton\",\n    \"desc\": \"the server\",\n    \"url\": null,\n    \"angle\": 117,\n    \"mark\": {\n      \"light\": \"soliton.svg\",\n      \"dark\": \"soliton-dark.svg\"\n    }\n  }\n] as const\n\nexport const home = {\n  \"id\": \"superthread\",\n  \"name\": \"superthread\",\n  \"url\": \"https://superthread.mauricekleine.com\"\n} as const\n\nexport type Ship = (typeof fleet)[number]\nexport type ShipId = Ship[\"id\"]\n// @mk/fleet 2.2.0\n",
+      "type": "registry:lib",
+      "target": "@components/superthread/lib/fleet.ts"
+    }
+  ],
+  "meta": {
+    "version": "2.2.0",
+    "sha256": "e835e3127ad48e700eb3b6a0f60da985444541f44d6f987a911ba49494cb22d1",
+    "tier": "lib",
+    "upstream": null
+  },
+  "type": "registry:lib"
+}
