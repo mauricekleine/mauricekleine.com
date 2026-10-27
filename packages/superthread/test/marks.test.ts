@@ -237,6 +237,7 @@ test("check rejects geometry, contrast, chromes, colour collisions, and stale pr
       (f) => writeFileSync(join(f.publicMarks, "fleet.json"), "{}\n"),
       "public marks/fleet.json differs",
     ],
+    ["retired mark removed", (f) => rmSync(join(f.publicMarks, "pilot/pilot.svg")), "retired mark is missing"],
     [
       "generated fleet drift",
       (f) => writeFileSync(join(f.root, "items/lib/fleet.ts"), ""),

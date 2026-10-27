@@ -26,7 +26,12 @@ export type MarkShip = {
   home?: boolean;
 };
 type Manifest = { schema: 1; fleet: MarkShip[] };
-type Provenance = { files: Record<string, { source: string; sha256: string }>; [key: string]: unknown };
+type Provenance = {
+  files: Record<string, { source: string; sha256: string }>;
+  // ships that left the fleet, whose marks stay served for the published snapshots that still list them
+  retired?: Record<string, string>;
+  [key: string]: unknown;
+};
 const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 const sha = (value: string) => createHash("sha256").update(value).digest("hex");
 const read = (file: string) => readFileSync(file, "utf8");
@@ -183,6 +188,14 @@ function check(manifest: Manifest): void {
   const provenance = JSON.parse(read(join(publicMarks, "PROVENANCE.json"))) as Provenance;
   if (provenance.files["fleet.json"]?.sha256 !== sha(published))
     throw new Error("public marks/fleet.json provenance differs");
+  for (const id of Object.keys(provenance.retired ?? {})) {
+    if (manifest.fleet.some((ship) => ship.id === id)) throw new Error(`${id}: retired but still in the fleet`);
+    for (const file of [`${id}/${id}.svg`, `${id}/${id}-dark.svg`]) {
+      if (!existsSync(join(publicMarks, file))) throw new Error(`${file}: retired mark is missing`);
+      if (provenance.files[file]?.sha256 !== sha(read(join(publicMarks, file))))
+        throw new Error(`${file}: retired mark provenance differs`);
+    }
+  }
 }
 
 function write(file: string, content: string): void {
