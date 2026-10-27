@@ -79,8 +79,9 @@ function Page() {
             <code>hrefs</code>
           </dt>
           <dd>
-            where each cell goes, by ship id, and <code>home</code> for the superthread mark at the top. a ship without
-            one is a disabled cell.
+            where each cell goes, by ship id, and <code>home</code> for the superthread mark at the top. a ship left out
+            links to its fleet url, and home to superthread.mauricekleine.com; pass <code>&quot;/&quot;</code> for your
+            own ship. <code>null</code>, or a ship with no url (soliton), is a disabled cell.
           </dd>
           <dt>
             <code>markBase</code>

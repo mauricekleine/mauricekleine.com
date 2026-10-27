@@ -120,23 +120,6 @@
       },
       "kind": "master",
       "home": true
-    },
-    {
-      "id": "pilot",
-      "name": "pilot",
-      "desc": "a new star",
-      "target": "cloudflare",
-      "url": "https://pilot.mauricekleine.com",
-      "angle": 1,
-      "spot": {
-        "light": "#00c4a8",
-        "dark": "#00b39c"
-      },
-      "mark": {
-        "light": "pilot.svg",
-        "dark": "pilot-dark.svg"
-      },
-      "kind": "star"
     }
   ]
 }

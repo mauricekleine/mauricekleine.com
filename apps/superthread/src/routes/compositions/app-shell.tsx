@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { fleet } from "@/components/superthread/lib/fleet";
 import {
   AppShell,
   AppShellGround,
@@ -26,13 +27,22 @@ export const Route = createFileRoute("/compositions/app-shell")({
   component: Page,
 });
 
+// The mock pages open here; null keeps the other cells off their fleet urls.
+const hrefs = {
+  ...Object.fromEntries(fleet.map((ship) => [ship.id, null])),
+  home: "/",
+  orbit: "/mock/orbit",
+  quanta: "/mock/reading",
+  constellation: "/mock/board",
+};
+
 function Workspace({ printed = false }: { printed?: boolean }) {
   const [page, setPage] = useState("board");
   return (
     <AppShell
       current="orbit"
       markBase="/marks"
-      hrefs={{ home: "/", orbit: "/mock/orbit", quanta: "/mock/reading", constellation: "/mock/board" }}
+      hrefs={hrefs}
       sidebar={
         <AppShellNav ship="orbit">
           {["board", "direction", "agents"].map((name, index) => (

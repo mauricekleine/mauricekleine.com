@@ -1,12 +1,13 @@
 // the fleet, in its order: generated from marks/fleet.json; edit the manifest, then run bun run build in packages/superthread
-// desc is the line under a ship's name in the rail's tab. Each mark is a file name under the consumer's mark base;
-// hrefs are the consumer's.
+// desc is the line under a ship's name in the rail's tab. Each mark is a file name under the consumer's mark base.
+// url is where the rail links a ship by default (null: no link); the consumer's hrefs win over it.
 
 export const fleet = [
   {
     "id": "orbit",
     "name": "orbit",
     "desc": "tasks, direction and the agents' board",
+    "url": "https://orbit.mauricekleine.com",
     "angle": 45,
     "mark": {
       "light": "orbit.svg",
@@ -17,6 +18,7 @@ export const fleet = [
     "id": "quanta",
     "name": "quanta",
     "desc": "learning chapters",
+    "url": "https://quanta.mauricekleine.com",
     "angle": 90,
     "mark": {
       "light": "quanta.svg",
@@ -27,6 +29,7 @@ export const fleet = [
     "id": "trisys",
     "name": "trisys",
     "desc": "essays and decks",
+    "url": "https://trisys.mauricekleine.com",
     "angle": 27,
     "mark": {
       "light": "trisys.svg",
@@ -37,6 +40,7 @@ export const fleet = [
     "id": "constellation",
     "name": "constellation",
     "desc": "a personal graph",
+    "url": "https://constellation.mauricekleine.com",
     "angle": 63,
     "mark": {
       "light": "constellation.svg",
@@ -47,6 +51,7 @@ export const fleet = [
     "id": "artifacts",
     "name": "artifacts",
     "desc": "reports and documents",
+    "url": "https://artifacts.mauricekleine.com",
     "angle": 135,
     "mark": {
       "light": "artifacts.svg",
@@ -57,23 +62,20 @@ export const fleet = [
     "id": "soliton",
     "name": "soliton",
     "desc": "the server",
+    "url": null,
     "angle": 117,
     "mark": {
       "light": "soliton.svg",
       "dark": "soliton-dark.svg"
     }
-  },
-  {
-    "id": "pilot",
-    "name": "pilot",
-    "desc": "a new star",
-    "angle": 1,
-    "mark": {
-      "light": "pilot.svg",
-      "dark": "pilot-dark.svg"
-    }
   }
 ] as const
+
+export const home = {
+  "id": "superthread",
+  "name": "superthread",
+  "url": "https://superthread.mauricekleine.com"
+} as const
 
 export type Ship = (typeof fleet)[number]
 export type ShipId = Ship["id"]

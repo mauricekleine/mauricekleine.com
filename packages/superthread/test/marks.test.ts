@@ -100,9 +100,10 @@ test("new writes a private ship and receipt, preserves legacy assets, survives b
   expect(build.stderr.toString()).toBe("");
   expect(build.exitCode).toBe(0);
   const builtFleet = read(join(f.root, "items/lib/fleet.ts"));
-  expect(builtFleet).toContain('"id": "test-ship"');
+  expect(builtFleet).toContain(
+    '"id": "test-ship",\n    "name": "test ship",\n    "desc": "a new star",\n    "url": null,',
+  );
   expect(builtFleet).not.toContain('"target"');
-  expect(builtFleet).not.toContain('"url"');
   expect(run(f, "check").code).toBe(0);
   const after = files(f.repo);
   expect(run(f, ...args).code).toBe(0);
@@ -118,6 +119,9 @@ test("new normalizes explicit URLs, and sheet embeds every mark in both chromes 
   const result = run(f, "new", "url-ship", "--url", "https://example.com/tool/", "--label", "a < ship");
   expect(result.code).toBe(0);
   expect(JSON.parse(result.stdout).url).toBe("https://example.com/tool");
+  // the rail links a ship to its url by default, so the generated fleet carries it
+  expect(Bun.spawnSync([process.execPath, "scripts/generate.ts"], { cwd: f.root }).exitCode).toBe(0);
+  expect(read(join(f.root, "items/lib/fleet.ts"))).toContain('"url": "https://example.com/tool",');
   const resultSheet = run(f, "sheet", "--out", "preview/sheet.html");
   expect(resultSheet.code).toBe(0);
   const html = read(join(f.root, "preview/sheet.html"));
@@ -127,7 +131,7 @@ test("new normalizes explicit URLs, and sheet embeds every mark in both chromes 
   expect(html).not.toContain('<img src="http');
 });
 
-test("the allocator supports several ships after the pilot, including a numeric-leading DNS name", () => {
+test("the allocator supports several new ships, including a numeric-leading DNS name", () => {
   const f = fixture();
   const allocated: string[] = [];
   for (const id of ["1st-star", "second-star", "third-star"]) {

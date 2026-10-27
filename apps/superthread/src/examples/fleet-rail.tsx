@@ -12,12 +12,13 @@ import {
 } from "@/components/superthread/ui/sidebar";
 
 // Where each cell goes on this site: home to the overview, orbit and quanta to their mock pages, the other ships to
-// the page that shows every mark. The printed states leave trisys out: a ship with no link is a disabled cell.
+// the page that shows every mark. The printed states unlink trisys with null: a ship with no link is a disabled cell.
 const marks = "/foundations/marks";
 const withoutTrisys = {
   home: "/",
   orbit: "/mock/orbit",
   quanta: "/mock/reading",
+  trisys: null,
   constellation: marks,
   artifacts: marks,
   soliton: marks,
