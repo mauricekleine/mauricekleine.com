@@ -1,8 +1,16 @@
-import { useEffect, type ComponentProps } from "react";
+import { useEffect, type ComponentProps, type ReactNode } from "react";
+import { Badge } from "@/components/superthread/ui/badge";
+import { Field, FieldLabel } from "@/components/superthread/ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/superthread/ui/input-group";
+import { useTheme } from "@/components/superthread/lib/theme";
 import type { Essay } from "./essay-content";
 import { essays } from "./essay-content";
-import { Field, FieldLabel } from "@/components/ui/field";
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
+import { sideQuests } from "./projects";
 
 export function EssayList({ variant }: { variant: "home" | "index" }) {
   const cover = variant === "index";
@@ -15,27 +23,285 @@ export function EssayList({ variant }: { variant: "home" | "index" }) {
   );
 }
 
-export function Hero(props: ComponentProps<"header">) {
-  return <header {...props} />;
+// Corner crop marks: 10 px ticks set 16 px outside a screened field, as a printer marks a plate.
+function CropMarks() {
+  return (
+    <span className="mk-crop" aria-hidden="true">
+      <i />
+      <i />
+      <i />
+      <i />
+    </span>
+  );
 }
 
-export function Section(props: ComponentProps<"section">) {
-  return <section {...props} />;
+// Maurice as a two-ink screen: the master ink's own 4 x 4 bayer, one file per mode so the ink always falls on the
+// light of the face. Click it: there's a moon.
+function Portrait() {
+  return (
+    <span className="portrait-wrap">
+      {(["light", "dark"] as const).map((mode) => (
+        <picture key={mode} className={`portrait portrait-${mode}`}>
+          <source media="(max-width: 600px)" srcSet={`/portrait/maurice-136-${mode}.png`} />
+          <img src={`/portrait/maurice-196-${mode}.png`} alt="Portrait of Maurice Kleine" width="196" height="196" />
+        </picture>
+      ))}
+      <span className="moon" aria-hidden="true"></span>
+    </span>
+  );
 }
 
-export function Waypoint({ constellation, ...props }: ComponentProps<"li"> & { constellation: string }) {
-  return <li data-constellation={constellation} {...props} />;
+// The screened field inside its crop marks: the live sky (sky.js), and a printed plate of it for anyone without
+// scripts. `slim` is the inner pages' band.
+function Band({ slim = false, children }: { slim?: boolean; children?: ReactNode }) {
+  return (
+    <div className={slim ? "mk-field mk-field-slim" : "mk-field"}>
+      <canvas id="sky" aria-hidden="true" suppressHydrationWarning />
+      <CropMarks />
+      {children}
+    </div>
+  );
 }
 
-export function GraveyardItem(props: ComponentProps<"li">) {
-  return <li {...props} />;
+// The opener: the band with the title knocked out of its lower left, then the lede. The page's "top" in the aside.
+export function Opener({
+  title,
+  portrait = false,
+  children,
+}: {
+  title: string;
+  portrait?: boolean;
+  children?: ReactNode;
+}) {
+  return (
+    <header id="top" className="mk-opener">
+      <div className="mk-band">
+        <Band>{portrait && <Portrait />}</Band>
+        <div className={portrait ? "mk-knock mk-knock-stacked" : "mk-knock"}>
+          <h1>{title}</h1>
+        </div>
+      </div>
+      {children}
+    </header>
+  );
+}
+
+// An inner page's head: the slim band, the title under it clear of the marks, then whatever the page says next.
+export function PageHead({ children }: { children: ReactNode }) {
+  return (
+    <header id="top" className="mk-pagehead">
+      <Band slim />
+      {children}
+    </header>
+  );
+}
+
+// A page section on the 64/44 rhythm: a rule across the whole column, then the heading and the body. Its id is the
+// anchor "on this page" links to.
+export function Section({
+  id,
+  title,
+  hideTitle = false,
+  children,
+  ...props
+}: Omit<ComponentProps<"section">, "title"> & { id: string; title: string; hideTitle?: boolean }) {
+  const heading = `${id}-heading`;
+  return (
+    <section id={id} aria-labelledby={heading} {...props} className={`mk-section ${props.className ?? ""}`.trim()}>
+      <h2 id={heading} className={hideTitle ? "visually-hidden" : "type-section"}>
+        {title}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+// A side quest's constellation, drawn at 1:1 so its stars stay whole pixels. It takes the house ink when you reach for
+// its project.
+const constellations = {
+  // a slightly wonky chat bubble
+  mockly: {
+    points: [
+      [0, 0],
+      [72, 6],
+      [66, 46],
+      [30, 42],
+      [16, 62],
+      [4, 40],
+    ],
+    lines: [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+      [5, 0],
+    ],
+  },
+  // a waveform, obviously
+  fluncle: {
+    points: [
+      [0, 30],
+      [22, 8],
+      [38, 40],
+      [56, 0],
+      [72, 34],
+      [92, 14],
+    ],
+    lines: [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+    ],
+  },
+  // a little clubhouse
+  hackadam: {
+    points: [
+      [0, 52],
+      [0, 20],
+      [34, 0],
+      [68, 20],
+      [68, 52],
+    ],
+    lines: [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 0],
+    ],
+  },
+  // a nonogram grid. llms can't solve this one either
+  nonobench: {
+    points: [
+      [0, 0],
+      [30, 0],
+      [60, 0],
+      [60, 30],
+      [60, 60],
+      [30, 60],
+      [0, 60],
+      [0, 30],
+    ],
+    lines: [
+      [0, 2],
+      [2, 4],
+      [4, 6],
+      [6, 0],
+      [1, 5],
+      [7, 3],
+    ],
+  },
+} satisfies Record<string, { points: number[][]; lines: number[][] }>;
+
+const TILE = { width: 104, height: 72 };
+
+function Constellation({ name }: { name: keyof typeof constellations }) {
+  const { points, lines } = constellations[name];
+  const dx = Math.round((TILE.width - Math.max(...points.map(([x]) => x))) / 2);
+  const dy = Math.round((TILE.height - Math.max(...points.map(([, y]) => y))) / 2);
+  return (
+    <svg
+      className="constellation"
+      viewBox={`0 0 ${TILE.width} ${TILE.height}`}
+      width={TILE.width}
+      height={TILE.height}
+      shapeRendering="crispEdges"
+      aria-hidden="true"
+    >
+      {lines.map(([from, to]) => (
+        <line
+          key={`${from}-${to}`}
+          x1={points[from][0] + dx}
+          y1={points[from][1] + dy}
+          x2={points[to][0] + dx}
+          y2={points[to][1] + dy}
+        />
+      ))}
+      {points.map(([x, y]) => (
+        <rect key={`${x}-${y}`} x={x + dx - 2} y={y + dy - 2} width="4" height="4" />
+      ))}
+    </svg>
+  );
+}
+
+function Waypoint({ name, children }: { name: keyof typeof constellations; children: ReactNode }) {
+  return (
+    <li className="waypoint">
+      <Constellation name={name} />
+      <div>
+        <a className="waypoint-name" href={sideQuests[name].url}>
+          {name}
+        </a>
+        <p>{children}</p>
+      </div>
+    </li>
+  );
+}
+
+export function SideQuests() {
+  return (
+    <ul className="waypoints">
+      <Waypoint name="mockly">
+        fake chat screenshots for 17+ platforms. built it in a weekend,{" "}
+        <a href="https://techcrunch.com/2025/07/10/mockly-made-a-fake-dm-generator-thats-actually-user-friendly/">
+          techcrunch
+        </a>{" "}
+        wrote about it, 10k people use it. now i run it with <a href="https://x.com/jasperdeboer">jasper</a>. i still
+        can't believe this is legal
+      </Waypoint>
+      <Waypoint name="fluncle">
+        drum &amp; bass bangers from another dimension. it has a radio, an api, and an ssh rave terminal
+      </Waypoint>
+      <Waypoint name="hackadam">
+        monthly meetup in amsterdam for indie makers building their own stuff. co-organized with{" "}
+        <a href="https://x.com/AbnerHout">abner</a>
+      </Waypoint>
+      <Waypoint name="nonobench">
+        benchmark for how well llms solve nonogram puzzles. the top score went from 63% in february to 93% in september
+      </Waypoint>
+    </ul>
+  );
+}
+
+export function GraveyardItem({
+  name,
+  stamp,
+  exit = false,
+  years,
+  children,
+}: {
+  name: string;
+  stamp: string;
+  exit?: boolean;
+  years: string;
+  children: ReactNode;
+}) {
+  return (
+    <li>
+      <span className="glyph" aria-hidden="true">
+        ✧
+      </span>
+      <p className="grave-title">
+        <span className="name">{name}</span> <Badge variant={exit ? "done" : "queued"}>{stamp}</Badge>{" "}
+        <span className="years">{years}</span>
+      </p>
+      <p className="grave-note">{children}</p>
+    </li>
+  );
 }
 
 export function Footer({ children, ...props }: ComponentProps<"footer">) {
   return (
-    <footer {...props}>
+    <footer {...props} className="mk-foot">
       {children}
-      <p>
+      <p className="mk-foot-status">
+        <span className="status-dot" aria-hidden="true"></span> status: operational · sleep: degraded · ideas:
+        backlogged
+      </p>
+      <p className="type-meta">
         <a href="/llms.txt">for agents</a>
       </p>
     </footer>
@@ -119,16 +385,21 @@ export function ElsewhereLinks() {
 }
 
 export function Subscribe() {
+  const theme = useTheme();
+
   useEffect(() => {
     type Turnstile = {
-      render: (target: string, options: { sitekey: string; theme: "dark" }) => string;
+      render: (target: string, options: { sitekey: string; theme: "light" | "dark" | "auto" }) => string;
       remove: (id: string) => void;
     };
     const api = () => (window as Window & { turnstile?: Turnstile }).turnstile;
     const script = document.querySelector<HTMLScriptElement>('script[src*="turnstile/v0/api.js"]');
     let widgetId: string | undefined;
     const render = () => {
-      widgetId = api()?.render("#subscribe-turnstile", { sitekey: "0x4AAAAAAABLi4eHqaf6akyS", theme: "dark" });
+      widgetId = api()?.render("#subscribe-turnstile", {
+        sitekey: "0x4AAAAAAABLi4eHqaf6akyS",
+        theme: theme ?? "auto",
+      });
     };
     if (api()) render();
     else script?.addEventListener("load", render);
@@ -136,11 +407,10 @@ export function Subscribe() {
       script?.removeEventListener("load", render);
       if (widgetId) api()?.remove(widgetId);
     };
-  }, []);
+  }, [theme]);
 
   return (
-    <Section className="subscribe" aria-labelledby="subscribe-heading">
-      <h2 id="subscribe-heading">new essays by email</h2>
+    <Section id="subscribe" title="new essays by email" className="subscribe">
       <p className="section-intro">the next essay, when it lands. nothing else.</p>
       <form className="subscribe-form" method="post" action="/subscribe" data-subscribe="">
         <Field>

@@ -5,7 +5,7 @@ const origin = "https://www.mauricekleine.com";
 const personId = `${origin}/#maurice`;
 const socialImage = `${origin}/og.png`;
 const socialImageAlt =
-  "maurice kleine, amsterdam. i build small internet things and sometimes they work. a night sky with project constellations.";
+  "maurice kleine, amsterdam. i build small internet things and sometimes they work. a night sky screened in two inks, beside his portrait.";
 const sameAs = [
   "https://github.com/mauricekleine",
   "https://www.linkedin.com/in/mauricekleine/",
@@ -60,7 +60,6 @@ function buildHead(page: PageSeo): { meta: Meta[]; links: Link[]; scripts: Scrip
     { title: page.title },
     { name: "description", content: page.description },
     { name: "robots", content: page.robots ?? "index,follow" },
-    { name: "theme-color", content: "#11131f" },
   ];
   const links: Link[] = [];
 
@@ -108,18 +107,18 @@ function buildHead(page: PageSeo): { meta: Meta[]; links: Link[]; scripts: Scrip
       rel: "preload",
       as: "font",
       type: "font/woff2",
-      href: "https://www.mauricekleine.com/fonts/unbounded-800.woff2",
+      href: "https://superthread.mauricekleine.com/fonts/unbounded-300.woff2",
       crossOrigin: "",
     },
     {
       rel: "preload",
       as: "font",
       type: "font/woff2",
-      href: "https://www.mauricekleine.com/fonts/supreme-400.woff2",
+      href: "https://superthread.mauricekleine.com/fonts/supreme-400.woff2",
       crossOrigin: "",
     },
   );
-  links.push({ rel: "stylesheet", href: `${page.relativeStylesheet ? "" : "/"}style.css?v=20260927-stock` });
+  links.push({ rel: "stylesheet", href: `${page.relativeStylesheet ? "" : "/"}style.css?v=20261031-stock` });
 
   const scripts: Script[] = [];
   if (page.turnstile)

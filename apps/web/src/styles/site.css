@@ -1,815 +1,997 @@
-@import "tailwindcss/theme";
-@import "tailwindcss/utilities" source(none);
+@import "tailwindcss" source(none);
 @import "shadcn/tailwind.css";
-@import "../../../../packages/superthread/dist/superthread.css";
+@import "../../../../packages/superthread/dist/v2/superthread.css";
 @source "../components.tsx";
-@source "../components/ui/field.tsx";
-@source "../components/ui/input-group.tsx";
-@source "../components/ui/input.tsx";
-@source "../components/ui/button.tsx";
-@source "../components/ui/label.tsx";
-@source "../components/ui/textarea.tsx";
-@source "../components/ui/separator.tsx";
+@source "../shell.tsx";
+@source "../pages";
+@source "../routes";
+@source "../essay-markdown.tsx";
+@source "../../../../packages/superthread/items/ui/badge.tsx";
+@source "../../../../packages/superthread/items/ui/button.tsx";
+@source "../../../../packages/superthread/items/ui/field.tsx";
+@source "../../../../packages/superthread/items/ui/glyphs.tsx";
+@source "../../../../packages/superthread/items/ui/input-group.tsx";
+@source "../../../../packages/superthread/items/ui/input.tsx";
+@source "../../../../packages/superthread/items/ui/label.tsx";
+@source "../../../../packages/superthread/items/ui/separator.tsx";
+@source "../../../../packages/superthread/items/ui/textarea.tsx";
 
-.dark {
-  --floor: oklch(13% 0.03 280);
-  --dim: oklch(66% 0.015 275);
-  --nebula: oklch(45% 0.09 300);
-  --ember-wash: oklch(55% 0.11 55);
-  --glint: oklch(90% 0.12 65);
-}
+/* www on superthread: the site's frame, the sky's band and the page blocks. Measures follow the superthread site at
+   1440 x 900; the breakpoints are the master's (1279, 1099, 900 and 600). Flat where you read, screened where you
+   look. In the components layer, so an item's own utilities still win inside a block. */
 
-@layer base {
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+@layer components {
+  html {
+    scroll-padding-top: 77px;
+    scrollbar-color: var(--muted-foreground) var(--background);
+    scrollbar-width: thin;
+    color-scheme: light;
   }
-}
-
-html {
-  scroll-behavior: smooth;
-  /* overscroll rubber-band shows this instead of a seam */
-  background: var(--floor);
-}
-
-body {
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  line-height: 1.65;
-  color: var(--foreground);
-  background: var(--background);
-  min-height: 100dvh;
-  text-wrap: pretty;
-}
-
-/* nebula gradients live on a viewport-fixed layer so they can't
-   tile or tear at the page edges during fast scroll */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    /* top vignette: the viewport's first pixels match the html
-       overscroll color, so rubber-banding has no seam */
-    linear-gradient(to bottom, var(--floor), oklch(from var(--floor) l c h / 0) 90px),
-    radial-gradient(ellipse 90% 55% at 15% -5%, oklch(from var(--nebula) l c h / 0.1), transparent 60%),
-    radial-gradient(ellipse 70% 45% at 90% 20%, oklch(from var(--ember-wash) l c h / 0.04), transparent 65%),
-    linear-gradient(to bottom, oklch(from var(--background) l c h / 0), var(--floor));
-}
-
-#nebula {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-  image-rendering: pixelated; /* the dither is the point */
-}
-
-#stars {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* film grain: the whole page is printed on very dark paper */
-body::after {
-  content: "";
-  position: fixed;
-  inset: -32px;
-  z-index: 6;
-  pointer-events: none;
-  opacity: 0.03;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  body::after {
-    animation: grain 0.9s steps(6) infinite;
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    min-height: 100dvh;
+  }
+  input {
+    caret-color: var(--primary);
   }
 
-  @keyframes grain {
-    0%,
-    100% {
-      transform: translate(0, 0);
-    }
-    16.6% {
-      transform: translate(-14px, 9px);
-    }
-    33.3% {
-      transform: translate(10px, -16px);
-    }
-    50% {
-      transform: translate(-8px, -11px);
-    }
-    66.6% {
-      transform: translate(15px, 7px);
-    }
-    83.3% {
-      transform: translate(-5px, 14px);
-    }
+  .visually-hidden,
+  .mk-skip:not(:focus) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
   }
-}
-
-main {
-  position: relative;
-  z-index: 1;
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: clamp(3rem, 8vh, 5.5rem) 1.5rem clamp(2.5rem, 6vh, 4rem);
-}
-
-/* hero */
-
-.hero {
-  text-align: center;
-  margin-bottom: clamp(4rem, 10vh, 6.5rem);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .hero {
-    animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  .mk-skip {
+    position: fixed;
+    left: 8px;
+    top: 8px;
+    z-index: 70;
+    padding: 8px 12px;
+    border: 1px solid var(--rule);
+    background: var(--background);
+  }
+  .mk-main:focus {
+    outline: 0;
   }
 
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(14px);
+  /* links: plum words that underline on hover, 4 px below the baseline */
+  .mk-page a,
+  .mk-toc a,
+  .mk-foot a {
+    color: var(--primary);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+  @media (hover: hover) {
+    .mk-page a:hover {
+      text-decoration-line: underline;
     }
   }
-}
 
-.portrait-wrap {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 1.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.portrait {
-  display: block;
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  filter: grayscale(15%);
-  box-shadow:
-    0 0 0 1px oklch(from var(--primary) l c h / 0.4),
-    0 0 0 5px oklch(from var(--primary) l c h / 0.08),
-    0 0 48px oklch(from var(--primary) l c h / 0.18);
-}
-
-/* the moon that transits the portrait when clicked */
-.portrait-wrap .moon {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.portrait-wrap .moon::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--floor);
-  transform: translateX(-115%);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .portrait-wrap.eclipsing .moon::before {
-    animation: eclipse 1.5s cubic-bezier(0.45, 0, 0.55, 1) both;
+  /* the masthead: one row of cells divided by rules, held at the top while the page scrolls */
+  .mk-mast {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    height: 77px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--background);
+  }
+  .mk-brand {
+    flex: none;
+    display: flex;
+    align-items: center;
+    width: 264px;
+    padding: 0 24px;
+    border-right: 1px solid var(--rule);
+    color: var(--foreground);
+    font: 400 21px/1 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  .mk-crumb {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 0 28px;
+    white-space: nowrap;
+  }
+  .mk-crumb .type-meta,
+  .mk-meta dt {
+    color: var(--muted-foreground);
+  }
+  .mk-crumb b {
+    min-width: 0;
+    overflow: hidden;
+    font-weight: 500;
+    text-overflow: ellipsis;
+  }
+  .mk-meta {
+    flex: none;
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    align-content: center;
+    row-gap: 5px;
+    width: 291px;
+    padding: 0 24px;
+    border-left: 1px solid var(--rule);
+  }
+  .mk-meta dt {
+    line-height: 16px;
+  }
+  .mk-meta dd {
+    font: 400 12px/16px var(--font-mono);
+  }
+  .status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 2px;
+    background: var(--primary);
+  }
+  .mk-mast-mode {
+    display: none;
+  }
+  .mk-house {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 77px;
+    border-left: 1px solid var(--rule);
+  }
+  .mk-house i {
+    width: 46px;
+    height: 46px;
+    background: var(--primary);
+    outline: 1px solid var(--foreground);
+    outline-offset: 3px;
   }
 
-  .portrait-wrap.eclipsing .portrait {
-    animation: corona 1.5s ease-in-out both;
+  /* the body: nav, page and aside. The nav's rule belongs to the column, so it runs past the first screen */
+  .mk-body {
+    display: grid;
+    grid-template-columns: 264px minmax(0, 1fr) 368px;
+    align-items: start;
+    min-height: calc(100dvh - 77px);
+    background: linear-gradient(var(--rule), var(--rule)) 263px 0 / 1px 100% no-repeat;
+  }
+  .mk-body-solo {
+    grid-template-columns: 264px minmax(0, 1fr);
+  }
+  .mk-nav {
+    position: sticky;
+    top: 77px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100dvh - 77px);
+  }
+  .mk-nav-list {
+    padding: 40px 16px 20px;
+    list-style: none;
+  }
+  .mk-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 29px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+  }
+  @media (hover: hover) {
+    .mk-nav a:not([aria-current="page"]):hover {
+      background: var(--control-hover);
+    }
+  }
+  .mk-nav a[aria-current="page"] {
+    border-color: var(--primary);
+    background: var(--accent);
+    font-weight: 500;
+  }
+  .mk-nav a[aria-current="page"]::before {
+    content: "";
+    flex: none;
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+  }
+  .mk-nav-foot {
+    padding: 20px 16px;
+    border-top: 1px solid var(--rule);
   }
 
+  /* the mode control: three cells in one box; the stored choice prints pressed from <html data-theme-choice> */
+  .mk-mode {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--foreground);
+  }
+  .mk-mode button {
+    height: 30px;
+    padding: 0 10px;
+    background: transparent;
+    color: var(--muted-foreground);
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+    letter-spacing: var(--text-meta--letter-spacing);
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .mk-mode button + button {
+    border-left: 1px solid var(--border);
+  }
+  @media (hover: hover) {
+    .mk-mode button:hover {
+      color: var(--foreground);
+    }
+  }
+  html[data-theme-choice="light"] .mk-mode [data-theme-option="light"],
+  html[data-theme-choice="dark"] .mk-mode [data-theme-option="dark"],
+  html[data-theme-choice="auto"] .mk-mode [data-theme-option="auto"] {
+    background: var(--foreground);
+    color: var(--background);
+  }
+  .mk-mode-compact {
+    grid-template-columns: repeat(3, auto);
+    height: 100%;
+    border: 0;
+  }
+  .mk-mode-compact button {
+    height: 100%;
+    padding: 0 10px;
+  }
+
+  .mk-main {
+    --gutter: 56px;
+    min-width: 0;
+    padding: 0 var(--gutter) 64px;
+    overflow-x: clip;
+  }
+  .mk-page {
+    max-width: 696px;
+  }
+  .mk-solo {
+    max-width: 808px;
+  }
+
+  /* the aside: on this page, held under the masthead; a window too short for it scrolls the aside on its own */
+  .mk-aside {
+    align-self: stretch;
+    min-width: 0;
+    border-left: 1px solid var(--rule);
+  }
+  .mk-toc {
+    position: sticky;
+    top: 77px;
+    max-height: calc(100dvh - 77px);
+    padding: 40px 28px 28px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  .mk-toc .type-meta {
+    color: var(--muted-foreground);
+  }
+  .mk-toc ul {
+    margin-top: 8px;
+    list-style: none;
+  }
+  .mk-toc a {
+    display: block;
+    padding: 4px 0;
+    color: var(--muted-foreground);
+    line-height: 20px;
+  }
+  @media (hover: hover) {
+    .mk-toc a:hover {
+      color: var(--foreground);
+    }
+  }
+  .mk-toc a[aria-current] {
+    color: var(--foreground);
+    font-weight: 500;
+  }
+
+  /* the band: the sky's screened field, inside its crop marks */
+  .mk-opener,
+  .mk-pagehead {
+    padding-top: 40px;
+  }
+  .mk-band {
+    position: relative;
+  }
+  .mk-field {
+    position: relative;
+    height: 196px;
+  }
+  .mk-field-slim {
+    height: 120px;
+  }
+  #sky {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: url("/sky/plate-light.png") 0 0 no-repeat;
+    image-rendering: pixelated;
+  }
+  html.dark #sky {
+    background-image: url("/sky/plate-dark.png");
+  }
+  #sky[data-live] {
+    background: none;
+  }
+  .mk-crop {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .mk-crop i {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 0 solid var(--foreground);
+  }
+  .mk-crop i:nth-child(1) {
+    top: -16px;
+    left: -16px;
+    border-width: 1px 0 0 1px;
+  }
+  .mk-crop i:nth-child(2) {
+    top: -16px;
+    right: -16px;
+    border-width: 1px 1px 0 0;
+  }
+  .mk-crop i:nth-child(3) {
+    bottom: -16px;
+    left: -16px;
+    border-width: 0 0 1px 1px;
+  }
+  .mk-crop i:nth-child(4) {
+    right: -16px;
+    bottom: -16px;
+    border-width: 0 1px 1px 0;
+  }
+  .mk-knock {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    max-width: 100%;
+    padding: 14px 30px 0 0;
+    background: var(--background);
+  }
+  .mk-knock h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-hero);
+    font-weight: 300;
+    line-height: var(--text-hero--line-height);
+    letter-spacing: var(--text-hero--letter-spacing);
+  }
+  .mk-knock-stacked h1 {
+    width: min-content;
+  }
+  .mk-lede {
+    max-width: 696px;
+    margin-top: 44px;
+    text-wrap: pretty;
+  }
+  .mk-where {
+    margin-top: 16px;
+    color: var(--muted-foreground);
+  }
+  .err-code {
+    margin-top: 40px;
+    color: var(--muted-foreground);
+  }
+  .err-code + .mk-lede {
+    margin-top: 16px;
+  }
+  .mk-pagehead > :not(.mk-field) {
+    margin-top: 40px;
+  }
+  .mk-pagehead > .mk-lede {
+    margin-top: 24px;
+  }
+  .essay-title {
+    text-wrap: balance;
+  }
+  .mk-pagehead > .essay-meta {
+    margin-top: 16px;
+  }
+  .essay-meta {
+    color: var(--muted-foreground);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  /* the portrait: two inks, whole pixels, at the band's right end. A moon crosses it in steps when clicked */
+  .portrait-wrap {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 196px;
+    height: 196px;
+    overflow: hidden;
+    background: var(--background);
+    cursor: pointer;
+  }
+  .portrait,
+  .portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+  }
+  html.dark .portrait-light,
+  html:not(.dark) .portrait-dark {
+    display: none;
+  }
+  .moon {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--first);
+    translate: -110% 0;
+  }
+  .eclipsing .moon {
+    animation: eclipse 2.4s steps(24) both;
+  }
   @keyframes eclipse {
-    to {
-      transform: translateX(115%);
+    0% {
+      translate: -110% 0;
     }
-  }
-
-  @keyframes corona {
     40%,
     60% {
-      box-shadow:
-        0 0 0 1px oklch(from var(--primary) l c h / 0.8),
-        0 0 0 6px oklch(from var(--primary) l c h / 0.25),
-        0 0 72px oklch(from var(--ring) l c h / 0.55);
-    }
-  }
-}
-
-h1 {
-  /* unbounded runs wide: clamp tuned so "maurice kleine" fits one line at 390px */
-  font-family: var(--font-display);
-  font-size: clamp(1.85rem, 4.5vw + 0.85rem, 2.9rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-}
-
-.tagline {
-  font-size: clamp(1.1rem, 1.5vw + 0.75rem, 1.3rem);
-  font-weight: 400;
-  color: var(--muted-foreground);
-  margin-top: 0.75rem;
-  line-height: 1.5;
-}
-
-.hero-meta {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--dim);
-  margin-top: 1.25rem;
-  letter-spacing: 0.04em;
-}
-
-/* sections */
-
-section {
-  margin-bottom: clamp(3rem, 7vh, 4.5rem);
-}
-
-h2 {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  text-wrap: balance;
-}
-
-p {
-  margin-bottom: 1rem;
-}
-
-p:last-child {
-  margin-bottom: 0;
-}
-
-.section-intro {
-  color: var(--muted-foreground);
-}
-
-/* links */
-
-a {
-  color: var(--primary);
-  text-decoration: underline;
-  text-decoration-color: oklch(from var(--primary) l c h / 0.35);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
-  transition:
-    color 0.15s ease,
-    text-decoration-color 0.15s ease;
-  border-radius: calc(var(--radius) * 0.25);
-}
-
-a:hover {
-  color: var(--ring);
-  text-decoration-color: currentColor;
-}
-
-:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 3px;
-}
-
-::selection {
-  background: var(--primary);
-  color: var(--floor);
-}
-
-/* waypoint lists */
-
-.waypoints {
-  list-style: none;
-}
-
-.waypoints > li {
-  display: flex;
-  gap: 0.9rem;
-  margin-bottom: 1.5rem;
-}
-
-.waypoints > li:last-child {
-  margin-bottom: 0;
-}
-
-.waypoints .glyph {
-  color: var(--primary);
-  flex-shrink: 0;
-  line-height: 1.65;
-  font-size: 0.9em;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.waypoints > li:hover .glyph,
-.waypoints > li:focus-within .glyph {
-  transform: scale(1.35) rotate(-14deg);
-  color: var(--ring);
-}
-
-.waypoints a {
-  /* supreme ships 400/500; 500 is its emphasis weight */
-  font-weight: 500;
-  font-size: 1.05em;
-}
-
-.waypoints p {
-  color: var(--muted-foreground);
-  margin-bottom: 0;
-}
-
-/* graveyard */
-
-.graveyard .glyph {
-  color: var(--dim);
-  transition:
-    color 0.5s ease,
-    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* dead stars flicker back when you look at them */
-.graveyard > li:hover .glyph {
-  color: var(--primary);
-  transform: none;
-  text-shadow: 0 0 12px oklch(from var(--primary) l c h / 0.5);
-}
-
-/* and once in a while one goes supernova on its own */
-@media (prefers-reduced-motion: no-preference) {
-  .glyph.supernova {
-    animation: supernova 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  @keyframes supernova {
-    0% {
-      transform: scale(1);
-    }
-    18% {
-      transform: scale(2.1);
-      color: var(--glint);
-      text-shadow:
-        0 0 14px oklch(from var(--ring) l c h / 0.9),
-        0 0 36px oklch(from var(--primary) l c h / 0.6);
+      translate: 0 0;
     }
     100% {
-      transform: scale(1);
+      translate: 110% 0;
     }
   }
-}
 
-.grave-title {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.grave-title .name {
-  font-weight: 500;
-  color: var(--foreground);
-}
-
-.stamp {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
-  color: var(--dim);
-  border: 1px solid oklch(from var(--dim) l c h / 0.45);
-  border-radius: calc(var(--radius) * 125);
-  padding: 0.05rem 0.55rem;
-  white-space: nowrap;
-}
-
-.stamp-exit {
-  color: var(--primary);
-  border-color: oklch(from var(--primary) l c h / 0.5);
-}
-
-.grave-title .years {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--dim);
-}
-
-/* icon row */
-
-.icons {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.75rem;
-}
-
-.icons a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--muted-foreground);
-  text-decoration: none;
-  padding: 0.25rem 0;
-}
-
-.icons a:hover {
-  color: var(--ring);
-}
-
-.icons svg {
-  width: 1.35rem;
-  height: 1.35rem;
-}
-
-.icons span {
-  font-size: 0.9rem;
-}
-
-.said-out-loud {
-  margin-top: 1.5rem;
-  color: var(--muted-foreground);
-  font-size: 0.9rem;
-}
-
-.more-link {
-  margin-top: 1.75rem;
-}
-
-/* footer */
-
-footer {
-  border-top: 1px solid oklch(from var(--dim) l c h / 0.25);
-  padding-top: 1.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--dim);
-  line-height: 1.9;
-}
-
-footer p {
-  margin-bottom: 0;
-}
-
-/* status line, fluncle-style but personal */
-.status-dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--primary);
-  box-shadow: 0 0 8px oklch(from var(--primary) l c h / 0.9);
-  margin-right: 0.45rem;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .status-dot {
-    animation: blink 2.8s ease-in-out infinite;
+  /* a section: 64 px above the rule, 44 below it; the rule runs across the whole column */
+  .mk-section {
+    position: relative;
+    margin-top: 64px;
+    padding-top: 44px;
+  }
+  .mk-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: calc(var(--gutter, 0px) * -1);
+    width: 100vw;
+    height: 1px;
+    background: var(--rule);
+  }
+  .mk-section h2 + * {
+    margin-top: 24px;
+  }
+  .prose > p,
+  .section-intro,
+  .said-out-loud {
+    max-width: 27.5em;
+    font-family: var(--font-serif);
+    font-size: var(--text-read);
+    line-height: var(--text-read--line-height);
+    text-wrap: pretty;
+  }
+  .prose > p + p {
+    margin-top: 16px;
+  }
+  .prose > p + .waypoints {
+    margin-top: 24px;
+  }
+  .more-link {
+    margin-top: 24px;
   }
 
-  @keyframes blink {
-    50% {
-      opacity: 0.35;
+  /* side quests: a constellation, then the project; its stars take the house ink as you reach for it */
+  .waypoints,
+  .graveyard,
+  .essay-list {
+    list-style: none;
+  }
+  .waypoint {
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 24px;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+  }
+  .waypoint:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .constellation {
+    color: var(--muted-foreground);
+    transition: color var(--duration-quick) var(--ease-brand);
+  }
+  .constellation line {
+    stroke: currentColor;
+    stroke-width: 1;
+  }
+  .constellation rect {
+    fill: var(--first);
+  }
+  .waypoint:hover .constellation,
+  .waypoint:focus-within .constellation {
+    color: var(--primary);
+  }
+  .waypoint:hover .constellation rect,
+  .waypoint:focus-within .constellation rect {
+    fill: var(--primary);
+  }
+  .waypoint-name {
+    font-family: var(--font-sans);
+    font-size: var(--text-subtitle);
+    font-weight: 500;
+    line-height: var(--text-subtitle--line-height);
+  }
+  .waypoint p {
+    margin-top: 4px;
+    font-size: var(--text-summary);
+    line-height: var(--text-summary--line-height);
+    text-wrap: pretty;
+  }
+
+  /* the graveyard: a ledger. The dead keep their stars, and they occasionally go supernova */
+  .graveyard {
+    margin-top: 24px;
+  }
+  .graveyard li {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+  }
+  .glyph {
+    display: block;
+    width: 16px;
+    color: var(--muted-foreground);
+    line-height: 24px;
+  }
+  .glyph.supernova {
+    animation: supernova 1.7s steps(10) both;
+  }
+  @keyframes supernova {
+    0%,
+    100% {
+      scale: 1;
+      color: var(--muted-foreground);
+    }
+    30% {
+      scale: 3;
+      color: var(--primary);
     }
   }
-}
-
-/* 404: lost in space */
-.lost {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
-
-.lost .hero {
-  margin-bottom: 2.5rem;
-}
-
-.lost section {
-  margin-bottom: 0;
-}
-
-.err-code {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.14em;
-  color: var(--dim);
-  margin-bottom: 1.25rem;
-}
-
-/* about page */
-
-.back-link {
-  margin-bottom: 2.5rem;
-}
-
-/* essays */
-
-.page-hero .hero-meta {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-}
-
-.page-hero .tagline {
-  color: var(--muted-foreground);
-}
-
-/* essay signup */
-
-.subscribe {
-  border-top: 1px solid oklch(from var(--dim) l c h / 0.25);
-  padding-top: clamp(2rem, 5vh, 3rem);
-}
-
-.subscribe .section-intro {
-  margin-bottom: 1.25rem;
-}
-
-.subscribe-form {
-  max-width: 28rem;
-}
-
-#subscribe-turnstile {
-  margin-top: 0.9rem;
-}
-
-.subscribe-note {
-  margin-top: 0.9rem;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  line-height: 1.6;
-  color: var(--dim);
-}
-
-.subscribe-status {
-  margin-top: 0.6rem;
-  min-height: 1.2em;
-  font-size: 0.85rem;
-  color: var(--muted-foreground);
-}
-
-.subscribe-status.error {
-  color: var(--primary);
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-.essay-meta {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--dim);
-  letter-spacing: 0.04em;
-}
-
-.essay-meta a {
-  color: var(--dim);
-}
-
-.page-hero .essay-meta {
-  margin-top: 0.75rem;
-}
-
-.essay-list {
-  list-style: none;
-}
-
-.essay-list > li {
-  margin-bottom: 2.75rem;
-}
-
-/* index covers: same crop for every essay so the list reads as one column */
-.essay-cover {
-  display: block;
-  margin-bottom: 0.9rem;
-  border-radius: calc(var(--radius) * 0.75);
-  overflow: hidden;
-  border: 1px solid oklch(from var(--dim) l c h / 0.18);
-}
-
-.essay-cover img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 5 / 2;
-  object-fit: cover;
-  opacity: 0.85;
-  transition: opacity 0.2s ease;
-}
-
-.essay-list > li:hover .essay-cover img,
-.essay-list > li:focus-within .essay-cover img {
-  opacity: 1;
-}
-
-.essay-list > li:last-child {
-  margin-bottom: 0;
-}
-
-.essay-list a {
-  font-weight: 500;
-  font-size: 1.1em;
-}
-
-.essay-list p {
-  color: var(--muted-foreground);
-  margin: 0.25rem 0 0;
-}
-
-/* the essay body keeps the author's own casing; only the chrome is lowercase */
-.essay {
-  font-size: 1.125rem;
-  line-height: 1.7;
-}
-
-.essay h2 {
-  margin-top: 2.75rem;
-  margin-bottom: 0.75rem;
-  font-size: 1.1rem;
-}
-
-.essay p,
-.essay ul {
-  margin-bottom: 1.1rem;
-}
-
-.essay ul {
-  padding-left: 1.25rem;
-  color: var(--foreground);
-}
-
-.essay li {
-  margin-bottom: 0.3rem;
-}
-
-.essay blockquote {
-  margin: 1.5rem 0;
-  padding-left: 1.1rem;
-  border-left: 2px solid oklch(from var(--primary) l c h / 0.5);
-  color: var(--muted-foreground);
-}
-
-.essay blockquote p:last-child {
-  margin-bottom: 0;
-}
-
-/* long titles (x articles run long) get a smaller display size */
-.essay-title {
-  font-size: clamp(1.5rem, 2.6vw + 0.8rem, 2.2rem);
-  line-height: 1.2;
-}
-
-.essay figure {
-  margin: 1.75rem 0;
-}
-
-.essay figure.cover {
-  margin-top: 0;
-  margin-bottom: 2.5rem;
-}
-
-.essay img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: calc(var(--radius) * 0.75);
-  border: 1px solid oklch(from var(--dim) l c h / 0.18);
-}
-
-.essay hr {
-  border: 0;
-  height: 1px;
-  margin: 2.25rem auto;
-  width: 4rem;
-  background: oklch(from var(--dim) l c h / 0.35);
-}
-
-.essay h3 {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 600;
-  margin-top: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.essay table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.5rem 0;
-  font-size: 0.95em;
-}
-
-.essay th,
-.essay td {
-  text-align: left;
-  padding: 0.45rem 0.75rem 0.45rem 0;
-  border-bottom: 1px solid oklch(from var(--dim) l c h / 0.25);
-  vertical-align: top;
-}
-
-.essay th {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  color: var(--dim);
-}
-
-.essay pre {
-  margin: 1.5rem 0;
-  padding: 1rem 1.1rem;
-  overflow-x: auto;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  line-height: 1.6;
-  color: var(--muted-foreground);
-  background: oklch(from var(--floor) l c h / 0.7);
-  border: 1px solid oklch(from var(--dim) l c h / 0.18);
-  border-radius: calc(var(--radius) * 0.75);
-  white-space: pre-wrap;
-}
-
-.essay code {
-  font-family: var(--font-mono);
-}
-
-/* older / newer, generated by tools/link-essays.py */
-.essay-nav {
-  display: flex;
-  justify-content: space-between;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.essay-nav a {
-  display: block;
-  max-width: 48%;
-  text-decoration: none;
-  color: var(--foreground);
-}
-
-.essay-nav a:hover {
-  color: var(--ring);
-}
-
-.essay-nav .newer {
-  margin-left: auto;
-  text-align: right;
-}
-
-.essay-nav .label {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
-  color: var(--dim);
-  margin-bottom: 0.2rem;
-}
-
-@media (max-width: 600px) {
-  .essay-nav {
-    flex-direction: column;
-    gap: 1rem;
+  .grave-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+  }
+  .grave-title .name {
+    font-size: var(--text-subtitle);
+    font-weight: 500;
+    line-height: var(--text-subtitle--line-height);
+  }
+  .grave-title .years {
+    margin-left: auto;
+    color: var(--muted-foreground);
+    font: 400 12px/24px var(--font-mono);
+  }
+  .grave-note {
+    grid-column: 2;
+    margin-top: 4px;
+    font-size: var(--text-summary);
+    line-height: var(--text-summary--line-height);
+    text-wrap: pretty;
   }
 
-  .essay-nav a,
-  .essay-nav .newer {
+  /* essays */
+  .essay-list li {
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+  }
+  .essay-list li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .essay-list li > a:not(.essay-cover) {
+    font-size: var(--text-subtitle);
+    font-weight: 500;
+    line-height: var(--text-subtitle--line-height);
+  }
+  .essay-list p {
+    margin-top: 4px;
+    font-size: var(--text-summary);
+    line-height: var(--text-summary--line-height);
+    text-wrap: pretty;
+  }
+  .essay-list .essay-meta {
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .essay-cover {
+    display: block;
+    margin-bottom: 16px;
+  }
+  .essay-cover img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+  }
+
+  /* elsewhere: 40 px cells with a 1 px edge */
+  .icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+  }
+  .icons a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--input);
+    color: var(--foreground);
+    transition: background-color var(--duration-instant) var(--ease-brand);
+  }
+  @media (hover: hover) {
+    .icons a:hover {
+      background: var(--control-hover);
+      text-decoration-line: none;
+    }
+  }
+  .icons svg {
+    width: 16px;
+    height: 16px;
+  }
+  .said-out-loud {
+    margin-top: 24px;
+    font-size: var(--text-summary);
+    line-height: var(--text-summary--line-height);
+    font-family: var(--font-sans);
+  }
+
+  /* the essay: Erode at the reading measure; authored headings keep their casing */
+  .essay {
+    margin-top: 44px;
+    font-family: var(--font-serif);
+    font-size: var(--text-read);
+    line-height: var(--text-read--line-height);
+  }
+  .essay > * {
+    max-width: 27.5em;
+  }
+  .essay > figure {
     max-width: none;
-    margin-left: 0;
+  }
+  .essay p,
+  .essay ul,
+  .essay ol,
+  .essay blockquote,
+  .essay pre,
+  .essay table {
+    margin-top: 20px;
+  }
+  .essay > :first-child {
+    margin-top: 0;
+  }
+  .essay h2 {
+    margin-top: 48px;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 32px;
+    text-wrap: balance;
+  }
+  .essay h3 {
+    margin-top: 32px;
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 28px;
+  }
+  .essay ul,
+  .essay ol {
+    padding-left: 24px;
+  }
+  .essay ul {
+    list-style: square;
+  }
+  .essay ol {
+    list-style: decimal;
+  }
+  .essay li + li {
+    margin-top: 8px;
+  }
+  .essay li::marker {
+    color: var(--primary);
+  }
+  .essay blockquote {
+    padding-left: 20px;
+    border-left: 1px solid var(--primary);
+    color: var(--muted-foreground);
+  }
+  .essay figure {
+    margin-top: 32px;
+  }
+  .essay figure.cover {
+    margin-top: 0;
+  }
+  .essay figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+  }
+  .essay code {
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+  }
+  .essay :not(pre) > code {
+    padding: 1px 4px;
+    background: var(--muted);
+  }
+  .essay pre {
+    max-width: none;
+    padding: 16px 20px;
+    overflow-x: auto;
+    background: var(--code);
+    color: var(--code-foreground);
+    font-size: var(--text-instrument);
+    line-height: var(--text-instrument--line-height);
+  }
+  .essay table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: var(--text-summary);
+    line-height: var(--text-summary--line-height);
+  }
+  .essay th,
+  .essay td {
+    padding: 8px 16px 8px 0;
+    border-top: 1px solid var(--border);
     text-align: left;
+    vertical-align: top;
   }
-}
-
-@media (max-width: 600px) {
-  body {
-    font-size: 1rem;
+  .essay th {
+    border-top: 0;
+    font-weight: 500;
+  }
+  .essay hr {
+    max-width: none;
+    margin-top: 48px;
+    border: 0;
+    border-top: 1px solid var(--rule);
   }
 
-  main {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+  /* the signup */
+  .section-intro {
+    margin-top: 24px;
+  }
+  .subscribe-form {
+    max-width: 424px;
+    margin-top: 24px;
+  }
+  #subscribe-turnstile {
+    margin-top: 16px;
+  }
+  #subscribe-turnstile:empty {
+    display: none;
+  }
+  .subscribe-note,
+  .subscribe-status {
+    margin-top: 12px;
+    color: var(--muted-foreground);
+    font-size: var(--text-instrument);
+    line-height: var(--text-instrument--line-height);
+  }
+  .subscribe-status:empty {
+    display: none;
+  }
+  .subscribe-status {
+    color: var(--foreground);
+  }
+  .subscribe-status.error {
+    color: var(--destructive);
+  }
+
+  /* the foot and the walk between essays */
+  .mk-foot {
+    position: relative;
+    margin-top: 64px;
+    padding-top: 24px;
+    color: var(--muted-foreground);
+  }
+  .mk-foot::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: calc(var(--gutter, 0px) * -1);
+    width: 100vw;
+    height: 1px;
+    background: var(--rule);
+  }
+  .mk-foot > * + * {
+    margin-top: 8px;
+  }
+  .mk-foot-status {
+    display: none;
+    font: 400 12px/20px var(--font-mono);
+  }
+  .essay-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+    font-size: var(--text-summary);
+    line-height: var(--text-summary--line-height);
+  }
+  .essay-nav .label {
+    display: block;
+    color: var(--muted-foreground);
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+    letter-spacing: var(--text-meta--letter-spacing);
+    text-transform: uppercase;
+  }
+  .essay-nav .newer {
+    grid-column: 2;
+    text-align: right;
+  }
+
+  @media (max-width: 1279px) {
+    .mk-body {
+      grid-template-columns: 264px minmax(0, 1fr) 312px;
+    }
+    .mk-body-solo {
+      grid-template-columns: 264px minmax(0, 1fr);
+    }
+    .mk-main {
+      --gutter: 40px;
+    }
+    .mk-meta {
+      grid-template-columns: 64px 1fr;
+      width: 240px;
+      padding: 0 20px;
+    }
+  }
+
+  /* the aside goes, and the masthead's status prints in the foot instead */
+  @media (max-width: 1099px) {
+    .mk-body {
+      grid-template-columns: 264px minmax(0, 1fr);
+    }
+    .mk-aside,
+    .mk-meta {
+      display: none;
+    }
+    .mk-foot-status {
+      display: block;
+    }
+  }
+
+  /* one column: the nav becomes a row under the masthead, which lets go of the top */
+  @media (max-width: 900px) {
+    html {
+      scroll-padding-top: 0;
+    }
+    .mk-mast {
+      position: static;
+      height: 65px;
+    }
+    .mk-brand {
+      flex: 1;
+      width: auto;
+      padding: 0 16px;
+      border-right: 0;
+    }
+    .mk-crumb,
+    .mk-house,
+    .mk-nav-foot {
+      display: none;
+    }
+    .mk-mast-mode {
+      display: block;
+      border-left: 1px solid var(--rule);
+    }
+    .mk-body,
+    .mk-body-solo {
+      display: block;
+      min-height: 0;
+      background: none;
+    }
+    .mk-nav {
+      position: static;
+      height: auto;
+      border-bottom: 1px solid var(--rule);
+    }
+    .mk-nav-list {
+      display: flex;
+      gap: 4px;
+      padding: 8px 12px;
+    }
+    .mk-main {
+      --gutter: 32px;
+      padding: 0 16px 56px 32px;
+    }
+  }
+
+  /* a phone: the wordmark comes out of the band and sits under it */
+  @media (max-width: 600px) {
+    .mk-brand {
+      font-size: 18px;
+    }
+    .mk-mode-compact button {
+      padding: 0 8px;
+    }
+    .mk-field {
+      height: 136px;
+    }
+    .mk-field-slim {
+      height: 96px;
+    }
+    .portrait-wrap {
+      width: 136px;
+      height: 136px;
+    }
+    .mk-knock {
+      position: static;
+      padding: 40px 0 0;
+    }
+    .mk-knock h1,
+    .mk-pagehead > h1.type-hero {
+      font-size: min(52px, 13vw);
+      line-height: 1.08;
+    }
+    .mk-lede {
+      margin-top: 24px;
+    }
+    .waypoint {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+    .essay-nav {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .essay-nav .newer {
+      grid-column: 1;
+      text-align: left;
+    }
+  }
+
+  @media print {
+    .mk-mast,
+    .mk-nav,
+    .mk-aside,
+    .mk-field,
+    .subscribe,
+    .mk-foot {
+      display: none;
+    }
+    .mk-body {
+      display: block;
+      background: none;
+    }
+    .mk-main {
+      padding: 0;
+    }
   }
 }

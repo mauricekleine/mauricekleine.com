@@ -1,6 +1,8 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod";
+import { themeScript } from "../../../packages/superthread/items/lib/theme.ts";
+import tokens from "../../../packages/superthread/dist/v2/tokens.json" with { type: "json" };
 import { handleShortLink, isShortLinkHost } from "./links.ts";
 
 export interface WorkerEnv {
@@ -464,32 +466,44 @@ async function sendConfirmationEmail(env: WorkerEnv, email: string, token: strin
 // small, self-contained page in the site's visual system, for the no-js path
 function subscribePage({ title, description, heading, message, back }: SubscribePage): string {
   return `<!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="theme-color"
+      content="${tokens.light.background.hex}"
+      data-light="${tokens.light.background.hex}"
+      data-dark="${tokens.dark.background.hex}"
+    />
+    <script>${themeScript}</script>
     <title>${title} - Maurice Kleine</title>
     <meta name="description" content="${description}" />
     <meta name="robots" content="noindex" />
-    <meta name="theme-color" content="#11131f" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/maurice.png" />
-    <link rel="stylesheet" href="/style.css?v=20260927-theme" />
+    <link rel="stylesheet" href="/style.css?v=20261031-stock" />
   </head>
   <body>
-    <canvas id="nebula" aria-hidden="true"></canvas>
-    <canvas id="stars" aria-hidden="true"></canvas>
-    <main class="lost">
-      <header class="hero">
-        <h1>${heading}</h1>
-        <p class="tagline">${message}</p>
-      </header>
-      <section aria-label="where to go next">
-        <p class="more-link"><a href="${back.href}">${back.label}</a></p>
-      </section>
+    <header class="mk-mast">
+      <a href="/" class="mk-brand">maurice kleine</a>
+    </header>
+    <main id="main" class="mk-main mk-solo">
+      <div class="mk-page">
+        <header id="top" class="mk-pagehead">
+          <div class="mk-field mk-field-slim">
+            <canvas id="sky" aria-hidden="true"></canvas>
+            <span class="mk-crop" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </div>
+          <h1 class="type-hero">${heading}</h1>
+          <p class="mk-lede type-lede">${message}</p>
+        </header>
+        <section class="mk-section" aria-label="where to go next">
+          <p class="more-link"><a href="${back.href}">${back.label}</a></p>
+        </section>
+      </div>
     </main>
-    <script src="/texture.js"></script>
-    <script src="/stars.js"></script>
+    <script src="/sky.js"></script>
     <script async src="https://api.mauricekleine.com/latest.js"></script>
   </body>
 </html>
@@ -636,7 +650,9 @@ export async function handleSiteRequest(
     (request.method === "GET" || request.method === "HEAD")
   ) {
     const path = url.pathname.slice("/superthread".length) || "/";
-    return Response.redirect(`${SUPERTHREAD_ORIGIN}${path}${url.search}`, 301);
+    // marks keep their old flat names here; the superthread host files each ship's in its own folder
+    const mark = path.match(/^\/marks\/([a-z-]+)\.svg$/)?.[1];
+    return Response.redirect(`${SUPERTHREAD_ORIGIN}${mark ? `/marks/${mark}/${mark}.svg` : path}${url.search}`, 301);
   }
 
   if (url.pathname === "/subscribe" && request.method === "POST") {

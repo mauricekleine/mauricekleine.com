@@ -1,18 +1,19 @@
-import { Hero, Section } from "../components";
+import { Opener, Section } from "../components";
+import { Shell } from "../shell";
+
 export function LostPage() {
   return (
-    <>
-      <Hero className="hero">
-        <p className="err-code">err_404: trajectory unknown</p>
-        <h1>lost in space</h1>
-        <p className="tagline">
+    <Shell crumb="maurice kleine" title="lost" interactive={false}>
+      <Opener title="lost in space">
+        <p className="err-code type-meta">err_404: trajectory unknown</p>
+        <p className="mk-lede type-lede">
           this page drifted out of orbit.
           <br />
           or it never existed. hard to tell from up here.
         </p>
-      </Hero>
+      </Opener>
 
-      <Section aria-label="where to go instead">
+      <Section id="elsewhere" title="where to go instead" hideTitle className="prose">
         <p>
           it's not in <a href="/#graveyard">the graveyard</a> either, i checked. the stars are nice though. you could
           stay a minute.
@@ -21,6 +22,6 @@ export function LostPage() {
           <a href="/">← back to earth</a>
         </p>
       </Section>
-    </>
+    </Shell>
   );
 }
