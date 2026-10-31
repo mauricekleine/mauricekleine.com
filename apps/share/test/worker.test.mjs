@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { after, test } from "node:test";
 import { createHash } from "node:crypto";
+import { readdir, readFile } from "node:fs/promises";
 import { request as httpRequest } from "node:http";
 import { fileURLToPath } from "node:url";
 import { localWorker } from "../tools/local.mjs";
@@ -145,9 +146,14 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   const darkPin = await get(`/${pinId}/`, { Cookie: "mk-other=1; mk-theme=dark" });
   assert.match(
     darkPin.headers.get("Content-Security-Policy"),
-    /font-src https:\/\/superthread\.mauricekleine\.com\/fonts\//,
+    /font-src https:\/\/share\.mauricekleine\.com\/_fonts\//,
   );
-  assert.match(await darkPin.text(), /<html lang="en" class="dark">/);
+  const darkPage = await darkPin.text();
+  assert.match(darkPage, /<html lang="en" class="dark">/);
+  assert.doesNotMatch(darkPage, /superthread\.mauricekleine\.com/);
+  const faces = [...darkPage.matchAll(/url\("(\/_fonts\/[^"]+)"\)/g)].map((match) => match[1]);
+  assert.equal(faces.length, 9);
+  for (const face of faces) assert.equal((await get(face)).status, 200, face);
   assert.match(await (await get(`/${pinId}/`, { Cookie: "mk-theme=auto" })).text(), /<html lang="en">/);
   const other = "Another123456789";
   await commit(other, await stage(other, "pin", "other protected"));
@@ -182,6 +188,33 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   assert.equal((await admin(`/${pinId}`, "DELETE")).status, 204);
   assert.equal((await get(`/${id}/%2e%2e/%2e%2e/_admin/shares`)).status, 401);
 });
+test("every superthread face serves at /_fonts/ to a sandboxed page, and nothing else does", async () => {
+  const directory = new URL("../../superthread/public/fonts/", import.meta.url);
+  const files = (await readdir(directory)).filter((file) => file.endsWith(".woff2"));
+  assert.equal(files.length, 9);
+  for (const file of files) {
+    const response = await get(`/_fonts/${file}`, { Origin: "null" });
+    assert.equal(response.status, 200, file);
+    assert.equal(response.headers.get("Content-Type"), "font/woff2");
+    assert.equal(response.headers.get("Access-Control-Allow-Origin"), "null");
+    assert.match(response.headers.get("Cache-Control"), /public/);
+    assert.equal(response.headers.get("X-Content-Type-Options"), "nosniff");
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()), await readFile(new URL(file, directory)));
+  }
+  const head = await worker.dispatchFetch(`${origin}/_fonts/${files[0]}`, { method: "HEAD" });
+  assert.equal(head.status, 200);
+  assert.equal(await head.text(), "");
+  for (const miss of ["/_fonts/", "/_fonts/nope.woff2", "/_fonts/constructor", "/_fonts/../fonts/erode-400.woff2"]) {
+    const response = await get(miss);
+    assert.equal(response.status, 404, miss);
+    assert.equal(response.headers.get("Access-Control-Allow-Origin"), null);
+    await response.body?.cancel();
+  }
+  const post = await worker.dispatchFetch(`${origin}/_fonts/${files[0]}`, { method: "POST" });
+  assert.equal(post.status, 404);
+  await post.body?.cancel();
+});
+
 test("committed files serve single byte ranges and HEAD with the same security headers", async () => {
   const identity = "Ranges1234567890";
   const body = "0123456789";

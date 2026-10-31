@@ -9,5 +9,5 @@ await build({
   platform: "browser",
   target: "es2022",
   external: ["cloudflare:workers"],
-  loader: { ".css": "text" },
+  loader: { ".css": "text", ".woff2": "binary" },
 });

@@ -1,4 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
+import { fontResponse } from "./fonts";
 import { pinPage, type PinMode } from "./pin-page";
 
 const HOUR = 3600000;
@@ -496,7 +497,7 @@ export class ShareStore extends DurableObject<Env> {
         });
         response.headers.set(
           "Content-Security-Policy",
-          `${SANDBOX}; default-src 'none'; style-src 'unsafe-inline'; font-src https://superthread.mauricekleine.com/fonts/; form-action ${url.origin}/${id}/; frame-ancestors 'none'; base-uri 'none'`,
+          `${SANDBOX}; default-src 'none'; style-src 'unsafe-inline'; font-src ${url.origin}/_fonts/; form-action ${url.origin}/${id}/; frame-ancestors 'none'; base-uri 'none'`,
         );
         return response;
       }
@@ -600,6 +601,7 @@ export class ShareStore extends DurableObject<Env> {
 export default {
   async fetch(request: Request, env: Env) {
     const path = new URL(request.url).pathname;
+    if (path.startsWith("/_fonts/")) return fontResponse(request, path) ?? reply();
     if (path.startsWith("/_admin/")) {
       const token = request.headers.get("Authorization") || "";
       if (!env.ADMIN_TOKEN || !(await same(token, `Bearer ${env.ADMIN_TOKEN}`))) return reply("unauthorized", 401);
