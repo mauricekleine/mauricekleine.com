@@ -13,7 +13,13 @@ Some words.
 More words.
 `;
 
-mock.module("./essay-content", () => ({ articleMarkdown: () => markdown }));
+// bun has no import.meta.glob, and a module mock outlives this file, so it carries the module's whole surface
+mock.module("./essay-content", () => ({
+  essays: [],
+  essaysBySlug: {},
+  essayNeighbors: () => ({}),
+  articleMarkdown: () => markdown,
+}));
 const { EssayArticle, essayHeadings } = await import("./essay-markdown");
 const essay = { slug: "test", images: {} } as Parameters<typeof essayHeadings>[0];
 
