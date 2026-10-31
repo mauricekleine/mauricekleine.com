@@ -21,7 +21,7 @@ import { mkdirSync, rmSync, writeFileSync, appendFileSync, readdirSync } from "n
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { prerenderPaths } from "../src/site/nav.ts";
-import { themeKey } from "../src/site/theme-script.ts";
+import { themeKey } from "../../../packages/superthread/items/lib/theme.ts";
 
 const { values } = parseArgs({
   args: Bun.argv.slice(2),
@@ -58,6 +58,7 @@ function js<T = unknown>(code: string): T {
 // stores the mode for the site's origin, so every page after it opens in that mode
 function store(mode: Mode) {
   ab("open", `${base}/`);
+  js(`document.cookie = ${JSON.stringify(`${themeKey}=${mode}; path=/`)}`);
   js(`localStorage.setItem(${JSON.stringify(themeKey)}, ${JSON.stringify(mode)})`);
 }
 

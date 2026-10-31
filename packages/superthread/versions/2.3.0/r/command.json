@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "command",
+  "title": "command",
+  "description": "a command list with a search field, inline or in a dialog",
+  "dependencies": [
+    "cmdk@^1.1.1"
+  ],
+  "registryDependencies": [
+    "@mk/dialog",
+    "@mk/glyphs",
+    "@mk/input-group",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/command.tsx",
+      "content": "import * as React from \"react\";\nimport { Command as CommandPrimitive } from \"cmdk\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n\nimport {\n  Dialog,\n  DialogContent,\n  DialogDescription,\n  DialogHeader,\n  DialogTitle,\n} from \"@/components/superthread/ui/dialog\";\nimport { InputGroup, InputGroupAddon } from \"@/components/superthread/ui/input-group\";\nimport { Icon } from \"@/components/superthread/ui/glyphs\";\n// @mk/command 2.3.0\n\n// A flat command surface takes its lift from the page or the dialog that contains it.\nfunction Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {\n  return (\n    <CommandPrimitive\n      label=\"commands\"\n      data-slot=\"command\"\n      data-mk=\"command\"\n      className={cn(\"flex size-full flex-col bg-popover text-popover-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\n// The palette uses our dialog sheet; its accessible title and description live inside that sheet.\nfunction CommandDialog({\n  title = \"command palette\",\n  description = \"search for a command to run\",\n  children,\n  className,\n  showCloseButton = false,\n  portalProps,\n  ...props\n}: Omit<React.ComponentProps<typeof Dialog>, \"children\"> & {\n  portalProps?: React.ComponentProps<typeof DialogContent>[\"portalProps\"];\n  title?: string;\n  description?: string;\n  className?: string;\n  showCloseButton?: boolean;\n  children: React.ReactNode;\n}) {\n  return (\n    <Dialog {...props}>\n      <DialogContent className={cn(\"p-0\", className)} portalProps={portalProps} showCloseButton={showCloseButton}>\n        <DialogHeader className=\"sr-only\">\n          <DialogTitle>{title}</DialogTitle>\n          <DialogDescription>{description}</DialogDescription>\n        </DialogHeader>\n        {children}\n      </DialogContent>\n    </Dialog>\n  );\n}\n\n// Search uses one input-group field box with the search glyph beside its text control. cmdk's input takes the\n// input group's text-control classes itself: the shadcn CLI rewrites an asChild into a render prop on install, and\n// cmdk has no render prop.\nfunction CommandInput({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Input>) {\n  return (\n    <div data-slot=\"command-input-wrapper\" className=\"p-1 pb-0\">\n      <InputGroup className=\"h-10\">\n        <CommandPrimitive.Input\n          data-slot=\"command-input\"\n          className={cn(\n            \"h-full w-full min-w-0 flex-1 self-stretch border-0 bg-transparent px-3 text-ui outline-0 caret-(--fx) placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:text-disabled\",\n            className,\n          )}\n          {...props}\n        />\n        <InputGroupAddon>\n          <Icon name=\"search\" className=\"size-3 shrink-0 text-muted-foreground\" />\n        </InputGroupAddon>\n      </InputGroup>\n    </div>\n  );\n}\n\n// The list scrolls within 288 px, with room around its focused row.\nfunction CommandList({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.List>) {\n  return (\n    <CommandPrimitive.List\n      label=\"suggestions\"\n      data-slot=\"command-list\"\n      className={cn(\"no-scrollbar max-h-72 scroll-py-1 overflow-y-auto p-1\", className)}\n      {...props}\n    />\n  );\n}\n\n// No matches prints as a quiet instrument line.\nfunction CommandEmpty({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) {\n  return (\n    <CommandPrimitive.Empty\n      data-slot=\"command-empty\"\n      className={cn(\"py-6 text-center type-instrument text-muted-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\n// Group headings use the list's meta labels and item inset.\nfunction CommandGroup({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Group>) {\n  return (\n    <CommandPrimitive.Group\n      data-slot=\"command-group\"\n      className={cn(\n        \"text-foreground [&_[cmdk-group-heading]]:px-2.5 [&_[cmdk-group-heading]]:pt-1.5 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:type-meta [&_[cmdk-group-heading]]:text-muted-foreground\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// A 1 px rule separates command groups.\nfunction CommandSeparator({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Separator>) {\n  return (\n    <CommandPrimitive.Separator\n      data-slot=\"command-separator\"\n      className={cn(\"-mx-1 h-px bg-border\", className)}\n      {...props}\n    />\n  );\n}\n\n// cmdk selected means the pointer or keys position, so it takes hover fill rather than the chosen box.\nfunction CommandItem({ className, children, ...props }: React.ComponentProps<typeof CommandPrimitive.Item>) {\n  return (\n    <CommandPrimitive.Item\n      data-slot=\"command-item\"\n      className={cn(\n        \"relative flex h-9 cursor-default items-center gap-2.5 border border-transparent px-2.5 text-ui select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring) data-[disabled=true]:pointer-events-none data-[disabled=true]:text-disabled data-[selected=true]:bg-raised-hover [&_svg]:pointer-events-none [&_svg]:shrink-0\",\n        className,\n      )}\n      {...props}\n    >\n      {children}\n    </CommandPrimitive.Item>\n  );\n}\n\n// Keys sit at the row end in Fragment Mono.\nfunction CommandShortcut({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-slot=\"command-shortcut\"\n      className={cn(\"ml-auto font-mono text-[11px] tracking-[0.14em] text-muted-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\nexport {\n  Command,\n  CommandDialog,\n  CommandInput,\n  CommandList,\n  CommandEmpty,\n  CommandGroup,\n  CommandItem,\n  CommandShortcut,\n  CommandSeparator,\n};\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/command.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.3.0",
+    "sha256": "2ebe57a84b0496fc5637899797039549539ae1e7b4c1d8aafed450d24c74fb33",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "command",
+      "sha256": "626b25da7b65ae2e800e5c7bc516f2223c2a144fb745ddaf0dcbf746d879f3d1",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

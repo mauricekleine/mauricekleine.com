@@ -83,7 +83,7 @@ describe("the fleet row", () => {
     const master = readJson("tokens/master.json") as { ships: Record<string, { "spot name": string }> };
     for (const ship of fleet) {
       if (master.ships[ship.id]) expect(spotNames[ship.id]).toBe(master.ships[ship.id]!["spot name"]);
-      else expect(spotNames[ship.id]).toBe("new star");
+      else expect(spotNames[ship.id]).toBe(ship.id === "telemetry" ? "tachyon teal" : "new star");
     }
   });
 });

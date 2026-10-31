@@ -69,7 +69,15 @@
     },
     "fleet.json": {
       "source": "packages/superthread/marks/fleet.json",
-      "sha256": "08032799080d6c1888b09736603f902d747249e6cb084bf0464ce73eece079df"
+      "sha256": "4c506af47b7d8dfba11dcf9dcf834251bc3f05b7273810025fcc9ee387ebf6dd"
+    },
+    "telemetry/telemetry.svg": {
+      "source": "drawn for superthread 2.3.0",
+      "sha256": "39347ef42fa4423a8c007c29f009855447553a9805288a7c4cb886d78bb4e78d"
+    },
+    "telemetry/telemetry-dark.svg": {
+      "source": "drawn for superthread 2.3.0",
+      "sha256": "cd72a33d592eeea117d7340db4211d29fcf821952622eded8adf1d1fbac7ab96"
     }
   },
   "retired": {

@@ -1,6 +1,7 @@
 import { type ReactNode, useId } from "react";
 
 import { fleet, home as homeShip, type ShipId } from "@/components/superthread/lib/fleet";
+import { toggleTheme, useTheme } from "@/components/superthread/lib/theme";
 import { cn } from "@/components/superthread/lib/utils";
 import { Sidebar, SidebarProvider } from "@/components/superthread/ui/sidebar";
 import { TooltipProvider } from "@/components/superthread/ui/tooltip";
@@ -9,7 +10,8 @@ const MARK_BASE = "https://superthread.mauricekleine.com/marks";
 
 // The rail and the ship's nav print on the deep ground. Every cell is a 32 px mark; hover or focus inverts the
 // cell, swaps in the light mark and slides out a joined tab, the ship's name over its descriptor. At 900 px and below
-// the rail is a bar.
+// the rail is a bar. The frame stays in view as the page scrolls, and the rail's last cell is the fleet's one mode
+// control, so a ship adds neither.
 //
 // The ground keeps the mode it is in, and the frame on it (the rail and the ship's sidebar) prints in the dark palette
 // in both modes, as the world's gutter does. GROUND holds the ground's roles where the frame paints them, and
@@ -22,11 +24,13 @@ const ON_GROUND =
 const nav =
   "relative z-20 flex w-[58px] shrink-0 flex-col border border-sidebar-border [@media(max-width:900px)]:w-max [@media(max-width:900px)]:flex-row";
 const home =
-  "grid h-[57px] shrink-0 place-items-center border-b border-sidebar-border [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:w-[49px] [@media(max-width:900px)]:border-r [@media(max-width:900px)]:border-b-0";
+  "grid h-[57px] shrink-0 place-items-center border-b border-sidebar-border [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:w-[49px] [@media(max-width:900px)]:border-r [@media(max-width:900px)]:border-b-0 [@media(max-width:420px)]:w-10!";
 const list =
   "flex flex-col py-1 [@media(max-width:900px)]:flex-row [@media(max-width:900px)]:px-0.5 [@media(max-width:900px)]:py-0";
+const modeSlot =
+  "border-t border-sidebar-border py-1 [@media(max-width:900px)]:border-t-0 [@media(max-width:900px)]:border-l [@media(max-width:900px)]:px-0.5 [@media(max-width:900px)]:py-0";
 const cell =
-  "group/cell relative m-1 grid h-12 place-items-center border border-transparent transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) motion-reduce:transition-none [@media(max-width:900px)]:mx-0.5 [@media(max-width:900px)]:size-10";
+  "group/cell relative m-1 grid h-12 place-items-center border border-transparent transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) motion-reduce:transition-none [@media(max-width:900px)]:mx-0.5 [@media(max-width:900px)]:size-10 [@media(max-width:420px)]:mx-0! [@media(max-width:420px)]:size-9!";
 const linked =
   "hover:border-foreground hover:bg-foreground focus-visible:border-foreground focus-visible:bg-foreground";
 const boxed =
@@ -43,6 +47,16 @@ const tabEnd =
 // so the descriptor takes the light palette's muted ink: it opens a light scope of its own.
 const tabName = "text-summary/[18px] font-medium";
 const tabDesc = "light text-[12px]/[16px] text-muted-foreground";
+
+// The mode cell's glyph: a disc, half ink and half outline, in the rail's whole pixels. Its one drawing serves both
+// modes, so the prerendered rail never shows the wrong one.
+function ModeGlyph() {
+  return (
+    <svg viewBox="0 0 12 12" width={24} height={24} shapeRendering="crispEdges" fill="currentColor" aria-hidden="true">
+      <path d="M4 0h4v1h-4zM2 1h2v1h-2zM6 1h3v1h-3zM1 2h1v1h-1zM6 2h4v1h-4zM1 3h1v1h-1zM6 3h4v1h-4zM0 4h1v4h-1zM6 4h5v4h-5zM1 8h1v2h-1zM6 8h4v2h-4zM2 10h2v1h-2zM6 10h3v1h-3zM4 11h4v1h-4z" />
+    </svg>
+  );
+}
 
 export function FleetRail({
   current,
@@ -69,10 +83,12 @@ export function FleetRail({
   className?: string;
 }) {
   const uid = useId();
+  const theme = useTheme();
   const base = markBase.replace(/\/+$/, "");
   const mark = (id: string, file: string) => `${base}/${id}/${file}`;
   const homeMark = <img src={mark("superthread", "superthread-dark.svg")} alt="" width={32} height={32} />;
   const homeHref = hrefs.home === undefined ? homeShip.url : hrefs.home;
+  const ships = fleet.filter((ship) => ship.rail);
 
   return (
     <TooltipProvider>
@@ -86,7 +102,10 @@ export function FleetRail({
       >
         <div
           data-slot="fleet-rail-frame"
-          className={cn("flex shrink-0 items-start gap-4 p-4 [@media(max-width:900px)]:flex-col", ON_GROUND)}
+          className={cn(
+            "sticky top-0 z-20 flex max-h-svh shrink-0 items-start gap-4 self-start p-4 [@media(max-width:900px)]:static [@media(max-width:900px)]:max-h-none [@media(max-width:900px)]:flex-col [@media(max-width:900px)]:self-stretch [@media(max-width:420px)]:p-3",
+            ON_GROUND,
+          )}
         >
           <nav data-slot="fleet-rail" aria-label={label} className={nav}>
             {homeHref ? (
@@ -99,7 +118,7 @@ export function FleetRail({
               </span>
             )}
             <ul className={list}>
-              {fleet.map((ship, index) => {
+              {ships.map((ship, index) => {
                 const given = hrefs[ship.id];
                 const href = given === undefined ? ship.url : given;
                 const isCurrent = current === ship.id;
@@ -159,9 +178,35 @@ export function FleetRail({
                 );
               })}
             </ul>
+            <div className={modeSlot}>
+              <button
+                data-slot="fleet-rail-mode"
+                type="button"
+                aria-label="dark mode"
+                aria-describedby={`${uid}-mode`}
+                aria-pressed={theme === null ? undefined : theme === "dark"}
+                onClick={toggleTheme}
+                className={cn(
+                  cell,
+                  linked,
+                  "w-[calc(100%-0.5rem)] cursor-pointer text-foreground hover:text-background focus-visible:text-background [@media(max-width:900px)]:w-auto",
+                )}
+              >
+                <ModeGlyph />
+                <span data-slot="fleet-rail-label" className={cn(tab, tabEnd)}>
+                  <span className={tabName}>dark mode</span>
+                  <span data-slot="fleet-rail-description" id={`${uid}-mode`} className={tabDesc}>
+                    across the whole fleet
+                  </span>
+                </span>
+              </button>
+            </div>
           </nav>
           {sidebar && (
-            <Sidebar collapsible="none" className="h-auto w-[150px] [@media(max-width:900px)]:w-full">
+            <Sidebar
+              collapsible="none"
+              className="h-auto max-h-[calc(100svh-2rem)] w-[150px] overflow-y-auto [@media(max-width:900px)]:max-h-none [@media(max-width:900px)]:w-full [@media(max-width:900px)]:overflow-visible"
+            >
               {sidebar}
             </Sidebar>
           )}

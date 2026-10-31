@@ -203,7 +203,9 @@ test("hosts: no private or foreign host in any file's content", async () => {
   const shipHosts = manifest.fleet.flatMap((ship) => (ship.url ? [new URL(ship.url).hostname] : []));
   for (const { item, file } of files) {
     const where = `${item.name} ${file.target}`;
-    const hosts = item.name === "fleet" ? [own, ...shipHosts] : [own];
+    // the theme item names the fleet's parent domain, which carries the mode cookie
+    const hosts =
+      item.name === "fleet" ? [own, ...shipHosts] : item.name === "theme" ? [own, "mauricekleine.com"] : [own];
     const code = file.content;
     // comments go first, so a reference link in a comment is allowed but a live http:// is not
     const live = code.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|\s)\/\/.*$/gm, "$1");

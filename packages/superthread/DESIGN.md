@@ -373,7 +373,7 @@ Five states, at badge scale only. A badge is a fill near the stock (`-wash`), a 
 
 ### Ship spots
 
-Each ship has one bright spot. It prints in the ship's mark (so its rail cell and fleet row) and in its chart series, and nowhere else. `--ship-<id>` names each; `--chart-1` to `--chart-5` are orbit, constellation, quanta, artifacts and trisys. These roles are new in v2 and provisional.
+Each ship has one bright spot. It prints in the ship's mark (so its rail cell and fleet row) and in its chart series, and nowhere else. `--ship-<id>` names each; `--chart-1` to `--chart-5` are orbit, constellation, quanta, artifacts and trisys. These roles are new in v2 and provisional. telemetry's tachyon teal lives in the marks manifest: it prints only in its mark, so it is none of these roles and has no chart series.
 
 | ship          | spot         | light     | dark      | line screen angle |
 | ------------- | ------------ | --------- | --------- | ----------------- |
@@ -453,7 +453,7 @@ Space runs on Tailwind's default 4 px step, used at 4, 8, 12, 16, 24, 32, 48, 64
 - **Sections.** A section head sits inside its full-bleed rule, with 64 px above it and 44 px between the head and its content; panes pad 36 to 48 px.
 - **Docs and public pages** print on the stock, with full-bleed rules, a boxed nav and an aside, and no fleet rail.
 - **Ship surfaces** print on the deep ground: the fleet rail and the ship's nav flat on it, the working panel raised on it. The board panel is at most 880 px wide and the reading sheet 672 px with 72 px of padding; the reading page keeps a 264 px margin on the ground for its contents and progress.
-- **Breakpoints.** At 900 px and below the fleet rail becomes a 48 px bar of 32 px marks above the panel, the current ship boxed, with 12 px of ground on each side of the panel. At 600 px and below the phone type steps and the phone plates apply. The site adds two of its own for its docs shell (1279 px, where the masthead and aside tighten, and 1099 px, where the aside drops below the page); they are the site's, not the tokens'.
+- **Breakpoints.** At 900 px and below the fleet rail becomes a 48 px bar of 32 px marks above the panel, the current ship boxed, with 12 px of ground on each side of the panel. At 420 px and below its cells tighten to 36 px so the whole rail fits a phone. At 600 px and below the phone type steps and the phone plates apply. The site adds two of its own for its docs shell (1279 px, where the masthead and aside tighten, and 1099 px, where the aside drops below the page); they are the site's, not the tokens'.
 
 **The Full Bleed Rule.** Horizontal rules belong to the page: they run to both window edges, past every column, and no column stops them.
 
@@ -539,6 +539,7 @@ Square, one chromatic ink, quick to answer.
 ### Fields
 
 - **Style:** input, textarea and the select trigger are 40 px boxes (the textarea grows from three lines) with a 1 px `input` edge on the stock, 12 px sides, Supreme at 14 px. The input group is one box holding a text control with addons and buttons beside it; its controls carry no box of their own.
+- **One row, one height:** controls side by side share a height, so a button or toggle beside a field stays at the 40 px default. `sm` is for a control inside a field and for a row of nothing but `sm` controls.
 - **Focus:** the box's edge becomes 2 px inside it in `--fx`, and the caret follows (see Shapes).
 - **Error / Disabled:** `aria-invalid` turns the edge and `--fx` to the error ink, and the error message leads with the bang glyph. Disabled prints a faint fill, the disabled label and the edge screened back to 50 percent; a disabled button inside an input group screens itself, never the box.
 
@@ -584,7 +585,7 @@ The ship's nav, on the deep ground. Everything that prints on the ground (status
 
 ### Fleet rail (signature)
 
-The column of ship marks down the left of every ship surface, on the deep ground: home, then the six ships, each a 32 px mark in a reversed cell. Hover or focus inverts the cell, swaps in the light mark and slides a joined tab out from it at the quick duration, the ship's name over its one-line descriptor; with reduced motion the tab appears in place. The current ship's cell is boxed in plum with its corner square. At 900 px and below the rail is a 48 px bar above the panel, and from the fourth cell on the bar's tab hangs right so it stays on screen. The consumer passes `current`, and optionally the `hrefs`, the ship's `sidebar` and a `markBase`. A ship the `hrefs` leave out links to its fleet url, and home to superthread's; a ship with no url, or an href of `null`, prints as a disabled cell (`aria-disabled`), its mark at half opacity unless it is the current ship.
+The column of ship marks down the left of every ship surface, on the deep ground: home, the ships, then the mode cell, each ship a 32 px mark in a reversed cell. `lib/fleet` lists soliton too, but with `rail: false`: its mark serves other places and has no cell here. Hover or focus inverts the cell, swaps in the light mark and slides a joined tab out from it at the quick duration, the ship's name over its one-line descriptor; with reduced motion the tab appears in place. The current ship's cell is boxed in plum with its corner square. The mode cell is the fleet's one light and dark toggle, so a ship adds no mode control of its own. Above 900 px the rail and `sidebar` stick to the top of the window while the panel scrolls. At 900 px and below the rail is a 48 px bar above the panel that scrolls with the page, and from the fourth cell on the bar's tab hangs right so it stays on screen. The consumer passes `current`, and optionally the `hrefs`, the ship's `sidebar` and a `markBase`. A ship the `hrefs` leave out links to its fleet url, and home to superthread's; a ship with no url, or an href of `null`, prints as a disabled cell (`aria-disabled`), its mark at half opacity unless it is the current ship.
 
 ### Card, label and separator
 

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "states",
+  "title": "states",
+  "description": "what a collection shows while it loads, when it fails and when it is empty",
+  "registryDependencies": [
+    "@mk/button",
+    "@mk/glyphs",
+    "@mk/skeleton",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/blocks/states.tsx",
+      "content": "import { cn } from \"@/components/superthread/lib/utils\";\nimport { Button } from \"@/components/superthread/ui/button\";\nimport { StatusGlyph } from \"@/components/superthread/ui/glyphs\";\nimport { Skeleton } from \"@/components/superthread/ui/skeleton\";\n// @mk/states 2.3.0\n\n// The three places a collection holds when it has no rows to show: still loading, failed, or empty. Each stands where\n// the rows would, at the rows' left edge, and says what happened in the collection's own words.\n\n// Loading: rows at the table's height, each a still bar through the 18.75 percent screen, read out once as loading.\nconst WIDTHS = [\"w-3/4\", \"w-1/2\", \"w-2/3\", \"w-2/5\"] as const;\n\nfunction LoadingState({\n  className,\n  rows = 3,\n  label = \"loading\",\n  ...props\n}: React.ComponentProps<\"div\"> & { rows?: number; label?: string }) {\n  return (\n    <div\n      role=\"status\"\n      aria-label={label}\n      data-slot=\"loading-state\"\n      data-mk=\"states\"\n      className={cn(\"flex flex-col\", className)}\n      {...props}\n    >\n      {Array.from({ length: rows }, (_, row) => (\n        <div key={row} className=\"flex h-(--spacing-row-table) items-center border-b border-border px-4\">\n          <Skeleton className={WIDTHS[row % WIDTHS.length]} />\n        </div>\n      ))}\n    </div>\n  );\n}\n\n// Failed: the failed glyph, what failed, why, and a way to try again. The glyph is the only colour, at badge scale.\nfunction FailedState({\n  className,\n  title = \"this did not load\",\n  onRetry,\n  retryLabel = \"try again\",\n  children,\n  ...props\n}: Omit<React.ComponentProps<\"div\">, \"title\"> & {\n  title?: React.ReactNode;\n  onRetry?: () => void;\n  retryLabel?: string;\n}) {\n  return (\n    <div\n      role=\"alert\"\n      data-slot=\"failed-state\"\n      data-mk=\"states\"\n      className={cn(\"flex flex-col items-start gap-4 px-4 pt-7\", className)}\n      {...props}\n    >\n      <p className=\"flex items-start gap-2.5 type-instrument text-muted-foreground\">\n        <StatusGlyph state=\"failed\" className=\"mt-[3px]\" />\n        <span>\n          <b className=\"block font-medium text-foreground\">{title}</b>\n          {children}\n        </span>\n      </p>\n      {onRetry && (\n        <Button variant=\"outline\" size=\"sm\" onClick={onRetry}>\n          {retryLabel}\n        </Button>\n      )}\n    </div>\n  );\n}\n\n// Empty: an optional figure (an app's empty plate in its crop marks), then what is missing and how to fill it.\nfunction EmptyState({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-state\"\n      data-mk=\"states\"\n      className={cn(\"flex flex-col items-start gap-7 px-4 pt-7\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction EmptyStateMedia({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"empty-state-media\" aria-hidden=\"true\" className={cn(\"w-full\", className)} {...props} />;\n}\n\nfunction EmptyStateText({\n  className,\n  title,\n  children,\n  ...props\n}: Omit<React.ComponentProps<\"p\">, \"title\"> & { title: React.ReactNode }) {\n  return (\n    <p data-slot=\"empty-state-text\" className={cn(\"type-instrument text-muted-foreground\", className)} {...props}>\n      <b className=\"block font-medium text-foreground\">{title}</b>\n      {children}\n    </p>\n  );\n}\n\nfunction EmptyStateActions({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"empty-state-actions\" className={cn(\"flex flex-wrap gap-2\", className)} {...props} />;\n}\n\nexport { EmptyState, EmptyStateActions, EmptyStateMedia, EmptyStateText, FailedState, LoadingState };\n",
+      "type": "registry:component",
+      "target": "@components/superthread/blocks/states.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.3.0",
+    "sha256": "75d2863d4ce7f0451700f5a205ad62d0a6d1ca7c267a6893370a215f838225b7",
+    "tier": "block",
+    "upstream": null,
+    "serves": [
+      "constellation",
+      "quanta",
+      "trisys",
+      "orbit",
+      "artifacts"
+    ]
+  },
+  "type": "registry:block"
+}

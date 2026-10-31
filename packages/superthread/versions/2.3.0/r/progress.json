@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress",
+  "title": "progress",
+  "description": "a flat house-ink bar with a screened leading edge",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/progress.tsx",
+      "content": "import { Progress as ProgressPrimitive } from \"@base-ui/react/progress\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/progress 2.3.0\n\n// The bar sits above its meter: a 12 px track with a 1 px edge, and an 8 px fill at a 1 px inset. The meter's label\n// and value read below it in 13/20, the value in mono.\nfunction Progress({ className, children, value, ...props }: ProgressPrimitive.Root.Props) {\n  return (\n    <ProgressPrimitive.Root\n      value={value}\n      data-slot=\"progress\"\n      data-mk=\"progress\"\n      className={cn(\"flex flex-wrap items-baseline gap-x-3 gap-y-2.5\", className)}\n      {...props}\n    >\n      {children}\n      <ProgressTrack>\n        <ProgressIndicator />\n      </ProgressTrack>\n    </ProgressPrimitive.Root>\n  );\n}\n\nfunction ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {\n  return (\n    <ProgressPrimitive.Track\n      className={cn(\n        \"relative order-first flex h-3 w-full items-center overflow-hidden border border-input p-px\",\n        className,\n      )}\n      data-slot=\"progress-track\"\n      {...props}\n    />\n  );\n}\n\n// A flat fill in the house ink whose leading 24 px is the 24 x 8 ramp (texture-ramp, one of the five places). A\n// finished bar has no leading edge, so it prints solid. Width travels at the brand ease, and reduced motion zeroes\n// the duration, so the bar steps. max-h holds the fill to 8 px against Base UI's inline height: inherit.\nfunction ProgressIndicator({ className, ...props }: ProgressPrimitive.Indicator.Props) {\n  return (\n    <ProgressPrimitive.Indicator\n      data-slot=\"progress-indicator\"\n      className={cn(\n        \"h-2 max-h-2 texture-ramp transition-[width] duration-(--duration-travel) ease-(--ease-brand) data-complete:[mask:none]\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction ProgressLabel({ className, ...props }: ProgressPrimitive.Label.Props) {\n  return (\n    <ProgressPrimitive.Label\n      className={cn(\"text-instrument text-muted-foreground\", className)}\n      data-slot=\"progress-label\"\n      {...props}\n    />\n  );\n}\n\nfunction ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {\n  return (\n    <ProgressPrimitive.Value\n      className={cn(\"ml-auto font-mono text-instrument text-muted-foreground tabular-nums\", className)}\n      data-slot=\"progress-value\"\n      {...props}\n    />\n  );\n}\n\nexport { Progress, ProgressTrack, ProgressIndicator, ProgressLabel, ProgressValue };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/progress.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.3.0",
+    "sha256": "d7b5c1e78ef3330aa58d4a23edb84494f414b8da3b36a652b46684a7aae71e12",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "progress",
+      "sha256": "359e72beff723311ec2e4d5154a0f80dedd253bd6b16959a4db0773714ceab52",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

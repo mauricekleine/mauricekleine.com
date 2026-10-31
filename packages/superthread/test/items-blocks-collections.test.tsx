@@ -76,7 +76,7 @@ describe("collection toolbar", () => {
   test("the chip boxes the filter and the clear button has an inside ring and a name", () => {
     const host = toolbar();
     expect(one(host, '[data-slot="filter-chip"]').classes).toEqual(
-      expect.arrayContaining(["border-primary", "bg-accent", "min-h-8"]),
+      expect.arrayContaining(["border-primary", "bg-accent", "min-h-10"]),
     );
     const clear = one(host, '[aria-label="clear filter"]');
     expect(clear.el.getAttribute("type")).toBe("button");

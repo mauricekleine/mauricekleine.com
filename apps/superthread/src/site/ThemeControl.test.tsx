@@ -5,8 +5,8 @@ import { afterAll, afterEach, beforeAll, describe, expect, test } from "bun:test
 import { GlobalRegistrator } from "@happy-dom/global-registrator";
 import { act } from "react";
 import type { Root } from "react-dom/client";
+import { themeKey, themeScript } from "@/components/superthread/lib/theme";
 import { ThemeControl } from "./ThemeControl";
-import { themeKey, themeScript } from "./theme-script";
 
 const globals = globalThis as Record<string, unknown>;
 let createRoot: typeof import("react-dom/client").createRoot;
@@ -126,8 +126,30 @@ describe("the mode control with storage", () => {
     await choose("light");
     expect(page()).toEqual({ theme: "light", choice: "light", dark: false, checked: ["light"] });
 
-    stored.set(themeKey, "dark");
+    document.cookie = `${themeKey}=dark`;
     await act(async () => void window.dispatchEvent(new StorageEvent("storage", { key: themeKey })));
     expect(page()).toEqual({ theme: "dark", choice: "dark", dark: true, checked: ["dark"] });
+  });
+
+  test("follows a choice another ship stored when the page comes back", async () => {
+    systemDark(false);
+    await load();
+    await choose("light");
+
+    document.cookie = `${themeKey}=dark`;
+    await act(async () => void window.dispatchEvent(new Event("focus")));
+    expect(page()).toEqual({ theme: "dark", choice: "dark", dark: true, checked: ["dark"] });
+  });
+
+  test("keeps another ship's choice through a reload after the cookie expires", async () => {
+    systemDark(false);
+    await load();
+    await choose("light");
+
+    document.cookie = `${themeKey}=dark`;
+    await act(async () => void window.dispatchEvent(new Event("focus")));
+    document.cookie = `${themeKey}=; max-age=0`;
+    new Function(themeScript)();
+    expect(document.documentElement.getAttribute("data-theme-choice")).toBe("dark");
   });
 });

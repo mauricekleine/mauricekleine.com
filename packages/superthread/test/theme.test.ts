@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { applyTheme, chooseTheme, readChoice, themeKey, themeScript, type ThemeChoice } from "./theme-script";
+import { applyTheme, readChoice, setThemeChoice, themeKey, themeScript, type ThemeChoice } from "../items/lib/theme";
 
-type Fakes = { root: FakeRoot; storage: FakeStorage };
+type Fakes = { root: FakeRoot; storage: FakeStorage; page: FakePage };
 
 class FakeRoot {
   classes = new Set<string>();
@@ -34,29 +34,60 @@ class FakeStorage {
   }
 }
 
-const globals = globalThis as Record<string, unknown>;
-const saved = { document: globals.document, localStorage: globals.localStorage, matchMedia: globals.matchMedia };
+// document.cookie and the theme-color tag, as a page holds them
+class FakePage {
+  written = "";
+  meta: FakeMeta | null = null;
+  constructor(public documentElement: FakeRoot) {}
+  get cookie() {
+    return this.written.split("; ")[0] ?? "";
+  }
+  set cookie(value: string) {
+    this.written = value;
+  }
+  querySelector() {
+    return this.meta;
+  }
+}
+
+class FakeMeta {
+  content = "#000000";
+  getAttribute(name: string) {
+    return { "data-light": "#ffffff", "data-dark": "#16181d" }[name] ?? null;
+  }
+}
+
+const names = ["document", "localStorage", "matchMedia", "location"] as const;
+const saved = names.map((name) => [name, Object.getOwnPropertyDescriptor(globalThis, name)] as const);
+const define = (name: (typeof names)[number], value: unknown) =>
+  Object.defineProperty(globalThis, name, { configurable: true, writable: true, value });
 
 // installs the fakes as the globals the script and applyTheme read
 function install(stored: string | null, systemDark: boolean | "throws", broken = false): Fakes {
   const root = new FakeRoot();
   const storage = new FakeStorage(stored === null ? {} : { [themeKey]: stored }, broken);
-  globals.document = { documentElement: root };
-  globals.localStorage = storage;
-  globals.matchMedia = (query: string) => {
+  const page = new FakePage(root);
+  define("document", page);
+  define("localStorage", storage);
+  define("location", { hostname: "orbit.mauricekleine.com", protocol: "https:" });
+  define("matchMedia", (query: string) => {
     if (systemDark === "throws") throw new Error("no matchMedia");
     expect(query).toBe("(prefers-color-scheme: dark)");
     return { matches: systemDark };
-  };
-  return { root, storage };
+  });
+  return { root, storage, page };
 }
 
-afterEach(() => Object.assign(globals, saved));
+afterEach(() => {
+  for (const [name, descriptor] of saved) {
+    if (descriptor) Object.defineProperty(globalThis, name, descriptor);
+    else delete (globalThis as Record<string, unknown>)[name];
+  }
+});
 
 const runScript = () => new Function(themeScript)();
 
 const state = ({ root }: Fakes) => ({
-  dark: root.classes.has("dark"),
   classes: [...root.classes],
   theme: root.attributes.get("data-theme"),
   choice: root.attributes.get("data-theme-choice"),
@@ -84,8 +115,7 @@ describe("the inline theme script", () => {
     const fakes = install(stored, systemDark, broken);
     runScript();
     expect(state(fakes)).toEqual({
-      dark: theme === "dark",
-      classes: theme === "dark" ? ["dark"] : [],
+      classes: [theme],
       theme,
       choice,
       colorScheme: theme,
@@ -94,7 +124,22 @@ describe("the inline theme script", () => {
 
   test("reads the key the runtime writes", () => {
     expect(themeScript).toContain(`localStorage.getItem("${themeKey}")`);
-    expect(themeKey).toBe("superthread-theme");
+    expect(themeKey).toBe("mk-theme");
+  });
+
+  test("the cookie wins over this ship's own copy", () => {
+    const fakes = install("light", false);
+    fakes.page.cookie = `${themeKey}=dark`;
+    runScript();
+    expect(state(fakes).choice).toBe("dark");
+    expect(readChoice()).toBe("dark");
+  });
+
+  test("sets a theme-color tag ahead of it", () => {
+    const fakes = install("dark", false);
+    fakes.page.meta = new FakeMeta();
+    runScript();
+    expect(fakes.page.meta.content).toBe("#16181d");
   });
 
   test("is one self-contained statement with no em dash", () => {
@@ -116,27 +161,39 @@ describe("applyTheme matches the script", () => {
     expect(state(viaRuntime)).toEqual(expected);
   });
 
-  test("switching from dark to light drops the class", () => {
+  test("switching from dark to light swaps the class and the theme-color", () => {
     const fakes = install("dark", false);
+    fakes.page.meta = new FakeMeta();
     runScript();
     expect(fakes.root.classes.has("dark")).toBe(true);
-    chooseTheme("light");
-    expect(state(fakes)).toEqual({ dark: false, classes: [], theme: "light", choice: "light", colorScheme: "light" });
+    setThemeChoice("light");
+    expect(state(fakes)).toEqual({ classes: ["light"], theme: "light", choice: "light", colorScheme: "light" });
+    expect(fakes.page.meta.content).toBe("#ffffff");
   });
 
-  test("chooseTheme stores the choice, and the script reads it back", () => {
+  test("a choice is stored for the whole fleet, and the script reads it back", () => {
     for (const choice of ["light", "dark", "auto"] satisfies ThemeChoice[]) {
       const fakes = install(null, true);
-      chooseTheme(choice);
+      setThemeChoice(choice);
+      expect(fakes.page.written).toBe(
+        `${themeKey}=${choice}; path=/; max-age=34560000; samesite=lax; domain=mauricekleine.com; secure`,
+      );
       expect(fakes.storage.getItem(themeKey)).toBe(choice);
       runScript();
       expect(state(fakes).choice).toBe(choice);
     }
   });
 
-  test("chooseTheme still applies when storage is off", () => {
+  test("away from the fleet's domain the cookie stays on its host", () => {
+    const fakes = install(null, true);
+    define("location", { hostname: "localhost", protocol: "http:" });
+    setThemeChoice("dark");
+    expect(fakes.page.written).toBe(`${themeKey}=dark; path=/; max-age=34560000; samesite=lax`);
+  });
+
+  test("a choice still applies when storage is off", () => {
     const fakes = install(null, false, true);
-    expect(chooseTheme("dark")).toBe("dark");
-    expect(state(fakes).dark).toBe(true);
+    setThemeChoice("dark");
+    expect(state(fakes).theme).toBe("dark");
   });
 });

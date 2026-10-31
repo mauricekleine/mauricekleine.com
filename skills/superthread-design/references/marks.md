@@ -21,6 +21,7 @@ The spot pops at rail and fleet-row sizes (32 to 48 px) and in the chart. At 16 
 | trisys        | flare orange |
 | constellation | nova violet  |
 | artifacts     | manila gold  |
+| telemetry     | tachyon teal |
 | soliton       | canal indigo |
 | superthread   | plum         |
 
@@ -37,7 +38,7 @@ https://superthread.mauricekleine.com/marks/<id>/<id>.svg
 https://superthread.mauricekleine.com/marks/<id>/<id>-dark.svg
 ```
 
-`FleetRail` reads them from its `markBase` prop, which defaults to `https://superthread.mauricekleine.com/marks`. A surface that hosts its own copies passes its own folder. `@mk/fleet` (`lib/fleet.ts`) lists the ships in rail order, each with its id, name, line-screen angle and mark file names.
+`FleetRail` reads them from its `markBase` prop, which defaults to `https://superthread.mauricekleine.com/marks`. A surface that hosts its own copies passes its own folder. `@mk/fleet` (`lib/fleet.ts`) lists the ships in rail order, each with its id, name, rail membership, line-screen angle and mark file names. A ship with `"rail": false` in the manifest, soliton today, keeps its mark for other places and has no rail cell.
 
 In the mauricekleine.com repo, `packages/superthread/marks/fleet.json` owns fleet membership and new star marks. `apps/superthread/public/marks/` keeps the original master marks as byte copies alongside generated marks. `PROVENANCE.json` records each file's source and sha256.
 
