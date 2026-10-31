@@ -1,7 +1,7 @@
 import { env } from "cloudflare:workers";
 import handler, { createServerEntry } from "@tanstack/react-start/server-entry";
+import { themeScript } from "@/components/superthread/lib/theme";
 import { handle, type WorkerEnv } from "./server-behavior";
-import { themeScript } from "./site/theme-script";
 
 const securityHeaders = {
   "strict-transport-security": "max-age=31536000",

@@ -24,6 +24,10 @@ export type MarkShip = {
   mark: Pair;
   kind: "master" | "star" | "glyph";
   home?: boolean;
+  // false keeps a ship's mark in the set and out of the fleet rail
+  rail?: boolean;
+  // what a drawn glyph's spot is called; a new star has none
+  spotName?: string;
 };
 type Manifest = { schema: 1; fleet: MarkShip[] };
 type Provenance = {
@@ -61,6 +65,7 @@ export function loadFleet(): Manifest {
       throw new Error(`${ship.id}: angle must be unique, 0 to 179`);
     angles.add(ship.angle);
     if (!["master", "star", "glyph"].includes(ship.kind)) throw new Error(`${ship.id}: invalid kind`);
+    if (ship.rail !== undefined && ship.rail !== false) throw new Error(`${ship.id}: rail is false or left out`);
     for (const mode of modes) {
       if (ship.mark[mode] !== `${ship.id}${mode === "dark" ? "-dark" : ""}.svg`)
         throw new Error(`${ship.id}: invalid ${mode} mark filename`);
@@ -71,14 +76,14 @@ export function loadFleet(): Manifest {
   return manifest;
 }
 
-// Each ship carries its url, the rail's default link for its cell; soliton has none, so its cell stays disabled. The
-// home ship (superthread) is left out of the fleet and exported on its own for the rail's home mark.
+// Each ship carries its url, the rail's default link for its cell, and whether it takes a cell at all. The home ship
+// (superthread) is left out of the fleet and exported on its own for the rail's home mark.
 export function fleetSource(manifest: Manifest): string {
   const fleet = manifest.fleet
     .filter((ship) => !ship.home)
-    .map(({ id, name, desc, url, angle, mark }) => ({ id, name, desc, url, angle, mark }));
+    .map(({ id, name, desc, url, angle, mark, rail }) => ({ id, name, desc, url, rail: rail !== false, angle, mark }));
   const { id, name, url } = manifest.fleet.find((ship) => ship.home)!;
-  return `// the fleet, in its order: generated from marks/fleet.json; edit the manifest, then run bun run build in packages/superthread\n// desc is the line under a ship's name in the rail's tab. Each mark is a file name under the consumer's mark base.\n// url is where the rail links a ship by default (null: no link); the consumer's hrefs win over it.\n\nexport const fleet = ${JSON.stringify(fleet, null, 2)} as const\n\nexport const home = ${JSON.stringify({ id, name, url }, null, 2)} as const\n\nexport type Ship = (typeof fleet)[number]\nexport type ShipId = Ship["id"]\n`;
+  return `// the fleet, in its order: generated from marks/fleet.json; edit the manifest, then run bun run build in packages/superthread\n// desc is the line under a ship's name in the rail's tab. Each mark is a file name under the consumer's mark base.\n// url is where the rail links a ship by default (null: no link); the consumer's hrefs win over it. rail: whether the ship takes a rail cell.\n\nexport const fleet = ${JSON.stringify(fleet, null, 2)} as const\n\nexport const home = ${JSON.stringify({ id, name, url }, null, 2)} as const\n\nexport type Ship = (typeof fleet)[number]\nexport type ShipId = Ship["id"]\n`;
 }
 
 // Same integer run paths as the master world's common.mark_svg. A new star is a screened hue tile with one dot.

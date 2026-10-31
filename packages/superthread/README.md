@@ -42,7 +42,8 @@ Only the Start layout is tested. For a surface without Tailwind, `@mk/tokens-pla
 - `:root` and `.light` are light; `.dark` on an ancestor is dark. A `.light` inside a dark page renders light again, so specimens can sit side by side.
 - Raised layers (dialog, select list, toast) portal to the end of `<body>` and take the document's mode, so put `.dark` on `<html>`.
 - The tokens load their nine faces from `https://superthread.mauricekleine.com/fonts/`. Unbounded and Fragment Mono (OFL) load on any origin; Supreme and Erode (ITF) load only on `*.mauricekleine.com`, `mk.wtf` and localhost, and other origins fall back to system fonts for them. `fonts.ts` is the face manifest and holds each face's rule.
-- The fleet rail links each ship to its `url` from `marks/fleet.json`, which `lib/fleet.ts` carries, and the home mark to `https://superthread.mauricekleine.com`. Pass `hrefs` to override any of them: `"/"` for your own ship, `null` for a cell with no link. A ship with no url (soliton) is a disabled cell. Pass `markBase` if the marks live somewhere other than `https://superthread.mauricekleine.com/marks`.
+- `@mk/theme` holds the one light and dark choice: `themeScript` runs first in `<head>` before anything paints, and the fleet rail's mode cell sets it. The choice lives in the `mk-theme` cookie on `mauricekleine.com`, so every ship shares it, and follows the system until someone picks.
+- The fleet rail links each ship to its `url` from `marks/fleet.json`, which `lib/fleet.ts` carries, and the home mark to `https://superthread.mauricekleine.com`. Pass `hrefs` to override any of them: `"/"` for your own ship, `null` for a cell with no link. A ship with no url is a disabled cell. A ship with `"rail": false` in the manifest (soliton) stays in `fleet` with its marks and gets no cell. Pass `markBase` if the marks live somewhere other than `https://superthread.mauricekleine.com/marks`.
 
 ### pinning a version
 
@@ -159,7 +160,7 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 ## Versions and stamps
 
-- **Version.** `package.json` `version` is the one source for every item, `2.2.0` now. A fix to a served item ships as the next patch, a new item or variant as the next minor, and a changed API as the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
+- **Version.** `package.json` `version` is the one source for every item, `2.3.0` now. A fix to a served item ships as the next patch, a new item or variant as the next minor, and a changed API as the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
 - **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. In CSS, `/* @mk/<item> <version> */` is line 1.
 - **Meta.** Each built item JSON carries `meta: { version, sha256, tier, upstream }`: the hash of its targets and contents, its tier, and the base-nova item and CLI it was seeded from. A block's meta adds `serves`, the apps it serves. Meta stays in the registry and never reaches an installed file.
 - **Paths.** Latest: `/r/<name>.json` and `/r/registry.json`. Pinned: `/r/v/<version>/<name>.json` and `/r/v/<version>/registry.json`. Index: `/r/versions.json`, `{ latest, versions }`.

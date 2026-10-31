@@ -13,7 +13,7 @@
 | block | `app-shell`, `page-header`, `section-header`, `collection-toolbar`, `list-rows`, `item-cards`, `data-table`, `states`, `facts`, `form-section`, `quick-add`, `notice`, `search-palette` |
 
 - **style**: `init` sets up an app; `tokens` is the theme (colour roles, type, motion, shape and the texture tiles).
-- **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `tokens-plain` is the theme as plain CSS and a typed module.
+- **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `theme` holds the fleet's light and dark choice; `tokens-plain` is the theme as plain CSS and a typed module.
 - **brand**: superthread's own components. They keep shadcn's Base UI API (exports, props, `data-slot`, variants) and add `data-mk="<item>"` on the root.
 - **pass**: base-nova's items as shadcn ships them, on the superthread tokens.
 - **block**: the compositions the fleet's apps repeat, built from the items: a shell, headers, collections, forms, notices and states. Each installs at `components/superthread/blocks/<name>.tsx`; its meta names the apps it serves. Reach for a block before composing the same pattern by hand.
@@ -51,6 +51,8 @@ A surface without Tailwind installs `@mk/tokens-plain`: `styles/superthread-plai
 - `:root` and `.light` are light. `.dark` on an ancestor is dark, and a `.light` inside it is light again, so two specimens can sit side by side.
 - Raised layers (dialog, select list, toast, sheet) portal to the end of `<body>` and take the document's mode, so the mode class goes on `<html>`.
 - The tokens carry the mode, so items and app code use roles, never `dark:` classes.
+- `@mk/theme` owns the mode. Render its `themeScript` as the first thing in `<head>`, after a `<meta name="theme-color" data-light="..." data-dark="...">`, and the script sets the class, `data-theme`, `data-theme-choice`, `color-scheme` and the meta before anything paints.
+- There is one choice across the fleet: the `mk-theme` cookie on `mauricekleine.com`, with a localStorage copy, following the system until someone picks. `FleetRail`'s mode cell sets it, so a ship adds no toggle or key of its own. Other controls use `useThemeChoice`, `useTheme`, `setThemeChoice` and `toggleTheme`.
 
 ## fonts and origins
 
@@ -65,8 +67,9 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 ```
 
 - `current` is the ship's id; its cell is boxed in plum.
-- `hrefs` maps `home` and ship ids to URLs, and only needs the links that differ from the fleet's. `@mk/fleet` carries each ship's public url from the marks manifest, so a ship left out links there and `home` links to superthread. Pass `"/"` for the app's own ship and `null` to unlink a cell. A ship with no url (soliton) prints as a disabled cell.
-- `sidebar` is the ship's own nav, which prints beside the rail on the deep ground.
+- `hrefs` maps `home` and ship ids to URLs, and only needs the links that differ from the fleet's. `@mk/fleet` carries each ship's public url from the marks manifest, so a ship left out links there and `home` links to superthread. Pass `"/"` for the app's own ship and `null` to unlink a cell. A ship with no url prints as a disabled cell, and one with `"rail": false` in the manifest (soliton) gets no cell.
+- `sidebar` is the ship's own nav, which prints beside the rail on the deep ground. Above 900 px both stick to the top of the window while the panel scrolls.
+- The last cell is the mode toggle.
 - `markBase` changes where the marks load from; `label` is the rail's accessible name (default `fleet`).
 
 ## pinning a version

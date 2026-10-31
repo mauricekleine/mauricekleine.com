@@ -33,8 +33,9 @@ function Page() {
           to it. with reduced motion the tab shows without the slide.
         </p>
         <p className="st-c-copy">
-          a ship with no link prints at half and takes no hover. at 900 px and below the rail turns into a bar across
-          the top, and the name drops under the cell.
+          a ship with no link prints at half and takes no hover. the last cell is the mode toggle: one choice, shared by
+          every ship. above 900 px the rail and the ship&rsquo;s nav stay put while the panel scrolls; at 900 px and
+          below the rail turns into a bar across the top, and the name drops under the cell.
         </p>
         <ModePair className="st-c-stack">
           <div className="st-c-rails">
@@ -81,7 +82,7 @@ function Page() {
           <dd>
             where each cell goes, by ship id, and <code>home</code> for the superthread mark at the top. a ship left out
             links to its fleet url, and home to superthread.mauricekleine.com; pass <code>&quot;/&quot;</code> for your
-            own ship. <code>null</code>, or a ship with no url (soliton), is a disabled cell.
+            own ship. <code>null</code>, or a ship with no url, is a disabled cell.
           </dd>
           <dt>
             <code>markBase</code>

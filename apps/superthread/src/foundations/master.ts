@@ -14,8 +14,7 @@ export const modes: readonly Mode[] = ["light", "dark"];
 export const recipes: Record<Mode, Readonly<Record<string, string>>> = recipe;
 
 const masterShip = (id: ShipId) => (ships as Partial<Record<ShipId, (typeof ships)[keyof typeof ships]>>)[id];
-export const spotName = (id: ShipId): string =>
-  masterShip(id)?.["spot name"] ?? (markShip(id).kind === "star" ? "new star" : markShip(id).desc);
+export const spotName = (id: ShipId): string => masterShip(id)?.["spot name"] ?? markShip(id).spotName ?? "new star";
 
 // the least distance a ship's spot keeps from the house ink, oklab delta e x 100 (the master's floors unit)
 export const spotFloor: number = house.floors["lead house inks from every ship spot"];

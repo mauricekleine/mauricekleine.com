@@ -21,7 +21,7 @@ import { mkdirSync, rmSync, writeFileSync, appendFileSync, readdirSync } from "n
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { prerenderPaths } from "../src/site/nav.ts";
-import { themeKey } from "../src/site/theme-script.ts";
+import { themeKey } from "../../../packages/superthread/items/lib/theme.ts";
 
 const { values } = parseArgs({
   args: Bun.argv.slice(2),

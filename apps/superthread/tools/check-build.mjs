@@ -13,7 +13,7 @@ import { fileURLToPath } from "node:url";
 const app = join(dirname(fileURLToPath(import.meta.url)), "..");
 const pkg = join(app, "../../packages/superthread");
 const { prerenderPaths } = await import("../src/site/nav.ts");
-const { themeScript } = await import("../src/site/theme-script.ts");
+const { themeScript } = await import("../../../packages/superthread/items/lib/theme.ts");
 const { catalog } = await import("../../../packages/superthread/items/catalog.ts");
 
 const failures = [];
@@ -31,6 +31,7 @@ const PUBLISHED_VERSIONS = [
   "2.1.0",
   "2.1.1",
   "2.2.0",
+  "2.3.0",
 ];
 
 // the client output: cf's build output, or Vite's own when the Cloudflare plugin writes there

@@ -20,6 +20,7 @@ const originalDrawings: Partial<Record<MarkId, string>> = {
   constellation: "four stars; the figure drawn between them takes the spot",
   artifacts: "a sheet lifted out of a folder; the folder takes the spot",
   soliton: "one solitary wave; the water under its crest takes the spot",
+  telemetry: "five readings on a chart; the body of each bar takes the spot",
 };
 
 // New ships live in the marks manifest until their glyph is drawn; the master stays immutable.

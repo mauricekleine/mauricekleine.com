@@ -87,6 +87,24 @@
       "kind": "master"
     },
     {
+      "id": "telemetry",
+      "name": "telemetry",
+      "desc": "dashboards, logs and alerts",
+      "target": "soliton",
+      "url": "https://telemetry.mauricekleine.com",
+      "angle": 153,
+      "spot": {
+        "light": "#14b8a6",
+        "dark": "#2dd4bf"
+      },
+      "mark": {
+        "light": "telemetry.svg",
+        "dark": "telemetry-dark.svg"
+      },
+      "kind": "glyph",
+      "spotName": "tachyon teal"
+    },
+    {
       "id": "soliton",
       "name": "soliton",
       "desc": "the server",
@@ -101,7 +119,8 @@
         "light": "soliton.svg",
         "dark": "soliton-dark.svg"
       },
-      "kind": "master"
+      "kind": "master",
+      "rail": false
     },
     {
       "id": "superthread",

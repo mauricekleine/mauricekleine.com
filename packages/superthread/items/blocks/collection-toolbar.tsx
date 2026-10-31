@@ -69,7 +69,7 @@ function FilterChip({
       data-mk="collection-toolbar"
       data-slot="filter-chip"
       className={cn(
-        "flex min-h-8 min-w-0 max-w-full items-center gap-2 border border-primary bg-accent pl-3 text-ui text-foreground",
+        "flex min-h-10 min-w-0 max-w-full items-center gap-2 border border-primary bg-accent pl-3 text-ui text-foreground",
         className,
       )}
       {...props}
@@ -81,7 +81,7 @@ function FilterChip({
         type="button"
         aria-label={clearLabel}
         onClick={onClear}
-        className="flex w-8 shrink-0 items-center justify-center self-stretch transition-[background-color] duration-(--duration-instant) ease-(--ease-brand) hover:bg-control-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)"
+        className="flex w-10 shrink-0 items-center justify-center self-stretch transition-[background-color] duration-(--duration-instant) ease-(--ease-brand) hover:bg-control-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)"
       >
         <Icon name="close" />
       </button>
@@ -148,7 +148,6 @@ function ViewSwitch({
         aria-label={label}
         multiple={false}
         variant="outline"
-        size="sm"
         spacing={0}
         disabled={disabled}
         value={[selected]}

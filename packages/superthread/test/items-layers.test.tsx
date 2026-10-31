@@ -59,6 +59,8 @@ const slotsOf = (code: string) =>
 const ADDED: Partial<Record<Item, string[]>> = { toast: ["ToastIcon", "ToastList"] };
 const shadcnExports = (name: Item) => [...exportsOf(upstream(name)), ...(ADDED[name] ?? [])].sort();
 
+const ships = fleet.filter((ship) => ship.rail);
+
 describe("the layer sources", () => {
   test("each item names exactly the component detail its catalog entry claims", () => {
     const found = Object.fromEntries(
@@ -221,9 +223,9 @@ describe("the layers rendered", () => {
     expect(rail).not.toBeNull();
     const home = rail.querySelector('[data-slot="fleet-rail-home"]')!;
     const cells = [...rail.querySelectorAll('[data-slot="fleet-rail-cell"]')];
-    expect(cells.map(nameOf)).toEqual(fleet.map((ship) => ship.name));
+    expect(cells.map(nameOf)).toEqual(ships.map((ship) => ship.name));
     expect(home.getAttribute("href")).toBe("/");
-    expect(cells.map((cell) => cell.getAttribute("href"))).toEqual(fleet.map((ship) => HREFS[ship.id]));
+    expect(cells.map((cell) => cell.getAttribute("href"))).toEqual(ships.map((ship) => HREFS[ship.id]));
     expect([home, ...cells].every((el) => el.tagName === "A")).toBe(true);
 
     const current = [...dom.querySelectorAll("[aria-current]")];
@@ -242,7 +244,7 @@ describe("the layers rendered", () => {
     expect(local.sort()).toEqual(
       [
         "/marks/superthread/superthread-dark.svg",
-        ...fleet.flatMap((ship) => [`/marks/${ship.id}/${ship.mark.dark}`, `/marks/${ship.id}/${ship.mark.light}`]),
+        ...ships.flatMap((ship) => [`/marks/${ship.id}/${ship.mark.dark}`, `/marks/${ship.id}/${ship.mark.light}`]),
       ].sort(),
     );
     expect(srcs(<FleetRail current="orbit" hrefs={HREFS} markBase="/marks/" />).sort()).toEqual(local);
@@ -267,9 +269,12 @@ describe("the layers rendered", () => {
       ["trisys", "/", null],
       ["constellation", "https://constellation.mauricekleine.com", null],
       ["artifacts", "https://artifacts.mauricekleine.com", null],
-      ["soliton", null, "true"],
+      ["telemetry", "https://telemetry.mauricekleine.com", null],
     ]);
     expect([...dom.querySelectorAll("[aria-current]")].map(nameOf)).toEqual(["trisys"]);
+    // soliton keeps its mark and takes no cell; the last cell is the mode control
+    expect(rail.querySelector('[aria-label="soliton"]')).toBeNull();
+    expect(rail.querySelector('[data-slot="fleet-rail-mode"]')?.tagName).toBe("BUTTON");
   });
 
   test("an href of null unlinks a cell or the home mark, and an href given wins over the fleet url", () => {
@@ -317,7 +322,7 @@ describe("the layers rendered", () => {
     expect(darkScope(wrapper)).toBeNull();
     expect(darkScope(frame)).toBe(frame);
     const cells = [...frame.querySelectorAll('[data-slot="fleet-rail-cell"], [data-slot="fleet-rail-home"]')];
-    expect(cells.length).toBe(fleet.length + 1);
+    expect(cells.length).toBe(ships.length + 1);
     for (const el of [...cells, button]) expect(frame.contains(darkScope(el))).toBe(true);
     expect(darkScope(wrapper.querySelector("main"))).toBeNull();
   });
@@ -623,7 +628,7 @@ describe("the layers rendered", () => {
   test("the rail's hidden tab never shows as the viewport crosses 900 px, and each cell keeps its ship's name", () => {
     const dom = server(<FleetRail current="orbit" hrefs={{ orbit: "/orbit" }} />);
     const cells = [...dom.querySelectorAll('[data-slot="fleet-rail-cell"]')];
-    expect(cells.length).toBe(fleet.length);
+    expect(cells.length).toBe(ships.length);
     for (const cell of cells) {
       const classes = classesOf(cell.querySelector('[data-slot="fleet-rail-label"]')!);
       const rail = insetOf(classes.find((c) => c.startsWith("[clip-path:")))!;
@@ -636,7 +641,7 @@ describe("the layers rendered", () => {
       expect(transitioned(classes)).toEqual(expect.arrayContaining(["clip-path", "visibility"]));
     }
     // An invisible tab names nothing, so the cell names its ship.
-    expect(cells.map((cell) => cell.getAttribute("aria-label"))).toEqual(fleet.map((ship) => ship.name));
+    expect(cells.map((cell) => cell.getAttribute("aria-label"))).toEqual(ships.map((ship) => ship.name));
   });
 
   // Integration-only in S1.F round 2b: the descriptors are fleet.ts's, which S1.F-L generates from the vendored DESC.
@@ -651,7 +656,7 @@ describe("the layers rendered", () => {
       const cells = [...dom.querySelectorAll('[data-slot="fleet-rail-cell"]')];
       const lines = (cell: Element) =>
         [...cell.querySelector('[data-slot="fleet-rail-label"]')!.children].map((line) => line.textContent);
-      expect(cells.map(lines)).toEqual(fleet.map((ship) => [ship.name, ship.desc]));
+      expect(cells.map(lines)).toEqual(ships.map((ship) => [ship.name, ship.desc]));
       expect(fleet.every((ship) => typeof ship.desc === "string" && ship.desc.length > 0)).toBe(true);
 
       for (const cell of cells) {
