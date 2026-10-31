@@ -40,7 +40,15 @@ https://superthread.mauricekleine.com/marks/<id>/<id>-dark.svg
 
 `FleetRail` reads them from its `markBase` prop, which defaults to `https://superthread.mauricekleine.com/marks`. A surface that hosts its own copies passes its own folder. `@mk/fleet` (`lib/fleet.ts`) lists the ships in rail order, each with its id, name, rail membership, line-screen angle and mark file names. A ship with `"rail": false` in the manifest, soliton today, keeps its mark for other places and has no rail cell.
 
-In the mauricekleine.com repo, `packages/superthread/marks/fleet.json` owns fleet membership and new star marks. `apps/superthread/public/marks/` keeps the original master marks as byte copies alongside generated marks. `PROVENANCE.json` records each file's source and sha256.
+[Download marks at /icons](https://superthread.mauricekleine.com/icons): the home mark and every current ship, in both chromes. Each drawing has its SVG and transparent PNGs at 16, 32, 48, 64, 128, 256, 512 and 1024 px. PNGs are exact integer upscales of the 16 px grid, with hard edges and transparent corner notches. Plain download links work without JavaScript. A per-mark zip includes both SVGs and every PNG size; the whole-set zip includes every current mark.
+
+```
+https://superthread.mauricekleine.com/marks/<id>/png/<id>-<light|dark>-<size>.png
+https://superthread.mauricekleine.com/marks/<id>/<id>.zip
+https://superthread.mauricekleine.com/marks/superthread-icons.zip
+```
+
+In the mauricekleine.com repo, `packages/superthread/marks/fleet.json` owns fleet membership and new star marks. `apps/superthread/public/marks/` keeps the original master marks as byte copies alongside generated marks. `PROVENANCE.json` records the SVGs' sources and sha256. The site's build and dev generate PNGs and zips with no extra dependency, embedding PNG source metadata and recording derived files in `DOWNLOADS.json`. These files are build output and inherit the marks' CORS and one-day cache headers.
 
 ## icons
 

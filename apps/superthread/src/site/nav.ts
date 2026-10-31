@@ -3,7 +3,8 @@
 
 export type Layout = "docs" | "app";
 
-export type NavSection = "overview" | "foundations" | "components" | "compositions" | "mock pages" | "install";
+export type NavSection =
+  "overview" | "foundations" | "icons" | "components" | "compositions" | "mock pages" | "install";
 
 export type NavEntry = {
   path: string;
@@ -47,6 +48,7 @@ export const nav: readonly NavEntry[] = [
   foundation("motion"),
   foundation("marks"),
   foundation("texture"),
+  { path: "/icons", title: "icons", section: "icons", layout: "docs" },
   component("button"),
   component("button-group"),
   component("toggle"),
@@ -110,6 +112,7 @@ export const nav: readonly NavEntry[] = [
 export const navSections: readonly NavSection[] = [
   "overview",
   "foundations",
+  "icons",
   "components",
   "compositions",
   "mock pages",

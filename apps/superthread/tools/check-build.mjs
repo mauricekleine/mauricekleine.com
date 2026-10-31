@@ -6,6 +6,7 @@
 // Prints each failure and exits 1 on any. CHECK_BUILD_OUT and CHECK_BUILD_VERSIONS point it at another client output
 // and another versions/ tree, for a negative control on a copy.
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, dirname, extname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -166,6 +167,24 @@ for (const area of ["texture", "marks"]) {
     continue;
   }
   const names = named(JSON.parse(readFileSync(record, "utf8")));
+  if (area === "marks") {
+    const downloads = join(dir, "DOWNLOADS.json");
+    if (!existsSync(downloads)) fail("provenance", "marks/DOWNLOADS.json is missing");
+    else {
+      names.add("DOWNLOADS.json");
+      const generated = JSON.parse(readFileSync(downloads, "utf8"));
+      for (const [file, receipt] of Object.entries(generated.files)) {
+        names.add(file);
+        if (!existsSync(join(dir, file))) fail("mark downloads", `${file} is missing`);
+        else if (
+          createHash("sha256")
+            .update(readFileSync(join(dir, file)))
+            .digest("hex") !== receipt.sha256
+        )
+          fail("mark downloads", `${file} differs from its provenance`);
+      }
+    }
+  }
   for (const file of files) {
     const local = relative(dir, file).split(sep).join("/");
     if (![local, `${area}/${local}`, `/${area}/${local}`, basename(file)].some((name) => names.has(name)))

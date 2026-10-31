@@ -8,6 +8,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { prerenderPaths } from "./src/site/nav.ts";
+import { generateMarkDownloads } from "./tools/mark-downloads.ts";
 
 const local = (path: string) => fileURLToPath(new URL(path, import.meta.url));
 
@@ -38,6 +39,9 @@ const items = (command: "build" | "serve") => {
   if (!existsSync(payload)) throw new Error("no .payload/; run bun run build:superthread from the repo root");
   return payload;
 };
+
+// Vite copies public/ into the asset output for build and serves it directly in dev. Generate before either.
+generateMarkDownloads(local("./public/marks"));
 
 export default defineConfig(({ command }) => ({
   define: {

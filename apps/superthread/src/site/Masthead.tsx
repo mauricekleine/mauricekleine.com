@@ -36,7 +36,7 @@ export function Mark({ size = 32 }: { size?: number }) {
 
 // where the page sits: the system for the overview, install and the not-found page, its section otherwise
 function crumbFor(section: string) {
-  return section === "overview" || section === "install" ? "superthread" : section;
+  return section === "overview" || section === "icons" || section === "install" ? "superthread" : section;
 }
 
 // The masthead's cells, left to right: the mark and wordmark, the crumb and the search, the system's name, version
