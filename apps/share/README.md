@@ -85,10 +85,12 @@ Each request sees one committed version; a page loading assets during replacemen
 can span versions. Re-share replaces the whole snapshot and invalidates prior cookies.
 
 Artifacts must be self-contained, in both modes, just as on the private vhost.
-The required opaque-origin sandbox and no-CORS policy prevent same-host ES modules,
-web fonts and `fetch()` of sibling files from loading. Inline scripts/styles/data,
-embedded images and external fonts with CORS (such as Superthread's public fonts)
-work. In PIN mode, the browser also withholds SameSite=Lax cookies from opaque-origin
+The required opaque-origin sandbox and no-CORS policy prevent same-host ES modules
+and `fetch()` of sibling files from loading. Inline scripts/styles/data, embedded
+images and fonts with CORS work. The Worker carries Superthread's nine faces and
+serves them at `/_fonts/<file>` to `Origin: null`, the origin a sandboxed page sends,
+because the font host refuses that origin for Supreme and Erode. `mk artifacts` pages
+and the PIN page load them from there. In PIN mode, the browser also withholds SameSite=Lax cookies from opaque-origin
 subresource requests, so embed images/styles rather than relying on sibling files.
 Assets, PDFs and media remain available as direct top-level links after unlocking;
 their HTTP MIME behavior does not imply they can be fetched by a sandboxed document.

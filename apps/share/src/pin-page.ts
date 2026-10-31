@@ -1,4 +1,7 @@
-import theme from "../../../packages/superthread/dist/v2/superthread-plain.css";
+import tokens from "../../../packages/superthread/dist/v2/superthread-plain.css";
+
+// The faces load from this Worker: see fonts.ts.
+const theme = tokens.replaceAll("https://superthread.mauricekleine.com/fonts/", "/_fonts/");
 
 // No script runs under this page's CSP, so the worker prints the fleet's stored mode as a class, and with no choice
 // stored the dark block answers to the system instead.

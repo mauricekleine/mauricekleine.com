@@ -56,7 +56,7 @@ A surface without Tailwind installs `@mk/tokens-plain`: `styles/superthread-plai
 
 ## fonts and origins
 
-The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. Unbounded and Fragment Mono (OFL) load on any origin. Supreme and Erode (ITF) load only on `*.mauricekleine.com`, `mk.wtf` and localhost; on any other origin those two fall back to system fonts. To print in all four faces, a surface runs on one of those origins. A page under a CSP `sandbox` without `allow-same-origin` requests fonts as `Origin: null` and falls back too, even on those hosts; `mk artifacts` pages load them through the artifacts host's `/_fonts/` proxy.
+The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. Unbounded and Fragment Mono (OFL) load on any origin. Supreme and Erode (ITF) load only on `*.mauricekleine.com`, `mk.wtf` and localhost; on any other origin those two fall back to system fonts. To print in all four faces, a surface runs on one of those origins. A page under a CSP `sandbox` without `allow-same-origin` requests fonts as `Origin: null` and falls back too, even on those hosts, so the artifacts host and the share Worker serve the faces themselves at `/_fonts/<file>`, the path `mk artifacts` pages list first.
 
 ## the fleet rail
 
