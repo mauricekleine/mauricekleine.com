@@ -30,3 +30,14 @@ test("a page carries the client entry", async () => {
 test("the lost page carries none", async () => {
   expect(await render("/404")).not.toContain(`src="${entry}"`);
 });
+
+test("every page sets the mode before it paints, and only a hydrated page offers the control", async () => {
+  const home = await render("/");
+  const lost = await render("/404");
+  for (const page of [home, lost]) {
+    expect(page.indexOf('name="theme-color"')).toBeLessThan(page.indexOf("mk-theme"));
+    expect(page.indexOf("mk-theme")).toBeLessThan(page.indexOf("<body"));
+  }
+  expect(home).toContain('role="radiogroup"');
+  expect(lost).not.toContain('role="radiogroup"');
+});

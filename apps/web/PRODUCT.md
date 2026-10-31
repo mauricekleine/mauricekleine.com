@@ -18,14 +18,14 @@ Playful, honest, understated. A builder talking to builders: lowercase, short li
 
 ## Anti-references
 
-- The generic dev personal site: monospace font + off-white + accent links (what this site was before).
+- The generic dev personal site: monospace font + off-white + accent links.
 - Corporate consultant pages: headshot-and-services, "empowering businesses through AI".
 - Fluncle/Spinup clones: siblings share cosmic DNA but this page is calmer and personal, not a product landing.
 - Resume-shaped pages. No timeline, no skills grid, no testimonials.
 
 ## Design Principles
 
-1. **The night sky is the personality.** One committed scene (canvas star field, the 2022 idea finally shipped) instead of decoration sprinkled on a plain page.
+1. **The night sky is the personality.** One committed scene, the 2022 idea finally shipped, printed as a live two-ink screen in the opener's band instead of decoration sprinkled on a plain page.
 2. **Ended experiments are shown, not hidden.** The graveyard is a first-class section; outcomes stated plainly.
 3. **One page, one scroll, every word earns its place.** Copy in Maurice's voice is the content; nothing padded. Essays get their own pages so the one-pager stays one page.
 4. **Small internet thing.** Prerendered HTML from a small TanStack Start app on Cloudflare Workers. Pages stay light enough to read like hand-written ones. The craft is the flex.
@@ -33,4 +33,4 @@ Playful, honest, understated. A builder talking to builders: lowercase, short li
 
 ## Accessibility & Inclusion
 
-WCAG AA contrast on dark background (body text ≥4.5:1). Star-field animation fully disabled under prefers-reduced-motion (static render). Keyboard-visible focus states. Semantic single-page structure, meaningful link text, alt text in voice.
+WCAG AA contrast in both modes (body text ≥4.5:1). The sky prints one still frame under prefers-reduced-motion. Keyboard-visible focus states. Semantic single-page structure, meaningful link text, alt text in voice.

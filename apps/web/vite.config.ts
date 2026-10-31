@@ -11,7 +11,15 @@ const essayPaths = readdirSync(new URL("./content/essays/", import.meta.url))
   .map((name) => `/essays/${name.slice(0, -3)}`);
 
 export default defineConfig({
-  resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
+  resolve: {
+    alias: [
+      {
+        find: "@/components/superthread",
+        replacement: fileURLToPath(new URL("../../packages/superthread/items", import.meta.url)),
+      },
+      { find: "@", replacement: fileURLToPath(new URL("./src", import.meta.url)) },
+    ],
+  },
   plugins: [
     cloudflare({
       viteEnvironment: { name: "ssr" },

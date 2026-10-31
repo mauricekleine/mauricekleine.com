@@ -10,7 +10,11 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "types": ["vite/client"],
-    "paths": { "@/*": ["./src/*"] }
+    "paths": {
+      "@/components/superthread/*": ["../../packages/superthread/items/*"],
+      "@/*": ["./src/*"]
+    },
+    "resolveJsonModule": true
   },
   "include": ["src", "vite.config.ts"]
 }

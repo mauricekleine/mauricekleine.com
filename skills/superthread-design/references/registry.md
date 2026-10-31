@@ -1,6 +1,6 @@
 # registry
 
-`@mk` is a shadcn registry of Base UI items on the superthread tokens, served at https://superthread.mauricekleine.com/r/. The version is `2.0.0`. Each item's page on the site shows it in light and dark with its install line.
+`@mk` is a shadcn registry of Base UI items on the superthread tokens, served at https://superthread.mauricekleine.com/r/. `/r/versions.json` lists the versions. Each item's page on the site shows it in light and dark with its install line.
 
 ## items
 
@@ -51,7 +51,7 @@ A surface without Tailwind installs `@mk/tokens-plain`: `styles/superthread-plai
 - `:root` and `.light` are light. `.dark` on an ancestor is dark, and a `.light` inside it is light again, so two specimens can sit side by side.
 - Raised layers (dialog, select list, toast, sheet) portal to the end of `<body>` and take the document's mode, so the mode class goes on `<html>`.
 - The tokens carry the mode, so items and app code use roles, never `dark:` classes.
-- `@mk/theme` owns the mode. Render its `themeScript` as the first thing in `<head>`, after a `<meta name="theme-color" data-light="..." data-dark="...">`, and the script sets the class, `data-theme`, `data-theme-choice`, `color-scheme` and the meta before anything paints.
+- `@mk/theme` owns the mode. Render its `themeScript` in `<head>`, after a `<meta name="theme-color" data-light="..." data-dark="...">`, and the script sets the class, `data-theme`, `data-theme-choice`, `color-scheme` and the meta before anything paints.
 - There is one choice across the fleet: the `mk-theme` cookie on `mauricekleine.com`, with a localStorage copy, following the system until someone picks. `FleetRail`'s mode cell sets it, so a ship adds no toggle or key of its own. Other controls use `useThemeChoice`, `useTheme`, `setThemeChoice` and `toggleTheme`.
 
 ## fonts and origins
@@ -77,7 +77,7 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.0.0/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.3.1/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions with a snapshot. A snapshot never changes once it is published.

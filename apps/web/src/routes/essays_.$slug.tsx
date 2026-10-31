@@ -1,8 +1,9 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { essayNeighbors, essaysBySlug } from "../essay-content";
-import { EssayArticle } from "../essay-markdown";
-import { EssayNav, Footer, Hero, Subscribe } from "../components";
+import { EssayArticle, essayHeadings } from "../essay-markdown";
+import { EssayNav, Footer, PageHead, Subscribe } from "../components";
 import { essayHead } from "../seo";
+import { Shell } from "../shell";
 
 export const Route = createFileRoute("/essays_/$slug")({
   loader: ({ params }) => {
@@ -18,12 +19,9 @@ function EssayPage() {
   const essay = Route.useLoaderData();
   const { older, newer } = essayNeighbors(essay);
   return (
-    <>
-      <Hero className="hero page-hero">
-        <p className="hero-meta">
-          <a href="/essays">← essays</a>
-        </p>
-        <h1 className="essay-title">{essay.title}</h1>
+    <Shell place="essays" crumb="essays" title={essay.title} sections={essayHeadings(essay)}>
+      <PageHead>
+        <h1 className="essay-title type-page">{essay.title}</h1>
         <p className="essay-meta">
           by <a href="/about">maurice kleine</a> · <time dateTime={essay.date}>{essay.dateDisplay}</time> · first posted
           on <a href={essay.x}>x</a>
@@ -34,15 +32,15 @@ function EssayPage() {
             </>
           )}
         </p>
-      </Hero>
+      </PageHead>
       <EssayArticle essay={essay} />
       <Subscribe />
       <Footer>
         <EssayNav older={older} newer={newer} />
-        <p>
+        <p className="type-meta">
           <a href="/essays">← all essays</a>
         </p>
       </Footer>
-    </>
+    </Shell>
   );
 }

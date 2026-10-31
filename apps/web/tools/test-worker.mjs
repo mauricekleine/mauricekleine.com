@@ -349,6 +349,8 @@ test("GET /subscribe/confirm rejects a tampered token", async () => {
     assert.equal(res.status, 410);
     const body = await res.text();
     assert.match(body, /essays/);
+    assert.match(body, /mk-theme/, "the no-js page follows the fleet's mode");
+    assert.match(body, /src="\/sky\.js"/);
     assert.equal(stub.calls.length, 0);
   } finally {
     stub.restore();
@@ -510,8 +512,8 @@ test("/superthread and its assets move to superthread.mauricekleine.com", async 
       ["/superthread", "https://superthread.mauricekleine.com/"],
       ["/superthread/", "https://superthread.mauricekleine.com/"],
       ["/superthread?ref=x", "https://superthread.mauricekleine.com/?ref=x"],
-      ["/superthread/marks/orbit.svg", "https://superthread.mauricekleine.com/marks/orbit.svg"],
-      ["/superthread/marks/orbit.svg?ref=x", "https://superthread.mauricekleine.com/marks/orbit.svg?ref=x"],
+      ["/superthread/marks/orbit.svg", "https://superthread.mauricekleine.com/marks/orbit/orbit.svg"],
+      ["/superthread/marks/orbit.svg?ref=x", "https://superthread.mauricekleine.com/marks/orbit/orbit.svg?ref=x"],
       ["/superthread/nonobench-mark.svg", "https://superthread.mauricekleine.com/nonobench-mark.svg"],
     ]) {
       const res = await worker.fetch(new Request(origin + path, { method }), noAssets);

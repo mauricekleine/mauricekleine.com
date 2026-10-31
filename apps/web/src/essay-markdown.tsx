@@ -1,6 +1,27 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Children, isValidElement, type ReactNode } from "react";
 import { articleMarkdown, type Essay } from "./essay-content";
+import type { PageSection } from "./shell";
+
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+const textOf = (node: ReactNode): string =>
+  Children.toArray(node)
+    .map((child) => (isValidElement<{ children?: ReactNode }>(child) ? textOf(child.props.children) : String(child)))
+    .join("");
+
+// the sections "on this page" lists, read from the same markdown the article renders
+export function essayHeadings(essay: Essay): PageSection[] {
+  return [...articleMarkdown(essay).matchAll(/^## (.+)$/gm)].map(([, heading]) => {
+    const title = heading.replace(/[*_`]/g, "");
+    return { id: slugify(title), title };
+  });
+}
 
 export function EssayArticle({ essay }: { essay: Essay }) {
   return (
@@ -14,6 +35,9 @@ export function EssayArticle({ essay }: { essay: Essay }) {
                 ? href.slice(0, -3)
                 : href;
             return <a href={target}>{children}</a>;
+          },
+          h2({ children }) {
+            return <h2 id={slugify(textOf(children).replace(/[*_`]/g, ""))}>{children}</h2>;
           },
           p({ node, children }) {
             const imageOnly =

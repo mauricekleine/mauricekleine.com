@@ -6,7 +6,7 @@
     "build": "node tools/sync-projects.ts && python3 tools/sync-essays.py && vite build && bun --check",
     "dev": "vite dev --port 3000",
     "preview": "vite preview",
-    "test": "bun test tools/mcp.test.ts src/lost-page.test.tsx && node tools/test-worker.mjs && node tools/sync-projects.ts --check && node tools/test-projects.mjs"
+    "test": "bun test tools/mcp.test.ts src/lost-page.test.tsx src/essay-markdown.test.tsx && node tools/test-worker.mjs && node tools/sync-projects.ts --check && node tools/test-projects.mjs"
   },
   "dependencies": {
     "@base-ui/react": "~1.8.0",
