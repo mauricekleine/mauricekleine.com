@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "notice",
+  "title": "notice",
+  "description": "a flat notice in the flow: its status glyph, what happened and what to do",
+  "registryDependencies": [
+    "@mk/glyphs",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/blocks/notice.tsx",
+      "content": "import { cn } from \"@/components/superthread/lib/utils\";\nimport { Icon, StatusGlyph, type StatusState } from \"@/components/superthread/ui/glyphs\";\n// @mk/notice 2.3.1\n\n// A flat notice in the page's own fill. Only the small glyph takes status ink; failures interrupt, other updates wait.\nfunction Notice({\n  className,\n  state,\n  children,\n  ...props\n}: Omit<React.ComponentProps<\"div\">, \"role\"> & { state?: StatusState }) {\n  return (\n    <div\n      {...props}\n      data-mk=\"notice\"\n      data-slot=\"notice\"\n      data-state={state}\n      role={state === \"failed\" ? \"alert\" : \"status\"}\n      className={cn(\"flex min-w-0 gap-3 border border-border p-4\", className)}\n    >\n      <span data-slot=\"notice-glyph\" className=\"mt-1 flex shrink-0\">\n        {state ? <StatusGlyph state={state} aria-label={state} /> : <Icon name=\"i\" />}\n      </span>\n      <div\n        data-slot=\"notice-content\"\n        className=\"grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-4 gap-y-1 [@media(max-width:600px)]:grid-cols-1\"\n      >\n        {children}\n      </div>\n    </div>\n  );\n}\n\n// The notice's first sentence carries the point in interface type.\nfunction NoticeTitle({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"notice-title\"\n      className={cn(\"col-start-1 min-w-0 text-ui font-medium [overflow-wrap:anywhere]\", className)}\n      {...props}\n    />\n  );\n}\n\n// Supporting words stay quiet and wrap within the page.\nfunction NoticeDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"notice-description\"\n      className={cn(\"col-start-1 min-w-0 type-instrument text-muted-foreground [overflow-wrap:anywhere]\", className)}\n      {...props}\n    />\n  );\n}\n\n// The app's buttons sit beside the words, then wrap beneath them on a phone.\nfunction NoticeActions({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"notice-actions\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 flex flex-wrap items-center gap-2 self-center [@media(max-width:600px)]:col-start-1 [@media(max-width:600px)]:row-span-1 [@media(max-width:600px)]:row-start-auto [@media(max-width:600px)]:mt-2\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Notice, NoticeTitle, NoticeDescription, NoticeActions };\n",
+      "type": "registry:component",
+      "target": "@components/superthread/blocks/notice.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.3.1",
+    "sha256": "24f1fb614769a63041c7537482f45425ef0b0095bdca1d607719d4bc2d1508ca",
+    "tier": "block",
+    "upstream": null,
+    "serves": [
+      "constellation",
+      "trisys",
+      "orbit",
+      "artifacts"
+    ]
+  },
+  "type": "registry:block"
+}

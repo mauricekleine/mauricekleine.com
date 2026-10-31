@@ -7,6 +7,7 @@ const pkg = resolve(import.meta.dir, "..");
 const repo = resolve(pkg, "../..");
 const publicMarks = join(repo, "apps/superthread/public/marks");
 const manifestPath = join(pkg, "marks/fleet.json");
+const detailsPath = join(pkg, "tokens/details.json");
 const fleetPath = join(pkg, "items/lib/fleet.ts");
 const KEY = "#16181d";
 const PAPER = "#ffffff";
@@ -46,6 +47,12 @@ function baseUrl(value: string): string {
   if (!["https:", "http:"].includes(url.protocol) || url.username || url.password || url.search || url.hash)
     throw new Error("url must be an http(s) base URL without credentials, query or fragment");
   return url.href.replace(/\/$/, "");
+}
+
+// The angles with a line screen of their own: the world's, and each one mirrored, which generate.ts derives.
+function screenAngles(): number[] {
+  const own = Object.keys((JSON.parse(read(detailsPath)) as { screens: object }).screens).map(Number);
+  return [...new Set([...own, ...own.map((angle) => 180 - angle)])].filter((a) => a < 180).sort((a, b) => a - b);
 }
 
 export function loadFleet(): Manifest {
@@ -262,7 +269,8 @@ function newShip(manifest: Manifest, id: string, options: Map<string, string>): 
       }
     }
   if (!spot) throw new Error("no distinct hue slot remains; draw a glyph and extend the palette deliberately");
-  const angle = Array.from({ length: 180 }, (_, i) => i).find((n) => !manifest.fleet.some((s) => s.angle === n))!;
+  const free = (n: number) => !manifest.fleet.some((s) => s.angle === n);
+  const angle = screenAngles().find(free) ?? Array.from({ length: 180 }, (_, i) => i).find(free)!;
   const ship: MarkShip = {
     id,
     name,

@@ -95,7 +95,10 @@ type Master = {
 const path = (p: string): Source => ({ path: p });
 const each = (f: (m: Mode) => Source) => ({ light: f("light"), dark: f("dark") });
 
-export function roles(master: Master): Role[] {
+// A star is a ship the manifest added after the master world: its spot comes from marks/fleet.json.
+export type Star = { id: string; spot: Record<Mode, string> };
+
+export function roles(master: Master, stars: readonly Star[] = []): Role[] {
   const out: Omit<Role, "provisional">[] = [];
   const add = (name: string, sources: { light: Source; dark: Source }) => out.push({ name, ...sources });
 
@@ -271,6 +274,11 @@ export function roles(master: Master): Role[] {
     add(
       `ship-${ship}`,
       each((m) => path(`ships.${ship}.${m}.spot`)),
+    );
+  for (const { id, spot } of stars)
+    add(
+      `ship-${id}`,
+      each((m) => ({ hex: spot[m], from: `marks/fleet.json ${id}` })),
     );
 
   add(

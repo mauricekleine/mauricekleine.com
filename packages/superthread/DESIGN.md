@@ -100,6 +100,7 @@ colors:
   ship-trisys: "#e9772a" # provisional
   ship-constellation: "#a970f0" # provisional
   ship-artifacts: "#e3ae34" # provisional
+  ship-telemetry: "#14b8a6" # provisional
   ship-soliton: "#6272e9" # provisional
   shadow-ink: "#020203" # provisional
   # dark: --<role> under .dark
@@ -194,6 +195,7 @@ colors:
   dark-ship-trisys: "#f38745" # provisional
   dark-ship-constellation: "#b085ec" # provisional
   dark-ship-artifacts: "#e7b546" # provisional
+  dark-ship-telemetry: "#2dd4bf" # provisional
   dark-ship-soliton: "#6a7be5" # provisional
   dark-shadow-ink: "#000000" # provisional
 typography:
@@ -323,7 +325,7 @@ Every value comes from one source, `tokens/master.json`, vendored unchanged from
 - Two inks: key `#16181d` on white stock `#ffffff`, and white on key in dark. Every neutral is a tint of the two.
 - One house ink, plum (`#aa337a`, dark `#c074a1`), for every control, link, focus ring and current item.
 - Five statuses at badge scale only, each with its glyph square and its word. Failed is the one solid badge.
-- Six ship spots that print only in their marks and chart series.
+- Seven ship spots that print only in their marks and chart series.
 - Four faces with one job each: Unbounded, Supreme, Erode and Fragment Mono.
 - Radius 0, 1 px edges, full-bleed rules.
 - One focus ring for controls and one inside edge for fields.
@@ -373,7 +375,7 @@ Five states, at badge scale only. A badge is a fill near the stock (`-wash`), a 
 
 ### Ship spots
 
-Each ship has one bright spot. It prints in the ship's mark (so its rail cell and fleet row) and in its chart series, and nowhere else. `--ship-<id>` names each; `--chart-1` to `--chart-5` are orbit, constellation, quanta, artifacts and trisys. These roles are new in v2 and provisional. telemetry's tachyon teal lives in the marks manifest: it prints only in its mark, so it is none of these roles and has no chart series.
+Each ship has one bright spot. It prints in the ship's mark (so its rail cell and fleet row) and in its chart series, and nowhere else. `--ship-<id>` names each; `--chart-1` to `--chart-5` are orbit, constellation, quanta, artifacts and trisys. These roles are new in v2 and provisional.
 
 | ship          | spot         | light     | dark      | line screen angle |
 | ------------- | ------------ | --------- | --------- | ----------------- |
@@ -382,9 +384,10 @@ Each ship has one bright spot. It prints in the ship's mark (so its rail cell an
 | trisys        | flare orange | `#e9772a` | `#f38745` | 27                |
 | constellation | nova violet  | `#a970f0` | `#b085ec` | 63                |
 | artifacts     | manila gold  | `#e3ae34` | `#e7b546` | 135               |
+| telemetry     | tachyon teal | `#14b8a6` | `#2dd4bf` | 153               |
 | soliton       | canal indigo | `#6272e9` | `#6a7be5` | 117               |
 
-Every spot stays at least 10 from plum (oklab delta E x 100), and its dithered region clears 3:1 on its mark's tile.
+Every spot stays at least 10 from plum (oklab delta E x 100), and its dithered region clears 3:1 on its mark's tile. A ship the master world doesn't name, such as telemetry, takes its spot and angle from `marks/fleet.json`; its role and line screen are generated like the others. An angle the world has no screen for mirrors its screen at 180 minus that angle, or takes the nearest one.
 
 ### Screens
 

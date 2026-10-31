@@ -1369,6 +1369,21 @@
           "oklch(0.95 0.0508 83.61)"
         ]
       },
+      "ship-telemetry": {
+        "role": "spot",
+        "displayName": "telemetry spot, tachyon teal",
+        "canonical": "oklch(0.7038 0.123 182.5)",
+        "tonalRamp": [
+          "oklch(0.15 0.0276 182.5)",
+          "oklch(0.2643 0.0475 182.5)",
+          "oklch(0.3786 0.0678 182.5)",
+          "oklch(0.4929 0.0881 182.5)",
+          "oklch(0.6071 0.1085 182.5)",
+          "oklch(0.7214 0.123 182.5)",
+          "oklch(0.8357 0.123 182.5)",
+          "oklch(0.95 0.0719 182.5)"
+        ]
+      },
       "ship-soliton": {
         "role": "spot",
         "displayName": "soliton spot, canal indigo",
@@ -2764,6 +2779,21 @@
           "oklch(0.95 0.0513 83.97)"
         ]
       },
+      "dark-ship-telemetry": {
+        "role": "spot",
+        "displayName": "telemetry spot, tachyon teal (dark)",
+        "canonical": "oklch(0.7845 0.1325 181.91)",
+        "tonalRamp": [
+          "oklch(0.15 0.0277 181.91)",
+          "oklch(0.2643 0.0476 181.91)",
+          "oklch(0.3786 0.068 181.91)",
+          "oklch(0.4929 0.0884 181.91)",
+          "oklch(0.6071 0.1089 181.91)",
+          "oklch(0.7214 0.1293 181.91)",
+          "oklch(0.8357 0.1325 181.91)",
+          "oklch(0.95 0.0719 181.91)"
+        ]
+      },
       "dark-ship-soliton": {
         "role": "spot",
         "displayName": "soliton spot, canal indigo (dark)",
@@ -3033,7 +3063,7 @@
       "Two inks: key `#16181d` on white stock `#ffffff`, and white on key in dark. Every neutral is a tint of the two.",
       "One house ink, plum (`#aa337a`, dark `#c074a1`), for every control, link, focus ring and current item.",
       "Five statuses at badge scale only, each with its glyph square and its word. Failed is the one solid badge.",
-      "Six ship spots that print only in their marks and chart series.",
+      "Seven ship spots that print only in their marks and chart series.",
       "Four faces with one job each: Unbounded, Supreme, Erode and Fragment Mono.",
       "Radius 0, 1 px edges, full-bleed rules.",
       "One focus ring for controls and one inside edge for fields.",

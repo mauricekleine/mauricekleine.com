@@ -39,12 +39,13 @@ export const drawn = Object.fromEntries(
 ) as Record<MarkId, string>;
 
 // a chart series' line screen per ship, written out so Tailwind finds each class in this source
-export const lineScreen: Partial<Record<ShipId, string>> = {
+export const lineScreen: Record<ShipId, string> = {
   orbit: "texture-line-orbit",
   quanta: "texture-line-quanta",
   trisys: "texture-line-trisys",
   constellation: "texture-line-constellation",
   artifacts: "texture-line-artifacts",
+  telemetry: "texture-line-telemetry",
   soliton: "texture-line-soliton",
 };
 
