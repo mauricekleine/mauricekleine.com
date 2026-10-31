@@ -85,6 +85,7 @@ function attach() {
     if (document.visibilityState === "hidden") return;
     const choice = stored();
     if (choice === null || choice === getChoice()) return;
+    store(choice); // the copy follows, so this ship can't bring back its old choice when the cookie expires
     applyTheme(choice);
     notify();
   };

@@ -58,6 +58,7 @@ function js<T = unknown>(code: string): T {
 // stores the mode for the site's origin, so every page after it opens in that mode
 function store(mode: Mode) {
   ab("open", `${base}/`);
+  js(`document.cookie = ${JSON.stringify(`${themeKey}=${mode}; path=/`)}`);
   js(`localStorage.setItem(${JSON.stringify(themeKey)}, ${JSON.stringify(mode)})`);
 }
 

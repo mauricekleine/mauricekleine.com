@@ -140,4 +140,16 @@ describe("the mode control with storage", () => {
     await act(async () => void window.dispatchEvent(new Event("focus")));
     expect(page()).toEqual({ theme: "dark", choice: "dark", dark: true, checked: ["dark"] });
   });
+
+  test("keeps another ship's choice through a reload after the cookie expires", async () => {
+    systemDark(false);
+    await load();
+    await choose("light");
+
+    document.cookie = `${themeKey}=dark`;
+    await act(async () => void window.dispatchEvent(new Event("focus")));
+    document.cookie = `${themeKey}=; max-age=0`;
+    new Function(themeScript)();
+    expect(document.documentElement.getAttribute("data-theme-choice")).toBe("dark");
+  });
 });
