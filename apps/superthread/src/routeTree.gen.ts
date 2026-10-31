@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as R404RouteImport } from './routes/404'
+import { Route as IconsRouteImport } from './routes/icons'
 import { Route as InstallRouteImport } from './routes/install'
 import { Route as ComponentsAccordionRouteImport } from './routes/components/accordion'
 import { Route as ComponentsAlertDialogRouteImport } from './routes/components/alert-dialog'
@@ -83,6 +84,11 @@ const IndexRoute = IndexRouteImport.update({
 const R404Route = R404RouteImport.update({
   id: '/404',
   path: '/404',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IconsRoute = IconsRouteImport.update({
+  id: '/icons',
+  path: '/icons',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InstallRoute = InstallRouteImport.update({
@@ -407,6 +413,7 @@ const MockReadingRoute = MockReadingRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/404': typeof R404Route
+  '/icons': typeof IconsRoute
   '/install': typeof InstallRoute
   '/components/accordion': typeof ComponentsAccordionRoute
   '/components/alert-dialog': typeof ComponentsAlertDialogRoute
@@ -474,6 +481,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/404': typeof R404Route
+  '/icons': typeof IconsRoute
   '/install': typeof InstallRoute
   '/components/accordion': typeof ComponentsAccordionRoute
   '/components/alert-dialog': typeof ComponentsAlertDialogRoute
@@ -542,6 +550,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/404': typeof R404Route
+  '/icons': typeof IconsRoute
   '/install': typeof InstallRoute
   '/components/accordion': typeof ComponentsAccordionRoute
   '/components/alert-dialog': typeof ComponentsAlertDialogRoute
@@ -611,6 +620,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/404'
+    | '/icons'
     | '/install'
     | '/components/accordion'
     | '/components/alert-dialog'
@@ -678,6 +688,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/404'
+    | '/icons'
     | '/install'
     | '/components/accordion'
     | '/components/alert-dialog'
@@ -745,6 +756,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/404'
+    | '/icons'
     | '/install'
     | '/components/accordion'
     | '/components/alert-dialog'
@@ -813,6 +825,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   R404Route: typeof R404Route
+  IconsRoute: typeof IconsRoute
   InstallRoute: typeof InstallRoute
   ComponentsAccordionRoute: typeof ComponentsAccordionRoute
   ComponentsAlertDialogRoute: typeof ComponentsAlertDialogRoute
@@ -892,6 +905,13 @@ declare module '@tanstack/react-router' {
       path: '/404'
       fullPath: '/404'
       preLoaderRoute: typeof R404RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/icons': {
+      id: '/icons'
+      path: '/icons'
+      fullPath: '/icons'
+      preLoaderRoute: typeof IconsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/install': {
@@ -1341,6 +1361,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   R404Route: R404Route,
+  IconsRoute: IconsRoute,
   InstallRoute: InstallRoute,
   ComponentsAccordionRoute: ComponentsAccordionRoute,
   ComponentsAlertDialogRoute: ComponentsAlertDialogRoute,

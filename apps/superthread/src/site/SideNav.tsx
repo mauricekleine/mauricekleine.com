@@ -49,7 +49,7 @@ function NavGroup({
   onNavigate?: () => void;
 }) {
   const entries = nav.filter((entry) => entry.section === section);
-  const titled = section !== "overview" && section !== "install";
+  const titled = section !== "overview" && section !== "icons" && section !== "install";
   return (
     <div className={cn("st-sidenav-group", !titled && "st-sidenav-plain")}>
       {titled && <h3 className="type-meta">{section}</h3>}

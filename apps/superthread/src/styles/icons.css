@@ -1,0 +1,85 @@
+@layer components {
+  .st-icons-all {
+    display: inline-block;
+    margin-top: 24px;
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .st-icons {
+    margin-top: 48px;
+  }
+  .st-icon {
+    padding: 20px 0 24px;
+    border-top: 1px solid var(--border);
+    scroll-margin-top: 80px;
+  }
+  .st-icon-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .st-icon a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .st-icon a:hover,
+  .st-icons-all:hover {
+    color: var(--foreground);
+  }
+  .st-icon-head > a {
+    flex-shrink: 0;
+    font-size: 13px;
+  }
+  .st-icon-themes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .st-icon-theme {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    min-width: 0;
+  }
+  .st-icon-preview {
+    display: grid;
+    flex: 0 0 80px;
+    height: 80px;
+    place-items: center;
+  }
+  .st-icon-preview img {
+    image-rendering: pixelated;
+  }
+  .st-icon-files {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 4px 12px;
+    min-width: 0;
+  }
+  .st-icon-files > a {
+    font: 400 12px/24px var(--font-mono);
+  }
+  .st-icon-files ul {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(4, minmax(32px, 1fr));
+    gap: 0 12px;
+  }
+  .st-icon-files li a {
+    display: inline-block;
+    min-width: 24px;
+    padding: 4px 0;
+    font: 400 12px/20px var(--font-mono);
+  }
+  @media (max-width: 1100px) {
+    .st-icon-themes {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+  }
+}
