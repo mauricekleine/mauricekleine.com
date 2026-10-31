@@ -1,6 +1,6 @@
 # mauricekleine.com web app
 
-`apps/web/` is the live TanStack Start app. Read `PRODUCT.md` (product brief) and `DESIGN.md` (the site's visual design) in this folder before changing product or design. www uses superthread's frozen v1 theme, `packages/superthread/dist/superthread.css`; v2 lives in `packages/superthread`.
+`apps/web/` is the live TanStack Start app. Read `PRODUCT.md` (product brief) and `DESIGN.md` (the site's visual design) in this folder before changing product or design. www prints on superthread v2: `src/styles/site.css` imports `packages/superthread/dist/v2/superthread.css`, and the `@/components/superthread` alias resolves to `packages/superthread/items`, so a registry item is used in place with no copy here. Keep `site.css`'s `@source` list in step with the items www imports.
 
 ## Commands
 

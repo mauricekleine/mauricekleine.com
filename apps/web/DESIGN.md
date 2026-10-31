@@ -2,64 +2,61 @@
 
 ## Theme
 
-"Night Garden": a calm night sky over Amsterdam. A full-viewport canvas star field (slow drift, faint twinkle, subtle cursor parallax) sits behind a single centered column of content. Projects are waypoints in the sky; ended projects are burnt-out stars. Sibling energy to Fluncle's cosmos (warm ember on deep dark) but quieter and personal. Descended from a 2022 note: "Foals / Sleeping Giants star particles effect".
+The site prints on Superthread v2, whose values, type and rules live in `packages/superthread/DESIGN.md`. It is a public page in that system: the stock in both modes, full-bleed rules, a boxed nav and an aside, no fleet rail. Flat where you read, screened where you look. The night sky over Amsterdam survives as the one live screen: a 1-bit field in the opener's band, inside crop marks. Descended from a 2022 note: "Foals / Sleeping Giants star particles effect".
 
-## Colors
+## Frame
 
-The site's void colors come from `packages/superthread/DESIGN.md`. `background` is the night sky, `foreground` is starlight, `muted-foreground` is secondary text, `primary` is ember and `ring` is its bright hover. `site.css` owns `floor`, `dim`, `nebula`, `ember-wash` and `glint` for page effects and meta text.
+`src/shell.tsx` follows the superthread site's measures.
 
-## Typography
+- **Masthead**, 77 px and sticky: the wordmark, the crumb, the status block and the plum swatch.
+- **Body**, three columns divided by 1 px rules: the 264 px boxed nav with the mode control at its foot, the page (696 px wide in a column with 56 px gutters) and the 368 px aside with "on this page".
+- **Breakpoints**: 1279 narrows the aside to 312 and the gutters to 40. 1099 drops the aside, and the status prints in the foot instead. 900 makes one column, with the nav as a row under a static masthead and the compact mode control in it. 600 takes the wordmark out of the band and sets it under.
+- **The lost page** has no client entry, so it prints no mode control and no aside. The head script still applies the stored mode.
 
-- Display: **Unbounded** (OFL, self-hosted woff2 under `fonts/`). Wide and rounded; the fleet's display voice per the superthread type stack. Weights: 800 for the h1 wordmark, 600 for section headings.
-- Body: **Supreme** (Fontshare, self-hosted; the CSS API dropped it silently, so the site ran on system-ui until 2026-09-13). Warm, round, legible; reports to Unbounded without competing. Weights: 400 body, 500 emphasis (waypoint names, grave titles).
-- Mono accent: **Fragment Mono** (Google Fonts) — log IDs, status stamps, footer meta. Small doses only.
-- **Bricolage Grotesque is retired** (texture-era refresh, 2026-07-30). It survives only in og.png until that's regenerated.
-- Section headings carry no glyph prefix; the waypoint glyphs are the only stars in the column.
-- Headings lowercase (brand voice). Essay bodies are the exception: they keep the casing they were published with. Scale ratio ≥1.3, fluid clamp() on the display line (clamp tuned so the Unbounded h1 stays one line at 390px), `text-wrap: balance` on headings.
+## Type
+
+Superthread's utilities and faces, from `packages/superthread/dist/v2/superthread.css`: fonts load from `superthread.mauricekleine.com/fonts/`.
+
+- The wordmark is Unbounded 400. `h1` in the band is `type-hero`; section heads are `type-section`.
+- Prose on the home and about pages and in essays is Erode at the read step and a 27.5em measure. Rows are Supreme: `type-subtitle` names over `type-summary` lines.
+- Fragment Mono is for meta: crumbs, status, years, essay bylines.
+- Chrome is lowercase. Essay titles and bodies keep the casing they were published with.
 
 ## Components
 
-- **Waypoint list** (side quests): star glyph + project name (link) + one-liner in Maurice's voice. No cards. Hover: glyph glints ember.
-- **Graveyard entries**: dimmed waypoints with a mono status stamp (`sold`, `dissolved`, `discontinued`, `spun down`) and years. Slightly reduced opacity, never illegible.
-- **Icon row**: Phosphor icons (inline SVG) for GitHub, LinkedIn, X, Reddit, email. 1.5rem, secondary text, bright ember on hover.
-- **Portrait**: existing maurice.png, circular, faint ember glow ring.
+Registry items come from `packages/superthread/items` through the `@/components/superthread` alias, so www never carries a copy. `site.css` owns the page blocks.
 
-## Layout
-
-Single centered column, max-width 40rem, generous vertical rhythm (clamp-based section spacing). Star canvas is `position: fixed`, z-index below content, pointer-events none. One-pager: hero → currently → side quests → graveyard → essays → links → footer.
-
-**Essays** (`/essays`, `/essays/<slug>`): same column and sky. Index is a reversed list (cover thumbnail cropped 5:2 at 85% opacity, title link, one-line summary, mono date). Essay pages use a compact page hero (back link, smaller `.essay-title` h1 because X titles run long, mono meta line) and an `.essay` article at 1.125rem/1.7: plain `h2`/`h3`, `ul`, ember-rule `blockquote`, full-width `figure` images with a hairline border (cover image first), a short centered `hr` for dividers, hairline tables with mono headers, and a dark `pre` for code. No cards, no reading-time badges, no share buttons.
+- **Band** (`Band`): the `#sky` canvas in its crop marks, 696 x 196 and 342 x 136 on a phone; 120 and 96 on inner pages. The title knocks out of the lower left. `public/sky/plate-*.png` is the same field printed, for the moment before the script runs and for readers without scripts.
+- **Portrait** (`public/portrait/`): a two-ink Bayer 4 screen of `maurice.png`, at 196 and 136 px, one file per mode because dark has to print on the light of the face. Set `image-rendering: pixelated` at whole pixels. Regenerate both modes together.
+- **Side quests** (`SideQuests`): a constellation tile (1:1 SVG, 4 px stars, 1 px lines), the project name and one line. The tile takes plum on hover and focus. No cards.
+- **Graveyard**: ledger rows with a `✧`, the name, a `Badge` (`done` for exits, `queued` for the rest) and mono years.
+- **Essays**: rows on the home page; on `/essays`, the cover with a 1 px edge, title, summary and date. The essay page sets the title in `type-page` under the slim band, lists its `h2`s in "on this page" and keeps images at full opacity with a 1 px edge.
+- **Subscribe**: registry `Field` and `InputGroup`. Turnstile follows the mode.
+- **Elsewhere**: 40 px cells with a 1 px edge and Phosphor icons vendored as inline SVG.
 
 ## Motion
 
-- Canvas stars: ~140 stars, slow drift + twinkle, cursor parallax (2 depth layers). rAF, DPR-aware, paused when tab hidden.
-- `prefers-reduced-motion: reduce`: canvas renders one static frame, no animation, no parallax.
-- Content: single soft fade-up on load for the hero only; sections are visible by default (no scroll-gated reveals).
+Motion lives in `public/sky.js` and two stepped CSS moments. The sky runs at 24 fps at CSS pixels, stops when the band leaves the page or the tab hides, and prints one still frame under `prefers-reduced-motion`.
 
-## Texture
+## The sky
 
-Quiet by design (2026-09-13: the texture-era shader stack was retired to cut visual noise; the sky is stars, a faint dithered nebula, and grain). Words beat weather.
+Deliberately overengineered, zero-dependency, and always in one of two inks, resolved from `--first` and `--primary` and read again when the mode changes.
 
-- **Deep currents (retired)** (`currents.js` + `vendor/paper-shaders/`): the warp + neuro-noise + grain-gradient aurora stack lived in `currents.js` + `vendor/paper-shaders/` until 2026-09-13. It is in git history (commit 9ac5ffa) if the sky ever wants weather again.
-- **Dithered neuro nebula** (`texture.js`): a single WebGL fragment shader behind the stars — domain-warped fbm ridges quantized through a Bayer 4 matrix (ordered dither), tinted nebula-violet drifting into ember. Rendered at ~quarter res with `image-rendering: pixelated` so the dither stays chunky. 30fps cap, additive blend at alpha ≤0.11, intensity dimmed in the reading column, paused when hidden, single static frame under reduced motion, skipped entirely without WebGL.
-- **Film grain** (`style.css` `body::after`): SVG feTurbulence tile at 3% opacity, `mix-blend-mode: overlay`, jittered with a `steps(6)` animation; static under reduced motion. Also baked into og.png via og-template.html.
+- **Nebula**: tiled, domain-warped value noise folded into ridges and screened through Superthread's Bayer 4 in plum, drifting slowly. One noise field is built at load.
+- **Stars**: whole pixels and crosses in the first ink, with twinkle as a screen threshold, slow drift and pointer parallax inside the band.
+- **Wish**: clicking the band sends a meteor from the click point; the first wish logs to the console. Meteors also fall on their own every 9 to 25 s.
+- **Sky traffic**: rare flybys, one at a time: a starlink train (always first, 45 to 90 s in), the ISS and a UFO, drawn as 1-bit sprites with plum lights. Each logs a line on first appearance; `window.sky.traffic('starlink' | 'iss' | 'ufo')` summons one.
+- **"dnb"**: typing it pulses the nebula and stars at 174 bpm, fluncle's tempo, for 16 beats.
+- **Console**: a star map, the secrets list and the llms.txt pointer.
 
-## Delight systems
+Beyond the band:
 
-Deliberately overengineered details, all reduced-motion safe and zero-dependency:
-
-- **Constellations**: each side quest owns a shape in the side sky (mockly: chat bubble, fluncle: waveform, hackadam: clubhouse, nonobench: nonogram grid). Idle at alpha 0.14; hover/focus on a `[data-constellation]` waypoint reveals lines + a Fragment Mono label. Auto-disabled when the side margin is under ~150px.
-- **Wish mechanic**: clicking empty sky spawns a meteor from the click point; first wish logs to console.
-- **Portrait eclipse**: clicking the portrait runs a 1.5s moon transit + corona flare (`.portrait-wrap.eclipsing`).
-- **Graveyard afterlife**: dead ✧ glyphs reignite ember on hover; an ambient supernova flares a random glyph every 14–32s (skipped when tab hidden).
-- **"dnb" easter egg**: typing it pulses all stars at 174bpm (fluncle's tempo) for 16 beats.
-- **Console + view-source easter eggs**: styled ASCII star map, secrets list, llms.txt pointer; HTML comment greets view-source readers.
-- **Footer status line**: blinking ember dot + `status: operational · sleep: degraded · ideas: backlogged`.
-- **404.html**: "lost in space" page on the same system, noindex.
-- **Sky traffic** (`stars.js`): rare ambient flybys, one at a time, none under reduced motion. A starlink train (procedural dot chain on a shallow arc, always the first visitor, 45–90s in), the ISS (code-drawn pixel sprite with a solar glint mid-pass), and a UFO (pixel sprite that drifts in, hovers with blinking ember lights, then bolts). Each logs a one-liner to the console on first appearance; `window.sky.traffic('starlink' | 'iss' | 'ufo')` summons them. The ISS and UFO use Nano-Banana-rendered pixel-art PNGs in `sprites/` (gemini-3.1-flash-image, fluncle's `docs/galaxy-sprites.md` workflow: pixel-art prompt on pure black → `magick -trim` → `-transparent black` → `-sample` downscale); the code-drawn `makeSprite()` pixels remain as the fallback while the PNGs load. To regenerate, prompt for "8-bit NES-era pixel art sprite ... solid pure black background, no text, no shadow, no grain" with the palette hexes from this file, then repeat the magick steps.
+- **Eclipse**: clicking the portrait runs a stepped first-ink moon across it (`.portrait-wrap.eclipsing`).
+- **Supernova**: a random graveyard `✧` flares in plum every 14 to 32 s, skipped when the tab is hidden.
 
 ## Assets
 
-- `maurice.png` portrait, `favicon.ico` (keep).
-- Phosphor icons vendored as inline SVG in the HTML (no icon font, no CDN).
-- Simple Analytics script (`https://api.mauricekleine.com/latest.js`) preserved at end of body.
+- `maurice.png` (touch icon and portrait source) and `favicon.ico`.
+- `og.png`: the band's world at 1200 x 630, rendered from the live page in light mode.
+- `public/fonts/` serves the frozen v1 theme's copies; www itself loads its fonts from the superthread host.
+- Simple Analytics (`https://api.mauricekleine.com/latest.js`) at the end of the body.

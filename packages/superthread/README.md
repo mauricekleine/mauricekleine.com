@@ -2,7 +2,7 @@
 
 The design system for Maurice's fleet, as a shadcn registry. This package holds two versions side by side:
 
-- **v1, frozen.** The theme www and the share Worker import (`dist/superthread.css`) and the two items www serves at `/r`. Nothing regenerates it.
+- **v1, frozen.** The theme at `dist/superthread.css`, for installs that still carry it. Nothing regenerates it.
 - **v2.** Tokens generated from the master world, and the versioned `@mk` registry of Base UI items built on them.
 
 ## Install v2
@@ -57,7 +57,7 @@ Nested dependencies resolve through the same mapping, so every item comes from t
 
 ### workspace imports
 
-Apps in this repo can import the package directly: `@mauricekleine/superthread/v2/theme.css`, `/v2/plain.css`, `/v2/tokens`, `/v2/tokens.json`, `/fleet` and `/fonts`. `/theme.css` is v1.
+www and the share Worker print on v2 from this package. Apps in this repo can import the package directly: `@mauricekleine/superthread/v2/theme.css`, `/v2/plain.css`, `/v2/tokens`, `/v2/tokens.json`, `/fleet` and `/fonts`. `/theme.css` is v1.
 
 `AppShellNav` is the page's banner by default. When embedding a shell inside another landmark, pass `role="group"` to `AppShellNav`. If that layout already owns main, also pass `render={<div />}` to `AppShellGround`. The ship's navigation keeps its accessible name.
 
@@ -178,4 +178,4 @@ Any change to a served item after its version reaches main ships as the next ver
 
 ## frozen v1 CSS
 
-www's `site.css` and the share Worker's pin page import `dist/superthread.css` directly. `test/v1-frozen.test.ts` pins its sha256. v2 builds leave it unchanged.
+`dist/superthread.css` serves installs that have not moved to v2, whose fonts www keeps at `/fonts/`. `test/v1-frozen.test.ts` pins its sha256. v2 builds leave it unchanged.
