@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "section-header",
+  "title": "section header",
+  "description": "a section's head, with its count and a link to the rest",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/glyphs",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/blocks/section-header.tsx",
+      "content": "import { createContext, useContext, useId } from \"react\";\nimport { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cn } from \"@/components/superthread/lib/utils\";\nimport { Icon } from \"@/components/superthread/ui/glyphs\";\n// @mk/section-header 2.3.1\n\nconst SectionContext = createContext<string | undefined>(undefined);\n\n// A section names itself through its title. The first starts in place; the next leaves 48 px above its head.\n// It owns its title's id, so the section keeps its name; pass titleId when the app needs a known id.\nfunction Section({\n  className,\n  titleId: suppliedTitleId,\n  ...props\n}: React.ComponentProps<\"section\"> & { titleId?: string }) {\n  const generatedTitleId = useId();\n  const titleId = suppliedTitleId ?? generatedTitleId;\n  return (\n    <SectionContext value={titleId}>\n      <section\n        data-mk=\"section-header\"\n        data-slot=\"section\"\n        aria-labelledby={titleId}\n        className={cn(\"mt-12 min-w-0 first:mt-0\", className)}\n        {...props}\n      />\n    </SectionContext>\n  );\n}\n\n// The title, count and way onward share a baseline, then a rule, before the section's content starts.\nfunction SectionHeader({ className, ...props }: React.ComponentProps<\"header\">) {\n  return (\n    <header\n      data-mk=\"section-header\"\n      data-slot=\"section-header\"\n      className={cn(\"mb-4 flex flex-wrap items-baseline gap-3 border-b border-foreground pb-3\", className)}\n      {...props}\n    />\n  );\n}\n\n// The title supplies the section's accessible name without making the app wire ids by hand.\nfunction SectionTitle({ className, ...props }: Omit<React.ComponentProps<\"h2\">, \"id\">) {\n  const titleId = useContext(SectionContext);\n  return (\n    <h2\n      data-mk=\"section-header\"\n      data-slot=\"section-title\"\n      className={cn(\"min-w-0 type-title break-words\", className)}\n      {...props}\n      id={titleId}\n    />\n  );\n}\n\n// A changing count stays quiet visually and is read out when the collection changes.\nfunction SectionCount({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-mk=\"section-header\"\n      data-slot=\"section-count\"\n      aria-live=\"polite\"\n      aria-atomic=\"true\"\n      className={cn(\"type-instrument font-mono text-muted-foreground tabular-nums\", className)}\n      {...props}\n    />\n  );\n}\n\n// The way onward sits at the end of the head; render lets the app supply its own router link.\nfunction SectionAction({ className, children = \"more\", render = <a />, ...props }: useRender.ComponentProps<\"a\">) {\n  return useRender({\n    render,\n    state: { slot: \"section-action\", mk: \"section-header\" },\n    props: mergeProps<\"a\">(\n      {\n        className: cn(\n          \"ml-auto inline-flex shrink-0 items-center gap-2 type-instrument text-muted-foreground underline-offset-4 transition-[color] duration-(--duration-instant) ease-(--ease-brand) hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)\",\n          className,\n        ),\n        children: (\n          <>\n            <span>{children}</span>\n            <Icon name=\"arrow\" />\n          </>\n        ),\n      },\n      props,\n    ),\n  });\n}\n\nexport { Section, SectionAction, SectionCount, SectionHeader, SectionTitle };\n",
+      "type": "registry:component",
+      "target": "@components/superthread/blocks/section-header.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.3.1",
+    "sha256": "4f04c3c9d8acbca711c041c40ae01879c6cd4f066662cce858e47d79cd62eb9e",
+    "tier": "block",
+    "upstream": null,
+    "serves": [
+      "constellation",
+      "quanta",
+      "trisys",
+      "orbit",
+      "www"
+    ]
+  },
+  "type": "registry:block"
+}
