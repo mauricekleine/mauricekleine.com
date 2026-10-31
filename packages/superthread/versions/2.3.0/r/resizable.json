@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "resizable",
+  "title": "resizable",
+  "description": "panels split by a 1 px rule you can drag, with an optional grip",
+  "dependencies": [
+    "react-resizable-panels@^4.14.1"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/resizable.tsx",
+      "content": "import { cn } from \"@/components/superthread/lib/utils\";\nimport * as ResizablePrimitive from \"react-resizable-panels\";\n// @mk/resizable 2.3.0\n\n// The group keeps full-size panels side by side, or stacked when its orientation is vertical.\nfunction ResizablePanelGroup({ className, orientation = \"horizontal\", ...props }: ResizablePrimitive.GroupProps) {\n  return (\n    <ResizablePrimitive.Group\n      data-slot=\"resizable-panel-group\"\n      data-mk=\"resizable\"\n      orientation={orientation}\n      className={cn(\"flex h-full w-full\", orientation === \"vertical\" && \"flex-col\", className)}\n      {...props}\n    />\n  );\n}\n\n// Panel sizing and its imperative API stay with react-resizable-panels.\nfunction ResizablePanel({ ...props }: ResizablePrimitive.PanelProps) {\n  return <ResizablePrimitive.Panel data-slot=\"resizable-panel\" {...props} />;\n}\n\n// A 1 px rule has an 8 px hit area. v4 marks hover and drag with data-separator=hover and active. With a grip, its\n// box draws the inside ring; without one, a zero-offset ring straddles the rule so keyboard focus stays visible.\nfunction ResizableHandle({\n  withHandle,\n  className,\n  ...props\n}: ResizablePrimitive.SeparatorProps & {\n  withHandle?: boolean;\n}) {\n  return (\n    <ResizablePrimitive.Separator\n      data-slot=\"resizable-handle\"\n      className={cn(\n        \"group/resizable-handle relative flex w-px items-center justify-center bg-border after:absolute after:inset-y-0 after:left-1/2 after:w-2 after:-translate-x-1/2 data-[separator=hover]:bg-primary data-[separator=active]:bg-primary focus-visible:bg-primary aria-[orientation=horizontal]:h-px aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:inset-y-auto aria-[orientation=horizontal]:after:top-1/2 aria-[orientation=horizontal]:after:left-0 aria-[orientation=horizontal]:after:h-2 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:translate-x-0 aria-[orientation=horizontal]:after:-translate-y-1/2 [&[aria-orientation=horizontal]>div]:rotate-90\",\n        withHandle\n          ? \"focus-visible:outline-0\"\n          : \"focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-(--ring)\",\n        className,\n      )}\n      {...props}\n    >\n      {withHandle && (\n        <div className=\"relative z-10 flex h-4 w-1.5 shrink-0 items-center justify-center gap-0.5 border border-input bg-background group-focus-visible/resizable-handle:outline-2 group-focus-visible/resizable-handle:-outline-offset-2 group-focus-visible/resizable-handle:outline-(--ring)\">\n          <div className=\"h-2 w-px bg-input\" />\n          <div className=\"h-2 w-px bg-input\" />\n        </div>\n      )}\n    </ResizablePrimitive.Separator>\n  );\n}\n\nexport { ResizableHandle, ResizablePanel, ResizablePanelGroup };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/resizable.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.3.0",
+    "sha256": "b4d2b70238b75baa893782acb4798f29ee7a83958f2b9b7909ef079f7c2194b4",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "resizable",
+      "sha256": "7415e497f342485720b6c878c81604eda0aa8b479a2211e4355c324de89a1672",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

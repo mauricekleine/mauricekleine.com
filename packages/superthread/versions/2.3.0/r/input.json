@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input",
+  "title": "input",
+  "description": "a text field with the one focus edge",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/input.tsx",
+      "content": "import * as React from \"react\";\nimport { Input as InputPrimitive } from \"@base-ui/react/input\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/input 2.3.0\n\n// A field whose box is its own text control. Focus thickens the 1 px edge to 2 px inside the box, in --fx: the\n// house ink, or the error ink when the field is invalid (the caret follows). Nothing outside the box draws, so the\n// text never moves. Disabled: never focused, a flat fill and the edge screened back.\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <InputPrimitive\n      type={type}\n      data-slot=\"input\"\n      data-mk=\"input\"\n      className={cn(\n        \"h-10 w-full min-w-0 border border-input bg-background px-3 text-ui text-foreground caret-(--fx) [--fx:var(--primary)] placeholder:text-muted-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-ui file:font-medium file:text-foreground focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled texture-disabled\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Input };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/input.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.3.0",
+    "sha256": "ab8d8e4dfd9c1dd81cb355bc4cf837b2ee4288f650938da3665628e48b8d0582",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "input",
+      "sha256": "bbad1bba130ac9750a61844eeb8f043e8a710846e07689fa85398b80a46c2741",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

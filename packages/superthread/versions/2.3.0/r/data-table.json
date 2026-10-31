@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "data-table",
+  "title": "data table",
+  "description": "a table its heads sort, with chosen rows and a row for when it is empty",
+  "registryDependencies": [
+    "@mk/glyphs",
+    "@mk/states",
+    "@mk/table",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/blocks/data-table.tsx",
+      "content": "import { cn } from \"@/components/superthread/lib/utils\";\nimport { EmptyState, EmptyStateText } from \"@/components/superthread/blocks/states\";\nimport { Icon } from \"@/components/superthread/ui/glyphs\";\nimport { Table, TableCell, TableHead, TableRow } from \"@/components/superthread/ui/table\";\n// @mk/data-table 2.3.0\n\n// A named collection with the table item's own scrolling box, row measures and selection edge. The app supplies\n// its columns and rows, including aria-selected or data-state=\"selected\" when a row is chosen.\nfunction DataTable({ className, label, ...props }: React.ComponentProps<typeof Table> & { label: string }) {\n  return (\n    <div data-mk=\"data-table\" data-slot=\"data-table\" role=\"region\" aria-label={label} className=\"min-w-0 max-w-full\">\n      <Table aria-label={label} className={cn(className)} {...props} />\n    </div>\n  );\n}\n\ntype SortDirection = \"ascending\" | \"descending\";\n\n// The active sort is announced on the head. An unsorted head previews its chevron only under pointer or keys.\nfunction SortableHead({\n  className,\n  children,\n  sort,\n  kind,\n  onSort,\n  ...props\n}: React.ComponentProps<typeof TableHead> & {\n  sort?: SortDirection | null;\n  onSort: (direction: SortDirection) => void;\n}) {\n  return (\n    <TableHead\n      data-mk=\"data-table\"\n      data-slot=\"sortable-head\"\n      scope=\"col\"\n      aria-sort={sort ?? \"none\"}\n      kind={kind}\n      className={cn(className)}\n      {...props}\n    >\n      <button\n        data-slot=\"sortable-head-button\"\n        type=\"button\"\n        onClick={() => onSort(sort === \"ascending\" ? \"descending\" : \"ascending\")}\n        className={cn(\n          \"group/sort flex w-full items-center gap-2 text-left type-meta focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)\",\n          kind === \"number\" ? \"justify-end\" : \"justify-between\",\n        )}\n      >\n        {children}\n        <Icon\n          name=\"chevron\"\n          className={cn(\n            \"shrink-0\",\n            sort === \"ascending\" && \"rotate-180\",\n            !sort && \"invisible group-hover/sort:visible group-focus-visible/sort:visible\",\n          )}\n        />\n      </button>\n    </TableHead>\n  );\n}\n\n// An empty collection still occupies one real row. Its words span every column and announce a changed result.\nfunction TableEmpty({\n  className,\n  columns,\n  title = \"nothing here\",\n  children,\n  ...props\n}: Omit<React.ComponentProps<typeof TableRow>, \"title\"> & { columns: number; title?: React.ReactNode }) {\n  return (\n    <TableRow data-mk=\"data-table\" data-slot=\"table-empty\" className={cn(className)} {...props}>\n      <TableCell colSpan={columns} className=\"pb-7 whitespace-normal\">\n        <EmptyState role=\"status\" aria-live=\"polite\" aria-atomic=\"true\">\n          <EmptyStateText title={title}>{children}</EmptyStateText>\n        </EmptyState>\n      </TableCell>\n    </TableRow>\n  );\n}\n\nexport { DataTable, SortableHead, TableEmpty, type SortDirection };\n",
+      "type": "registry:component",
+      "target": "@components/superthread/blocks/data-table.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.3.0",
+    "sha256": "e2b4c48aa1cc7c81cd06b4d2cfe4e18427120dc686426513dd30ed5eca3ca7b9",
+    "tier": "block",
+    "upstream": null,
+    "serves": [
+      "constellation",
+      "quanta",
+      "trisys",
+      "artifacts"
+    ]
+  },
+  "type": "registry:block"
+}
