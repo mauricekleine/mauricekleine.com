@@ -1,5 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
-import { pinPage } from "./pin-page";
+import { pinPage, type PinMode } from "./pin-page";
 
 const HOUR = 3600000;
 const DAY = 24 * HOUR;
@@ -41,6 +41,12 @@ function reply(body: BodyInit | null = "not found", status = 404, headers: Heade
     result.headers.set("Content-Security-Policy", SANDBOX);
   return result;
 }
+// superthread's mode cookie, set on mauricekleine.com, so it reaches this subdomain too
+function storedMode(request: Request): PinMode {
+  const mode = request.headers.get("Cookie")?.match(/(?:^|;\s*)mk-theme=(light|dark)(?:;|$)/)?.[1];
+  return mode === "light" || mode === "dark" ? mode : null;
+}
+
 function json(value: unknown, status = 200) {
   return reply(JSON.stringify(value), status, { "Content-Type": "application/json" });
 }
@@ -485,12 +491,12 @@ export class ShareStore extends DurableObject<Env> {
           this.env.COOKIE_KEY,
           `form.${id}.${active.version}.${Date.now() + 600000}.${crypto.randomUUID()}`,
         );
-        const response = reply(request.method === "HEAD" ? null : pinPage(id, challenge), 200, {
+        const response = reply(request.method === "HEAD" ? null : pinPage(id, challenge, storedMode(request)), 200, {
           "Content-Type": "text/html; charset=utf-8",
         });
         response.headers.set(
           "Content-Security-Policy",
-          `${SANDBOX}; default-src 'none'; style-src 'unsafe-inline'; font-src https://www.mauricekleine.com/fonts/; form-action ${url.origin}/${id}/; frame-ancestors 'none'; base-uri 'none'`,
+          `${SANDBOX}; default-src 'none'; style-src 'unsafe-inline'; font-src https://superthread.mauricekleine.com/fonts/; form-action ${url.origin}/${id}/; frame-ancestors 'none'; base-uri 'none'`,
         );
         return response;
       }

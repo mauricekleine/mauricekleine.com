@@ -142,6 +142,13 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   assert.equal(await response.text(), "protected content");
   headers(response);
   assert.match(await (await get(`/${pinId}/`, { Cookie: cookieHeader.slice(0, -1) + "z" })).text(), /shared with you/);
+  const darkPin = await get(`/${pinId}/`, { Cookie: "mk-other=1; mk-theme=dark" });
+  assert.match(
+    darkPin.headers.get("Content-Security-Policy"),
+    /font-src https:\/\/superthread\.mauricekleine\.com\/fonts\//,
+  );
+  assert.match(await darkPin.text(), /<html lang="en" class="dark">/);
+  assert.match(await (await get(`/${pinId}/`, { Cookie: "mk-theme=auto" })).text(), /<html lang="en">/);
   const other = "Another123456789";
   await commit(other, await stage(other, "pin", "other protected"));
   assert.match(
