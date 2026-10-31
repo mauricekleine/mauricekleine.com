@@ -2,7 +2,8 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { oklchCss, oklchCssToHex, tint } from "../scripts/color.ts";
-import { blockVars, emittedVars, hexAt, hexOf, lookup, root } from "../scripts/generate.ts";
+import { blockVars, emittedVars, hexAt, hexOf, lookup, root, starShips } from "../scripts/generate.ts";
+import { loadFleet } from "../scripts/marks.ts";
 import { alphaOf, CONSUMED, ELEVATIONS, IGNORED, KEY, MODES, PAPER, roles, V1, type Source } from "../tokens/roles.ts";
 import * as scale from "../tokens/scale.ts";
 
@@ -12,7 +13,7 @@ const master = JSON.parse(read("tokens/master.json"));
 const check = JSON.parse(read("tokens/check.json"));
 const css = read("dist/v2/superthread.css");
 const emitted = emittedVars(css);
-const all = roles(master);
+const all = roles(master, starShips());
 const hexIn = (value: string) => oklchCssToHex(value);
 
 function leaves(value: unknown, path: string): string[] {
@@ -242,5 +243,30 @@ describe("scale.ts", () => {
       expect(prose).toContain(`${Math.round(ink.rake * 100)} percent alpha`);
       expect(prose).toContain(`contact shadow at ${Math.round(ink.contact * 100)}`);
     }
+  });
+});
+
+describe("the fleet's line screens", () => {
+  const cells = (ship: string) => {
+    const encoded = new RegExp(`--texture-line-${ship}: url\\("data:image/svg\\+xml;base64,([^"]+)"`).exec(css)![1]!;
+    return [...atob(encoded).matchAll(/M(\d+) (\d+)h1/g)].map(([, x, y]) => [Number(x), Number(y)] as const);
+  };
+
+  test("every ship in the manifest prints a screen in its own spot", () => {
+    for (const { id } of loadFleet().fleet.filter((ship) => ship.id !== "superthread")) {
+      expect(css).toContain(`--ship-${id}:`);
+      expect(css).toContain(
+        `@utility texture-line-${id} {\n  background-color: var(--ship-${id});\n  mask: var(--texture-line-${id})`,
+      );
+    }
+  });
+
+  test("telemetry's 153 degrees is trisys's 27 mirrored", () => {
+    const mirrored = cells("trisys").map(([x, y]) => `${7 - x},${y}`);
+    expect(
+      cells("telemetry")
+        .map(([x, y]) => `${x},${y}`)
+        .sort(),
+    ).toEqual(mirrored.sort());
   });
 });

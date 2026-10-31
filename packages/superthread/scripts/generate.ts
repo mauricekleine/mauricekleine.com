@@ -10,7 +10,7 @@ import { fontFaces, fonts } from "../fonts.ts";
 import { alphaOf, ELEVATIONS, KEY, MODES, PAPER, roles, type Mode, type Role, type Source } from "../tokens/roles.ts";
 import * as scale from "../tokens/scale.ts";
 import { oklchCss, tint } from "./color.ts";
-import { fleetSource, loadFleet } from "./marks.ts";
+import { fleetSource, loadFleet, type MarkShip } from "./marks.ts";
 
 export const root = join(import.meta.dir, "..");
 const read = (path: string) => readFileSync(join(root, path), "utf8");
@@ -54,6 +54,7 @@ export type Details = {
   LEVELS: Record<string, number>;
   CONTACT: { x: number; y: number; pct: number; on: boolean };
   DETAILS: { key: string; component: string; detail: string; job: string }[];
+  screens: Record<string, { w: number; h: number; on: [number, number][] }>;
 };
 
 export function lookup(master: Master, path: string): unknown {
@@ -170,6 +171,9 @@ const block = (selector: string, lines: string[]) => `${selector} {\n${lines.map
 export type Tile = { w: number; h: number; svg: string; from: string };
 export type Texture = { tiles: Record<string, Tile>; css: string | null };
 
+// the ships the manifest added after the master world; each needs a role and a line screen the world doesn't hold
+export const starShips = () => loadFleet().fleet.filter((ship) => ship.kind !== "master");
+
 export function readTexture(): Texture | null {
   if (!existsSync(join(root, "texture/tiles.json"))) return null;
   const tiles = JSON.parse(read("texture/tiles.json")) as Record<string, Tile>;
@@ -185,6 +189,36 @@ function textureVars(texture: Texture, details: Details): string[] {
   out.push(`--contact-x: ${px(details.CONTACT.x)};`, `--contact-y: ${px(details.CONTACT.y)};`);
   return out;
 }
+
+// A star's line tile: the world's screen at its angle, that screen's mirror at 180 minus the angle, the same lines
+// leaning the other way, or the nearest of those. The tile takes the form scripts/texture/build.py writes.
+function starTile(star: MarkShip, screens: Details["screens"]): Tile {
+  const own = Object.entries(screens).map(([angle, screen]) => ({ ...screen, angle: Number(angle) }));
+  const mirrored = own.map((screen) => ({
+    ...screen,
+    angle: 180 - screen.angle,
+    on: screen.on.map(([x, y]) => [screen.w - 1 - x, y] as [number, number]),
+  }));
+  const gap = (angle: number) => {
+    const delta = Math.abs(angle - star.angle);
+    return Math.min(delta, 180 - delta);
+  };
+  const { w, h, on } = [...own, ...mirrored].reduce((best, screen) =>
+    gap(screen.angle) < gap(best.angle) ? screen : best,
+  );
+  const d = on.map(([x, y]) => `M${x} ${y}h1v1h-1z`).join("");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" shape-rendering="crispEdges"><path d="${d}"/></svg>`;
+  return { w, h, svg, from: `${star.id}'s angle ${star.angle} in marks/fleet.json` };
+}
+
+// a star's line screen utility, in the form tokens/texture.css gives the master's ships
+const starScreens = (stars: readonly MarkShip[], tiles: Record<string, Tile>) =>
+  stars
+    .map(({ id }) => {
+      const { w, h } = tiles[`line-${id}`]!;
+      return `@utility texture-line-${id} {\n  background-color: var(--ship-${id});\n  mask: var(--texture-line-${id}) 0 0 / ${w}px ${h}px;\n}`;
+    })
+    .join("\n");
 
 const PSEUDO = new Set([
   "hover",
@@ -225,7 +259,7 @@ export function plainTexture(css: string): string {
 
 // ---------- the typed values ----------
 
-function tokenData(master: Master, all: Role[], texture: Texture | null, details: Details) {
+function tokenData(master: Master, all: Role[], texture: Texture | null, details: Details, stars: readonly MarkShip[]) {
   const colour = (source: Source, provisional: boolean) => {
     const hex = hexOf(master, source);
     const alpha = alphaOf(source);
@@ -289,14 +323,14 @@ function tokenData(master: Master, all: Role[], texture: Texture | null, details
     },
     wedge: { light: wedge("light"), dark: wedge("dark") },
     ships: Object.fromEntries(
-      master.fleet.map((id) => [
-        id,
-        {
-          light: hex(master.ships[id].light.spot),
-          dark: hex(master.ships[id].dark.spot),
+      [
+        ...master.fleet.map((id) => ({
+          id,
+          spot: { light: master.ships[id].light.spot, dark: master.ships[id].dark.spot },
           angle: master.ships[id].angle,
-        },
-      ]),
+        })),
+        ...stars,
+      ].map(({ id, spot, angle }) => [id, { light: hex(spot.light), dark: hex(spot.dark), angle }]),
     ),
     status: Object.fromEntries(
       Object.entries(states).map(([state, s]) => [
@@ -500,8 +534,16 @@ export function build(): Map<string, string> {
   const details = JSON.parse(read("tokens/details.json")) as Details;
   const glyphs = withOwnIcons(JSON.parse(read("tokens/glyphs.json")), JSON.parse(read("tokens/icons.json")));
   const base = read("tokens/base.css").trimEnd();
-  const texture = readTexture();
-  const all = roles(master as never);
+  const stars = starShips();
+  const world = readTexture();
+  const texture = world && {
+    ...world,
+    tiles: {
+      ...world.tiles,
+      ...Object.fromEntries(stars.map((star) => [`line-${star.id}`, starTile(star, details.screens)])),
+    },
+  };
+  const all = roles(master as never, stars);
   const sha = createHash("sha256").update(raw).digest("hex").slice(0, 12);
   const said = `generated by scripts/generate.ts from tokens/master.json (sha256 ${sha}); edit the sources, then rerun it`;
 
@@ -515,12 +557,15 @@ export function build(): Map<string, string> {
     parts.push(base);
     if (texture) {
       parts.push(block(":root", textureVars(texture, details)));
-      if (texture.css !== null) parts.push((plain ? plainTexture(texture.css) : texture.css).trimEnd());
+      if (texture.css !== null) {
+        const screens = `${texture.css.trimEnd()}\n${starScreens(stars, texture.tiles)}`;
+        parts.push((plain ? plainTexture(screens) : screens).trimEnd());
+      }
     }
     return parts.join("\n\n") + "\n";
   };
 
-  const data = tokenData(master, all, texture, details);
+  const data = tokenData(master, all, texture, details, stars);
 
   return new Map([
     [OUTPUTS.css, css(FONT_BASE.package, false)],

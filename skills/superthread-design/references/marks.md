@@ -62,7 +62,7 @@ An icon is decorative until it gets an `aria-label`. A surface uses these icons 
 
 ## adding a ship or redrawing a mark
 
-Run `bun run --cwd packages/superthread marks new <id> [--target soliton|cloudflare] [--url URL|none]` in the mauricekleine.com repo. It allocates a distinct spot and line-screen angle, draws a star in both chromes, and updates the manifest, fleet item and provenance. A star is one dot on a screened hue tile until its glyph is drawn.
+Run `bun run --cwd packages/superthread marks new <id> [--target soliton|cloudflare] [--url URL|none]` in the mauricekleine.com repo. It allocates a distinct spot and a free line-screen angle, draws a star in both chromes, and updates the manifest, fleet item and provenance. A star is one dot on a screened hue tile until its glyph is drawn.
 
 `marks check` verifies the 16 px geometry, contrast, colour separation and provenance. `marks sheet --out <file.html>` renders every mark at 16, 32 and 48 px in both chromes.
 
