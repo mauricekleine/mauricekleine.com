@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-25T08:31:57.446Z",
+  "generatedAt": "2026-11-01T21:20:51.000Z",
   "title": "Design System: superthread",
   "extensions": {
     "colorMeta": {
@@ -2858,11 +2858,11 @@
     "typographyMeta": {
       "meta": {
         "displayName": "meta",
-        "purpose": "legends, table heads and the select list's group labels, in caps"
+        "purpose": "legends and the group labels inside a select, menu or command list"
       },
       "instrument": {
         "displayName": "instrument",
-        "purpose": "notes, captions, badges and small controls"
+        "purpose": "notes, captions, badges, small controls, fact labels, toolbar group labels and table heads"
       },
       "ui": {
         "displayName": "ui",
@@ -2870,7 +2870,7 @@
       },
       "summary": {
         "displayName": "summary",
-        "purpose": "the text under a section head"
+        "purpose": "the text under a form section's title and a page head's meta line"
       },
       "subtitle": {
         "displayName": "subtitle",
@@ -2894,11 +2894,11 @@
       },
       "title": {
         "displayName": "title",
-        "purpose": "card and board titles"
+        "purpose": "card, board and form titles, and a section head in a panel"
       },
       "section": {
         "displayName": "section",
-        "purpose": "section heads"
+        "purpose": "a page head's title in a panel, and a section head on the stock"
       },
       "page": {
         "displayName": "page",
@@ -2910,11 +2910,11 @@
       },
       "hero": {
         "displayName": "hero",
-        "purpose": "a page head's title"
+        "purpose": "a page head's title on the stock, or at size=\"page\""
       },
       "hero-phone": {
         "displayName": "hero on a phone",
-        "purpose": "type-hero at 600 px and below: a page head's title"
+        "purpose": "type-hero at 600 px and below: a page head's title on the stock, or at size=\"page\""
       },
       "display": {
         "displayName": "display",
@@ -3103,7 +3103,12 @@
     "rules": [
       {
         "name": "The One House Ink Rule",
-        "body": "One plum fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. A ship never sets a control colour, and no status or spot ink fills a control.",
+        "body": "One plum fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. The focus signal is the ring, a field's focus edge and its caret, and it doesn't count against the fill. A ship never sets a control colour, and no status or spot ink fills a control.",
+        "section": "colors"
+      },
+      {
+        "name": "The Outward Action Rule",
+        "body": "An action that leaves the app, such as a send, a publish or a share, prints `key`, never plum. A block that holds one is a key block, and its focus ring prints in the first ink.",
         "section": "colors"
       },
       {
@@ -3123,7 +3128,7 @@
       },
       {
         "name": "The One Job Rule",
-        "body": "Unbounded sets display lines, Supreme the interface, Erode reading, and Fragment Mono ids, numbers, code and caps legends. A face never does another's job.",
+        "body": "Unbounded sets display lines, Supreme the interface, Erode reading, and Fragment Mono ids, times, figures that hold a column, code and caps legends. A face never does another's job.",
         "section": "typography"
       },
       {
@@ -3133,12 +3138,22 @@
       },
       {
         "name": "The Tabular Rule",
-        "body": "Every figure is tabular, from the body rule down; ids and numbers in a table set in mono, with numbers aligned right.",
+        "body": "Times and any figure that must hold a column set in Fragment Mono, because Supreme and Erode have no tabular figures. Numbers in a table align right.",
+        "section": "typography"
+      },
+      {
+        "name": "The First Ink Rule",
+        "body": "A title in the display face prints in the first ink.",
         "section": "typography"
       },
       {
         "name": "The Full Bleed Rule",
         "body": "Horizontal rules belong to the page: they run to both window edges, past every column, and no column stops them.",
+        "section": "layout"
+      },
+      {
+        "name": "The Phone Target Rule",
+        "body": "Every target on a phone is 44 px, through its box or a hit area.",
         "section": "layout"
       },
       {
@@ -3160,19 +3175,100 @@
         "name": "The One Frame Rule",
         "body": "A focused field shows one frame, its own edge thickened inside the box. A ring outside a field reads as a second frame and its gap as a third.",
         "section": "shapes"
+      },
+      {
+        "name": "The Two Links Rule",
+        "body": "A link prints in foreground, with a 1 px underline at rest in running text and on hover in chrome. `link-quiet` is the one second form.",
+        "section": "components"
+      },
+      {
+        "name": "The Quiet Count Rule",
+        "body": "A count in a nav never asks for attention. Only decisions waiting may print as a backlog, and a library's item counts stay muted reference.",
+        "section": "components"
+      },
+      {
+        "name": "The Row Status Rule",
+        "body": "A status on a row is a fact the row is about. It prints through `Badge`, and only where the list exists to show status, such as a run or board table. A personal list prints none.",
+        "section": "components"
+      },
+      {
+        "name": "The Muted Label Rule",
+        "body": "A label prints as muted text, never as a badge.",
+        "section": "components"
+      },
+      {
+        "name": "The Neutral Age Rule",
+        "body": "Age prints neutral and uncoloured: `since friday`, from `@mk/time-words`. It never turns red or counts days past a date.",
+        "section": "components"
+      },
+      {
+        "name": "The Vouched Number Rule",
+        "body": "A page prints no number the app can't vouch for: no estimated total, no finish time, no streak and no missed count.",
+        "section": "components"
+      },
+      {
+        "name": "The No Guilt Rule",
+        "body": "No word says someone is behind: overdue, late and missed print nowhere.",
+        "section": "components"
+      },
+      {
+        "name": "The Confirm Rule",
+        "body": "A confirm's title names the action and its reach, its action repeats the verb, and its cancel stays plain: `publish to everyone?`, `publish`, `cancel`.",
+        "section": "components"
+      },
+      {
+        "name": "The Label Form Rule",
+        "body": "An aria label is a lowercase verb plus the authored title, which keeps its casing: `mark done: <title>`.",
+        "section": "components"
+      },
+      {
+        "name": "The Plain Schedule Rule",
+        "body": "A schedule prints in plain words, `every day at 07:00` or `when mail arrives`: no cron, and a timezone only when it differs.",
+        "section": "components"
+      },
+      {
+        "name": "The One Sentence Rule",
+        "body": "A page prints one sentence saying what it is, only if that sentence changes what the reader does there.",
+        "section": "components"
+      },
+      {
+        "name": "The Still Click Rule",
+        "body": "A click never moves anything: slots stay reserved, a button holds its width when its word changes, a tick keeps its space, and a panel keeps its height when its content shortens.",
+        "section": "components"
+      },
+      {
+        "name": "The Named Step Rule",
+        "body": "A button says what happens, and the primary names the step: `open the mail`, `read the draft`. `start` prints only when there is no source to open.",
+        "section": "components"
+      },
+      {
+        "name": "The One Primary Rule",
+        "body": "A page has one primary action.",
+        "section": "components"
+      },
+      {
+        "name": "The Complete Read Rule",
+        "body": "Clear prints only after a complete read. A failed or loading read isn't zero, and a stale read prints when it was last read.",
+        "section": "components"
+      },
+      {
+        "name": "The Steady Target Rule",
+        "body": "A refresh never moves a target. A newer version prints a quiet line and never swaps the body, a re-rank waits behind one line, and nothing re-picks on focus, because the click that focuses can land on the button.",
+        "section": "components"
       }
     ],
     "dos": [
       "**Do** name roles and utilities, never values: `bg-primary`, `text-muted-foreground`, `border-input`, `type-<step>`, `shadow-<lift>`, `texture-<detail>`. The `.dark` class on `<html>` sets the mode.",
       "**Do** print every status with its glyph square and its word, through `Badge`'s status variants, `StatusGlyph` or `ToastIcon`.",
-      "**Do** keep focus visible on everything focusable: the 2 px ring at 2 px for a control, plum in the panel and neutral in the ship's nav, the 2 px inside edge in `--fx` for a field.",
+      "**Do** keep focus visible on everything focusable: the 2 px ring at 2 px for a control, plum in the panel, neutral in the ship's nav and first ink in a key block, the 2 px inside edge in `--fx` for a field.",
       "**Do** lift a raised layer by its size, `shadow-leaf` for lists and toasts and `shadow-sheet` for dialogs and panels, and on the stock add `texture-contact` with its `--elevation-<lift>-rake`.",
       "**Do** transition named properties at a brand duration on `--ease-brand`, for example `transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand)`.",
       "**Do** run horizontal rules to both window edges.",
-      "**Do** set ids, numbers and code in Fragment Mono with tabular figures.",
+      "**Do** set ids, times, code and any figure that holds a column in Fragment Mono.",
       "**Do** put a ship's spot only in its mark and its chart series, and chart a series as its line screen.",
       "**Do** draw a missing icon on the pixel grid and add it to the glyph source.",
-      "**Do** keep chrome and every served label lowercase, with no em dashes."
+      "**Do** keep chrome and every served label lowercase, with no em dashes.",
+      "**Do** reserve the space a state will need, so a click or a refresh moves nothing."
     ],
     "donts": [
       "**Don't** write a hex value, a `dark:` class or a literal radius in item or app code: the mode and the ink come from the tokens.",
@@ -3187,7 +3283,11 @@
       "**Don't** print a spot or a status ink as a large flat field.",
       "**Don't** fade or screen the cut edge of a scrolling table.",
       "**Don't** take icons from an icon library; every icon and glyph is drawn in whole-pixel squares.",
-      "**Don't** draw a ring outside a field's box or a second frame around it."
+      "**Don't** draw a ring outside a field's box or a second frame around it.",
+      "**Don't** print a plum fill off paper, or a second one in a viewport.",
+      "**Don't** restyle an item from outside: no `[data-slot]` rule and no look class at a call site. Margins, widths and grid placement stay composition.",
+      "**Don't** widen the working panel or re-stick the frame at 900 px and below.",
+      "**Don't** put a keycap inside a button."
     ]
   }
 }
