@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page-header",
+  "title": "page header",
+  "description": "a page's title, with a way back, a lede, its meta and its actions",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/glyphs",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/blocks/page-header.tsx",
+      "content": "import { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cn } from \"@/components/superthread/lib/utils\";\nimport { Icon } from \"@/components/superthread/ui/glyphs\";\n// @mk/page-header 2.4.0\n\n// The head of a page: an optional way back, the title, a count or meta line beside it, the actions at the far end,\n// and a lede on its own line below. Children flow in that order and wrap; the description always takes a full line.\n// A working panel's head (size \"panel\", the default) sets the title at the section step in the first ink; a page on\n// the stock (size \"page\") sets the hero title. Both print the same Erode lede under it. No eyebrow above the title:\n// the title carries its own weight.\nfunction PageHeader({\n  className,\n  size = \"panel\",\n  ...props\n}: React.ComponentProps<\"header\"> & { size?: \"panel\" | \"page\" }) {\n  return (\n    <header\n      data-slot=\"page-header\"\n      data-mk=\"page-header\"\n      data-size={size}\n      className={cn(\"group/page-header flex flex-wrap items-center gap-x-4 gap-y-4\", className)}\n      {...props}\n    />\n  );\n}\n\n// The way back: a quiet link with the left arrow, on its own line above the title. Pass the router's link as render.\nfunction PageHeaderBack({ className, children = \"back\", render = <a />, ...props }: useRender.ComponentProps<\"a\">) {\n  return useRender({\n    props: mergeProps<\"a\">(\n      {\n        className: cn(\"inline-flex basis-full items-center gap-2 type-instrument link-quiet\", className),\n        children: (\n          <>\n            <Icon name=\"left\" />\n            <span>{children}</span>\n          </>\n        ),\n      },\n      props,\n    ),\n    render,\n    state: { slot: \"page-header-back\" },\n  });\n}\n\nfunction PageHeaderTitle({ className, ...props }: React.ComponentProps<\"h1\">) {\n  return (\n    <h1\n      data-slot=\"page-header-title\"\n      className={cn(\n        \"min-w-0 type-section text-balance text-first group-data-[size=page]/page-header:type-hero\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// The line beside the title: a count, a state, when it last changed. It pushes the actions to the far end, and\n// updates are read out, so a count that changes says so.\nfunction PageHeaderMeta({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"page-header-meta\"\n      aria-live=\"polite\"\n      className={cn(\"mr-auto flex flex-wrap items-baseline gap-x-3 type-summary text-muted-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction PageHeaderActions({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"page-header-actions\"\n      className={cn(\"ml-auto flex flex-wrap items-center gap-2\", className)}\n      {...props}\n    />\n  );\n}\n\n// The sentence under the title, on its own line at the lede step and held to a reading measure.\nfunction PageHeaderDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"page-header-description\"\n      className={cn(\"max-w-[27.5em] basis-full type-lede text-pretty text-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\nexport { PageHeader, PageHeaderActions, PageHeaderBack, PageHeaderDescription, PageHeaderMeta, PageHeaderTitle };\n",
+      "type": "registry:component",
+      "target": "@components/superthread/blocks/page-header.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.4.0",
+    "sha256": "decc67dbe5de5723a50e3f09057269ade43f48f4aad939cebafcd56bdd17a182",
+    "tier": "block",
+    "upstream": null,
+    "serves": [
+      "constellation",
+      "quanta",
+      "trisys",
+      "orbit",
+      "artifacts",
+      "www"
+    ]
+  },
+  "type": "registry:block"
+}

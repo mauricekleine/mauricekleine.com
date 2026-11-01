@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea",
+  "title": "textarea",
+  "description": "a multi-line text field with the one focus edge",
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/textarea.tsx",
+      "content": "import * as React from \"react\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/textarea 2.4.0\n\n// A field whose box is its own text control, as the input is: focus thickens the 1 px edge to 2 px inside the box,\n// in --fx (the ring's ink, or the error ink when invalid), the caret follows, and the text never moves. It grows with\n// its words from three lines. Disabled: never focused, a flat fill and the edge screened back.\nfunction Textarea({ className, ...props }: React.ComponentProps<\"textarea\">) {\n  return (\n    <textarea\n      data-slot=\"textarea\"\n      data-mk=\"textarea\"\n      className={cn(\n        \"flex field-sizing-content min-h-20 w-full resize-none border border-input bg-background px-3 py-[9px] text-ui leading-5 text-foreground caret-(--fx) [--fx:var(--ring)] placeholder:text-muted-foreground focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled texture-disabled\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Textarea };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/textarea.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.4.0",
+    "sha256": "2179514a11f3e2e8cf5e87aa113e1d9057fb12edab56a3a34251cfe89950ebd6",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "textarea",
+      "sha256": "8f01f6bc4ee556263bae7644e8b527022fa77ff203f33a258bb47142ef7d9c81",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

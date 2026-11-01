@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge",
+  "title": "badge",
+  "description": "a badge, with a status variant for each state: done, running, waiting, failed and queued",
+  "dependencies": [
+    "@base-ui/react@^1.8.0",
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "@mk/glyphs",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/badge.tsx",
+      "content": "import { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/components/superthread/lib/utils\";\nimport { StatusGlyph, type StatusState } from \"@/components/superthread/ui/glyphs\";\n// @mk/badge 2.4.0\n\nconst STATES = [\"done\", \"running\", \"waiting\", \"failed\", \"queued\"] as const satisfies readonly StatusState[];\n\n// Square, 1 px edge, 13 px words, in Supreme wherever it lands, a mono row aside included. A status badge is the\n// sanctioned exception to one colour, at badge scale only: a fill near the stock, the edge at about half strength, the\n// 14 px glyph square at full strength and the word. failed is the one solid badge, so it is the most urgent by its\n// form, not by a louder ink. sm is 24 px, the height of an xs button, with the glyph square as evenly set in it. The\n// link variant is a link part: it lets its 44 px hit area out of the clip on a phone.\nconst badgeVariants = cva(\n  \"group/badge inline-flex w-fit shrink-0 items-center justify-center overflow-hidden border border-transparent font-sans text-instrument leading-none font-medium whitespace-nowrap transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) aria-invalid:border-error [&>svg]:pointer-events-none [&>svg]:shrink-0\",\n  {\n    variants: {\n      variant: {\n        default:\n          \"border-foreground bg-foreground text-background [a]:hover:border-destructive-hover [a]:hover:bg-destructive-hover\",\n        secondary: \"bg-secondary text-secondary-foreground [a]:hover:bg-secondary-hover\",\n        destructive: \"bg-destructive text-destructive-foreground [a]:hover:bg-destructive-hover\",\n        outline: \"border-current [a]:hover:bg-control-hover\",\n        ghost: \"hover:bg-control-hover\",\n        link: \"relative overflow-visible text-foreground decoration-1 underline-offset-4 hover:underline [@media(max-width:600px)]:hit-area\",\n        done: \"border-success-edge bg-success-wash text-success-foreground\",\n        running: \"border-info-edge bg-info-wash text-info-foreground\",\n        waiting: \"border-warning-edge bg-warning-wash text-warning-foreground\",\n        failed: \"border-error-solid bg-error-solid text-error-solid-foreground\",\n        queued: \"border-neutral-edge bg-neutral-wash text-neutral-foreground\",\n      },\n      size: {\n        default: \"h-[30px] gap-2 px-[11px] has-data-[icon=inline-end]:pr-[7px] has-data-[icon=inline-start]:pl-[7px]\",\n        sm: \"h-6 gap-1.5 px-2 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1\",\n      },\n    },\n    compoundVariants: [\n      { variant: [...STATES], size: \"default\", className: \"pl-[7px]\" },\n      { variant: [...STATES], size: \"sm\", className: \"pl-1\" },\n    ],\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  },\n);\n\nconst isState = (variant: string): variant is StatusState => (STATES as readonly string[]).includes(variant);\n\n// A status variant prints its glyph square before the word, and the state's own name when it is given no word.\n// On the failed solid the square takes the label ink, so its cross still knocks out to the solid.\n// The default element declares data-mk in the source, as every other item does, so a grep finds it; the state's mk\n// keeps the mark on an element the caller renders instead.\nfunction Badge({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  render = <span data-mk=\"badge\" />,\n  children,\n  ...props\n}: useRender.ComponentProps<\"span\"> & VariantProps<typeof badgeVariants>) {\n  const state = variant != null && isState(variant) ? variant : null;\n  return useRender({\n    props: mergeProps<\"span\">(\n      {\n        className: cn(badgeVariants({ variant, size }), className),\n        children: state ? (\n          <>\n            <StatusGlyph state={state} className={state === \"failed\" ? \"text-error-solid-foreground\" : undefined} />\n            {children ?? state}\n          </>\n        ) : (\n          children\n        ),\n      },\n      props,\n    ),\n    render,\n    state: {\n      slot: \"badge\",\n      mk: \"badge\",\n      variant,\n      size,\n    },\n  });\n}\n\nexport { Badge, badgeVariants };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/badge.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.4.0",
+    "sha256": "e576004424cccb943379893493a94ac18b664f14849ff68fb29939695656a78e",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "badge",
+      "sha256": "ccc20021cdcbf0fb23c0d4d28f1da4adde8e51ba59f4b11dd2722ed97a5ee3a4",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

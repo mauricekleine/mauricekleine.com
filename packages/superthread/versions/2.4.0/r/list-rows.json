@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "list-rows",
+  "title": "list rows",
+  "description": "ruled rows, each a title with its time, a meta line and its actions",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/blocks/list-rows.tsx",
+      "content": "import { Children, Fragment, isValidElement, type ReactNode } from \"react\";\nimport { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/list-rows 2.4.0\n\n// A collection of ruled rows. The list owns the first rule and every row owns the one below it.\nfunction ListRows({ className, ...props }: React.ComponentProps<\"ul\">) {\n  return (\n    <ul\n      data-mk=\"list-rows\"\n      data-slot=\"list-rows\"\n      className={cn(\"min-w-0 list-none border-t border-border\", className)}\n      {...props}\n    />\n  );\n}\n\n// The optional lead, title and time share a line. On phones the time moves below the title, before the meta line. A\n// closed row stays in the list with its title muted and struck through.\nfunction ListRow({ className, closed, ...props }: React.ComponentProps<\"li\"> & { closed?: boolean }) {\n  return (\n    <li\n      data-mk=\"list-rows\"\n      data-slot=\"list-row\"\n      data-closed={closed || undefined}\n      className={cn(\n        \"group/list-row grid min-h-(--spacing-row-board) min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 border-b border-border px-4 py-3 [grid-template-areas:'title_aside'_'meta_meta'_'actions_actions'] has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)_auto] has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title_aside'_'lead_meta_meta'_'._actions_actions'] [@media(max-width:600px)]:grid-cols-[minmax(0,1fr)] [@media(max-width:600px)]:[grid-template-areas:'title'_'aside'_'meta'_'actions'] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title'_'lead_aside'_'lead_meta'_'._actions']\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// A checkbox or status glyph sits against the first line, leaving the title room to wrap.\nfunction ListRowLead({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"list-row-lead\"\n      className={cn(\"flex min-h-[21px] items-center self-start [grid-area:lead]\", className)}\n      {...props}\n    />\n  );\n}\n\n// The title is plain text until it gets an href or the app's router link through render. Either way it prints in\n// foreground, and a linked title underlines on hover and takes the hit area on a phone. A closed row's title keeps its\n// strike under the pointer.\nfunction ListRowTitle({ className, href, render, ...props }: useRender.ComponentProps<\"a\">) {\n  return useRender({\n    defaultTagName: \"span\",\n    render: render ?? (href !== undefined ? <a /> : undefined),\n    state: { slot: \"list-row-title\" },\n    props: mergeProps<\"a\">(\n      {\n        href,\n        className: cn(\n          \"min-w-0 text-ui font-medium text-foreground [grid-area:title] [overflow-wrap:anywhere] decoration-1 underline-offset-4 [&:is(a)]:hover:underline [@media(max-width:600px)]:[&:is(a)]:relative [@media(max-width:600px)]:[&:is(a)]:hit-area group-data-[closed]/list-row:text-muted-foreground group-data-[closed]/list-row:line-through group-data-[closed]/list-row:hover:line-through focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)\",\n          className,\n        ),\n      },\n      props,\n    ),\n  });\n}\n\n// A time, a count or a small status badge sits at the end on wide rows. On a phone it wraps below the title, flush with\n// it, and figures stay mono.\nfunction ListRowAside({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"list-row-aside\"\n      className={cn(\n        \"min-w-0 text-right type-instrument text-muted-foreground font-mono tabular-nums [grid-area:aside] [overflow-wrap:anywhere] [@media(max-width:600px)]:text-left\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// A meta line's pieces, read through fragments, so a row can group or map them.\nfunction metaPieces(children: ReactNode): ReactNode[] {\n  return Children.toArray(children).flatMap((child) =>\n    isValidElement<{ children?: ReactNode }>(child) && child.type === Fragment\n      ? metaPieces(child.props.children)\n      : [child],\n  );\n}\n\n// The second line holds context, and it prints the dot between its pieces, so a row writes only the pieces. The dot is\n// its own element outside each piece, so a link keeps it out of its underline and a hit area keeps its ::after. It stays\n// with the piece before it, so it ends a wrapped line rather than starting the next, and it is decoration, so a screen\n// reader skips it. Each piece may wrap without truncating the title. A status sits outside it, in the aside.\nfunction ListRowMeta({ className, children, ...props }: React.ComponentProps<\"div\">) {\n  const pieces = metaPieces(children);\n  return (\n    <div\n      data-slot=\"list-row-meta\"\n      className={cn(\n        \"flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 type-instrument text-muted-foreground [grid-area:meta] [overflow-wrap:anywhere]\",\n        className,\n      )}\n      {...props}\n    >\n      {pieces.map((piece, index) => (\n        <span key={index} data-slot=\"list-row-meta-piece\" className=\"min-w-0\">\n          {piece}\n          {index < pieces.length - 1 && (\n            <span aria-hidden=\"true\" data-slot=\"list-row-meta-dot\" className=\"ml-2\">\n              ·\n            </span>\n          )}\n        </span>\n      ))}\n    </div>\n  );\n}\n\n// Actions stay at the end of their own line, outside the title link and able to wrap on a phone.\nfunction ListRowActions({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"list-row-actions\"\n      className={cn(\"flex min-w-0 flex-wrap items-center justify-end gap-2 [grid-area:actions]\", className)}\n      {...props}\n    />\n  );\n}\n\nexport { ListRows, ListRow, ListRowLead, ListRowTitle, ListRowAside, ListRowMeta, ListRowActions };\n",
+      "type": "registry:component",
+      "target": "@components/superthread/blocks/list-rows.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.4.0",
+    "sha256": "45655f7a1b36b62071e22049e31787d2084ac5861d48e4c357ca3d26516c3a91",
+    "tier": "block",
+    "upstream": null,
+    "serves": [
+      "constellation",
+      "quanta",
+      "trisys",
+      "orbit",
+      "www"
+    ]
+  },
+  "type": "registry:block"
+}
