@@ -3073,7 +3073,7 @@
     "rules": [
       {
         "name": "The One House Ink Rule",
-        "body": "Plum is the only colour a control takes, on every surface. A ship never sets a control colour, and no status or spot ink fills a control.",
+        "body": "One plum fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. A ship never sets a control colour, and no status or spot ink fills a control.",
         "section": "colors"
       },
       {

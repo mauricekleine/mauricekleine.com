@@ -87,6 +87,7 @@ Nested dependencies resolve through the same mapping, so every item comes from t
 - Every installed file names its item and version: `// @mk/<item> <version>` after the imports in TS and TSX, `/* @mk/<item> <version> */` on line 1 in CSS.
 - `bunx --bun shadcn@latest add @mk/<item> --diff` shows how the installed file differs from the registry; `--overwrite` takes the registry's version.
 - Installed files stay as the registry writes them. A fix goes into `packages/superthread/items/` in the mauricekleine.com repo, and any change to a served item after its version is published ships as the next version: a patch for a fix, a minor for a new item or variant.
+- A ship never restyles an item from outside: no `[data-slot]` rule and no look class at a call site. Margins, widths and grid placement stay composition.
 
 ## changing an item
 

@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: superthread
-description: maurice kleine's design system for his fleet, v2. key ink on white stock, plum for every control, screens only where you look.
+description: maurice kleine's design system for his fleet, v2. key ink on white stock, one plum fill per viewport, screens only where you look.
 # Colours are the tokens dist/v2/superthread.css emits. A key `x` is the variable `--x` on `:root` and `.light`;
 # `dark-x` is the same variable under `.dark`. The css carries each as oklch(), which .impeccable/design.json
 # records as `canonical`; the value here is the master world's hex (with its alpha, as rgb(), on the scrim) that
@@ -405,7 +405,7 @@ The five places, in the world's order:
 
 A chart series prints in its ship's spot with 1 px lines knocked out to the stock every 4 px at the ship's angle, so it reads by colour first and by angle without colour. Every screened field gets crop marks: 10 px corner ticks, 16 px outside the field. `scripts/texture/build.py plates` builds the plates: a masks plate prints a first plate and a spot plate per mode, inked by CSS, and a composite plate prints the master's indexed image per mode, keeping the true overprint colour where the inks overlap. `texture/plates.sha256` holds their pixel hashes. The six component details are under Components.
 
-**The One House Ink Rule.** Plum is the only colour a control takes, on every surface. A ship never sets a control colour, and no status or spot ink fills a control.
+**The One House Ink Rule.** One plum fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. A ship never sets a control colour, and no status or spot ink fills a control.
 
 **The Badge Scale Rule.** Status colour prints at badge scale only, always with its glyph square and its word. Failed is the one solid badge, and red never fills a button.
 
