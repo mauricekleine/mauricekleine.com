@@ -87,7 +87,7 @@ function Page() {
     <>
       <PageHead
         title="page header"
-        lede="a title, a way back, live meta and the next action. a panel keeps the section step; a public page gives the title more room."
+        lede="a title, a way back, live meta and the next action, with a lede under them. a panel keeps the section step; a public page gives the title more room."
       >
         <InstallLine items={["page-header"]} />
       </PageHead>
@@ -100,8 +100,8 @@ function Page() {
       </Section>
       <Section id="sizes" title="sizes">
         <p className="st-ca-copy">
-          <code>panel</code> is the default above. <code>page</code> below uses the hero title and a reading lede, held
-          to 66 characters per line.
+          <code>panel</code> is the default above, its title at the section step in the first ink. <code>page</code>{" "}
+          below uses the hero title. both print the same lede, held to a reading measure of 27.5em.
         </p>
         <Pair size="page" />
       </Section>

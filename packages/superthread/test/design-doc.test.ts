@@ -230,7 +230,14 @@ describe(".impeccable/design.json", () => {
     const { northStar, overview, keyCharacteristics, rules, dos, donts } = sidecar.narrative;
     expect(body).toContain(`**Creative North Star: "${northStar}"**`);
     for (const paragraph of overview.split("\n\n")) expect(body).toContain(paragraph);
-    for (const line of [...keyCharacteristics, ...dos, ...donts]) expect(body).toContain(`\n- ${line}\n`);
+    const bullets = (from: string, to?: string) =>
+      body
+        .slice(body.indexOf(from), to ? body.indexOf(to) : undefined)
+        .split("\n")
+        .flatMap((line) => (line.startsWith("- ") ? [line.slice(2)] : []));
+    expect(keyCharacteristics).toEqual(bullets("**Key Characteristics:**", "\n## Colors"));
+    expect(dos).toEqual(bullets("### Do:", "### Don't:"));
+    expect(donts).toEqual(bullets("### Don't:"));
     for (const rule of rules) expect(body).toContain(`**${rule.name}.** ${rule.body}`);
     expect(rules.length).toBe(body.match(/\*\*The [^*]+ Rule\.\*\*/g)?.length ?? 0);
   });

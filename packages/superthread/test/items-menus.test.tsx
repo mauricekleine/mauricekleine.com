@@ -19,7 +19,7 @@ const LEAF = [
   "texture-contact",
   "[--contact-lift:var(--elevation-leaf-rake)]",
 ];
-const ROW = ["h-9", "gap-2.5", "border", "border-transparent", "text-ui", ...INSIDE];
+const ROW = ["h-9", "[@media(max-width:600px)]:h-11", "gap-2.5", "border", "border-transparent", "text-ui", ...INSIDE];
 const KEYS = ["ml-auto", "font-mono", "text-[11px]", "tracking-[0.14em]", "text-muted-foreground"];
 function has(scope: ParentNode, selector: string, classes: string[]) {
   const result = one(scope, selector);
@@ -106,13 +106,13 @@ describe("dropdown-menu", () => {
     const sub = has(body, "[data-slot=dropdown-menu-sub-trigger]", ["data-popup-open:bg-raised-hover"]);
     has(sub, "svg", ["-rotate-90"]);
   });
-  test("check and chosen radio have a fixed left column, with a check or 6 px house square", () => {
+  test("check and chosen radio have a fixed left column, with a check or 6 px foreground square", () => {
     const check = one(body, "[role=menuitemcheckbox][aria-checked=true]").el;
     has(check, "[data-slot=dropdown-menu-checkbox-item-indicator]", ["left-2.5"]);
     expect(check.querySelector("svg")).not.toBeNull();
     const radio = one(body, "[role=menuitemradio][aria-checked=true]").el;
     has(radio, "[data-slot=dropdown-menu-radio-item-indicator]", ["left-2.5"]);
-    has(radio, ".bg-primary", ["size-1.5"]);
+    has(radio, ".bg-foreground", ["size-1.5"]);
   });
   test("labels, rules and shortcuts keep the menu hierarchy; contact is the only detail", () => {
     has(body, "[data-slot=dropdown-menu-label]", ["type-meta", "px-2.5", "pt-1.5", "pb-1"]);
@@ -180,12 +180,11 @@ describe("combobox", () => {
       "translate(0px, 6px)",
     );
   });
-  test("aria-selected boxes the chosen option, highlight previews other rows, and the check sits at the end", () => {
+  test("the chosen option keeps its check over the raised hover, highlight previews the same fill, and the check sits at the end", () => {
     const chosen = has(body, "[role=option][aria-selected=true]", [
       ...ROW,
-      "aria-selected:border-primary",
-      "aria-selected:bg-accent",
-      "data-highlighted:not-aria-selected:bg-raised-hover",
+      "aria-selected:bg-raised-hover",
+      "data-highlighted:bg-raised-hover",
     ]);
     expect(chosen.textContent).toBe("quanta");
     has(chosen, ".absolute", ["right-2.5"]);
@@ -378,12 +377,37 @@ describe("alert-dialog", () => {
   });
   test("the title, media and right-aligned footer keep the sheet hierarchy and house buttons", () => {
     has(body, "[data-slot=alert-dialog-title]", ["type-subtitle"]);
-    has(body, "[data-slot=alert-dialog-description]", ["text-ui", "text-muted-foreground"]);
+    has(body, "[data-slot=alert-dialog-description]", ["text-ui", "text-muted-foreground", "[&_a]:text-foreground"]);
     has(body, "[data-slot=alert-dialog-media]", ["size-10", "bg-secondary"]);
     has(body, "[data-slot=alert-dialog-footer]", ["mt-6", "justify-end", "gap-2"]);
     has(body, "[data-slot=alert-dialog-action]", ["bg-primary"]);
     has(body, "[data-slot=alert-dialog-cancel]", ["border-current"]);
     skin(body, "alert-dialog");
+  });
+  test.each<[string, ComponentProps<typeof Alert.AlertDialogContent> | undefined, string]>([
+    ["cancel, past a link and an action printed before it", undefined, "cancel"],
+    ["where initialFocus sends it", { initialFocus: true }, "the logs"],
+  ])("focus opens on %s", async (_, content, focused) => {
+    const mounted = await client(
+      <Alert.AlertDialog defaultOpen>
+        <Alert.AlertDialogContent {...content}>
+          <Alert.AlertDialogTitle>delete run?</Alert.AlertDialogTitle>
+          <Alert.AlertDialogDescription>
+            read <a href="#logs">the logs</a> first
+          </Alert.AlertDialogDescription>
+          <Alert.AlertDialogFooter>
+            <Alert.AlertDialogAction>delete</Alert.AlertDialogAction>
+            <Alert.AlertDialogCancel>cancel</Alert.AlertDialogCancel>
+          </Alert.AlertDialogFooter>
+        </Alert.AlertDialogContent>
+      </Alert.AlertDialog>,
+    );
+    try {
+      await act(async () => new Promise((resolve) => setTimeout(resolve, 20)));
+      expect(document.activeElement?.textContent).toBe(focused);
+    } finally {
+      await mounted.done();
+    }
   });
   test("small keeps the compact width; portalProps carry mode and container; cancel closes", async () => {
     const frame = document.createElement("div");
@@ -433,6 +457,9 @@ describe("sonner", () => {
     expect(body.querySelectorAll("[data-sonner-toast]")).toHaveLength(5);
     for (const el of body.querySelectorAll("[data-close-button]"))
       expect(el.getAttribute("aria-label")).toBe("close toast");
+  });
+  test("the close button takes the hit area on a phone", () => {
+    has(body, "[data-close-button]", ["size-6", "[@media(max-width:600px)]:hit-area"]);
   });
   test("each kind is unstyled and expanded on the leaf lift; its contact edge never clips", () => {
     for (const { el, classes } of elements(body).filter(({ el }) => el.hasAttribute("data-sonner-toast"))) {

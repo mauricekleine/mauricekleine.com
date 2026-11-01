@@ -21,7 +21,8 @@ type QuickAddProps = Omit<React.ComponentProps<"form">, "onSubmit" | "children">
   >;
 };
 
-// One named field and its submit control. A failed add keeps the draft; a successful add clears it and returns focus.
+// One named field and its submit control, an outline so it never spends the page's plum fill. A failed add keeps the
+// draft; a successful add clears it and returns focus.
 function QuickAdd({
   className,
   label,
@@ -92,7 +93,7 @@ function QuickAdd({
         <InputGroupAddon align="inline-end">
           <InputGroupButton
             type="submit"
-            variant="default"
+            variant="outline"
             size="sm"
             disabled={busy || !value.trim() || inputProps.disabled}
           >

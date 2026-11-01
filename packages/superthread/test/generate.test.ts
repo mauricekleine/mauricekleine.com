@@ -153,13 +153,22 @@ describe("the dark scope", () => {
   for (const [name, chain, dark] of cases)
     test(`${name}: ${dark ? "dark" : "light"}`, () => expect(inScope(DARK, chain)).toBe(dark));
 
-  test("tailwind's dark variant and texture.css's dark and light branches are DARK, and the plain css declares no variant", () => {
+  test("tailwind's dark variant and every hand-written dark and light branch are DARK, and the plain css declares no variant", () => {
     for (const out of [OUTPUTS.css, OUTPUTS.site]) expect(read(out)).toContain(`\n@custom-variant dark (${DARK});\n`);
     expect(read(OUTPUTS.plain)).not.toContain("@custom-variant");
-    const branches = read("tokens/texture.css")
-      .split("\n")
-      .filter((line) => /\.(dark|light)\b/.test(line) && line.trimEnd().endsWith("{"))
-      .map((line) => line.trim());
-    expect(branches).toEqual([`&:not(${DARK.slice(1)}) {`, `${DARK}::after {`]);
+    const branches = (file: string) =>
+      read(file)
+        .split("\n")
+        .filter((line) => /\.(dark|light)\b/.test(line) && line.trimEnd().endsWith("{"))
+        .map((line) => line.trim());
+    expect(branches("tokens/texture.css")).toEqual([`&:not(${DARK.slice(1)}) {`, `${DARK}::after {`]);
+    expect(branches("tokens/utilities.css")).toEqual([`${DARK} {`]);
+  });
+
+  test("the Tailwind outputs carry the item utilities and the plain css leaves them out", () => {
+    for (const name of ["off-paper", "hit-area", "link-quiet"]) {
+      for (const out of [OUTPUTS.css, OUTPUTS.site]) expect(read(out)).toContain(`\n@utility ${name} {\n`);
+      expect(read(OUTPUTS.plain)).not.toContain(name);
+    }
   });
 });

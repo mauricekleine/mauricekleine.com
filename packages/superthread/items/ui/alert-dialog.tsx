@@ -4,6 +4,9 @@ import { cn } from "@/components/superthread/lib/utils";
 
 import { Button } from "@/components/superthread/ui/button";
 
+// Cancel registers itself here, so the sheet can open on the way back.
+const CancelContext = React.createContext<React.RefObject<HTMLButtonElement | null> | null>(null);
+
 // The root keeps Base UI's modal confirmation behaviour.
 function AlertDialog({ ...props }: AlertDialogPrimitive.Root.Props) {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" data-mk="alert-dialog" {...props} />;
@@ -39,7 +42,8 @@ function AlertDialogOverlay({ className, ...props }: AlertDialogPrimitive.Backdr
   );
 }
 
-// A whole-pixel centred sheet keeps its contact edge visible. The small size keeps the compact upstream width.
+// A whole-pixel centred sheet keeps its contact edge visible. The small size keeps the compact upstream width. Focus
+// opens on cancel, so a stray Enter keeps what the sheet asks about; initialFocus moves it.
 function AlertDialogContent({
   className,
   size = "default",
@@ -49,19 +53,23 @@ function AlertDialogContent({
   portalProps?: AlertDialogPrimitive.Portal.Props;
   size?: "default" | "sm";
 }) {
+  const cancel = React.useRef<HTMLButtonElement>(null);
   return (
     <AlertDialogPortal {...portalProps}>
       <AlertDialogOverlay />
-      <AlertDialogPrimitive.Popup
-        data-slot="alert-dialog-content"
-        data-mk="alert-dialog"
-        data-size={size}
-        className={cn(
-          "group/alert-dialog-content fixed isolate top-[round(50%,1px)] left-[round(50%,1px)] z-50 w-full max-w-[calc(100%-2rem)] [translate:round(-50%,1px)_round(-50%,1px)] border border-border bg-popover p-7 text-ui text-popover-foreground shadow-sheet texture-contact [--contact-lift:var(--elevation-sheet-rake)] transition-none duration-(--duration-quick) ease-(--ease-brand) sm:max-w-[440px] data-[size=sm]:max-w-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
-          className,
-        )}
-        {...props}
-      />
+      <CancelContext value={cancel}>
+        <AlertDialogPrimitive.Popup
+          data-slot="alert-dialog-content"
+          data-mk="alert-dialog"
+          data-size={size}
+          initialFocus={cancel}
+          className={cn(
+            "group/alert-dialog-content fixed isolate top-[round(50%,1px)] left-[round(50%,1px)] z-50 w-full max-w-[calc(100%-2rem)] [translate:round(-50%,1px)_round(-50%,1px)] border border-border bg-popover p-7 text-ui text-popover-foreground shadow-sheet texture-contact [--contact-lift:var(--elevation-sheet-rake)] transition-none duration-(--duration-quick) ease-(--ease-brand) sm:max-w-[440px] data-[size=sm]:max-w-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+            className,
+          )}
+          {...props}
+        />
+      </CancelContext>
     </AlertDialogPortal>
   );
 }
@@ -94,7 +102,7 @@ function AlertDialogTitle({ className, ...props }: React.ComponentProps<typeof A
   );
 }
 
-// The explanation prints at the UI step in the muted ink.
+// The explanation prints at the UI step in the muted ink, and a link in it in the foreground ink, underlined.
 function AlertDialogDescription({
   className,
   ...props
@@ -103,7 +111,7 @@ function AlertDialogDescription({
     <AlertDialogPrimitive.Description
       data-slot="alert-dialog-description"
       className={cn(
-        "text-ui text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
+        "text-ui text-muted-foreground [&_a]:text-foreground [&_a]:underline [&_a]:decoration-1 [&_a]:underline-offset-4",
         className,
       )}
       {...props}
@@ -111,23 +119,25 @@ function AlertDialogDescription({
   );
 }
 
-// The action keeps our button API, variants and control states.
+// The action keeps our button API, variants and control states, so the default prints in the house ink on paper and as
+// the outline on a dark sheet. An action that leaves the app takes the key variant.
 function AlertDialogAction({ className, ...props }: React.ComponentProps<typeof Button>) {
   return <Button data-slot="alert-dialog-action" className={cn(className)} {...props} />;
 }
 
-// Cancel closes the sheet through an outline button.
+// Cancel closes the sheet through an outline button, and takes focus when the sheet opens.
 function AlertDialogCancel({
   className,
   variant = "outline",
   size = "default",
   ...props
 }: AlertDialogPrimitive.Close.Props & Pick<React.ComponentProps<typeof Button>, "variant" | "size">) {
+  const cancel = React.useContext(CancelContext);
   return (
     <AlertDialogPrimitive.Close
       data-slot="alert-dialog-cancel"
       className={cn(className)}
-      render={<Button variant={variant} size={size} />}
+      render={<Button ref={cancel} variant={variant} size={size} />}
       {...props}
     />
   );

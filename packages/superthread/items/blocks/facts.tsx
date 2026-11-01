@@ -42,7 +42,7 @@ function FactLabel({ className, ...props }: React.ComponentProps<"dt">) {
     <dt
       data-slot="fact-label"
       className={cn(
-        "min-w-0 type-meta text-muted-foreground [overflow-wrap:anywhere] group-data-[layout=list]/facts:max-w-[min(24ch,35vw)]",
+        "min-w-0 type-instrument text-muted-foreground [overflow-wrap:anywhere] group-data-[layout=list]/facts:max-w-[min(24ch,35vw)]",
         className,
       )}
       {...props}

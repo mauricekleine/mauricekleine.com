@@ -21,7 +21,7 @@ function Page() {
     <>
       <PageHead
         title="table"
-        lede="rows come from the row spacing: 48&nbsp;px in a table, 56&nbsp;px on a board. ids and numbers set in mono, and every figure is tabular."
+        lede="rows come from the row spacing: 48&nbsp;px in a table, 56&nbsp;px on a board. ids and numbers set in mono, so every figure holds its column."
       >
         <InstallLine items={["table"]} />
       </PageHead>
@@ -29,8 +29,8 @@ function Page() {
       <Section id="rows" title="rows">
         <p className="st-b-copy">
           the row under the pointer prints a 4&nbsp;px strip at half inside its first cell, beside the words, never
-          behind them. a selected row prints it solid on the accent ground. here constellation prints as hovered and
-          quanta as selected.
+          behind them. a selected row prints it solid on the control hover fill. here constellation prints as hovered
+          and quanta as selected.
         </p>
         <ModePair className="st-b-stack">
           <TableRuns />

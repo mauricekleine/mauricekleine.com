@@ -37,9 +37,9 @@ function Page() {
 
       <Section id="open" title="open">
         <p className="st-a-copy">
-          the list, printed open: the row under the pointer takes the raised hover fill, and the chosen ship is boxed in
-          the house ink with a tick. in light its lift prints as a screen where the list meets the page; in dark it
-          stays soft.
+          the list, printed open: the row under the pointer takes the raised hover fill, and the chosen ship keeps its
+          tick over the same fill. in light its lift prints as a screen where the list meets the page; in dark it stays
+          soft.
         </p>
         <ModePair className="st-a-stack" light={<SelectOpen mode="light" />} dark={<SelectOpen mode="dark" />} />
         <Caption detail="contact" />

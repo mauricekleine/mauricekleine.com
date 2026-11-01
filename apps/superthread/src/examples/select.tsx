@@ -134,7 +134,7 @@ export function SelectOpen({ mode }: { mode: Mode }) {
               className={cn(
                 "relative flex h-9 w-full items-center gap-2.5 border border-transparent pr-8 pl-2.5 text-ui",
                 ship.id === "quanta" && "bg-raised-hover",
-                chosen && "border-primary bg-accent text-accent-foreground",
+                chosen && "bg-raised-hover",
               )}
             >
               <span className="flex flex-1 shrink-0 gap-2.5 whitespace-nowrap">

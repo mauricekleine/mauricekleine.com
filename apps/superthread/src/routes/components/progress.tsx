@@ -21,7 +21,7 @@ function Page() {
     <>
       <PageHead
         title="progress"
-        lede="a 12&nbsp;px track with a 1&nbsp;px edge and an 8&nbsp;px fill in the house ink. the fill's leading 24&nbsp;px fade out through a screen."
+        lede="a 12&nbsp;px track with a 1&nbsp;px edge and an 8&nbsp;px fill in foreground. the fill's leading 24&nbsp;px fade out through a screen."
       >
         <InstallLine items={["progress"]} />
       </PageHead>

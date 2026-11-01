@@ -1,4 +1,4 @@
-import { type ReactNode, useId } from "react";
+import { type CSSProperties, type ReactNode, useId } from "react";
 
 import { fleet, home as homeShip, type ShipId } from "@/components/superthread/lib/fleet";
 import { toggleTheme, useTheme } from "@/components/superthread/lib/theme";
@@ -10,31 +10,38 @@ const MARK_BASE = "https://superthread.mauricekleine.com/marks";
 
 // The rail and the ship's nav print on the deep ground. Every cell is a 32 px mark; hover or focus inverts the
 // cell, swaps in the light mark and slides out a joined tab, the ship's name over its descriptor. At 900 px and below
-// the rail is a bar. The frame stays in view as the page scrolls, and the rail's last cell is the fleet's one mode
-// control, so a ship adds neither.
+// the rail is a bar. At 420 px and below the bar spans the width and the cells share it: each tightens to 36 px, less
+// when the bar is too narrow to hold them all, and takes the pointer through a hit area on ::before, as wide as its
+// share of the bar up to 44 px, so a tap never lands on the next cell. The share reaches 44 px at 375 px and wider. The
+// frame stays in view as the page scrolls, and the rail's last cell is the fleet's one mode control, so a ship adds
+// neither.
 //
 // The ground keeps the mode it is in, and the frame on it (the rail and the ship's sidebar) prints in the dark palette
 // in both modes, as the world's gutter does. GROUND holds the ground's roles where the frame paints them, and
-// ON_GROUND opens the dark scope and pins them back, important so they outrank the token block's .dark. The page
-// beside the frame stays in the page's mode. The sidebar item scopes its own content the same way.
+// ON_GROUND opens the dark scope and pins them back, important so they outrank the token block's .dark, with the
+// current item held to the words beside it. The page beside the frame stays in the page's mode. The sidebar item
+// scopes its own content the same way.
 const GROUND =
-  "[--sidebar-ground:var(--sidebar)] [--sidebar-ground-foreground:var(--sidebar-foreground)] [--sidebar-ground-hover:var(--sidebar-hover)] [--sidebar-ground-accent-foreground:var(--sidebar-accent-foreground)]";
+  "[--sidebar-ground:var(--sidebar)] [--sidebar-ground-foreground:var(--sidebar-foreground)] [--sidebar-ground-hover:var(--sidebar-hover)]";
 const ON_GROUND =
-  "dark [--sidebar:var(--sidebar-ground)]! [--sidebar-foreground:var(--sidebar-ground-foreground)]! [--sidebar-hover:var(--sidebar-ground-hover)]! [--sidebar-accent-foreground:var(--sidebar-ground-accent-foreground)]!";
+  "dark [--sidebar:var(--sidebar-ground)]! [--sidebar-foreground:var(--sidebar-ground-foreground)]! [--sidebar-hover:var(--sidebar-ground-hover)]! [--selected:var(--sidebar-foreground)]!";
 const nav =
-  "relative z-20 flex w-[58px] shrink-0 flex-col border border-sidebar-border [@media(max-width:900px)]:w-max [@media(max-width:900px)]:flex-row";
+  "relative z-20 flex w-[58px] shrink-0 flex-col border border-sidebar-border [@media(max-width:900px)]:w-max [@media(max-width:900px)]:flex-row [@media(max-width:420px)]:w-full!";
 const home =
-  "grid h-[57px] shrink-0 place-items-center border-b border-sidebar-border [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:w-[49px] [@media(max-width:900px)]:border-r [@media(max-width:900px)]:border-b-0 [@media(max-width:420px)]:w-10!";
+  "grid h-[57px] shrink-0 place-items-center border-b border-sidebar-border [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:w-[49px] [@media(max-width:900px)]:border-r [@media(max-width:900px)]:border-b-0 [@media(max-width:420px)]:w-11!";
 const list =
-  "flex flex-col py-1 [@media(max-width:900px)]:flex-row [@media(max-width:900px)]:px-0.5 [@media(max-width:900px)]:py-0";
+  "flex flex-col py-1 [@media(max-width:900px)]:flex-row [@media(max-width:900px)]:px-0.5 [@media(max-width:900px)]:py-0 [@media(max-width:420px)]:min-w-0 [@media(max-width:420px)]:flex-1 [@media(max-width:420px)]:justify-between [@media(max-width:420px)]:px-0! [@media(max-width:420px)]:[container-type:inline-size]";
+const slot =
+  "[@media(max-width:420px)]:grid [@media(max-width:420px)]:min-w-0 [@media(max-width:420px)]:flex-1 [@media(max-width:420px)]:place-items-center";
 const modeSlot =
-  "border-t border-sidebar-border py-1 [@media(max-width:900px)]:border-t-0 [@media(max-width:900px)]:border-l [@media(max-width:900px)]:px-0.5 [@media(max-width:900px)]:py-0";
+  "border-t border-sidebar-border py-1 [@media(max-width:900px)]:border-t-0 [@media(max-width:900px)]:border-l [@media(max-width:900px)]:px-0.5 [@media(max-width:900px)]:py-0 [@media(max-width:420px)]:grid [@media(max-width:420px)]:w-[45px] [@media(max-width:420px)]:flex-none [@media(max-width:420px)]:place-items-center [@media(max-width:420px)]:px-0! [--rail-cells:1] [@media(max-width:420px)]:[container-type:inline-size]";
 const cell =
-  "group/cell relative m-1 grid h-12 place-items-center border border-transparent transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) motion-reduce:transition-none [@media(max-width:900px)]:mx-0.5 [@media(max-width:900px)]:size-10 [@media(max-width:420px)]:mx-0! [@media(max-width:420px)]:size-9!";
+  "group/cell relative m-1 grid h-12 place-items-center border border-transparent transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) motion-reduce:transition-none [@media(max-width:900px)]:mx-0.5 [@media(max-width:900px)]:size-10 [@media(max-width:420px)]:mx-0! [@media(max-width:420px)]:h-9! [@media(max-width:420px)]:w-full! [@media(max-width:420px)]:max-w-9 [@media(max-width:420px)]:before:absolute [@media(max-width:420px)]:before:-inset-y-1.5 [@media(max-width:420px)]:before:left-1/2 [@media(max-width:420px)]:before:w-[min(44px,calc(100cqw/var(--rail-cells)))] [@media(max-width:420px)]:before:-translate-x-1/2 [@media(max-width:420px)]:before:content-['']";
 const linked =
   "hover:border-foreground hover:bg-foreground focus-visible:border-foreground focus-visible:bg-foreground";
-const boxed =
-  "border-sidebar-primary bg-sidebar-accent after:absolute after:-right-px after:-bottom-px after:size-2 after:bg-sidebar-primary after:content-['']";
+// The current cell is neutral, with an 8 px plum corner mark, the only plum on a cell's edge.
+const here =
+  "border-sidebar-border after:absolute after:-right-px after:-bottom-px after:size-2 after:bg-sidebar-primary after:content-['']";
 // The tab hides two ways, clipped to its left edge on the rail and to its top edge on the bar, so it is also invisible
 // while hidden: crossing 900 px moves the clip from one form to the other, and that move never shows. The visibility
 // turns on as the tab opens and off once it has closed, so the slide plays in full; the cell carries the ship's name.
@@ -47,6 +54,9 @@ const tabEnd =
 // so the descriptor takes the light palette's muted ink: it opens a light scope of its own.
 const tabName = "text-summary/[18px] font-medium";
 const tabDesc = "light text-[12px]/[16px] text-muted-foreground";
+
+// The way past the frame, off the page until focus lands on it: the first stop on the page, to #main.
+const skip = "absolute top-[-100px] left-4 z-40 bg-background p-3 text-foreground focus:top-4";
 
 // The mode cell's glyph: a disc, half ink and half outline, in the rail's whole pixels. Its one drawing serves both
 // modes, so the prerendered rail never shows the wrong one.
@@ -65,6 +75,7 @@ export function FleetRail({
   hrefs = {},
   markBase = MARK_BASE,
   label = "fleet",
+  skipLink = true,
   className,
 }: {
   // the id of the ship this surface is
@@ -79,6 +90,8 @@ export function FleetRail({
   markBase?: string;
   // the rail's accessible name
   label?: string;
+  // false for a rail embedded in a page that owns its own skip link
+  skipLink?: boolean;
   // classes for the wrapper that paints the ground and holds the rail, its nav and the page
   className?: string;
 }) {
@@ -100,6 +113,11 @@ export function FleetRail({
           className,
         )}
       >
+        {skipLink && (
+          <a data-slot="fleet-rail-skip" href="#main" className={skip}>
+            skip to content
+          </a>
+        )}
         <div
           data-slot="fleet-rail-frame"
           className={cn(
@@ -117,7 +135,7 @@ export function FleetRail({
                 {homeMark}
               </span>
             )}
-            <ul className={list}>
+            <ul className={list} style={{ "--rail-cells": ships.length } as CSSProperties}>
               {ships.map((ship, index) => {
                 const given = hrefs[ship.id];
                 const href = given === undefined ? ship.url : given;
@@ -134,7 +152,7 @@ export function FleetRail({
                 const dark = mark(ship.id, ship.mark.dark);
 
                 return (
-                  <li key={ship.id}>
+                  <li key={ship.id} className={slot}>
                     {href ? (
                       <a
                         data-slot="fleet-rail-cell"
@@ -142,7 +160,7 @@ export function FleetRail({
                         aria-label={ship.name}
                         aria-describedby={describedBy}
                         aria-current={isCurrent ? "page" : undefined}
-                        className={cn(cell, linked, isCurrent && boxed)}
+                        className={cn(cell, linked, isCurrent && here)}
                       >
                         <img
                           src={dark}
@@ -168,7 +186,7 @@ export function FleetRail({
                         aria-describedby={describedBy}
                         aria-disabled="true"
                         aria-current={isCurrent ? "page" : undefined}
-                        className={cn(cell, isCurrent && boxed)}
+                        className={cn(cell, isCurrent && here)}
                       >
                         <img src={dark} alt="" width={32} height={32} className={cn(!isCurrent && "opacity-50")} />
                         {name}
@@ -205,7 +223,7 @@ export function FleetRail({
           {sidebar && (
             <Sidebar
               collapsible="none"
-              className="h-auto max-h-[calc(100svh-2rem)] w-[150px] overflow-y-auto [@media(max-width:900px)]:max-h-none [@media(max-width:900px)]:w-full [@media(max-width:900px)]:overflow-visible"
+              className="-mx-1 h-auto max-h-[calc(100svh-2rem)] w-[158px] overflow-y-auto px-1 [@media(max-width:900px)]:mx-0 [@media(max-width:900px)]:max-h-none [@media(max-width:900px)]:w-full [@media(max-width:900px)]:overflow-visible [@media(max-width:900px)]:px-0"
             >
               {sidebar}
             </Sidebar>

@@ -1,3 +1,4 @@
+import { Children, Fragment, isValidElement, type ReactNode } from "react";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@/components/superthread/lib/utils";
@@ -14,14 +15,16 @@ function ListRows({ className, ...props }: React.ComponentProps<"ul">) {
   );
 }
 
-// The optional lead, title and time share a line. On phones the time moves below the title, before the meta line.
-function ListRow({ className, ...props }: React.ComponentProps<"li">) {
+// The optional lead, title and time share a line. On phones the time moves below the title, before the meta line. A
+// closed row stays in the list with its title muted and struck through.
+function ListRow({ className, closed, ...props }: React.ComponentProps<"li"> & { closed?: boolean }) {
   return (
     <li
       data-mk="list-rows"
       data-slot="list-row"
+      data-closed={closed || undefined}
       className={cn(
-        "grid min-h-(--spacing-row-board) min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 border-b border-border px-4 py-3 [grid-template-areas:'title_aside'_'meta_meta'_'actions_actions'] has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)_auto] has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title_aside'_'lead_meta_meta'_'._actions_actions'] [@media(max-width:600px)]:grid-cols-[minmax(0,1fr)] [@media(max-width:600px)]:[grid-template-areas:'title'_'aside'_'meta'_'actions'] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title'_'lead_aside'_'lead_meta'_'._actions']",
+        "group/list-row grid min-h-(--spacing-row-board) min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 border-b border-border px-4 py-3 [grid-template-areas:'title_aside'_'meta_meta'_'actions_actions'] has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)_auto] has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title_aside'_'lead_meta_meta'_'._actions_actions'] [@media(max-width:600px)]:grid-cols-[minmax(0,1fr)] [@media(max-width:600px)]:[grid-template-areas:'title'_'aside'_'meta'_'actions'] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title'_'lead_aside'_'lead_meta'_'._actions']",
         className,
       )}
       {...props}
@@ -40,7 +43,9 @@ function ListRowLead({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// The title is plain text until it gets an href or the app's router link through render.
+// The title is plain text until it gets an href or the app's router link through render. Either way it prints in
+// foreground, and a linked title underlines on hover and takes the hit area on a phone. A closed row's title keeps its
+// strike under the pointer.
 function ListRowTitle({ className, href, render, ...props }: useRender.ComponentProps<"a">) {
   return useRender({
     defaultTagName: "span",
@@ -50,7 +55,7 @@ function ListRowTitle({ className, href, render, ...props }: useRender.Component
       {
         href,
         className: cn(
-          "min-w-0 text-ui font-medium [grid-area:title] [overflow-wrap:anywhere] [&:is(a)]:text-primary [&:is(a)]:underline-offset-4 [&:is(a):hover]:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          "min-w-0 text-ui font-medium text-foreground [grid-area:title] [overflow-wrap:anywhere] decoration-1 underline-offset-4 [&:is(a)]:hover:underline [@media(max-width:600px)]:[&:is(a)]:relative [@media(max-width:600px)]:[&:is(a)]:hit-area group-data-[closed]/list-row:text-muted-foreground group-data-[closed]/list-row:line-through group-data-[closed]/list-row:hover:line-through focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
           className,
         ),
       },
@@ -59,13 +64,14 @@ function ListRowTitle({ className, href, render, ...props }: useRender.Component
   });
 }
 
-// A time or count sits at the end on wide rows and keeps its mono figures when it wraps below the title.
+// A time, a count or a small status badge sits at the end on wide rows. On a phone it wraps below the title, flush with
+// it, and figures stay mono.
 function ListRowAside({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="list-row-aside"
       className={cn(
-        "min-w-0 text-right type-instrument text-muted-foreground font-mono tabular-nums [grid-area:aside] [overflow-wrap:anywhere]",
+        "min-w-0 text-right type-instrument text-muted-foreground font-mono tabular-nums [grid-area:aside] [overflow-wrap:anywhere] [@media(max-width:600px)]:text-left",
         className,
       )}
       {...props}
@@ -73,17 +79,41 @@ function ListRowAside({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// The second line holds context and badges; each fragment may wrap without truncating the title.
-function ListRowMeta({ className, ...props }: React.ComponentProps<"div">) {
+// A meta line's pieces, read through fragments, so a row can group or map them.
+function metaPieces(children: ReactNode): ReactNode[] {
+  return Children.toArray(children).flatMap((child) =>
+    isValidElement<{ children?: ReactNode }>(child) && child.type === Fragment
+      ? metaPieces(child.props.children)
+      : [child],
+  );
+}
+
+// The second line holds context, and it prints the dot between its pieces, so a row writes only the pieces. The dot is
+// its own element outside each piece, so a link keeps it out of its underline and a hit area keeps its ::after. It stays
+// with the piece before it, so it ends a wrapped line rather than starting the next, and it is decoration, so a screen
+// reader skips it. Each piece may wrap without truncating the title. A status sits outside it, in the aside.
+function ListRowMeta({ className, children, ...props }: React.ComponentProps<"div">) {
+  const pieces = metaPieces(children);
   return (
     <div
       data-slot="list-row-meta"
       className={cn(
-        "flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 type-instrument text-muted-foreground [grid-area:meta] [overflow-wrap:anywhere]",
+        "flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 type-instrument text-muted-foreground [grid-area:meta] [overflow-wrap:anywhere]",
         className,
       )}
       {...props}
-    />
+    >
+      {pieces.map((piece, index) => (
+        <span key={index} data-slot="list-row-meta-piece" className="min-w-0">
+          {piece}
+          {index < pieces.length - 1 && (
+            <span aria-hidden="true" data-slot="list-row-meta-dot" className="ml-2">
+              ·
+            </span>
+          )}
+        </span>
+      ))}
+    </div>
   );
 }
 

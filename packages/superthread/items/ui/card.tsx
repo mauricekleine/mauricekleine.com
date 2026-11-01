@@ -37,7 +37,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-title"
       className={cn(
-        "font-display text-base leading-snug font-medium group-data-[size=sm]/card:text-sm",
+        "font-display text-first text-base leading-snug font-medium group-data-[size=sm]/card:text-sm",
         className
       )}
       {...props}

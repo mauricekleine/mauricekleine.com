@@ -40,7 +40,7 @@ function RowsExample() {
   const [pinned, setPinned] = useState(false);
   return (
     <ListRows aria-label="chapter tasks">
-      <ListRow>
+      <ListRow closed={done}>
         <ListRowLead>
           <Checkbox aria-label="complete the reading layout review" checked={done} onCheckedChange={setDone} />
         </ListRowLead>
@@ -50,7 +50,7 @@ function RowsExample() {
         </ListRowAside>
         <ListRowMeta>
           <span>quanta</span>
-          <Badge variant={done ? "done" : "queued"} />
+          <span>chapter 03</span>
         </ListRowMeta>
         <ListRowActions>
           <Button size="sm" variant="outline" aria-pressed={pinned} onClick={() => setPinned(!pinned)}>
@@ -68,6 +68,17 @@ function RowsExample() {
       </ListRow>
       <ListRow>
         <ListRowTitle>leave room for a longer title without cutting off the last word</ListRowTitle>
+      </ListRow>
+      <ListRow>
+        <ListRowTitle>render the chapter plates</ListRowTitle>
+        <ListRowAside>
+          <Badge size="sm" variant="running" />
+        </ListRowAside>
+        <ListRowMeta>
+          <span>quanta</span>
+          <span>chapter 05</span>
+          <time dateTime="2026-10-25T08:12:00Z">08:12</time>
+        </ListRowMeta>
       </ListRow>
     </ListRows>
   );
@@ -129,8 +140,9 @@ function Page() {
 
       <Section id="example" title="example">
         <p className="st-cb-copy">
-          check the first task to complete it, or pin it for later. its title links to the states below; the next two
-          titles are plain text.
+          check the first task to complete it, or pin it for later. its title links to the states below; the next titles
+          are plain text. the meta line holds context and prints the dot between its pieces. a status sits outside it,
+          as a small badge in the aside.
         </p>
         <ModePair className="st-cb-stack">
           <RowsExample />
@@ -138,7 +150,8 @@ function Page() {
       </Section>
       <Section id="states" title="title states">
         <p className="st-cb-copy">
-          a linked title takes the house ink. hover adds an underline, and keyboard focus draws the control ring.
+          a title prints in foreground, linked or plain. hover adds an underline to a link, and keyboard focus draws the
+          control ring. a closed row stays in the list, with its title muted and struck through.
         </p>
         <ModePair className="st-cb-stack">
           <div className="st-cb-states">
@@ -163,6 +176,13 @@ function Page() {
                 </ListRows>
               </State>
             ))}
+            <State name="closed" note="muted and struck through">
+              <ListRows aria-label="closed row">
+                <ListRow closed>
+                  <ListRowTitle href="#example">read the chapter notes</ListRowTitle>
+                </ListRow>
+              </ListRows>
+            </State>
           </div>
         </ModePair>
       </Section>

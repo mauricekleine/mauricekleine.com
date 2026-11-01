@@ -27,7 +27,7 @@ OWN-WORLD: key ink #16181d and its wedge of tints on white; one house ink, plum 
 
 STORY: the visitor understands what superthread is, sees it hold on docs, a board and a reading page, and installs it.
 
-FIRST VIEWPORT: masthead cells across the top (mark and wordmark, breadcrumb and search, system, version and date, the house swatch); left nav with the boxed current item and the light, dark and auto control at its foot; centre, the cropped opener with the Unbounded wordmark, one Erode sentence, the install patch, the six-ship fleet row and the plum primary action; right, on this page, the wedge and the states. Signature interaction: the fleet rail's label slides out as a tab on hover and focus. Motion: 120, 180 and 240 ms on one ease-out curve; reduced motion keeps every state and drops the travel.
+FIRST VIEWPORT: masthead cells across the top (mark and wordmark, breadcrumb and search, system, version and date, the house swatch); left nav with the neutral current item and the light, dark and auto control at its foot; centre, the cropped opener with the Unbounded wordmark, one Erode sentence, the install patch, the six-ship fleet row and the plum primary action; right, on this page, the wedge and the states. Signature interaction: the fleet rail's label slides out as a tab on hover and focus. Motion: 120, 180 and 240 ms on one ease-out curve; reduced motion keeps every state and drops the travel.
 
 FORM: the exposure record's zone sheets carrying the two-ink proof's screens; first on the ordered list as Maurice's remix; seed:9553ea8ea3c775a6
 

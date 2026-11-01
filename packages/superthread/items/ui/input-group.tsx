@@ -6,7 +6,7 @@ import { cn } from "@/components/superthread/lib/utils";
 import { Button } from "@/components/superthread/ui/button";
 
 // The box is the field. While its text control holds focus, the box's 1 px edge becomes 2 px inside it, in --fx
-// (the house ink, or the error ink when the control is invalid); the control itself draws no outline and its caret
+// (the ring's ink, or the error ink when the control is invalid); the control itself draws no outline and its caret
 // takes --fx. The rule matches the text control with :has(), never :focus-within, because a button inside the box
 // (clear, reveal, a toggle) is a control: it takes its own 2 px ring inside itself and the box stays at 1 px.
 // Disabled is the text control's state: the box never takes focus, keeps a flat fill and the disabled label, and its
@@ -18,7 +18,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
       data-mk="input-group"
       role="group"
       className={cn(
-        "group/input-group relative flex h-10 w-full min-w-0 items-center border border-input bg-background text-ui text-foreground [--fx:var(--primary)] has-[input:focus,textarea:focus]:border-(--fx) has-[input:focus,textarea:focus]:outline-2 has-[input:focus,textarea:focus]:-outline-offset-2 has-[input:focus,textarea:focus]:outline-(--fx) has-[[aria-invalid=true]]:border-error has-[[aria-invalid=true]]:[--fx:var(--error)] has-[input:disabled,textarea:disabled]:cursor-not-allowed has-[input:disabled,textarea:disabled]:bg-faint has-[input:disabled,textarea:disabled]:text-disabled texture-disabled has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-2.5 has-[>[data-align=inline-start]]:[&>input]:pl-2.5",
+        "group/input-group relative flex h-10 w-full min-w-0 items-center [@media(max-width:600px)]:h-11 border border-input bg-background text-ui text-foreground [--fx:var(--ring)] has-[input:focus,textarea:focus]:border-(--fx) has-[input:focus,textarea:focus]:outline-2 has-[input:focus,textarea:focus]:-outline-offset-2 has-[input:focus,textarea:focus]:outline-(--fx) has-[[aria-invalid=true]]:border-error has-[[aria-invalid=true]]:[--fx:var(--error)] has-[input:disabled,textarea:disabled]:cursor-not-allowed has-[input:disabled,textarea:disabled]:bg-faint has-[input:disabled,textarea:disabled]:text-disabled texture-disabled has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-2.5 has-[>[data-align=inline-start]]:[&>input]:pl-2.5",
         className,
       )}
       {...props}
@@ -68,7 +68,7 @@ function InputGroupAddon({
 
 // A control inside the field: its focus ring is drawn inside itself, so the box keeps its 1 px edge.
 const inputGroupButtonVariants = cva(
-  "flex items-center gap-1.5 text-ui shadow-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--primary)",
+  "flex items-center gap-1.5 text-ui shadow-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)",
   {
     variants: {
       size: {

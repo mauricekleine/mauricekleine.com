@@ -17,7 +17,7 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
 }
 
 // The trigger is a field whose box is the control: on focus, by Tab or by click, its 1 px edge becomes 2 px inside
-// the box in --fx (the house ink, or the error ink when invalid), so the global ring leaves it alone. Disabled, it
+// the box in --fx (the ring's ink, or the error ink when invalid), so the global ring leaves it alone. Disabled, it
 // keeps the flat disabled look: the select's one detail is its list's contact edge.
 function SelectTrigger({
   className,
@@ -33,7 +33,7 @@ function SelectTrigger({
       data-mk="select"
       data-size={size}
       className={cn(
-        "flex w-fit cursor-pointer items-center justify-between gap-2.5 border border-input bg-background px-3 text-ui whitespace-nowrap text-foreground select-none [--fx:var(--primary)] focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled data-placeholder:text-muted-foreground data-[size=default]:h-10 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2.5 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "flex w-fit cursor-pointer items-center justify-between gap-2.5 border border-input bg-background px-3 text-ui whitespace-nowrap text-foreground select-none [@media(max-width:600px)]:data-[size=default]:h-11 [@media(max-width:600px)]:data-[size=sm]:h-11 [--fx:var(--ring)] focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled data-placeholder:text-muted-foreground data-[size=default]:h-10 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2.5 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}
@@ -104,15 +104,15 @@ function SelectLabel({ className, ...props }: SelectPrimitive.GroupLabel.Props) 
   );
 }
 
-// An option: the one under the pointer or the keys takes the raised hover fill; the chosen one is boxed in the
-// house ink, as every current item is. Keyboard focus draws the 2 px ring inside the option. The chosen state reads
-// aria-selected: shadcn's tailwind.css narrows data-selected: to data-selected="true", and Base UI sets it empty.
+// An option: the one under the pointer or the keys takes the raised hover fill, and the chosen one keeps its check
+// over the same fill. Keyboard focus draws the 2 px ring inside the option. The chosen state reads aria-selected:
+// shadcn's tailwind.css narrows data-selected: to data-selected="true", and Base UI sets it empty.
 function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Props) {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex h-9 w-full cursor-default items-center gap-2.5 border border-transparent pr-8 pl-2.5 text-ui select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--primary) data-highlighted:not-aria-selected:bg-raised-hover aria-selected:border-primary aria-selected:bg-accent aria-selected:text-accent-foreground data-disabled:pointer-events-none data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2.5",
+        "relative flex h-9 [@media(max-width:600px)]:h-11 w-full cursor-default items-center gap-2.5 border border-transparent pr-8 pl-2.5 text-ui select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring) data-highlighted:bg-raised-hover aria-selected:bg-raised-hover data-disabled:pointer-events-none data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2.5",
         className,
       )}
       {...props}

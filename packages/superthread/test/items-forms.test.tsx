@@ -101,15 +101,10 @@ describe("field", () => {
         ]),
       );
     expect(one(host, '[data-slot="field-description"]').classes).toEqual(
-      expect.arrayContaining([
-        "type-instrument",
-        "text-muted-foreground",
-        "[&_a]:text-primary",
-        "[&_a:hover]:underline",
-      ]),
+      expect.arrayContaining(["type-instrument", "text-muted-foreground", "[&_a]:text-foreground", "[&_a]:underline"]),
     );
   });
-  test("the checked choice card boxes the field in plum with 16 px padding", () => {
+  test("the checked choice card edges the field in foreground on no tint, with 16 px padding", () => {
     const host = server(
       <FieldLabel>
         <Field orientation="horizontal">
@@ -124,10 +119,12 @@ describe("field", () => {
         "has-[>[data-slot=field]]:border",
         "has-[>[data-slot=field]]:border-border",
         "has-[>[data-slot=field]]:p-4",
-        "has-[>[data-slot=field]]:has-data-checked:border-primary",
-        "has-[>[data-slot=field]]:has-data-checked:bg-accent",
+        "has-[>[data-slot=field]]:has-data-checked:border-foreground",
       ]),
     );
+    expect(
+      one(host, 'label[data-slot="field-label"]').classes.filter((c) => c.includes("has-data-checked:bg-")),
+    ).toEqual([]);
   });
   test("empty errors render nothing; duplicates and absent messages add no lines", () => {
     expect(server(<FieldError errors={[undefined, {}, { message: "" }]} />).innerHTML).toBe("");
@@ -157,11 +154,11 @@ describe("field", () => {
     expect(custom.querySelectorAll("svg")).toHaveLength(1);
     expect(one(custom, "a").el.getAttribute("href")).toBe("#email");
   });
-  test("the separator prints its meta label on stock over a 1 px rule", () => {
+  test("the separator prints its instrument label on stock over a 1 px rule", () => {
     const host = server(<FieldSeparator>or</FieldSeparator>);
     expect(one(host, '[data-slot="separator"]').classes).toEqual(expect.arrayContaining(["h-px", "bg-border"]));
     expect(one(host, '[data-slot="field-separator-content"]').classes).toEqual(
-      expect.arrayContaining(["bg-background", "type-meta", "text-muted-foreground"]),
+      expect.arrayContaining(["bg-background", "type-instrument", "text-muted-foreground"]),
     );
   });
   test("no texture or forbidden class across states and choice cards", () => {
@@ -225,7 +222,7 @@ describe("native-select", () => {
     expect(select.classes).toEqual(
       expect.arrayContaining([
         ...SELF_EDGE,
-        "[--fx:var(--primary)]",
+        "[--fx:var(--ring)]",
         "aria-invalid:border-error",
         "aria-invalid:[--fx:var(--error)]",
       ]),
@@ -333,7 +330,7 @@ describe("accordion", () => {
       ]),
     );
     expect(panel.el.firstElementChild?.className.split(" ")).toEqual(
-      expect.arrayContaining(["pb-4", "text-ui", "text-muted-foreground", "[&_a]:text-primary"]),
+      expect.arrayContaining(["pb-4", "text-ui", "text-muted-foreground", "[&_a]:text-foreground", "[&_a]:underline"]),
     );
   });
   test("enabled triggers toggle while disabled items stay closed", async () => {
@@ -403,14 +400,7 @@ describe("breadcrumb", () => {
       ]),
     );
     expect(one(host, '[data-slot="breadcrumb-link"]').classes).toEqual(
-      expect.arrayContaining([
-        ...CONTROL_RING,
-        "text-muted-foreground",
-        "hover:text-foreground",
-        "transition-[color]",
-        "duration-(--duration-instant)",
-        "ease-(--ease-brand)",
-      ]),
+      expect.arrayContaining([...CONTROL_RING, "link-quiet"]),
     );
   });
   test("separators face right, custom separators stay, and the ellipsis says more", () => {
@@ -460,8 +450,8 @@ describe("resizable", () => {
         "after:w-2",
         "aria-[orientation=horizontal]:h-px",
         "aria-[orientation=horizontal]:after:h-2",
-        "data-[separator=hover]:bg-primary",
-        "data-[separator=active]:bg-primary",
+        "data-[separator=hover]:bg-foreground",
+        "data-[separator=active]:bg-foreground",
       ]),
     );
   });
@@ -469,7 +459,7 @@ describe("resizable", () => {
     const plain = one(server(resizable("horizontal")), '[data-slot="resizable-handle"]');
     expect(plain.classes).toEqual(
       expect.arrayContaining([
-        "focus-visible:bg-primary",
+        "focus-visible:bg-foreground",
         "focus-visible:outline-2",
         "focus-visible:outline-offset-0",
         "focus-visible:outline-(--ring)",

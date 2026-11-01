@@ -53,7 +53,7 @@ function WedgeTable({ mode }: { mode: "light" | "dark" }) {
               <i style={{ background: tokens[mode].primary.hex }} />
             </td>
             <td className="st-wedge-step">h</td>
-            <td>house: primary, ring, current</td>
+            <td>house: primary, ring</td>
           </tr>
         </tbody>
       </table>

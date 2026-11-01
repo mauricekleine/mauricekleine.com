@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
 import { tokens } from "@/components/superthread/lib/tokens";
 import { Copy } from "@/foundations/parts";
+import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
 import { Section } from "@/site/Section";
 
@@ -9,6 +11,7 @@ export const Route = createFileRoute("/foundations/type")({
     sections: [
       { id: "faces", title: "faces" },
       { id: "steps", title: "steps" },
+      { id: "links", title: "links" },
     ],
   },
   component: Page,
@@ -22,7 +25,7 @@ const families: readonly { name: string; family: Family; role: string; use: stri
     name: "Unbounded",
     family: "display",
     role: "display",
-    use: "titles, section heads and the board, at 300; the wordmark at 400",
+    use: "titles, section heads and the board, at 300 in the first ink; the wordmark at 400",
     sample: "runs this week",
   },
   {
@@ -43,7 +46,7 @@ const families: readonly { name: string; family: Family; role: string; use: stri
     name: "Fragment Mono",
     family: "mono",
     role: "mono",
-    use: "ids, numbers, code and the caps legends",
+    use: "ids, times, figures that hold a column, code and the caps legends",
     sample: "run 7f3a2c · 00:04:12",
   },
 ];
@@ -112,7 +115,7 @@ function Page() {
     <>
       <PageHead
         title="type"
-        lede="four faces, each with one job: unbounded for display, supreme for the interface, erode for reading and fragment mono for ids, numbers and code."
+        lede="four faces, each with one job: unbounded for display, supreme for the interface, erode for reading and fragment mono for ids, times, code and any figure that holds a column."
       />
 
       <Section id="faces" title="faces">
@@ -178,6 +181,24 @@ function Page() {
             </li>
           ))}
         </ol>
+      </Section>
+
+      <Section id="links" title="links">
+        <Copy>
+          a link in running text prints in foreground with a 1 px underline at rest. in a working panel the base layer
+          does this for any anchor no item owns. <code>link-quiet</code> is the one second form: a muted word that turns
+          foreground on hover, for a way onward beside a head or a row.
+        </Copy>
+        <ModePair>
+          <AppShellPanel className="grid justify-items-start gap-3">
+            <p className="type-summary">
+              the run left <a href="#links">three notes</a> for the morning.
+            </p>
+            <a className="type-instrument link-quiet" href="#links">
+              all runs
+            </a>
+          </AppShellPanel>
+        </ModePair>
       </Section>
     </>
   );

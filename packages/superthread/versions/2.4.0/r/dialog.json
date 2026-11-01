@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dialog",
+  "title": "dialog",
+  "description": "a square dialog on the sheet lift",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/button",
+    "@mk/glyphs",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/dialog.tsx",
+      "content": "import * as React from \"react\";\nimport { Dialog as DialogPrimitive } from \"@base-ui/react/dialog\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n\nimport { Button } from \"@/components/superthread/ui/button\";\nimport { Icon } from \"@/components/superthread/ui/glyphs\";\n// @mk/dialog 2.4.0\n\nfunction Dialog({ ...props }: DialogPrimitive.Root.Props) {\n  return <DialogPrimitive.Root data-slot=\"dialog\" {...props} />;\n}\n\nfunction DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {\n  return <DialogPrimitive.Trigger data-slot=\"dialog-trigger\" {...props} />;\n}\n\nfunction DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {\n  return <DialogPrimitive.Portal data-slot=\"dialog-portal\" {...props} />;\n}\n\nfunction DialogClose({ ...props }: DialogPrimitive.Close.Props) {\n  return <DialogPrimitive.Close data-slot=\"dialog-close\" {...props} />;\n}\n\n// The scrim: the world's --scrim, the key at 42 percent in light and black at 60 percent in dark. No blur. It and the\n// sheet fade in and out as animations, so nothing on either transitions.\nfunction DialogOverlay({ className, ...props }: DialogPrimitive.Backdrop.Props) {\n  return (\n    <DialogPrimitive.Backdrop\n      data-slot=\"dialog-overlay\"\n      className={cn(\n        \"fixed inset-0 isolate z-50 bg-scrim transition-none duration-(--duration-quick) ease-(--ease-brand) data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// A square sheet on the sheet lift. Its centring offsets, the half-way point and the half size, each round to a whole\n// pixel, so at any viewport its edges and contact screen land on the pixel grid at 1x and 2x. portalProps go to its\n// portal, for example a container that holds the page's mode.\nfunction DialogContent({\n  className,\n  children,\n  showCloseButton = true,\n  portalProps,\n  ...props\n}: DialogPrimitive.Popup.Props & {\n  showCloseButton?: boolean;\n  portalProps?: DialogPrimitive.Portal.Props;\n}) {\n  return (\n    <DialogPortal {...portalProps}>\n      <DialogOverlay />\n      <DialogPrimitive.Popup\n        data-slot=\"dialog-content\"\n        data-mk=\"dialog\"\n        className={cn(\n          \"fixed top-[round(50%,1px)] left-[round(50%,1px)] z-50 grid w-full max-w-[calc(100%-2rem)] [translate:round(-50%,1px)_round(-50%,1px)] gap-6 border bg-popover px-7 pt-7 pb-6 text-ui text-popover-foreground shadow-sheet texture-contact [--contact-lift:var(--elevation-sheet-rake)] transition-none duration-(--duration-quick) ease-(--ease-brand) sm:max-w-[440px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0\",\n          className,\n        )}\n        {...props}\n      >\n        {children}\n        {showCloseButton && (\n          <DialogPrimitive.Close\n            data-slot=\"dialog-close\"\n            render={<Button variant=\"ghost\" className=\"absolute top-3 right-3 hover:bg-raised-hover\" size=\"icon-sm\" />}\n          >\n            <Icon name=\"close\" />\n            <span className=\"sr-only\">close</span>\n          </DialogPrimitive.Close>\n        )}\n      </DialogPrimitive.Popup>\n    </DialogPortal>\n  );\n}\n\nfunction DialogHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"dialog-header\" className={cn(\"flex flex-col gap-2\", className)} {...props} />;\n}\n\nfunction DialogFooter({\n  className,\n  showCloseButton = false,\n  children,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  showCloseButton?: boolean;\n}) {\n  return (\n    <div\n      data-slot=\"dialog-footer\"\n      className={cn(\"flex flex-col-reverse gap-3 sm:flex-row sm:justify-end\", className)}\n      {...props}\n    >\n      {children}\n      {showCloseButton && <DialogPrimitive.Close render={<Button variant=\"outline\" />}>close</DialogPrimitive.Close>}\n    </div>\n  );\n}\n\nfunction DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {\n  return <DialogPrimitive.Title data-slot=\"dialog-title\" className={cn(\"type-subtitle\", className)} {...props} />;\n}\n\nfunction DialogDescription({ className, ...props }: DialogPrimitive.Description.Props) {\n  return (\n    <DialogPrimitive.Description\n      data-slot=\"dialog-description\"\n      className={cn(\n        \"text-ui text-muted-foreground [&_a]:text-foreground [&_a]:underline [&_a]:decoration-1 [&_a]:underline-offset-4\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport {\n  Dialog,\n  DialogClose,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogOverlay,\n  DialogPortal,\n  DialogTitle,\n  DialogTrigger,\n};\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/dialog.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.4.0",
+    "sha256": "a3168c28248c65b88c4243ed2b05e3b23d5c315997113bcecb2d08fa98f1dbaf",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "dialog",
+      "sha256": "40fc321d25eb9590d07db54b00d9bc1a74274a549aa06d5915a34ba302ed8b94",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

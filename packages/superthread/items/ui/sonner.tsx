@@ -53,7 +53,7 @@ function Toaster({ className, toastOptions, icons, expand = true, ...props }: To
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
             ),
             closeButton:
-              "absolute top-1 right-1 flex size-6 items-center justify-center border border-transparent! bg-popover! text-muted-foreground! hover:bg-raised-hover! hover:text-foreground! focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)",
+              "absolute top-1 right-1 flex size-6 items-center justify-center [@media(max-width:600px)]:hit-area border border-transparent! bg-popover! text-muted-foreground! hover:bg-raised-hover! hover:text-foreground! focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)",
             ...toastOptions?.classNames,
           },
         }}

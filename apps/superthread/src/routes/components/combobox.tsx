@@ -24,7 +24,7 @@ function Page() {
     <>
       <PageHead
         title="combobox"
-        lede="a searchable field with a leaf list below it. the field owns the inside focus edge; the chosen option keeps its plum box and check."
+        lede="a searchable field with a leaf list below it. the field owns the inside focus edge; the chosen option keeps its check over the raised hover fill."
       >
         <InstallLine items={["combobox"]} />
       </PageHead>

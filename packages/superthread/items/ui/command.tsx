@@ -126,13 +126,13 @@ function CommandSeparator({ className, ...props }: React.ComponentProps<typeof C
   );
 }
 
-// cmdk selected means the pointer or keys position, so it takes hover fill rather than the chosen box.
+// cmdk selected means the pointer or keys position, so it takes the hover fill and no chosen state.
 function CommandItem({ className, children, ...props }: React.ComponentProps<typeof CommandPrimitive.Item>) {
   return (
     <CommandPrimitive.Item
       data-slot="command-item"
       className={cn(
-        "relative flex h-9 cursor-default items-center gap-2.5 border border-transparent px-2.5 text-ui select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring) data-[disabled=true]:pointer-events-none data-[disabled=true]:text-disabled data-[selected=true]:bg-raised-hover [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "relative flex h-9 [@media(max-width:600px)]:h-11 cursor-default items-center gap-2.5 border border-transparent px-2.5 text-ui select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring) data-[disabled=true]:pointer-events-none data-[disabled=true]:text-disabled data-[selected=true]:bg-raised-hover [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}

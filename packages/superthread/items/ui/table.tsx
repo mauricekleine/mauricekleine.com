@@ -45,13 +45,13 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
   return <tfoot data-slot="table-footer" className={cn("bg-muted font-medium", className)} {...props} />;
 }
 
-// No hover fill: hover shows only the strip. A selected row takes the accent ground under its cells.
+// No hover fill: hover shows only the strip. A selected row keeps its strip over the control hover fill.
 function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
   return (
     <tr
       data-slot="table-row"
       className={cn(
-        "transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) has-aria-expanded:bg-control-hover aria-selected:bg-accent data-[state=selected]:bg-accent",
+        "transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) has-aria-expanded:bg-control-hover aria-selected:bg-control-hover data-[state=selected]:bg-control-hover",
         className,
       )}
       {...props}
@@ -71,14 +71,15 @@ const cellKind = cva("", {
 
 type CellKind = VariantProps<typeof cellKind>;
 
+// A head is a word, so it sets in Supreme at the instrument step, over its column's alignment.
 function TableHead({ className, kind, ...props }: React.ComponentProps<"th"> & CellKind) {
   return (
     <th
       data-slot="table-head"
       data-kind={kind ?? undefined}
       className={cn(
-        "border-b border-foreground pr-4 pb-3 text-left align-bottom type-meta whitespace-nowrap text-muted-foreground last:pr-0 [&:has([role=checkbox])]:pr-0",
-        cellKind({ kind }),
+        "border-b border-foreground pr-4 pb-3 text-left align-bottom type-instrument whitespace-nowrap text-muted-foreground last:pr-0 [&:has([role=checkbox])]:pr-0",
+        kind === "number" && "text-right",
         className,
       )}
       {...props}

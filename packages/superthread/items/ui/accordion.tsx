@@ -59,7 +59,7 @@ function AccordionContent({ className, children, ...props }: AccordionPrimitive.
     >
       <div
         className={cn(
-          "pb-4 text-ui text-muted-foreground [&_a]:text-primary [&_a]:underline-offset-4 [&_a:hover]:underline [&_p:not(:last-child)]:mb-4",
+          "pb-4 text-ui text-muted-foreground [&_a]:text-foreground [&_a]:underline [&_a]:decoration-1 [&_a]:underline-offset-4 [&_p:not(:last-child)]:mb-4",
           className,
         )}
       >

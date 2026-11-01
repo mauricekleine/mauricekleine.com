@@ -1,7 +1,8 @@
 # data display
 
-ids, numbers and code set in Fragment Mono, and numbers are tabular everywhere, so
-columns line up. a table row is 48 px, and the board's row 56 px.
+ids, times, code and any figure that must hold a column set in Fragment Mono, because
+Supreme and Erode have no tabular figures, and numbers in a table align right. a table
+row is 48 px, and the board's row 56 px.
 
 ## zero, missing and comparisons (F14)
 

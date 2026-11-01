@@ -30,7 +30,7 @@ A single operator's fleet identity that agents build and maintain. Values live i
 
 - shadcn on Base UI with Tailwind v4; apps are TanStack Start apps. One registry, `@mk`, with one version for all its items.
 - Components are branded skins: every primitive keeps shadcn's API, and the craft lives in its classes and behaviour. Apps rebrand with no call-site edits.
-- The visual world lives in `tokens/master.json`, vendored from the master world, and `DESIGN.md` documents it: key ink on white stock, plum as the one control colour, five statuses at badge scale with a glyph and a word, one bright spot per ship in its mark and chart series, four faces with one job each, square corners and 1 px edges, and 1-bit screens in five places plus one small detail per component.
+- The visual world lives in `tokens/master.json`, vendored from the master world, and `DESIGN.md` documents it: key ink on white stock; one plum fill per viewport, on paper only, in the deep value; five statuses at badge scale with a glyph and a word; one bright spot per ship in its mark and chart series; four faces with one job each; square corners and 1 px edges; and 1-bit screens in five places plus one small detail per component.
 - Fonts load from one host. Unbounded and Fragment Mono load on any origin; Supreme and Erode load only on Maurice's own origins and localhost, and other origins print those two in system fonts. Every face is licensed for the way it is delivered.
 - Marks read at 16px on light and dark browser chrome and in the rail.
 
@@ -59,7 +59,7 @@ A single operator's fleet identity that agents build and maintain. Values live i
 
 ## Product Principles
 
-1. **One system, no carve-outs.** Ships differ only through the system's own parameters, such as a ship's mark, never through local exceptions.
+1. **One system, no carve-outs.** What helps one ship's UI goes into Superthread for every ship. Ships differ only through the system's own parameters, such as a ship's mark, never through local exceptions: a ship owns its data, routes and composition, and anything that changes how an item looks (colour, type, border, case) changes Superthread.
 2. **Recognisable at 16px.** Every ship is identifiable from its tab icon, and the fleet still reads as one family.
 3. **One source, generated.** Values live in one place and reach apps through the registry; no app copies them by hand.
 4. **Craft lives in the components.** Quality comes from what every app gets for free, not from per-app polish.

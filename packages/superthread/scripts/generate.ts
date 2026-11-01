@@ -1,5 +1,5 @@
-// Generates the v2 tokens from tokens/master.json, tokens/roles.ts, tokens/scale.ts, tokens/base.css and
-// fonts.ts, plus S1.T's texture tiles when they exist. `--check` writes nothing and exits 1 on any diff.
+// Generates the v2 tokens from tokens/master.json, tokens/roles.ts, tokens/scale.ts, tokens/base.css,
+// tokens/utilities.css and fonts.ts, plus S1.T's texture tiles when they exist. `--check` writes nothing and exits 1 on any diff.
 //
 //   bun scripts/generate.ts [--check]
 
@@ -534,6 +534,7 @@ export function build(): Map<string, string> {
   const details = JSON.parse(read("tokens/details.json")) as Details;
   const glyphs = withOwnIcons(JSON.parse(read("tokens/glyphs.json")), JSON.parse(read("tokens/icons.json")));
   const base = read("tokens/base.css").trimEnd();
+  const utilities = read("tokens/utilities.css").trimEnd();
   const stars = starShips();
   const world = readTexture();
   const texture = world && {
@@ -553,7 +554,7 @@ export function build(): Map<string, string> {
     parts.push(fontFaces(fontBase));
     parts.push(block(":root,\n.light", [...declarations(master, all, "light"), ...shared(), "color-scheme: light;"]));
     parts.push(block(".dark", [...declarations(master, all, "dark"), "color-scheme: dark;"]));
-    if (!plain) parts.push(block("@theme inline", theme(all)), typeUtilities());
+    if (!plain) parts.push(block("@theme inline", theme(all)), typeUtilities(), utilities);
     parts.push(base);
     if (texture) {
       parts.push(block(":root", textureVars(texture, details)));

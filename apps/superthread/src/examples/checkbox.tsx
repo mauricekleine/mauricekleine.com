@@ -67,7 +67,7 @@ export function CheckboxExample() {
 // data-demo, which the site's variants read as keyboard focus.
 const states = [
   { name: "empty", note: "1 px input edge" },
-  { name: "checked", note: "house ink, tick", checked: true },
+  { name: "checked", note: "foreground, tick", checked: true },
   { name: "mixed", note: "ink at 50 percent", indeterminate: true },
   { name: "focus", note: "2 px ring, 2 px out", demo: true },
   { name: "invalid", note: "1 px error edge", invalid: true },

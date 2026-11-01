@@ -29,6 +29,7 @@ export function ShipFrame({
       current={ship}
       markBase="/marks"
       hrefs={hrefs}
+      skipLink={false}
       className="min-h-[calc(100svh-32px)]"
       sidebar={
         <AppShellNav ship={ship} role="group">

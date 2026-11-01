@@ -6,26 +6,26 @@ A screen sits at an edge, a track, a shadow or a state, beside the content it se
 
 ## the five places
 
-| place             | what prints                                                                                     | how                                   |
-| ----------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------- |
+| place             | what prints                                                                                                     | how                                                             |
+| ----------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
 | opener            | a two-plate halftone band inside crop marks: key at 45 degrees, plum at 74, the title knocked out to bare stock | plates; the overview's opener and a slim band in each page head |
-| figures           | reading figures on their own two screens, and chart series as line screens                     | plates; `texture-line-<ship>`        |
-| marks             | the ship's spot region as a 1 px checker at 50 percent                                          | the mark SVGs                         |
-| progress edge     | the fill's leading 24 px, a bayer ramp from solid to the stock                                  | `texture-ramp`, inside `Progress`     |
-| empty and loading | a light key wedge, which the matrix prints as three steps: 6.25, 12.5 and 18.75 percent         | plates; `Skeleton` for loading rows   |
+| figures           | reading figures on their own two screens, and chart series as line screens                                      | plates; `texture-line-<ship>`                                   |
+| marks             | the ship's spot region as a 1 px checker at 50 percent                                                          | the mark SVGs                                                   |
+| progress edge     | the fill's leading 24 px, a bayer ramp from solid to the stock                                                  | `texture-ramp`, inside `Progress`                               |
+| empty and loading | a light key wedge, which the matrix prints as three steps: 6.25, 12.5 and 18.75 percent                         | plates; `Skeleton` for loading rows                             |
 
 ## the six component details
 
 At most one per component. 50 percent, the half, is the in-between state (a hover previewing the solid current bar, a mixed checkbox, a disabled control); solid is the settled one.
 
-| detail    | utility             | component                    | what prints                                                                                     |
-| --------- | ------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------- |
-| contact   | `texture-contact`   | select list, toast, dialog   | light only: the contact shadow as a 50 percent screen, 3 px right of the layer and 2 px below it |
-| mixed     | `texture-mixed`     | checkbox                     | plum at 50 percent inside the box's plum edge                                                   |
-| tabhover  | `texture-tabhover`  | tabs                         | a 2 px plum bar at 50 percent, previewing the current bar                                       |
-| rowedge   | `texture-rowedge`   | table                        | a 4 px plum strip at 50 percent at the left edge of the row under the pointer; solid when selected |
-| disabled  | `texture-disabled`  | button and fields            | the 1 px edge at 50 percent; the fill stays flat and the label plain                            |
-| skeleton  | `texture-skeleton`  | skeleton                     | the first ink at 18.75 percent on whole-pixel bars                                              |
+| detail   | utility            | component                  | what prints                                                                                              |
+| -------- | ------------------ | -------------------------- | -------------------------------------------------------------------------------------------------------- |
+| contact  | `texture-contact`  | select list, toast, dialog | light only: the contact shadow as a 50 percent screen, 3 px right of the layer and 2 px below it         |
+| mixed    | `texture-mixed`    | checkbox                   | foreground at 50 percent inside the box's foreground edge                                                |
+| tabhover | `texture-tabhover` | tabs                       | a 2 px foreground bar at 50 percent, previewing the current bar                                          |
+| rowedge  | `texture-rowedge`  | table                      | a 4 px foreground strip at 50 percent at the left edge of the row under the pointer; solid when selected |
+| disabled | `texture-disabled` | button and fields          | the 1 px edge at 50 percent; the fill stays flat and the label plain                                     |
+| skeleton | `texture-skeleton` | skeleton                   | the first ink at 18.75 percent on whole-pixel bars                                                       |
 
 The items already carry their detail. A raised layer's screen is an edge, never a field, so no dots fall on the words past it.
 

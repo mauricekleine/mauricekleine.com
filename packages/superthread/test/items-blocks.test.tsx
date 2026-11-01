@@ -103,12 +103,20 @@ describe("page header", () => {
     expect(panel.querySelectorAll("h1")).toHaveLength(1);
   });
 
-  test("a panel sets the section head, a page the hero title and the lede", () => {
+  test("a panel's title is the section step in the first ink, a page's the hero, and either prints the same lede", () => {
     const title = one(panel, "h1").classes;
-    expect(title).toEqual(expect.arrayContaining(["type-section", "group-data-[size=page]/page-header:type-hero"]));
-    expect(one(page, '[data-slot="page-header-description"]').classes).toEqual(
-      expect.arrayContaining(["basis-full", "group-data-[size=page]/page-header:type-lede"]),
+    expect(title).toEqual(
+      expect.arrayContaining(["type-section", "text-first", "group-data-[size=page]/page-header:type-hero"]),
     );
+    const lede = server(
+      <PageHeader>
+        <PageHeaderDescription>the lede under a panel's title.</PageHeaderDescription>
+      </PageHeader>,
+    );
+    for (const head of [lede, page])
+      expect(one(head, '[data-slot="page-header-description"]').classes).toEqual(
+        expect.arrayContaining(["basis-full", "type-lede", "text-foreground"]),
+      );
   });
 
   test("the meta line is read out when it changes and pushes the actions to the end", () => {

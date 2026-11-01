@@ -28,8 +28,8 @@ function Page() {
 
       <Section id="ground" title="on the ground">
         <p className="st-c-copy">
-          orbit&rsquo;s nav: its pages with the board current, then its latest runs. the current page is boxed in the
-          house ink with its 8 px square, the way this site&rsquo;s own nav marks it.
+          orbit&rsquo;s nav: its pages with the board current, then its latest runs. the current page is neutral: the
+          foreground word in a 1 px edge with its 8 px square, the way this site&rsquo;s own nav marks it.
         </p>
         <p className="st-c-copy">
           the ground is a dark grey in light and close to black in dark. glyphs, badges, rules and rows on it take the
@@ -42,8 +42,8 @@ function Page() {
 
       <Section id="states" title="states">
         <p className="st-c-copy">
-          a row lightens on hover and takes the 2 px ring outside it on keyboard focus. the current row is boxed; a
-          disabled one prints at half.
+          a row lightens on hover and takes a neutral 2 px ring outside it on keyboard focus. the current row takes the
+          1 px edge and the square, with no fill; a disabled one prints at half.
         </p>
         <ModePair>
           <SidebarStates />
@@ -86,7 +86,7 @@ function Page() {
             <code>SidebarMenuButton</code>
           </dt>
           <dd>
-            a row, inside <code>SidebarMenu</code> and <code>SidebarMenuItem</code>. <code>isActive</code> boxes the
+            a row, inside <code>SidebarMenu</code> and <code>SidebarMenuItem</code>. <code>isActive</code> marks the
             current one; <code>render=&#123;&lt;a href=&quot;/board&quot; /&gt;&#125;</code> makes it a link.
           </dd>
           <dt>

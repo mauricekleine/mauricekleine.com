@@ -112,7 +112,7 @@ export function DropdownMenuOpen() {
         <div className="px-2.5 pt-1.5 pb-1 type-meta text-muted-foreground">move to ship</div>
         <Row inset>
           <span className="absolute left-2.5 flex size-3 items-center justify-center">
-            <span className="size-1.5 bg-primary" />
+            <span className="size-1.5 bg-foreground" />
           </span>
           orbit
         </Row>

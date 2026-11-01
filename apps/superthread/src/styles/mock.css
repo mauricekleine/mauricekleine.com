@@ -130,9 +130,9 @@
   }
   .mock-sheet sup a {
     padding: 0 2px;
-    border-bottom: 1px solid var(--primary);
+    border-bottom: 1px solid var(--foreground);
     font: 500 12px/1 var(--font-sans);
-    color: var(--primary);
+    color: var(--foreground);
   }
   .mock-figure {
     margin-top: 56px;
@@ -165,7 +165,7 @@
   .mock-notes a {
     margin-right: 8px;
     font: 500 12px var(--font-sans);
-    color: var(--primary);
+    color: var(--foreground);
   }
   .mock-margin {
     position: sticky;
@@ -190,14 +190,14 @@
     font-size: var(--text-ui);
     line-height: 20px;
   }
-  .mock-contents a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
+  @media (hover: hover) {
+    .mock-contents a:not([aria-current]):hover {
+      background: var(--control-hover);
+    }
   }
   .mock-contents a[aria-current] {
-    border-color: var(--primary);
-    background: var(--accent);
-    color: var(--accent-foreground);
+    border-color: var(--selected);
+    color: var(--selected);
     font-weight: 500;
   }
   .mock-contents a[aria-current]::before {
@@ -205,7 +205,7 @@
     flex: none;
     width: 8px;
     height: 8px;
-    background: var(--primary);
+    background: var(--selected);
   }
   .mock-meter {
     margin-top: 16px;
@@ -335,6 +335,13 @@
       grid-template-columns: minmax(0, 1fr);
     }
   }
+  /* the phone drawing needs 324 px; a narrower pane takes the same six weeks on 36 px slots */
+  @container (max-width: 323px) {
+    .mock-chart {
+      --slot: 36px;
+      --bar: 24px;
+    }
+  }
 
   /* Paired fields span both columns where they need the full measure. */
   .mock-wide {
@@ -371,6 +378,9 @@
     }
     .mock-field {
       width: min(100%, var(--field-phone-w));
+    }
+    .mock-contents a {
+      padding-block: 11px;
     }
   }
 

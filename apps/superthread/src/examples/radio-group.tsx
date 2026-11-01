@@ -23,7 +23,7 @@ export function RadioGroupExample() {
 const states = [
   { name: "rest", note: "18 px input box" },
   { name: "hover", note: "keeps its input edge", demo: "hover" },
-  { name: "chosen", note: "8 px house square", checked: true },
+  { name: "chosen", note: "8 px foreground square", checked: true },
   { name: "focus", note: "2 px ring, 2 px out", demo: "focus-visible" },
   { name: "invalid", note: "error edge", invalid: true },
   { name: "disabled", note: "faint stock", disabled: true },

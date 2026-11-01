@@ -44,7 +44,7 @@ function Page() {
       </Section>
       <Section id="parts" title="parts">
         <p className="st-e-copy">
-          the label legend uses interface type. choice cards box the checked field in the house ink. a plain separator
+          the label legend uses interface type. choice cards edge the checked field in foreground. a plain separator
           divides the parts, and an error list removes duplicate messages.
         </p>
         <ModePair className="st-e-wide">

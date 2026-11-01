@@ -206,6 +206,12 @@ export function roles(master: Master, stars: readonly Star[] = []): Role[] {
     "key",
     each(() => path(KEY)),
   );
+  // the current item in a nav, wherever it is drawn: the foreground word, its 1 px edge and its 8 px square, no fill.
+  // The frame pins it to --sidebar-foreground, so on the ground it matches the words beside it.
+  add(
+    "selected",
+    each((m) => path(`${m}.foreground`)),
+  );
   // the scrim under a modal layer, as build_reach.py sets --scrim
   add(
     "scrim",

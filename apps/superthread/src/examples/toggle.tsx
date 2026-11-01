@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Icon } from "@/components/superthread/ui/glyphs";
 import { Toggle } from "@/components/superthread/ui/toggle";
 import { State } from "@/examples/input";
 export function ToggleExample() {
@@ -48,6 +49,15 @@ export function ToggleSizes() {
           </div>
         </State>
       ))}
+      <State name="icon" note="a square of one glyph, 32, 40 or 48 px; the edge says pressed">
+        <div className="st-e-row">
+          {(["icon-sm", "icon", "icon-lg"] as const).map((size) => (
+            <Toggle key={size} variant="outline" size={size} pressed={size === "icon"} aria-label="pin">
+              <Icon name="plus" />
+            </Toggle>
+          ))}
+        </div>
+      </State>
     </div>
   );
 }
@@ -58,7 +68,7 @@ export function ToggleStates() {
         { name: "rest", note: "quiet outline" },
         { name: "hover", note: "control hover fill", demo: "hover" },
         { name: "focus", note: "2 px ring, 2 px out", demo: "focus-visible" },
-        { name: "pressed", note: "house edge, accent fill", pressed: true },
+        { name: "pressed", note: "foreground edge, tick", pressed: true },
         { name: "invalid", note: "error edge", invalid: true },
         { name: "disabled", note: "faint stock, dim label", disabled: true },
         { name: "disabled, pressed", note: "pressed box stays visible", disabled: true, pressed: true },

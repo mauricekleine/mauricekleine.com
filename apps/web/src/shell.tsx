@@ -149,9 +149,6 @@ export function Shell({
             <ModeControl compact />
           </div>
         )}
-        <div className="mk-house" role="img" aria-label="the house ink: plum" title="the house ink: plum">
-          <i />
-        </div>
       </header>
       <div className={cn("mk-body", !sections && "mk-body-solo")}>
         <nav className="mk-nav" aria-label="site">

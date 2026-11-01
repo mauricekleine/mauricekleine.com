@@ -18,7 +18,7 @@ function Page() {
     <>
       <PageHead
         title="radio group"
-        lede="one choice from a named set. an 18 px square holds an 8 px house square when chosen."
+        lede="one choice from a named set. an 18 px square holds an 8 px foreground square when chosen."
       >
         <InstallLine items={["radio-group"]} />
       </PageHead>

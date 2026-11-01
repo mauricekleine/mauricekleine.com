@@ -2,9 +2,8 @@ import { createContext, useCallback, useContext, useEffect, useId, useState } fr
 import { cn } from "@/components/superthread/lib/utils";
 import { Command, CommandDialog, CommandEmpty, CommandInput, CommandList } from "@/components/superthread/ui/command";
 import { Icon } from "@/components/superthread/ui/glyphs";
-import { Kbd } from "@/components/superthread/ui/kbd";
 
-type PaletteState = { open: boolean; setOpen: (open: boolean) => void; hotkey: string | null; contentId: string };
+type PaletteState = { open: boolean; setOpen: (open: boolean) => void; contentId: string };
 const PaletteContext = createContext<PaletteState | null>(null);
 
 function usePalette() {
@@ -75,13 +74,14 @@ function SearchPalette({
   }, [hotkey, open, setOpen]);
 
   return (
-    <PaletteContext value={{ open, setOpen, hotkey, contentId }}>
+    <PaletteContext value={{ open, setOpen, contentId }}>
       <div data-mk="search-palette" data-slot="search-palette" className={cn("contents", className)} {...props} />
     </PaletteContext>
   );
 }
 
-// The search box is a button, so focus draws the control ring and its words remain a hint, never a value.
+// The search box is a button, so focus draws the control ring and its words remain a hint, never a value. It prints no
+// keycap.
 function SearchPaletteTrigger({
   className,
   placeholder = "search everything",
@@ -89,7 +89,7 @@ function SearchPaletteTrigger({
   children,
   ...props
 }: React.ComponentProps<"button"> & { placeholder?: string }) {
-  const { open, setOpen, hotkey, contentId } = usePalette();
+  const { open, setOpen, contentId } = usePalette();
   return (
     <button
       data-mk="search-palette"
@@ -100,7 +100,7 @@ function SearchPaletteTrigger({
       aria-expanded={open}
       aria-controls={open ? contentId : undefined}
       className={cn(
-        "flex h-10 w-full min-w-0 items-center gap-2 border border-input bg-background px-3 text-left text-ui text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled",
+        "flex h-10 w-full min-w-0 items-center gap-2 border border-input bg-background px-3 text-left text-ui text-foreground [@media(max-width:600px)]:h-11 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled",
         className,
       )}
       {...props}
@@ -111,7 +111,6 @@ function SearchPaletteTrigger({
     >
       <Icon name="search" className="shrink-0" />
       <span className="min-w-0 flex-1 truncate text-muted-foreground">{children ?? placeholder}</span>
-      {hotkey !== null && <Kbd aria-hidden="true">⌘/ctrl {hotkey.toLowerCase()}</Kbd>}
     </button>
   );
 }

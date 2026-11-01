@@ -150,7 +150,7 @@ function claim(name: string): string[] {
 
 // The edge a box draws while it is its own focused control (GATE.md: border and a 2 px outline at -2 px in --fx).
 const SELF_EDGE = ["focus:border-(--fx)", "focus:outline-2", "focus:-outline-offset-2", "focus:outline-(--fx)"];
-const FX_PRIMARY = "[--fx:var(--primary)]";
+const FX_RING = "[--fx:var(--ring)]";
 
 const ships = ["orbit", "quanta", "trisys"];
 
@@ -198,7 +198,7 @@ describe("input", () => {
 
   test("the box is its own control: focus draws its edge, the caret takes --fx, and --fx turns to the error ink", () => {
     const { classes } = one(states[0]!, "input");
-    expect(classes).toEqual(expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", FX_PRIMARY]));
+    expect(classes).toEqual(expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", FX_RING]));
     expect(classes).toEqual(expect.arrayContaining(["aria-invalid:[--fx:var(--error)]", "aria-invalid:border-error"]));
   });
 
@@ -229,7 +229,7 @@ describe("textarea", () => {
 
   test("the box is its own control: focus draws its edge, the caret takes --fx, and --fx turns to the error ink", () => {
     const { classes } = one(states[0]!, "textarea");
-    expect(classes).toEqual(expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", FX_PRIMARY]));
+    expect(classes).toEqual(expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", FX_RING]));
     expect(classes).toEqual(expect.arrayContaining(["aria-invalid:[--fx:var(--error)]", "aria-invalid:border-error"]));
   });
 
@@ -256,18 +256,8 @@ describe("select", () => {
   test("the trigger is a field whose box is the control: focus draws its edge in --fx", () => {
     const { classes } = one(states[0]!, "[data-slot=select-trigger]");
     expect(classes).toEqual(
-      expect.arrayContaining([
-        ...SELF_EDGE,
-        FX_PRIMARY,
-        "aria-invalid:[--fx:var(--error)]",
-        "aria-invalid:border-error",
-      ]),
+      expect.arrayContaining([...SELF_EDGE, FX_RING, "aria-invalid:[--fx:var(--error)]", "aria-invalid:border-error"]),
     );
-  });
-
-  test("the global ring leaves the trigger alone, keyed on its data-slot", () => {
-    const ring = css.match(/^\s*(.+):focus-visible \{\n\s*outline: 2px solid var\(--ring\);\n\s*outline-offset: 2px;/m);
-    expect(ring?.[1]).toContain(':where(:not([data-slot="select-trigger"]))');
   });
 
   test("the trigger carries no texture class, at rest, invalid or disabled", () => {
@@ -304,14 +294,20 @@ describe("select", () => {
 
     // shadcn's tailwind.css narrows data-selected: to data-selected="true"; Base UI sets data-selected empty, so the
     // chosen option is styled on aria-selected, which Base UI sets to "true"
-    test("the chosen option is boxed on aria-selected, never data-selected:", () => {
+    test("the chosen option keeps its check over the raised hover on aria-selected, never data-selected:", () => {
       const chosen = one(body, "[role=option][aria-selected=true]");
       expect(chosen.el.textContent).toBe("trisys");
-      expect(chosen.classes).toEqual(
-        expect.arrayContaining(["aria-selected:border-primary", "aria-selected:bg-accent"]),
-      );
+      expect(chosen.el.querySelector("svg")).not.toBeNull();
+      expect(chosen.classes).toContain("aria-selected:bg-raised-hover");
+      expect(chosen.classes.filter((cls) => /primary|accent/.test(cls) && !cls.startsWith("focus"))).toEqual([]);
       const options = elements(body).filter(({ el }) => el.getAttribute("role") === "option");
       expect(options.flatMap(({ classes }) => classes.filter((cls) => cls.includes("data-selected")))).toEqual([]);
+    });
+
+    test("an option row is 36 px, 44 px on a phone", () => {
+      expect(one(body, "[role=option]").classes).toEqual(
+        expect.arrayContaining(["h-9", "[@media(max-width:600px)]:h-11"]),
+      );
     });
 
     test("the open select carries only texture-contact, and no forbidden class", () => {
@@ -423,6 +419,16 @@ describe("checkbox", () => {
     expect(one(states[4]!, "[role=checkbox]").el.getAttribute("aria-invalid")).toBe("true");
   });
 
+  test("a ticked box fills in foreground with the tick in stock", () => {
+    expect(one(states[1]!, "[role=checkbox]").classes).toEqual(
+      expect.arrayContaining([
+        "data-checked:border-foreground",
+        "data-checked:bg-foreground",
+        "data-checked:text-background",
+      ]),
+    );
+  });
+
   test("it is a control: its span takes the 2 px ring 2 px outside it", () => {
     const { el, classes } = one(states[0]!, "[role=checkbox]");
     expect(el.tagName).toBe("SPAN");
@@ -503,7 +509,7 @@ describe("input-group", () => {
         "has-[input:focus,textarea:focus]:outline-2",
         "has-[input:focus,textarea:focus]:-outline-offset-2",
         "has-[input:focus,textarea:focus]:outline-(--fx)",
-        FX_PRIMARY,
+        FX_RING,
         "has-[[aria-invalid=true]]:[--fx:var(--error)]",
         "has-[[aria-invalid=true]]:border-error",
       ]),
@@ -533,7 +539,7 @@ describe("input-group", () => {
       expect.arrayContaining([
         "focus-visible:outline-2",
         "focus-visible:-outline-offset-2",
-        "focus-visible:outline-(--primary)",
+        "focus-visible:outline-(--ring)",
       ]),
     );
   });

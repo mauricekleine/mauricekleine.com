@@ -33,7 +33,7 @@ function ToolbarGroup({ className, label, children, ...props }: React.ComponentP
       className={cn("flex min-w-0 max-w-full flex-wrap items-center gap-2", className)}
       {...props}
     >
-      <span id={labelId} className="type-meta text-muted-foreground">
+      <span id={labelId} className="type-instrument text-muted-foreground">
         {label}
       </span>
       {children}
@@ -54,7 +54,7 @@ function ToolbarSpacer({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// The active filter is boxed in the house ink. Its clear control keeps its own ring inside the box.
+// The active filter is neutral: a foreground edge, no fill. Its clear control keeps its own ring inside the box.
 function FilterChip({
   className,
   children,
@@ -69,7 +69,7 @@ function FilterChip({
       data-mk="collection-toolbar"
       data-slot="filter-chip"
       className={cn(
-        "flex min-h-10 min-w-0 max-w-full items-center gap-2 border border-primary bg-accent pl-3 text-ui text-foreground",
+        "flex min-h-10 min-w-0 max-w-full items-center gap-2 border border-foreground pl-3 text-ui text-foreground [@media(max-width:600px)]:min-h-11",
         className,
       )}
       {...props}
@@ -81,7 +81,7 @@ function FilterChip({
         type="button"
         aria-label={clearLabel}
         onClick={onClear}
-        className="flex w-10 shrink-0 items-center justify-center self-stretch transition-[background-color] duration-(--duration-instant) ease-(--ease-brand) hover:bg-control-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)"
+        className="flex w-10 shrink-0 items-center justify-center self-stretch [@media(max-width:600px)]:w-11 transition-[background-color] duration-(--duration-instant) ease-(--ease-brand) hover:bg-control-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)"
       >
         <Icon name="close" />
       </button>

@@ -227,11 +227,13 @@ function List({ tasks, status, agent }: { tasks: readonly Task[]; status: BoardS
         {ordered.map((task) => (
           <ListRow key={task.id}>
             <ListRowTitle>{task.title}</ListRowTitle>
-            <ListRowAside>{task.age}</ListRowAside>
+            <ListRowAside>
+              <Badge size="sm" variant={task.state} />
+            </ListRowAside>
             <ListRowMeta>
               <span className="font-mono">{task.id}</span>
-              <Badge variant={task.state} />
               <span>{task.agent}</span>
+              <span>{task.age}</span>
             </ListRowMeta>
           </ListRow>
         ))}

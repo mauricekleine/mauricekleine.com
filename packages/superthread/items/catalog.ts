@@ -24,7 +24,6 @@ export type InitConfig = {
   style: string;
   rsc: boolean;
   tsx: boolean;
-  iconLibrary: string;
   // build-registry.ts replaces the @mk URL with the base it builds for
   registries: { "@mk": string };
 };
@@ -87,10 +86,9 @@ export const catalog: CatalogItem[] = [
       style: "base-nova",
       rsc: false,
       tsx: true,
-      iconLibrary: "phosphor",
       registries: { "@mk": "https://superthread.mauricekleine.com/r/{name}.json" },
     },
-    dependencies: ["@base-ui/react@^1.8.0", "class-variance-authority@^0.7.1", "@phosphor-icons/react@^2.1.10"],
+    dependencies: ["@base-ui/react@^1.8.0", "class-variance-authority@^0.7.1"],
     registryDependencies: ["@mk/utils", "@mk/tokens", "@mk/button"],
   },
   {
@@ -159,6 +157,15 @@ export const catalog: CatalogItem[] = [
     upstream: null,
   },
   {
+    name: "time-words",
+    type: "registry:lib",
+    title: "time-words",
+    description: "time in the fleet's words: since friday, before 11:00, 48 min until standup, every day at 07:00",
+    files: [lib("time-words")],
+    tier: "lib",
+    upstream: null,
+  },
+  {
     name: "glyphs",
     type: "registry:ui",
     title: "glyphs",
@@ -171,7 +178,8 @@ export const catalog: CatalogItem[] = [
     name: "button",
     type: "registry:ui",
     title: "button",
-    description: "a button in the house ink, with secondary, outline, ghost, link and destructive variants",
+    description:
+      "a button in the house ink on paper and an outline off it, with secondary, outline, ghost, key, link and destructive variants",
     files: [ui("button")],
     tier: "brand",
     upstream: "button",
@@ -260,7 +268,7 @@ export const catalog: CatalogItem[] = [
     name: "progress",
     type: "registry:ui",
     title: "progress",
-    description: "a flat house-ink bar with a screened leading edge",
+    description: "a flat foreground bar with a screened leading edge",
     files: [ui("progress")],
     tier: "brand",
     upstream: "progress",
@@ -279,7 +287,7 @@ export const catalog: CatalogItem[] = [
     name: "sidebar",
     type: "registry:ui",
     title: "sidebar",
-    description: "the sidebar on the deep ground, with a boxed current item",
+    description: "the sidebar on the deep ground, with a neutral current item",
     files: [ui("sidebar")],
     tier: "brand",
     upstream: "sidebar",
@@ -318,7 +326,7 @@ export const catalog: CatalogItem[] = [
     name: "switch",
     type: "registry:ui",
     title: "switch",
-    description: "a square switch: the house ink when on, a key square that crosses the track",
+    description: "a square switch: foreground when on, a stock square that crosses the track",
     files: [ui("switch")],
     tier: "brand",
     upstream: "switch",
@@ -327,7 +335,7 @@ export const catalog: CatalogItem[] = [
     name: "radio-group",
     type: "registry:ui",
     title: "radio group",
-    description: "square radios: the chosen one boxed in the house ink with its 8 px square",
+    description: "square radios: the chosen one edged in foreground with its 8 px square",
     files: [ui("radio-group")],
     tier: "brand",
     upstream: "radio-group",
@@ -336,7 +344,7 @@ export const catalog: CatalogItem[] = [
     name: "slider",
     type: "registry:ui",
     title: "slider",
-    description: "a slider on a ruled track, with a flat house-ink range and a square thumb",
+    description: "a slider on a ruled track, with a flat foreground range and a square thumb",
     files: [ui("slider")],
     tier: "brand",
     upstream: "slider",
@@ -345,7 +353,7 @@ export const catalog: CatalogItem[] = [
     name: "toggle",
     type: "registry:ui",
     title: "toggle",
-    description: "a button that stays pressed, boxed in the house ink while it is on",
+    description: "a button that stays pressed, with a foreground edge and a tick while it is on",
     files: [ui("toggle")],
     tier: "brand",
     upstream: "toggle",

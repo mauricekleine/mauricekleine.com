@@ -4,7 +4,7 @@ import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group
 import { type VariantProps } from "class-variance-authority";
 import { cn } from "@/components/superthread/lib/utils";
 
-import { toggleVariants } from "@/components/superthread/ui/toggle";
+import { ToggleTick, toggleVariants } from "@/components/superthread/ui/toggle";
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants> & {
@@ -55,7 +55,9 @@ function ToggleGroup({
   );
 }
 
-// Shared edges overlap by 1 px. The pressed edge rises above its neighbour; joined focus draws inside.
+// Shared edges overlap by 1 px. The pressed edge rises above its neighbour; joined focus draws inside. On a phone a joined
+// item's box reaches 44 px along the group, since a hit area there would take taps from its neighbour. The item renders
+// the primitive itself, so it draws the tick a Toggle draws.
 function ToggleGroupItem({
   className,
   children,
@@ -78,12 +80,16 @@ function ToggleGroupItem({
         }),
         "relative shrink-0 focus-visible:z-20 aria-pressed:z-10",
         context.spacing === 0 && "focus-visible:-outline-offset-2",
-        context.spacing === 0 && (context.orientation === "vertical" ? "not-first:-mt-px" : "not-first:-ml-px"),
+        context.spacing === 0 &&
+          (context.orientation === "vertical"
+            ? "not-first:-mt-px [@media(max-width:600px)]:min-h-11"
+            : "not-first:-ml-px [@media(max-width:600px)]:min-w-11"),
         className,
       )}
       {...props}
     >
       {children}
+      <ToggleTick size={context.size || size} />
     </TogglePrimitive>
   );
 }

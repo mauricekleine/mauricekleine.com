@@ -23,6 +23,7 @@
     background: var(--background);
   }
   .st-opener-knock h1 {
+    color: var(--first);
     font-family: var(--font-display);
     font-size: var(--text-display);
     font-weight: 300;

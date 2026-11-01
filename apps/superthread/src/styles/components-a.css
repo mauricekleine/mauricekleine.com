@@ -208,4 +208,17 @@
   .st-a-checkstates .st-a-state > :first-child {
     margin: 4px;
   }
+  /* a stack of ticks on a phone: each row is the 44 px its hit area needs */
+  @media (max-width: 600px) {
+    .st-a-checks,
+    .st-a-children {
+      row-gap: 0;
+    }
+    .st-a-children {
+      margin-top: 0;
+    }
+    .st-a-check {
+      min-height: 44px;
+    }
+  }
 }

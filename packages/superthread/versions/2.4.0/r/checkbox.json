@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox",
+  "title": "checkbox",
+  "description": "a square checkbox with a screened mixed state",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/glyphs",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/checkbox.tsx",
+      "content": "import { Checkbox as CheckboxPrimitive } from \"@base-ui/react/checkbox\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n\nimport { Icon } from \"@/components/superthread/ui/glyphs\";\n// @mk/checkbox 2.4.0\n\n// A square box with the input edge. Checked fills it in foreground; mixed (some, not all) keeps the stock fill inside\n// a foreground edge and prints foreground at 50 percent (texture-mixed). It is a control, not a field: keyboard focus\n// draws the 2 px ring 2 px outside it.\nfunction Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {\n  return (\n    <CheckboxPrimitive.Root\n      data-slot=\"checkbox\"\n      data-mk=\"checkbox\"\n      className={cn(\n        \"peer relative flex size-[18px] shrink-0 items-center justify-center border border-input bg-background texture-mixed hit-area focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) aria-invalid:border-error data-checked:border-foreground data-checked:bg-foreground data-checked:text-background data-indeterminate:border-foreground data-disabled:cursor-not-allowed data-disabled:data-checked:border-input data-disabled:data-checked:bg-faint data-disabled:data-checked:text-disabled data-disabled:not-data-checked:bg-faint\",\n        className,\n      )}\n      {...props}\n    >\n      <CheckboxPrimitive.Indicator\n        data-slot=\"checkbox-indicator\"\n        className=\"grid place-content-center text-current data-indeterminate:hidden\"\n      >\n        <Icon name=\"check\" />\n      </CheckboxPrimitive.Indicator>\n    </CheckboxPrimitive.Root>\n  );\n}\n\nexport { Checkbox };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/checkbox.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.4.0",
+    "sha256": "5541b589960c8ce5c27a594996ae471bed0b5036c8f193209db8873f96791066",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "checkbox",
+      "sha256": "e6df7b595f25a7ee97c3fb94e0ddc35998f74c98b990d3030e485905ec677178",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

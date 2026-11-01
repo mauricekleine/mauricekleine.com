@@ -92,7 +92,7 @@ export const ICON_MAP: Record<string, { glyph: string; add?: string; drop?: stri
  * that carry them here. `regen` fails on a hook this table does not map, so no pass item names an undefined class.
  */
 export const STYLE_HOOKS: Record<string, string[]> = {
-  "cn-font-heading": ["font-display"],
+  "cn-font-heading": ["font-display", "text-first"],
 };
 
 /**
@@ -109,6 +109,8 @@ export const PASS_CLASSES: Record<string, Record<string, string[]>> = {
     "supports-backdrop-filter:backdrop-blur-xs": [],
     // the panel lifts as a sheet, as the dialog does
     "shadow-lg": ["shadow-sheet"],
+    // the title's display face already brings the first ink
+    "text-foreground": [],
   },
   // corners come from the radius tokens, which are square; a literal radius would round the arrow alone
   tooltip: { "rounded-[2px]": [] },

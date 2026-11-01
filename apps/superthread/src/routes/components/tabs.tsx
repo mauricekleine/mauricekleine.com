@@ -22,7 +22,7 @@ function Page() {
     <>
       <PageHead
         title="tabs"
-        lede="tabs sit on a rule. the current tab is solid: its word in the foreground over a 2&nbsp;px bar of the house ink."
+        lede="tabs sit on a rule. the current tab is solid: its word and a 2&nbsp;px bar, both in foreground."
       >
         <InstallLine items={["tabs"]} />
       </PageHead>

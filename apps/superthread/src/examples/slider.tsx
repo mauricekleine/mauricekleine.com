@@ -61,11 +61,11 @@ export function SliderStates() {
     <div className="st-e-states" inert>
       {[
         { name: "rest", note: "8 px track, 16 px thumb" },
-        { name: "hover", note: "accent thumb fill", demo: "hover" },
+        { name: "hover", note: "control hover thumb", demo: "hover" },
         { name: "focus", note: "outside house ring", demo: "focus-visible" },
-        { name: "dragging", note: "accent thumb fill", dragging: true },
+        { name: "dragging", note: "control hover thumb", dragging: true },
         { name: "minimum", note: "thumb stays inside", value: 0 },
-        { name: "maximum", note: "flat house range", value: 100 },
+        { name: "maximum", note: "flat foreground range", value: 100 },
         { name: "disabled", note: "disabled edge and range", disabled: true },
       ].map((s) => (
         <State key={s.name} name={s.name} note={s.note}>

@@ -48,6 +48,7 @@ import { Route as ComponentsSwitchRouteImport } from './routes/components/switch
 import { Route as ComponentsTableRouteImport } from './routes/components/table'
 import { Route as ComponentsTabsRouteImport } from './routes/components/tabs'
 import { Route as ComponentsTextareaRouteImport } from './routes/components/textarea'
+import { Route as ComponentsTimeWordsRouteImport } from './routes/components/time-words'
 import { Route as ComponentsToastRouteImport } from './routes/components/toast'
 import { Route as ComponentsToggleRouteImport } from './routes/components/toggle'
 import { Route as ComponentsToggleGroupRouteImport } from './routes/components/toggle-group'
@@ -271,6 +272,11 @@ const ComponentsTextareaRoute = ComponentsTextareaRouteImport.update({
   path: '/components/textarea',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComponentsTimeWordsRoute = ComponentsTimeWordsRouteImport.update({
+  id: '/components/time-words',
+  path: '/components/time-words',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComponentsToastRoute = ComponentsToastRouteImport.update({
   id: '/components/toast',
   path: '/components/toast',
@@ -450,6 +456,7 @@ export interface FileRoutesByFullPath {
   '/components/table': typeof ComponentsTableRoute
   '/components/tabs': typeof ComponentsTabsRoute
   '/components/textarea': typeof ComponentsTextareaRoute
+  '/components/time-words': typeof ComponentsTimeWordsRoute
   '/components/toast': typeof ComponentsToastRoute
   '/components/toggle': typeof ComponentsToggleRoute
   '/components/toggle-group': typeof ComponentsToggleGroupRoute
@@ -518,6 +525,7 @@ export interface FileRoutesByTo {
   '/components/table': typeof ComponentsTableRoute
   '/components/tabs': typeof ComponentsTabsRoute
   '/components/textarea': typeof ComponentsTextareaRoute
+  '/components/time-words': typeof ComponentsTimeWordsRoute
   '/components/toast': typeof ComponentsToastRoute
   '/components/toggle': typeof ComponentsToggleRoute
   '/components/toggle-group': typeof ComponentsToggleGroupRoute
@@ -587,6 +595,7 @@ export interface FileRoutesById {
   '/components/table': typeof ComponentsTableRoute
   '/components/tabs': typeof ComponentsTabsRoute
   '/components/textarea': typeof ComponentsTextareaRoute
+  '/components/time-words': typeof ComponentsTimeWordsRoute
   '/components/toast': typeof ComponentsToastRoute
   '/components/toggle': typeof ComponentsToggleRoute
   '/components/toggle-group': typeof ComponentsToggleGroupRoute
@@ -657,6 +666,7 @@ export interface FileRouteTypes {
     | '/components/table'
     | '/components/tabs'
     | '/components/textarea'
+    | '/components/time-words'
     | '/components/toast'
     | '/components/toggle'
     | '/components/toggle-group'
@@ -725,6 +735,7 @@ export interface FileRouteTypes {
     | '/components/table'
     | '/components/tabs'
     | '/components/textarea'
+    | '/components/time-words'
     | '/components/toast'
     | '/components/toggle'
     | '/components/toggle-group'
@@ -793,6 +804,7 @@ export interface FileRouteTypes {
     | '/components/table'
     | '/components/tabs'
     | '/components/textarea'
+    | '/components/time-words'
     | '/components/toast'
     | '/components/toggle'
     | '/components/toggle-group'
@@ -862,6 +874,7 @@ export interface RootRouteChildren {
   ComponentsTableRoute: typeof ComponentsTableRoute
   ComponentsTabsRoute: typeof ComponentsTabsRoute
   ComponentsTextareaRoute: typeof ComponentsTextareaRoute
+  ComponentsTimeWordsRoute: typeof ComponentsTimeWordsRoute
   ComponentsToastRoute: typeof ComponentsToastRoute
   ComponentsToggleRoute: typeof ComponentsToggleRoute
   ComponentsToggleGroupRoute: typeof ComponentsToggleGroupRoute
@@ -1166,6 +1179,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsTextareaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/components/time-words': {
+      id: '/components/time-words'
+      path: '/components/time-words'
+      fullPath: '/components/time-words'
+      preLoaderRoute: typeof ComponentsTimeWordsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/components/toast': {
       id: '/components/toast'
       path: '/components/toast'
@@ -1398,6 +1418,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsTableRoute: ComponentsTableRoute,
   ComponentsTabsRoute: ComponentsTabsRoute,
   ComponentsTextareaRoute: ComponentsTextareaRoute,
+  ComponentsTimeWordsRoute: ComponentsTimeWordsRoute,
   ComponentsToastRoute: ComponentsToastRoute,
   ComponentsToggleRoute: ComponentsToggleRoute,
   ComponentsToggleGroupRoute: ComponentsToggleGroupRoute,

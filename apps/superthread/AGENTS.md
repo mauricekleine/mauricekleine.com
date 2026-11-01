@@ -60,7 +60,7 @@ bun apps/superthread/tools/shoot.ts --focus --base http://127.0.0.1:3001 --tag <
 ## Never
 
 - Edit items, tokens or generated files from the site; change them at their source in `packages/superthread/` and regenerate.
-- Change a snapshot under `packages/superthread/versions/` once it is on main, or anything www serves at its v1 `/r`.
+- Change a snapshot under `packages/superthread/versions/` once it is on main.
 - Copy the surface contract's prose, or print a private host, a client's name or real data on any page.
 - Load fonts at runtime from Fontshare or Google; the faces are served from `/fonts/`.
 - Add a domain, a Workers Builds project or a deploy. Those are Maurice's steps.

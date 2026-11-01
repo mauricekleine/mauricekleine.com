@@ -37,7 +37,7 @@ export function ToggleGroupVariants() {
   return (
     <div className="st-e-states" inert>
       {(["default", "outline"] as const).map((variant) => (
-        <State key={variant} name={variant} note="shared edge, boxed selection">
+        <State key={variant} name={variant} note="shared edge, pressed edge and tick">
           <Views variant={variant} />
         </State>
       ))}

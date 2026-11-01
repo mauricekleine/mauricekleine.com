@@ -39,7 +39,7 @@ const breakpointUse: Record<keyof typeof breakpoints, string> = {
   wide: "the masthead and the aside tighten",
   aside: "the aside drops below the page",
   bar: "the nav moves into the top bar and mode pairs stack",
-  phone: "the phone type sizes and plates take over",
+  phone: "the phone type sizes and plates take over, and every target reaches 44 px",
 };
 
 type Lift = keyof typeof tokens.shadow.elevation;

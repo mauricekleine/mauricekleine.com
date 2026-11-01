@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-25T08:31:57.446Z",
+  "generatedAt": "2026-11-01T21:20:51.000Z",
   "title": "Design System: superthread",
   "extensions": {
     "colorMeta": {
@@ -937,6 +937,21 @@
       "key": {
         "role": "neutral",
         "displayName": "key",
+        "canonical": "oklch(0.2091 0.0104 268.19)",
+        "tonalRamp": [
+          "oklch(0.2091 0.0104 268.19)",
+          "oklch(0.5036 0.0016 286.34)",
+          "oklch(0.6103 0.0015 286.36)",
+          "oklch(0.7155 0 0)",
+          "oklch(0.807 0.0011 197.13)",
+          "oklch(0.8795 0.0014 286.37)",
+          "oklch(0.928 0 0)",
+          "oklch(0.9821 0 0)"
+        ]
+      },
+      "selected": {
+        "role": "neutral",
+        "displayName": "current item",
         "canonical": "oklch(0.2091 0.0104 268.19)",
         "tonalRamp": [
           "oklch(0.2091 0.0104 268.19)",
@@ -2359,6 +2374,21 @@
           "oklch(0.928 0 0)"
         ]
       },
+      "dark-selected": {
+        "role": "neutral",
+        "displayName": "current item (dark)",
+        "canonical": "oklch(0.928 0 0)",
+        "tonalRamp": [
+          "oklch(0.2091 0.0104 268.19)",
+          "oklch(0.2678 0.0063 258.36)",
+          "oklch(0.3379 0.0052 286.12)",
+          "oklch(0.4089 0.0036 264.52)",
+          "oklch(0.4755 0.0032 286.28)",
+          "oklch(0.6271 0.0015 286.36)",
+          "oklch(0.7636 0 0)",
+          "oklch(0.928 0 0)"
+        ]
+      },
       "dark-scrim": {
         "role": "neutral",
         "displayName": "scrim (dark)",
@@ -2828,11 +2858,11 @@
     "typographyMeta": {
       "meta": {
         "displayName": "meta",
-        "purpose": "legends, table heads and the select list's group labels, in caps"
+        "purpose": "legends and the group labels inside a select, menu or command list"
       },
       "instrument": {
         "displayName": "instrument",
-        "purpose": "notes, captions, badges and small controls"
+        "purpose": "notes, captions, badges, small controls, fact labels, toolbar group labels and table heads"
       },
       "ui": {
         "displayName": "ui",
@@ -2840,7 +2870,7 @@
       },
       "summary": {
         "displayName": "summary",
-        "purpose": "the text under a section head"
+        "purpose": "the text under a form section's title and a page head's meta line"
       },
       "subtitle": {
         "displayName": "subtitle",
@@ -2864,11 +2894,11 @@
       },
       "title": {
         "displayName": "title",
-        "purpose": "card and board titles"
+        "purpose": "card, board and form titles, and a section head in a panel"
       },
       "section": {
         "displayName": "section",
-        "purpose": "section heads"
+        "purpose": "a page head's title in a panel, and a section head on the stock"
       },
       "page": {
         "displayName": "page",
@@ -2880,11 +2910,11 @@
       },
       "hero": {
         "displayName": "hero",
-        "purpose": "a page head's title"
+        "purpose": "a page head's title on the stock, or at size=\"page\""
       },
       "hero-phone": {
         "displayName": "hero on a phone",
-        "purpose": "type-hero at 600 px and below: a page head's title"
+        "purpose": "type-hero at 600 px and below: a page head's title on the stock, or at size=\"page\""
       },
       "display": {
         "displayName": "display",
@@ -2995,9 +3025,9 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "the one chromatic control: plum fill and edge under the stock label, darker on hover and press, the ring snapping on at 2 px.",
+      "description": "the one chromatic control: plum fill and edge under the stock label, darker on hover and press, the ring snapping on at 2 px. in a dark scope it prints as the outline.",
       "html": "<button class=\"ds-btn ds-btn-primary\" type=\"button\">save changes</button>",
-      "css": ".ds-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 40px; padding: 0 18px; border: 1px solid transparent; border-radius: var(--radius); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } .ds-btn .ds-glyph { flex-shrink: 0; } .ds-btn-primary { border-color: var(--primary); background: var(--primary); color: var(--primary-foreground); } .ds-btn-primary:hover { border-color: var(--primary-hover); background: var(--primary-hover); } .ds-btn-primary:active { border-color: var(--primary-press); background: var(--primary-press); box-shadow: inset 0 0 0 1px var(--key); }"
+      "css": ".ds-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 40px; padding: 0 18px; border: 1px solid transparent; border-radius: var(--radius); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } .ds-btn .ds-glyph { flex-shrink: 0; } .ds-btn-primary { border-color: var(--primary); background: var(--primary); color: var(--primary-foreground); } .ds-btn-primary:hover { border-color: var(--primary-hover); background: var(--primary-hover); } .ds-btn-primary:active { border-color: var(--primary-press); background: var(--primary-press); box-shadow: inset 0 0 0 1px var(--key); } :host-context(.dark) .ds-btn-primary { border-color: currentColor; background: transparent; color: var(--foreground); } :host-context(.dark) .ds-btn-primary:hover { background: var(--control-hover); } :host-context(.dark) .ds-btn-primary:active { background: var(--control-press); box-shadow: none; }"
     },
     {
       "name": "Outline Button",
@@ -3011,9 +3041,9 @@
       "name": "Destructive Button",
       "kind": "button",
       "refersTo": "button-destructive",
-      "description": "a destructive action in the first ink, with the trash glyph and its word; red stays a status colour.",
+      "description": "a destructive action in the first ink, with the trash glyph and its word; red stays a status colour. in a dark scope it prints as the outline.",
       "html": "<button class=\"ds-btn ds-btn-destructive\" type=\"button\"><svg class=\"ds-glyph\" viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M4 1h4v1h-4zM1 2h10v1h-10zM2 4h8v1h-8zM2 5h1v1h-1zM4 5h1v1h-1zM7 5h1v1h-1zM9 5h1v1h-1zM2 6h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM9 6h1v1h-1zM2 7h1v1h-1zM4 7h1v1h-1zM7 7h1v1h-1zM9 7h1v1h-1zM2 8h1v1h-1zM4 8h1v1h-1zM7 8h1v1h-1zM9 8h1v1h-1zM2 9h8v1h-8z\"/></svg>delete run</button>",
-      "css": ".ds-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 40px; padding: 0 18px; border: 1px solid transparent; border-radius: var(--radius); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } .ds-btn .ds-glyph { flex-shrink: 0; } .ds-btn-destructive { background: var(--destructive); color: var(--destructive-foreground); } .ds-btn-destructive:hover { background: var(--destructive-hover); } .ds-btn-destructive:active { background: var(--destructive-press); }"
+      "css": ".ds-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 40px; padding: 0 18px; border: 1px solid transparent; border-radius: var(--radius); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } .ds-btn .ds-glyph { flex-shrink: 0; } .ds-btn-destructive { background: var(--destructive); color: var(--destructive-foreground); } .ds-btn-destructive:hover { background: var(--destructive-hover); } .ds-btn-destructive:active { background: var(--destructive-press); } :host-context(.dark) .ds-btn-destructive { border-color: currentColor; background: transparent; color: var(--foreground); } :host-context(.dark) .ds-btn-destructive:hover { background: var(--control-hover); } :host-context(.dark) .ds-btn-destructive:active { background: var(--control-press); }"
     },
     {
       "name": "Text Field",
@@ -3035,33 +3065,33 @@
       "name": "Tabs",
       "kind": "nav",
       "refersTo": "tabs",
-      "description": "the current tab over a 2 px plum bar; a tab that is not current previews that bar at 50 percent on hover.",
+      "description": "the current tab over a 2 px foreground bar; a tab that is not current previews that bar at 50 percent on hover.",
       "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"run\"><button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\" type=\"button\">board</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\" type=\"button\">runs</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\" type=\"button\">logs</button></div>",
-      "css": ".ds-tabs { display: flex; align-items: flex-end; gap: 28px; border-bottom: 1px solid var(--border); } .ds-tab { position: relative; padding: 0 0 12px; border: 0; background: none; color: var(--muted-foreground); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-tab:hover, .ds-tab[aria-selected=\"true\"] { color: var(--foreground); } .ds-tab[aria-selected=\"true\"]::after, .ds-tab:not([aria-selected=\"true\"]):hover::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--primary); pointer-events: none; } .ds-tab:not([aria-selected=\"true\"]):hover::after { mask: var(--texture-b50) 0 0 / 4px 4px; } .ds-tab:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }"
+      "css": ".ds-tabs { display: flex; align-items: flex-end; gap: 28px; border-bottom: 1px solid var(--border); } .ds-tab { position: relative; padding: 0 0 12px; border: 0; background: none; color: var(--muted-foreground); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-tab:hover, .ds-tab[aria-selected=\"true\"] { color: var(--foreground); } .ds-tab[aria-selected=\"true\"]::after, .ds-tab:not([aria-selected=\"true\"]):hover::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--foreground); pointer-events: none; } .ds-tab:not([aria-selected=\"true\"]):hover::after { mask: var(--texture-b50) 0 0 / 4px 4px; } .ds-tab:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }"
     },
     {
       "name": "Select List",
       "kind": "custom",
       "refersTo": "select",
-      "description": "a raised layer on the leaf lift; in light its contact shadow prints as a 50 percent screen at its edge, and the chosen option is boxed in plum.",
-      "html": "<div class=\"ds-list\" role=\"listbox\" aria-label=\"ship\"><div class=\"ds-option\" role=\"option\" aria-selected=\"false\" tabindex=\"0\">orbit</div><div class=\"ds-option\" role=\"option\" aria-selected=\"true\" tabindex=\"0\">quanta</div><div class=\"ds-option\" role=\"option\" aria-selected=\"false\" tabindex=\"0\">trisys</div></div>",
-      "css": ".ds-list { position: relative; width: 220px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--popover); color: var(--popover-foreground); box-shadow: var(--elevation-leaf-rake), inset 0 0 0 1px var(--raised-edge); } .ds-list::after { content: \"\"; position: absolute; left: -1px; top: -1px; width: calc(100% + 2px + var(--contact-x)); height: calc(100% + 2px + var(--contact-y)); background: var(--shadow-ink); pointer-events: none; mask: var(--texture-rake-contact) 0 0 / 4px 4px; clip-path: polygon(calc(100% - var(--contact-x)) var(--contact-y), 100% var(--contact-y), 100% 100%, var(--contact-x) 100%, var(--contact-x) calc(100% - var(--contact-y)), calc(100% - var(--contact-x)) calc(100% - var(--contact-y))); } :host-context(.dark) .ds-list { box-shadow: var(--elevation-leaf); } :host-context(.dark) .ds-list::after { display: none; } .ds-option { display: flex; align-items: center; height: 36px; padding: 0 32px 0 10px; border: 1px solid transparent; font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); cursor: default; } .ds-option:hover:not([aria-selected=\"true\"]) { background: var(--raised-hover); } .ds-option[aria-selected=\"true\"] { border-color: var(--primary); background: var(--accent); color: var(--accent-foreground); } .ds-option:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }"
+      "description": "a raised layer on the leaf lift; in light its contact shadow prints as a 50 percent screen at its edge, and the chosen option keeps its check over the raised hover fill.",
+      "html": "<div class=\"ds-list\" role=\"listbox\" aria-label=\"ship\"><div class=\"ds-option\" role=\"option\" aria-selected=\"false\" tabindex=\"0\">orbit</div><div class=\"ds-option\" role=\"option\" aria-selected=\"true\" tabindex=\"0\">quanta<svg class=\"ds-glyph\" viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M10 2h1v1h-1zM9 3h2v1h-2zM8 4h2v1h-2zM1 5h1v1h-1zM7 5h2v1h-2zM1 6h2v1h-2zM6 6h2v1h-2zM2 7h2v1h-2zM5 7h2v1h-2zM3 8h3v1h-3zM4 9h1v1h-1z\"></path></svg></div><div class=\"ds-option\" role=\"option\" aria-selected=\"false\" tabindex=\"0\">trisys</div></div>",
+      "css": ".ds-list { position: relative; width: 220px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--popover); color: var(--popover-foreground); box-shadow: var(--elevation-leaf-rake), inset 0 0 0 1px var(--raised-edge); } .ds-list::after { content: \"\"; position: absolute; left: -1px; top: -1px; width: calc(100% + 2px + var(--contact-x)); height: calc(100% + 2px + var(--contact-y)); background: var(--shadow-ink); pointer-events: none; mask: var(--texture-rake-contact) 0 0 / 4px 4px; clip-path: polygon(calc(100% - var(--contact-x)) var(--contact-y), 100% var(--contact-y), 100% 100%, var(--contact-x) 100%, var(--contact-x) calc(100% - var(--contact-y)), calc(100% - var(--contact-x)) calc(100% - var(--contact-y))); } :host-context(.dark) .ds-list { box-shadow: var(--elevation-leaf); } :host-context(.dark) .ds-list::after { display: none; } .ds-option { position: relative; display: flex; align-items: center; height: 36px; padding: 0 32px 0 10px; border: 1px solid transparent; font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); cursor: default; } .ds-option:hover, .ds-option[aria-selected=\"true\"] { background: var(--raised-hover); } .ds-option .ds-glyph { position: absolute; right: 10px; } .ds-option:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }"
     },
     {
       "name": "Ground Nav",
       "kind": "nav",
       "refersTo": "sidebar",
-      "description": "a ship's nav flat on the deep ground in the dark palette; the current item is boxed in plum with its 8 px square before the word.",
+      "description": "a ship's nav flat on the deep ground in the dark palette; the current item is neutral, the foreground word in a 1 px edge with its 8 px square before the word.",
       "html": "<nav class=\"ds-ground\" aria-label=\"orbit\"><a class=\"ds-nav-item\" href=\"#board\" aria-current=\"page\">board</a><a class=\"ds-nav-item\" href=\"#runs\">runs</a><a class=\"ds-nav-item\" href=\"#settings\">settings</a></nav>",
-      "css": ".ds-ground { display: flex; flex-direction: column; gap: 2px; width: 220px; padding: 12px; background: var(--sidebar); color: var(--sidebar-foreground); } .ds-nav-item { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border: 1px solid transparent; color: var(--sidebar-foreground); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); text-decoration: none; transition-property: background-color, border-color; transition-duration: var(--duration-quick); transition-timing-function: var(--ease-brand); } .ds-nav-item:hover { background: var(--sidebar-hover); } .ds-nav-item[aria-current=\"page\"] { border-color: var(--sidebar-primary); background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); font-weight: 500; } .ds-nav-item[aria-current=\"page\"]::before { content: \"\"; width: 8px; height: 8px; flex-shrink: 0; background: var(--sidebar-primary); } .ds-nav-item:focus-visible { outline: 2px solid var(--sidebar-ring); outline-offset: 2px; }"
+      "css": ".ds-ground { display: flex; flex-direction: column; gap: 2px; width: 220px; padding: 12px; background: var(--sidebar); color: var(--sidebar-foreground); } .ds-nav-item { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border: 1px solid transparent; color: var(--sidebar-foreground); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); text-decoration: none; transition-property: background-color, border-color; transition-duration: var(--duration-quick); transition-timing-function: var(--ease-brand); } .ds-nav-item:hover { background: var(--sidebar-hover); } .ds-nav-item[aria-current=\"page\"] { border-color: var(--sidebar-foreground); color: var(--sidebar-foreground); font-weight: 500; } .ds-nav-item[aria-current=\"page\"]::before { content: \"\"; width: 8px; height: 8px; flex-shrink: 0; background: var(--sidebar-foreground); } .ds-nav-item:focus-visible { outline: 2px solid var(--sidebar-foreground); outline-offset: 2px; }"
     }
   ],
   "narrative": {
     "northStar": "the two-ink proof",
-    "overview": "Superthread prints every fleet surface the way a two-ink proof prints: key ink on white stock, plum for everything you act on, and 1-bit screens only where the eye is meant to rest. The master world's own thesis states the rule the rest follows: flat where you read, screened where you look. Words, numbers, data and code always sit on flat ink. Screens print in five places and as at most one small detail per component, beside the content and never behind it.\n\nThe register is quiet and exact. Square corners, 1 px edges and horizontal rules that reach both window edges carry the structure, so a page needs no rounded cards on grey, no gradient accent and no glow. Dark mode is the same proof printed white on key: every neutral in both modes is a tint of the two inks, mixed in linear light, and most sit on one eleven-step wedge. There are two surfaces. Docs and public pages print on the stock. A ship's working surface prints on the deep ground, with the fleet rail and the ship's nav flat on the ground and the working panel raised on it by a soft rake from the upper left.\n\nEvery value comes from one source, `tokens/master.json`, vendored unchanged from the approved master world. `scripts/generate.ts` emits it as `dist/v2/superthread.css` (Tailwind 4), `dist/v2/superthread-plain.css` (no Tailwind) and `dist/v2/tokens.json`, and the `@mk` registry installs it into apps. The frontmatter above restates the emitted colour, type, radius and space tokens; motion, elevation, breakpoints and texture live in `.impeccable/design.json`, because the format has no place for them.",
+    "overview": "Superthread prints every fleet surface the way a two-ink proof prints: key ink on white stock, one plum fill per viewport, and 1-bit screens only where the eye is meant to rest. The master world's own thesis states the rule the rest follows: flat where you read, screened where you look. Words, numbers, data and code always sit on flat ink. Screens print in five places and as at most one small detail per component, beside the content and never behind it.\n\nThe register is quiet and exact. Square corners, 1 px edges and horizontal rules that reach both window edges carry the structure, so a page needs no rounded cards on grey, no gradient accent and no glow. Dark mode is the same proof printed white on key: every neutral in both modes is a tint of the two inks, mixed in linear light, and most sit on one eleven-step wedge. There are two surfaces. Docs and public pages print on the stock. A ship's working surface prints on the deep ground, with the fleet rail and the ship's nav flat on the ground and the working panel raised on it by a soft rake from the upper left.\n\nEvery value comes from one source, `tokens/master.json`, vendored unchanged from the approved master world. `scripts/generate.ts` emits it as `dist/v2/superthread.css` (Tailwind 4), `dist/v2/superthread-plain.css` (no Tailwind) and `dist/v2/tokens.json`, and the `@mk` registry installs it into apps. The frontmatter above restates the emitted colour, type, radius and space tokens; motion, elevation, breakpoints and texture live in `.impeccable/design.json`, because the format has no place for them.",
     "keyCharacteristics": [
       "Two inks: key `#16181d` on white stock `#ffffff`, and white on key in dark. Every neutral is a tint of the two.",
-      "One house ink, plum (`#aa337a`, dark `#c074a1`), for every control, link, focus ring and current item.",
+      "One house ink, plum (`#aa337a`, dark `#c074a1`): one fill per viewport, on paper only, in the deep value.",
       "Five statuses at badge scale only, each with its glyph square and its word. Failed is the one solid badge.",
       "Seven ship spots that print only in their marks and chart series.",
       "Four faces with one job each: Unbounded, Supreme, Erode and Fragment Mono.",
@@ -3073,7 +3103,12 @@
     "rules": [
       {
         "name": "The One House Ink Rule",
-        "body": "Plum is the only colour a control takes, on every surface. A ship never sets a control colour, and no status or spot ink fills a control.",
+        "body": "One plum fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. The focus signal is the ring, a field's focus edge and its caret, and it doesn't count against the fill. A ship never sets a control colour, and no status or spot ink fills a control.",
+        "section": "colors"
+      },
+      {
+        "name": "The Outward Action Rule",
+        "body": "An action that leaves the app, such as a send, a publish or a share, prints `key`, never plum. A block that holds one is a key block, and its focus ring prints in the first ink.",
         "section": "colors"
       },
       {
@@ -3093,7 +3128,7 @@
       },
       {
         "name": "The One Job Rule",
-        "body": "Unbounded sets display lines, Supreme the interface, Erode reading, and Fragment Mono ids, numbers, code and caps legends. A face never does another's job.",
+        "body": "Unbounded sets display lines, Supreme the interface, Erode reading, and Fragment Mono ids, times, figures that hold a column, code and caps legends. A face never does another's job.",
         "section": "typography"
       },
       {
@@ -3103,12 +3138,22 @@
       },
       {
         "name": "The Tabular Rule",
-        "body": "Every figure is tabular, from the body rule down; ids and numbers in a table set in mono, with numbers aligned right.",
+        "body": "Times and any figure that must hold a column set in Fragment Mono, because Supreme and Erode have no tabular figures. Numbers in a table align right.",
+        "section": "typography"
+      },
+      {
+        "name": "The First Ink Rule",
+        "body": "A title in the display face prints in the first ink.",
         "section": "typography"
       },
       {
         "name": "The Full Bleed Rule",
         "body": "Horizontal rules belong to the page: they run to both window edges, past every column, and no column stops them.",
+        "section": "layout"
+      },
+      {
+        "name": "The Phone Target Rule",
+        "body": "Every target on a phone is 44 px, through its box or a hit area, in hand-built nav as in an item. Hit areas never overlap. Only a link in running text keeps its line's height.",
         "section": "layout"
       },
       {
@@ -3130,19 +3175,100 @@
         "name": "The One Frame Rule",
         "body": "A focused field shows one frame, its own edge thickened inside the box. A ring outside a field reads as a second frame and its gap as a third.",
         "section": "shapes"
+      },
+      {
+        "name": "The Two Links Rule",
+        "body": "A link prints in foreground, with a 1 px underline at rest in running text and on hover in chrome. `link-quiet` is the one second form.",
+        "section": "components"
+      },
+      {
+        "name": "The Quiet Count Rule",
+        "body": "A count in a nav never asks for attention. Only decisions waiting may print as a backlog, and a library's item counts stay muted reference.",
+        "section": "components"
+      },
+      {
+        "name": "The Row Status Rule",
+        "body": "A status on a row is a fact the row is about. It prints through `Badge`, and only where the list exists to show status, such as a run or board table. A personal list prints none.",
+        "section": "components"
+      },
+      {
+        "name": "The Muted Label Rule",
+        "body": "A label prints as muted text, never as a badge.",
+        "section": "components"
+      },
+      {
+        "name": "The Neutral Age Rule",
+        "body": "Age prints neutral and uncoloured: `since friday`, from `@mk/time-words`. It never turns red or counts days past a date.",
+        "section": "components"
+      },
+      {
+        "name": "The Vouched Number Rule",
+        "body": "A page prints no number the app can't vouch for: no estimated total, no finish time, no streak and no missed count.",
+        "section": "components"
+      },
+      {
+        "name": "The No Guilt Rule",
+        "body": "No word says someone is behind: overdue, late and missed print nowhere.",
+        "section": "components"
+      },
+      {
+        "name": "The Confirm Rule",
+        "body": "A confirm's title names the action and its reach, its action repeats the verb, and its cancel stays plain: `publish to everyone?`, `publish`, `cancel`.",
+        "section": "components"
+      },
+      {
+        "name": "The Label Form Rule",
+        "body": "An aria label is a lowercase verb plus the authored title, which keeps its casing: `mark done: <title>`.",
+        "section": "components"
+      },
+      {
+        "name": "The Plain Schedule Rule",
+        "body": "A schedule prints in plain words, `every day at 07:00` or `when mail arrives`: no cron, and a timezone only when it differs.",
+        "section": "components"
+      },
+      {
+        "name": "The One Sentence Rule",
+        "body": "A page prints one sentence saying what it is, only if that sentence changes what the reader does there.",
+        "section": "components"
+      },
+      {
+        "name": "The Still Click Rule",
+        "body": "A click never moves anything: slots stay reserved, a button holds its width when its word changes, a tick keeps its space, and a panel keeps its height when its content shortens.",
+        "section": "components"
+      },
+      {
+        "name": "The Named Step Rule",
+        "body": "A button says what happens, and the primary names the step: `open the mail`, `read the draft`. `start` prints only when there is no source to open.",
+        "section": "components"
+      },
+      {
+        "name": "The One Primary Rule",
+        "body": "A page has one primary action.",
+        "section": "components"
+      },
+      {
+        "name": "The Complete Read Rule",
+        "body": "Clear prints only after a complete read. A failed or loading read isn't zero, and a stale read prints when it was last read.",
+        "section": "components"
+      },
+      {
+        "name": "The Steady Target Rule",
+        "body": "A refresh never moves a target. A newer version prints a quiet line and never swaps the body, a re-rank waits behind one line, and nothing re-picks on focus, because the click that focuses can land on the button.",
+        "section": "components"
       }
     ],
     "dos": [
       "**Do** name roles and utilities, never values: `bg-primary`, `text-muted-foreground`, `border-input`, `type-<step>`, `shadow-<lift>`, `texture-<detail>`. The `.dark` class on `<html>` sets the mode.",
       "**Do** print every status with its glyph square and its word, through `Badge`'s status variants, `StatusGlyph` or `ToastIcon`.",
-      "**Do** keep focus visible on everything focusable: the 2 px plum ring at 2 px for a control, the 2 px inside edge in `--fx` for a field.",
+      "**Do** keep focus visible on everything focusable: the 2 px ring at 2 px for a control, plum in the panel, neutral in the ship's nav and first ink in a key block, the 2 px inside edge in `--fx` for a field.",
       "**Do** lift a raised layer by its size, `shadow-leaf` for lists and toasts and `shadow-sheet` for dialogs and panels, and on the stock add `texture-contact` with its `--elevation-<lift>-rake`.",
       "**Do** transition named properties at a brand duration on `--ease-brand`, for example `transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand)`.",
       "**Do** run horizontal rules to both window edges.",
-      "**Do** set ids, numbers and code in Fragment Mono with tabular figures.",
+      "**Do** set ids, times, code and any figure that holds a column in Fragment Mono.",
       "**Do** put a ship's spot only in its mark and its chart series, and chart a series as its line screen.",
       "**Do** draw a missing icon on the pixel grid and add it to the glyph source.",
-      "**Do** keep chrome and every served label lowercase, with no em dashes."
+      "**Do** keep chrome and every served label lowercase, with no em dashes.",
+      "**Do** reserve the space a state will need, so a click or a refresh moves nothing."
     ],
     "donts": [
       "**Don't** write a hex value, a `dark:` class or a literal radius in item or app code: the mode and the ink come from the tokens.",
@@ -3153,11 +3279,15 @@
       "**Don't** print a screen behind words, numbers, data or code, or give a component a second texture detail.",
       "**Don't** animate a screen, or add grain, noise, glow or misregistered type.",
       "**Don't** grey a component out with dots: a disabled control screens its edge and nothing else.",
-      "**Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink with the trash glyph and the word.",
+      "**Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink, or the outline off paper, with the trash glyph and the word.",
       "**Don't** print a spot or a status ink as a large flat field.",
       "**Don't** fade or screen the cut edge of a scrolling table.",
       "**Don't** take icons from an icon library; every icon and glyph is drawn in whole-pixel squares.",
-      "**Don't** draw a ring outside a field's box or a second frame around it."
+      "**Don't** draw a ring outside a field's box or a second frame around it.",
+      "**Don't** print a plum fill off paper, or a second one in a viewport.",
+      "**Don't** restyle an item from outside: no `[data-slot]` rule and no look class at a call site. Margins, widths and grid placement stay composition.",
+      "**Don't** widen the working panel or re-stick the frame at 900 px and below.",
+      "**Don't** put a keycap inside a button."
     ]
   }
 }

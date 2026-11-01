@@ -18,7 +18,7 @@ export function Section({
   const heading = `${id}-title`;
   return (
     <section id={id} aria-labelledby={heading} className={cn("st-section", className)}>
-      <h2 id={heading} className="type-section">
+      <h2 id={heading} className="type-section text-first">
         {title}
       </h2>
       {children}

@@ -7,13 +7,13 @@
 | tier  | items                                                                                                                                                                      |
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | style | `init`, `tokens`                                                                                                                                                           |
-| lib   | `tokens-plain`, `utils`, `fleet`                                                                                                                                           |
+| lib   | `tokens-plain`, `utils`, `fleet`, `theme`, `time-words`                                                                                                                    |
 | brand | `glyphs`, `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`, `input`, `input-group`, `textarea`, `field`, `select`, `native-select`, `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
 | pass  | `card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile` |
 | block | `app-shell`, `page-header`, `section-header`, `collection-toolbar`, `list-rows`, `item-cards`, `data-table`, `states`, `facts`, `form-section`, `quick-add`, `notice`, `search-palette` |
 
 - **style**: `init` sets up an app; `tokens` is the theme (colour roles, type, motion, shape and the texture tiles).
-- **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `theme` holds the fleet's light and dark choice; `tokens-plain` is the theme as plain CSS and a typed module.
+- **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `theme` holds the fleet's light and dark choice; `time-words` puts time in the fleet's words (`since friday`, `before 11:00`, `48 min until standup`, `every day at 07:00`); `tokens-plain` is the theme as plain CSS and a typed module.
 - **brand**: superthread's own components. They keep shadcn's Base UI API (exports, props, `data-slot`, variants) and add `data-mk="<item>"` on the root.
 - **pass**: base-nova's items as shadcn ships them, on the superthread tokens.
 - **block**: the compositions the fleet's apps repeat, built from the items: a shell, headers, collections, forms, notices and states. Each installs at `components/superthread/blocks/<name>.tsx`; its meta names the apps it serves. Reach for a block before composing the same pattern by hand.
@@ -66,18 +66,19 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 </FleetRail>
 ```
 
-- `current` is the ship's id; its cell is boxed in plum.
+- `current` is the ship's id; its cell is neutral, with an 8 px plum corner mark.
 - `hrefs` maps `home` and ship ids to URLs, and only needs the links that differ from the fleet's. `@mk/fleet` carries each ship's public url from the marks manifest, so a ship left out links there and `home` links to superthread. Pass `"/"` for the app's own ship and `null` to unlink a cell. A ship with no url prints as a disabled cell, and one with `"rail": false` in the manifest (soliton) gets no cell.
 - `sidebar` is the ship's own nav, which prints beside the rail on the deep ground. Above 900 px both stick to the top of the window while the panel scrolls.
 - The last cell is the mode toggle.
 - `markBase` changes where the marks load from; `label` is the rail's accessible name (default `fleet`).
+- The rail brings a skip link to `#main`, and `AppShellGround` is that target when it renders `main`. Pass `skipLink={false}` for a rail embedded in a page that owns its own.
 
 ## pinning a version
 
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.3.1/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.4.0/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions with a snapshot. A snapshot never changes once it is published.
@@ -87,6 +88,7 @@ Nested dependencies resolve through the same mapping, so every item comes from t
 - Every installed file names its item and version: `// @mk/<item> <version>` after the imports in TS and TSX, `/* @mk/<item> <version> */` on line 1 in CSS.
 - `bunx --bun shadcn@latest add @mk/<item> --diff` shows how the installed file differs from the registry; `--overwrite` takes the registry's version.
 - Installed files stay as the registry writes them. A fix goes into `packages/superthread/items/` in the mauricekleine.com repo, and any change to a served item after its version is published ships as the next version: a patch for a fix, a minor for a new item or variant.
+- A ship never restyles an item from outside: no `[data-slot]` rule and no look class at a call site. Margins, widths and grid placement stay composition.
 
 ## changing an item
 

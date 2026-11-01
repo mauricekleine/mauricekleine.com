@@ -47,7 +47,7 @@ function SectionTitle({ className, ...props }: Omit<React.ComponentProps<"h2">, 
     <h2
       data-mk="section-header"
       data-slot="section-title"
-      className={cn("min-w-0 type-title break-words", className)}
+      className={cn("min-w-0 type-title break-words text-first", className)}
       {...props}
       id={titleId}
     />
@@ -68,7 +68,7 @@ function SectionCount({ className, ...props }: React.ComponentProps<"span">) {
   );
 }
 
-// The way onward sits at the end of the head; render lets the app supply its own router link.
+// The way onward sits at the end of the head as a quiet link; render lets the app supply its own router link.
 function SectionAction({ className, children = "more", render = <a />, ...props }: useRender.ComponentProps<"a">) {
   return useRender({
     render,
@@ -76,7 +76,7 @@ function SectionAction({ className, children = "more", render = <a />, ...props 
     props: mergeProps<"a">(
       {
         className: cn(
-          "ml-auto inline-flex shrink-0 items-center gap-2 type-instrument text-muted-foreground underline-offset-4 transition-[color] duration-(--duration-instant) ease-(--ease-brand) hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          "ml-auto inline-flex shrink-0 items-center gap-2 type-instrument link-quiet focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
           className,
         ),
         children: (

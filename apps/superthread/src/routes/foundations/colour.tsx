@@ -245,7 +245,7 @@ function Page() {
     <>
       <PageHead
         title="colour"
-        lede="one key ink on white stock, and plum for everything you act on. each ship keeps one bright spot for its mark and its chart series, and five status inks name the state of a run."
+        lede="one key ink on white stock, and one plum fill per viewport. each ship keeps one bright spot for its mark and its chart series, and five status inks name the state of a run."
       />
 
       <Section id="wedge" title="the wedge">
@@ -262,8 +262,9 @@ function Page() {
 
       <Section id="house" title="house ink">
         <Copy>
-          plum is the only control colour, on this site and inside every ship: primary actions, links, the focus ring,
-          the current item, selection and the progress fill. hover and press take a step of their own in each mode.
+          one plum fill per viewport, on paper only, in the deep value. as ink it prints only in the focus signal, the
+          rail&rsquo;s corner mark and home cell, the plates, the code accent and a ship&rsquo;s mark. the current item
+          in a nav is neutral, in the selected role. hover and press take a step of their own in each mode.
         </Copy>
         <ModePair light={<House mode="light" />} dark={<House mode="dark" />} />
       </Section>

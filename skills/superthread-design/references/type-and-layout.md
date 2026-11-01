@@ -9,9 +9,9 @@ Four faces, each with one job. The tokens load them; app code picks a face throu
 | Unbounded     | 300; 400 for the wordmark | titles, section heads, the board                                |
 | Supreme       | 400, 500                | controls, tables, notes, dialog titles and the body of docs pages |
 | Erode         | 400, 400 italic, 500, 600 | the reading page, ledes and page titles                       |
-| Fragment Mono | 400                     | ids, numbers, code and the caps legends                          |
+| Fragment Mono | 400                     | ids, times, figures that hold a column, code and the caps legends |
 
-Chrome (nav, labels, headings, buttons) is lowercase. Authored titles keep their own casing. Numbers are tabular everywhere, from the body rule.
+Chrome (nav, labels, headings, buttons) is lowercase. Authored titles keep their own casing. Supreme and Erode have no tabular figures, so times and any figure that must hold a column set in Fragment Mono, and numbers in a table align right. A title in the display face prints in the first ink.
 
 ## type steps
 
@@ -19,28 +19,34 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 
 | step         | size / line | face                                   | use                         |
 | ------------ | ----------- | -------------------------------------- | --------------------------- |
-| `meta`       | 11 / 14     | Fragment Mono, caps, .14em              | legends                     |
-| `instrument` | 13 / 20     | Supreme 400                            | notes, badges               |
+| `meta`       | 11 / 14     | Fragment Mono, caps, .14em              | legends and a list's group labels |
+| `instrument` | 13 / 20     | Supreme 400                            | notes, badges, fact and toolbar labels, table heads |
 | `ui`         | 14 / 21     | Supreme 400                            | the interface's body        |
-| `summary`    | 15 / 24     | Supreme 400                            | the text under a section head |
+| `summary`    | 15 / 24     | Supreme 400                            | the text under a form title and a page head's meta line |
 | `subtitle`   | 18 / 24     | Supreme 500                            | dialog titles               |
 | `read`       | 19 / 32     | Erode 400 (phone 18 / 30)              | the reading page            |
 | `lede`       | 21 / 33     | Erode 400 (phone 19 / 31)              | ledes                       |
-| `title`      | 22 / 28     | Unbounded 300, -0.02em                 | card and board titles       |
-| `section`    | 30 / 34     | Unbounded 300, -0.03em                 | section heads               |
+| `title`      | 22 / 28     | Unbounded 300, -0.02em                 | card, board and form titles, a section head in a panel |
+| `section`    | 30 / 34     | Unbounded 300, -0.03em                 | a page head's title in a panel, a section head on the stock |
 | `page`       | 34 / 40     | Erode 600 (phone 28 / 34)              | a reading sheet's heading   |
-| `hero`       | 64 / 68     | Unbounded 300 (phone 52 / 56)          | a page head's title         |
+| `hero`       | 64 / 68     | Unbounded 300 (phone 52 / 56)          | a page head's title on the stock, or at `size="page"` |
 | `display`    | 76 / 80     | Unbounded 300                          | the overview wordmark       |
 
 The reading page sets Erode at 19 px on 32 px with a 27.5em measure (about 66 characters) on a 672 px sheet.
+
+The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or an `li` reads with its words; `ListRowAside` prints in mono, so a time there holds its column.
+
+Links print in foreground, 4 px above their underline. A link in running text keeps a 1 px underline at rest, and inside `AppShellPanel` the base layer prints any anchor no item owns that way. A chrome link with no box, such as a row title or a door, underlines on hover. A nav item has a box, so it hovers with its fill. `link-quiet` is the one second form: a muted word that turns foreground on hover.
 
 ## space and layout
 
 - Space runs on a 4 px base: 4, 8, 12, 16, 24, 32, 48, 64 and 96.
 - Rows: 56 px on the board, 48 px in a table, 32 px for a nav item (`--spacing-row-board`, `-table`, `-nav`).
-- A section head sits inside its full-bleed rule, 64 px below the section before it and 44 px above its content.
-- On a ship surface the board panel is at most 880 px wide and the reading sheet 672 px, both beside the fleet rail and the ship's nav. The reading page keeps a 264 px margin on the ground for its contents and progress.
-- At 900 px and below the fleet rail becomes a 48 px bar above the panel, with 12 px of ground on each side of it. At 600 px and below the phone type steps apply.
+- On the stock a section head sits under its full-bleed rule, 64 px below the section before it and 44 px below the rule, with 24 px to its content. In a panel `section-header` leaves 48 px between sections and 16 px between its rule and its content.
+- On a ship surface the working panel is at most 880 px wide and the reading sheet 672 px, both beside the fleet rail and the ship's nav. No ship widens the panel and there is no wide setting, so main content holds its place between pages. The reading page keeps a 264 px margin on the ground for its contents and progress.
+- `AppShellPanel` is a size container, and text in it wraps anywhere, except inside a table's cells.
+- At 900 px and below the fleet rail becomes a 48 px bar above the panel, with 12 px of ground on each side of it. The frame scrolls with the page, and no ship re-sticks it. At 600 px and below the phone type steps apply.
+- At 600 px and below every target reaches 44 px, in hand-built nav as in an item. A field, a tab, an option row or a joined button grows to 44 px, and so does a field row or a label holding a checkbox, radio or switch. A button, a toggle, a link part or a nav item keeps its box and takes the `hit-area` utility, which needs a positioned host. A row of nav items wraps on a 44 px pitch, and rail cells at 36 px or less carry a hit area as wide as their share. Hit areas never overlap, and only a link in running text keeps its line's height.
 
 ## shape
 
@@ -50,8 +56,8 @@ The reading page sets Erode at 19 px on 32 px with a 27.5em measure (about 66 ch
 
 ## focus
 
-- **Controls** (buttons, tabs, links, rail cells) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible`.
-- **Fields** (input, textarea, input group, the select trigger) own their focus. While the text control holds focus, the box's 1 px edge becomes a 2 px edge drawn inside it (`outline: 2px` at `-2px` offset, in `--fx`) and the caret takes the same ink. `--fx` is plum, or the error ink when the field is invalid. The text never moves, and a disabled field takes no focus.
+- **Controls** (buttons, tabs, links, rail cells) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible` for every control role and anything else in the tab order. Inside the ship's nav the ring prints in `sidebar-foreground`, so the nav holds no plum. Inside a key block the ring prints in `first`, because the block sets `--ring` to `--first`.
+- **Fields** (input, textarea, input group, the select trigger) own their focus. While the text control holds focus, the box's 1 px edge becomes a 2 px edge drawn inside it (`outline: 2px` at `-2px` offset, in `--fx`) and the caret takes the same ink. `--fx` is the ring's ink, so a field in the ship's nav or a key block takes that surface's ring, or the error ink when the field is invalid. The text never moves, and a disabled field takes no focus.
 - **A button inside a field** (clear, reveal, a toggle) keeps its own 2 px ring, drawn inside itself, and the box stays at 1 px.
 - **The code patch's copy link** draws its ring 4 px inside itself, in plum's dark value.
 

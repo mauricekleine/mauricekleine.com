@@ -12,7 +12,7 @@ export function PageHead({ title, lede, children }: { title: string; lede?: Reac
         <Plate name="band" phone="band-phone" width={696} height={160} phoneWidth={342} phoneHeight={136} />
         <CropMarks />
       </div>
-      <h1 className="st-pagehead-title type-hero">{title}</h1>
+      <h1 className="st-pagehead-title type-hero text-first">{title}</h1>
       {lede && <p className="st-lede type-lede">{lede}</p>}
       {children}
     </header>

@@ -43,8 +43,8 @@ function PrintedSplit({ state, withHandle = true }: { state: string; withHandle?
         data-demo={state === "focus" ? "focus-visible" : undefined}
         className={
           withHandle
-            ? "group/resizable-handle relative flex w-px items-center justify-center bg-border data-[separator=hover]:bg-primary data-[separator=active]:bg-primary focus-visible:bg-primary focus-visible:outline-0"
-            : "relative flex w-px items-center justify-center bg-border focus-visible:bg-primary focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-(--ring)"
+            ? "group/resizable-handle relative flex w-px items-center justify-center bg-border data-[separator=hover]:bg-foreground data-[separator=active]:bg-foreground focus-visible:bg-foreground focus-visible:outline-0"
+            : "relative flex w-px items-center justify-center bg-border focus-visible:bg-foreground focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-(--ring)"
         }
       >
         {withHandle && (
@@ -81,7 +81,7 @@ export function ResizableStates() {
                   ? "fixed split, no keyboard stop"
                   : state === "rest"
                     ? "1 px rule, 8 px hit area"
-                    : "rule takes house ink"
+                    : "rule takes foreground"
           }
         >
           {state === "disabled" ? (

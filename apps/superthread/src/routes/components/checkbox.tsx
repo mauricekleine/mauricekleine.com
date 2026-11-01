@@ -21,7 +21,7 @@ function Page() {
     <>
       <PageHead
         title="checkbox"
-        lede="a square box with the input's edge. checked fills it with the house ink; mixed means some, not all, and prints the ink at half."
+        lede="a square box with the input's edge. checked fills it with foreground; mixed means some, not all, and prints the ink at half."
       >
         <InstallLine items={["checkbox"]} />
       </PageHead>

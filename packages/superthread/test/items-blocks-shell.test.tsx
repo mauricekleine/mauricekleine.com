@@ -23,6 +23,8 @@ import {
 import { CommandGroup, CommandItem, CommandShortcut } from "@/components/superthread/ui/command";
 import { client, CONTROL_RING, detailsUsed, elements, forbidden, one, own, server } from "./rendered.tsx";
 
+const classesOf = (el: Element) => (el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean);
+
 describe("app shell", () => {
   const frame = () =>
     server(
@@ -46,6 +48,12 @@ describe("app shell", () => {
         </AppShellGround>
       </AppShell>,
     );
+
+  test("the panel takes the ring back to the house ink, so the rail's pale ring stays on the frame", () => {
+    const panel = one(frame(), '[data-slot="app-shell-panel"]');
+    expect(panel.classes).toContain("[--ring:var(--primary)]");
+    expect(panel.classes).toContain("[--selected:var(--foreground)]");
+  });
 
   test("passes the rail's identity, destinations, marks, label and classes through", () => {
     const host = frame();
@@ -92,6 +100,45 @@ describe("app shell", () => {
     expect(nested.querySelector("main")).toBeNull();
     expect(one(nested, '[data-slot="app-shell-ground"]').el.hasAttribute("aria-label")).toBe(false);
     expect(one(nested, '[data-slot="app-shell-ground"]').classes).toContain("flex-1");
+  });
+
+  test("the ground is the skip link's target when it renders main, and a caller's id or tabIndex wins", () => {
+    const ground = server(<AppShellGround>page</AppShellGround>).querySelector("main")!;
+    expect([ground.id, ground.getAttribute("tabindex")]).toEqual(["main", "-1"]);
+    expect(classesOf(ground)).toContain("outline-0");
+
+    const named = server(
+      <AppShellGround id="board" tabIndex={0}>
+        page
+      </AppShellGround>,
+    ).querySelector("main")!;
+    expect([named.id, named.getAttribute("tabindex")]).toEqual(["board", "0"]);
+
+    const nested = one(
+      server(<AppShellGround render={<div />}>page</AppShellGround>),
+      '[data-slot="app-shell-ground"]',
+    );
+    expect([nested.el.hasAttribute("id"), nested.el.hasAttribute("tabindex")]).toEqual([false, false]);
+  });
+
+  test("the skip link and the ground meet at #main, and an embedded shell passes skipLink through", () => {
+    const host = frame();
+    const skip = one(host, '[data-slot="fleet-rail-skip"]').el.getAttribute("href")!;
+    expect(host.querySelector(skip)).toBe(one(host, '[data-slot="app-shell-ground"]').el);
+
+    const embedded = server(
+      <AppShell current="orbit" skipLink={false}>
+        <AppShellGround render={<div />}>page</AppShellGround>
+      </AppShell>,
+    );
+    expect(embedded.querySelector('[data-slot="fleet-rail-skip"]')).toBeNull();
+  });
+
+  // A nav drawn by hand on the ground reads --selected, and the ground is dark in both modes; paper hands it back.
+  test("the ground holds the selected role to its own words, and the panel returns it to the page's", () => {
+    const host = frame();
+    expect(one(host, '[data-slot="app-shell-ground"]').classes).toContain("[--selected:var(--ground-foreground)]");
+    expect(one(host, '[data-slot="app-shell-panel"]').classes).toContain("[--selected:var(--foreground)]");
   });
 
   test("names the ship nav, keeps real list links and announces a zero count", () => {
@@ -239,10 +286,10 @@ describe("search palette", () => {
     expect(trigger.el.getAttribute("type")).toBe("button");
     expect(host.querySelector("input")).toBeNull();
     expect(trigger.el.textContent).toContain("search everything");
-    expect(one(host, "kbd").el.textContent).toBe("⌘/ctrl k");
+    expect(host.querySelector("kbd")).toBeNull();
     expect(trigger.classes).toEqual(expect.arrayContaining(["h-10", "border-input", ...CONTROL_RING]));
     expect(detailsUsed(elements(host), "search-palette")).toEqual([]);
-    expect(forbidden(own(elements(host), "search-palette")).filter((hit) => !hit.startsWith("kbd:"))).toEqual([]);
+    expect(forbidden(own(elements(host), "search-palette"))).toEqual([]);
   });
 
   test("the trigger opens a named dialog with named search and live results", async () => {
@@ -326,7 +373,6 @@ describe("search palette", () => {
       expect(isOpen(view.body)).toBe(false);
       await key(document, "p", { ctrlKey: true });
       expect(isOpen(view.body)).toBe(true);
-      expect(one(view.body, "kbd").el.textContent).toBe("⌘/ctrl p");
     } finally {
       await view.done();
     }
@@ -337,7 +383,6 @@ describe("search palette", () => {
       await key(document, "k", { metaKey: true });
       await key(document, "/");
       expect(isOpen(disabled.body)).toBe(false);
-      expect(disabled.body.querySelector("kbd")).toBeNull();
     } finally {
       await disabled.done();
     }

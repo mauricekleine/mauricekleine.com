@@ -151,6 +151,14 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   const darkPage = await darkPin.text();
   assert.match(darkPage, /<html lang="en" class="dark">/);
   assert.doesNotMatch(darkPage, /superthread\.mauricekleine\.com/);
+  // the button prints as the outline off paper, for a stored dark mode and for a system one
+  for (const scope of [".dark", "html:not(.light)"])
+    assert.ok(darkPage.includes(`${scope} button { border-color: currentColor; background: transparent;`), scope);
+  assert.ok(darkPage.includes("@media (max-width: 600px) { input, button { height: 44px; } }"));
+  // a focused field keeps one frame: its edge thickens inside the box, the caret follows, and the title is first ink
+  assert.ok(darkPage.includes("input:focus-visible { outline-offset: -2px; }"));
+  assert.match(darkPage, /input \{[^}]*caret-color: var\(--ring\)/);
+  assert.match(darkPage, /h1 \{[^}]*color: var\(--first\)/);
   const faces = [...darkPage.matchAll(/url\("(\/_fonts\/[^"]+)"\)/g)].map((match) => match[1]);
   assert.equal(faces.length, 9);
   for (const face of faces) assert.equal((await get(face)).status, 200, face);

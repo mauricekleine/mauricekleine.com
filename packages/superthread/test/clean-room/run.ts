@@ -486,6 +486,9 @@ async function initWorked(app: string, ran: Ran): Promise<string | null> {
   if (!existsSync(config)) return "wrote no components.json";
   const mapped = (await readJson<{ registries?: Record<string, string> }>(config)).registries?.["@mk"];
   if (mapped !== `${base}/r/{name}.json`) return `components.json maps @mk to ${mapped}`;
+  const { dependencies } = await readJson<{ dependencies?: Record<string, string> }>(join(app, "package.json"));
+  const library = ["lucide-react", "@phosphor-icons/react"].filter((name) => name in (dependencies ?? {}));
+  if (library.length > 0) return `init installed ${library.join(", ")}`;
   return null;
 }
 

@@ -150,6 +150,10 @@ describe("the emitted css", () => {
     expect(json.dark.scrim).toMatchObject({ hex: "#000000", alpha: 0.6, provisional: true });
   });
 
+  test("the selected role is the foreground in each mode, so a current item is never a colour of its own", () => {
+    for (const m of MODES) expect(emitted[m].selected, m).toBe(emitted[m].foreground!);
+  });
+
   test("the sidebar hover is the master's printed --gnd-h in each mode", () => {
     for (const m of MODES) expect(hexIn(emitted[m]["sidebar-hover"]!), m).toBe(check.printed["--gnd-h"][m]);
   });

@@ -80,7 +80,7 @@ export function ComboboxOpen({ empty = false }: { empty?: boolean }) {
                 key={ship}
                 aria-selected={ship === "trisys"}
                 data-highlighted={ship === "quanta" ? "" : undefined}
-                className="relative flex h-9 w-full items-center gap-2.5 border border-transparent pr-8 pl-2.5 text-ui data-highlighted:not-aria-selected:bg-raised-hover aria-selected:border-primary aria-selected:bg-accent aria-selected:text-accent-foreground"
+                className="relative flex h-9 w-full items-center gap-2.5 border border-transparent pr-8 pl-2.5 text-ui data-highlighted:bg-raised-hover aria-selected:bg-raised-hover"
               >
                 {ship}
                 {ship === "trisys" && (

@@ -6,6 +6,11 @@
   html {
     scroll-padding-top: 77px;
   }
+  /* a rail specimen on a docs page is no ship: the window stays on stock */
+  html:has(.st-body) {
+    background-color: var(--background);
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
 
   .st-skip {
     position: fixed;
@@ -59,6 +64,7 @@
     width: 264px;
     padding: 0 24px;
     border-right: 1px solid var(--rule);
+    color: var(--first);
     font: 400 21px/1 var(--font-display);
     letter-spacing: -0.02em;
   }
@@ -95,7 +101,7 @@
     grid-template-columns: 76px 1fr;
     align-content: center;
     row-gap: 5px;
-    width: 291px;
+    width: 368px;
     margin-left: auto;
     padding: 0 24px;
     border-left: 1px solid var(--rule);
@@ -108,20 +114,6 @@
   }
   .st-mast-menu {
     display: none;
-  }
-  .st-house {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 77px;
-    border-left: 1px solid var(--rule);
-  }
-  .st-house i {
-    width: 46px;
-    height: 46px;
-    background: var(--primary);
-    outline: 1px solid var(--foreground);
-    outline-offset: 3px;
   }
 
   /* the search: the field is the registry's input-group; the matches open 8 px below it as a raised list */
@@ -210,7 +202,7 @@
     scrollbar-width: thin;
   }
 
-  /* the nav: groups under mono labels, the current page boxed in the house ink with its 8 px square. Overview,
+  /* the nav: groups under mono labels, the current page neutral in the selected role with its 8 px square. Overview,
      foundations and components scroll on their own, cut at the masthead's rule above and at the foot's rule below;
      the mock pages, install and the mode control hold the foot, as the sketch prints them */
   .st-sidenav {
@@ -254,8 +246,8 @@
     }
   }
   .st-sidenav a[aria-current="page"] {
-    border-color: var(--primary);
-    background: var(--accent);
+    border-color: var(--selected);
+    color: var(--selected);
     font-weight: 500;
   }
   .st-sidenav a[aria-current="page"]::before {
@@ -263,7 +255,7 @@
     flex: none;
     width: 8px;
     height: 8px;
-    background: var(--primary);
+    background: var(--selected);
   }
 
   /* the mode control: three cells in one box; the stored choice prints pressed from <html data-theme-choice>, so
@@ -321,7 +313,7 @@
     line-height: 28px;
   }
   .st-toc a[aria-current] {
-    color: var(--foreground);
+    color: var(--selected);
     font-weight: 500;
   }
   .st-wedge {
@@ -608,7 +600,7 @@
     padding-top: 20px;
   }
 
-  /* the mock pages: a 32 px strip back to the docs over the app, full bleed on the deep ground */
+  /* the mock pages: a 32 px strip back to the docs over the app, 44 on a phone, full bleed on the deep ground */
   .st-app {
     display: flex;
     flex-direction: column;
@@ -674,7 +666,7 @@
     }
     .st-meta {
       grid-template-columns: 64px 1fr;
-      width: 240px;
+      width: 312px;
       padding: 0 20px;
     }
   }
@@ -733,14 +725,6 @@
       padding: 0 12px;
       border-bottom: 1px solid var(--rule);
     }
-    .st-house {
-      width: 64px;
-      border-bottom: 1px solid var(--rule);
-    }
-    .st-house i {
-      width: 36px;
-      height: 36px;
-    }
     .st-mast-search {
       order: 3;
       flex-basis: calc(100% - 32px);
@@ -780,6 +764,17 @@
     .st-strip-crumb .type-meta {
       display: none;
     }
+    /* hand-built nav holds the phone target an item does: a stacked link grows to 44 px, and so do the strip's cells
+       above its 1 px rule */
+    .st-strip {
+      height: 45px;
+    }
+    .st-sidenav a {
+      height: 44px;
+    }
+    .st-toc a {
+      line-height: 44px;
+    }
     .st-plate[data-phone] {
       width: min(100%, var(--plate-phone-w));
       height: var(--plate-phone-h);
@@ -817,6 +812,8 @@
       padding-inline: 12px;
     }
     .st-code button {
+      justify-content: center;
+      min-width: 44px;
       padding: 0 14px;
     }
     .st-code button span {

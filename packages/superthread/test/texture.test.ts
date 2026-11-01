@@ -5,6 +5,7 @@ import { afterAll, beforeAll, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { child, parse, type Rule, value } from "./css.ts";
 
 const root = join(import.meta.dir, "..");
 const scripts = join(root, "scripts/texture");
@@ -313,52 +314,12 @@ print(json.dumps(results))`);
 
 // ---------- texture.css ----------
 
-type Rule = { sel: string; decls: [string, string][]; rules: Rule[] };
-
-/** A block tree of the file: every rule or at-rule with its own declarations and nested rules, whitespace normalised. */
-function parse(css: string): Rule {
-  const norm = (s: string) => s.replace(/\s+/g, " ").replace(/\(\s/g, "(").replace(/\s\)/g, ")").trim();
-  const top: Rule = { sel: "", decls: [], rules: [] };
-  const stack = [top];
-  let buf = "";
-  let parens = 0;
-  const decl = () => {
-    const s = norm(buf);
-    buf = "";
-    if (!s) return;
-    const i = s.indexOf(":");
-    stack.at(-1)!.decls.push([s.slice(0, i).trim(), s.slice(i + 1).trim()]);
-  };
-  for (const ch of css.replace(/\/\*[\s\S]*?\*\//g, "")) {
-    if (ch === "(") parens++;
-    if (ch === ")") parens--;
-    if (parens === 0 && ch === "{") {
-      const rule: Rule = { sel: norm(buf), decls: [], rules: [] };
-      buf = "";
-      stack.at(-1)!.rules.push(rule);
-      stack.push(rule);
-    } else if (parens === 0 && ch === "}") {
-      decl();
-      stack.pop();
-    } else if (parens === 0 && ch === ";") decl();
-    else buf += ch;
-  }
-  expect(stack).toHaveLength(1);
-  return top;
-}
-
 const css = readFileSync(join(root, "tokens/texture.css"), "utf8");
 const sheet = parse(css);
 const tiles: { [name: string]: { w: number; h: number } } = json("texture/tiles.json");
 const details = json("tokens/details.json");
 
-const child = (rule: Rule, sel: string) => {
-  const found = rule.rules.filter((r) => r.sel === sel);
-  expect({ in: rule.sel, sel, count: found.length }).toEqual({ in: rule.sel, sel, count: 1 });
-  return found[0]!;
-};
 const utility = (name: string) => child(sheet, `@utility ${name}`);
-const value = (rule: Rule, prop: string) => Object.fromEntries(rule.decls)[prop];
 const walk = (rule: Rule): Rule[] => [rule, ...rule.rules.flatMap(walk)];
 const declsOf = (rule: Rule) => walk(rule).flatMap((r) => r.decls);
 
@@ -408,6 +369,58 @@ test("texture-contact lifts light layers by --contact-lift and its edge, screens
     "&::after",
     "&:is(.dark *):not(.dark .light *)::after",
   ]);
+});
+
+test("the mixed tick, the tab's hover preview, the table's row edge and the ramp print in foreground, never plum", () => {
+  for (const name of ["texture-mixed", "texture-tabhover", "texture-rowedge", "texture-ramp"]) {
+    const backgrounds = declsOf(utility(name)).filter(([p]) => p === "background" || p === "background-color");
+    expect({ name, plum: backgrounds.filter(([, v]) => v.includes("--primary")) }).toEqual({ name, plum: [] });
+    expect({ name, ink: backgrounds.some(([, v]) => v.includes("--foreground")) }).toEqual({ name, ink: true });
+  }
+});
+
+test("off-paper prints the outline inside a dark scope and nowhere else, and keeps disabled and invalid", () => {
+  const off = child(parse(readFileSync(join(root, "tokens/utilities.css"), "utf8")), "@utility off-paper");
+  expect(off.decls).toEqual([]);
+  const enabled = child(child(off, "&:is(.dark *):not(.dark .light *)"), "@variant not-disabled");
+  expect(enabled.decls).toEqual([
+    ["border-color", "currentColor"],
+    ["background-color", "transparent"],
+    ["color", "var(--foreground)"],
+  ]);
+  expect(value(child(enabled, "@variant hover"), "background-color")).toBe("var(--control-hover)");
+  expect(value(child(enabled, "@variant aria-expanded"), "background-color")).toBe("var(--control-hover)");
+  expect(child(enabled, "@variant active").decls).toEqual([
+    ["background-color", "var(--control-press)"],
+    ["box-shadow", "none"],
+  ]);
+  expect(value(child(enabled, "@variant aria-invalid"), "border-color")).toBe("var(--error)");
+});
+
+test("link-quiet is a muted word with no underline that turns foreground and underlines 4 px down on hover", () => {
+  const quiet = child(parse(readFileSync(join(root, "tokens/utilities.css"), "utf8")), "@utility link-quiet");
+  expect(quiet.decls).toEqual(
+    expect.arrayContaining([
+      ["color", "var(--muted-foreground)"],
+      ["text-decoration-line", "none"],
+      ["text-underline-offset", "4px"],
+    ]),
+  );
+  expect(child(quiet, "@variant hover").decls).toEqual([
+    ["color", "var(--foreground)"],
+    ["text-decoration-line", "underline"],
+  ]);
+});
+
+test("hit-area takes the pointer at least 44 px each way, centred on its box, and link-quiet takes it on a phone", () => {
+  const sheet = parse(readFileSync(join(root, "tokens/utilities.css"), "utf8"));
+  const area = child(child(sheet, "@utility hit-area"), "&::after");
+  expect(value(area, "width")).toBe("max(100%, 44px)");
+  expect(value(area, "height")).toBe("max(100%, 44px)");
+  expect(value(area, "translate")).toBe("-50% -50%");
+  const phone = child(child(sheet, "@utility link-quiet"), "@media (max-width: 600px)");
+  expect(value(phone, "position")).toBe("relative");
+  expect(phone.decls.flat().join(" ")).toContain("@apply hit-");
 });
 
 test("texture-disabled screens the edge on ::before, a field box only for a disabled text control, and a bare input or textarea masks its own border (ruling 3)", () => {

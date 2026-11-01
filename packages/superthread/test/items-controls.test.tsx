@@ -1,5 +1,5 @@
 // The controls 2.0 adds: switch, radio group, slider, toggle, toggle group, button group and kbd. Each is a control,
-// not a field: keyboard focus draws the 2 px house ring 2 px outside it, and the boxed current item marks what is on.
+// not a field: keyboard focus draws the 2 px house ring 2 px outside it, and foreground marks what is on.
 import { beforeAll, describe, expect, test } from "bun:test";
 import { act } from "react";
 import { Button } from "@/components/superthread/ui/button";
@@ -39,13 +39,13 @@ describe("switch", () => {
     expect(one(states[0]!, "[role=switch]").classes).toEqual(expect.arrayContaining(CONTROL_RING));
   });
 
-  test("square and solid: the track fills with the house ink on, and the thumb crosses in the label ink", () => {
+  test("square and solid: the track fills in foreground on, and the thumb crosses in stock", () => {
     const track = one(states[1]!, "[role=switch]").classes;
     expect(track).toEqual(
-      expect.arrayContaining(["border-input", "data-checked:bg-primary", "data-checked:border-primary"]),
+      expect.arrayContaining(["border-input", "data-checked:bg-foreground", "data-checked:border-foreground"]),
     );
     const thumb = one(states[1]!, '[data-slot="switch-thumb"]').classes;
-    expect(thumb).toEqual(expect.arrayContaining(["bg-input", "data-checked:bg-primary-foreground"]));
+    expect(thumb).toEqual(expect.arrayContaining(["bg-input", "data-checked:bg-background"]));
     expect(thumb.filter((c) => c.includes("translate-x"))).not.toHaveLength(0);
   });
 
@@ -77,7 +77,7 @@ describe("radio-group", () => {
       </RadioGroup>,
     );
 
-  test("choices keep a stock box, the outside ring and a centred house square", () => {
+  test("choices keep a stock box, the outside ring and a centred foreground square", () => {
     const host = sample();
     expect(one(host, '[data-slot="radio-group"]').classes).toContain("gap-3");
     const selected = one(host, '[role="radio"][aria-checked="true"]');
@@ -86,13 +86,13 @@ describe("radio-group", () => {
         "size-[18px]",
         "border-input",
         "bg-background",
-        "data-checked:border-primary",
+        "data-checked:border-foreground",
         "aria-invalid:border-error",
         ...CONTROL_RING,
       ]),
     );
     expect(one(selected.el, '[data-slot="radio-group-indicator"] > span').classes).toEqual(
-      expect.arrayContaining(["size-2", "bg-primary"]),
+      expect.arrayContaining(["size-2", "bg-foreground"]),
     );
     expect(host.querySelectorAll('[data-slot="radio-group-indicator"]')).toHaveLength(1);
   });
@@ -148,15 +148,15 @@ describe("slider", () => {
       expect(track.classes).toEqual(
         expect.arrayContaining(["border", "border-input", "bg-background", "data-horizontal:h-2", "data-vertical:w-2"]),
       );
-      expect(one(host, '[data-slot="slider-range"]').classes).toContain("bg-primary");
+      expect(one(host, '[data-slot="slider-range"]').classes).toContain("bg-foreground");
       expect(host.querySelectorAll('[data-slot="slider-thumb"]')).toHaveLength(2);
       expect(one(host, '[data-slot="slider-thumb"]').classes).toEqual(
         expect.arrayContaining([
           "size-4",
-          "border-primary",
+          "border-foreground",
           "bg-background",
-          "not-data-disabled:hover:bg-accent",
-          "data-dragging:bg-accent",
+          "not-data-disabled:hover:bg-control-hover",
+          "data-dragging:bg-control-hover",
           ...CONTROL_RING,
           "has-[input:focus-visible]:outline-2",
           "has-[input:focus-visible]:outline-offset-2",
@@ -209,7 +209,7 @@ describe("toggle", () => {
     );
   });
 
-  test("pressed is boxed on accent stock; disabled outline keeps a faint fill", () => {
+  test("pressed prints a foreground edge on no tint; disabled outline keeps a faint fill", () => {
     for (const variant of ["default", "outline"] as const) {
       const host = server(
         <Toggle variant={variant} defaultPressed disabled>
@@ -221,17 +221,55 @@ describe("toggle", () => {
       expect(toggle.el.hasAttribute("data-pressed")).toBe(true);
       expect(toggle.classes).toEqual(
         expect.arrayContaining([
-          "aria-pressed:border-primary",
-          "aria-pressed:bg-accent",
-          "aria-pressed:text-accent-foreground",
+          "aria-pressed:border-foreground",
+          "data-disabled:aria-pressed:border-disabled",
           "data-disabled:text-disabled",
         ]),
       );
+      expect(toggle.classes.filter((c) => c.startsWith("aria-pressed:bg-"))).toEqual([]);
       if (variant === "outline")
         expect(toggle.classes).toEqual(expect.arrayContaining(["border-input", "data-disabled:bg-faint"]));
       expect(forbidden(elements(host))).toEqual([]);
       expect(detailsUsed(elements(host), "toggle")).toEqual(claim("toggle"));
     }
+  });
+
+  test("the tick follows the words and keeps its space at rest, so nothing moves when it turns on", () => {
+    const toggle = one(server(<Toggle>bold</Toggle>), "button").el;
+    expect(toggle.textContent).toBe("bold");
+    expect(toggle.lastElementChild?.tagName.toLowerCase()).toBe("svg");
+    expect(toggle.lastElementChild?.getAttribute("data-icon")).toBe("inline-end");
+    expect(toggle.lastElementChild?.getAttribute("class")?.split(" ")).toEqual(
+      expect.arrayContaining(["invisible", "group-aria-pressed/toggle:visible"]),
+    );
+  });
+
+  test.each([
+    ["icon-sm", "size-8"],
+    ["icon", "size-10"],
+    ["icon-lg", "size-12"],
+  ] as const)("%s is a square with no tick, so the icon stays centred", (size, box) => {
+    const toggle = one(
+      server(
+        <Toggle size={size} aria-label="pin">
+          <svg />
+        </Toggle>,
+      ),
+      "button",
+    );
+    expect(toggle.classes).toContain(box);
+    expect(toggle.el.querySelectorAll("svg")).toHaveLength(1);
+  });
+
+  test("a toggle group's icon item drops the tick too", () => {
+    const host = server(
+      <ToggleGroup size="icon" aria-label="view">
+        <ToggleGroupItem value="a" aria-label="a">
+          <svg />
+        </ToggleGroupItem>
+      </ToggleGroup>,
+    );
+    expect(one(host, "button").el.querySelectorAll("svg")).toHaveLength(1);
   });
 });
 
@@ -269,6 +307,15 @@ describe("toggle-group", () => {
     },
   );
 
+  test("each item draws the toggle's tick, pressed or not", () => {
+    const items = [...sample("horizontal").querySelectorAll('[data-slot="toggle-group-item"]')];
+    expect(items).toHaveLength(2);
+    for (const item of items)
+      expect(item.lastElementChild?.getAttribute("class")?.split(" ")).toEqual(
+        expect.arrayContaining(["invisible", "group-aria-pressed/toggle:visible"]),
+      );
+  });
+
   test("positive spacing keeps separate edges and the outside ring", () => {
     const host = sample("horizontal", 3);
     expect(one(host, '[data-slot="toggle-group"]').el.getAttribute("style")).toContain("--gap:3");
@@ -296,7 +343,7 @@ describe("toggle-group", () => {
     }
   });
 
-  test("clicking a joined item moves the boxed current state", async () => {
+  test("clicking a joined item moves the pressed state", async () => {
     const view = await client(
       <ToggleGroup defaultValue={["day"]} variant="outline">
         <ToggleGroupItem value="day">day</ToggleGroupItem>

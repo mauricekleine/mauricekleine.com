@@ -57,7 +57,7 @@ const fieldVariants = cva("group/field flex w-full gap-2", {
     orientation: {
       vertical: "flex-col *:w-full [&>.sr-only]:w-auto",
       horizontal:
-        "flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px",
+        "flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px [@media(max-width:600px)]:has-[>[role=checkbox],>[role=radio],>[role=switch]]:min-h-11 [@media(max-width:600px)]:has-[>[role=checkbox],>[role=radio],>[role=switch]]:*:data-[slot=field-label]:self-stretch",
       responsive:
         "flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px",
     },
@@ -67,7 +67,8 @@ const fieldVariants = cva("group/field flex w-full gap-2", {
   },
 });
 
-// A field keeps its upstream orientation and scopes label states to its controls.
+// A field keeps its upstream orientation and scopes label states to its controls. On a phone a row holding a tick is
+// 44 px tall with the label filling it, so stacked choices never share a target.
 function Field({
   className,
   orientation = "vertical",
@@ -96,13 +97,14 @@ function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// A label stays plain; a choice card boxes its checked field in the house ink.
+// A label stays plain; a choice card edges its checked field in foreground. On a phone a label holding a tick is a 44 px
+// row, so stacked choices never share a target.
 function FieldLabel({ className, ...props }: React.ComponentProps<"label">) {
   return (
     <label
       data-slot="field-label"
       className={cn(
-        "group/field-label peer/field-label flex w-fit items-center gap-2 text-ui font-medium select-none group-data-[invalid=true]/field:text-error group-data-[disabled=true]/field:text-disabled has-[>[data-slot=field]]:border has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:p-4 has-[>[data-slot=field]]:has-data-checked:border-primary has-[>[data-slot=field]]:has-data-checked:bg-accent has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:not-has-data-checked:hover:bg-control-hover",
+        "group/field-label peer/field-label flex w-fit items-center gap-2 text-ui font-medium select-none [@media(max-width:600px)]:has-[>[role=checkbox],>[role=radio],>[role=switch]]:min-h-11 group-data-[invalid=true]/field:text-error group-data-[disabled=true]/field:text-disabled has-[>[data-slot=field]]:border has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:p-4 has-[>[data-slot=field]]:has-data-checked:border-foreground has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:not-has-data-checked:hover:bg-control-hover",
         "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col",
         className,
       )}
@@ -125,7 +127,7 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// Supporting text sets at the instrument step, with links in the house ink.
+// Supporting text sets at the instrument step, and its links hold the underline at rest in foreground.
 function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
@@ -133,7 +135,7 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
       className={cn(
         "text-left type-instrument text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5",
         "last:mt-0 nth-last-2:-mt-1",
-        "[&_a]:text-primary [&_a]:underline-offset-4 [&_a:hover]:underline",
+        "[&_a]:text-foreground [&_a]:underline [&_a]:decoration-1 [&_a]:underline-offset-4",
         className,
       )}
       {...props}
@@ -141,7 +143,7 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
-// A quiet rule runs behind a meta label on the stock.
+// A quiet rule runs behind an instrument label on the stock.
 function FieldSeparator({
   children,
   className,
@@ -159,7 +161,7 @@ function FieldSeparator({
       <Separator className="absolute inset-x-0 top-1/2 h-px bg-border" />
       {children && (
         <span
-          className="relative mx-auto block w-fit bg-background px-2 type-meta text-muted-foreground"
+          className="relative mx-auto block w-fit bg-background px-2 type-instrument text-muted-foreground"
           data-slot="field-separator-content"
         >
           {children}

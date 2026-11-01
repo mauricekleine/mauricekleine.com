@@ -139,6 +139,7 @@
   --faint: oklch(0.9821 0 0);
   --first: oklch(0.2091 0.0104 268.19);
   --key: oklch(0.2091 0.0104 268.19);
+  --selected: oklch(0.2091 0.0104 268.19);
   --scrim: oklch(0.2091 0.0104 268.19 / 0.42);
   --code: oklch(0.2091 0.0104 268.19);
   --code-foreground: oklch(1 0 0);
@@ -295,6 +296,7 @@
   --faint: oklch(0.3053 0.0055 271.23);
   --first: oklch(1 0 0);
   --key: oklch(0.2091 0.0104 268.19);
+  --selected: oklch(0.928 0 0);
   --scrim: oklch(0 0 0 / 0.6);
   --code: oklch(0.1676 0.0071 258.37);
   --code-foreground: oklch(0.928 0 0);
@@ -397,6 +399,7 @@
   --color-faint: var(--faint);
   --color-first: var(--first);
   --color-key: var(--key);
+  --color-selected: var(--selected);
   --color-scrim: var(--scrim);
   --color-code: var(--code);
   --color-code-foreground: var(--code-foreground);
@@ -616,9 +619,78 @@
   text-transform: none;
 }
 
+/* utilities beyond the type steps and the screens. a form that changes with the mode sits here on generate.ts's dark
+   scope, as texture-contact's does in texture.css, so no item needs a dark: class. the plain css leaves them out, as
+   it does the type steps: an item or a ship's own markup reads them through tailwind. */
+
+/* off paper: a plum fill prints pale pink in a dark scope, which is every surface of a dark page and the frame on any
+   page, so there a filled button prints as the outline: an edge in its label's ink, no fill, and the outline's hover
+   and press. disabled keeps the button's flat fill and screened edge, and invalid keeps its error edge. */
+@utility off-paper {
+  &:is(.dark *):not(.dark .light *) {
+    @variant not-disabled {
+      border-color: currentColor;
+      background-color: transparent;
+      color: var(--foreground);
+      @variant hover {
+        background-color: var(--control-hover);
+      }
+      @variant aria-expanded {
+        background-color: var(--control-hover);
+      }
+      @variant active {
+        background-color: var(--control-press);
+        box-shadow: none;
+      }
+      @variant aria-invalid {
+        border-color: var(--error);
+      }
+    }
+  }
+}
+
+/* a target reaches 44 px without growing: ::after, centred on its box, takes the pointer at least 44 px each way. the
+   box stays positioned. an item scopes it to the widths that need it. */
+@utility hit-area {
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    translate: -50% -50%;
+  }
+}
+
+/* the one second link form, beside the foreground link: a muted word that turns foreground on hover, underlined 4 px
+   below the baseline. it has no underline at rest, and it takes the hit area on a phone. */
+@utility link-quiet {
+  color: var(--muted-foreground);
+  text-decoration-line: none;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color var(--duration-instant) var(--ease-brand);
+  @variant hover {
+    color: var(--foreground);
+    text-decoration-line: underline;
+  }
+  @media (max-width: 600px) {
+    position: relative;
+    @apply hit-area;
+  }
+}
+
 @layer base {
   * {
     border-color: var(--border);
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
+
+  /* a ship's window keeps the deep ground past the page's edges; a page with no rail stays on stock */
+  html:has([data-mk="fleet-rail"]) {
+    background-color: var(--ground);
+    scrollbar-color: var(--sidebar-border) var(--ground);
   }
 
   body {
@@ -630,6 +702,7 @@
     font-variant-numeric: tabular-nums;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
   }
 
   ::selection {
@@ -637,10 +710,56 @@
     color: var(--foreground);
   }
 
-  /* buttons, tabs, links and rail cells keep a 2 px ring at 2 px; fields own their focus in their skins */
-  :where(a, button, summary, [role="tab"], [role="button"]):where(:not([data-slot="select-trigger"])):focus-visible {
+  /* the caret takes the ring's ink; a field item's --fx takes over inside its box */
+  :where(input, textarea, [contenteditable]) {
+    caret-color: var(--ring);
+  }
+
+  /* every focusable control keeps a 2 px ring at 2 px; a field owns its focus in its skin, as its inside edge */
+  :where(
+      a,
+      button,
+      summary,
+      [role="button"],
+      [role="checkbox"],
+      [role="link"],
+      [role="menuitem"],
+      [role="menuitemcheckbox"],
+      [role="menuitemradio"],
+      [role="option"],
+      [role="radio"],
+      [role="slider"],
+      [role="switch"],
+      [role="tab"],
+      [role="treeitem"],
+      [tabindex]:not([tabindex="-1"])
+    ):where(:not(input, select, textarea, [contenteditable], [data-slot="select-trigger"])):focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
+  }
+
+  /* figures and code that hold a column set in mono; a time in running text or a row's line reads with its words */
+  code,
+  time {
+    font-family: var(--font-mono);
+  }
+
+  :is(p, li) time {
+    font-family: inherit;
+  }
+
+  /* the working panel's text wraps anywhere, so a long id never widens the page; a table keeps its own columns */
+  [data-slot="app-shell-panel"] :is(p, h1, h2, h3, dd, li):not(td *, th *) {
+    overflow-wrap: anywhere;
+  }
+
+  /* an anchor no item owns is running text: foreground, with a 1 px underline at rest, 4 px below the baseline. an
+     item's own link is chrome and underlines on hover. this is the base layer, so every item and utility wins */
+  [data-slot="app-shell-panel"] a:not([data-slot]) {
+    color: var(--foreground);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
   }
 }
 
@@ -722,8 +841,8 @@
   }
 }
 
-/* mixed: the checkbox's some-not-all state, a 12 px square of the house ink at 50 percent centred inside the box's
-   house edge. it draws on ::before, so base-nova's enlarged hit area on ::after stays, and centres itself, so it
+/* mixed: the checkbox's some-not-all state, a 12 px square of foreground at 50 percent centred inside the box's
+   foreground edge. it draws on ::before, so base-nova's enlarged hit area on ::after stays, and centres itself, so it
    holds whatever else the box lays out. the box stays positioned. */
 @utility texture-mixed {
   &[data-indeterminate]::before {
@@ -733,13 +852,13 @@
     margin: auto;
     width: 12px;
     height: 12px;
-    background: var(--primary);
+    background: var(--foreground);
     pointer-events: none;
     mask: var(--texture-b50) 0 0 / 4px 4px;
   }
 }
 
-/* tab hover: a tab that is not current previews the current bar at 50 percent, a 2 px bar of the house ink over the
+/* tab hover: a tab that is not current previews the current bar at 50 percent, a 2 px bar of foreground over the
    list's rule. the tab stays positioned. */
 @utility texture-tabhover {
   @variant hover {
@@ -750,7 +869,7 @@
       right: 0;
       bottom: -1px;
       height: 2px;
-      background: var(--primary);
+      background: var(--foreground);
       pointer-events: none;
       mask: var(--texture-b50) 0 0 / 4px 4px;
     }
@@ -758,7 +877,7 @@
 }
 
 /* row edge, on the table: every row's first cell takes 16 px of left padding, and the row under the pointer prints
-   a 4 px strip of the house ink at 50 percent at its left edge, inside that padding, so the strip sits inside the
+   a 4 px strip of foreground at 50 percent at its left edge, inside that padding, so the strip sits inside the
    table's box (a scrolling wrapper cannot clip it) and 12 px clear of the cell's content. a selected row
    (aria-selected, or shadcn's data-state) prints the strip solid. */
 @utility texture-rowedge {
@@ -777,7 +896,7 @@
         top: 8px;
         bottom: 8px;
         width: 4px;
-        background: var(--primary);
+        background: var(--foreground);
         pointer-events: none;
         mask: var(--texture-b50) 0 0 / 4px 4px;
       }
@@ -789,7 +908,7 @@
       top: 8px;
       bottom: 8px;
       width: 4px;
-      background: var(--primary);
+      background: var(--foreground);
       pointer-events: none;
     }
   }
@@ -846,10 +965,10 @@
   mask: var(--texture-b19) 0 0 / 4px 4px;
 }
 
-/* the progress edge, one of the five places: the fill in the house ink, its leading 24 px the 24 x 8 bayer ramp
+/* the progress edge, one of the five places: the fill in foreground, its leading 24 px the 24 x 8 bayer ramp
    from 100 to 0 percent. it masks the fill itself, which carries no words. */
 @utility texture-ramp {
-  background-color: var(--primary);
+  background-color: var(--foreground);
   mask:
     linear-gradient(#000 0 0) 0 0 / calc(100% - 24px) 100% no-repeat,
     var(--texture-ramp) 100% 0 / 24px 8px repeat-y;

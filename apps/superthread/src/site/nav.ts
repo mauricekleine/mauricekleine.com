@@ -88,6 +88,7 @@ export const nav: readonly NavEntry[] = [
   component("sheet"),
   component("skeleton"),
   component("tooltip"),
+  component("time-words", "time-words"),
   component("use-mobile", "use-mobile"),
   composition("app-shell"),
   composition("page-header"),

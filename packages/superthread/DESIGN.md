@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: superthread
-description: maurice kleine's design system for his fleet, v2. key ink on white stock, plum for every control, screens only where you look.
+description: maurice kleine's design system for his fleet, v2. key ink on white stock, one plum fill per viewport, screens only where you look.
 # Colours are the tokens dist/v2/superthread.css emits. A key `x` is the variable `--x` on `:root` and `.light`;
 # `dark-x` is the same variable under `.dark`. The css carries each as oklch(), which .impeccable/design.json
 # records as `canonical`; the value here is the master world's hex (with its alpha, as rgb(), on the scrim) that
@@ -72,6 +72,7 @@ colors:
   faint: "#f9f9f9" # provisional
   first: "#16181d" # provisional
   key: "#16181d" # provisional
+  selected: "#16181d" # provisional
   scrim: "rgb(22 24 29 / 0.42)" # provisional
   code: "#16181d" # provisional
   code-foreground: "#ffffff" # provisional
@@ -167,6 +168,7 @@ colors:
   dark-faint: "#2e2f32" # provisional
   dark-first: "#ffffff" # provisional
   dark-key: "#16181d" # provisional
+  dark-selected: "#e7e7e7" # provisional
   dark-scrim: "rgb(0 0 0 / 0.6)" # provisional
   dark-code: "#0d0f12" # provisional
   dark-code-foreground: "#e7e7e7" # provisional
@@ -314,7 +316,7 @@ spacing:
 
 **Creative North Star: "the two-ink proof"**
 
-Superthread prints every fleet surface the way a two-ink proof prints: key ink on white stock, plum for everything you act on, and 1-bit screens only where the eye is meant to rest. The master world's own thesis states the rule the rest follows: flat where you read, screened where you look. Words, numbers, data and code always sit on flat ink. Screens print in five places and as at most one small detail per component, beside the content and never behind it.
+Superthread prints every fleet surface the way a two-ink proof prints: key ink on white stock, one plum fill per viewport, and 1-bit screens only where the eye is meant to rest. The master world's own thesis states the rule the rest follows: flat where you read, screened where you look. Words, numbers, data and code always sit on flat ink. Screens print in five places and as at most one small detail per component, beside the content and never behind it.
 
 The register is quiet and exact. Square corners, 1 px edges and horizontal rules that reach both window edges carry the structure, so a page needs no rounded cards on grey, no gradient accent and no glow. Dark mode is the same proof printed white on key: every neutral in both modes is a tint of the two inks, mixed in linear light, and most sit on one eleven-step wedge. There are two surfaces. Docs and public pages print on the stock. A ship's working surface prints on the deep ground, with the fleet rail and the ship's nav flat on the ground and the working panel raised on it by a soft rake from the upper left.
 
@@ -323,7 +325,7 @@ Every value comes from one source, `tokens/master.json`, vendored unchanged from
 **Key Characteristics:**
 
 - Two inks: key `#16181d` on white stock `#ffffff`, and white on key in dark. Every neutral is a tint of the two.
-- One house ink, plum (`#aa337a`, dark `#c074a1`), for every control, link, focus ring and current item.
+- One house ink, plum (`#aa337a`, dark `#c074a1`): one fill per viewport, on paper only, in the deep value.
 - Five statuses at badge scale only, each with its glyph square and its word. Failed is the one solid badge.
 - Seven ship spots that print only in their marks and chart series.
 - Four faces with one job each: Unbounded, Supreme, Erode and Fragment Mono.
@@ -334,24 +336,25 @@ Every value comes from one source, `tokens/master.json`, vendored unchanged from
 
 ## Colors
 
-A two-ink palette: the key and its wedge carry everything neutral, plum carries every control, and colour beyond those two lives only in status badges, ship marks and chart series.
+A two-ink palette: the key and its wedge carry everything neutral and every state a control shows, plum carries the one fill and the focus signal, and colour beyond those two lives only in status badges, ship marks and chart series.
 
 App code names the role (`bg-primary`, `text-muted-foreground`, `border-input`), never a value; the `.dark` class on `<html>` switches every role at once. `.light` inside a dark page, or `.dark` inside a light one, makes an island in the other mode.
 
 ### Primary
 
-- **Plum, the house ink** (`primary` and `ring`: `#aa337a`, dark `#c074a1`): primary actions, links, focus rings, the current item's edge and corner square, the progress fill, the tab bar and row edge, the second plate of the opener and figures, and the fleet rail's home cell. It is the only chromatic ink a control ever takes. The label on it, `primary-foreground` (stock in light, key in dark), measures 6.06:1 in light and 5.29:1 in dark.
+- **Plum, the house ink** (`primary` and `ring`: `#aa337a`, dark `#c074a1`): the primary button on paper, focus rings, the rail's corner mark and home cell, and the second plate of the opener and figures. It is the only chromatic ink a control ever takes. Links, the tab bar, ticks, switches, sliders, progress and the row edge print in foreground. The label on it, `primary-foreground` (stock in light, key in dark), measures 6.06:1 in light and 5.29:1 in dark.
 - **Plum, hover and pressed** (`primary-hover` `#9a2f6f` / `#cd80ad`, `primary-press` `#8b2b65` / `#d88eb9`): in light the ink overprints darker; in dark it lifts in lightness. A pressed primary button adds a 1 px key inset.
-- **Plum tints** (`accent` `#f7f2f4` / `#503246`, house 12 and 14; `selection` `#eee3e8` / `#71455f`, house 24 and 30): the boxed current item's fill and selected text. Words inside these fills print in `foreground` or `muted-foreground`, never in plum.
+- **Plum tints** (`accent` `#f7f2f4` / `#503246`, house 12 and 14; `selection` `#eee3e8` / `#71455f`, house 24 and 30): `selection` prints selected text, and `accent` is shadcn's tint role, which no item prints. Words inside these fills print in `foreground` or `muted-foreground`, never in plum.
 
 ### Neutral
 
+- **Selected** (`selected`: `#16181d`, dark `#e7e7e7`, `foreground` in each mode): the current item in a nav, wherever it is drawn. The frame pins it to `sidebar-foreground` and the ground to `ground-foreground`, so a current item matches the words beside it, and the panel returns it to `foreground`. This role is new in v2 and provisional.
 - **Key** (`foreground` `#16181d`, also `key` in both modes and `first` in light): the first ink. In dark the first ink is white (`first` `#ffffff`), and words print in paper 80 (`dark-foreground` `#e7e7e7`).
 - **Stock** (`background`, `card`, `popover`: `#ffffff`; dark `background` `#16181d`, dark `card` and `popover` `#242629`): the paper. In light every raised surface is the stock itself; in dark it lifts one wedge step and draws a 1 px edge.
 - **The wedge.** In light the key prints over white at 100, 98, 88, 78, 64, 48, 32, 20, 12, 5 and 0 percent; in dark white prints over key at 80, 60, 44, 24, 16, 10, 6, 4, 3, 1 and 0. Each neutral role names its tint. Light: `muted-foreground` key 88 (`#646465`), `input` 78 (`#838384`), `disabled` 48 (`#bfc0c0`), `border` 20 (`#e7e7e7`), `secondary` 12 (`#f1f1f1`), `muted` and `faint` 5 (`#f9f9f9`). Dark: `muted-foreground` 44 (`#b2b2b2`), `input` 24 (`#888889`), `rule` 16 (`#727273`), `disabled` 10 (`#5c5c5e`), `secondary` 4 (`#3e3e40`), `border` 3 (`#37373a`), `faint` 2 (`#2e2f32`, between the wedge's 3 and 1), `muted` 1 (`#242629`).
 - **Rule** (`rule`: key in light, `#727273` in dark): the page's full-bleed rules, stronger than `border`.
-- **Destructive is key** (`destructive` `#16181d` / `#e7e7e7`): a destructive action prints in the first ink with the trash glyph and its word. Red is a status colour.
-- **Control states**: `secondary-hover` and `-press`; `control-hover` and `-press` for outline and ghost; `raised-hover` and `-press` for options and buttons on a raised layer; `destructive-hover` and `-press`. Light overprints key tints; dark lifts paper tints. `raised-edge` is transparent in light and paper 6 (`#494a4c`) in dark, the 1 px edge a raised surface draws there.
+- **Destructive is key** (`destructive` `#16181d` / `#e7e7e7`): a destructive action prints in the first ink with the trash glyph and its word, and off paper as the outline. Red is a status colour.
+- **Control states**: `secondary-hover` and `-press`; `control-hover` and `-press` for outline and ghost; `raised-hover` and `-press` for options and buttons on a raised layer; `destructive-hover` and `-press` for every fill in the first ink. Light overprints key tints; dark lifts paper tints. `raised-edge` is transparent in light and paper 6 (`#494a4c`) in dark, the 1 px edge a raised surface draws there.
 - **The deep ground** (`ground` `#2e2f32`, key 98; dark `#0d0f12`, key printed twice; `ground-foreground` `#ffffff` / `#e7e7e7`): the field a ship surface prints on, dark in both modes. What prints flat on it takes the dark palette in both modes, which the `sidebar-*` roles carry: `sidebar-primary` and `sidebar-ring` are plum's dark value, `sidebar-accent` is `#503246`, `sidebar-border` is `#727273`, and `sidebar-hover` is paper 5 over the ground (`#4e4e50` / `#424243`).
 - **The code patch** (`code` `#16181d` / `#0d0f12`, `code-foreground`, `code-muted` for the prompt, `code-border` for separators): install lines and code blocks print dark in both modes. Package names and the copy link's ring (`code-accent`, `code-ring`) print in plum's dark value `#c074a1` in both modes.
 - **Scrim** (`scrim`: the key at 42 percent in light, black at 60 percent in dark): the field under a modal layer, with no blur.
@@ -405,7 +408,9 @@ The five places, in the world's order:
 
 A chart series prints in its ship's spot with 1 px lines knocked out to the stock every 4 px at the ship's angle, so it reads by colour first and by angle without colour. Every screened field gets crop marks: 10 px corner ticks, 16 px outside the field. `scripts/texture/build.py plates` builds the plates: a masks plate prints a first plate and a spot plate per mode, inked by CSS, and a composite plate prints the master's indexed image per mode, keeping the true overprint colour where the inks overlap. `texture/plates.sha256` holds their pixel hashes. The six component details are under Components.
 
-**The One House Ink Rule.** Plum is the only colour a control takes, on every surface. A ship never sets a control colour, and no status or spot ink fills a control.
+**The One House Ink Rule.** One plum fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. The focus signal is the ring, a field's focus edge and its caret, and it doesn't count against the fill. A ship never sets a control colour, and no status or spot ink fills a control.
+
+**The Outward Action Rule.** An action that leaves the app, such as a send, a publish or a share, prints `key`, never plum. A block that holds one is a key block, and its focus ring prints in the first ink.
 
 **The Badge Scale Rule.** Status colour prints at badge scale only, always with its glyph square and its word. Failed is the one solid badge, and red never fills a button.
 
@@ -428,37 +433,43 @@ The faces load from superthread's own host. Unbounded and Fragment Mono load on 
 
 Each step is a `type-<step>` utility that sets face, size, line, tracking, weight and case together. Steps with a phone value change at 600 px and below.
 
-- **Meta** (Fragment Mono 400, 11/14 px, 0.14em, caps): legends, table heads and the select list's group labels.
-- **Instrument** (Supreme 400, 13/20 px): notes, captions, badges and small controls.
+- **Meta** (Fragment Mono 400, 11/14 px, 0.14em, caps): legends and the group labels inside a select, menu or command list. A label anywhere else sets at the instrument step, so a page prints no stack of caps labels.
+- **Instrument** (Supreme 400, 13/20 px): notes, captions, badges, small controls, fact labels, toolbar group labels and table heads.
 - **UI** (Supreme 400, 14/21 px): the interface's body; the base layer sets `body` to 14 px at 1.5.
-- **Summary** (Supreme 400, 15/24 px): the text under a section head.
+- **Summary** (Supreme 400, 15/24 px): the text under a form section's title and a page head's meta line.
 - **Subtitle** (Supreme 500, 18/24 px): dialog titles.
 - **Read** (Erode 400, 19/32 px; phone 18/30): the reading page, on a 27.5em measure (about 66 characters).
-- **Lede** (Erode 400, 21/33 px; phone 19/31): the sentence under a page title.
-- **Title** (Unbounded 300, 22/28 px, -0.02em): card and board titles.
-- **Section** (Unbounded 300, 30/34 px, -0.03em): section heads.
+- **Lede** (Erode 400, 21/33 px; phone 19/31): the sentence under a page title, on a panel and on the stock alike, on the reading measure.
+- **Title** (Unbounded 300, 22/28 px, -0.02em): card, board and form titles, and a section head in a panel.
+- **Section** (Unbounded 300, 30/34 px, -0.03em): a page head's title in a panel, and a section head on the stock.
 - **Page** (Erode 600, 34/40 px, -0.01em; phone 28/34): a reading sheet's heading.
-- **Hero** (Unbounded 300, 64/68 px, -0.04em; phone 52/56): a page head's title.
+- **Hero** (Unbounded 300, 64/68 px, -0.04em; phone 52/56): a page head's title on the stock, or at `size="page"`.
 - **Display** (Unbounded 300, 76/80 px, -0.04em): the overview's wordmark line.
+
+The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or an `li` reads with its words, so a time in a sentence or a row's meta line holds no column; `ListRowAside` prints in mono, so a time there still does.
 
 The superthread wordmark sets in Unbounded 400 at -0.02em.
 
-**The One Job Rule.** Unbounded sets display lines, Supreme the interface, Erode reading, and Fragment Mono ids, numbers, code and caps legends. A face never does another's job.
+**The One Job Rule.** Unbounded sets display lines, Supreme the interface, Erode reading, and Fragment Mono ids, times, figures that hold a column, code and caps legends. A face never does another's job.
 
 **The Lowercase Chrome Rule.** Nav, labels, headings, buttons and every served label, screen-reader text included, are lowercase. Authored titles keep their own casing.
 
-**The Tabular Rule.** Every figure is tabular, from the body rule down; ids and numbers in a table set in mono, with numbers aligned right.
+**The Tabular Rule.** Times and any figure that must hold a column set in Fragment Mono, because Supreme and Erode have no tabular figures. Numbers in a table align right.
+
+**The First Ink Rule.** A title in the display face prints in the first ink.
 
 ## Layout
 
 Space runs on Tailwind's default 4 px step, used at 4, 8, 12, 16, 24, 32, 48, 64 and 96 px; the frontmatter keys are the Tailwind multipliers (`gap-4` is 16 px). Rows have their own tokens: 56 px on a board (`--spacing-row-board`), 48 px in a table (`--spacing-row-table`) and 32 px for a nav item (`--spacing-row-nav`), each plus its 1 px rule.
 
-- **Sections.** A section head sits inside its full-bleed rule, with 64 px above it and 44 px between the head and its content; panes pad 36 to 48 px.
+- **Sections.** On the stock a section head sits under its full-bleed rule, 64 px below the section before it and 44 px below the rule, with 24 px to its content. In a panel `section-header` leaves 48 px between sections and 16 px between its rule and its content; panes pad 36 to 48 px.
 - **Docs and public pages** print on the stock, with full-bleed rules, a boxed nav and an aside, and no fleet rail.
-- **Ship surfaces** print on the deep ground: the fleet rail and the ship's nav flat on it, the working panel raised on it. The board panel is at most 880 px wide and the reading sheet 672 px with 72 px of padding; the reading page keeps a 264 px margin on the ground for its contents and progress.
-- **Breakpoints.** At 900 px and below the fleet rail becomes a 48 px bar of 32 px marks above the panel, the current ship boxed, with 12 px of ground on each side of the panel. At 420 px and below its cells tighten to 36 px so the whole rail fits a phone. At 600 px and below the phone type steps and the phone plates apply. The site adds two of its own for its docs shell (1279 px, where the masthead and aside tighten, and 1099 px, where the aside drops below the page); they are the site's, not the tokens'.
+- **Ship surfaces** print on the deep ground: the fleet rail and the ship's nav flat on it, the working panel raised on it. The base layer gives a ship's `html` the ground and its scrollbar, keyed to `data-mk="fleet-rail"`, so the window never shows stock past the page's edge and a page with no rail stays on stock. The working panel is at most 880 px wide. No ship widens it and there is no wide setting, so main content holds its place between pages. The reading sheet is 672 px with 72 px of padding, and the reading page keeps a 264 px margin on the ground for its contents and progress. The panel is a size container, and text in it wraps anywhere, except inside a table's cells.
+- **Breakpoints.** At 900 px and below the fleet rail becomes a 48 px bar of 32 px marks above the panel, the current cell neutral on its plum corner mark, with 12 px of ground on each side of the panel. The frame scrolls with the page, and no ship re-sticks it. At 420 px and below the bar spans the width and its cells share it, at 36 px or less, each with a hit area as wide as its share up to 44 px, so the whole rail fits a phone. At 600 px and below the phone type steps and the phone plates apply, and every target reaches 44 px: a field, a tab, an option row or a joined button grows to 44 px, a stacked choice takes a 44 px row, and a button, a toggle, a link part or a nav item keeps its box and takes the `hit-area` utility. Hand-built nav holds the same target. The site adds two of its own for its docs shell (1279 px, where the masthead and aside tighten, and 1099 px, where the aside drops below the page); they are the site's, not the tokens'.
 
 **The Full Bleed Rule.** Horizontal rules belong to the page: they run to both window edges, past every column, and no column stops them.
+
+**The Phone Target Rule.** Every target on a phone is 44 px, through its box or a hit area, in hand-built nav as in an item. Hit areas never overlap. Only a link in running text keeps its line's height.
 
 ## Elevation & Depth
 
@@ -489,15 +500,15 @@ The form language is square and ruled: `--radius` and every `--radius-*` emit 0p
 
 ### Focus
 
-- **Controls** (buttons, tabs, links, rail cells, checkboxes) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible` for links, buttons, summaries, tabs and role buttons.
-- **Fields** (input, textarea, input group, the select trigger) own their focus. While the text control holds focus, or when the box is the control as the select trigger is, the box's 1 px edge becomes a 2 px edge drawn inside it (`outline: 2px solid var(--fx)` at `-2px`), and the caret takes the same ink. `--fx` is plum, or the error ink on an invalid field. The text control draws no outline, so the text never moves. An outline, unlike a box shadow, survives forced-colours mode.
+- **Controls** (buttons, tabs, links, rail cells, checkboxes) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible` for links, buttons, summaries, every control role and anything else in the tab order, so a focusable element with no skin of its own still shows it. Inside the ship's nav the ring prints in `sidebar-foreground`, so the nav holds no plum; the rail keeps `sidebar-ring`. Inside a key block the ring prints in `first`, because the block sets `--ring` to `--first`.
+- **Fields** (input, textarea, input group, the select trigger) own their focus. While the text control holds focus, or when the box is the control as the select trigger is, the box's 1 px edge becomes a 2 px edge drawn inside it (`outline: 2px solid var(--fx)` at `-2px`), and the caret takes the same ink; the base layer sets any other text control's caret to `--ring`. `--fx` is the ring's ink, so a field in a ship's nav or on a key block takes that surface's ring, or the error ink on an invalid field. The text control draws no outline, so the text never moves. An outline, unlike a box shadow, survives forced-colours mode.
 - **A button inside a field box** (clear, reveal, a toggle) is a control: it draws its own 2 px ring inside itself and the box stays at 1 px. The input group matches the text control with `:has()`, never `:focus-within`, for this reason.
 - **The code patch's copy link** draws its ring 4 px inside itself (`--code-ring-offset: -4px`) in plum's dark value.
 - A disabled field never takes focus.
 
-### The boxed current item
+### The current item
 
-The current item, wherever it is (a sidebar entry, the fleet rail's cell, a chosen select option), is boxed: a plum tint fill, a 1 px plum edge, and on the rail and in the sidebar an 8 px plum square, at the rail cell's corner and before the sidebar entry's word.
+A current item in a nav is neutral, wherever it is drawn: the word, a 1 px edge and an 8 px square before the word, all in the `selected` role, with no fill. A nav drawn by hand reads the same role. The fleet rail's current cell is neutral too: no fill, a `sidebar-border` edge and its 8 px plum corner mark, the only plum on a cell's edge.
 
 ### Marks and icons
 
@@ -513,58 +524,61 @@ The current item, wherever it is (a sidebar entry, the fleet rail's cell, a chos
 
 Every `@mk` item is a branded skin on base-nova, shadcn's Base UI style: shadcn's API, exports and `data-slot` attributes stay, and the craft lives in the classes. Each brand item's root carries `data-mk="<item>"`. Install with `bunx --bun shadcn@latest add @mk/<item>`; `shadcn init` with the registry's `init` item sets an app up with the style, the tokens, `utils` and the button. Brand items carry the system's rules; pass items (`card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile`) are base-nova on the tokens. Each brand item carries at most one texture detail:
 
-| detail    | utility            | item                                                                      | what prints                                                                           |
-| --------- | ------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| contact   | `texture-contact`  | select list, toast, dialog, dropdown menu, combobox, alert dialog, sonner | light only: the contact shadow as a 50 percent screen                                 |
-| mixed     | `texture-mixed`    | checkbox                                                                  | a 12 px plum square at 50 percent inside the box's plum edge                          |
-| tab hover | `texture-tabhover` | tabs                                                                      | a 2 px plum bar at 50 percent, previewing the current bar                             |
-| row edge  | `texture-rowedge`  | table                                                                     | a 4 px plum strip at 50 percent beside the row under the pointer; solid when selected |
-| disabled  | `texture-disabled` | button, input, textarea, input group                                      | the 1 px edge in the input ink at 50 percent; the fill stays flat, the label plain    |
-| loading   | `texture-skeleton` | skeleton                                                                  | the first ink at 18.75 percent on whole-pixel bars                                    |
+| detail    | utility            | item                                                                      | what prints                                                                                 |
+| --------- | ------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| contact   | `texture-contact`  | select list, toast, dialog, dropdown menu, combobox, alert dialog, sonner | light only: the contact shadow as a 50 percent screen                                       |
+| mixed     | `texture-mixed`    | checkbox                                                                  | a 12 px foreground square at 50 percent inside the box's foreground edge                    |
+| tab hover | `texture-tabhover` | tabs                                                                      | a 2 px foreground bar at 50 percent, previewing the current bar                             |
+| row edge  | `texture-rowedge`  | table                                                                     | a 4 px foreground strip at 50 percent beside the row under the pointer; solid when selected |
+| disabled  | `texture-disabled` | button, input, textarea, input group                                      | the 1 px edge in the input ink at 50 percent; the fill stays flat, the label plain          |
+| loading   | `texture-skeleton` | skeleton                                                                  | the first ink at 18.75 percent on whole-pixel bars                                          |
 
 ### Buttons
 
 Square, one chromatic ink, quick to answer.
 
-- **Shape:** square corners (0px), a 1 px edge; 40 px tall with 18 px sides at the default size (24, 32 and 48 px for `xs`, `sm` and `lg`, and square icon sizes), Supreme 500 at the UI or instrument step.
-- **Primary:** plum fill and edge under the stock label; hover and press take `primary-hover` and `primary-press`, and press adds a 1 px key inset.
+- **Shape:** square corners (0px), a 1 px edge; 40 px tall with 18 px sides at the default size (24, 32 and 48 px for `xs`, `sm` and `lg`, and square icon sizes), Supreme 500 at the UI or instrument step. At 600 px and below every size keeps its box and takes the pointer through a 44 px hit area.
+- **Primary:** plum fill and edge under the stock label; hover and press take `primary-hover` and `primary-press`, and press adds a 1 px key inset. Off paper the fill would print pale pink, so the button prints as the outline. Off paper means inside a dark scope: every surface of a dark page, and the frame on any page. On a light page a panel is paper, so the button fills.
 - **Secondary / Outline / Ghost:** secondary is key 12 with key words; outline draws its edge in the current colour; ghost has no edge. Their hovers and presses come from the `secondary-*` and `control-*` roles, or `raised-*` on a raised layer.
-- **Destructive:** the key ink with the trash glyph before its word (the trash alone on an icon button).
-- **Link:** plum words that underline on hover, 4 px below the baseline.
+- **Destructive:** the key ink with the trash glyph before its word (the trash alone on an icon button). Off paper it prints as the outline, so it never outranks the primary action beside it.
+- **Key:** the first ink under the stock label, with no glyph, for an action that leaves the app or any strong action where plum isn't the fill. It keeps its fill off paper. Its hover and press are destructive's.
+- **Link:** foreground words that underline on hover, 4 px below the baseline, as every chrome link with no box does: a row title, a door. A nav item has a box, so it hovers with its fill. A link in running text keeps a 1 px underline at rest, and inside a working panel the base layer prints any anchor no item owns that way. `link-quiet` is the one second form, a muted word that turns foreground on hover at the same offset. An override never makes a third.
 - **Disabled:** a faint fill, the disabled label, no pointer, and the edge screened back to 50 percent.
 - **Focus:** the base layer's 2 px plum ring at 2 px. Only the fill, edge and label transition, so the ring snaps on.
 
+**The Two Links Rule.** A link prints in foreground, with a 1 px underline at rest in running text and on hover in chrome. `link-quiet` is the one second form.
+
 ### Badges
 
-- **Style:** 30 px tall, square, a 1 px edge, 11 px sides, Supreme 500 at 13 px. shadcn's variants (default, secondary, destructive, outline, ghost, link) keep their meaning on the role inks.
+- **Style:** 30 px tall, square, a 1 px edge, 11 px sides, Supreme 500 at 13 px wherever it lands. `size="sm"` is 24 px, the height of an `xs` button, with 8 px sides, for a status in a row's aside. shadcn's variants (default, secondary, destructive, outline, ghost, link) keep their meaning on the role inks, and the default and link print in foreground.
 - **Status:** `variant="done" | "running" | "waiting" | "failed" | "queued"` prints the glyph square before the word, and the state's name when given no word. Failed is solid, its glyph in the label ink.
 
 ### Fields
 
-- **Style:** input, textarea and the select trigger are 40 px boxes (the textarea grows from three lines) with a 1 px `input` edge on the stock, 12 px sides, Supreme at 14 px. The input group is one box holding a text control with addons and buttons beside it; its controls carry no box of their own.
-- **One row, one height:** controls side by side share a height, so a button or toggle beside a field stays at the 40 px default. `sm` is for a control inside a field and for a row of nothing but `sm` controls.
+- **Style:** input, textarea and the select trigger are 40 px boxes, 44 px at 600 px and below (the textarea grows from three lines) with a 1 px `input` edge on the stock, 12 px sides, Supreme at 14 px. The input group is one box holding a text control with addons and buttons beside it; its controls carry no box of their own.
+- **One row, one height:** controls side by side share a height, so a button or toggle beside a field stays at the 40 px default. `sm` is for a control inside a field and for a row of nothing but `sm` controls. At 600 px and below a `sm` field is 44 px too, and a joined `ButtonGroup` holding a field takes 44 px across every child.
 - **Focus:** the box's edge becomes 2 px inside it in `--fx`, and the caret follows (see Shapes).
 - **Error / Disabled:** `aria-invalid` turns the edge and `--fx` to the error ink, and the error message leads with the bang glyph. Disabled prints a faint fill, the disabled label and the edge screened back to 50 percent; a disabled button inside an input group screens itself, never the box.
 
 ### Select
 
-The trigger is a field whose box is the control. The list is a raised layer on the leaf lift with the contact edge, 6 px below the trigger; it scrolls inside the popup so the popup never clips its screen. The option under the pointer or the keys takes the raised hover fill, keyboard focus draws the 2 px ring inside the option, the chosen option is boxed in plum, and group labels set at the meta step.
+The trigger is a field whose box is the control. The list is a raised layer on the leaf lift with the contact edge, 6 px below the trigger; it scrolls inside the popup so the popup never clips its screen. The option under the pointer or the keys takes the raised hover fill, keyboard focus draws the 2 px ring inside the option, the chosen option keeps its check over the same fill, and group labels set at the meta step. Option rows are 36 px, 44 px on a phone.
 
 ### Checkbox
 
-An 18 px square with the input edge, and a control: its focus ring sits 2 px outside it. Checked fills it with plum under a stock check; mixed (some, not all) keeps the stock fill inside a plum edge and prints its 12 px square at 50 percent.
+An 18 px square with the input edge, and a control: its focus ring sits 2 px outside it, and its hit area reaches 44 px at any width. On a phone a field row or a label holding one is 44 px tall, so a stack keeps each hit area whole. Checked fills it with foreground under a stock check; mixed (some, not all) keeps the stock fill inside a foreground edge and prints its 12 px square at 50 percent.
 
 ### Tabs
 
-The default list draws its own 1 px rule; the line list leaves the rule to the page. The current tab is solid: its word in the foreground over a 2 px plum bar that covers the rule. A tab that is not current previews that bar at 50 percent on hover.
+The default list draws its own 1 px rule; the line list leaves the rule to the page. A tab is 44 px at 600 px and below. The current tab is solid: its word and a 2 px bar that covers the rule, both in foreground. A tab that is not current previews that bar at 50 percent on hover.
 
 ### Table
 
-Rows are 48 px (56 on a board) plus a 1 px rule, and the rules sit on the cells. Every first cell takes 16 px of left padding, where the row edge prints. Hover fills no row; a selected row takes the accent fill and a solid strip. Ids and numbers set in mono, numbers align right, and every figure is tabular. A wide table scrolls sideways inside its own container, with no fade at the cut edge.
+Rows are 48 px (56 on a board) plus a 1 px rule, and the rules sit on the cells. Every first cell takes 16 px of left padding, where the row edge prints. Hover fills no row; a selected row takes the control hover fill and a solid strip. Ids and numbers set in mono, so every figure holds its column, and numbers align right. A head is a word: it sets in Supreme at the instrument step, in the muted ink, over its column's alignment. A wide table scrolls sideways inside its own container, with no fade at the cut edge.
 
 ### Progress
 
-A 12 px track with a 1 px edge holds an 8 px fill at a 1 px inset: flat plum whose leading 24 px is the ramp. A finished bar prints solid. The label and value read below it at 13/20, the value in mono, and the width travels at 240 ms on the brand ease.
+A 12 px track with a 1 px edge holds an 8 px fill at a 1 px inset: flat foreground whose leading 24 px is the ramp. A finished bar prints solid. The label and value read below it at 13/20, the value in mono, and the width travels at 240 ms on the brand ease.
 
 ### Skeleton
 
@@ -572,7 +586,7 @@ Loading rows: 12 px whole-pixel bars, square and still, in the first ink at 18.7
 
 ### Dialog
 
-A square sheet on the popover fill with a 1 px edge, at most 440 px wide, padded 28 px (24 at the foot), on the sheet lift with the contact edge. Its centring offsets round to whole pixels, so its edges and screen land on the pixel grid at 1x and 2x. The title sets at the subtitle step; the close control is a small ghost button with the close glyph, labelled "close". The scrim beneath has no blur. It fades in and out on its keyframes at the quick duration.
+A square sheet on the popover fill with a 1 px edge, at most 440 px wide, padded 28 px (24 at the foot), on the sheet lift with the contact edge. Its centring offsets round to whole pixels, so its edges and screen land on the pixel grid at 1x and 2x. The title sets at the subtitle step, and a link in the description prints in the foreground ink, underlined; the close control is a small ghost button with the close glyph, labelled "close". The scrim beneath has no blur. It fades in and out on its keyframes at the quick duration.
 
 ### Toast
 
@@ -584,11 +598,13 @@ Pass items, and the only motion outside the brand tokens: each keeps base-nova's
 
 ### Sidebar
 
-The ship's nav, on the deep ground. Everything that prints on the ground (status glyphs, badges, buttons, skeletons, rules) takes the dark palette in both modes, while the ground keeps the page's mode. A nav item is 34 px tall, the 32 px row inside its 1 px edge; its hover is paper 5 over the ground, and the current item is boxed with its 8 px plum square before the word. Below 768 px, `use-mobile`'s breakpoint, it opens as a sheet.
+The ship's nav, on the deep ground. Everything that prints on the ground (status glyphs, badges, buttons, skeletons, rules) takes the dark palette in both modes, while the ground keeps the page's mode. A nav item is 34 px tall, the 32 px row inside its 1 px edge, and 44 px in a stack on a phone; its hover is paper 5 over the ground, and the current item prints in `selected`, with its 8 px square before the word and no fill. Keyboard focus prints a neutral ring. Below 768 px, `use-mobile`'s breakpoint, it opens as a sheet.
+
+**The Quiet Count Rule.** A count in a nav never asks for attention. Only decisions waiting may print as a backlog, and a library's item counts stay muted reference.
 
 ### Fleet rail (signature)
 
-The column of ship marks down the left of every ship surface, on the deep ground: home, the ships, then the mode cell, each ship a 32 px mark in a reversed cell. `lib/fleet` lists soliton too, but with `rail: false`: its mark serves other places and has no cell here. Hover or focus inverts the cell, swaps in the light mark and slides a joined tab out from it at the quick duration, the ship's name over its one-line descriptor; with reduced motion the tab appears in place. The current ship's cell is boxed in plum with its corner square. The mode cell is the fleet's one light and dark toggle, so a ship adds no mode control of its own. Above 900 px the rail and `sidebar` stick to the top of the window while the panel scrolls. At 900 px and below the rail is a 48 px bar above the panel that scrolls with the page, and from the fourth cell on the bar's tab hangs right so it stays on screen. The consumer passes `current`, and optionally the `hrefs`, the ship's `sidebar` and a `markBase`. A ship the `hrefs` leave out links to its fleet url, and home to superthread's; a ship with no url, or an href of `null`, prints as a disabled cell (`aria-disabled`), its mark at half opacity unless it is the current ship.
+The column of ship marks down the left of every ship surface, on the deep ground: home, the ships, then the mode cell, each ship a 32 px mark in a reversed cell. `lib/fleet` lists soliton too, but with `rail: false`: its mark serves other places and has no cell here. Hover or focus inverts the cell, swaps in the light mark and slides a joined tab out from it at the quick duration, the ship's name over its one-line descriptor; with reduced motion the tab appears in place. The current ship's cell is neutral, with a `sidebar-border` edge and its 8 px plum corner mark. The mode cell is the fleet's one light and dark toggle, so a ship adds no mode control of its own. Above 900 px the rail and `sidebar` stick to the top of the window while the panel scrolls. At 900 px and below the rail is a 48 px bar above the panel that scrolls with the page, and from the fourth cell on the bar's tab hangs right so it stays on screen. The consumer passes `current`, and optionally the `hrefs`, the ship's `sidebar` and a `markBase`. A ship the `hrefs` leave out links to its fleet url, and home to superthread's; a ship with no url, or an href of `null`, prints as a disabled cell (`aria-disabled`), its mark at half opacity unless it is the current ship. The rail's first child is the skip link, `skip to content` to `#main`, off the page until focus lands on it; `AppShellGround` is its target when it renders `main`, and `skipLink={false}` leaves it out of a rail embedded in a page that owns its own.
 
 ### Card, label and separator
 
@@ -596,91 +612,131 @@ Pass items: base-nova's card, label and separator on the tokens, square and rule
 
 ### Switch
 
-A square track with the input edge on the stock and an input-ink square inside it. On, the track fills with plum and the square crosses to the right in the stock ink, on the quick duration; hover overprints the fill. The track is a control, with the outside ring. Disabled, the track and its square take the disabled ink on faint stock. The world rejected a screened track: on must read as settled.
+A square track with the input edge on the stock and an input-ink square inside it. On, the track fills with foreground and the square crosses to the right in the stock ink, on the quick duration; hover overprints the fill. The track is a control, with the outside ring and a 44 px hit area. Disabled, the track and its square take the disabled ink on faint stock. The world rejected a screened track: on must read as settled.
 
 ### Radio group
 
-An 18 px stock square with the input edge and an outside control ring. Chosen, a plum edge encloses an 8 px plum square; disabled, the edge and square take the disabled ink on faint stock. The grid leaves 12 px between choices.
+An 18 px stock square with the input edge, an outside control ring and a 44 px hit area. Chosen, a foreground edge encloses an 8 px foreground square; disabled, the edge and square take the disabled ink on faint stock. The grid leaves 12 px between choices, and on a phone 26 px between bare radios, so each hit area stays whole; a row with a label takes the checkbox's 44 px.
 
 ### Slider
 
-An 8 px ruled stock track holds a flat plum range, with no screen. The 16 px square thumbs keep their outside control ring when the range input takes keyboard focus, and take the accent fill on hover or drag. Vertical tracks mirror the same dimensions; disabled tracks and thumbs use the disabled edge and range ink.
+An 8 px ruled stock track holds a flat foreground range, with no screen. The 16 px square thumbs carry a 44 px hit area, keep their outside control ring when the range input takes keyboard focus, and take the control hover fill on hover or drag. Vertical tracks mirror the same dimensions; disabled tracks and thumbs use the disabled edge and range ink.
 
 ### Toggle
 
-The button's 40 px height, with 32 and 48 px sizes, Supreme 500 at 14 px, and an outside control ring. Default rests without a visible edge; outline draws the input edge. Pressed is boxed in plum on the accent fill. Only fill, edge and label transition, at the instant duration.
+The button's 40 px height, with 32 and 48 px sizes, Supreme 500 at 14 px, and an outside control ring. Default rests without a visible edge; outline draws the input edge. Pressed prints a foreground edge and a tick after the words, on no fill. The tick keeps its space at rest, so the words don't move. An icon toggle is a 32, 40 or 48 px square with no tick: its foreground edge says pressed. Only fill, edge and label transition, at the instant duration.
 
 ### Toggle group
 
-Joined by default at spacing 0, with neighbouring 1 px edges overlapping. The pressed item rises so all four plum edges show, and joined keyboard focus sits inside the item. Positive spacing separates the controls and restores the outside ring; vertical groups share horizontal edges instead.
+Joined by default at spacing 0, with neighbouring 1 px edges overlapping. The pressed item rises so all four foreground edges show and draws the toggle's tick, and joined keyboard focus sits inside the item. Positive spacing separates the controls and restores the outside ring; vertical groups share horizontal edges instead. On a phone a joined item grows to 44 px along the group, so its hit area stays its own.
 
 ### Button group
 
-Actions join on shared 1 px edges, horizontally or vertically, and the focused child rises above its neighbours. The text addon is a 40 px secondary-stock box with an input edge and muted UI words. A separator stretches in the input ink.
+Actions join on shared 1 px edges, horizontally or vertically, and the focused child rises above its neighbours. On a phone a joined button grows to 44 px along the group, so its hit area stays its own. The text addon is a 40 px secondary-stock box with an input edge and muted UI words. A separator stretches in the input ink.
 
 ### Kbd
 
-A 20 px keycap, at least 20 px wide, with a quiet edge on muted stock. Keys set in Fragment Mono at 11 px without caps or tracking. Inside a tooltip they take the inverted stock ink, with an opaque foreground fill and a muted edge; groups leave 4 px between keys.
+A 20 px keycap, at least 20 px wide, with a quiet edge on muted stock. Keys set in Fragment Mono at 11 px without caps or tracking. Inside a tooltip they take the inverted stock ink, with an opaque foreground fill and a muted edge; groups leave 4 px between keys. A keycap sits beside a control or in a tooltip, never inside a button.
 
 ### Field
 
-Fieldsets keep their upstream parts and orientation variants. Legends set in mono caps, labels and titles at the UI step, and descriptions at the instrument step. Invalid labels take the error ink, disabled labels the disabled ink. A checked choice card is boxed in plum on the accent fill with 16 px padding. Every error message leads with the bang square, including each line of a list; separators carry a meta label on the stock over a 1 px rule.
+Fieldsets keep their upstream parts and orientation variants. Legends set in mono caps, labels and titles at the UI step, and descriptions at the instrument step. Invalid labels take the error ink, disabled labels the disabled ink. Links in a description print in foreground and keep their underline at rest. A checked choice card takes a foreground edge, with no fill and 16 px padding. Every error message leads with the bang square, including each line of a list; separators carry an instrument label on the stock over a 1 px rule.
 
 ### Native select
 
-The native select is a flat 40 px field box, or 32 px at the small size, with the input edge and the same inside focus edge as the select trigger. Invalid changes the edge and focus ink together; disabled uses the faint fill and disabled label. A pixel chevron sits at the right without taking pointer input, and options keep native platform semantics.
+The native select is a flat 40 px field box, or 32 px at the small size, and 44 px at either size at 600 px and below, with the input edge and the same inside focus edge as the select trigger. Invalid changes the edge and focus ink together; disabled uses the faint fill and disabled label. A pixel chevron sits at the right without taking pointer input, and options keep native platform semantics.
 
 ### Accordion
 
-Rows run between full-width 1 px rules. The 48 px trigger keeps its focus ring inside and turns one pixel chevron on the quick duration. The panel's measured height travels on the same duration and brand ease; its muted UI copy keeps 16 px below it, with links in the house ink.
+Rows run between full-width 1 px rules. The 48 px trigger keeps its focus ring inside and turns one pixel chevron on the quick duration. The panel's measured height travels on the same duration and brand ease; its muted UI copy keeps 16 px below it, with links in foreground that keep their underline at rest.
 
 ### Breadcrumb
 
-A wrapping path at the instrument step, with muted links that take foreground ink on hover and the control ring on keyboard focus. The current page prints in foreground ink. Right-facing pixel chevrons separate the items, and a 20 px square holds the more glyph for an omitted stretch.
+A wrapping path at the instrument step, with `link-quiet` links that take the control ring on keyboard focus. The current page prints in foreground ink. Right-facing pixel chevrons separate the items, and a 20 px square holds the more glyph for an omitted stretch.
 
 ### Resizable
 
-A 1 px rule separates full-size panels, with an invisible 8 px hit area; hover and drag turn the rule plum. With a handle, a 6 by 16 px grip holds two whole-pixel lines and draws the focus ring inside its box. Without a grip the ring has zero offset around the rule, which has no room for an inside ring. Vertical groups mirror the layout; the installed v4 primitive supplies the hover, active and disabled states.
+A 1 px rule separates full-size panels, with an invisible 8 px hit area; hover and drag turn the rule foreground. With a handle, a 6 by 16 px grip holds two whole-pixel lines and draws the focus ring inside its box. Without a grip the ring has zero offset around the rule, which has no room for an inside ring. Vertical groups mirror the layout; the installed v4 primitive supplies the hover, active and disabled states.
 
 ### Dropdown menu
 
-The menu and its submenus are leaf lists with the contact edge, 6 px from their triggers. Only the inner list scrolls. Rows are 36 px tall, highlight in the raised hover fill and draw keyboard focus inside; destructive stays in the key ink. Checks and 6 px house squares occupy the left indicator column. Group labels and mono shortcuts keep the list hierarchy.
+The menu and its submenus are leaf lists with the contact edge, 6 px from their triggers. Only the inner list scrolls. Rows are 36 px tall, 44 px on a phone, highlight in the raised hover fill and draw keyboard focus inside; destructive stays in the key ink. Checks and 6 px foreground squares occupy the left indicator column. Group labels and mono shortcuts keep the list hierarchy.
 
 ### Combobox
 
-The input is an input group whose field box owns focus; trigger and clear keep their own inside control rings. The popup takes the select's leaf lift and contact edge, with the chosen option boxed on aria-selected and the check at the end. Multiple values print as 24 px secondary chips with named 16 px ghost remove controls; the chips box thickens only while its text control holds focus.
+The input is an input group whose field box owns focus; trigger and clear keep their own inside control rings. The popup takes the select's leaf lift and contact edge, with the chosen option on the raised hover fill, read from aria-selected, and the check at the end. Its rows are the select's. Multiple values print as 24 px secondary chips with named 16 px ghost remove controls; the chips box thickens only while its text control holds focus.
 
 ### Command
 
-The cmdk surface stays flat, with a 40 px input group and a scroll list of 36 px rows. cmdk's selected state means the pointer or keys position, so it takes the raised hover fill rather than the chosen box. Group headings use the meta step and shortcuts use Fragment Mono. The palette uses the dialog's sheet and contact edge, with its lowercase accessible title and description inside it.
+The cmdk surface stays flat, with a 40 px input group, 44 px on a phone, and a scroll list of 36 px rows, 44 px on a phone. cmdk's selected state means the pointer or keys position, so it takes the raised hover fill and no chosen state. Group headings use the meta step and shortcuts use Fragment Mono. The palette uses the dialog's sheet and contact edge, with its lowercase accessible title and description inside it.
 
 ### Alert dialog
 
-The confirmation is a whole-pixel centred sheet on the popover fill, with a 1 px edge, 28 px padding, the sheet lift and its contact edge. Default width stops at 440 px; small keeps the compact 320 px width. The title uses the subtitle step, media sits in a 40 px secondary square, and house buttons align right 24 px below the explanation. The plain scrim and sheet fade at the quick duration.
+The confirmation is a whole-pixel centred sheet on the popover fill, with a 1 px edge, 28 px padding, the sheet lift and its contact edge. Default width stops at 440 px; small keeps the compact 320 px width. The title uses the subtitle step, media sits in a 40 px secondary square, and house buttons align right 24 px below the explanation. A link in the explanation prints in the foreground ink, underlined. The plain scrim and sheet fade at the quick duration.
+
+Focus opens on cancel, so a stray Enter keeps what the sheet asks about. The action prints through the button: plum on paper, the outline on a dark sheet. An action that leaves the app takes `key`. Destructive keeps the trash glyph and the word: key ink on paper, the outline on a dark sheet.
 
 ### Sonner
 
-Sonner's toast API prints unstyled on the toast's popover fill, 1 px edge and leaf lift with the contact edge, padded 16 px. Every kind uses its 14 px status glyph, including a static i for loading. Titles use UI medium over muted instrument descriptions; actions and cancels take the small default and outline button looks with flat edges. The stack expands by default so toasts never scale. A wrapper carries data-slot and data-mk because sonner drops arbitrary attributes; the viewport label is "notifications".
+Sonner's toast API prints unstyled on the toast's popover fill, 1 px edge and leaf lift with the contact edge, padded 16 px. Every kind uses its 14 px status glyph, including a static i for loading. Titles use UI medium over muted instrument descriptions; actions and cancels take the small default and outline button looks with flat edges. The close button is a 24 px square that reaches 44 px through a hit area on a phone. The stack expands by default so toasts never scale. A wrapper carries data-slot and data-mk because sonner drops arbitrary attributes; the viewport label is "notifications".
 
 ### Compositions
 
 Blocks (`registry:block`) are the patterns the fleet's apps repeat, built only from the items above. Each installs one file at `components/superthread/blocks/<name>.tsx`, carries `data-mk="<block>"` on its roots, and owns its layout and semantics, not the app's data, routing or copy. Blocks add no texture detail of their own: their lifts, edges and states come from the items inside them. Each block's meta names the apps it serves.
 
-| block              | parts                                                                                                                                           | what it settles                                                                                                                                          |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| app-shell          | `AppShell`, `AppShellNav`, `AppShellNavItem`, `AppShellGround`, `AppShellPanel`                                                                 | the fleet rail with the ship's own nav, the deep ground and the working panel on the sheet lift; below 900 px the nav wraps into a row of links          |
-| page-header        | `PageHeader`, `PageHeaderBack`, `PageHeaderTitle`, `PageHeaderMeta`, `PageHeaderActions`, `PageHeaderDescription`                               | the title at the section step (hero on `size="page"`), a way back, live meta, actions at the end and a lede under 66ch; no line above the title          |
-| section-header     | `Section`, `SectionHeader`, `SectionTitle`, `SectionCount`, `SectionAction`                                                                     | a section named by its title over a foreground rule, a live count and a way onward; 48 px between sections                                               |
-| collection-toolbar | `CollectionToolbar`, `ToolbarGroup`, `ToolbarSpacer`, `FilterChip`, `ToolbarCount`, `ViewSwitch`                                                | labelled control groups that wrap, the active filter boxed in plum with its own clear control, a live "n of m" count and a one-pressed view switch       |
-| list-rows          | `ListRows`, `ListRow`, `ListRowLead`, `ListRowTitle`, `ListRowAside`, `ListRowMeta`, `ListRowActions`                                           | ruled rows at the board measure; a lead, a title that may link, a mono aside and a meta line; the aside drops under the title at 600 px                  |
-| item-cards         | `ItemCards`, `ItemCard`, `ItemCardMedia`, `ItemCardId`, `ItemCardTitle`, `ItemCardMeta`, `ItemCardActions`                                      | small cards in an auto-filling grid; a linked title covers the card with one link, and corner actions stay their own controls                            |
-| data-table         | `DataTable`, `SortableHead`, `TableEmpty`                                                                                                       | a named table in the table item's own scroll box, `aria-sort` on the sorted head and an empty row across every column                                    |
-| states             | `LoadingState`, `FailedState`, `EmptyState`, `EmptyStateMedia`, `EmptyStateText`, `EmptyStateActions`                                           | loading as skeleton rows at the table measure, failure as an alert with the failed glyph and a retry, empty as words, an optional media slot and actions |
-| facts              | `Facts`, `Fact`, `FactLabel`, `FactValue`                                                                                                       | labelled values as a two-column list or a ruled grid of two to four cells, one per line on a phone; numbers and ids in mono                              |
-| form-section       | `FormSection`, `FormSectionHeader`, `FormSectionTitle`, `FormSectionDescription`, `FormSectionFields`, `FormSectionFooter`, `FormSectionStatus` | a form named by its heading, the field item's spacing and a ruled save row with a live status                                                            |
-| quick-add          | `QuickAdd`                                                                                                                                      | one named field and its add button; it trims, blocks a second add while one is pending, keeps the draft on failure and clears it on success              |
-| notice             | `Notice`, `NoticeTitle`, `NoticeDescription`, `NoticeActions`                                                                                   | a flat box on the page's fill where only the status glyph takes colour; a failure is an alert, anything else a status                                    |
-| search-palette     | `SearchPalette`, `SearchPaletteTrigger`, `SearchPaletteContent`                                                                                 | one search over the app in the command dialog, opened by its trigger, the modified letter or slash away from text fields                                 |
+| block              | parts                                                                                                                                           | what it settles                                                                                                                                                                                                                                                                                                          |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| app-shell          | `AppShell`, `AppShellNav`, `AppShellNavItem`, `AppShellGround`, `AppShellPanel`                                                                 | the fleet rail with the ship's own nav, the deep ground as `#main` and the working panel on the sheet lift; below 900 px the nav wraps into a row of 32 px links on a 44 px pitch, each with a hit area                                                                                                                  |
+| page-header        | `PageHeader`, `PageHeaderBack`, `PageHeaderTitle`, `PageHeaderMeta`, `PageHeaderActions`, `PageHeaderDescription`                               | the title at the section step in the first ink (hero on `size="page"`), a way back, live meta, actions at the end and a lede on the reading measure; no line above the title                                                                                                                                             |
+| section-header     | `Section`, `SectionHeader`, `SectionTitle`, `SectionCount`, `SectionAction`                                                                     | a section named by its title over a foreground rule, a live count and a `link-quiet` way onward; 48 px between sections                                                                                                                                                                                                  |
+| collection-toolbar | `CollectionToolbar`, `ToolbarGroup`, `ToolbarSpacer`, `FilterChip`, `ToolbarCount`, `ViewSwitch`                                                | labelled control groups that wrap, the active filter in a foreground edge with no fill and its own clear control, a live "n of m" count and a one-pressed view switch                                                                                                                                                    |
+| list-rows          | `ListRows`, `ListRow`, `ListRowLead`, `ListRowTitle`, `ListRowAside`, `ListRowMeta`, `ListRowActions`                                           | ruled rows at the board measure; a lead, a title that may link, a mono aside that also holds a small status badge, and a meta line of context that prints the `·` between its pieces and holds no status; the aside drops under the title at 600 px; a `closed` row stays listed with its title muted and struck through |
+| item-cards         | `ItemCards`, `ItemCard`, `ItemCardMedia`, `ItemCardId`, `ItemCardTitle`, `ItemCardMeta`, `ItemCardActions`                                      | small cards in an auto-filling grid; a linked title covers the card with one link, and corner actions stay their own controls                                                                                                                                                                                            |
+| data-table         | `DataTable`, `SortableHead`, `TableEmpty`                                                                                                       | a named table in the table item's own scroll box, `aria-sort` on the sorted head and an empty row across every column                                                                                                                                                                                                    |
+| states             | `LoadingState`, `FailedState`, `EmptyState`, `EmptyStateMedia`, `EmptyStateText`, `EmptyStateActions`                                           | loading as skeleton rows at the table measure, failure as an alert with the failed glyph and a retry, empty as words, an optional media slot and actions                                                                                                                                                                 |
+| facts              | `Facts`, `Fact`, `FactLabel`, `FactValue`                                                                                                       | labelled values, each label at the instrument step, as a two-column list or a ruled grid of two to four cells, one per line on a phone; numbers and ids in mono                                                                                                                                                          |
+| form-section       | `FormSection`, `FormSectionHeader`, `FormSectionTitle`, `FormSectionDescription`, `FormSectionFields`, `FormSectionFooter`, `FormSectionStatus` | a form named by its heading, the field item's spacing and a ruled save row with a live status                                                                                                                                                                                                                            |
+| quick-add          | `QuickAdd`                                                                                                                                      | one named field and its add button; it trims, blocks a second add while one is pending, keeps the draft on failure and clears it on success                                                                                                                                                                              |
+| notice             | `Notice`, `NoticeTitle`, `NoticeDescription`, `NoticeActions`                                                                                   | a flat box on the page's fill where only the status glyph takes colour; a failure is an alert, anything else a status                                                                                                                                                                                                    |
+| search-palette     | `SearchPalette`, `SearchPaletteTrigger`, `SearchPaletteContent`                                                                                 | one search over the app in the command dialog, opened by its trigger, which prints no keycap, the modified letter or slash away from text fields                                                                                                                                                                         |
+
+### Rows
+
+**The Row Status Rule.** A status on a row is a fact the row is about. It prints through `Badge`, and only where the list exists to show status, such as a run or board table. A personal list prints none.
+
+**The Muted Label Rule.** A label prints as muted text, never as a badge.
+
+**The Neutral Age Rule.** Age prints neutral and uncoloured: `since friday`, from `@mk/time-words`. It never turns red or counts days past a date.
+
+**The Vouched Number Rule.** A page prints no number the app can't vouch for: no estimated total, no finish time, no streak and no missed count.
+
+### Time words
+
+`@mk/time-words` puts time in the fleet's words, so every ship says it the same way: `sinceWords` (`today`, `since yesterday`, `since friday`, `since 9 oct`), `beforeWords` (`before 11:00`), `untilWords` (`48 min until standup`, `standup now`) and `scheduleWords` (`every day at 07:00`, `every monday and thursday at 07:15`). Clocks run on 24 hours, and a schedule set in another zone says so. A plain `2026-11-02` is a calendar date with no clock face, so the words count days and name the date: `before 2 nov`, `3 days until standup`. A schedule with an empty list of days reads `never`. Each moment comes in as an argument, so a page renders the same words on the server and in the browser. The words state when, and never judge how long something took.
+
+### Words
+
+**The No Guilt Rule.** No word says someone is behind: overdue, late and missed print nowhere.
+
+**The Confirm Rule.** A confirm's title names the action and its reach, its action repeats the verb, and its cancel stays plain: `publish to everyone?`, `publish`, `cancel`.
+
+**The Label Form Rule.** An aria label is a lowercase verb plus the authored title, which keeps its casing: `mark done: <title>`.
+
+**The Plain Schedule Rule.** A schedule prints in plain words, `every day at 07:00` or `when mail arrives`: no cron, and a timezone only when it differs.
+
+**The One Sentence Rule.** A page prints one sentence saying what it is, only if that sentence changes what the reader does there.
+
+### Behaviour
+
+**The Still Click Rule.** A click never moves anything: slots stay reserved, a button holds its width when its word changes, a tick keeps its space, and a panel keeps its height when its content shortens.
+
+**The Named Step Rule.** A button says what happens, and the primary names the step: `open the mail`, `read the draft`. `start` prints only when there is no source to open.
+
+**The One Primary Rule.** A page has one primary action.
+
+**The Complete Read Rule.** Clear prints only after a complete read. A failed or loading read isn't zero, and a stale read prints when it was last read.
+
+**The Steady Target Rule.** A refresh never moves a target. A newer version prints a quiet line and never swaps the body, a re-rank waits behind one line, and nothing re-picks on focus, because the click that focuses can land on the button.
 
 ### Motion
 
@@ -692,14 +748,15 @@ Three durations on one ease. `--duration-instant` (120 ms) times hover and press
 
 - **Do** name roles and utilities, never values: `bg-primary`, `text-muted-foreground`, `border-input`, `type-<step>`, `shadow-<lift>`, `texture-<detail>`. The `.dark` class on `<html>` sets the mode.
 - **Do** print every status with its glyph square and its word, through `Badge`'s status variants, `StatusGlyph` or `ToastIcon`.
-- **Do** keep focus visible on everything focusable: the 2 px plum ring at 2 px for a control, the 2 px inside edge in `--fx` for a field.
+- **Do** keep focus visible on everything focusable: the 2 px ring at 2 px for a control, plum in the panel, neutral in the ship's nav and first ink in a key block, the 2 px inside edge in `--fx` for a field.
 - **Do** lift a raised layer by its size, `shadow-leaf` for lists and toasts and `shadow-sheet` for dialogs and panels, and on the stock add `texture-contact` with its `--elevation-<lift>-rake`.
 - **Do** transition named properties at a brand duration on `--ease-brand`, for example `transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand)`.
 - **Do** run horizontal rules to both window edges.
-- **Do** set ids, numbers and code in Fragment Mono with tabular figures.
+- **Do** set ids, times, code and any figure that holds a column in Fragment Mono.
 - **Do** put a ship's spot only in its mark and its chart series, and chart a series as its line screen.
 - **Do** draw a missing icon on the pixel grid and add it to the glyph source.
 - **Do** keep chrome and every served label lowercase, with no em dashes.
+- **Do** reserve the space a state will need, so a click or a refresh moves nothing.
 
 ### Don't:
 
@@ -711,8 +768,12 @@ Three durations on one ease. `--duration-instant` (120 ms) times hover and press
 - **Don't** print a screen behind words, numbers, data or code, or give a component a second texture detail.
 - **Don't** animate a screen, or add grain, noise, glow or misregistered type.
 - **Don't** grey a component out with dots: a disabled control screens its edge and nothing else.
-- **Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink with the trash glyph and the word.
+- **Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink, or the outline off paper, with the trash glyph and the word.
 - **Don't** print a spot or a status ink as a large flat field.
 - **Don't** fade or screen the cut edge of a scrolling table.
 - **Don't** take icons from an icon library; every icon and glyph is drawn in whole-pixel squares.
 - **Don't** draw a ring outside a field's box or a second frame around it.
+- **Don't** print a plum fill off paper, or a second one in a viewport.
+- **Don't** restyle an item from outside: no `[data-slot]` rule and no look class at a call site. Margins, widths and grid placement stay composition.
+- **Don't** widen the working panel or re-stick the frame at 900 px and below.
+- **Don't** put a keycap inside a button.

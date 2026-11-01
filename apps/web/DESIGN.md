@@ -8,7 +8,7 @@ The site prints on Superthread v2, whose values, type and rules live in `package
 
 `src/shell.tsx` follows the superthread site's measures.
 
-- **Masthead**, 77 px and sticky: the wordmark, the crumb, the status block and the plum swatch.
+- **Masthead**, 77 px and sticky: the wordmark, the crumb and the status block.
 - **Body**, three columns divided by 1 px rules: the 264 px boxed nav with the mode control at its foot, the page (696 px wide in a column with 56 px gutters) and the 368 px aside with "on this page".
 - **Breakpoints**: 1279 narrows the aside to 312 and the gutters to 40. 1099 drops the aside, and the status prints in the foot instead. 900 makes one column, with the nav as a row under a static masthead and the compact mode control in it. 600 takes the wordmark out of the band and sets it under.
 - **The lost page** has no client entry, so it prints no mode control and no aside. The head script still applies the stored mode.
@@ -28,7 +28,7 @@ Registry items come from `packages/superthread/items` through the `@/components/
 
 - **Band** (`Band`): the `#sky` canvas in its crop marks, 696 x 196 and 342 x 136 on a phone; 120 and 96 on inner pages. The title knocks out of the lower left. `public/sky/plate-*.png` is the same field printed, for the moment before the script runs and for readers without scripts.
 - **Portrait** (`public/portrait/`): a two-ink Bayer 4 screen of `maurice.png`, at 196 and 136 px, one file per mode because dark has to print on the light of the face. Set `image-rendering: pixelated` at whole pixels. Regenerate both modes together.
-- **Side quests** (`SideQuests`): a constellation tile (1:1 SVG, 4 px stars, 1 px lines), the project name and one line. The tile takes plum on hover and focus. No cards.
+- **Side quests** (`SideQuests`): a constellation tile (1:1 SVG, 4 px stars, 1 px lines), the project name and one line. Its lines take the first ink on hover and focus. No cards.
 - **Graveyard**: ledger rows with a `✧`, the name, a `Badge` (`done` for exits, `queued` for the rest) and mono years.
 - **Essays**: rows on the home page; on `/essays`, the cover with a 1 px edge, title, summary and date. The essay page sets the title in `type-page` under the slim band, lists its `h2`s in "on this page" and keeps images at full opacity with a 1 px edge.
 - **Subscribe**: registry `Field` and `InputGroup`. Turnstile follows the mode.
@@ -52,7 +52,7 @@ Deliberately overengineered, zero-dependency, and always in one of two inks, res
 Beyond the band:
 
 - **Eclipse**: clicking the portrait runs a stepped first-ink moon across it (`.portrait-wrap.eclipsing`).
-- **Supernova**: a random graveyard `✧` flares in plum every 14 to 32 s, skipped when the tab is hidden.
+- **Supernova**: a random graveyard `✧` flares in the first ink every 14 to 32 s, skipped when the tab is hidden.
 
 ## Assets
 

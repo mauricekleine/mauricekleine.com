@@ -7,6 +7,7 @@
 import { type ReactNode, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { fleet } from "@/components/superthread/lib/fleet";
+import { beforeWords, scheduleWords, sinceWords, untilWords } from "@/components/superthread/lib/time-words";
 import { cn } from "@/components/superthread/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/superthread/ui/accordion";
 import {
@@ -719,6 +720,13 @@ function Sink({ mode }: { mode: Mode }) {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
+      </Part>
+      <Part name="time-words">
+        <p className="text-sm">
+          {sinceWords("2026-10-30", "2026-11-01")}, {beforeWords("2026-11-01T10:00:00Z", { timeZone: "UTC" })},{" "}
+          {untilWords("2026-11-01T11:00:00Z", "standup", "2026-11-01T10:12:00Z")},{" "}
+          {scheduleWords({ every: "day", at: "07:00" })}
+        </p>
       </Part>
       <Part name="resizable">
         <div className="h-48 max-w-lg border border-border">

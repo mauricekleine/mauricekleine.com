@@ -40,7 +40,7 @@ const withTab = `${specimen} [@media(max-width:900px)]:pb-10`;
 export function RailLive() {
   return (
     <div className="st-c-ground">
-      <FleetRail current="orbit" hrefs={hrefs} markBase={markBase} className={withTab} />
+      <FleetRail current="orbit" hrefs={hrefs} markBase={markBase} skipLink={false} className={withTab} />
     </div>
   );
 }
@@ -62,7 +62,7 @@ export function RailStates({ hover, focus }: { hover?: ShipId; focus?: ShipId })
   return (
     <div className="st-c-ground st-c-print">
       <div ref={print} inert>
-        <FleetRail current="orbit" hrefs={withoutTrisys} markBase={markBase} className={withTab} />
+        <FleetRail current="orbit" hrefs={withoutTrisys} markBase={markBase} skipLink={false} className={withTab} />
       </div>
     </div>
   );
@@ -98,7 +98,14 @@ function OrbitNav() {
 export function RailWithNav() {
   return (
     <div className="st-c-ground">
-      <FleetRail current="orbit" hrefs={hrefs} markBase={markBase} className={specimen} sidebar={<OrbitNav />} />
+      <FleetRail
+        current="orbit"
+        hrefs={hrefs}
+        markBase={markBase}
+        skipLink={false}
+        className={specimen}
+        sidebar={<OrbitNav />}
+      />
     </div>
   );
 }

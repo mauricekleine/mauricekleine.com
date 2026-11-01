@@ -482,7 +482,7 @@ function subscribePage({ title, description, heading, message, back }: Subscribe
     <meta name="robots" content="noindex" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/maurice.png" />
-    <link rel="stylesheet" href="/style.css?v=20261031-stock" />
+    <link rel="stylesheet" href="/style.css?v=20261101-first" />
   </head>
   <body>
     <header class="mk-mast">
@@ -495,7 +495,7 @@ function subscribePage({ title, description, heading, message, back }: Subscribe
             <canvas id="sky" aria-hidden="true"></canvas>
             <span class="mk-crop" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           </div>
-          <h1 class="type-hero">${heading}</h1>
+          <h1 class="type-hero text-first">${heading}</h1>
           <p class="mk-lede type-lede">${message}</p>
         </header>
         <section class="mk-section" aria-label="where to go next">
