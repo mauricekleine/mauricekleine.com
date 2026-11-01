@@ -67,7 +67,7 @@ const trashPath = pathOf(renderToString(<Icon name="trash" />));
 const items: Record<string, { html: string; slots: string[] }> = {
   button: {
     html: [
-      ...(["default", "secondary", "outline", "ghost", "link", "destructive"] as const).map((variant) =>
+      ...(["default", "secondary", "outline", "ghost", "link", "destructive", "key"] as const).map((variant) =>
         renderToString(<Button variant={variant}>save</Button>),
       ),
       ...(["xs", "sm", "lg", "icon"] as const).map((size) =>
@@ -264,10 +264,35 @@ describe("button", () => {
       outline: "control",
       ghost: "control",
       destructive: "destructive",
+      key: "destructive",
     };
     for (const [variant, role] of Object.entries(roles)) {
       const tokens = classes(renderToString(<Button variant={variant as keyof typeof roles}>save</Button>));
       expect(tokens).toEqual(expect.arrayContaining([`hover:bg-${role}-hover`, `active:bg-${role}-press`]));
+    }
+  });
+
+  test("key takes the first ink with a stock label and no trash", () => {
+    const html = renderToString(<Button variant="key">continue</Button>);
+    expect(classes(html)).toEqual(expect.arrayContaining(["bg-first", "text-background"]));
+    expect(html).not.toContain("<svg");
+  });
+
+  test("only the default fill prints as an outline off paper", () => {
+    const variants = ["default", "secondary", "outline", "ghost", "link", "destructive", "key"] as const;
+    const off = variants.filter((variant) =>
+      classes(renderToString(<Button variant={variant}>save</Button>)).includes("off-paper"),
+    );
+    expect(off).toEqual(["default"]);
+  });
+
+  test("a link prints in foreground and takes its underline on hover", () => {
+    for (const html of [
+      renderToString(<Button variant="link">read the run</Button>),
+      renderToString(<Badge variant="link">read the run</Badge>),
+    ]) {
+      expect(classes(html)).toEqual(expect.arrayContaining(["text-foreground", "hover:underline"]));
+      expect(classes(html)).not.toContain("text-primary");
     }
   });
 });
@@ -283,6 +308,17 @@ describe("badge", () => {
     expect(pathOf(bare)).toBe(glyph);
     expect(bare).toContain(`${state}</span>`);
     expect(bare).toContain(`data-variant="${state}"`);
+  });
+
+  test("the default prints in foreground, and a linked one takes destructive's hover", () => {
+    expect(classes(renderToString(<Badge>orbit</Badge>))).toEqual(
+      expect.arrayContaining([
+        "border-foreground",
+        "bg-foreground",
+        "text-background",
+        "[a]:hover:bg-destructive-hover",
+      ]),
+    );
   });
 
   test.each(STATES.filter((state) => state !== "failed"))("%s is a wash with an edge", (state) => {
@@ -337,7 +373,7 @@ describe("tabs", () => {
           "texture-tabhover",
           "relative",
           "data-active:text-foreground",
-          "data-active:after:bg-primary",
+          "data-active:after:bg-foreground",
         ]),
       );
     }
@@ -357,7 +393,7 @@ describe("tabs", () => {
 });
 
 describe("progress", () => {
-  test("a flat house-ink fill with the ramp at its leading edge", () => {
+  test("a flat foreground fill with the ramp at its leading edge", () => {
     const indicator = items.progress!.html.match(/<div[^>]*data-slot="progress-indicator"[^>]*>/)?.[0] ?? "";
     expect(classes(indicator)).toEqual(expect.arrayContaining(["texture-ramp", "duration-(--duration-travel)"]));
     expect(indicator).toContain("width:62%");
@@ -402,11 +438,12 @@ describe("table", () => {
     expect(classes(plain)).not.toContain("font-mono");
   });
 
-  test("hover fills no row; a selected row takes the accent", () => {
+  test("hover fills no row; a selected row takes the control hover, never a plum tint", () => {
     const rows = items.table!.html.match(/<tr[^>]*>/g) ?? [];
     for (const row of rows) {
       expect(classes(row).some((t) => t.startsWith("hover:bg-"))).toBe(false);
-      expect(classes(row)).toContain("data-[state=selected]:bg-accent");
+      expect(classes(row)).toContain("data-[state=selected]:bg-control-hover");
+      expect(classes(row).filter((t) => t.endsWith("bg-accent"))).toEqual([]);
     }
   });
 });

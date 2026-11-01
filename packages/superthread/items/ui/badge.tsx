@@ -13,12 +13,12 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "border-primary bg-primary text-primary-foreground [a]:hover:border-primary-hover [a]:hover:bg-primary-hover",
+          "border-foreground bg-foreground text-background [a]:hover:border-destructive-hover [a]:hover:bg-destructive-hover",
         secondary: "bg-secondary text-secondary-foreground [a]:hover:bg-secondary-hover",
         destructive: "bg-destructive text-destructive-foreground [a]:hover:bg-destructive-hover",
         outline: "border-current [a]:hover:bg-control-hover",
         ghost: "hover:bg-control-hover",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-foreground decoration-1 underline-offset-4 hover:underline",
         done: "border-success-edge bg-success-wash pl-[7px] text-success-foreground",
         running: "border-info-edge bg-info-wash pl-[7px] text-info-foreground",
         waiting: "border-warning-edge bg-warning-wash pl-[7px] text-warning-foreground",

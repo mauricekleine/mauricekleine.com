@@ -96,13 +96,13 @@ function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// A label stays plain; a choice card boxes its checked field in the house ink.
+// A label stays plain; a choice card edges its checked field in foreground.
 function FieldLabel({ className, ...props }: React.ComponentProps<"label">) {
   return (
     <label
       data-slot="field-label"
       className={cn(
-        "group/field-label peer/field-label flex w-fit items-center gap-2 text-ui font-medium select-none group-data-[invalid=true]/field:text-error group-data-[disabled=true]/field:text-disabled has-[>[data-slot=field]]:border has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:p-4 has-[>[data-slot=field]]:has-data-checked:border-primary has-[>[data-slot=field]]:has-data-checked:bg-accent has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:not-has-data-checked:hover:bg-control-hover",
+        "group/field-label peer/field-label flex w-fit items-center gap-2 text-ui font-medium select-none group-data-[invalid=true]/field:text-error group-data-[disabled=true]/field:text-disabled has-[>[data-slot=field]]:border has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:p-4 has-[>[data-slot=field]]:has-data-checked:border-foreground has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:not-has-data-checked:hover:bg-control-hover",
         "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col",
         className,
       )}
@@ -125,7 +125,7 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// Supporting text sets at the instrument step, with links in the house ink.
+// Supporting text sets at the instrument step, and its links hold the underline at rest in foreground.
 function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
@@ -133,7 +133,7 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
       className={cn(
         "text-left type-instrument text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5",
         "last:mt-0 nth-last-2:-mt-1",
-        "[&_a]:text-primary [&_a]:underline-offset-4 [&_a:hover]:underline",
+        "[&_a]:text-foreground [&_a]:underline [&_a]:decoration-1 [&_a]:underline-offset-4",
         className,
       )}
       {...props}

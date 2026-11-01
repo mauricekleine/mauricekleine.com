@@ -1,10 +1,12 @@
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/components/superthread/lib/utils";
+import { Icon } from "@/components/superthread/ui/glyphs";
 
-// The button sizes, with a quiet rest and a boxed current state. Only ink and fill transition; focus snaps on.
+// The button sizes, with a quiet rest and a pressed state of a foreground edge and a tick, never plum. Only ink and
+// fill transition; focus snaps on.
 const toggleVariants = cva(
-  "group/toggle relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2.5 border border-transparent text-ui font-medium whitespace-nowrap text-foreground transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none not-data-disabled:not-aria-pressed:hover:bg-control-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) aria-invalid:border-error aria-pressed:border-primary aria-pressed:bg-accent aria-pressed:text-accent-foreground data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "group/toggle relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2.5 border border-transparent text-ui font-medium whitespace-nowrap text-foreground transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none not-data-disabled:not-aria-pressed:hover:bg-control-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) aria-invalid:border-error aria-pressed:border-foreground data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:text-disabled data-disabled:aria-pressed:border-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -24,9 +26,15 @@ const toggleVariants = cva(
   },
 );
 
-// A standalone pressed control keeps the outside house ring. Disabled outline toggles take the faint stock.
+// The tick after the words. It holds its space at rest, so the words don't move when the toggle turns on.
+function ToggleTick() {
+  return <Icon name="check" data-icon="inline-end" className="invisible group-aria-pressed/toggle:visible" />;
+}
+
+// A standalone pressed control keeps the outside ring. Disabled outline toggles take the faint stock.
 function Toggle({
   className,
+  children,
   variant = "default",
   size = "default",
   ...props
@@ -37,8 +45,11 @@ function Toggle({
       data-mk="toggle"
       className={cn(toggleVariants({ variant, size, className }))}
       {...props}
-    />
+    >
+      {children}
+      <ToggleTick />
+    </TogglePrimitive>
   );
 }
 
-export { Toggle, toggleVariants };
+export { Toggle, ToggleTick, toggleVariants };

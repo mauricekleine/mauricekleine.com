@@ -104,15 +104,15 @@ function SelectLabel({ className, ...props }: SelectPrimitive.GroupLabel.Props) 
   );
 }
 
-// An option: the one under the pointer or the keys takes the raised hover fill; the chosen one is boxed in the
-// house ink, as every current item is. Keyboard focus draws the 2 px ring inside the option. The chosen state reads
-// aria-selected: shadcn's tailwind.css narrows data-selected: to data-selected="true", and Base UI sets it empty.
+// An option: the one under the pointer or the keys takes the raised hover fill, and the chosen one keeps its check
+// over the same fill. Keyboard focus draws the 2 px ring inside the option. The chosen state reads aria-selected:
+// shadcn's tailwind.css narrows data-selected: to data-selected="true", and Base UI sets it empty.
 function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Props) {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex h-9 w-full cursor-default items-center gap-2.5 border border-transparent pr-8 pl-2.5 text-ui select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--primary) data-highlighted:not-aria-selected:bg-raised-hover aria-selected:border-primary aria-selected:bg-accent aria-selected:text-accent-foreground data-disabled:pointer-events-none data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2.5",
+        "relative flex h-9 w-full cursor-default items-center gap-2.5 border border-transparent pr-8 pl-2.5 text-ui select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--primary) data-highlighted:bg-raised-hover aria-selected:bg-raised-hover data-disabled:pointer-events-none data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2.5",
         className,
       )}
       {...props}

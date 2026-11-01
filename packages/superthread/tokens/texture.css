@@ -43,8 +43,8 @@
   }
 }
 
-/* mixed: the checkbox's some-not-all state, a 12 px square of the house ink at 50 percent centred inside the box's
-   house edge. it draws on ::before, so base-nova's enlarged hit area on ::after stays, and centres itself, so it
+/* mixed: the checkbox's some-not-all state, a 12 px square of foreground at 50 percent centred inside the box's
+   foreground edge. it draws on ::before, so base-nova's enlarged hit area on ::after stays, and centres itself, so it
    holds whatever else the box lays out. the box stays positioned. */
 @utility texture-mixed {
   &[data-indeterminate]::before {
@@ -54,13 +54,13 @@
     margin: auto;
     width: 12px;
     height: 12px;
-    background: var(--primary);
+    background: var(--foreground);
     pointer-events: none;
     mask: var(--texture-b50) 0 0 / 4px 4px;
   }
 }
 
-/* tab hover: a tab that is not current previews the current bar at 50 percent, a 2 px bar of the house ink over the
+/* tab hover: a tab that is not current previews the current bar at 50 percent, a 2 px bar of foreground over the
    list's rule. the tab stays positioned. */
 @utility texture-tabhover {
   @variant hover {
@@ -71,7 +71,7 @@
       right: 0;
       bottom: -1px;
       height: 2px;
-      background: var(--primary);
+      background: var(--foreground);
       pointer-events: none;
       mask: var(--texture-b50) 0 0 / 4px 4px;
     }
@@ -79,7 +79,7 @@
 }
 
 /* row edge, on the table: every row's first cell takes 16 px of left padding, and the row under the pointer prints
-   a 4 px strip of the house ink at 50 percent at its left edge, inside that padding, so the strip sits inside the
+   a 4 px strip of foreground at 50 percent at its left edge, inside that padding, so the strip sits inside the
    table's box (a scrolling wrapper cannot clip it) and 12 px clear of the cell's content. a selected row
    (aria-selected, or shadcn's data-state) prints the strip solid. */
 @utility texture-rowedge {
@@ -98,7 +98,7 @@
         top: 8px;
         bottom: 8px;
         width: 4px;
-        background: var(--primary);
+        background: var(--foreground);
         pointer-events: none;
         mask: var(--texture-b50) 0 0 / 4px 4px;
       }
@@ -110,7 +110,7 @@
       top: 8px;
       bottom: 8px;
       width: 4px;
-      background: var(--primary);
+      background: var(--foreground);
       pointer-events: none;
     }
   }
@@ -167,10 +167,10 @@
   mask: var(--texture-b19) 0 0 / 4px 4px;
 }
 
-/* the progress edge, one of the five places: the fill in the house ink, its leading 24 px the 24 x 8 bayer ramp
+/* the progress edge, one of the five places: the fill in foreground, its leading 24 px the 24 x 8 bayer ramp
    from 100 to 0 percent. it masks the fill itself, which carries no words. */
 @utility texture-ramp {
-  background-color: var(--primary);
+  background-color: var(--foreground);
   mask:
     linear-gradient(#000 0 0) 0 0 / calc(100% - 24px) 100% no-repeat,
     var(--texture-ramp) 100% 0 / 24px 8px repeat-y;

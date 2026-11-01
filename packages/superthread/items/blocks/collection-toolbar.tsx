@@ -54,7 +54,7 @@ function ToolbarSpacer({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// The active filter is boxed in the house ink. Its clear control keeps its own ring inside the box.
+// The active filter is neutral: a foreground edge, no fill. Its clear control keeps its own ring inside the box.
 function FilterChip({
   className,
   children,
@@ -69,7 +69,7 @@ function FilterChip({
       data-mk="collection-toolbar"
       data-slot="filter-chip"
       className={cn(
-        "flex min-h-10 min-w-0 max-w-full items-center gap-2 border border-primary bg-accent pl-3 text-ui text-foreground",
+        "flex min-h-10 min-w-0 max-w-full items-center gap-2 border border-foreground pl-3 text-ui text-foreground",
         className,
       )}
       {...props}

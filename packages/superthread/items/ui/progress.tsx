@@ -33,7 +33,7 @@ function ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {
   );
 }
 
-// A flat fill in the house ink whose leading 24 px is the 24 x 8 ramp (texture-ramp, one of the five places). A
+// A flat foreground fill whose leading 24 px is the 24 x 8 ramp (texture-ramp, one of the five places). A
 // finished bar has no leading edge, so it prints solid. Width travels at the brand ease, and reduced motion zeroes
 // the duration, so the bar steps. max-h holds the fill to 8 px against Base UI's inline height: inherit.
 function ProgressIndicator({ className, ...props }: ProgressPrimitive.Indicator.Props) {

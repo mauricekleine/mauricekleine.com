@@ -106,13 +106,13 @@ describe("dropdown-menu", () => {
     const sub = has(body, "[data-slot=dropdown-menu-sub-trigger]", ["data-popup-open:bg-raised-hover"]);
     has(sub, "svg", ["-rotate-90"]);
   });
-  test("check and chosen radio have a fixed left column, with a check or 6 px house square", () => {
+  test("check and chosen radio have a fixed left column, with a check or 6 px foreground square", () => {
     const check = one(body, "[role=menuitemcheckbox][aria-checked=true]").el;
     has(check, "[data-slot=dropdown-menu-checkbox-item-indicator]", ["left-2.5"]);
     expect(check.querySelector("svg")).not.toBeNull();
     const radio = one(body, "[role=menuitemradio][aria-checked=true]").el;
     has(radio, "[data-slot=dropdown-menu-radio-item-indicator]", ["left-2.5"]);
-    has(radio, ".bg-primary", ["size-1.5"]);
+    has(radio, ".bg-foreground", ["size-1.5"]);
   });
   test("labels, rules and shortcuts keep the menu hierarchy; contact is the only detail", () => {
     has(body, "[data-slot=dropdown-menu-label]", ["type-meta", "px-2.5", "pt-1.5", "pb-1"]);
@@ -180,12 +180,11 @@ describe("combobox", () => {
       "translate(0px, 6px)",
     );
   });
-  test("aria-selected boxes the chosen option, highlight previews other rows, and the check sits at the end", () => {
+  test("the chosen option keeps its check over the raised hover, highlight previews the same fill, and the check sits at the end", () => {
     const chosen = has(body, "[role=option][aria-selected=true]", [
       ...ROW,
-      "aria-selected:border-primary",
-      "aria-selected:bg-accent",
-      "data-highlighted:not-aria-selected:bg-raised-hover",
+      "aria-selected:bg-raised-hover",
+      "data-highlighted:bg-raised-hover",
     ]);
     expect(chosen.textContent).toBe("quanta");
     has(chosen, ".absolute", ["right-2.5"]);

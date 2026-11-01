@@ -4,7 +4,7 @@ import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group
 import { type VariantProps } from "class-variance-authority";
 import { cn } from "@/components/superthread/lib/utils";
 
-import { toggleVariants } from "@/components/superthread/ui/toggle";
+import { ToggleTick, toggleVariants } from "@/components/superthread/ui/toggle";
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants> & {
@@ -55,7 +55,8 @@ function ToggleGroup({
   );
 }
 
-// Shared edges overlap by 1 px. The pressed edge rises above its neighbour; joined focus draws inside.
+// Shared edges overlap by 1 px. The pressed edge rises above its neighbour; joined focus draws inside. The item renders
+// the primitive itself, so it draws the tick a Toggle draws.
 function ToggleGroupItem({
   className,
   children,
@@ -84,6 +85,7 @@ function ToggleGroupItem({
       {...props}
     >
       {children}
+      <ToggleTick />
     </TogglePrimitive>
   );
 }

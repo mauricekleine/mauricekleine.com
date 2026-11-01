@@ -203,7 +203,7 @@ function DropdownMenuRadioGroup({ ...props }: MenuPrimitive.RadioGroup.Props) {
   return <MenuPrimitive.RadioGroup data-slot="dropdown-menu-radio-group" {...props} />;
 }
 
-// The chosen value prints a 6 px house square in the left column.
+// The chosen value prints a 6 px foreground square in the left column.
 function DropdownMenuRadioItem({
   className,
   children,
@@ -227,7 +227,7 @@ function DropdownMenuRadioItem({
         data-slot="dropdown-menu-radio-item-indicator"
       >
         <MenuPrimitive.RadioItemIndicator>
-          <span className="block size-1.5 bg-primary" />
+          <span className="block size-1.5 bg-foreground" />
         </MenuPrimitive.RadioItemIndicator>
       </span>
       {children}

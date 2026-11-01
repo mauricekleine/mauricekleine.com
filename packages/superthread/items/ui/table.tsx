@@ -45,13 +45,13 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
   return <tfoot data-slot="table-footer" className={cn("bg-muted font-medium", className)} {...props} />;
 }
 
-// No hover fill: hover shows only the strip. A selected row takes the accent ground under its cells.
+// No hover fill: hover shows only the strip. A selected row keeps its strip over the control hover fill.
 function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
   return (
     <tr
       data-slot="table-row"
       className={cn(
-        "transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) has-aria-expanded:bg-control-hover aria-selected:bg-accent data-[state=selected]:bg-accent",
+        "transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) has-aria-expanded:bg-control-hover aria-selected:bg-control-hover data-[state=selected]:bg-control-hover",
         className,
       )}
       {...props}

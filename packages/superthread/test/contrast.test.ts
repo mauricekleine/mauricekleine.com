@@ -183,7 +183,7 @@ const PORTED: Record<string, Ported> = {
   'f"{tag} card on ground (the raised sheet)"': {
     checks: one(() => ["card on ground (the raised sheet)", "card", "ground"]),
   },
-  // the rail's corner mark and the progress fill print the house ink's dark value, --sidebar-primary, on the ground
+  // the rail's corner mark prints the house ink's dark value, --sidebar-primary, on the ground
   'f"{tag} house (dark value) on the ground: current edge and progress"': {
     checks: one(() => ["house (dark value) on the ground: current edge and progress", "sidebar-primary", "ground"]),
   },

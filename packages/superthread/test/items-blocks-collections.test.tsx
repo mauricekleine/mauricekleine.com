@@ -73,11 +73,11 @@ describe("collection toolbar", () => {
     expect(one(host, '[data-slot="view-switch"] [role="group"]').el.getAttribute("aria-label")).toBe("view");
   });
 
-  test("the chip boxes the filter and the clear button has an inside ring and a name", () => {
+  test("the chip edges the filter in foreground with no fill, and the clear button has an inside ring and a name", () => {
     const host = toolbar();
-    expect(one(host, '[data-slot="filter-chip"]').classes).toEqual(
-      expect.arrayContaining(["border-primary", "bg-accent", "min-h-10"]),
-    );
+    const chip = one(host, '[data-slot="filter-chip"]').classes;
+    expect(chip).toEqual(expect.arrayContaining(["border-foreground", "min-h-10"]));
+    expect(chip.filter((c) => c.startsWith("bg-"))).toEqual([]);
     const clear = one(host, '[aria-label="clear filter"]');
     expect(clear.el.getAttribute("type")).toBe("button");
     expect(clear.classes).toEqual(expect.arrayContaining(insideRing));
@@ -211,6 +211,37 @@ describe("list rows", () => {
       expect.arrayContaining(["font-mono", "tabular-nums", "text-right"]),
     );
     expect(one(host, "a").classes).toEqual(expect.arrayContaining(CONTROL_RING));
+  });
+
+  test("a title prints in foreground, linked or plain, and a linked one underlines on hover", () => {
+    const host = list();
+    const linked = one(host, "a").classes;
+    expect(linked).toEqual(expect.arrayContaining(["text-foreground", "[&:is(a):hover]:underline"]));
+    expect(linked.filter((c) => c.includes("primary"))).toEqual([]);
+    expect(one(host, "li:last-child span").classes).toContain("text-foreground");
+  });
+
+  test("a closed row stays in the list with its title muted and struck through, under the pointer too", () => {
+    const host = server(
+      <ListRows>
+        <ListRow closed>
+          <ListRowTitle href="/tasks/12">written up</ListRowTitle>
+        </ListRow>
+        <ListRow>
+          <ListRowTitle href="/tasks/13">open</ListRowTitle>
+        </ListRow>
+      </ListRows>,
+    );
+    const [closed, open] = [...host.querySelectorAll("li")];
+    expect(closed!.hasAttribute("data-closed")).toBe(true);
+    expect(open!.hasAttribute("data-closed")).toBe(false);
+    expect(one(closed!, "a").classes).toEqual(
+      expect.arrayContaining([
+        "group-data-[closed]/list-row:text-muted-foreground",
+        "group-data-[closed]/list-row:line-through",
+        "group-data-[closed]/list-row:[&:is(a):hover]:line-through",
+      ]),
+    );
   });
 
   test("a router link keeps its href, ref and event, and actions stay independent", async () => {
@@ -389,7 +420,7 @@ describe("data table", () => {
     expect(one(host, '[data-slot="table-container"]').classes).toContain("overflow-x-auto");
     expect(one(host, "table").classes).toContain("texture-rowedge");
     expect(one(host, "td[data-kind=number]").classes).toEqual(expect.arrayContaining(["font-mono", "text-right"]));
-    expect(one(host, '[aria-selected="true"]').classes).toContain("aria-selected:bg-accent");
+    expect(one(host, '[aria-selected="true"]').classes).toContain("aria-selected:bg-control-hover");
     expect(one(host, '[aria-sort="descending"]').el.getAttribute("scope")).toBe("col");
   });
 

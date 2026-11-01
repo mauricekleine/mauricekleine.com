@@ -141,13 +141,13 @@ function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
   );
 }
 
-// Highlight previews a row; aria-selected boxes the chosen value in the house ink.
+// Highlight previews a row; the chosen value keeps its check over the same fill, on aria-selected.
 function ComboboxItem({ className, children, ...props }: ComboboxPrimitive.Item.Props) {
   return (
     <ComboboxPrimitive.Item
       data-slot="combobox-item"
       className={cn(
-        "relative flex h-9 w-full cursor-default items-center gap-2.5 border border-transparent pr-8 pl-2.5 text-ui select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring) data-highlighted:not-aria-selected:bg-raised-hover aria-selected:border-primary aria-selected:bg-accent aria-selected:text-accent-foreground data-disabled:pointer-events-none data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "relative flex h-9 w-full cursor-default items-center gap-2.5 border border-transparent pr-8 pl-2.5 text-ui select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring) data-highlighted:bg-raised-hover aria-selected:bg-raised-hover data-disabled:pointer-events-none data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}

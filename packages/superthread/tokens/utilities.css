@@ -1,0 +1,29 @@
+/* utilities an item carries, beyond the type steps and the screens. a form that changes with the mode sits here on
+   generate.ts's dark scope, as texture-contact's does in texture.css, so no item needs a dark: class. the plain css
+   leaves them out: only an item reads them. */
+
+/* off paper: a plum fill prints pale pink in a dark scope, which is every surface of a dark page and the frame on any
+   page, so there a filled button prints as the outline: an edge in its label's ink, no fill, and the outline's hover
+   and press. disabled keeps the button's flat fill and screened edge, and invalid keeps its error edge. */
+@utility off-paper {
+  &:is(.dark *):not(.dark .light *) {
+    @variant not-disabled {
+      border-color: currentColor;
+      background-color: transparent;
+      color: var(--foreground);
+      @variant hover {
+        background-color: var(--control-hover);
+      }
+      @variant aria-expanded {
+        background-color: var(--control-hover);
+      }
+      @variant active {
+        background-color: var(--control-press);
+        box-shadow: none;
+      }
+      @variant aria-invalid {
+        border-color: var(--error);
+      }
+    }
+  }
+}

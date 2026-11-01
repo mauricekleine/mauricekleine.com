@@ -14,14 +14,16 @@ function ListRows({ className, ...props }: React.ComponentProps<"ul">) {
   );
 }
 
-// The optional lead, title and time share a line. On phones the time moves below the title, before the meta line.
-function ListRow({ className, ...props }: React.ComponentProps<"li">) {
+// The optional lead, title and time share a line. On phones the time moves below the title, before the meta line. A
+// closed row stays in the list with its title muted and struck through.
+function ListRow({ className, closed, ...props }: React.ComponentProps<"li"> & { closed?: boolean }) {
   return (
     <li
       data-mk="list-rows"
       data-slot="list-row"
+      data-closed={closed || undefined}
       className={cn(
-        "grid min-h-(--spacing-row-board) min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 border-b border-border px-4 py-3 [grid-template-areas:'title_aside'_'meta_meta'_'actions_actions'] has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)_auto] has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title_aside'_'lead_meta_meta'_'._actions_actions'] [@media(max-width:600px)]:grid-cols-[minmax(0,1fr)] [@media(max-width:600px)]:[grid-template-areas:'title'_'aside'_'meta'_'actions'] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title'_'lead_aside'_'lead_meta'_'._actions']",
+        "group/list-row grid min-h-(--spacing-row-board) min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 border-b border-border px-4 py-3 [grid-template-areas:'title_aside'_'meta_meta'_'actions_actions'] has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)_auto] has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title_aside'_'lead_meta_meta'_'._actions_actions'] [@media(max-width:600px)]:grid-cols-[minmax(0,1fr)] [@media(max-width:600px)]:[grid-template-areas:'title'_'aside'_'meta'_'actions'] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title'_'lead_aside'_'lead_meta'_'._actions']",
         className,
       )}
       {...props}
@@ -40,7 +42,8 @@ function ListRowLead({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// The title is plain text until it gets an href or the app's router link through render.
+// The title is plain text until it gets an href or the app's router link through render. Either way it prints in
+// foreground, and a linked title underlines on hover. A closed row's title keeps its strike under the pointer.
 function ListRowTitle({ className, href, render, ...props }: useRender.ComponentProps<"a">) {
   return useRender({
     defaultTagName: "span",
@@ -50,7 +53,7 @@ function ListRowTitle({ className, href, render, ...props }: useRender.Component
       {
         href,
         className: cn(
-          "min-w-0 text-ui font-medium [grid-area:title] [overflow-wrap:anywhere] [&:is(a)]:text-primary [&:is(a)]:underline-offset-4 [&:is(a):hover]:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          "min-w-0 text-ui font-medium text-foreground [grid-area:title] [overflow-wrap:anywhere] decoration-1 underline-offset-4 [&:is(a):hover]:underline group-data-[closed]/list-row:text-muted-foreground group-data-[closed]/list-row:line-through group-data-[closed]/list-row:[&:is(a):hover]:line-through focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
           className,
         ),
       },

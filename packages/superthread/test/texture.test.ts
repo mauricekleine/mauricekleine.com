@@ -410,6 +410,32 @@ test("texture-contact lifts light layers by --contact-lift and its edge, screens
   ]);
 });
 
+test("the mixed tick, the tab's hover preview, the table's row edge and the ramp print in foreground, never plum", () => {
+  for (const name of ["texture-mixed", "texture-tabhover", "texture-rowedge", "texture-ramp"]) {
+    const backgrounds = declsOf(utility(name)).filter(([p]) => p === "background" || p === "background-color");
+    expect({ name, plum: backgrounds.filter(([, v]) => v.includes("--primary")) }).toEqual({ name, plum: [] });
+    expect({ name, ink: backgrounds.some(([, v]) => v.includes("--foreground")) }).toEqual({ name, ink: true });
+  }
+});
+
+test("off-paper prints the outline inside a dark scope and nowhere else, and keeps disabled and invalid", () => {
+  const off = child(parse(readFileSync(join(root, "tokens/utilities.css"), "utf8")), "@utility off-paper");
+  expect(off.decls).toEqual([]);
+  const enabled = child(child(off, "&:is(.dark *):not(.dark .light *)"), "@variant not-disabled");
+  expect(enabled.decls).toEqual([
+    ["border-color", "currentColor"],
+    ["background-color", "transparent"],
+    ["color", "var(--foreground)"],
+  ]);
+  expect(value(child(enabled, "@variant hover"), "background-color")).toBe("var(--control-hover)");
+  expect(value(child(enabled, "@variant aria-expanded"), "background-color")).toBe("var(--control-hover)");
+  expect(child(enabled, "@variant active").decls).toEqual([
+    ["background-color", "var(--control-press)"],
+    ["box-shadow", "none"],
+  ]);
+  expect(value(child(enabled, "@variant aria-invalid"), "border-color")).toBe("var(--error)");
+});
+
 test("texture-disabled screens the edge on ::before, a field box only for a disabled text control, and a bare input or textarea masks its own border (ruling 3)", () => {
   const disabled = utility("texture-disabled");
   const variant = child(disabled, "@variant disabled");

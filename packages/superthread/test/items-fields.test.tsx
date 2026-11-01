@@ -304,12 +304,12 @@ describe("select", () => {
 
     // shadcn's tailwind.css narrows data-selected: to data-selected="true"; Base UI sets data-selected empty, so the
     // chosen option is styled on aria-selected, which Base UI sets to "true"
-    test("the chosen option is boxed on aria-selected, never data-selected:", () => {
+    test("the chosen option keeps its check over the raised hover on aria-selected, never data-selected:", () => {
       const chosen = one(body, "[role=option][aria-selected=true]");
       expect(chosen.el.textContent).toBe("trisys");
-      expect(chosen.classes).toEqual(
-        expect.arrayContaining(["aria-selected:border-primary", "aria-selected:bg-accent"]),
-      );
+      expect(chosen.el.querySelector("svg")).not.toBeNull();
+      expect(chosen.classes).toContain("aria-selected:bg-raised-hover");
+      expect(chosen.classes.filter((cls) => /primary|accent/.test(cls) && !cls.startsWith("focus"))).toEqual([]);
       const options = elements(body).filter(({ el }) => el.getAttribute("role") === "option");
       expect(options.flatMap(({ classes }) => classes.filter((cls) => cls.includes("data-selected")))).toEqual([]);
     });
@@ -421,6 +421,16 @@ describe("checkbox", () => {
     expect(mixed.el.hasAttribute("data-indeterminate")).toBe(true);
     expect(mixed.el.getAttribute("aria-checked")).toBe("mixed");
     expect(one(states[4]!, "[role=checkbox]").el.getAttribute("aria-invalid")).toBe("true");
+  });
+
+  test("a ticked box fills in foreground with the tick in stock", () => {
+    expect(one(states[1]!, "[role=checkbox]").classes).toEqual(
+      expect.arrayContaining([
+        "data-checked:border-foreground",
+        "data-checked:bg-foreground",
+        "data-checked:text-background",
+      ]),
+    );
   });
 
   test("it is a control: its span takes the 2 px ring 2 px outside it", () => {
