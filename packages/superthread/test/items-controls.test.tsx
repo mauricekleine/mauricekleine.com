@@ -243,6 +243,34 @@ describe("toggle", () => {
       expect.arrayContaining(["invisible", "group-aria-pressed/toggle:visible"]),
     );
   });
+
+  test.each([
+    ["icon-sm", "size-8"],
+    ["icon", "size-10"],
+    ["icon-lg", "size-12"],
+  ] as const)("%s is a square with no tick, so the icon stays centred", (size, box) => {
+    const toggle = one(
+      server(
+        <Toggle size={size} aria-label="pin">
+          <svg />
+        </Toggle>,
+      ),
+      "button",
+    );
+    expect(toggle.classes).toContain(box);
+    expect(toggle.el.querySelectorAll("svg")).toHaveLength(1);
+  });
+
+  test("a toggle group's icon item drops the tick too", () => {
+    const host = server(
+      <ToggleGroup size="icon" aria-label="view">
+        <ToggleGroupItem value="a" aria-label="a">
+          <svg />
+        </ToggleGroupItem>
+      </ToggleGroup>,
+    );
+    expect(one(host, "button").el.querySelectorAll("svg")).toHaveLength(1);
+  });
 });
 
 describe("toggle-group", () => {

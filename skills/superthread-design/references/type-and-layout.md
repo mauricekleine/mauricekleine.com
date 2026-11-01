@@ -36,7 +36,7 @@ The reading page sets Erode at 19 px on 32 px with a 27.5em measure (about 66 ch
 
 The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or an `li` reads with its words; `ListRowAside` prints in mono, so a time there holds its column.
 
-Links print in foreground, 4 px above their underline. A link in running text keeps a 1 px underline at rest, and inside `AppShellPanel` the base layer prints any anchor no item owns that way. A chrome link, such as a row title, a nav word or a door, underlines on hover. `link-quiet` is the one second form: a muted word that turns foreground on hover.
+Links print in foreground, 4 px above their underline. A link in running text keeps a 1 px underline at rest, and inside `AppShellPanel` the base layer prints any anchor no item owns that way. A chrome link with no box, such as a row title or a door, underlines on hover. A nav item has a box, so it hovers with its fill. `link-quiet` is the one second form: a muted word that turns foreground on hover.
 
 ## space and layout
 
@@ -46,7 +46,7 @@ Links print in foreground, 4 px above their underline. A link in running text ke
 - On a ship surface the working panel is at most 880 px wide and the reading sheet 672 px, both beside the fleet rail and the ship's nav. No ship widens the panel and there is no wide setting, so main content holds its place between pages. The reading page keeps a 264 px margin on the ground for its contents and progress.
 - `AppShellPanel` is a size container, and text in it wraps anywhere, except inside a table's cells.
 - At 900 px and below the fleet rail becomes a 48 px bar above the panel, with 12 px of ground on each side of it. The frame scrolls with the page, and no ship re-sticks it. At 600 px and below the phone type steps apply.
-- At 600 px and below every target reaches 44 px. A field or a tab grows to 44 px. A button, a toggle, a link part or a nav item keeps its box and takes the `hit-area` utility, which needs a positioned host. A row of nav items wraps on a 44 px pitch, and rail cells at 36 px carry a hit area.
+- At 600 px and below every target reaches 44 px, in hand-built nav as in an item. A field, a tab, an option row or a joined button grows to 44 px, and so does a field row or a label holding a checkbox, radio or switch. A button, a toggle, a link part or a nav item keeps its box and takes the `hit-area` utility, which needs a positioned host. A row of nav items wraps on a 44 px pitch, and rail cells at 36 px or less carry a hit area as wide as their share. Hit areas never overlap, and only a link in running text keeps its line's height.
 
 ## shape
 
@@ -57,7 +57,7 @@ Links print in foreground, 4 px above their underline. A link in running text ke
 ## focus
 
 - **Controls** (buttons, tabs, links, rail cells) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible` for every control role and anything else in the tab order. Inside the ship's nav the ring prints in `sidebar-foreground`, so the nav holds no plum. Inside a key block the ring prints in `first`, because the block sets `--ring` to `--first`.
-- **Fields** (input, textarea, input group, the select trigger) own their focus. While the text control holds focus, the box's 1 px edge becomes a 2 px edge drawn inside it (`outline: 2px` at `-2px` offset, in `--fx`) and the caret takes the same ink. `--fx` is plum, or the error ink when the field is invalid. The text never moves, and a disabled field takes no focus.
+- **Fields** (input, textarea, input group, the select trigger) own their focus. While the text control holds focus, the box's 1 px edge becomes a 2 px edge drawn inside it (`outline: 2px` at `-2px` offset, in `--fx`) and the caret takes the same ink. `--fx` is the ring's ink, so a field in the ship's nav or a key block takes that surface's ring, or the error ink when the field is invalid. The text never moves, and a disabled field takes no focus.
 - **A button inside a field** (clear, reveal, a toggle) keeps its own 2 px ring, drawn inside itself, and the box stays at 1 px.
 - **The code patch's copy link** draws its ring 4 px inside itself, in plum's dark value.
 

@@ -278,12 +278,12 @@ describe("button", () => {
     expect(html).not.toContain("<svg");
   });
 
-  test("only the default fill prints as an outline off paper", () => {
+  test("the default and destructive fills print as the outline off paper, and key keeps its fill", () => {
     const variants = ["default", "secondary", "outline", "ghost", "link", "destructive", "key"] as const;
     const off = variants.filter((variant) =>
       classes(renderToString(<Button variant={variant}>save</Button>)).includes("off-paper"),
     );
-    expect(off).toEqual(["default"]);
+    expect(off).toEqual(["default", "destructive"]);
   });
 
   test("a link prints in foreground and takes its underline on hover", () => {

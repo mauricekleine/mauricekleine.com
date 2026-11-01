@@ -9,17 +9,26 @@ import { ListRow, ListRows, ListRowTitle } from "@/components/superthread/blocks
 import { PageHeaderBack } from "@/components/superthread/blocks/page-header";
 import { SearchPalette, SearchPaletteTrigger } from "@/components/superthread/blocks/search-palette";
 import { SectionAction } from "@/components/superthread/blocks/section-header";
+import { Badge } from "@/components/superthread/ui/badge";
 import { BreadcrumbLink } from "@/components/superthread/ui/breadcrumb";
 import { Button } from "@/components/superthread/ui/button";
 import { ButtonGroup } from "@/components/superthread/ui/button-group";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
+import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { FleetRail } from "@/components/superthread/ui/fleet-rail";
 import { Input } from "@/components/superthread/ui/input";
 import { InputGroup } from "@/components/superthread/ui/input-group";
 import { NativeSelect } from "@/components/superthread/ui/native-select";
 import { RadioGroup, RadioGroupItem } from "@/components/superthread/ui/radio-group";
 import { Select, SelectTrigger, SelectValue } from "@/components/superthread/ui/select";
-import { SidebarInput, SidebarProvider } from "@/components/superthread/ui/sidebar";
+import {
+  SidebarInput,
+  SidebarMenuAction,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuSubButton,
+  SidebarProvider,
+} from "@/components/superthread/ui/sidebar";
 import { Slider } from "@/components/superthread/ui/slider";
 import { Switch } from "@/components/superthread/ui/switch";
 import { Table, TableHeader, TableRow } from "@/components/superthread/ui/table";
@@ -184,9 +193,45 @@ describe("the frame keeps a 44 px pitch", () => {
     );
     expect(one(host, "a").classes).toEqual(expect.arrayContaining([`${BAR}h-8`, `${BAR}hit-area`]));
     expect(one(host, "ul").classes).toContain(`${BAR}gap-y-3`);
+    expect(one(host, "a").classes).not.toContain(`${PHONE}h-11`);
   });
 
-  test("the rail spans a phone and each 36 px cell takes the pointer past 44 px", () => {
+  test("a stacked nav row grows to 44 px, and the action and badge beside it stay centred", () => {
+    const row = (size: "default" | "sm", slot = '[data-slot="sidebar-menu-button"]') =>
+      reaches(
+        <SidebarProvider>
+          <SidebarMenuButton size={size}>board</SidebarMenuButton>
+        </SidebarProvider>,
+        slot,
+        `${PHONE}h-11`,
+      );
+    row("default");
+    row("sm");
+    reaches(
+      <SidebarProvider>
+        <SidebarMenuAction>more</SidebarMenuAction>
+      </SidebarProvider>,
+      '[data-slot="sidebar-menu-action"]',
+      `${PHONE}after:-inset-3`,
+      `${PHONE}peer-data-[size=default]/menu-button:top-3`,
+    );
+    reaches(
+      <SidebarProvider>
+        <SidebarMenuBadge>3</SidebarMenuBadge>
+      </SidebarProvider>,
+      '[data-slot="sidebar-menu-badge"]',
+      `${PHONE}peer-data-[size=default]/menu-button:top-3`,
+    );
+    reaches(
+      <SidebarProvider>
+        <SidebarMenuSubButton href="/board">board</SidebarMenuSubButton>
+      </SidebarProvider>,
+      '[data-slot="sidebar-menu-sub-button"]',
+      `${PHONE}h-11`,
+    );
+  });
+
+  test("the rail spans a phone, its cells share the bar, and each takes the pointer as wide as its share up to 44 px", () => {
     const host = server(<FleetRail current="orbit" markBase="/marks" />);
     expect(one(host, '[data-slot="fleet-rail"]').classes).toContain(`${NARROW}w-full!`);
     expect(one(host, '[data-slot="fleet-rail-home"]').classes).toContain(`${NARROW}w-11!`);
@@ -194,12 +239,89 @@ describe("the frame keeps a 44 px pitch", () => {
       const classes = cell.getAttribute("class")!.split(/\s+/);
       expect(classes).toEqual(
         expect.arrayContaining([
-          `${NARROW}size-9!`,
-          `${NARROW}before:absolute`,
-          `${NARROW}before:-inset-x-[5px]`,
+          `${NARROW}w-full!`,
+          `${NARROW}max-w-9`,
           `${NARROW}before:-inset-y-1.5`,
+          `${NARROW}before:w-[min(44px,calc(100cqw/var(--rail-cells)))]`,
         ]),
       );
     }
+    const ships = one(host, '[data-slot="fleet-rail"] ul');
+    expect(ships.classes).toContain(`${NARROW}[container-type:inline-size]`);
+    expect(Number((ships.el as HTMLElement).style.getPropertyValue("--rail-cells"))).toBe(
+      ships.el.querySelectorAll("li").length,
+    );
   });
+});
+
+describe("neighbours keep their own hit areas", () => {
+  test("a joined button grows along its group", () => {
+    const axis = (orientation: "horizontal" | "vertical", grown: string) =>
+      reaches(
+        <ButtonGroup orientation={orientation}>
+          <Button size="icon-sm">a</Button>
+          <Button size="icon-sm">b</Button>
+        </ButtonGroup>,
+        '[data-slot="button-group"]',
+        `${PHONE}[&>[data-slot=button]]:${grown}`,
+      );
+    axis("horizontal", "min-w-11");
+    axis("vertical", "min-h-11");
+  });
+
+  test("a joined toggle grows along its group", () => {
+    const item = (orientation: "horizontal" | "vertical", grown: string) =>
+      reaches(
+        <ToggleGroup orientation={orientation}>
+          <ToggleGroupItem value="a">a</ToggleGroupItem>
+        </ToggleGroup>,
+        "button",
+        grown,
+      );
+    item("horizontal", `${PHONE}min-w-11`);
+    item("vertical", `${PHONE}min-h-11`);
+  });
+
+  test("a stacked tick's row is 44 px tall", () => {
+    const tall = `${PHONE}has-[>[role=checkbox],>[role=radio],>[role=switch]]:min-h-11`;
+    reaches(
+      <Field orientation="horizontal">
+        <Checkbox id="one" />
+        <FieldLabel htmlFor="one">one</FieldLabel>
+      </Field>,
+      '[data-slot="field"]',
+      tall,
+    );
+    reaches(
+      <FieldLabel>
+        <Checkbox />
+        one
+      </FieldLabel>,
+      '[data-slot="field-label"]',
+      tall,
+    );
+  });
+
+  test("bare radios stack 44 px apart", () => {
+    reaches(
+      <RadioGroup aria-label="plan">
+        <RadioGroupItem value="a" aria-label="a" />
+        <RadioGroupItem value="b" aria-label="b" />
+      </RadioGroup>,
+      '[role="radiogroup"]',
+      `${PHONE}has-[>[role=radio]]:gap-[26px]`,
+    );
+  });
+});
+
+test("a badge link keeps its overflow open and takes the hit area", () => {
+  reaches(
+    <Badge variant="link" render={<a href="/run" />}>
+      read
+    </Badge>,
+    "a",
+    "relative",
+    "overflow-visible",
+    `${PHONE}hit-area`,
+  );
 });

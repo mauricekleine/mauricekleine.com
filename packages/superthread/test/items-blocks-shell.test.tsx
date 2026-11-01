@@ -49,6 +49,12 @@ describe("app shell", () => {
       </AppShell>,
     );
 
+  test("the panel takes the ring back to the house ink, so the rail's pale ring stays on the frame", () => {
+    const panel = one(frame(), '[data-slot="app-shell-panel"]');
+    expect(panel.classes).toContain("[--ring:var(--primary)]");
+    expect(panel.classes).toContain("[--selected:var(--foreground)]");
+  });
+
   test("passes the rail's identity, destinations, marks, label and classes through", () => {
     const host = frame();
     expect(one(host, '[data-slot="app-shell"]').el.getAttribute("data-mk")).toBe("app-shell");

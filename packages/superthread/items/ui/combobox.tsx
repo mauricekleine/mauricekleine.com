@@ -147,7 +147,7 @@ function ComboboxItem({ className, children, ...props }: ComboboxPrimitive.Item.
     <ComboboxPrimitive.Item
       data-slot="combobox-item"
       className={cn(
-        "relative flex h-9 w-full cursor-default items-center gap-2.5 border border-transparent pr-8 pl-2.5 text-ui select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring) data-highlighted:bg-raised-hover aria-selected:bg-raised-hover data-disabled:pointer-events-none data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "relative flex h-9 [@media(max-width:600px)]:h-11 w-full cursor-default items-center gap-2.5 border border-transparent pr-8 pl-2.5 text-ui select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring) data-highlighted:bg-raised-hover aria-selected:bg-raised-hover data-disabled:pointer-events-none data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}
@@ -218,7 +218,7 @@ function ComboboxChips({
       data-slot="combobox-chips"
       data-mk="combobox"
       className={cn(
-        "flex min-h-10 flex-wrap items-center gap-1 border border-input bg-background px-2.5 py-1 text-ui [@media(max-width:600px)]:min-h-11 [--fx:var(--primary)] has-[input:focus]:border-(--fx) has-[input:focus]:outline-2 has-[input:focus]:-outline-offset-2 has-[input:focus]:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] has-[[aria-invalid=true]]:border-error has-[[aria-invalid=true]]:[--fx:var(--error)] has-[input:disabled]:bg-faint has-[input:disabled]:text-disabled has-data-[slot=combobox-chip]:px-1",
+        "flex min-h-10 flex-wrap items-center gap-1 border border-input bg-background px-2.5 py-1 text-ui [@media(max-width:600px)]:min-h-11 [--fx:var(--ring)] has-[input:focus]:border-(--fx) has-[input:focus]:outline-2 has-[input:focus]:-outline-offset-2 has-[input:focus]:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] has-[[aria-invalid=true]]:border-error has-[[aria-invalid=true]]:[--fx:var(--error)] has-[input:disabled]:bg-faint has-[input:disabled]:text-disabled has-data-[slot=combobox-chip]:px-1",
         className,
       )}
       {...props}

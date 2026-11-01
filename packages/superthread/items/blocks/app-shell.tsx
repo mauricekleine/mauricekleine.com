@@ -64,7 +64,7 @@ function AppShellNavItem({
         isActive={isActive}
         aria-current={isActive ? "page" : undefined}
         className={cn(
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:900px)]:h-8 [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:hit-area",
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:900px)]:h-8 [@media(max-width:600px)]:h-8 [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:hit-area",
           className,
         )}
         {...props}
@@ -117,15 +117,15 @@ function AppShellGround({ className, render, ...props }: useRender.ComponentProp
 
 // The working panel takes the sheet lift on the deep ground, with the board's measure and phone padding. One width
 // everywhere: no ship widens it, so main content holds its place between pages. It is a size container, so what prints
-// inside it answers to the panel's width. It is paper again, so the selected role returns to the page's foreground.
-// The base layer prints a plain anchor in it as a foreground link and wraps its text anywhere.
+// inside it answers to the panel's width. It is paper again, so the selected role returns to the page's foreground and
+// the ring to the house ink. The base layer prints a plain anchor in it as a foreground link and wraps its text anywhere.
 function AppShellPanel({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
       data-mk="app-shell"
       data-slot="app-shell-panel"
       className={cn(
-        "@container/panel w-full min-w-0 max-w-[880px] bg-card px-12 pt-10 pb-7 text-card-foreground shadow-sheet [--selected:var(--foreground)] [@media(max-width:600px)]:px-4 [@media(max-width:600px)]:pt-7 [@media(max-width:600px)]:pb-4",
+        "@container/panel w-full min-w-0 max-w-[880px] bg-card px-12 pt-10 pb-7 text-card-foreground shadow-sheet [--ring:var(--primary)] [--selected:var(--foreground)] [@media(max-width:600px)]:px-4 [@media(max-width:600px)]:pt-7 [@media(max-width:600px)]:pb-4",
         className,
       )}
       {...props}

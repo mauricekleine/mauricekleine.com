@@ -56,6 +56,11 @@ describe("beforeWords", () => {
   test("midnight is 00:00", () => {
     expect(beforeWords("2026-11-01T23:00:00Z", amsterdam)).toBe("before 00:00");
   });
+
+  test("a calendar date has no clock face, so it names the date in every zone", () => {
+    expect(beforeWords("2026-11-02", amsterdam)).toBe("before 2 nov");
+    expect(beforeWords("2026-11-02", { timeZone: "America/New_York" })).toBe("before 2 nov");
+  });
 });
 
 describe("untilWords", () => {
@@ -75,6 +80,21 @@ describe("untilWords", () => {
   test("names the thing once the moment arrives or has passed", () => {
     expect(untilWords(at, "standup", at)).toBe("standup now");
     expect(untilWords(at, "standup", "2026-11-01T11:20:00+01:00")).toBe("standup now");
+  });
+
+  test.each([
+    ["tomorrow", "2026-11-02", "1 day until the deadline"],
+    ["this week", "2026-11-04", "3 days until the deadline"],
+    ["today", "2026-11-01", "the deadline now"],
+    ["last week", "2026-10-25", "the deadline now"],
+  ])("a calendar date counts days: %s", (_, date, words) =>
+    expect(untilWords(date, "the deadline", now, amsterdam)).toBe(words),
+  );
+
+  test("a calendar date counts from the day it is in the reader's zone", () => {
+    const late = "2026-11-01T23:30:00Z";
+    expect(untilWords("2026-11-02", "the deadline", late, amsterdam)).toBe("the deadline now");
+    expect(untilWords("2026-11-02", "the deadline", late, { timeZone: "UTC" })).toBe("1 day until the deadline");
   });
 });
 
@@ -96,6 +116,7 @@ describe("scheduleWords", () => {
       "every tuesday, wednesday, thursday, friday and saturday at 09:00",
     ],
     [{ every: "hour" }, "every hour"],
+    [{ every: [], at: "07:00" }, "never"],
   ])("%j", (schedule, words) => expect(scheduleWords(schedule, amsterdam)).toBe(words));
 
   test("names the zone only when it differs from the reader's", () => {

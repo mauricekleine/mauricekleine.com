@@ -43,7 +43,7 @@ Two names differ from shadcn's habits. `--destructive` is the key ink. A status 
 
 Plum is the house ink on every surface, one fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. The focus signal is the ring, a field's focus edge and its caret, and it doesn't count against the fill. A ship never sets a control colour, so every working page prints in two inks: key and plum.
 
-Off paper a plum fill prints pale pink, so a `default` button prints as the outline. Off paper means inside a dark scope: every surface of a dark page, and the frame on any page. On a light page a panel is paper, so `default` fills. The `key` variant is the strong action off paper and every action that leaves the app, on any paper: the first ink under the stock label, with `destructive-hover` and `-press` and no trash.
+Off paper a plum fill prints pale pink, so a `default` button prints as the outline. Off paper means inside a dark scope: every surface of a dark page, and the frame on any page. On a light page a panel is paper, so `default` fills. `destructive` prints as the same outline off paper, so it never outranks the action beside it. The `key` variant is the strong action off paper and every action that leaves the app, on any paper: the first ink under the stock label, with `destructive-hover` and `-press` and no trash.
 
 Every other control state prints in foreground: links, ticks, switches, radios, sliders, progress, the tab bar, a pressed toggle, an active filter and the table's row edge. A chosen option keeps its check over `raised-hover`, and a selected row keeps its strip over `control-hover`, with no plum tint.
 
@@ -72,7 +72,7 @@ Five states, at badge scale only. Each badge has a fill near the stock, a 1 px e
 - Each role has `-glyph`, `-foreground` (the word), `-wash` (the fill) and `-edge` variables. `Badge` takes the state as its variant (`<Badge variant="failed" />`) and prints the glyph and the word.
 - Failed is the one solid badge, in madder: `--error-solid` `#843c36` in light, `#a55b4e` in dark, with `--error-solid-foreground` for its word. Its form makes it the most urgent state, so it never needs a louder ink.
 - Failed is the fleet's one red. Error text and an invalid field's edge follow it, and a field's error message leads with the `bang` glyph (`FieldErrorGlyph`).
-- Destructive actions print in the key ink with the trash glyph and the word.
+- Destructive actions print in the key ink, or the outline off paper, with the trash glyph and the word.
 - Glyphs clear 3:1 and words 4.5:1 on their fill.
 
 ## ship spots

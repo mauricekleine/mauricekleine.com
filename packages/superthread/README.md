@@ -101,20 +101,20 @@ fleet apps pin `@mk` to `https://superthread.mauricekleine.com/r/v/<version>/{na
 
 ## Where things live
 
-| path                                                                          | what                                                                                                                                        |
-| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tokens/master.json`                                                          | the master world's `tokens.json`, with the vendor's added keys (`desc`, from `build_reach.py`) after its last key. Never hand-edited        |
-| `tokens/{details,glyphs,check}.json`, `tokens/master.source.json`             | data dumped from the world, and the sha256 of every file it came from                                                                       |
-| `tokens/roles.ts`, `tokens/scale.ts`, `tokens/base.css`, `tokens/texture.css` | the role map, the type and motion scale, the base layer and the texture utilities, by hand                                                  |
-| `fonts.ts`                                                                    | the face manifest                                                                                                                           |
-| `scripts/texture/master/`                                                     | the world's own Python modules, vendored by name and unchanged                                                                              |
-| `scripts/texture/build.py`                                                    | tiles, plates and pixel checks, run with those modules (stdlib only)                                                                        |
-| `texture/`                                                                    | `tiles.json` (generated), `plates.json` (the plate spec), `plates.sha256` (pixel hashes) and `places.json` (the places' caption keys)       |
-| `dist/v2/`                                                                    | the generated CSS and `tokens.json`                                                                                                         |
-| `items/`                                                                      | item sources, at the paths they install to. `catalog.ts` lists the items. `lib/tokens.ts`, `lib/fleet.ts` and `ui/glyphs.tsx` are generated |
-| `upstream/`                                                                   | base-nova as fetched, with its manifest; the recorded CLI mirror (`cli/`); the pinned Start template; shadcn's licence                      |
-| `versions/<version>/r/`                                                       | committed snapshots                                                                                                                         |
-| `test/clean-room/`                                                            | the clean room, its fixture app and the page that renders every item                                                                        |
+| path                                                                                                  | what                                                                                                                                        |
+| ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tokens/master.json`                                                                                  | the master world's `tokens.json`, with the vendor's added keys (`desc`, from `build_reach.py`) after its last key. Never hand-edited        |
+| `tokens/{details,glyphs,check}.json`, `tokens/master.source.json`                                     | data dumped from the world, and the sha256 of every file it came from                                                                       |
+| `tokens/roles.ts`, `tokens/scale.ts`, `tokens/base.css`, `tokens/texture.css`, `tokens/utilities.css` | the role map, the type and motion scale, the base layer, the texture utilities and the other utilities, by hand                             |
+| `fonts.ts`                                                                                            | the face manifest                                                                                                                           |
+| `scripts/texture/master/`                                                                             | the world's own Python modules, vendored by name and unchanged                                                                              |
+| `scripts/texture/build.py`                                                                            | tiles, plates and pixel checks, run with those modules (stdlib only)                                                                        |
+| `texture/`                                                                                            | `tiles.json` (generated), `plates.json` (the plate spec), `plates.sha256` (pixel hashes) and `places.json` (the places' caption keys)       |
+| `dist/v2/`                                                                                            | the generated CSS and `tokens.json`                                                                                                         |
+| `items/`                                                                                              | item sources, at the paths they install to. `catalog.ts` lists the items. `lib/tokens.ts`, `lib/fleet.ts` and `ui/glyphs.tsx` are generated |
+| `upstream/`                                                                                           | base-nova as fetched, with its manifest; the recorded CLI mirror (`cli/`); the pinned Start template; shadcn's licence                      |
+| `versions/<version>/r/`                                                                               | committed snapshots                                                                                                                         |
+| `test/clean-room/`                                                                                    | the clean room, its fixture app and the page that renders every item                                                                        |
 
 ## Scripts
 
@@ -171,7 +171,7 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 Any change to a served item after its version reaches main ships as the next version.
 
-1. After editing `base.css`, `roles.ts`, `texture.css`, `scale.ts` or `icons.json`, run `texture`, `build`, then `upstream regen`.
+1. After editing `base.css`, `roles.ts`, `texture.css`, `utilities.css`, `scale.ts` or `icons.json`, run `texture`, `build`, then `upstream regen`.
 2. Set `version` in `package.json` to the next patch, minor or major.
 3. `git fetch origin`, then `bun run --cwd packages/superthread snapshot`. It refuses a version that origin/main already holds.
 4. Add the version to `PUBLISHED_VERSIONS` in `apps/superthread/tools/check-build.mjs`, and move the version in this file and in `skills/superthread-design/references/registry.md`.

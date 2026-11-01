@@ -6,14 +6,15 @@ import { cn } from "@/components/superthread/lib/utils";
 import { Separator } from "@/components/superthread/ui/separator";
 
 // Neighbouring boxes share a 1 px edge; the focused child rises so its ring stays visible. On a phone a group holding a
-// field takes the field's 44 px across every child, so joined boxes keep one height.
+// field takes the field's 44 px across every child, so joined boxes keep one height, and a button's box reaches 44 px
+// along the group, since a hit area there would take taps from the button beside it.
 const buttonGroupVariants = cva(
   "flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 [@media(max-width:600px)]:has-[>input,>[data-slot=input-group],>[data-slot=select-trigger]]:*:h-11",
   {
     variants: {
       orientation: {
-        horizontal: "*:not-first:-ml-px",
-        vertical: "flex-col *:not-first:-mt-px",
+        horizontal: "*:not-first:-ml-px [@media(max-width:600px)]:[&>[data-slot=button]]:min-w-11",
+        vertical: "flex-col *:not-first:-mt-px [@media(max-width:600px)]:[&>[data-slot=button]]:min-h-11",
       },
     },
     defaultVariants: {

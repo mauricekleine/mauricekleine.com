@@ -3041,9 +3041,9 @@
       "name": "Destructive Button",
       "kind": "button",
       "refersTo": "button-destructive",
-      "description": "a destructive action in the first ink, with the trash glyph and its word; red stays a status colour.",
+      "description": "a destructive action in the first ink, with the trash glyph and its word; red stays a status colour. in a dark scope it prints as the outline.",
       "html": "<button class=\"ds-btn ds-btn-destructive\" type=\"button\"><svg class=\"ds-glyph\" viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M4 1h4v1h-4zM1 2h10v1h-10zM2 4h8v1h-8zM2 5h1v1h-1zM4 5h1v1h-1zM7 5h1v1h-1zM9 5h1v1h-1zM2 6h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM9 6h1v1h-1zM2 7h1v1h-1zM4 7h1v1h-1zM7 7h1v1h-1zM9 7h1v1h-1zM2 8h1v1h-1zM4 8h1v1h-1zM7 8h1v1h-1zM9 8h1v1h-1zM2 9h8v1h-8z\"/></svg>delete run</button>",
-      "css": ".ds-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 40px; padding: 0 18px; border: 1px solid transparent; border-radius: var(--radius); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } .ds-btn .ds-glyph { flex-shrink: 0; } .ds-btn-destructive { background: var(--destructive); color: var(--destructive-foreground); } .ds-btn-destructive:hover { background: var(--destructive-hover); } .ds-btn-destructive:active { background: var(--destructive-press); }"
+      "css": ".ds-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 40px; padding: 0 18px; border: 1px solid transparent; border-radius: var(--radius); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } .ds-btn .ds-glyph { flex-shrink: 0; } .ds-btn-destructive { background: var(--destructive); color: var(--destructive-foreground); } .ds-btn-destructive:hover { background: var(--destructive-hover); } .ds-btn-destructive:active { background: var(--destructive-press); } :host-context(.dark) .ds-btn-destructive { border-color: currentColor; background: transparent; color: var(--foreground); } :host-context(.dark) .ds-btn-destructive:hover { background: var(--control-hover); } :host-context(.dark) .ds-btn-destructive:active { background: var(--control-press); }"
     },
     {
       "name": "Text Field",
@@ -3153,7 +3153,7 @@
       },
       {
         "name": "The Phone Target Rule",
-        "body": "Every target on a phone is 44 px, through its box or a hit area.",
+        "body": "Every target on a phone is 44 px, through its box or a hit area, in hand-built nav as in an item. Hit areas never overlap. Only a link in running text keeps its line's height.",
         "section": "layout"
       },
       {
@@ -3279,7 +3279,7 @@
       "**Don't** print a screen behind words, numbers, data or code, or give a component a second texture detail.",
       "**Don't** animate a screen, or add grain, noise, glow or misregistered type.",
       "**Don't** grey a component out with dots: a disabled control screens its edge and nothing else.",
-      "**Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink with the trash glyph and the word.",
+      "**Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink, or the outline off paper, with the trash glyph and the word.",
       "**Don't** print a spot or a status ink as a large flat field.",
       "**Don't** fade or screen the cut edge of a scrolling table.",
       "**Don't** take icons from an icon library; every icon and glyph is drawn in whole-pixel squares.",

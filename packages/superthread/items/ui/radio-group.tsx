@@ -2,13 +2,14 @@ import { Radio as RadioPrimitive } from "@base-ui/react/radio";
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
 import { cn } from "@/components/superthread/lib/utils";
 
-// A grid of square choices, with 12 px between controls.
+// A grid of square choices, with 12 px between controls. On a phone bare controls sit 44 px apart, so their hit areas
+// never overlap; a choice in a field or a label takes its row's 44 px from the field item.
 function RadioGroup({ className, ...props }: RadioGroupPrimitive.Props) {
   return (
     <RadioGroupPrimitive
       data-slot="radio-group"
       data-mk="radio-group"
-      className={cn("grid w-full gap-3", className)}
+      className={cn("grid w-full gap-3 [@media(max-width:600px)]:has-[>[role=radio]]:gap-[26px]", className)}
       {...props}
     />
   );

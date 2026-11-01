@@ -463,8 +463,8 @@ const sidebarMenuButtonVariants = cva(
         outline: "border-sidebar-border hover:bg-sidebar-hover",
       },
       size: {
-        default: "h-[34px] text-sm",
-        sm: "h-7 text-xs",
+        default: "h-[34px] text-sm [@media(max-width:600px)]:h-11",
+        sm: "h-7 text-xs [@media(max-width:600px)]:h-11",
         lg: "h-12 text-sm group-data-[collapsible=icon]:p-0!",
       },
     },
@@ -538,7 +538,7 @@ function SidebarMenuAction({
     props: mergeProps<"button">(
       {
         className: cn(
-          "absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center p-0 text-sidebar-foreground transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-[7px] peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 after:absolute after:-inset-2 hover:bg-sidebar-hover md:after:hidden [&>svg]:shrink-0",
+          "absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center p-0 text-sidebar-foreground transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-[7px] peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 [@media(max-width:600px)]:peer-data-[size=default]/menu-button:top-3 [@media(max-width:600px)]:peer-data-[size=sm]/menu-button:top-3 after:absolute after:-inset-2 [@media(max-width:600px)]:after:-inset-3 hover:bg-sidebar-hover md:after:hidden [&>svg]:shrink-0",
           showOnHover &&
             "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-active/menu-button:text-selected aria-expanded:opacity-100 md:opacity-0",
           className,
@@ -560,7 +560,7 @@ function SidebarMenuBadge({ className, ...props }: React.ComponentProps<"div">) 
       data-slot="sidebar-menu-badge"
       data-sidebar="menu-badge"
       className={cn(
-        "pointer-events-none absolute right-1 flex h-5 min-w-5 items-center justify-center px-1 text-xs font-medium text-sidebar-foreground tabular-nums select-none group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-[7px] peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 peer-data-active/menu-button:text-selected",
+        "pointer-events-none absolute right-1 flex h-5 min-w-5 items-center justify-center px-1 text-xs font-medium text-sidebar-foreground tabular-nums select-none group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-[7px] peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 [@media(max-width:600px)]:peer-data-[size=default]/menu-button:top-3 [@media(max-width:600px)]:peer-data-[size=sm]/menu-button:top-3 peer-data-active/menu-button:text-selected",
         className,
       )}
       {...props}
@@ -644,7 +644,7 @@ function SidebarMenuSubButton({
     props: mergeProps<"a">(
       {
         className: cn(
-          "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden border border-transparent px-2 text-sidebar-foreground transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) group-data-[collapsible=icon]:hidden hover:bg-sidebar-hover disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-sm data-[size=sm]:text-xs data-active:border-selected data-active:font-medium data-active:text-selected data-active:before:size-2 data-active:before:shrink-0 data-active:before:bg-selected data-active:before:content-[''] [&>span:last-child]:truncate [&>svg]:shrink-0",
+          "flex h-7 min-w-0 -translate-x-px items-center gap-2 [@media(max-width:600px)]:h-11 overflow-hidden border border-transparent px-2 text-sidebar-foreground transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) group-data-[collapsible=icon]:hidden hover:bg-sidebar-hover disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-sm data-[size=sm]:text-xs data-active:border-selected data-active:font-medium data-active:text-selected data-active:before:size-2 data-active:before:shrink-0 data-active:before:bg-selected data-active:before:content-[''] [&>span:last-child]:truncate [&>svg]:shrink-0",
           className,
         ),
       },

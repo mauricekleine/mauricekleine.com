@@ -17,6 +17,10 @@ const fragment = (html: string) => {
   return host;
 };
 
+test("a tap prints no grey flash of its own, so a control's press is the only feedback", () => {
+  expect(child(base, "body").decls).toContainEqual(["-webkit-tap-highlight-color", "transparent"]);
+});
+
 describe("the focus ring", () => {
   const ring: Rule = base.rules.find((rule) => rule.sel.endsWith(":focus-visible"))!;
   const control = ring.sel.replace(/:focus-visible$/, "");

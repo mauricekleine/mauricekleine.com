@@ -14,7 +14,8 @@ export function parse(css: string): Rule {
     buf = "";
     if (!s) return;
     const i = s.indexOf(":");
-    stack.at(-1)!.decls.push([s.slice(0, i).trim(), s.slice(i + 1).trim()]);
+    // a statement such as `@apply hit-area` has no colon, so it prints whole with no value
+    stack.at(-1)!.decls.push(i < 0 ? [s, ""] : [s.slice(0, i).trim(), s.slice(i + 1).trim()]);
   };
   for (const ch of css.replace(/\/\*[\s\S]*?\*\//g, "")) {
     if (ch === "(") parens++;
@@ -41,3 +42,6 @@ export const child = (rule: Rule, sel: string) => {
 };
 
 export const value = (rule: Rule, prop: string) => Object.fromEntries(rule.decls)[prop];
+
+/** Every rule under this one, at any depth, in source order. */
+export const flat = (rule: Rule): Rule[] => rule.rules.flatMap((inner) => [inner, ...flat(inner)]);

@@ -1,3 +1,4 @@
+import { Children, Fragment, isValidElement, type ReactNode } from "react";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@/components/superthread/lib/utils";
@@ -78,19 +79,41 @@ function ListRowAside({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// The second line holds context, and it prints the dot between its pieces, so a row writes only the pieces. A dot ends
-// a wrapped line rather than starting the next, and it is decoration, so a screen reader skips it. Each piece may wrap
-// without truncating the title. A status sits outside it, in the aside.
-function ListRowMeta({ className, ...props }: React.ComponentProps<"div">) {
+// A meta line's pieces, read through fragments, so a row can group or map them.
+function metaPieces(children: ReactNode): ReactNode[] {
+  return Children.toArray(children).flatMap((child) =>
+    isValidElement<{ children?: ReactNode }>(child) && child.type === Fragment
+      ? metaPieces(child.props.children)
+      : [child],
+  );
+}
+
+// The second line holds context, and it prints the dot between its pieces, so a row writes only the pieces. The dot is
+// its own element outside each piece, so a link keeps it out of its underline and a hit area keeps its ::after. It stays
+// with the piece before it, so it ends a wrapped line rather than starting the next, and it is decoration, so a screen
+// reader skips it. Each piece may wrap without truncating the title. A status sits outside it, in the aside.
+function ListRowMeta({ className, children, ...props }: React.ComponentProps<"div">) {
+  const pieces = metaPieces(children);
   return (
     <div
       data-slot="list-row-meta"
       className={cn(
-        "flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 type-instrument text-muted-foreground [grid-area:meta] [overflow-wrap:anywhere] [&>*:not(:last-child)]:after:ml-2 [&>*:not(:last-child)]:after:content-['·'/'']",
+        "flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 type-instrument text-muted-foreground [grid-area:meta] [overflow-wrap:anywhere]",
         className,
       )}
       {...props}
-    />
+    >
+      {pieces.map((piece, index) => (
+        <span key={index} data-slot="list-row-meta-piece" className="min-w-0">
+          {piece}
+          {index < pieces.length - 1 && (
+            <span aria-hidden="true" data-slot="list-row-meta-dot" className="ml-2">
+              ·
+            </span>
+          )}
+        </span>
+      ))}
+    </div>
   );
 }
 

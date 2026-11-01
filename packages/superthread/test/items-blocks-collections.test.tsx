@@ -208,13 +208,63 @@ describe("list rows", () => {
     expect(one(host, "li").classes).toEqual(
       expect.arrayContaining(["min-h-(--spacing-row-board)", "border-b", "py-3", "px-4"]),
     );
-    expect(one(host, '[data-slot="list-row-meta"]').classes).toEqual(
-      expect.arrayContaining(["flex-wrap", "[&>*:not(:last-child)]:after:content-['·'/'']"]),
-    );
+    expect(one(host, '[data-slot="list-row-meta"]').classes).toContain("flex-wrap");
     expect(one(host, '[data-slot="list-row-aside"]').classes).toEqual(
       expect.arrayContaining(["font-mono", "tabular-nums", "text-right"]),
     );
     expect(one(host, "a").classes).toEqual(expect.arrayContaining(CONTROL_RING));
+  });
+
+  describe("the meta line's dots", () => {
+    const meta = (children: React.ReactNode) =>
+      one(server(<ListRowMeta>{children}</ListRowMeta>), '[data-slot="list-row-meta"]').el;
+    const dots = (line: Element) => [...line.querySelectorAll('[data-slot="list-row-meta-dot"]')];
+
+    test("sit between the pieces, one fewer than the pieces, and a screen reader skips them", () => {
+      const line = meta(
+        <>
+          <span>orbit</span>
+          <span>queued</span>
+          <span>2 files</span>
+        </>,
+      );
+      expect(line.textContent).toBe("orbit·queued·2 files");
+      expect(dots(line)).toHaveLength(2);
+      for (const dot of dots(line)) expect(dot.getAttribute("aria-hidden")).toBe("true");
+    });
+
+    test("leave a single piece alone", () => {
+      expect(dots(meta(<span>orbit</span>))).toEqual([]);
+    });
+
+    test("read through fragments and skip an empty piece, so a row can map its pieces", () => {
+      const line = meta(
+        <>
+          {null}
+          <>
+            <span>orbit</span>
+            {["a", "b"].map((name) => (
+              <span key={name}>{name}</span>
+            ))}
+          </>
+          {false}
+        </>,
+      );
+      expect(line.textContent).toBe("orbit·a·b");
+    });
+
+    test("stay outside a link, so its underline and hit area are the link's own", () => {
+      const line = meta(
+        <>
+          <a className="link-quiet" href="/runs">
+            runs
+          </a>
+          <span>queued</span>
+        </>,
+      );
+      expect(line.querySelector("a")!.textContent).toBe("runs");
+      expect(dots(line)[0]!.closest("a")).toBeNull();
+    });
   });
 
   test("a title prints in foreground, linked or plain, and a linked one underlines on hover", () => {

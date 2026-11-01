@@ -154,11 +154,11 @@ describe("field", () => {
     expect(custom.querySelectorAll("svg")).toHaveLength(1);
     expect(one(custom, "a").el.getAttribute("href")).toBe("#email");
   });
-  test("the separator prints its meta label on stock over a 1 px rule", () => {
+  test("the separator prints its instrument label on stock over a 1 px rule", () => {
     const host = server(<FieldSeparator>or</FieldSeparator>);
     expect(one(host, '[data-slot="separator"]').classes).toEqual(expect.arrayContaining(["h-px", "bg-border"]));
     expect(one(host, '[data-slot="field-separator-content"]').classes).toEqual(
-      expect.arrayContaining(["bg-background", "type-meta", "text-muted-foreground"]),
+      expect.arrayContaining(["bg-background", "type-instrument", "text-muted-foreground"]),
     );
   });
   test("no texture or forbidden class across states and choice cards", () => {
@@ -222,7 +222,7 @@ describe("native-select", () => {
     expect(select.classes).toEqual(
       expect.arrayContaining([
         ...SELF_EDGE,
-        "[--fx:var(--primary)]",
+        "[--fx:var(--ring)]",
         "aria-invalid:border-error",
         "aria-invalid:[--fx:var(--error)]",
       ]),

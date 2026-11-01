@@ -150,7 +150,7 @@ function claim(name: string): string[] {
 
 // The edge a box draws while it is its own focused control (GATE.md: border and a 2 px outline at -2 px in --fx).
 const SELF_EDGE = ["focus:border-(--fx)", "focus:outline-2", "focus:-outline-offset-2", "focus:outline-(--fx)"];
-const FX_PRIMARY = "[--fx:var(--primary)]";
+const FX_RING = "[--fx:var(--ring)]";
 
 const ships = ["orbit", "quanta", "trisys"];
 
@@ -198,7 +198,7 @@ describe("input", () => {
 
   test("the box is its own control: focus draws its edge, the caret takes --fx, and --fx turns to the error ink", () => {
     const { classes } = one(states[0]!, "input");
-    expect(classes).toEqual(expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", FX_PRIMARY]));
+    expect(classes).toEqual(expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", FX_RING]));
     expect(classes).toEqual(expect.arrayContaining(["aria-invalid:[--fx:var(--error)]", "aria-invalid:border-error"]));
   });
 
@@ -229,7 +229,7 @@ describe("textarea", () => {
 
   test("the box is its own control: focus draws its edge, the caret takes --fx, and --fx turns to the error ink", () => {
     const { classes } = one(states[0]!, "textarea");
-    expect(classes).toEqual(expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", FX_PRIMARY]));
+    expect(classes).toEqual(expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", FX_RING]));
     expect(classes).toEqual(expect.arrayContaining(["aria-invalid:[--fx:var(--error)]", "aria-invalid:border-error"]));
   });
 
@@ -256,12 +256,7 @@ describe("select", () => {
   test("the trigger is a field whose box is the control: focus draws its edge in --fx", () => {
     const { classes } = one(states[0]!, "[data-slot=select-trigger]");
     expect(classes).toEqual(
-      expect.arrayContaining([
-        ...SELF_EDGE,
-        FX_PRIMARY,
-        "aria-invalid:[--fx:var(--error)]",
-        "aria-invalid:border-error",
-      ]),
+      expect.arrayContaining([...SELF_EDGE, FX_RING, "aria-invalid:[--fx:var(--error)]", "aria-invalid:border-error"]),
     );
   });
 
@@ -307,6 +302,12 @@ describe("select", () => {
       expect(chosen.classes.filter((cls) => /primary|accent/.test(cls) && !cls.startsWith("focus"))).toEqual([]);
       const options = elements(body).filter(({ el }) => el.getAttribute("role") === "option");
       expect(options.flatMap(({ classes }) => classes.filter((cls) => cls.includes("data-selected")))).toEqual([]);
+    });
+
+    test("an option row is 36 px, 44 px on a phone", () => {
+      expect(one(body, "[role=option]").classes).toEqual(
+        expect.arrayContaining(["h-9", "[@media(max-width:600px)]:h-11"]),
+      );
     });
 
     test("the open select carries only texture-contact, and no forbidden class", () => {
@@ -508,7 +509,7 @@ describe("input-group", () => {
         "has-[input:focus,textarea:focus]:outline-2",
         "has-[input:focus,textarea:focus]:-outline-offset-2",
         "has-[input:focus,textarea:focus]:outline-(--fx)",
-        FX_PRIMARY,
+        FX_RING,
         "has-[[aria-invalid=true]]:[--fx:var(--error)]",
         "has-[[aria-invalid=true]]:border-error",
       ]),
@@ -538,7 +539,7 @@ describe("input-group", () => {
       expect.arrayContaining([
         "focus-visible:outline-2",
         "focus-visible:-outline-offset-2",
-        "focus-visible:outline-(--primary)",
+        "focus-visible:outline-(--ring)",
       ]),
     );
   });

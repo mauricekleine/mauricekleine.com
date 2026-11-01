@@ -143,7 +143,7 @@ describe("the transforms", () => {
       `const a = <span className="sr-only">close</span>`,
       `const b = <button aria-label="close toast" title="toggle sidebar" />`,
       `const c = <img alt='a mark' placeholder="search" />`,
-      `const d = "font-display text-base font-medium"`,
+      `const d = "font-display text-first text-base font-medium"`,
       ``,
     ].join("\n");
     expect(transform(probe, "probe")).toBe(want);

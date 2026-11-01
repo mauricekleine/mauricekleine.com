@@ -4,8 +4,9 @@ import { cn } from "@/components/superthread/lib/utils";
 import { Icon } from "@/components/superthread/ui/glyphs";
 
 // Square, 1 px edges, one chromatic ink. The default fills with plum on paper; off-paper turns it into the outline in a
-// dark scope, where a plum fill prints pale pink. Key takes the first ink and destructive's hover and press, for an
-// action that leaves the app. Hover and press come from the --*-hover and --*-press roles (light overprints key, dark
+// dark scope, where a plum fill prints pale pink. Destructive takes the same outline there, so the action that throws
+// work away never outranks the page's one job. Key keeps its fill: it takes the first ink and destructive's hover and
+// press, for an action that leaves the app. Hover and press come from the --*-hover and --*-press roles (light overprints key, dark
 // lifts the ink). Focus is the base layer's 2 px ring at 2 px offset, so nothing here silences it, and only the fill,
 // edge and label travel, so the ring snaps on. A disabled button keeps a flat fill and a plain label, and
 // texture-disabled screens its edge back to the half on ::before, which is why every button stays positioned. On a
@@ -22,7 +23,7 @@ const buttonVariants = cva(
         outline: "border-current hover:bg-control-hover active:bg-control-press aria-expanded:bg-control-hover",
         ghost: "hover:bg-control-hover active:bg-control-press aria-expanded:bg-control-hover",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-press aria-expanded:bg-destructive-hover",
+          "off-paper bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-press aria-expanded:bg-destructive-hover",
         key: "bg-first text-background hover:bg-destructive-hover active:bg-destructive-press aria-expanded:bg-destructive-hover",
         link: "text-foreground decoration-1 underline-offset-4 hover:underline",
       },
@@ -48,7 +49,7 @@ type ButtonSize = NonNullable<VariantProps<typeof buttonVariants>["size"]>;
 
 const iconSizes: ReadonlySet<ButtonSize> = new Set(["icon", "icon-xs", "icon-sm", "icon-lg"]);
 
-// Destructive prints in key with the trash glyph and the word, so red stays a status colour. An icon button shows
+// Destructive prints in the first ink with the trash glyph and the word, so red stays a status colour. An icon button shows
 // one glyph: the trash, unless it is given its own.
 function Button({
   className,

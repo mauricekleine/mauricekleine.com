@@ -19,7 +19,7 @@ const LEAF = [
   "texture-contact",
   "[--contact-lift:var(--elevation-leaf-rake)]",
 ];
-const ROW = ["h-9", "gap-2.5", "border", "border-transparent", "text-ui", ...INSIDE];
+const ROW = ["h-9", "[@media(max-width:600px)]:h-11", "gap-2.5", "border", "border-transparent", "text-ui", ...INSIDE];
 const KEYS = ["ml-auto", "font-mono", "text-[11px]", "tracking-[0.14em]", "text-muted-foreground"];
 function has(scope: ParentNode, selector: string, classes: string[]) {
   const result = one(scope, selector);
@@ -457,6 +457,9 @@ describe("sonner", () => {
     expect(body.querySelectorAll("[data-sonner-toast]")).toHaveLength(5);
     for (const el of body.querySelectorAll("[data-close-button]"))
       expect(el.getAttribute("aria-label")).toBe("close toast");
+  });
+  test("the close button takes the hit area on a phone", () => {
+    has(body, "[data-close-button]", ["size-6", "[@media(max-width:600px)]:hit-area"]);
   });
   test("each kind is unstyled and expanded on the leaf lift; its contact edge never clips", () => {
     for (const { el, classes } of elements(body).filter(({ el }) => el.hasAttribute("data-sonner-toast"))) {

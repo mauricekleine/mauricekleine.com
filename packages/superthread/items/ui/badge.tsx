@@ -9,7 +9,8 @@ const STATES = ["done", "running", "waiting", "failed", "queued"] as const satis
 // Square, 1 px edge, 13 px words, in Supreme wherever it lands, a mono row aside included. A status badge is the
 // sanctioned exception to one colour, at badge scale only: a fill near the stock, the edge at about half strength, the
 // 14 px glyph square at full strength and the word. failed is the one solid badge, so it is the most urgent by its
-// form, not by a louder ink. sm is 24 px, the height of an xs button, with the glyph square as evenly set in it.
+// form, not by a louder ink. sm is 24 px, the height of an xs button, with the glyph square as evenly set in it. The
+// link variant is a link part: it lets its 44 px hit area out of the clip on a phone.
 const badgeVariants = cva(
   "group/badge inline-flex w-fit shrink-0 items-center justify-center overflow-hidden border border-transparent font-sans text-instrument leading-none font-medium whitespace-nowrap transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) aria-invalid:border-error [&>svg]:pointer-events-none [&>svg]:shrink-0",
   {
@@ -21,7 +22,7 @@ const badgeVariants = cva(
         destructive: "bg-destructive text-destructive-foreground [a]:hover:bg-destructive-hover",
         outline: "border-current [a]:hover:bg-control-hover",
         ghost: "hover:bg-control-hover",
-        link: "text-foreground decoration-1 underline-offset-4 hover:underline",
+        link: "relative overflow-visible text-foreground decoration-1 underline-offset-4 hover:underline [@media(max-width:600px)]:hit-area",
         done: "border-success-edge bg-success-wash text-success-foreground",
         running: "border-info-edge bg-info-wash text-info-foreground",
         waiting: "border-warning-edge bg-warning-wash text-warning-foreground",

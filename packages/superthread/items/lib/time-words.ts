@@ -2,8 +2,9 @@
 // function is pure. Each moment comes in as an argument, so nothing here reads a clock, and the words never judge how
 // long something took.
 //
-// A moment is a Date or a date string. A plain "2026-10-30" is a calendar date, the same day in every zone. timeZone
-// names the reader's zone and defaults to the machine's, so a server rendering for a reader in another zone passes it.
+// A moment is a Date or a date string. A plain "2026-10-30" is a calendar date, the same day in every zone, and it has no
+// clock face, so the words count days and name the date. timeZone names the reader's zone and defaults to the machine's,
+// so a server rendering for a reader in another zone passes it.
 
 export type Moment = Date | string;
 export type Weekday = (typeof WEEK)[number];
@@ -22,6 +23,7 @@ const DAY_MS = 86_400_000;
 const CALENDAR_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 const readerZone = (options?: TimeOptions) => options?.timeZone ?? new Intl.DateTimeFormat().resolvedOptions().timeZone;
+const isCalendarDate = (moment: Moment): moment is string => typeof moment === "string" && CALENDAR_DATE.test(moment);
 
 // The calendar day a moment falls on in the zone, as whole days since the epoch.
 function dayOf(moment: Moment, timeZone: string) {
@@ -48,8 +50,12 @@ export function sinceWords(from: Moment, now: Moment, options?: TimeOptions) {
   return `since ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}${sameYear ? "" : ` ${date.getUTCFullYear()}`}`;
 }
 
-/** "before 11:00", on the 24-hour clock. */
+/** "before 11:00", on the 24-hour clock. A calendar date has no clock face, so it reads "before 2 nov". */
 export function beforeWords(at: Moment, options?: TimeOptions) {
+  if (isCalendarDate(at)) {
+    const date = new Date(dayOf(at, "UTC") * DAY_MS);
+    return `before ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}`;
+  }
   const clock = new Intl.DateTimeFormat("en-GB", {
     timeZone: readerZone(options),
     hour: "2-digit",
@@ -61,9 +67,16 @@ export function beforeWords(at: Moment, options?: TimeOptions) {
 
 /**
  * "48 min until standup", "1 h 20 until standup", "2 h until standup", and "standup now" once the moment arrives. A
- * part minute rounds up, so the words match the difference between the two clock faces.
+ * part minute rounds up, so the words match the difference between the two clock faces. A calendar date counts days in
+ * the reader's zone: "1 day until the deadline", "3 days until the deadline", and "the deadline now" once its day starts.
  */
-export function untilWords(at: Moment, what: string, now: Moment) {
+export function untilWords(at: Moment, what: string, now: Moment, options?: TimeOptions) {
+  if (isCalendarDate(at)) {
+    const timeZone = readerZone(options);
+    const days = dayOf(at, timeZone) - dayOf(now, timeZone);
+    if (days <= 0) return `${what} now`;
+    return `${days} ${days === 1 ? "day" : "days"} until ${what}`;
+  }
   const minutes = Math.ceil((new Date(at).getTime() - new Date(now).getTime()) / 60_000);
   if (minutes <= 0) return `${what} now`;
   if (minutes < 60) return `${minutes} min until ${what}`;
@@ -84,10 +97,12 @@ const zoneWords = (timeZone: string) => timeZone.split("/").at(-1)!.replaceAll("
 
 /**
  * "every day at 07:00", "every monday and thursday at 07:15", "every hour". A schedule set in another zone than the
- * reader's says so: "every day at 07:00, amsterdam time".
+ * reader's says so: "every day at 07:00, amsterdam time". A list with no days never runs, so it reads "never".
  */
 export function scheduleWords(schedule: Schedule, options?: TimeOptions) {
-  const when = schedule.every === "hour" ? "every hour" : `every ${dayWords(schedule.every)} at ${schedule.at}`;
+  const days = schedule.every === "hour" ? "hour" : dayWords(schedule.every);
+  if (!days) return "never";
+  const when = schedule.every === "hour" ? "every hour" : `every ${days} at ${schedule.at}`;
   const elsewhere = schedule.timeZone && schedule.timeZone !== readerZone(options);
   return elsewhere ? `${when}, ${zoneWords(schedule.timeZone!)} time` : when;
 }

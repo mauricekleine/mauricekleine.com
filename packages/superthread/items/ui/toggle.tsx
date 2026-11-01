@@ -17,6 +17,9 @@ const toggleVariants = cva(
         default: "h-10 min-w-10 px-4.5 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
         sm: "h-8 min-w-8 gap-2 px-3 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
         lg: "h-12 min-w-12 px-6 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4",
+        icon: "size-10",
+        "icon-sm": "size-8",
+        "icon-lg": "size-12",
       },
     },
     defaultVariants: {
@@ -26,8 +29,12 @@ const toggleVariants = cva(
   },
 );
 
-// The tick after the words. It holds its space at rest, so the words don't move when the toggle turns on.
-function ToggleTick() {
+type ToggleSize = VariantProps<typeof toggleVariants>["size"];
+
+// The tick after the words. It holds its space at rest, so the words don't move when the toggle turns on. An icon size
+// holds one glyph in a square, so its edge alone says pressed, as a pressed toggle's foreground edge does anywhere.
+function ToggleTick({ size }: { size?: ToggleSize }) {
+  if (size?.startsWith("icon")) return null;
   return <Icon name="check" data-icon="inline-end" className="invisible group-aria-pressed/toggle:visible" />;
 }
 
@@ -47,7 +54,7 @@ function Toggle({
       {...props}
     >
       {children}
-      <ToggleTick />
+      <ToggleTick size={size} />
     </TogglePrimitive>
   );
 }
