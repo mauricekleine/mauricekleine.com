@@ -108,7 +108,7 @@ export function Section({
   const heading = `${id}-heading`;
   return (
     <section id={id} aria-labelledby={heading} {...props} className={`mk-section ${props.className ?? ""}`.trim()}>
-      <h2 id={heading} className={hideTitle ? "visually-hidden" : "type-section"}>
+      <h2 id={heading} className={hideTitle ? "visually-hidden" : "type-section text-first"}>
         {title}
       </h2>
       {children}

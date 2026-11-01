@@ -93,7 +93,7 @@
     width: 264px;
     padding: 0 24px;
     border-right: 1px solid var(--rule);
-    color: var(--foreground);
+    color: var(--first);
     font: 400 21px/1 var(--font-display);
     letter-spacing: -0.02em;
   }
@@ -122,7 +122,7 @@
     grid-template-columns: 76px 1fr;
     align-content: center;
     row-gap: 5px;
-    width: 291px;
+    width: 368px;
     padding: 0 24px;
     border-left: 1px solid var(--rule);
   }
@@ -141,20 +141,6 @@
   }
   .mk-mast-mode {
     display: none;
-  }
-  .mk-house {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 77px;
-    border-left: 1px solid var(--rule);
-  }
-  .mk-house i {
-    width: 46px;
-    height: 46px;
-    background: var(--primary);
-    outline: 1px solid var(--foreground);
-    outline-offset: 3px;
   }
 
   /* the body: nav, page and aside. The nav's rule belongs to the column, so it runs past the first screen */
@@ -371,6 +357,7 @@
     background: var(--background);
   }
   .mk-knock h1 {
+    color: var(--first);
     font-family: var(--font-display);
     font-size: var(--text-hero);
     font-weight: 300;
@@ -497,7 +484,7 @@
     margin-top: 24px;
   }
 
-  /* side quests: a constellation, then the project; its stars take the house ink as you reach for it */
+  /* side quests: a constellation, then the project; its lines take the first ink as you reach for it */
   .waypoints,
   .graveyard,
   .essay-list {
@@ -527,11 +514,7 @@
   }
   .waypoint:hover .constellation,
   .waypoint:focus-within .constellation {
-    color: var(--primary);
-  }
-  .waypoint:hover .constellation rect,
-  .waypoint:focus-within .constellation rect {
-    fill: var(--primary);
+    color: var(--first);
   }
   .waypoint-name {
     font-family: var(--font-sans);
@@ -573,7 +556,7 @@
     }
     30% {
       scale: 3;
-      color: var(--primary);
+      color: var(--first);
     }
   }
   .grave-title {
@@ -872,7 +855,7 @@
     }
     .mk-meta {
       grid-template-columns: 64px 1fr;
-      width: 240px;
+      width: 312px;
       padding: 0 20px;
     }
   }
@@ -907,7 +890,6 @@
       border-right: 0;
     }
     .mk-crumb,
-    .mk-house,
     .mk-nav-foot {
       display: none;
     }

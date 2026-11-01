@@ -10,7 +10,7 @@ export function EssaysPage() {
   return (
     <Shell place="essays" crumb="maurice kleine" title="essays" sections={sections}>
       <PageHead>
-        <h1 className="type-hero">essays</h1>
+        <h1 className="type-hero text-first">essays</h1>
         <p className="mk-lede type-lede">
           longer thoughts, first posted on x and linkedin.
           <br />
