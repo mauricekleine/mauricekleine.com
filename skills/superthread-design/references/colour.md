@@ -41,9 +41,9 @@ Two names differ from shadcn's habits. `--destructive` is the key ink. A status 
 
 ## the house ink
 
-Plum is the house ink on every surface, one fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. A ship never sets a control colour, so every working page prints in two inks: key and plum.
+Plum is the house ink on every surface, one fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. The focus signal is the ring, a field's focus edge and its caret, and it doesn't count against the fill. A ship never sets a control colour, so every working page prints in two inks: key and plum.
 
-Off paper a plum fill prints pale pink, so a `default` button prints as the outline. Off paper means inside a dark scope: every surface of a dark page, and the frame on any page. On a light page a panel is paper, so `default` fills. The `key` variant is the strong action off paper: the first ink under the stock label, with `destructive-hover` and `-press` and no trash.
+Off paper a plum fill prints pale pink, so a `default` button prints as the outline. Off paper means inside a dark scope: every surface of a dark page, and the frame on any page. On a light page a panel is paper, so `default` fills. The `key` variant is the strong action off paper and every action that leaves the app, on any paper: the first ink under the stock label, with `destructive-hover` and `-press` and no trash.
 
 Every other control state prints in foreground: links, ticks, switches, radios, sliders, progress, the tab bar, a pressed toggle, an active filter and the table's row edge. A chosen option keeps its check over `raised-hover`, and a selected row keeps its strip over `control-hover`, with no plum tint.
 
@@ -55,7 +55,7 @@ Every other control state prints in foreground: links, ticks, switches, radios, 
 
 The label on plum clears 6.06:1 in light and 5.29:1 in dark. The other control states are key tints, carried as `--secondary-hover`, `--control-hover`, `--raised-hover` and `--destructive-hover`, each with a `-press` partner. A disabled control prints a faint fill and a disabled label.
 
-A current item in a nav prints in the `selected` role: the word, a 1 px edge and an 8 px square before the word, with no fill. `selected` is `foreground` on paper, and the frame and the ground pin it to the words beside it, so a nav drawn by hand reads the same role. The rail's current cell is neutral with its 8 px plum corner mark. `accent` is shadcn's tint role, which no item prints. Words inside accent and selection fills print in `foreground` or `muted-foreground`. Words in the house ink or a status ink sit on `background`, `card`, `muted`, `popover` or their own badge fill.
+A current item in a nav prints in the `selected` role: the word, a 1 px edge and an 8 px square before the word, with no fill. `selected` is `foreground` on paper, and the frame and the ground pin it to the words beside it, so a nav drawn by hand reads the same role. The rail's current cell is neutral with its 8 px plum corner mark. `accent` is shadcn's tint role, which no item prints. Words inside accent and selection fills print in `foreground` or `muted-foreground`. Words in a status ink sit on `background`, `card`, `muted`, `popover` or their own badge fill.
 
 ## statuses
 
