@@ -115,7 +115,7 @@ function Page() {
     <>
       <PageHead
         title="type"
-        lede="four faces, each with one job: unbounded for display, supreme for the interface, erode for reading and fragment mono for ids, numbers and code."
+        lede="four faces, each with one job: unbounded for display, supreme for the interface, erode for reading and fragment mono for ids, times, code and any figure that holds a column."
       />
 
       <Section id="faces" title="faces">
