@@ -18,4 +18,4 @@ bun run test     # worker regression tests
 bun run deploy   # deploy the build output with cf
 ```
 
-Workers Builds deploys from the repo root. Site guidance is in `apps/web/AGENTS.md`.
+Maurice deploys from the repo root on the M5. Site guidance is in `apps/web/AGENTS.md`.
