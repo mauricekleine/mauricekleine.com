@@ -53,8 +53,8 @@ try {
     throw new Error(`${target} is not a commit on origin/main`);
   }
 
-  // Workers Builds deploys artifact-share and the superthread site only for their paths,
-  // so each must contain the newest commit at or before the target that touched them.
+  // artifact-share and the superthread site change only with their paths, so each must
+  // contain the newest commit at or before the target that touched them.
   const workers = [{ name: "Web", url: "https://www.mauricekleine.com/api/deploy.json", target }];
   for (const [name, url, paths] of [
     ["Share", "https://share.mauricekleine.com/_health", SHARE_PATHS],

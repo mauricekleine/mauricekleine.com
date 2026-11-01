@@ -153,7 +153,7 @@ When the master world moves, run `vendor` against it, then regenerate. The tests
 7. a pinned version installs the same files, once a snapshot exists
 8. every upstream request came from the mirror, and none missed
 
-The report lands in `test/clean-room/.out/report.json`. Flags: `--record` re-records the mirror and the init form (network; rerun when the CLI pin moves or a run misses on `/upstream`), `--keep <name>` keeps the app with every item installed, `--overlay <file...>` builds from `HEAD` plus only the named files, `--registry <url>` installs from a running site, `--cli latest` runs `shadcn@latest`, and `--refresh-lock` refreshes the fixture's lock when web's pins move.
+The report lands in `test/clean-room/.out/report.json`. Flags: `--record` re-records the mirror and the init form (network; rerun when the CLI pin or the init form moves, or a run misses on `/upstream`), `--keep <name>` keeps the app with every item installed, `--overlay <file...>` builds from `HEAD` plus only the named files, `--registry <url>` installs from a running site, `--cli latest` runs `shadcn@latest`, and `--refresh-lock` refreshes the fixture's lock when web's pins move.
 
 To look at a kept app in a browser, run `bun test/clean-room/serve.ts <name>` from this directory. It serves the app on a free port on 127.0.0.1 in its own process group and writes the group and port to `test/clean-room/.out/`; `bun test/clean-room/serve.ts <name> --stop` stops that group. Run it directly, not through hyperspeed-run, which stops what its command started when the command exits.
 
@@ -161,7 +161,7 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 ## Versions and stamps
 
-- **Version.** `package.json` `version` is the one source for every item, `2.3.1` now. A fix to a served item ships as the next patch, a new item or variant as the next minor, and a changed API as the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
+- **Version.** `package.json` `version` is the one source for every item, `2.3.1` now. A fix to a served item ships as the next patch, including a fix that touches only an item's look or a token, such as a role a new ship needs. A new item or variant ships as the next minor, and so does a change to how the fleet prints, in an item's look or in a token, because every ship has to look at it. A changed API is the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
 - **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. In CSS, `/* @mk/<item> <version> */` is line 1.
 - **Meta.** Each built item JSON carries `meta: { version, sha256, tier, upstream }`: the hash of its targets and contents, its tier, and the base-nova item and CLI it was seeded from. A block's meta adds `serves`, the apps it serves. Meta stays in the registry and never reaches an installed file.
 - **Paths.** Latest: `/r/<name>.json` and `/r/registry.json`. Pinned: `/r/v/<version>/<name>.json` and `/r/v/<version>/registry.json`. Index: `/r/versions.json`, `{ latest, versions }`.
@@ -171,10 +171,12 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 Any change to a served item after its version reaches main ships as the next version.
 
-1. Set `version` in `package.json` to the next patch, minor or major.
-2. `git fetch origin`, then `bun run --cwd packages/superthread snapshot`. It refuses a version that origin/main already holds.
-3. Run `bun run test` and `bun run test:clean-room`, whose pinned step now installs from the new snapshot.
-4. Commit the snapshot as the pull request's last commit. If an item changes again before the merge, retake it: the script replaces a snapshot that is not on main yet.
+1. After editing `base.css`, `roles.ts`, `texture.css`, `scale.ts` or `icons.json`, run `texture`, `build`, then `upstream regen`.
+2. Set `version` in `package.json` to the next patch, minor or major.
+3. `git fetch origin`, then `bun run --cwd packages/superthread snapshot`. It refuses a version that origin/main already holds.
+4. Add the version to `PUBLISHED_VERSIONS` in `apps/superthread/tools/check-build.mjs`, and move the version in this file and in `skills/superthread-design/references/registry.md`.
+5. Run `bun run --cwd packages/superthread check`, `bun run test`, `bun run test:clean-room` and `bun run build:superthread`. The clean room's pinned step now installs from the new snapshot.
+6. Commit the snapshot as the pull request's last commit. If an item changes again before the merge, retake it: the script replaces a snapshot that is not on main yet.
 
 ## frozen v1 CSS
 
