@@ -412,6 +412,17 @@ test("link-quiet is a muted word with no underline that turns foreground and und
   ]);
 });
 
+test("hit-area takes the pointer at least 44 px each way, centred on its box, and link-quiet takes it on a phone", () => {
+  const sheet = parse(readFileSync(join(root, "tokens/utilities.css"), "utf8"));
+  const area = child(child(sheet, "@utility hit-area"), "&::after");
+  expect(value(area, "width")).toBe("max(100%, 44px)");
+  expect(value(area, "height")).toBe("max(100%, 44px)");
+  expect(value(area, "translate")).toBe("-50% -50%");
+  const phone = child(child(sheet, "@utility link-quiet"), "@media (max-width: 600px)");
+  expect(value(phone, "position")).toBe("relative");
+  expect(phone.decls.flat().join(" ")).toContain("@apply hit-");
+});
+
 test("texture-disabled screens the edge on ::before, a field box only for a disabled text control, and a bare input or textarea masks its own border (ruling 3)", () => {
   const disabled = utility("texture-disabled");
   const variant = child(disabled, "@variant disabled");

@@ -100,7 +100,7 @@ function SearchPaletteTrigger({
       aria-expanded={open}
       aria-controls={open ? contentId : undefined}
       className={cn(
-        "flex h-10 w-full min-w-0 items-center gap-2 border border-input bg-background px-3 text-left text-ui text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled",
+        "flex h-10 w-full min-w-0 items-center gap-2 border border-input bg-background px-3 text-left text-ui text-foreground [@media(max-width:600px)]:h-11 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled",
         className,
       )}
       {...props}

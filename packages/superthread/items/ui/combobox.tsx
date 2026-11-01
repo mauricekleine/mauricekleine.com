@@ -218,7 +218,7 @@ function ComboboxChips({
       data-slot="combobox-chips"
       data-mk="combobox"
       className={cn(
-        "flex min-h-10 flex-wrap items-center gap-1 border border-input bg-background px-2.5 py-1 text-ui [--fx:var(--primary)] has-[input:focus]:border-(--fx) has-[input:focus]:outline-2 has-[input:focus]:-outline-offset-2 has-[input:focus]:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] has-[[aria-invalid=true]]:border-error has-[[aria-invalid=true]]:[--fx:var(--error)] has-[input:disabled]:bg-faint has-[input:disabled]:text-disabled has-data-[slot=combobox-chip]:px-1",
+        "flex min-h-10 flex-wrap items-center gap-1 border border-input bg-background px-2.5 py-1 text-ui [@media(max-width:600px)]:min-h-11 [--fx:var(--primary)] has-[input:focus]:border-(--fx) has-[input:focus]:outline-2 has-[input:focus]:-outline-offset-2 has-[input:focus]:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] has-[[aria-invalid=true]]:border-error has-[[aria-invalid=true]]:[--fx:var(--error)] has-[input:disabled]:bg-faint has-[input:disabled]:text-disabled has-data-[slot=combobox-chip]:px-1",
         className,
       )}
       {...props}

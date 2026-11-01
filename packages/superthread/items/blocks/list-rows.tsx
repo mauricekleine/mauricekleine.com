@@ -43,7 +43,8 @@ function ListRowLead({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 // The title is plain text until it gets an href or the app's router link through render. Either way it prints in
-// foreground, and a linked title underlines on hover. A closed row's title keeps its strike under the pointer.
+// foreground, and a linked title underlines on hover and takes the hit area on a phone. A closed row's title keeps its
+// strike under the pointer.
 function ListRowTitle({ className, href, render, ...props }: useRender.ComponentProps<"a">) {
   return useRender({
     defaultTagName: "span",
@@ -53,7 +54,7 @@ function ListRowTitle({ className, href, render, ...props }: useRender.Component
       {
         href,
         className: cn(
-          "min-w-0 text-ui font-medium text-foreground [grid-area:title] [overflow-wrap:anywhere] decoration-1 underline-offset-4 [&:is(a)]:hover:underline group-data-[closed]/list-row:text-muted-foreground group-data-[closed]/list-row:line-through group-data-[closed]/list-row:hover:line-through focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          "min-w-0 text-ui font-medium text-foreground [grid-area:title] [overflow-wrap:anywhere] decoration-1 underline-offset-4 [&:is(a)]:hover:underline [@media(max-width:600px)]:[&:is(a)]:relative [@media(max-width:600px)]:[&:is(a)]:hit-area group-data-[closed]/list-row:text-muted-foreground group-data-[closed]/list-row:line-through group-data-[closed]/list-row:hover:line-through focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
           className,
         ),
       },
@@ -62,14 +63,14 @@ function ListRowTitle({ className, href, render, ...props }: useRender.Component
   });
 }
 
-// A time, a count or a small status badge sits at the end on wide rows, and figures stay mono when it wraps below the
-// title.
+// A time, a count or a small status badge sits at the end on wide rows. On a phone it wraps below the title, flush with
+// it, and figures stay mono.
 function ListRowAside({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="list-row-aside"
       className={cn(
-        "min-w-0 text-right type-instrument text-muted-foreground font-mono tabular-nums [grid-area:aside] [overflow-wrap:anywhere]",
+        "min-w-0 text-right type-instrument text-muted-foreground font-mono tabular-nums [grid-area:aside] [overflow-wrap:anywhere] [@media(max-width:600px)]:text-left",
         className,
       )}
       {...props}

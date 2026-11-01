@@ -50,13 +50,14 @@ function TabsList({
 
 // The current tab is solid: its word over a 2 px bar, both in foreground, and the bar covers the list's rule. A tab
 // that is not current previews that bar at the half on hover (texture-tabhover, on ::after, under the word). Focus is
-// the base layer's 2 px ring at 2 px offset.
+// the base layer's 2 px ring at 2 px offset. On a phone a tab is 44 px tall, with its word centred over the bar, and a
+// short word takes the pointer 44 px wide on ::before, since ::after belongs to the bar.
 function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
   return (
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex items-center gap-2 pb-3 text-ui font-medium whitespace-nowrap text-muted-foreground transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) hover:text-foreground disabled:pointer-events-none disabled:text-disabled aria-disabled:pointer-events-none aria-disabled:text-disabled data-disabled:pointer-events-none data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "relative inline-flex items-center gap-2 pb-3 text-ui font-medium whitespace-nowrap text-muted-foreground [@media(max-width:600px)]:h-11 [@media(max-width:600px)]:pb-0 [@media(max-width:600px)]:before:absolute [@media(max-width:600px)]:before:inset-y-0 [@media(max-width:600px)]:before:left-1/2 [@media(max-width:600px)]:before:w-[max(100%,44px)] [@media(max-width:600px)]:before:-translate-x-1/2 [@media(max-width:600px)]:before:content-[''] transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) hover:text-foreground disabled:pointer-events-none disabled:text-disabled aria-disabled:pointer-events-none aria-disabled:text-disabled data-disabled:pointer-events-none data-disabled:text-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0",
         "data-active:text-foreground data-active:after:absolute data-active:after:inset-x-0 data-active:after:-bottom-px data-active:after:h-0.5 data-active:after:bg-foreground",
         "texture-tabhover",
         className,

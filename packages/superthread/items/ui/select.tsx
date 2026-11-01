@@ -33,7 +33,7 @@ function SelectTrigger({
       data-mk="select"
       data-size={size}
       className={cn(
-        "flex w-fit cursor-pointer items-center justify-between gap-2.5 border border-input bg-background px-3 text-ui whitespace-nowrap text-foreground select-none [--fx:var(--primary)] focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled data-placeholder:text-muted-foreground data-[size=default]:h-10 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2.5 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "flex w-fit cursor-pointer items-center justify-between gap-2.5 border border-input bg-background px-3 text-ui whitespace-nowrap text-foreground select-none [@media(max-width:600px)]:data-[size=default]:h-11 [@media(max-width:600px)]:data-[size=sm]:h-11 [--fx:var(--primary)] focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled data-placeholder:text-muted-foreground data-[size=default]:h-10 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2.5 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}

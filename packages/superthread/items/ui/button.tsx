@@ -8,9 +8,10 @@ import { Icon } from "@/components/superthread/ui/glyphs";
 // action that leaves the app. Hover and press come from the --*-hover and --*-press roles (light overprints key, dark
 // lifts the ink). Focus is the base layer's 2 px ring at 2 px offset, so nothing here silences it, and only the fill,
 // edge and label travel, so the ring snaps on. A disabled button keeps a flat fill and a plain label, and
-// texture-disabled screens its edge back to the half on ::before, which is why every button stays positioned.
+// texture-disabled screens its edge back to the half on ::before, which is why every button stays positioned. On a
+// phone every size keeps its box and takes the pointer through a 44 px hit area on ::after.
 const buttonVariants = cva(
-  "group/button relative inline-flex shrink-0 items-center justify-center border border-transparent font-medium whitespace-nowrap transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none disabled:pointer-events-none disabled:bg-faint disabled:text-disabled aria-invalid:border-error texture-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "group/button relative inline-flex shrink-0 items-center justify-center border border-transparent font-medium whitespace-nowrap transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none disabled:pointer-events-none disabled:bg-faint disabled:text-disabled aria-invalid:border-error texture-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0 [@media(max-width:600px)]:hit-area",
   {
     variants: {
       variant: {

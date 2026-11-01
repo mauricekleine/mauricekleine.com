@@ -42,7 +42,7 @@ function SortableHead({
         type="button"
         onClick={() => onSort(sort === "ascending" ? "descending" : "ascending")}
         className={cn(
-          "group/sort flex w-full items-center gap-2 text-left type-instrument focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)",
+          "group/sort relative flex w-full items-center gap-2 text-left type-instrument [@media(max-width:600px)]:hit-area focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)",
           kind === "number" ? "justify-end" : "justify-between",
         )}
       >

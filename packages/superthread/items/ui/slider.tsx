@@ -32,7 +32,7 @@ function Slider({ className, defaultValue, value, min = 0, max = 100, ...props }
           <SliderPrimitive.Thumb
             data-slot="slider-thumb"
             key={index}
-            className="relative block size-4 shrink-0 border border-foreground bg-background transition-[background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none after:absolute after:-inset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-(--ring) not-data-disabled:hover:bg-control-hover data-dragging:bg-control-hover data-disabled:pointer-events-none data-disabled:border-disabled"
+            className="relative block size-4 shrink-0 border border-foreground bg-background transition-[background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none hit-area focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-(--ring) not-data-disabled:hover:bg-control-hover data-dragging:bg-control-hover data-disabled:pointer-events-none data-disabled:border-disabled"
           />
         ))}
       </SliderPrimitive.Control>

@@ -46,6 +46,7 @@ Links print in foreground, 4 px above their underline. A link in running text ke
 - On a ship surface the working panel is at most 880 px wide and the reading sheet 672 px, both beside the fleet rail and the ship's nav. No ship widens the panel and there is no wide setting, so main content holds its place between pages. The reading page keeps a 264 px margin on the ground for its contents and progress.
 - `AppShellPanel` is a size container, and text in it wraps anywhere, except inside a table's cells.
 - At 900 px and below the fleet rail becomes a 48 px bar above the panel, with 12 px of ground on each side of it. At 600 px and below the phone type steps apply.
+- At 600 px and below every target reaches 44 px. A field or a tab grows to 44 px. A button, a toggle, a link part or a nav item keeps its box and takes the `hit-area` utility, which needs a positioned host. A row of nav items wraps on a 44 px pitch, and rail cells at 36 px carry a hit area.
 
 ## shape
 

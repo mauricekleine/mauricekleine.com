@@ -44,7 +44,7 @@ function BreadcrumbLink({ className, render, ...props }: useRender.ComponentProp
     props: mergeProps<"a">(
       {
         className: cn(
-          "text-muted-foreground transition-[color] duration-(--duration-instant) ease-(--ease-brand) hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          "link-quiet focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
           className,
         ),
       },

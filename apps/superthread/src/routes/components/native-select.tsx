@@ -34,7 +34,8 @@ function Page() {
       </Section>
       <Section id="sizes" title="sizes">
         <p className="st-e-copy">
-          default is 40 px high and small is 32 px. the native options and right-hand chevron stay the same.
+          default is 40 px high and small is 32 px, and both are 44 px on a phone. the native options and right-hand
+          chevron stay the same.
         </p>
         <ModePair className="st-e-wide">
           <NativeSelectSizes />

@@ -461,7 +461,7 @@ Space runs on Tailwind's default 4 px step, used at 4, 8, 12, 16, 24, 32, 48, 64
 - **Sections.** A section head sits inside its full-bleed rule, with 64 px above it and 44 px between the head and its content; panes pad 36 to 48 px.
 - **Docs and public pages** print on the stock, with full-bleed rules, a boxed nav and an aside, and no fleet rail.
 - **Ship surfaces** print on the deep ground: the fleet rail and the ship's nav flat on it, the working panel raised on it. The base layer gives a ship's `html` the ground and its scrollbar, keyed to `data-mk="fleet-rail"`, so the window never shows stock past the page's edge and a page with no rail stays on stock. The working panel is at most 880 px wide. No ship widens it and there is no wide setting, so main content holds its place between pages. The reading sheet is 672 px with 72 px of padding, and the reading page keeps a 264 px margin on the ground for its contents and progress. The panel is a size container, and text in it wraps anywhere, except inside a table's cells.
-- **Breakpoints.** At 900 px and below the fleet rail becomes a 48 px bar of 32 px marks above the panel, the current cell neutral on its plum corner mark, with 12 px of ground on each side of the panel. At 420 px and below its cells tighten to 36 px so the whole rail fits a phone. At 600 px and below the phone type steps and the phone plates apply. The site adds two of its own for its docs shell (1279 px, where the masthead and aside tighten, and 1099 px, where the aside drops below the page); they are the site's, not the tokens'.
+- **Breakpoints.** At 900 px and below the fleet rail becomes a 48 px bar of 32 px marks above the panel, the current cell neutral on its plum corner mark, with 12 px of ground on each side of the panel. At 420 px and below the bar spans the width and its cells tighten to 36 px, each with a hit area that keeps it a full target, so the whole rail fits a phone. At 600 px and below the phone type steps and the phone plates apply, and every target reaches 44 px: a field or a tab grows to 44 px, and a button, a toggle, a link part or a nav item keeps its box and takes the `hit-area` utility. The site adds two of its own for its docs shell (1279 px, where the masthead and aside tighten, and 1099 px, where the aside drops below the page); they are the site's, not the tokens'.
 
 **The Full Bleed Rule.** Horizontal rules belong to the page: they run to both window edges, past every column, and no column stops them.
 
@@ -531,7 +531,7 @@ Every `@mk` item is a branded skin on base-nova, shadcn's Base UI style: shadcn'
 
 Square, one chromatic ink, quick to answer.
 
-- **Shape:** square corners (0px), a 1 px edge; 40 px tall with 18 px sides at the default size (24, 32 and 48 px for `xs`, `sm` and `lg`, and square icon sizes), Supreme 500 at the UI or instrument step.
+- **Shape:** square corners (0px), a 1 px edge; 40 px tall with 18 px sides at the default size (24, 32 and 48 px for `xs`, `sm` and `lg`, and square icon sizes), Supreme 500 at the UI or instrument step. At 600 px and below every size keeps its box and takes the pointer through a 44 px hit area.
 - **Primary:** plum fill and edge under the stock label; hover and press take `primary-hover` and `primary-press`, and press adds a 1 px key inset. Off paper the fill would print pale pink, so the button prints as the outline. Off paper means inside a dark scope: every surface of a dark page, and the frame on any page. On a light page a panel is paper, so the button fills.
 - **Secondary / Outline / Ghost:** secondary is key 12 with key words; outline draws its edge in the current colour; ghost has no edge. Their hovers and presses come from the `secondary-*` and `control-*` roles, or `raised-*` on a raised layer.
 - **Destructive:** the key ink with the trash glyph before its word (the trash alone on an icon button).
@@ -547,8 +547,8 @@ Square, one chromatic ink, quick to answer.
 
 ### Fields
 
-- **Style:** input, textarea and the select trigger are 40 px boxes (the textarea grows from three lines) with a 1 px `input` edge on the stock, 12 px sides, Supreme at 14 px. The input group is one box holding a text control with addons and buttons beside it; its controls carry no box of their own.
-- **One row, one height:** controls side by side share a height, so a button or toggle beside a field stays at the 40 px default. `sm` is for a control inside a field and for a row of nothing but `sm` controls.
+- **Style:** input, textarea and the select trigger are 40 px boxes, 44 px at 600 px and below (the textarea grows from three lines) with a 1 px `input` edge on the stock, 12 px sides, Supreme at 14 px. The input group is one box holding a text control with addons and buttons beside it; its controls carry no box of their own.
+- **One row, one height:** controls side by side share a height, so a button or toggle beside a field stays at the 40 px default. `sm` is for a control inside a field and for a row of nothing but `sm` controls. At 600 px and below a `sm` field is 44 px too, and a joined `ButtonGroup` holding a field takes 44 px across every child.
 - **Focus:** the box's edge becomes 2 px inside it in `--fx`, and the caret follows (see Shapes).
 - **Error / Disabled:** `aria-invalid` turns the edge and `--fx` to the error ink, and the error message leads with the bang glyph. Disabled prints a faint fill, the disabled label and the edge screened back to 50 percent; a disabled button inside an input group screens itself, never the box.
 
@@ -558,11 +558,11 @@ The trigger is a field whose box is the control. The list is a raised layer on t
 
 ### Checkbox
 
-An 18 px square with the input edge, and a control: its focus ring sits 2 px outside it. Checked fills it with foreground under a stock check; mixed (some, not all) keeps the stock fill inside a foreground edge and prints its 12 px square at 50 percent.
+An 18 px square with the input edge, and a control: its focus ring sits 2 px outside it, and its hit area reaches 44 px at any width. Checked fills it with foreground under a stock check; mixed (some, not all) keeps the stock fill inside a foreground edge and prints its 12 px square at 50 percent.
 
 ### Tabs
 
-The default list draws its own 1 px rule; the line list leaves the rule to the page. The current tab is solid: its word and a 2 px bar that covers the rule, both in foreground. A tab that is not current previews that bar at 50 percent on hover.
+The default list draws its own 1 px rule; the line list leaves the rule to the page. A tab is 44 px at 600 px and below. The current tab is solid: its word and a 2 px bar that covers the rule, both in foreground. A tab that is not current previews that bar at 50 percent on hover.
 
 ### Table
 
@@ -602,15 +602,15 @@ Pass items: base-nova's card, label and separator on the tokens, square and rule
 
 ### Switch
 
-A square track with the input edge on the stock and an input-ink square inside it. On, the track fills with foreground and the square crosses to the right in the stock ink, on the quick duration; hover overprints the fill. The track is a control, with the outside ring. Disabled, the track and its square take the disabled ink on faint stock. The world rejected a screened track: on must read as settled.
+A square track with the input edge on the stock and an input-ink square inside it. On, the track fills with foreground and the square crosses to the right in the stock ink, on the quick duration; hover overprints the fill. The track is a control, with the outside ring and a 44 px hit area. Disabled, the track and its square take the disabled ink on faint stock. The world rejected a screened track: on must read as settled.
 
 ### Radio group
 
-An 18 px stock square with the input edge and an outside control ring. Chosen, a foreground edge encloses an 8 px foreground square; disabled, the edge and square take the disabled ink on faint stock. The grid leaves 12 px between choices.
+An 18 px stock square with the input edge, an outside control ring and a 44 px hit area. Chosen, a foreground edge encloses an 8 px foreground square; disabled, the edge and square take the disabled ink on faint stock. The grid leaves 12 px between choices.
 
 ### Slider
 
-An 8 px ruled stock track holds a flat foreground range, with no screen. The 16 px square thumbs keep their outside control ring when the range input takes keyboard focus, and take the control hover fill on hover or drag. Vertical tracks mirror the same dimensions; disabled tracks and thumbs use the disabled edge and range ink.
+An 8 px ruled stock track holds a flat foreground range, with no screen. The 16 px square thumbs carry a 44 px hit area, keep their outside control ring when the range input takes keyboard focus, and take the control hover fill on hover or drag. Vertical tracks mirror the same dimensions; disabled tracks and thumbs use the disabled edge and range ink.
 
 ### Toggle
 
@@ -634,7 +634,7 @@ Fieldsets keep their upstream parts and orientation variants. Legends set in mon
 
 ### Native select
 
-The native select is a flat 40 px field box, or 32 px at the small size, with the input edge and the same inside focus edge as the select trigger. Invalid changes the edge and focus ink together; disabled uses the faint fill and disabled label. A pixel chevron sits at the right without taking pointer input, and options keep native platform semantics.
+The native select is a flat 40 px field box, or 32 px at the small size, and 44 px at either size at 600 px and below, with the input edge and the same inside focus edge as the select trigger. Invalid changes the edge and focus ink together; disabled uses the faint fill and disabled label. A pixel chevron sits at the right without taking pointer input, and options keep native platform semantics.
 
 ### Accordion
 
@@ -642,7 +642,7 @@ Rows run between full-width 1 px rules. The 48 px trigger keeps its focus ring i
 
 ### Breadcrumb
 
-A wrapping path at the instrument step, with muted links that take foreground ink on hover and the control ring on keyboard focus. The current page prints in foreground ink. Right-facing pixel chevrons separate the items, and a 20 px square holds the more glyph for an omitted stretch.
+A wrapping path at the instrument step, with `link-quiet` links that take the control ring on keyboard focus. The current page prints in foreground ink. Right-facing pixel chevrons separate the items, and a 20 px square holds the more glyph for an omitted stretch.
 
 ### Resizable
 
@@ -658,7 +658,7 @@ The input is an input group whose field box owns focus; trigger and clear keep t
 
 ### Command
 
-The cmdk surface stays flat, with a 40 px input group and a scroll list of 36 px rows. cmdk's selected state means the pointer or keys position, so it takes the raised hover fill rather than the chosen box. Group headings use the meta step and shortcuts use Fragment Mono. The palette uses the dialog's sheet and contact edge, with its lowercase accessible title and description inside it.
+The cmdk surface stays flat, with a 40 px input group, 44 px on a phone, and a scroll list of 36 px rows. cmdk's selected state means the pointer or keys position, so it takes the raised hover fill rather than the chosen box. Group headings use the meta step and shortcuts use Fragment Mono. The palette uses the dialog's sheet and contact edge, with its lowercase accessible title and description inside it.
 
 ### Alert dialog
 
@@ -674,7 +674,7 @@ Blocks (`registry:block`) are the patterns the fleet's apps repeat, built only f
 
 | block              | parts                                                                                                                                           | what it settles                                                                                                                                                                                                                                                                                                          |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| app-shell          | `AppShell`, `AppShellNav`, `AppShellNavItem`, `AppShellGround`, `AppShellPanel`                                                                 | the fleet rail with the ship's own nav, the deep ground as `#main` and the working panel on the sheet lift; below 900 px the nav wraps into a row of links                                                                                                                                                               |
+| app-shell          | `AppShell`, `AppShellNav`, `AppShellNavItem`, `AppShellGround`, `AppShellPanel`                                                                 | the fleet rail with the ship's own nav, the deep ground as `#main` and the working panel on the sheet lift; below 900 px the nav wraps into a row of 32 px links on a 44 px pitch, each with a hit area                                                                                                                  |
 | page-header        | `PageHeader`, `PageHeaderBack`, `PageHeaderTitle`, `PageHeaderMeta`, `PageHeaderActions`, `PageHeaderDescription`                               | the title at the section step in the first ink (hero on `size="page"`), a way back, live meta, actions at the end and a lede on the reading measure; no line above the title                                                                                                                                             |
 | section-header     | `Section`, `SectionHeader`, `SectionTitle`, `SectionCount`, `SectionAction`                                                                     | a section named by its title over a foreground rule, a live count and a `link-quiet` way onward; 48 px between sections                                                                                                                                                                                                  |
 | collection-toolbar | `CollectionToolbar`, `ToolbarGroup`, `ToolbarSpacer`, `FilterChip`, `ToolbarCount`, `ViewSwitch`                                                | labelled control groups that wrap, the active filter in a foreground edge with no fill and its own clear control, a live "n of m" count and a one-pressed view switch                                                                                                                                                    |

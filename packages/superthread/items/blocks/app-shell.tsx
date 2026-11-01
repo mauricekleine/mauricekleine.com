@@ -36,7 +36,7 @@ function AppShellNav({
       </SidebarHeader>
       <SidebarContent className="overflow-visible py-2 [@media(max-width:900px)]:py-0">
         <nav aria-label={ship}>
-          <SidebarMenu className="[@media(max-width:900px)]:flex-row [@media(max-width:900px)]:flex-wrap [@media(max-width:900px)]:gap-x-1 [@media(max-width:900px)]:gap-y-0">
+          <SidebarMenu className="[@media(max-width:900px)]:flex-row [@media(max-width:900px)]:flex-wrap [@media(max-width:900px)]:gap-x-1 [@media(max-width:900px)]:gap-y-3">
             {children}
           </SidebarMenu>
         </nav>
@@ -45,7 +45,9 @@ function AppShellNav({
   );
 }
 
-// A nav link keeps the sidebar item's neutral current state; numbers and changing counts print in mono.
+// A nav link keeps the sidebar item's neutral current state; numbers and changing counts print in mono. Below 900 px it
+// is 32 px with a 44 px hit area, measured from the menu item, so the sidebar button's clip leaves the area alone, and
+// wrapped rows keep that 44 px pitch.
 function AppShellNavItem({
   isActive = false,
   render = <a />,
@@ -62,7 +64,7 @@ function AppShellNavItem({
         isActive={isActive}
         aria-current={isActive ? "page" : undefined}
         className={cn(
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:900px)]:h-8 [@media(max-width:900px)]:w-auto",
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:900px)]:h-8 [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:hit-area",
           className,
         )}
         {...props}

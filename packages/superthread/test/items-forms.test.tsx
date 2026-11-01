@@ -400,14 +400,7 @@ describe("breadcrumb", () => {
       ]),
     );
     expect(one(host, '[data-slot="breadcrumb-link"]').classes).toEqual(
-      expect.arrayContaining([
-        ...CONTROL_RING,
-        "text-muted-foreground",
-        "hover:text-foreground",
-        "transition-[color]",
-        "duration-(--duration-instant)",
-        "ease-(--ease-brand)",
-      ]),
+      expect.arrayContaining([...CONTROL_RING, "link-quiet"]),
     );
   });
   test("separators face right, custom separators stay, and the ellipsis says more", () => {

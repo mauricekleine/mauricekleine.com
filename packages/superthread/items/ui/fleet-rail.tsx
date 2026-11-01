@@ -10,8 +10,9 @@ const MARK_BASE = "https://superthread.mauricekleine.com/marks";
 
 // The rail and the ship's nav print on the deep ground. Every cell is a 32 px mark; hover or focus inverts the
 // cell, swaps in the light mark and slides out a joined tab, the ship's name over its descriptor. At 900 px and below
-// the rail is a bar. The frame stays in view as the page scrolls, and the rail's last cell is the fleet's one mode
-// control, so a ship adds neither.
+// the rail is a bar. At 420 px and below the bar spans the width, each cell tightens to 36 px and keeps a 44 px pitch
+// through a hit area on ::before. The frame stays in view as the page scrolls, and the rail's last cell is the fleet's
+// one mode control, so a ship adds neither.
 //
 // The ground keeps the mode it is in, and the frame on it (the rail and the ship's sidebar) prints in the dark palette
 // in both modes, as the world's gutter does. GROUND holds the ground's roles where the frame paints them, and
@@ -23,15 +24,17 @@ const GROUND =
 const ON_GROUND =
   "dark [--sidebar:var(--sidebar-ground)]! [--sidebar-foreground:var(--sidebar-ground-foreground)]! [--sidebar-hover:var(--sidebar-ground-hover)]! [--selected:var(--sidebar-foreground)]!";
 const nav =
-  "relative z-20 flex w-[58px] shrink-0 flex-col border border-sidebar-border [@media(max-width:900px)]:w-max [@media(max-width:900px)]:flex-row";
+  "relative z-20 flex w-[58px] shrink-0 flex-col border border-sidebar-border [@media(max-width:900px)]:w-max [@media(max-width:900px)]:flex-row [@media(max-width:420px)]:w-full!";
 const home =
-  "grid h-[57px] shrink-0 place-items-center border-b border-sidebar-border [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:w-[49px] [@media(max-width:900px)]:border-r [@media(max-width:900px)]:border-b-0 [@media(max-width:420px)]:w-10!";
+  "grid h-[57px] shrink-0 place-items-center border-b border-sidebar-border [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:w-[49px] [@media(max-width:900px)]:border-r [@media(max-width:900px)]:border-b-0 [@media(max-width:420px)]:w-11!";
 const list =
-  "flex flex-col py-1 [@media(max-width:900px)]:flex-row [@media(max-width:900px)]:px-0.5 [@media(max-width:900px)]:py-0";
+  "flex flex-col py-1 [@media(max-width:900px)]:flex-row [@media(max-width:900px)]:px-0.5 [@media(max-width:900px)]:py-0 [@media(max-width:420px)]:flex-1 [@media(max-width:420px)]:justify-between [@media(max-width:420px)]:px-0!";
+const slot =
+  "[@media(max-width:420px)]:grid [@media(max-width:420px)]:flex-1 [@media(max-width:420px)]:place-items-center";
 const modeSlot =
-  "border-t border-sidebar-border py-1 [@media(max-width:900px)]:border-t-0 [@media(max-width:900px)]:border-l [@media(max-width:900px)]:px-0.5 [@media(max-width:900px)]:py-0";
+  "border-t border-sidebar-border py-1 [@media(max-width:900px)]:border-t-0 [@media(max-width:900px)]:border-l [@media(max-width:900px)]:px-0.5 [@media(max-width:900px)]:py-0 [@media(max-width:420px)]:grid [@media(max-width:420px)]:w-11 [@media(max-width:420px)]:flex-none [@media(max-width:420px)]:place-items-center [@media(max-width:420px)]:px-0!";
 const cell =
-  "group/cell relative m-1 grid h-12 place-items-center border border-transparent transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) motion-reduce:transition-none [@media(max-width:900px)]:mx-0.5 [@media(max-width:900px)]:size-10 [@media(max-width:420px)]:mx-0! [@media(max-width:420px)]:size-9!";
+  "group/cell relative m-1 grid h-12 place-items-center border border-transparent transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) motion-reduce:transition-none [@media(max-width:900px)]:mx-0.5 [@media(max-width:900px)]:size-10 [@media(max-width:420px)]:mx-0! [@media(max-width:420px)]:size-9! [@media(max-width:420px)]:before:absolute [@media(max-width:420px)]:before:-inset-x-[5px] [@media(max-width:420px)]:before:-inset-y-1.5 [@media(max-width:420px)]:before:content-['']";
 const linked =
   "hover:border-foreground hover:bg-foreground focus-visible:border-foreground focus-visible:bg-foreground";
 // The current cell is neutral, with an 8 px plum corner mark, the only plum on a cell's edge.
@@ -147,7 +150,7 @@ export function FleetRail({
                 const dark = mark(ship.id, ship.mark.dark);
 
                 return (
-                  <li key={ship.id}>
+                  <li key={ship.id} className={slot}>
                     {href ? (
                       <a
                         data-slot="fleet-rail-cell"

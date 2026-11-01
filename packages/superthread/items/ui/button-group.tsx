@@ -5,9 +5,10 @@ import { cn } from "@/components/superthread/lib/utils";
 
 import { Separator } from "@/components/superthread/ui/separator";
 
-// Neighbouring boxes share a 1 px edge; the focused child rises so its ring stays visible.
+// Neighbouring boxes share a 1 px edge; the focused child rises so its ring stays visible. On a phone a group holding a
+// field takes the field's 44 px across every child, so joined boxes keep one height.
 const buttonGroupVariants = cva(
-  "flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1",
+  "flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 [@media(max-width:600px)]:has-[>input,>[data-slot=input-group],>[data-slot=select-trigger]]:*:h-11",
   {
     variants: {
       orientation: {
