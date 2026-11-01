@@ -1,6 +1,13 @@
 @layer base {
   * {
     border-color: var(--border);
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
+
+  /* a ship's window keeps the deep ground past the page's edges; a page with no rail stays on stock */
+  html:has([data-mk="fleet-rail"]) {
+    background-color: var(--ground);
+    scrollbar-color: var(--sidebar-border) var(--ground);
   }
 
   body {
@@ -12,11 +19,17 @@
     font-variant-numeric: tabular-nums;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
   }
 
   ::selection {
     background-color: var(--selection);
     color: var(--foreground);
+  }
+
+  /* the caret takes the ring's ink; a field item's --fx takes over inside its box */
+  :where(input, textarea, [contenteditable]) {
+    caret-color: var(--ring);
   }
 
   /* buttons, tabs, links and rail cells keep a 2 px ring at 2 px; fields own their focus in their skins */

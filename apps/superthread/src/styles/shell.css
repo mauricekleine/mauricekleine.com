@@ -6,6 +6,11 @@
   html {
     scroll-padding-top: 77px;
   }
+  /* a rail specimen on a docs page is no ship: the window stays on stock */
+  html:has(.st-body) {
+    background-color: var(--background);
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
 
   .st-skip {
     position: fixed;
@@ -210,7 +215,7 @@
     scrollbar-width: thin;
   }
 
-  /* the nav: groups under mono labels, the current page boxed in the house ink with its 8 px square. Overview,
+  /* the nav: groups under mono labels, the current page neutral in the selected role with its 8 px square. Overview,
      foundations and components scroll on their own, cut at the masthead's rule above and at the foot's rule below;
      the mock pages, install and the mode control hold the foot, as the sketch prints them */
   .st-sidenav {
@@ -254,8 +259,8 @@
     }
   }
   .st-sidenav a[aria-current="page"] {
-    border-color: var(--primary);
-    background: var(--accent);
+    border-color: var(--selected);
+    color: var(--selected);
     font-weight: 500;
   }
   .st-sidenav a[aria-current="page"]::before {
@@ -263,7 +268,7 @@
     flex: none;
     width: 8px;
     height: 8px;
-    background: var(--primary);
+    background: var(--selected);
   }
 
   /* the mode control: three cells in one box; the stored choice prints pressed from <html data-theme-choice>, so
@@ -321,7 +326,7 @@
     line-height: 28px;
   }
   .st-toc a[aria-current] {
-    color: var(--foreground);
+    color: var(--selected);
     font-weight: 500;
   }
   .st-wedge {

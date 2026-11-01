@@ -33,9 +33,6 @@
   body {
     min-height: 100dvh;
   }
-  input {
-    caret-color: var(--primary);
-  }
 
   .visually-hidden,
   .mk-skip:not(:focus) {
@@ -191,8 +188,8 @@
     }
   }
   .mk-nav a[aria-current="page"] {
-    border-color: var(--primary);
-    background: var(--accent);
+    border-color: var(--selected);
+    color: var(--selected);
     font-weight: 500;
   }
   .mk-nav a[aria-current="page"]::before {
@@ -200,7 +197,7 @@
     flex: none;
     width: 8px;
     height: 8px;
-    background: var(--primary);
+    background: var(--selected);
   }
   .mk-nav-foot {
     padding: 20px 16px;
@@ -296,7 +293,7 @@
     }
   }
   .mk-toc a[aria-current] {
-    color: var(--foreground);
+    color: var(--selected);
     font-weight: 500;
   }
 

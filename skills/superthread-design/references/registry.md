@@ -66,11 +66,12 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 </FleetRail>
 ```
 
-- `current` is the ship's id; its cell is boxed in plum.
+- `current` is the ship's id; its cell is neutral, with an 8 px plum corner mark.
 - `hrefs` maps `home` and ship ids to URLs, and only needs the links that differ from the fleet's. `@mk/fleet` carries each ship's public url from the marks manifest, so a ship left out links there and `home` links to superthread. Pass `"/"` for the app's own ship and `null` to unlink a cell. A ship with no url prints as a disabled cell, and one with `"rail": false` in the manifest (soliton) gets no cell.
 - `sidebar` is the ship's own nav, which prints beside the rail on the deep ground. Above 900 px both stick to the top of the window while the panel scrolls.
 - The last cell is the mode toggle.
 - `markBase` changes where the marks load from; `label` is the rail's accessible name (default `fleet`).
+- The rail brings a skip link to `#main`, and `AppShellGround` is that target when it renders `main`. Pass `skipLink={false}` for a rail embedded in a page that owns its own.
 
 ## pinning a version
 

@@ -5,7 +5,7 @@ import { nav, navPinned, navSections, type NavEntry, type NavSection } from "./n
 import { useEntry } from "./layout";
 import { ThemeControl } from "./ThemeControl";
 
-// The docs nav: one group per section, the current page boxed with the house square. Overview, foundations and
+// The docs nav: one group per section, the current page neutral with its 8 px square. Overview, foundations and
 // components scroll on their own; the mock pages, install and the mode control hold the foot, under a 1 px rule
 // that marks where the scrolling list is cut.
 export function SideNav({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {

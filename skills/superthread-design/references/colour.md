@@ -41,7 +41,7 @@ Two names differ from shadcn's habits. `--destructive` is the key ink. A status 
 
 ## the house ink
 
-Plum is the one control colour on every surface: primary actions, links, focus rings, the current item (nav, contents, the rail cell's outline), selection and accent tints, the progress fill, the second plate of the opener and figures, and the rail's home cell. A ship never sets a control colour, so every working page prints in two inks: key and plum.
+Plum is the house ink on every surface, one fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. A ship never sets a control colour, so every working page prints in two inks: key and plum.
 
 | state   | light     | dark      |
 | ------- | --------- | --------- |
@@ -51,7 +51,7 @@ Plum is the one control colour on every surface: primary actions, links, focus r
 
 The label on plum clears 6.06:1 in light and 5.29:1 in dark. The other control states are key tints, carried as `--secondary-hover`, `--control-hover`, `--raised-hover` and `--destructive-hover`, each with a `-press` partner. A disabled control prints a faint fill and a disabled label.
 
-The current item is boxed: a house tint fill, a 1 px house edge and an 8 px house square at its corner. Words inside accent and selection fills print in `foreground` or `muted-foreground`. Words in the house ink or a status ink sit on `background`, `card`, `muted`, `popover` or their own badge fill.
+A current item in a nav prints in the `selected` role: the word, a 1 px edge and an 8 px square before the word, with no fill. `selected` is `foreground` on paper, and the frame and the ground pin it to the words beside it, so a nav drawn by hand reads the same role. The rail's current cell is neutral with its 8 px plum corner mark. Words inside accent and selection fills print in `foreground` or `muted-foreground`. Words in the house ink or a status ink sit on `background`, `card`, `muted`, `popover` or their own badge fill.
 
 ## statuses
 

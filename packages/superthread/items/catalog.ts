@@ -279,7 +279,7 @@ export const catalog: CatalogItem[] = [
     name: "sidebar",
     type: "registry:ui",
     title: "sidebar",
-    description: "the sidebar on the deep ground, with a boxed current item",
+    description: "the sidebar on the deep ground, with a neutral current item",
     files: [ui("sidebar")],
     tier: "brand",
     upstream: "sidebar",

@@ -45,7 +45,7 @@ function AppShellNav({
   );
 }
 
-// A nav link keeps the sidebar item's boxed current state; numbers and changing counts print in mono.
+// A nav link keeps the sidebar item's neutral current state; numbers and changing counts print in mono.
 function AppShellNavItem({
   isActive = false,
   render = <a />,
@@ -91,17 +91,20 @@ function AppShellNavItem({
 }
 
 // The app's ground starts level with the frame and keeps 12 px beside the working panel below 900 px.
-// It is the page's main, named workspace; render a div when the app's layout already owns main.
-// Inside another landmark, pass role="group" to AppShellNav.
+// It is the page's main, named workspace, and the rail's skip link lands on it, so it takes focus and prints no ring;
+// render a div when the app's layout already owns main. Inside another landmark, pass role="group" to AppShellNav.
+// The ground is dark in both modes, so a nav drawn on it holds the selected role to the ground's words.
 function AppShellGround({ className, render, ...props }: useRender.ComponentProps<"main">) {
   return useRender({
     render: render ?? <main />,
     state: { slot: "app-shell-ground", mk: "app-shell" },
     props: mergeProps<"main">(
       {
+        id: render ? undefined : "main",
+        tabIndex: render ? undefined : -1,
         "aria-label": render ? undefined : "workspace",
         className: cn(
-          "min-w-0 flex-1 pt-4 pr-12 pb-[72px] pl-8 text-ground-foreground [@media(max-width:900px)]:px-3 [@media(max-width:900px)]:pt-0 [@media(max-width:900px)]:pb-10",
+          "min-w-0 flex-1 pt-4 pr-12 pb-[72px] pl-8 text-ground-foreground outline-0 [--selected:var(--ground-foreground)] [@media(max-width:900px)]:px-3 [@media(max-width:900px)]:pt-0 [@media(max-width:900px)]:pb-10",
           className,
         ),
       },
@@ -110,14 +113,15 @@ function AppShellGround({ className, render, ...props }: useRender.ComponentProp
   });
 }
 
-// The working panel takes the sheet lift on the deep ground, with the board's measure and phone padding.
+// The working panel takes the sheet lift on the deep ground, with the board's measure and phone padding. It is paper
+// again, so the selected role returns to the page's foreground.
 function AppShellPanel({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
       data-mk="app-shell"
       data-slot="app-shell-panel"
       className={cn(
-        "min-w-0 max-w-[880px] bg-card px-12 pt-10 pb-7 text-card-foreground shadow-sheet [@media(max-width:600px)]:px-4 [@media(max-width:600px)]:pt-7 [@media(max-width:600px)]:pb-4",
+        "min-w-0 max-w-[880px] bg-card px-12 pt-10 pb-7 text-card-foreground shadow-sheet [--selected:var(--foreground)] [@media(max-width:600px)]:px-4 [@media(max-width:600px)]:pt-7 [@media(max-width:600px)]:pb-4",
         className,
       )}
       {...props}

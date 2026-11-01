@@ -50,7 +50,7 @@ The reading page sets Erode at 19 px on 32 px with a 27.5em measure (about 66 ch
 
 ## focus
 
-- **Controls** (buttons, tabs, links, rail cells) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible`.
+- **Controls** (buttons, tabs, links, rail cells) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible`. Inside the ship's nav the ring prints in `sidebar-foreground`, so the nav holds no plum.
 - **Fields** (input, textarea, input group, the select trigger) own their focus. While the text control holds focus, the box's 1 px edge becomes a 2 px edge drawn inside it (`outline: 2px` at `-2px` offset, in `--fx`) and the caret takes the same ink. `--fx` is plum, or the error ink when the field is invalid. The text never moves, and a disabled field takes no focus.
 - **A button inside a field** (clear, reveal, a toggle) keeps its own 2 px ring, drawn inside itself, and the box stays at 1 px.
 - **The code patch's copy link** draws its ring 4 px inside itself, in plum's dark value.

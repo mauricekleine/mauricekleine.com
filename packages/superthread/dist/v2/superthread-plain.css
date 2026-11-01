@@ -137,6 +137,7 @@
   --faint: oklch(0.9821 0 0);
   --first: oklch(0.2091 0.0104 268.19);
   --key: oklch(0.2091 0.0104 268.19);
+  --selected: oklch(0.2091 0.0104 268.19);
   --scrim: oklch(0.2091 0.0104 268.19 / 0.42);
   --code: oklch(0.2091 0.0104 268.19);
   --code-foreground: oklch(1 0 0);
@@ -293,6 +294,7 @@
   --faint: oklch(0.3053 0.0055 271.23);
   --first: oklch(1 0 0);
   --key: oklch(0.2091 0.0104 268.19);
+  --selected: oklch(0.928 0 0);
   --scrim: oklch(0 0 0 / 0.6);
   --code: oklch(0.1676 0.0071 258.37);
   --code-foreground: oklch(0.928 0 0);
@@ -334,6 +336,13 @@
 @layer base {
   * {
     border-color: var(--border);
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
+
+  /* a ship's window keeps the deep ground past the page's edges; a page with no rail stays on stock */
+  html:has([data-mk="fleet-rail"]) {
+    background-color: var(--ground);
+    scrollbar-color: var(--sidebar-border) var(--ground);
   }
 
   body {
@@ -345,11 +354,17 @@
     font-variant-numeric: tabular-nums;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
   }
 
   ::selection {
     background-color: var(--selection);
     color: var(--foreground);
+  }
+
+  /* the caret takes the ring's ink; a field item's --fx takes over inside its box */
+  :where(input, textarea, [contenteditable]) {
+    caret-color: var(--ring);
   }
 
   /* buttons, tabs, links and rail cells keep a 2 px ring at 2 px; fields own their focus in their skins */

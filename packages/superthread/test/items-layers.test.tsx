@@ -237,6 +237,97 @@ describe("the layers rendered", () => {
     expect(dom.querySelector('[data-mk="sidebar"]')).toBeNull();
   });
 
+  test("the current cell is neutral on its one plum corner mark, linked or not", () => {
+    const dom = server(<FleetRail current="orbit" hrefs={{ ...HREFS, quanta: null }} markBase="/marks" />);
+    const unlinked = server(<FleetRail current="orbit" hrefs={{ orbit: null }} markBase="/marks" />);
+    for (const scope of [dom, unlinked]) {
+      const cell = scope.querySelector('[data-slot="fleet-rail-cell"][aria-current="page"]')!;
+      expect(classesOf(cell)).toEqual(expect.arrayContaining(["border-sidebar-border", "after:bg-sidebar-primary"]));
+      expect(classesOf(cell).filter((c) => /^(bg-sidebar-accent|border-sidebar-primary)$/.test(c))).toEqual([]);
+    }
+  });
+
+  test("the skip link is the rail's first stop, off the page until focus lands on it", () => {
+    const dom = server(<FleetRail current="orbit" hrefs={HREFS} />);
+    const wrapper = dom.querySelector('[data-mk="fleet-rail"]')!;
+    const skip = wrapper.firstElementChild!;
+    expect(wrapper.querySelector<Element>("a")).toBe(skip);
+    expect([skip.tagName, skip.getAttribute("href"), skip.textContent]).toEqual(["A", "#main", "skip to content"]);
+    expect(classesOf(skip)).toEqual(expect.arrayContaining(["absolute", "top-[-100px]", "focus:top-4"]));
+
+    const embedded = server(<FleetRail current="orbit" hrefs={HREFS} skipLink={false} />);
+    expect(embedded.querySelector('a[href="#main"]')).toBeNull();
+    expect(embedded.querySelector('[data-slot="fleet-rail-frame"]')).not.toBeNull();
+  });
+
+  // The roles the dark scope would otherwise reset. Each is the sidebar's own ink, so the frame's current item matches
+  // the words beside it in both modes, and the pixels are the browser proof's.
+  test("the frame pins the selected role to its words, and focus inside the ship's nav is neutral", () => {
+    const dom = server(
+      <FleetRail current="orbit" hrefs={HREFS} sidebar={<s.SidebarContent>board</s.SidebarContent>}>
+        <main>the board</main>
+      </FleetRail>,
+    );
+    const SELECTED = "[--selected:var(--sidebar-foreground)]!";
+    const NEUTRAL_FOCUS = "[--ring:var(--sidebar-foreground)]!";
+    const frame = dom.querySelector('[data-slot="fleet-rail-frame"]')!;
+    const nav = darkScope(frame.querySelector('[data-slot="sidebar-content"]'))!;
+    expect(nav).not.toBe(frame);
+    expect(classesOf(frame)).toContain(SELECTED);
+    expect(classesOf(nav)).toEqual(expect.arrayContaining([SELECTED, NEUTRAL_FOCUS]));
+    expect(classesOf(frame)).not.toContain(NEUTRAL_FOCUS);
+    expect(classesOf(dom.querySelector('[data-mk="fleet-rail"]')!)).toContain("[--ring:var(--sidebar-ring)]");
+  });
+
+  test("a current nav item prints the selected role: the word, its edge and its square, with no fill", () => {
+    const dom = server(
+      <s.SidebarProvider>
+        <s.Sidebar collapsible="none">
+          <s.SidebarMenu>
+            <s.SidebarMenuItem>
+              <s.SidebarMenuButton isActive>board</s.SidebarMenuButton>
+              <s.SidebarMenuAction showOnHover>more</s.SidebarMenuAction>
+              <s.SidebarMenuBadge>3</s.SidebarMenuBadge>
+              <s.SidebarMenuSub>
+                <s.SidebarMenuSubItem>
+                  <s.SidebarMenuSubButton isActive href="#">
+                    today
+                  </s.SidebarMenuSubButton>
+                </s.SidebarMenuSubItem>
+              </s.SidebarMenuSub>
+            </s.SidebarMenuItem>
+          </s.SidebarMenu>
+        </s.Sidebar>
+      </s.SidebarProvider>,
+    );
+    for (const slot of ["sidebar-menu-button", "sidebar-menu-sub-button"]) {
+      const classes = classesOf(dom.querySelector(`[data-slot="${slot}"]`)!);
+      expect(classes).toEqual(
+        expect.arrayContaining([
+          "data-active:border-selected",
+          "data-active:text-selected",
+          "data-active:before:size-2",
+          "data-active:before:bg-selected",
+        ]),
+      );
+      expect(classes.filter((c) => /^data-active:bg-|sidebar-(primary|accent)/.test(c))).toEqual([]);
+    }
+    for (const slot of ["sidebar-menu-action", "sidebar-menu-badge"])
+      expect(classesOf(dom.querySelector(`[data-slot="${slot}"]`)!)).toContain(
+        "peer-data-active/menu-button:text-selected",
+      );
+  });
+
+  // The base layer keys on the attribute the rail prints, so the two can't part. The pixels are the browser proof's.
+  test("a ship's html takes the deep ground, keyed to the rail, and a page with no rail stays on stock", () => {
+    const css = read("dist/v2/superthread.css");
+    const ship = /html:has\(\[data-mk="([a-z-]+)"\]\) \{([^}]*)\}/.exec(css);
+    expect(ship?.[2]).toContain("background-color: var(--ground);");
+    expect(ship?.[2]).toContain("scrollbar-color: var(--sidebar-border) var(--ground);");
+    expect(server(<FleetRail current="orbit" />).querySelector(`[data-mk="${ship?.[1]}"]`)).not.toBeNull();
+    expect(css).not.toMatch(/(^|\n)\s*html \{[^}]*background/);
+  });
+
   test("markBase prefixes every mark, the dark mark at rest and the light one for the inverted cell", () => {
     const srcs = (node: ReactNode) => [...server(node).querySelectorAll("img")].map((img) => img.getAttribute("src")!);
 

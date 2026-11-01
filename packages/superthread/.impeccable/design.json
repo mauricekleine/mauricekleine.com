@@ -949,6 +949,21 @@
           "oklch(0.9821 0 0)"
         ]
       },
+      "selected": {
+        "role": "neutral",
+        "displayName": "current item",
+        "canonical": "oklch(0.2091 0.0104 268.19)",
+        "tonalRamp": [
+          "oklch(0.2091 0.0104 268.19)",
+          "oklch(0.5036 0.0016 286.34)",
+          "oklch(0.6103 0.0015 286.36)",
+          "oklch(0.7155 0 0)",
+          "oklch(0.807 0.0011 197.13)",
+          "oklch(0.8795 0.0014 286.37)",
+          "oklch(0.928 0 0)",
+          "oklch(0.9821 0 0)"
+        ]
+      },
       "scrim": {
         "role": "neutral",
         "displayName": "scrim",
@@ -2359,6 +2374,21 @@
           "oklch(0.928 0 0)"
         ]
       },
+      "dark-selected": {
+        "role": "neutral",
+        "displayName": "current item (dark)",
+        "canonical": "oklch(0.928 0 0)",
+        "tonalRamp": [
+          "oklch(0.2091 0.0104 268.19)",
+          "oklch(0.2678 0.0063 258.36)",
+          "oklch(0.3379 0.0052 286.12)",
+          "oklch(0.4089 0.0036 264.52)",
+          "oklch(0.4755 0.0032 286.28)",
+          "oklch(0.6271 0.0015 286.36)",
+          "oklch(0.7636 0 0)",
+          "oklch(0.928 0 0)"
+        ]
+      },
       "dark-scrim": {
         "role": "neutral",
         "displayName": "scrim (dark)",
@@ -3051,17 +3081,17 @@
       "name": "Ground Nav",
       "kind": "nav",
       "refersTo": "sidebar",
-      "description": "a ship's nav flat on the deep ground in the dark palette; the current item is boxed in plum with its 8 px square before the word.",
+      "description": "a ship's nav flat on the deep ground in the dark palette; the current item is neutral, the foreground word in a 1 px edge with its 8 px square before the word.",
       "html": "<nav class=\"ds-ground\" aria-label=\"orbit\"><a class=\"ds-nav-item\" href=\"#board\" aria-current=\"page\">board</a><a class=\"ds-nav-item\" href=\"#runs\">runs</a><a class=\"ds-nav-item\" href=\"#settings\">settings</a></nav>",
-      "css": ".ds-ground { display: flex; flex-direction: column; gap: 2px; width: 220px; padding: 12px; background: var(--sidebar); color: var(--sidebar-foreground); } .ds-nav-item { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border: 1px solid transparent; color: var(--sidebar-foreground); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); text-decoration: none; transition-property: background-color, border-color; transition-duration: var(--duration-quick); transition-timing-function: var(--ease-brand); } .ds-nav-item:hover { background: var(--sidebar-hover); } .ds-nav-item[aria-current=\"page\"] { border-color: var(--sidebar-primary); background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); font-weight: 500; } .ds-nav-item[aria-current=\"page\"]::before { content: \"\"; width: 8px; height: 8px; flex-shrink: 0; background: var(--sidebar-primary); } .ds-nav-item:focus-visible { outline: 2px solid var(--sidebar-ring); outline-offset: 2px; }"
+      "css": ".ds-ground { display: flex; flex-direction: column; gap: 2px; width: 220px; padding: 12px; background: var(--sidebar); color: var(--sidebar-foreground); } .ds-nav-item { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border: 1px solid transparent; color: var(--sidebar-foreground); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); text-decoration: none; transition-property: background-color, border-color; transition-duration: var(--duration-quick); transition-timing-function: var(--ease-brand); } .ds-nav-item:hover { background: var(--sidebar-hover); } .ds-nav-item[aria-current=\"page\"] { border-color: var(--sidebar-foreground); color: var(--sidebar-foreground); font-weight: 500; } .ds-nav-item[aria-current=\"page\"]::before { content: \"\"; width: 8px; height: 8px; flex-shrink: 0; background: var(--sidebar-foreground); } .ds-nav-item:focus-visible { outline: 2px solid var(--sidebar-foreground); outline-offset: 2px; }"
     }
   ],
   "narrative": {
     "northStar": "the two-ink proof",
-    "overview": "Superthread prints every fleet surface the way a two-ink proof prints: key ink on white stock, plum for everything you act on, and 1-bit screens only where the eye is meant to rest. The master world's own thesis states the rule the rest follows: flat where you read, screened where you look. Words, numbers, data and code always sit on flat ink. Screens print in five places and as at most one small detail per component, beside the content and never behind it.\n\nThe register is quiet and exact. Square corners, 1 px edges and horizontal rules that reach both window edges carry the structure, so a page needs no rounded cards on grey, no gradient accent and no glow. Dark mode is the same proof printed white on key: every neutral in both modes is a tint of the two inks, mixed in linear light, and most sit on one eleven-step wedge. There are two surfaces. Docs and public pages print on the stock. A ship's working surface prints on the deep ground, with the fleet rail and the ship's nav flat on the ground and the working panel raised on it by a soft rake from the upper left.\n\nEvery value comes from one source, `tokens/master.json`, vendored unchanged from the approved master world. `scripts/generate.ts` emits it as `dist/v2/superthread.css` (Tailwind 4), `dist/v2/superthread-plain.css` (no Tailwind) and `dist/v2/tokens.json`, and the `@mk` registry installs it into apps. The frontmatter above restates the emitted colour, type, radius and space tokens; motion, elevation, breakpoints and texture live in `.impeccable/design.json`, because the format has no place for them.",
+    "overview": "Superthread prints every fleet surface the way a two-ink proof prints: key ink on white stock, one plum fill per viewport, and 1-bit screens only where the eye is meant to rest. The master world's own thesis states the rule the rest follows: flat where you read, screened where you look. Words, numbers, data and code always sit on flat ink. Screens print in five places and as at most one small detail per component, beside the content and never behind it.\n\nThe register is quiet and exact. Square corners, 1 px edges and horizontal rules that reach both window edges carry the structure, so a page needs no rounded cards on grey, no gradient accent and no glow. Dark mode is the same proof printed white on key: every neutral in both modes is a tint of the two inks, mixed in linear light, and most sit on one eleven-step wedge. There are two surfaces. Docs and public pages print on the stock. A ship's working surface prints on the deep ground, with the fleet rail and the ship's nav flat on the ground and the working panel raised on it by a soft rake from the upper left.\n\nEvery value comes from one source, `tokens/master.json`, vendored unchanged from the approved master world. `scripts/generate.ts` emits it as `dist/v2/superthread.css` (Tailwind 4), `dist/v2/superthread-plain.css` (no Tailwind) and `dist/v2/tokens.json`, and the `@mk` registry installs it into apps. The frontmatter above restates the emitted colour, type, radius and space tokens; motion, elevation, breakpoints and texture live in `.impeccable/design.json`, because the format has no place for them.",
     "keyCharacteristics": [
       "Two inks: key `#16181d` on white stock `#ffffff`, and white on key in dark. Every neutral is a tint of the two.",
-      "One house ink, plum (`#aa337a`, dark `#c074a1`), for every control, link, focus ring and current item.",
+      "One house ink, plum (`#aa337a`, dark `#c074a1`): one fill per viewport, on paper only, in the deep value.",
       "Five statuses at badge scale only, each with its glyph square and its word. Failed is the one solid badge.",
       "Seven ship spots that print only in their marks and chart series.",
       "Four faces with one job each: Unbounded, Supreme, Erode and Fragment Mono.",
@@ -3135,7 +3165,7 @@
     "dos": [
       "**Do** name roles and utilities, never values: `bg-primary`, `text-muted-foreground`, `border-input`, `type-<step>`, `shadow-<lift>`, `texture-<detail>`. The `.dark` class on `<html>` sets the mode.",
       "**Do** print every status with its glyph square and its word, through `Badge`'s status variants, `StatusGlyph` or `ToastIcon`.",
-      "**Do** keep focus visible on everything focusable: the 2 px plum ring at 2 px for a control, the 2 px inside edge in `--fx` for a field.",
+      "**Do** keep focus visible on everything focusable: the 2 px ring at 2 px for a control, plum in the panel and neutral in the ship's nav, the 2 px inside edge in `--fx` for a field.",
       "**Do** lift a raised layer by its size, `shadow-leaf` for lists and toasts and `shadow-sheet` for dialogs and panels, and on the stock add `texture-contact` with its `--elevation-<lift>-rake`.",
       "**Do** transition named properties at a brand duration on `--ease-brand`, for example `transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand)`.",
       "**Do** run horizontal rules to both window edges.",

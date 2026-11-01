@@ -195,9 +195,8 @@
     text-underline-offset: 4px;
   }
   .mock-contents a[aria-current] {
-    border-color: var(--primary);
-    background: var(--accent);
-    color: var(--accent-foreground);
+    border-color: var(--selected);
+    color: var(--selected);
     font-weight: 500;
   }
   .mock-contents a[aria-current]::before {
@@ -205,7 +204,7 @@
     flex: none;
     width: 8px;
     height: 8px;
-    background: var(--primary);
+    background: var(--selected);
   }
   .mock-meter {
     margin-top: 16px;

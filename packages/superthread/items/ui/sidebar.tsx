@@ -23,11 +23,12 @@ const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 // The sidebar prints on the deep ground, and what sits on the ground takes the dark palette in both modes, as the
 // world's gutter does: status glyphs, badges, buttons, skeletons and rules. The ground keeps the mode it is in. The
 // element that paints it holds that mode's ground roles (GROUND), and the dark scope inside it (ON_GROUND) pins them
-// back, important so they outrank the token block's .dark.
+// back, important so they outrank the token block's .dark. The same pin holds the current item to the words beside
+// it and turns focus neutral: the ship's nav prints no plum.
 const GROUND =
-  "[--sidebar-ground:var(--sidebar)] [--sidebar-ground-foreground:var(--sidebar-foreground)] [--sidebar-ground-hover:var(--sidebar-hover)] [--sidebar-ground-accent-foreground:var(--sidebar-accent-foreground)]";
+  "[--sidebar-ground:var(--sidebar)] [--sidebar-ground-foreground:var(--sidebar-foreground)] [--sidebar-ground-hover:var(--sidebar-hover)]";
 const ON_GROUND =
-  "dark [--sidebar:var(--sidebar-ground)]! [--sidebar-foreground:var(--sidebar-ground-foreground)]! [--sidebar-hover:var(--sidebar-ground-hover)]! [--sidebar-accent-foreground:var(--sidebar-ground-accent-foreground)]!";
+  "dark [--sidebar:var(--sidebar-ground)]! [--sidebar-foreground:var(--sidebar-ground-foreground)]! [--sidebar-hover:var(--sidebar-ground-hover)]! [--selected:var(--sidebar-foreground)]! [--ring:var(--sidebar-foreground)]!";
 
 type SidebarContextProps = {
   state: "expanded" | "collapsed";
@@ -160,11 +161,7 @@ function Sidebar({
     return (
       <div
         data-slot="sidebar"
-        className={cn(
-          "flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground [--ring:var(--sidebar-ring)]",
-          GROUND,
-          className,
-        )}
+        className={cn("flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground", GROUND, className)}
         {...props}
       >
         <div className={cn("contents", ON_GROUND)}>{children}</div>
@@ -180,10 +177,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className={cn(
-            "w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [--ring:var(--sidebar-ring)] [&>button]:hidden",
-            GROUND,
-          )}
+          className={cn("w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden", GROUND)}
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -203,7 +197,7 @@ function Sidebar({
 
   return (
     <div
-      className="group peer hidden text-sidebar-foreground [--ring:var(--sidebar-ring)] md:block"
+      className="group peer hidden text-sidebar-foreground md:block"
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
@@ -461,7 +455,7 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
 }
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden border border-transparent px-2.5 text-left text-sm transition-[width,height,padding,background-color] duration-(--duration-quick) ease-(--ease-brand) group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-hover disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:bg-sidebar-hover data-active:border-sidebar-primary data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground data-active:before:size-2 data-active:before:shrink-0 data-active:before:bg-sidebar-primary data-active:before:content-[''] group-data-[collapsible=icon]:before:hidden [&_svg]:shrink-0 [&>span:last-child]:truncate",
+  "peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden border border-transparent px-2.5 text-left text-sm transition-[width,height,padding,background-color] duration-(--duration-quick) ease-(--ease-brand) group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-hover disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:bg-sidebar-hover data-active:border-selected data-active:font-medium data-active:text-selected data-active:before:size-2 data-active:before:shrink-0 data-active:before:bg-selected data-active:before:content-[''] group-data-[collapsible=icon]:before:hidden [&_svg]:shrink-0 [&>span:last-child]:truncate",
   {
     variants: {
       variant: {
@@ -546,7 +540,7 @@ function SidebarMenuAction({
         className: cn(
           "absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center p-0 text-sidebar-foreground transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-[7px] peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 after:absolute after:-inset-2 hover:bg-sidebar-hover md:after:hidden [&>svg]:shrink-0",
           showOnHover &&
-            "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-active/menu-button:text-sidebar-accent-foreground aria-expanded:opacity-100 md:opacity-0",
+            "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-active/menu-button:text-selected aria-expanded:opacity-100 md:opacity-0",
           className,
         ),
       },
@@ -566,7 +560,7 @@ function SidebarMenuBadge({ className, ...props }: React.ComponentProps<"div">) 
       data-slot="sidebar-menu-badge"
       data-sidebar="menu-badge"
       className={cn(
-        "pointer-events-none absolute right-1 flex h-5 min-w-5 items-center justify-center px-1 text-xs font-medium text-sidebar-foreground tabular-nums select-none group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-[7px] peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 peer-data-active/menu-button:text-sidebar-accent-foreground",
+        "pointer-events-none absolute right-1 flex h-5 min-w-5 items-center justify-center px-1 text-xs font-medium text-sidebar-foreground tabular-nums select-none group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-[7px] peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 peer-data-active/menu-button:text-selected",
         className,
       )}
       {...props}
@@ -650,7 +644,7 @@ function SidebarMenuSubButton({
     props: mergeProps<"a">(
       {
         className: cn(
-          "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden border border-transparent px-2 text-sidebar-foreground transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) group-data-[collapsible=icon]:hidden hover:bg-sidebar-hover disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-sm data-[size=sm]:text-xs data-active:border-sidebar-primary data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground data-active:before:size-2 data-active:before:shrink-0 data-active:before:bg-sidebar-primary data-active:before:content-[''] [&>span:last-child]:truncate [&>svg]:shrink-0",
+          "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden border border-transparent px-2 text-sidebar-foreground transition-[color,background-color,border-color] duration-(--duration-quick) ease-(--ease-brand) group-data-[collapsible=icon]:hidden hover:bg-sidebar-hover disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-sm data-[size=sm]:text-xs data-active:border-selected data-active:font-medium data-active:text-selected data-active:before:size-2 data-active:before:shrink-0 data-active:before:bg-selected data-active:before:content-[''] [&>span:last-child]:truncate [&>svg]:shrink-0",
           className,
         ),
       },

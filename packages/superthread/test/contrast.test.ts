@@ -183,11 +183,11 @@ const PORTED: Record<string, Ported> = {
   'f"{tag} card on ground (the raised sheet)"': {
     checks: one(() => ["card on ground (the raised sheet)", "card", "ground"]),
   },
-  // the rail's current edge and the progress fill print the house ink's dark value, --sidebar-primary, on the ground
+  // the rail's corner mark and the progress fill print the house ink's dark value, --sidebar-primary, on the ground
   'f"{tag} house (dark value) on the ground: current edge and progress"': {
     checks: one(() => ["house (dark value) on the ground: current edge and progress", "sidebar-primary", "ground"]),
   },
-  // the current box on the ground: the ground's text on the dark accent
+  // the ground's text on the dark accent, shadcn's sidebar-accent role
   'f"{tag} ground text inside the current box (dark accent)"': {
     checks: one(() => [
       "ground text inside the current box (dark accent)",
@@ -545,6 +545,25 @@ describe("check.py on the emitted css", () => {
 // `gutter dk` does (GATE.md, S1.F round 1, review 4). check.py checks no status glyph on the ground, so this holds
 // every status glyph's dark value to check.py's glyph floor on each mode's sidebar ground.
 describe("the deep ground", () => {
+  // the current item in a nav: the frame pins --selected to --sidebar-foreground, and on paper it is the page's own
+  test("the selected role clears AA wherever a current item prints", () => {
+    const floor = 4.5;
+    const fails = perMode((m) => [
+      need(`${tag(m)} selected on the page`, ink(m, "selected"), ink(m, "background"), floor),
+      need(`${tag(m)} selected on a card`, ink(m, "selected"), ink(m, "card"), floor),
+      need(`${tag(m)} selected, pinned, on the frame`, ink(m, "sidebar-foreground"), ink(m, "sidebar"), floor),
+      need(
+        `${tag(m)} selected, pinned, on the frame's hover`,
+        ink(m, "sidebar-foreground"),
+        ink(m, "sidebar-hover"),
+        floor,
+      ),
+    ])
+      .filter((c) => c.value < c.floor)
+      .map((c) => `${c.label}: ${c.value.toFixed(3)} < ${c.floor}`);
+    expect(fails).toEqual([]);
+  });
+
   test("every status glyph's dark value clears the glyph floor on each mode's sidebar ground", () => {
     const floor = floorOf('f"{tag} {s} glyph on {g}"')!;
     const fails = perMode((m) =>

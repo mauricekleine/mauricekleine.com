@@ -72,6 +72,7 @@ colors:
   faint: "#f9f9f9" # provisional
   first: "#16181d" # provisional
   key: "#16181d" # provisional
+  selected: "#16181d" # provisional
   scrim: "rgb(22 24 29 / 0.42)" # provisional
   code: "#16181d" # provisional
   code-foreground: "#ffffff" # provisional
@@ -167,6 +168,7 @@ colors:
   dark-faint: "#2e2f32" # provisional
   dark-first: "#ffffff" # provisional
   dark-key: "#16181d" # provisional
+  dark-selected: "#e7e7e7" # provisional
   dark-scrim: "rgb(0 0 0 / 0.6)" # provisional
   dark-code: "#0d0f12" # provisional
   dark-code-foreground: "#e7e7e7" # provisional
@@ -314,7 +316,7 @@ spacing:
 
 **Creative North Star: "the two-ink proof"**
 
-Superthread prints every fleet surface the way a two-ink proof prints: key ink on white stock, plum for everything you act on, and 1-bit screens only where the eye is meant to rest. The master world's own thesis states the rule the rest follows: flat where you read, screened where you look. Words, numbers, data and code always sit on flat ink. Screens print in five places and as at most one small detail per component, beside the content and never behind it.
+Superthread prints every fleet surface the way a two-ink proof prints: key ink on white stock, one plum fill per viewport, and 1-bit screens only where the eye is meant to rest. The master world's own thesis states the rule the rest follows: flat where you read, screened where you look. Words, numbers, data and code always sit on flat ink. Screens print in five places and as at most one small detail per component, beside the content and never behind it.
 
 The register is quiet and exact. Square corners, 1 px edges and horizontal rules that reach both window edges carry the structure, so a page needs no rounded cards on grey, no gradient accent and no glow. Dark mode is the same proof printed white on key: every neutral in both modes is a tint of the two inks, mixed in linear light, and most sit on one eleven-step wedge. There are two surfaces. Docs and public pages print on the stock. A ship's working surface prints on the deep ground, with the fleet rail and the ship's nav flat on the ground and the working panel raised on it by a soft rake from the upper left.
 
@@ -323,7 +325,7 @@ Every value comes from one source, `tokens/master.json`, vendored unchanged from
 **Key Characteristics:**
 
 - Two inks: key `#16181d` on white stock `#ffffff`, and white on key in dark. Every neutral is a tint of the two.
-- One house ink, plum (`#aa337a`, dark `#c074a1`), for every control, link, focus ring and current item.
+- One house ink, plum (`#aa337a`, dark `#c074a1`): one fill per viewport, on paper only, in the deep value.
 - Five statuses at badge scale only, each with its glyph square and its word. Failed is the one solid badge.
 - Seven ship spots that print only in their marks and chart series.
 - Four faces with one job each: Unbounded, Supreme, Erode and Fragment Mono.
@@ -340,12 +342,13 @@ App code names the role (`bg-primary`, `text-muted-foreground`, `border-input`),
 
 ### Primary
 
-- **Plum, the house ink** (`primary` and `ring`: `#aa337a`, dark `#c074a1`): primary actions, links, focus rings, the current item's edge and corner square, the progress fill, the tab bar and row edge, the second plate of the opener and figures, and the fleet rail's home cell. It is the only chromatic ink a control ever takes. The label on it, `primary-foreground` (stock in light, key in dark), measures 6.06:1 in light and 5.29:1 in dark.
+- **Plum, the house ink** (`primary` and `ring`: `#aa337a`, dark `#c074a1`): primary actions, links, focus rings, the rail's corner mark, the progress fill, the tab bar and row edge, the second plate of the opener and figures, and the fleet rail's home cell. It is the only chromatic ink a control ever takes. The label on it, `primary-foreground` (stock in light, key in dark), measures 6.06:1 in light and 5.29:1 in dark.
 - **Plum, hover and pressed** (`primary-hover` `#9a2f6f` / `#cd80ad`, `primary-press` `#8b2b65` / `#d88eb9`): in light the ink overprints darker; in dark it lifts in lightness. A pressed primary button adds a 1 px key inset.
-- **Plum tints** (`accent` `#f7f2f4` / `#503246`, house 12 and 14; `selection` `#eee3e8` / `#71455f`, house 24 and 30): the boxed current item's fill and selected text. Words inside these fills print in `foreground` or `muted-foreground`, never in plum.
+- **Plum tints** (`accent` `#f7f2f4` / `#503246`, house 12 and 14; `selection` `#eee3e8` / `#71455f`, house 24 and 30): a chosen option's fill and selected text. Words inside these fills print in `foreground` or `muted-foreground`, never in plum.
 
 ### Neutral
 
+- **Selected** (`selected`: `#16181d`, dark `#e7e7e7`, `foreground` in each mode): the current item in a nav, wherever it is drawn. The frame pins it to `sidebar-foreground` and the ground to `ground-foreground`, so a current item matches the words beside it, and the panel returns it to `foreground`. This role is new in v2 and provisional.
 - **Key** (`foreground` `#16181d`, also `key` in both modes and `first` in light): the first ink. In dark the first ink is white (`first` `#ffffff`), and words print in paper 80 (`dark-foreground` `#e7e7e7`).
 - **Stock** (`background`, `card`, `popover`: `#ffffff`; dark `background` `#16181d`, dark `card` and `popover` `#242629`): the paper. In light every raised surface is the stock itself; in dark it lifts one wedge step and draws a 1 px edge.
 - **The wedge.** In light the key prints over white at 100, 98, 88, 78, 64, 48, 32, 20, 12, 5 and 0 percent; in dark white prints over key at 80, 60, 44, 24, 16, 10, 6, 4, 3, 1 and 0. Each neutral role names its tint. Light: `muted-foreground` key 88 (`#646465`), `input` 78 (`#838384`), `disabled` 48 (`#bfc0c0`), `border` 20 (`#e7e7e7`), `secondary` 12 (`#f1f1f1`), `muted` and `faint` 5 (`#f9f9f9`). Dark: `muted-foreground` 44 (`#b2b2b2`), `input` 24 (`#888889`), `rule` 16 (`#727273`), `disabled` 10 (`#5c5c5e`), `secondary` 4 (`#3e3e40`), `border` 3 (`#37373a`), `faint` 2 (`#2e2f32`, between the wedge's 3 and 1), `muted` 1 (`#242629`).
@@ -455,8 +458,8 @@ Space runs on Tailwind's default 4 px step, used at 4, 8, 12, 16, 24, 32, 48, 64
 
 - **Sections.** A section head sits inside its full-bleed rule, with 64 px above it and 44 px between the head and its content; panes pad 36 to 48 px.
 - **Docs and public pages** print on the stock, with full-bleed rules, a boxed nav and an aside, and no fleet rail.
-- **Ship surfaces** print on the deep ground: the fleet rail and the ship's nav flat on it, the working panel raised on it. The board panel is at most 880 px wide and the reading sheet 672 px with 72 px of padding; the reading page keeps a 264 px margin on the ground for its contents and progress.
-- **Breakpoints.** At 900 px and below the fleet rail becomes a 48 px bar of 32 px marks above the panel, the current ship boxed, with 12 px of ground on each side of the panel. At 420 px and below its cells tighten to 36 px so the whole rail fits a phone. At 600 px and below the phone type steps and the phone plates apply. The site adds two of its own for its docs shell (1279 px, where the masthead and aside tighten, and 1099 px, where the aside drops below the page); they are the site's, not the tokens'.
+- **Ship surfaces** print on the deep ground: the fleet rail and the ship's nav flat on it, the working panel raised on it. The base layer gives a ship's `html` the ground and its scrollbar, keyed to `data-mk="fleet-rail"`, so the window never shows stock past the page's edge and a page with no rail stays on stock. The board panel is at most 880 px wide and the reading sheet 672 px with 72 px of padding; the reading page keeps a 264 px margin on the ground for its contents and progress.
+- **Breakpoints.** At 900 px and below the fleet rail becomes a 48 px bar of 32 px marks above the panel, the current cell neutral on its plum corner mark, with 12 px of ground on each side of the panel. At 420 px and below its cells tighten to 36 px so the whole rail fits a phone. At 600 px and below the phone type steps and the phone plates apply. The site adds two of its own for its docs shell (1279 px, where the masthead and aside tighten, and 1099 px, where the aside drops below the page); they are the site's, not the tokens'.
 
 **The Full Bleed Rule.** Horizontal rules belong to the page: they run to both window edges, past every column, and no column stops them.
 
@@ -489,15 +492,15 @@ The form language is square and ruled: `--radius` and every `--radius-*` emit 0p
 
 ### Focus
 
-- **Controls** (buttons, tabs, links, rail cells, checkboxes) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible` for links, buttons, summaries, tabs and role buttons.
-- **Fields** (input, textarea, input group, the select trigger) own their focus. While the text control holds focus, or when the box is the control as the select trigger is, the box's 1 px edge becomes a 2 px edge drawn inside it (`outline: 2px solid var(--fx)` at `-2px`), and the caret takes the same ink. `--fx` is plum, or the error ink on an invalid field. The text control draws no outline, so the text never moves. An outline, unlike a box shadow, survives forced-colours mode.
+- **Controls** (buttons, tabs, links, rail cells, checkboxes) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible` for links, buttons, summaries, tabs and role buttons. Inside the ship's nav the ring prints in `sidebar-foreground`, so the nav holds no plum; the rail keeps `sidebar-ring`.
+- **Fields** (input, textarea, input group, the select trigger) own their focus. While the text control holds focus, or when the box is the control as the select trigger is, the box's 1 px edge becomes a 2 px edge drawn inside it (`outline: 2px solid var(--fx)` at `-2px`), and the caret takes the same ink; the base layer sets any other text control's caret to `--ring`. `--fx` is plum, or the error ink on an invalid field. The text control draws no outline, so the text never moves. An outline, unlike a box shadow, survives forced-colours mode.
 - **A button inside a field box** (clear, reveal, a toggle) is a control: it draws its own 2 px ring inside itself and the box stays at 1 px. The input group matches the text control with `:has()`, never `:focus-within`, for this reason.
 - **The code patch's copy link** draws its ring 4 px inside itself (`--code-ring-offset: -4px`) in plum's dark value.
 - A disabled field never takes focus.
 
-### The boxed current item
+### The current item
 
-The current item, wherever it is (a sidebar entry, the fleet rail's cell, a chosen select option), is boxed: a plum tint fill, a 1 px plum edge, and on the rail and in the sidebar an 8 px plum square, at the rail cell's corner and before the sidebar entry's word.
+A current item in a nav is neutral, wherever it is drawn: the word, a 1 px edge and an 8 px square before the word, all in the `selected` role, with no fill. A nav drawn by hand reads the same role. The fleet rail's current cell is neutral too: no fill, a `sidebar-border` edge and its 8 px plum corner mark, the only plum on a cell's edge.
 
 ### Marks and icons
 
@@ -584,11 +587,11 @@ Pass items, and the only motion outside the brand tokens: each keeps base-nova's
 
 ### Sidebar
 
-The ship's nav, on the deep ground. Everything that prints on the ground (status glyphs, badges, buttons, skeletons, rules) takes the dark palette in both modes, while the ground keeps the page's mode. A nav item is 34 px tall, the 32 px row inside its 1 px edge; its hover is paper 5 over the ground, and the current item is boxed with its 8 px plum square before the word. Below 768 px, `use-mobile`'s breakpoint, it opens as a sheet.
+The ship's nav, on the deep ground. Everything that prints on the ground (status glyphs, badges, buttons, skeletons, rules) takes the dark palette in both modes, while the ground keeps the page's mode. A nav item is 34 px tall, the 32 px row inside its 1 px edge; its hover is paper 5 over the ground, and the current item prints in `selected`, with its 8 px square before the word and no fill. Keyboard focus prints a neutral ring. Below 768 px, `use-mobile`'s breakpoint, it opens as a sheet.
 
 ### Fleet rail (signature)
 
-The column of ship marks down the left of every ship surface, on the deep ground: home, the ships, then the mode cell, each ship a 32 px mark in a reversed cell. `lib/fleet` lists soliton too, but with `rail: false`: its mark serves other places and has no cell here. Hover or focus inverts the cell, swaps in the light mark and slides a joined tab out from it at the quick duration, the ship's name over its one-line descriptor; with reduced motion the tab appears in place. The current ship's cell is boxed in plum with its corner square. The mode cell is the fleet's one light and dark toggle, so a ship adds no mode control of its own. Above 900 px the rail and `sidebar` stick to the top of the window while the panel scrolls. At 900 px and below the rail is a 48 px bar above the panel that scrolls with the page, and from the fourth cell on the bar's tab hangs right so it stays on screen. The consumer passes `current`, and optionally the `hrefs`, the ship's `sidebar` and a `markBase`. A ship the `hrefs` leave out links to its fleet url, and home to superthread's; a ship with no url, or an href of `null`, prints as a disabled cell (`aria-disabled`), its mark at half opacity unless it is the current ship.
+The column of ship marks down the left of every ship surface, on the deep ground: home, the ships, then the mode cell, each ship a 32 px mark in a reversed cell. `lib/fleet` lists soliton too, but with `rail: false`: its mark serves other places and has no cell here. Hover or focus inverts the cell, swaps in the light mark and slides a joined tab out from it at the quick duration, the ship's name over its one-line descriptor; with reduced motion the tab appears in place. The current ship's cell is neutral, with a `sidebar-border` edge and its 8 px plum corner mark. The mode cell is the fleet's one light and dark toggle, so a ship adds no mode control of its own. Above 900 px the rail and `sidebar` stick to the top of the window while the panel scrolls. At 900 px and below the rail is a 48 px bar above the panel that scrolls with the page, and from the fourth cell on the bar's tab hangs right so it stays on screen. The consumer passes `current`, and optionally the `hrefs`, the ship's `sidebar` and a `markBase`. A ship the `hrefs` leave out links to its fleet url, and home to superthread's; a ship with no url, or an href of `null`, prints as a disabled cell (`aria-disabled`), its mark at half opacity unless it is the current ship. The rail's first child is the skip link, `skip to content` to `#main`, off the page until focus lands on it; `AppShellGround` is its target when it renders `main`, and `skipLink={false}` leaves it out of a rail embedded in a page that owns its own.
 
 ### Card, label and separator
 
@@ -666,21 +669,21 @@ Sonner's toast API prints unstyled on the toast's popover fill, 1 px edge and le
 
 Blocks (`registry:block`) are the patterns the fleet's apps repeat, built only from the items above. Each installs one file at `components/superthread/blocks/<name>.tsx`, carries `data-mk="<block>"` on its roots, and owns its layout and semantics, not the app's data, routing or copy. Blocks add no texture detail of their own: their lifts, edges and states come from the items inside them. Each block's meta names the apps it serves.
 
-| block              | parts                                                                                                                                           | what it settles                                                                                                                                          |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| app-shell          | `AppShell`, `AppShellNav`, `AppShellNavItem`, `AppShellGround`, `AppShellPanel`                                                                 | the fleet rail with the ship's own nav, the deep ground and the working panel on the sheet lift; below 900 px the nav wraps into a row of links          |
-| page-header        | `PageHeader`, `PageHeaderBack`, `PageHeaderTitle`, `PageHeaderMeta`, `PageHeaderActions`, `PageHeaderDescription`                               | the title at the section step (hero on `size="page"`), a way back, live meta, actions at the end and a lede under 66ch; no line above the title          |
-| section-header     | `Section`, `SectionHeader`, `SectionTitle`, `SectionCount`, `SectionAction`                                                                     | a section named by its title over a foreground rule, a live count and a way onward; 48 px between sections                                               |
-| collection-toolbar | `CollectionToolbar`, `ToolbarGroup`, `ToolbarSpacer`, `FilterChip`, `ToolbarCount`, `ViewSwitch`                                                | labelled control groups that wrap, the active filter boxed in plum with its own clear control, a live "n of m" count and a one-pressed view switch       |
-| list-rows          | `ListRows`, `ListRow`, `ListRowLead`, `ListRowTitle`, `ListRowAside`, `ListRowMeta`, `ListRowActions`                                           | ruled rows at the board measure; a lead, a title that may link, a mono aside and a meta line; the aside drops under the title at 600 px                  |
-| item-cards         | `ItemCards`, `ItemCard`, `ItemCardMedia`, `ItemCardId`, `ItemCardTitle`, `ItemCardMeta`, `ItemCardActions`                                      | small cards in an auto-filling grid; a linked title covers the card with one link, and corner actions stay their own controls                            |
-| data-table         | `DataTable`, `SortableHead`, `TableEmpty`                                                                                                       | a named table in the table item's own scroll box, `aria-sort` on the sorted head and an empty row across every column                                    |
-| states             | `LoadingState`, `FailedState`, `EmptyState`, `EmptyStateMedia`, `EmptyStateText`, `EmptyStateActions`                                           | loading as skeleton rows at the table measure, failure as an alert with the failed glyph and a retry, empty as words, an optional media slot and actions |
-| facts              | `Facts`, `Fact`, `FactLabel`, `FactValue`                                                                                                       | labelled values as a two-column list or a ruled grid of two to four cells, one per line on a phone; numbers and ids in mono                              |
-| form-section       | `FormSection`, `FormSectionHeader`, `FormSectionTitle`, `FormSectionDescription`, `FormSectionFields`, `FormSectionFooter`, `FormSectionStatus` | a form named by its heading, the field item's spacing and a ruled save row with a live status                                                            |
-| quick-add          | `QuickAdd`                                                                                                                                      | one named field and its add button; it trims, blocks a second add while one is pending, keeps the draft on failure and clears it on success              |
-| notice             | `Notice`, `NoticeTitle`, `NoticeDescription`, `NoticeActions`                                                                                   | a flat box on the page's fill where only the status glyph takes colour; a failure is an alert, anything else a status                                    |
-| search-palette     | `SearchPalette`, `SearchPaletteTrigger`, `SearchPaletteContent`                                                                                 | one search over the app in the command dialog, opened by its trigger, the modified letter or slash away from text fields                                 |
+| block              | parts                                                                                                                                           | what it settles                                                                                                                                            |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| app-shell          | `AppShell`, `AppShellNav`, `AppShellNavItem`, `AppShellGround`, `AppShellPanel`                                                                 | the fleet rail with the ship's own nav, the deep ground as `#main` and the working panel on the sheet lift; below 900 px the nav wraps into a row of links |
+| page-header        | `PageHeader`, `PageHeaderBack`, `PageHeaderTitle`, `PageHeaderMeta`, `PageHeaderActions`, `PageHeaderDescription`                               | the title at the section step (hero on `size="page"`), a way back, live meta, actions at the end and a lede under 66ch; no line above the title            |
+| section-header     | `Section`, `SectionHeader`, `SectionTitle`, `SectionCount`, `SectionAction`                                                                     | a section named by its title over a foreground rule, a live count and a way onward; 48 px between sections                                                 |
+| collection-toolbar | `CollectionToolbar`, `ToolbarGroup`, `ToolbarSpacer`, `FilterChip`, `ToolbarCount`, `ViewSwitch`                                                | labelled control groups that wrap, the active filter boxed in plum with its own clear control, a live "n of m" count and a one-pressed view switch         |
+| list-rows          | `ListRows`, `ListRow`, `ListRowLead`, `ListRowTitle`, `ListRowAside`, `ListRowMeta`, `ListRowActions`                                           | ruled rows at the board measure; a lead, a title that may link, a mono aside and a meta line; the aside drops under the title at 600 px                    |
+| item-cards         | `ItemCards`, `ItemCard`, `ItemCardMedia`, `ItemCardId`, `ItemCardTitle`, `ItemCardMeta`, `ItemCardActions`                                      | small cards in an auto-filling grid; a linked title covers the card with one link, and corner actions stay their own controls                              |
+| data-table         | `DataTable`, `SortableHead`, `TableEmpty`                                                                                                       | a named table in the table item's own scroll box, `aria-sort` on the sorted head and an empty row across every column                                      |
+| states             | `LoadingState`, `FailedState`, `EmptyState`, `EmptyStateMedia`, `EmptyStateText`, `EmptyStateActions`                                           | loading as skeleton rows at the table measure, failure as an alert with the failed glyph and a retry, empty as words, an optional media slot and actions   |
+| facts              | `Facts`, `Fact`, `FactLabel`, `FactValue`                                                                                                       | labelled values as a two-column list or a ruled grid of two to four cells, one per line on a phone; numbers and ids in mono                                |
+| form-section       | `FormSection`, `FormSectionHeader`, `FormSectionTitle`, `FormSectionDescription`, `FormSectionFields`, `FormSectionFooter`, `FormSectionStatus` | a form named by its heading, the field item's spacing and a ruled save row with a live status                                                              |
+| quick-add          | `QuickAdd`                                                                                                                                      | one named field and its add button; it trims, blocks a second add while one is pending, keeps the draft on failure and clears it on success                |
+| notice             | `Notice`, `NoticeTitle`, `NoticeDescription`, `NoticeActions`                                                                                   | a flat box on the page's fill where only the status glyph takes colour; a failure is an alert, anything else a status                                      |
+| search-palette     | `SearchPalette`, `SearchPaletteTrigger`, `SearchPaletteContent`                                                                                 | one search over the app in the command dialog, opened by its trigger, the modified letter or slash away from text fields                                   |
 
 ### Motion
 
@@ -692,7 +695,7 @@ Three durations on one ease. `--duration-instant` (120 ms) times hover and press
 
 - **Do** name roles and utilities, never values: `bg-primary`, `text-muted-foreground`, `border-input`, `type-<step>`, `shadow-<lift>`, `texture-<detail>`. The `.dark` class on `<html>` sets the mode.
 - **Do** print every status with its glyph square and its word, through `Badge`'s status variants, `StatusGlyph` or `ToastIcon`.
-- **Do** keep focus visible on everything focusable: the 2 px plum ring at 2 px for a control, the 2 px inside edge in `--fx` for a field.
+- **Do** keep focus visible on everything focusable: the 2 px ring at 2 px for a control, plum in the panel and neutral in the ship's nav, the 2 px inside edge in `--fx` for a field.
 - **Do** lift a raised layer by its size, `shadow-leaf` for lists and toasts and `shadow-sheet` for dialogs and panels, and on the stock add `texture-contact` with its `--elevation-<lift>-rake`.
 - **Do** transition named properties at a brand duration on `--ease-brand`, for example `transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand)`.
 - **Do** run horizontal rules to both window edges.

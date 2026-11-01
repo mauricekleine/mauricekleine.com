@@ -21,7 +21,7 @@ function Page() {
     <>
       <PageHead
         title="fleet rail"
-        lede="the fleet in one column on the deep ground: every ship's mark at 32 px, the ship you are in boxed in the house ink. point at a cell, or tab to it, to read its name."
+        lede="the fleet in one column on the deep ground: every ship's mark at 32 px, the ship you are in edged, with a plum corner mark. point at a cell, or tab to it, to read its name."
       >
         <InstallLine items={["fleet-rail"]} />
       </PageHead>
@@ -75,7 +75,7 @@ function Page() {
           <dt>
             <code>current</code>
           </dt>
-          <dd>the id of the ship this surface is. its cell is boxed.</dd>
+          <dd>the id of the ship this surface is. its cell takes the edge and the plum corner mark.</dd>
           <dt>
             <code>hrefs</code>
           </dt>
@@ -97,6 +97,13 @@ function Page() {
           </dt>
           <dd>
             the rail&rsquo;s accessible name, <code>fleet</code> by default.
+          </dd>
+          <dt>
+            <code>skipLink</code>
+          </dt>
+          <dd>
+            the first stop on the page, <code>skip to content</code> to <code>#main</code>, shown on focus. pass{" "}
+            <code>false</code> for a rail embedded in a page that owns its own.
           </dd>
           <dt>
             <code>sidebar</code>

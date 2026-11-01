@@ -43,6 +43,7 @@ function Workspace({ printed = false }: { printed?: boolean }) {
       current="orbit"
       markBase="/marks"
       hrefs={hrefs}
+      skipLink={false}
       sidebar={
         <AppShellNav ship="orbit">
           {["board", "direction", "agents"].map((name, index) => (
@@ -183,9 +184,9 @@ function Page() {
             <code>AppShellGround</code>
           </dt>
           <dd>
-            is the page's main, named workspace, and leaves the gutter around <code>AppShellPanel</code>, the raised
-            working surface. inside a layout that already owns main, render a div and pass <code>role="group"</code> to{" "}
-            <code>AppShellNav</code>.
+            is the page's main, named workspace, with <code>id="main"</code> for the rail&rsquo;s skip link, and leaves
+            the gutter around <code>AppShellPanel</code>, the raised working surface. inside a layout that already owns
+            main, render a div and pass <code>role="group"</code> to <code>AppShellNav</code>.
           </dd>
         </dl>
       </Section>
