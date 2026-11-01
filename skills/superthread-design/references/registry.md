@@ -7,13 +7,13 @@
 | tier  | items                                                                                                                                                                      |
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | style | `init`, `tokens`                                                                                                                                                           |
-| lib   | `tokens-plain`, `utils`, `fleet`                                                                                                                                           |
+| lib   | `tokens-plain`, `utils`, `fleet`, `theme`, `time-words`                                                                                                                    |
 | brand | `glyphs`, `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`, `input`, `input-group`, `textarea`, `field`, `select`, `native-select`, `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
 | pass  | `card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile` |
 | block | `app-shell`, `page-header`, `section-header`, `collection-toolbar`, `list-rows`, `item-cards`, `data-table`, `states`, `facts`, `form-section`, `quick-add`, `notice`, `search-palette` |
 
 - **style**: `init` sets up an app; `tokens` is the theme (colour roles, type, motion, shape and the texture tiles).
-- **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `theme` holds the fleet's light and dark choice; `tokens-plain` is the theme as plain CSS and a typed module.
+- **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `theme` holds the fleet's light and dark choice; `time-words` puts time in the fleet's words (`since friday`, `before 11:00`, `48 min until standup`, `every day at 07:00`); `tokens-plain` is the theme as plain CSS and a typed module.
 - **brand**: superthread's own components. They keep shadcn's Base UI API (exports, props, `data-slot`, variants) and add `data-mk="<item>"` on the root.
 - **pass**: base-nova's items as shadcn ships them, on the superthread tokens.
 - **block**: the compositions the fleet's apps repeat, built from the items: a shell, headers, collections, forms, notices and states. Each installs at `components/superthread/blocks/<name>.tsx`; its meta names the apps it serves. Reach for a block before composing the same pattern by hand.

@@ -157,6 +157,15 @@ export const catalog: CatalogItem[] = [
     upstream: null,
   },
   {
+    name: "time-words",
+    type: "registry:lib",
+    title: "time-words",
+    description: "time in the fleet's words: since friday, before 11:00, 48 min until standup, every day at 07:00",
+    files: [lib("time-words")],
+    tier: "lib",
+    upstream: null,
+  },
+  {
     name: "glyphs",
     type: "registry:ui",
     title: "glyphs",
