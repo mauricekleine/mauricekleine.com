@@ -740,6 +740,7 @@
   .st-f-layer {
     position: relative;
     width: 200px;
+    max-width: 100%;
     margin-bottom: 16px;
     padding: 4px 0;
   }
@@ -764,11 +765,12 @@
   }
   .st-f-field {
     width: 200px;
+    max-width: 100%;
   }
   .st-f-skeleton {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
-    max-width: 100%;
   }
   .st-f-skeleton > * {
     max-width: 100%;
