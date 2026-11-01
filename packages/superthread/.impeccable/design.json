@@ -2929,12 +2929,12 @@
       {
         "name": "shadow-slip",
         "value": "6px 4px 6px -2px oklch(0.086 0.0056 285.17 / 0.62), 1px .7px 1px oklch(0.086 0.0056 285.17 / 0.3)",
-        "purpose": "the lowest lift; no item uses it yet. light: the soft rake and the contact shadow in the shadow ink"
+        "purpose": "the lowest lift, for paper on a light page. light: the soft rake and the contact shadow in the shadow ink"
       },
       {
         "name": "dark-shadow-slip",
         "value": "6px 4px 6px -2px oklch(0 0 0 / 0.85), 1px .7px 1px oklch(0 0 0 / 0.4), inset 0 0 0 1px var(--raised-edge)",
-        "purpose": "the lowest lift; no item uses it yet. dark: the rake and contact in black, and the 1 px raised edge"
+        "purpose": "the lowest lift, for paper on a light page. dark: the rake and contact in black, and the 1 px raised edge"
       },
       {
         "name": "shadow-slip-rake",
@@ -3098,6 +3098,7 @@
       "Radius 0, 1 px edges, full-bleed rules.",
       "One focus ring for controls and one inside edge for fields.",
       "Raised layers lift by a raked shadow; in light their contact edge prints as a 50 percent screen.",
+      "One paper per page: a white block that stays white in every theme.",
       "Three durations on one ease. Reduced motion zeroes them and keeps every state."
     ],
     "rules": [
@@ -3179,6 +3180,11 @@
       {
         "name": "The Two Links Rule",
         "body": "A link prints in foreground, with a 1 px underline at rest in running text and on hover in chrome. `link-quiet` is the one second form.",
+        "section": "components"
+      },
+      {
+        "name": "The One Paper Rule",
+        "body": "A page prints one paper, and it stays white in every theme: it never reverses on a dark page. On a dark panel the white is its edge, so it prints flat. On a light panel, white on white, it lifts by the slip rake and the contact edge.",
         "section": "components"
       },
       {
@@ -3285,6 +3291,7 @@
       "**Don't** take icons from an icon library; every icon and glyph is drawn in whole-pixel squares.",
       "**Don't** draw a ring outside a field's box or a second frame around it.",
       "**Don't** print a plum fill off paper, or a second one in a viewport.",
+      "**Don't** print a second paper on a page, or reverse one on a dark page.",
       "**Don't** restyle an item from outside: no `[data-slot]` rule and no look class at a call site. Margins, widths and grid placement stay composition.",
       "**Don't** widen the working panel or re-stick the frame at 900 px and below.",
       "**Don't** put a keycap inside a button."

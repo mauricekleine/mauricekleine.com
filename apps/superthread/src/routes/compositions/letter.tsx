@@ -108,10 +108,8 @@ function LetterWithFoot() {
       <LetterBody>the next draft goes up on thursday.</LetterBody>
       <Tools />
       <Paper render={<section aria-label="where it goes" />} className="st-paper-foot">
-        <p className="type-title text-first">goes to sam</p>
-        <Button variant="key" size="lg">
-          send to sam
-        </Button>
+        <p className="type-title text-first">goes up on thursday</p>
+        <Button size="lg">approve the draft</Button>
       </Paper>
     </Letter>
   );
