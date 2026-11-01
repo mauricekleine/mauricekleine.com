@@ -218,7 +218,7 @@ export function FleetRail({
           {sidebar && (
             <Sidebar
               collapsible="none"
-              className="h-auto max-h-[calc(100svh-2rem)] w-[150px] overflow-y-auto [@media(max-width:900px)]:max-h-none [@media(max-width:900px)]:w-full [@media(max-width:900px)]:overflow-visible"
+              className="-mx-1 h-auto max-h-[calc(100svh-2rem)] w-[158px] overflow-y-auto px-1 [@media(max-width:900px)]:mx-0 [@media(max-width:900px)]:max-h-none [@media(max-width:900px)]:w-full [@media(max-width:900px)]:overflow-visible [@media(max-width:900px)]:px-0"
             >
               {sidebar}
             </Sidebar>

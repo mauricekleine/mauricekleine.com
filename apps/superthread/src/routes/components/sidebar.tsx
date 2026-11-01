@@ -86,7 +86,7 @@ function Page() {
             <code>SidebarMenuButton</code>
           </dt>
           <dd>
-            a row, inside <code>SidebarMenu</code> and <code>SidebarMenuItem</code>. <code>isActive</code> boxes the
+            a row, inside <code>SidebarMenu</code> and <code>SidebarMenuItem</code>. <code>isActive</code> marks the
             current one; <code>render=&#123;&lt;a href=&quot;/board&quot; /&gt;&#125;</code> makes it a link.
           </dd>
           <dt>

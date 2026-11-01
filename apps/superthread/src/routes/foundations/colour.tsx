@@ -245,7 +245,7 @@ function Page() {
     <>
       <PageHead
         title="colour"
-        lede="one key ink on white stock, and plum for everything you act on. each ship keeps one bright spot for its mark and its chart series, and five status inks name the state of a run."
+        lede="one key ink on white stock, and one plum fill per viewport. each ship keeps one bright spot for its mark and its chart series, and five status inks name the state of a run."
       />
 
       <Section id="wedge" title="the wedge">
