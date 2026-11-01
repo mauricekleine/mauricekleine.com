@@ -512,6 +512,7 @@ describe("the layers rendered", () => {
     expect(classesOf(popup)).toContain(LIFT.dialog!);
     expect(classesOf(popup)).toContain("shadow-sheet");
     expect(classesOf(popup.querySelector('[data-slot="dialog-title"]')!)).toContain("type-subtitle");
+    expect(classesOf(popup.querySelector('[data-slot="dialog-description"]')!)).toContain("[&_a]:text-foreground");
     const overlay = document.body.querySelector('[data-slot="dialog-overlay"]');
     expect(overlay).not.toBeNull();
     // The sheet and the scrim fade by animation, which their duration sets, and transition nothing.

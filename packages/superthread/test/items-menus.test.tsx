@@ -377,12 +377,37 @@ describe("alert-dialog", () => {
   });
   test("the title, media and right-aligned footer keep the sheet hierarchy and house buttons", () => {
     has(body, "[data-slot=alert-dialog-title]", ["type-subtitle"]);
-    has(body, "[data-slot=alert-dialog-description]", ["text-ui", "text-muted-foreground"]);
+    has(body, "[data-slot=alert-dialog-description]", ["text-ui", "text-muted-foreground", "[&_a]:text-foreground"]);
     has(body, "[data-slot=alert-dialog-media]", ["size-10", "bg-secondary"]);
     has(body, "[data-slot=alert-dialog-footer]", ["mt-6", "justify-end", "gap-2"]);
     has(body, "[data-slot=alert-dialog-action]", ["bg-primary"]);
     has(body, "[data-slot=alert-dialog-cancel]", ["border-current"]);
     skin(body, "alert-dialog");
+  });
+  test.each<[string, ComponentProps<typeof Alert.AlertDialogContent> | undefined, string]>([
+    ["cancel, past a link and an action printed before it", undefined, "cancel"],
+    ["where initialFocus sends it", { initialFocus: true }, "the logs"],
+  ])("focus opens on %s", async (_, content, focused) => {
+    const mounted = await client(
+      <Alert.AlertDialog defaultOpen>
+        <Alert.AlertDialogContent {...content}>
+          <Alert.AlertDialogTitle>delete run?</Alert.AlertDialogTitle>
+          <Alert.AlertDialogDescription>
+            read <a href="#logs">the logs</a> first
+          </Alert.AlertDialogDescription>
+          <Alert.AlertDialogFooter>
+            <Alert.AlertDialogAction>delete</Alert.AlertDialogAction>
+            <Alert.AlertDialogCancel>cancel</Alert.AlertDialogCancel>
+          </Alert.AlertDialogFooter>
+        </Alert.AlertDialogContent>
+      </Alert.AlertDialog>,
+    );
+    try {
+      await act(async () => new Promise((resolve) => setTimeout(resolve, 20)));
+      expect(document.activeElement?.textContent).toBe(focused);
+    } finally {
+      await mounted.done();
+    }
   });
   test("small keeps the compact width; portalProps carry mode and container; cancel closes", async () => {
     const frame = document.createElement("div");

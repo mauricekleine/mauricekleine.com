@@ -1,5 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AlertDialogExample, AlertDialogOpen, AlertDialogSizes, AlertDialogStates } from "@/examples/alert-dialog";
+import {
+  AlertDialogActions,
+  AlertDialogExample,
+  AlertDialogOpen,
+  AlertDialogSizes,
+  AlertDialogStates,
+} from "@/examples/alert-dialog";
 import { Caption } from "@/site/Caption";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -11,6 +17,7 @@ export const Route = createFileRoute("/components/alert-dialog")({
     sections: [
       { id: "example", title: "example" },
       { id: "open", title: "open" },
+      { id: "actions", title: "actions" },
       { id: "sizes", title: "sizes" },
       { id: "states", title: "states" },
     ],
@@ -29,8 +36,8 @@ function Page() {
       </PageHead>
       <Section id="example" title="example">
         <p className="st-gl-copy">
-          delete the synthetic run or cancel to keep it. the action closes the sheet and confirms the result below the
-          trigger.
+          delete the synthetic run or cancel to keep it. focus opens on cancel, the action closes the sheet, and the
+          result shows below the trigger.
         </p>
         <ModePair
           className="st-gl-pair"
@@ -47,6 +54,15 @@ function Page() {
           <AlertDialogOpen scrim />
         </ModePair>
         <Caption detail="contact" />
+      </Section>
+      <Section id="actions" title="actions">
+        <p className="st-gl-copy">
+          the default action prints in the house ink on paper and as the outline on a dark sheet. an action that leaves
+          the app takes key.
+        </p>
+        <ModePair className="st-gl-pair">
+          <AlertDialogActions />
+        </ModePair>
       </Section>
       <Section id="sizes" title="sizes">
         <p className="st-gl-copy">

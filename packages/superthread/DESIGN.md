@@ -578,7 +578,7 @@ Loading rows: 12 px whole-pixel bars, square and still, in the first ink at 18.7
 
 ### Dialog
 
-A square sheet on the popover fill with a 1 px edge, at most 440 px wide, padded 28 px (24 at the foot), on the sheet lift with the contact edge. Its centring offsets round to whole pixels, so its edges and screen land on the pixel grid at 1x and 2x. The title sets at the subtitle step; the close control is a small ghost button with the close glyph, labelled "close". The scrim beneath has no blur. It fades in and out on its keyframes at the quick duration.
+A square sheet on the popover fill with a 1 px edge, at most 440 px wide, padded 28 px (24 at the foot), on the sheet lift with the contact edge. Its centring offsets round to whole pixels, so its edges and screen land on the pixel grid at 1x and 2x. The title sets at the subtitle step, and a link in the description prints in the foreground ink, underlined; the close control is a small ghost button with the close glyph, labelled "close". The scrim beneath has no blur. It fades in and out on its keyframes at the quick duration.
 
 ### Toast
 
@@ -662,7 +662,9 @@ The cmdk surface stays flat, with a 40 px input group, 44 px on a phone, and a s
 
 ### Alert dialog
 
-The confirmation is a whole-pixel centred sheet on the popover fill, with a 1 px edge, 28 px padding, the sheet lift and its contact edge. Default width stops at 440 px; small keeps the compact 320 px width. The title uses the subtitle step, media sits in a 40 px secondary square, and house buttons align right 24 px below the explanation. The plain scrim and sheet fade at the quick duration.
+The confirmation is a whole-pixel centred sheet on the popover fill, with a 1 px edge, 28 px padding, the sheet lift and its contact edge. Default width stops at 440 px; small keeps the compact 320 px width. The title uses the subtitle step, media sits in a 40 px secondary square, and house buttons align right 24 px below the explanation. A link in the explanation prints in the foreground ink, underlined. The plain scrim and sheet fade at the quick duration.
+
+Focus opens on cancel, so a stray Enter keeps what the sheet asks about. The action prints through the button: plum on paper, the outline on a dark sheet. An action that leaves the app takes `key`. Destructive stays key ink with the trash glyph and the word.
 
 ### Sonner
 
