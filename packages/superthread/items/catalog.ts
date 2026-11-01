@@ -480,6 +480,16 @@ export const catalog: CatalogItem[] = [
     upstream: "resizable",
   },
   {
+    name: "paper",
+    type: "registry:ui",
+    title: "paper",
+    description: "the one white block on a page, white in every theme and on the slip lift in light",
+    files: [ui("paper")],
+    tier: "brand",
+    upstream: null,
+    texture: "contact",
+  },
+  {
     name: "collapsible",
     type: "registry:ui",
     title: "collapsible",
@@ -668,6 +678,16 @@ export const catalog: CatalogItem[] = [
     tier: "block",
     upstream: null,
     serves: ["constellation", "quanta", "trisys", "orbit", "artifacts"],
+  },
+  {
+    name: "letter",
+    type: "registry:block",
+    title: "letter",
+    description: "a piece of writing read whole: its subject and kind, the body at the reading measure, and its tools",
+    files: [block("letter")],
+    tier: "block",
+    upstream: null,
+    serves: ["orbit", "artifacts"],
   },
   {
     name: "notice",

@@ -48,6 +48,16 @@ import {
 } from "@/components/superthread/blocks/form-section";
 import { QuickAdd } from "@/components/superthread/blocks/quick-add";
 import { Facts, Fact, FactLabel, FactValue } from "@/components/superthread/blocks/facts";
+import {
+  Letter,
+  LetterHead,
+  LetterSubject,
+  LetterKind,
+  LetterBody,
+  LetterTools,
+  LetterActions,
+  LetterSource,
+} from "@/components/superthread/blocks/letter";
 import { Notice, NoticeTitle, NoticeDescription, NoticeActions } from "@/components/superthread/blocks/notice";
 import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { Input } from "@/components/superthread/ui/input";
@@ -333,6 +343,25 @@ function Sink({ mode }: { mode: Mode }) {
             <FactValue kind="number">12:04</FactValue>
           </Fact>
         </Facts>
+      </Part>
+      <Part name="letter">
+        <Letter aria-label="the draft, as it goes out">
+          <LetterHead>
+            <LetterSubject>re: chapter 7 notes</LetterSubject>
+            <LetterKind>reply · mail</LetterKind>
+          </LetterHead>
+          <LetterBody>
+            <p>hi sam,</p>
+            <p>the next draft goes up on thursday.</p>
+          </LetterBody>
+          <LetterTools>
+            <LetterActions>
+              <Button variant="ghost">edit</Button>
+              <Button variant="outline">reject</Button>
+            </LetterActions>
+            <LetterSource href="#letter">sam's mail, mon 2 nov</LetterSource>
+          </LetterTools>
+        </Letter>
       </Part>
       <Part name="notice">
         <Notice>

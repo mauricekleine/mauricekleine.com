@@ -34,6 +34,7 @@ import { Route as ComponentsInputGroupRouteImport } from './routes/components/in
 import { Route as ComponentsKbdRouteImport } from './routes/components/kbd'
 import { Route as ComponentsLabelRouteImport } from './routes/components/label'
 import { Route as ComponentsNativeSelectRouteImport } from './routes/components/native-select'
+import { Route as ComponentsPaperRouteImport } from './routes/components/paper'
 import { Route as ComponentsProgressRouteImport } from './routes/components/progress'
 import { Route as ComponentsRadioGroupRouteImport } from './routes/components/radio-group'
 import { Route as ComponentsResizableRouteImport } from './routes/components/resizable'
@@ -60,6 +61,7 @@ import { Route as CompositionsDataTableRouteImport } from './routes/compositions
 import { Route as CompositionsFactsRouteImport } from './routes/compositions/facts'
 import { Route as CompositionsFormSectionRouteImport } from './routes/compositions/form-section'
 import { Route as CompositionsItemCardsRouteImport } from './routes/compositions/item-cards'
+import { Route as CompositionsLetterRouteImport } from './routes/compositions/letter'
 import { Route as CompositionsListRowsRouteImport } from './routes/compositions/list-rows'
 import { Route as CompositionsNoticeRouteImport } from './routes/compositions/notice'
 import { Route as CompositionsPageHeaderRouteImport } from './routes/compositions/page-header'
@@ -202,6 +204,11 @@ const ComponentsNativeSelectRoute = ComponentsNativeSelectRouteImport.update({
   path: '/components/native-select',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComponentsPaperRoute = ComponentsPaperRouteImport.update({
+  id: '/components/paper',
+  path: '/components/paper',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComponentsProgressRoute = ComponentsProgressRouteImport.update({
   id: '/components/progress',
   path: '/components/progress',
@@ -333,6 +340,11 @@ const CompositionsItemCardsRoute = CompositionsItemCardsRouteImport.update({
   path: '/compositions/item-cards',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompositionsLetterRoute = CompositionsLetterRouteImport.update({
+  id: '/compositions/letter',
+  path: '/compositions/letter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompositionsListRowsRoute = CompositionsListRowsRouteImport.update({
   id: '/compositions/list-rows',
   path: '/compositions/list-rows',
@@ -442,6 +454,7 @@ export interface FileRoutesByFullPath {
   '/components/kbd': typeof ComponentsKbdRoute
   '/components/label': typeof ComponentsLabelRoute
   '/components/native-select': typeof ComponentsNativeSelectRoute
+  '/components/paper': typeof ComponentsPaperRoute
   '/components/progress': typeof ComponentsProgressRoute
   '/components/radio-group': typeof ComponentsRadioGroupRoute
   '/components/resizable': typeof ComponentsResizableRoute
@@ -468,6 +481,7 @@ export interface FileRoutesByFullPath {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
@@ -511,6 +525,7 @@ export interface FileRoutesByTo {
   '/components/kbd': typeof ComponentsKbdRoute
   '/components/label': typeof ComponentsLabelRoute
   '/components/native-select': typeof ComponentsNativeSelectRoute
+  '/components/paper': typeof ComponentsPaperRoute
   '/components/progress': typeof ComponentsProgressRoute
   '/components/radio-group': typeof ComponentsRadioGroupRoute
   '/components/resizable': typeof ComponentsResizableRoute
@@ -537,6 +552,7 @@ export interface FileRoutesByTo {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
@@ -581,6 +597,7 @@ export interface FileRoutesById {
   '/components/kbd': typeof ComponentsKbdRoute
   '/components/label': typeof ComponentsLabelRoute
   '/components/native-select': typeof ComponentsNativeSelectRoute
+  '/components/paper': typeof ComponentsPaperRoute
   '/components/progress': typeof ComponentsProgressRoute
   '/components/radio-group': typeof ComponentsRadioGroupRoute
   '/components/resizable': typeof ComponentsResizableRoute
@@ -607,6 +624,7 @@ export interface FileRoutesById {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
@@ -652,6 +670,7 @@ export interface FileRouteTypes {
     | '/components/kbd'
     | '/components/label'
     | '/components/native-select'
+    | '/components/paper'
     | '/components/progress'
     | '/components/radio-group'
     | '/components/resizable'
@@ -678,6 +697,7 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/letter'
     | '/compositions/list-rows'
     | '/compositions/notice'
     | '/compositions/page-header'
@@ -721,6 +741,7 @@ export interface FileRouteTypes {
     | '/components/kbd'
     | '/components/label'
     | '/components/native-select'
+    | '/components/paper'
     | '/components/progress'
     | '/components/radio-group'
     | '/components/resizable'
@@ -747,6 +768,7 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/letter'
     | '/compositions/list-rows'
     | '/compositions/notice'
     | '/compositions/page-header'
@@ -790,6 +812,7 @@ export interface FileRouteTypes {
     | '/components/kbd'
     | '/components/label'
     | '/components/native-select'
+    | '/components/paper'
     | '/components/progress'
     | '/components/radio-group'
     | '/components/resizable'
@@ -816,6 +839,7 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/letter'
     | '/compositions/list-rows'
     | '/compositions/notice'
     | '/compositions/page-header'
@@ -860,6 +884,7 @@ export interface RootRouteChildren {
   ComponentsKbdRoute: typeof ComponentsKbdRoute
   ComponentsLabelRoute: typeof ComponentsLabelRoute
   ComponentsNativeSelectRoute: typeof ComponentsNativeSelectRoute
+  ComponentsPaperRoute: typeof ComponentsPaperRoute
   ComponentsProgressRoute: typeof ComponentsProgressRoute
   ComponentsRadioGroupRoute: typeof ComponentsRadioGroupRoute
   ComponentsResizableRoute: typeof ComponentsResizableRoute
@@ -886,6 +911,7 @@ export interface RootRouteChildren {
   CompositionsFactsRoute: typeof CompositionsFactsRoute
   CompositionsFormSectionRoute: typeof CompositionsFormSectionRoute
   CompositionsItemCardsRoute: typeof CompositionsItemCardsRoute
+  CompositionsLetterRoute: typeof CompositionsLetterRoute
   CompositionsListRowsRoute: typeof CompositionsListRowsRoute
   CompositionsNoticeRoute: typeof CompositionsNoticeRoute
   CompositionsPageHeaderRoute: typeof CompositionsPageHeaderRoute
@@ -1081,6 +1107,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsNativeSelectRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/components/paper': {
+      id: '/components/paper'
+      path: '/components/paper'
+      fullPath: '/components/paper'
+      preLoaderRoute: typeof ComponentsPaperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/components/progress': {
       id: '/components/progress'
       path: '/components/progress'
@@ -1263,6 +1296,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompositionsItemCardsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compositions/letter': {
+      id: '/compositions/letter'
+      path: '/compositions/letter'
+      fullPath: '/compositions/letter'
+      preLoaderRoute: typeof CompositionsLetterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compositions/list-rows': {
       id: '/compositions/list-rows'
       path: '/compositions/list-rows'
@@ -1404,6 +1444,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsKbdRoute: ComponentsKbdRoute,
   ComponentsLabelRoute: ComponentsLabelRoute,
   ComponentsNativeSelectRoute: ComponentsNativeSelectRoute,
+  ComponentsPaperRoute: ComponentsPaperRoute,
   ComponentsProgressRoute: ComponentsProgressRoute,
   ComponentsRadioGroupRoute: ComponentsRadioGroupRoute,
   ComponentsResizableRoute: ComponentsResizableRoute,
@@ -1430,6 +1471,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompositionsFactsRoute: CompositionsFactsRoute,
   CompositionsFormSectionRoute: CompositionsFormSectionRoute,
   CompositionsItemCardsRoute: CompositionsItemCardsRoute,
+  CompositionsLetterRoute: CompositionsLetterRoute,
   CompositionsListRowsRoute: CompositionsListRowsRoute,
   CompositionsNoticeRoute: CompositionsNoticeRoute,
   CompositionsPageHeaderRoute: CompositionsPageHeaderRoute,
