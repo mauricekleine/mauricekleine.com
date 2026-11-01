@@ -8,9 +8,9 @@ This is Maurice's public identity monorepo. `apps/web/` is the live TanStack Sta
 
 Read [`apps/web/AGENTS.md`](apps/web/AGENTS.md), [`apps/web/PRODUCT.md`](apps/web/PRODUCT.md), and [`apps/web/DESIGN.md`](apps/web/DESIGN.md) before work on www.
 
-Run commands from the repo root. `bun run dev` starts the web app on port 3000, `bun run build` prerenders every page and writes cf's build output, `bun run test` runs the tests of the superthread package and the web, share and superthread apps, and `bun run deploy` deploys that output with cf. Cloudflare Workers Builds runs from this root. `bun run dev:superthread` starts the superthread site on port 3001, `bun run build:superthread` builds it with the registry, and `bun run deploy:superthread` deploys it with cf.
+Run commands from the repo root. `bun run dev` starts the web app on port 3000, `bun run build` prerenders every page and writes cf's build output, `bun run test` runs the tests of the superthread package and the web, share and superthread apps, and `bun run deploy` deploys that output with cf. A merge deploys nothing: Maurice deploys the Workers by hand from the M5, where `cf` uses the Superthread login. `bun run dev:superthread` starts the superthread site on port 3001, `bun run build:superthread` builds it with the registry, and `bun run deploy:superthread` deploys it with cf.
 
-After a merge, run `bun run deploy:verify <merged-sha>` to wait for the build-stamped SHAs: the web Worker's `/api/deploy.json` and, when the merge's history touches their paths, the share Worker's `/_health` and the superthread site's `/api/deploy.json`.
+After a deploy, run `bun run deploy:verify <merged-sha>` to wait for the build-stamped SHAs: the web Worker's `/api/deploy.json` and, when the merge's history touches their paths, the share Worker's `/_health` and the superthread site's `/api/deploy.json`.
 
 The pre-commit hook runs `bun fmt --staged` with the pinned Bun release, then `bun-canary lint --staged` when the canary is installed (dotfiles supplies it). Lint is still canary-only. `[fmt]` in `bunfig.toml` sets the style and ignored paths. Run `bun fmt` or `bun-canary lint` by hand for the whole repo.
 

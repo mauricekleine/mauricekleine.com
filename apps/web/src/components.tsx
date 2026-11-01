@@ -397,7 +397,7 @@ export function Subscribe() {
     let widgetId: string | undefined;
     const render = () => {
       widgetId = api()?.render("#subscribe-turnstile", {
-        sitekey: "0x4AAAAAAABLi4eHqaf6akyS",
+        sitekey: "0x4AAAAAAFvOQQpuZFgGXmUZ",
         theme: theme ?? "auto",
       });
     };

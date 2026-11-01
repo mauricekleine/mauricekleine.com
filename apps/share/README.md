@@ -3,12 +3,10 @@
 `artifact-share` serves snapshot copies at `share.mauricekleine.com`. The private
 Soliton store remains the source; nothing here reads it. Shares expire 30 days after
 their commit, or earlier when deleted.
-Workers Builds deploys it from `main` through its own `artifact-share` trigger, which
-runs only when `apps/share/`, `packages/superthread/`, `package.json` or `bun.lock`
-changes. It builds with `bun install --frozen-lockfile && bun run --cwd apps/share build`
-and deploys with `bun run --cwd apps/share deploy`: the build image has no global `cf`,
-and `bun run` puts the repository's pinned one on `PATH`. Deploys keep the Worker's
-existing secrets, so the build needs no credentials beyond its Workers Builds token.
+Maurice deploys it by hand from the M5 in the Superthread account, when `apps/share/`,
+`packages/superthread/`, `package.json` or `bun.lock` changes. It builds with
+`bun install --frozen-lockfile && bun run --cwd apps/share build` and deploys with
+`bun run --cwd apps/share deploy`. Deploys keep the Worker's existing secrets.
 Root `bun run deploy:verify <sha>` waits for both Workers.
 
 ## Admin API v1
@@ -150,7 +148,7 @@ the independent build without touching the existing web Worker.
 ## One-time M5 setup
 
 Run from a fresh checkout of this repo on the M5, after loading `mk-cloudflare` and
-`mk-1password`. Select Kaulos (`cloudflare-account --name` from this repo). Keep the
+`mk-1password`. Select Superthread (`cloudflare-account --name` from this repo). Keep the
 R2 bucket private with no r2.dev or custom bucket domain. The Worker is its only reader.
 
 Create two **API Credential** items in **Soliton Agents**, with a concealed built-in
@@ -161,7 +159,7 @@ M5 desktop app (Touch ID). They print no credentials and create no secret files:
 
 ```bash
 set -o pipefail
-cloudflare-account --name  # must say kaulos
+cloudflare-account --name  # must say superthread
 for item in ARTIFACT_SHARE_TOKEN ARTIFACT_SHARE_COOKIE_KEY; do
   python3 - "$item" <<'PYSETUP' | op item create --account mauricekleine.1password.com --vault "Soliton Agents" --format json - >/dev/null
 import json, secrets, sys
@@ -188,8 +186,8 @@ First deploy provisions the SQLite Durable Object migration for exported `ShareS
 binds private R2 `artifact-share`, installs both secrets in that same deployment and
 attaches **only** `share.mauricekleine.com`. `exports.durableObject({storage:"sqlite"})`
 is cf's migration declaration; no separate Wrangler migration is needed. Existing
-`mauricekleine-com` and all four of its domains are untouched. Later releases deploy
-through Workers Builds. Rotate a secret by repeating the `op inject | cf deploy`
+`mauricekleine-com` and all four of its domains are untouched. Later releases repeat
+the build and `bun run --cwd apps/share deploy`. Rotate a secret by repeating the `op inject | cf deploy`
 pipeline. Root `bun run deploy` deploys only the web app.
 
 After the dotfiles refresh, run `mk artifacts share <project>/<slug> --public` or
