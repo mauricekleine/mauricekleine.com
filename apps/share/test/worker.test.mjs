@@ -154,6 +154,7 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   // the button prints as the outline off paper, for a stored dark mode and for a system one
   for (const scope of [".dark", "html:not(.light)"])
     assert.ok(darkPage.includes(`${scope} button { border-color: currentColor; background: transparent;`), scope);
+  assert.ok(darkPage.includes("@media (max-width: 600px) { input, button { height: 44px; } }"));
   const faces = [...darkPage.matchAll(/url\("(\/_fonts\/[^"]+)"\)/g)].map((match) => match[1]);
   assert.equal(faces.length, 9);
   for (const face of faces) assert.equal((await get(face)).status, 200, face);

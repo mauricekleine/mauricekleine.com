@@ -27,6 +27,7 @@ input, button { width: 100%; height: 40px; border-radius: 0; font: inherit; }
 input { padding: 0 12px; border: 1px solid var(--input); background: var(--background); color: var(--foreground); caret-color: var(--primary); font-family: var(--font-mono); }
 button { margin-top: 16px; border: 1px solid transparent; padding: 0 16px; background: var(--primary); color: var(--primary-foreground); font-weight: 500; cursor: pointer; }
 button:hover { background: var(--primary-hover); }
+@media (max-width: 600px) { input, button { height: 44px; } }
 ${outline(".dark")}
 @media (prefers-color-scheme: dark) { ${outline("html:not(.light)")} }
 :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
