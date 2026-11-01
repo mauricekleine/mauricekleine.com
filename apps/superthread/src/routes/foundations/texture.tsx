@@ -246,7 +246,7 @@ function Page() {
         <ol className="st-f-places">
           {places.map(({ name, note }) => (
             <li key={name}>
-              <h3 className="type-title">{name}</h3>
+              <h3 className="type-title text-first">{name}</h3>
               <p className="st-f-note">{note}</p>
               <ModePair
                 className="st-f-stack"
@@ -291,7 +291,7 @@ function Page() {
         <ol className="st-f-details">
           {tokens.texture.details.map((detail) => (
             <li key={detail.key}>
-              <h3 className="type-title">{detail.component}</h3>
+              <h3 className="type-title text-first">{detail.component}</h3>
               <Caption detail={detail.key} />
               <p className="st-f-note">{detailNote[detail.key]}</p>
               <ModePair className="st-f-detail-pair">{detailSpecimen[detail.key]}</ModePair>

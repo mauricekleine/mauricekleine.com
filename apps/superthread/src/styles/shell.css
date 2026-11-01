@@ -64,6 +64,7 @@
     width: 264px;
     padding: 0 24px;
     border-right: 1px solid var(--rule);
+    color: var(--first);
     font: 400 21px/1 var(--font-display);
     letter-spacing: -0.02em;
   }

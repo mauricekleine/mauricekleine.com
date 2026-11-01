@@ -70,7 +70,7 @@ function Workspace({ printed = false }: { printed?: boolean }) {
     >
       <AppShellGround render={<div />}>
         <AppShellPanel>
-          <h1 className="type-section">{page}</h1>
+          <h1 className="type-section text-first">{page}</h1>
           <p className="st-ca-panel-copy">
             {page === "board"
               ? "12 tasks, 2 running. the next check starts here."

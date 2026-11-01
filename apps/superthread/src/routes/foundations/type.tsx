@@ -25,7 +25,7 @@ const families: readonly { name: string; family: Family; role: string; use: stri
     name: "Unbounded",
     family: "display",
     role: "display",
-    use: "titles, section heads and the board, at 300; the wordmark at 400",
+    use: "titles, section heads and the board, at 300 in the first ink; the wordmark at 400",
     sample: "runs this week",
   },
   {
@@ -46,7 +46,7 @@ const families: readonly { name: string; family: Family; role: string; use: stri
     name: "Fragment Mono",
     family: "mono",
     role: "mono",
-    use: "ids, numbers, code and the caps legends",
+    use: "ids, times, figures that hold a column, code and the caps legends",
     sample: "run 7f3a2c · 00:04:12",
   },
 ];

@@ -34,7 +34,7 @@ function Page() {
         </div>
       </Opener>
       <section id="fleet" aria-labelledby="fleet-title" className="st-ov-fleet">
-        <h2 id="fleet-title" className="type-section">
+        <h2 id="fleet-title" className="type-section text-first">
           the fleet
         </h2>
         <FleetRow />

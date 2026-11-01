@@ -21,7 +21,7 @@ function Page() {
     <>
       <PageHead
         title="table"
-        lede="rows come from the row spacing: 48&nbsp;px in a table, 56&nbsp;px on a board. ids and numbers set in mono, and every figure is tabular."
+        lede="rows come from the row spacing: 48&nbsp;px in a table, 56&nbsp;px on a board. ids and numbers set in mono, so every figure holds its column."
       >
         <InstallLine items={["table"]} />
       </PageHead>
