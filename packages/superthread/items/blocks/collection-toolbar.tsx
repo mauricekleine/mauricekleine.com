@@ -33,7 +33,7 @@ function ToolbarGroup({ className, label, children, ...props }: React.ComponentP
       className={cn("flex min-w-0 max-w-full flex-wrap items-center gap-2", className)}
       {...props}
     >
-      <span id={labelId} className="type-meta text-muted-foreground">
+      <span id={labelId} className="type-instrument text-muted-foreground">
         {label}
       </span>
       {children}

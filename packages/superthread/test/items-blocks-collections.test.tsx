@@ -65,7 +65,9 @@ describe("collection toolbar", () => {
     expect(root.el.getAttribute("role")).toBe("group");
     expect(root.el.getAttribute("aria-label")).toBe("task controls");
     const group = one(host, '[data-slot="toolbar-group"]').el;
-    expect(host.querySelector(`[id="${group.getAttribute("aria-labelledby")}"]`)?.textContent).toBe("status");
+    const label = one(host, `[id="${group.getAttribute("aria-labelledby")}"]`);
+    expect(label.el.textContent).toBe("status");
+    expect(label.classes).toContain("type-instrument");
     expect([...host.querySelectorAll('[aria-live="polite"]')].map((el) => el.textContent)).toEqual([
       "0 of 40",
       "12 of 40",
@@ -206,7 +208,9 @@ describe("list rows", () => {
     expect(one(host, "li").classes).toEqual(
       expect.arrayContaining(["min-h-(--spacing-row-board)", "border-b", "py-3", "px-4"]),
     );
-    expect(one(host, '[data-slot="list-row-meta"]').classes).toContain("flex-wrap");
+    expect(one(host, '[data-slot="list-row-meta"]').classes).toEqual(
+      expect.arrayContaining(["flex-wrap", "[&>*:not(:last-child)]:after:content-['·'/'']"]),
+    );
     expect(one(host, '[data-slot="list-row-aside"]').classes).toEqual(
       expect.arrayContaining(["font-mono", "tabular-nums", "text-right"]),
     );
@@ -422,6 +426,7 @@ describe("data table", () => {
     expect(one(host, "td[data-kind=number]").classes).toEqual(expect.arrayContaining(["font-mono", "text-right"]));
     expect(one(host, '[aria-selected="true"]').classes).toContain("aria-selected:bg-control-hover");
     expect(one(host, '[aria-sort="descending"]').el.getAttribute("scope")).toBe("col");
+    expect(one(host, '[data-slot="sortable-head-button"]').classes).toContain("type-instrument");
   });
 
   test("sorting cycles ascending and descending, and the app's rows follow the accepted direction", async () => {

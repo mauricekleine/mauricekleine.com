@@ -207,11 +207,11 @@ function Sink({ mode }: { mode: Mode }) {
             </ListRowLead>
             <ListRowTitle render={<a href="#task" />}>check the registry</ListRowTitle>
             <ListRowAside>
-              <time dateTime="2026-10-25">2h ago</time>
+              <Badge size="sm" variant="queued" />
             </ListRowAside>
             <ListRowMeta>
-              <Badge variant="queued" />
               <span>orbit</span>
+              <time dateTime="2026-10-25">2h ago</time>
             </ListRowMeta>
             <ListRowActions>
               <Button variant="outline" size="sm">

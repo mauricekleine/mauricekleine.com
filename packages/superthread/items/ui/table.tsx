@@ -71,14 +71,15 @@ const cellKind = cva("", {
 
 type CellKind = VariantProps<typeof cellKind>;
 
+// A head is a word, so it sets in Supreme at the instrument step, over its column's alignment.
 function TableHead({ className, kind, ...props }: React.ComponentProps<"th"> & CellKind) {
   return (
     <th
       data-slot="table-head"
       data-kind={kind ?? undefined}
       className={cn(
-        "border-b border-foreground pr-4 pb-3 text-left align-bottom type-meta whitespace-nowrap text-muted-foreground last:pr-0 [&:has([role=checkbox])]:pr-0",
-        cellKind({ kind }),
+        "border-b border-foreground pr-4 pb-3 text-left align-bottom type-instrument whitespace-nowrap text-muted-foreground last:pr-0 [&:has([role=checkbox])]:pr-0",
+        kind === "number" && "text-right",
         className,
       )}
       {...props}

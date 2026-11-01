@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { BadgeStates, BadgeVariants, BadgeWords } from "@/examples/badge";
+import { BadgeSizes, BadgeStates, BadgeVariants, BadgeWords } from "@/examples/badge";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/components/badge")({
     sections: [
       { id: "status", title: "status" },
       { id: "variants", title: "variants" },
+      { id: "sizes", title: "sizes" },
     ],
   },
   component: Page,
@@ -43,6 +44,16 @@ function Page() {
         <p className="st-b-copy">shadcn&apos;s six variants, square, with the word at 13&nbsp;px.</p>
         <ModePair className="st-b-stack">
           <BadgeVariants />
+        </ModePair>
+      </Section>
+
+      <Section id="sizes" title="sizes">
+        <p className="st-b-copy">
+          <code>sm</code> is 24&nbsp;px, the height of an <code>xs</code> button. it fits a status into a row&apos;s
+          aside without pushing the row taller.
+        </p>
+        <ModePair className="st-b-stack">
+          <BadgeSizes />
         </ModePair>
       </Section>
     </>

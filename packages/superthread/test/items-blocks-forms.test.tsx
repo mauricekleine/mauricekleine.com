@@ -343,6 +343,7 @@ describe("facts", () => {
       const dl = one(rendered, "dl").el;
       expect(dl.getAttribute("data-mk")).toBe("facts");
       expect(dl.getAttribute("data-layout")).toBe(layout);
+      expect(one(rendered, "dt").classes).toEqual(expect.arrayContaining(["type-instrument", "text-muted-foreground"]));
       expect(dl.getAttribute("data-columns")).toBe("3");
       expect([...dl.children].map((pair) => [...pair.children].map((part) => part.tagName))).toEqual([
         ["DT", "DD"],

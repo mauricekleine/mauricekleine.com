@@ -50,7 +50,7 @@ function RowsExample() {
         </ListRowAside>
         <ListRowMeta>
           <span>quanta</span>
-          <Badge variant={done ? "done" : "queued"} />
+          <span>chapter 03</span>
         </ListRowMeta>
         <ListRowActions>
           <Button size="sm" variant="outline" aria-pressed={pinned} onClick={() => setPinned(!pinned)}>
@@ -68,6 +68,17 @@ function RowsExample() {
       </ListRow>
       <ListRow>
         <ListRowTitle>leave room for a longer title without cutting off the last word</ListRowTitle>
+      </ListRow>
+      <ListRow>
+        <ListRowTitle>render the chapter plates</ListRowTitle>
+        <ListRowAside>
+          <Badge size="sm" variant="running" />
+        </ListRowAside>
+        <ListRowMeta>
+          <span>quanta</span>
+          <span>chapter 05</span>
+          <time dateTime="2026-10-25T08:12:00Z">08:12</time>
+        </ListRowMeta>
       </ListRow>
     </ListRows>
   );
@@ -129,8 +140,9 @@ function Page() {
 
       <Section id="example" title="example">
         <p className="st-cb-copy">
-          check the first task to complete it, or pin it for later. its title links to the states below; the next two
-          titles are plain text.
+          check the first task to complete it, or pin it for later. its title links to the states below; the next titles
+          are plain text. the meta line holds context and prints the dot between its pieces. a status sits outside it,
+          as a small badge in the aside.
         </p>
         <ModePair className="st-cb-stack">
           <RowsExample />

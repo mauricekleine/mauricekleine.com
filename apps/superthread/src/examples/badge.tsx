@@ -34,6 +34,28 @@ export function BadgeWords() {
   );
 }
 
+// sm is 24 px, the height of an xs button, for a row's aside.
+export function BadgeSizes() {
+  return (
+    <>
+      <div className="st-b-row">
+        {states.map((state) => (
+          <Badge key={state} size="sm" variant={state} />
+        ))}
+      </div>
+      <div className="st-b-row">
+        <Badge size="sm">new</Badge>
+        <Badge size="sm" variant="secondary">
+          draft
+        </Badge>
+        <Badge size="sm" variant="outline">
+          beta
+        </Badge>
+      </div>
+    </>
+  );
+}
+
 const variants = [
   { variant: "default", word: "new" },
   { variant: "secondary", word: "draft" },

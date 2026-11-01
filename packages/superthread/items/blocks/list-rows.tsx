@@ -62,7 +62,8 @@ function ListRowTitle({ className, href, render, ...props }: useRender.Component
   });
 }
 
-// A time or count sits at the end on wide rows and keeps its mono figures when it wraps below the title.
+// A time, a count or a small status badge sits at the end on wide rows, and figures stay mono when it wraps below the
+// title.
 function ListRowAside({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -76,13 +77,15 @@ function ListRowAside({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// The second line holds context and badges; each fragment may wrap without truncating the title.
+// The second line holds context, and it prints the dot between its pieces, so a row writes only the pieces. A dot ends
+// a wrapped line rather than starting the next, and it is decoration, so a screen reader skips it. Each piece may wrap
+// without truncating the title. A status sits outside it, in the aside.
 function ListRowMeta({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="list-row-meta"
       className={cn(
-        "flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 type-instrument text-muted-foreground [grid-area:meta] [overflow-wrap:anywhere]",
+        "flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 type-instrument text-muted-foreground [grid-area:meta] [overflow-wrap:anywhere] [&>*:not(:last-child)]:after:ml-2 [&>*:not(:last-child)]:after:content-['·'/'']",
         className,
       )}
       {...props}

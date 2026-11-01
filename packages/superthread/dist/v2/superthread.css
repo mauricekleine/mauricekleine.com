@@ -717,25 +717,23 @@
 
   /* every focusable control keeps a 2 px ring at 2 px; a field owns its focus in its skin, as its inside edge */
   :where(
-    a,
-    button,
-    summary,
-    [role="button"],
-    [role="checkbox"],
-    [role="link"],
-    [role="menuitem"],
-    [role="menuitemcheckbox"],
-    [role="menuitemradio"],
-    [role="option"],
-    [role="radio"],
-    [role="slider"],
-    [role="switch"],
-    [role="tab"],
-    [role="treeitem"],
-    [tabindex]:not([tabindex="-1"])
-  ):where(
-    :not(input, select, textarea, [contenteditable], [data-slot="select-trigger"])
-  ):focus-visible {
+      a,
+      button,
+      summary,
+      [role="button"],
+      [role="checkbox"],
+      [role="link"],
+      [role="menuitem"],
+      [role="menuitemcheckbox"],
+      [role="menuitemradio"],
+      [role="option"],
+      [role="radio"],
+      [role="slider"],
+      [role="switch"],
+      [role="tab"],
+      [role="treeitem"],
+      [tabindex]:not([tabindex="-1"])
+    ):where(:not(input, select, textarea, [contenteditable], [data-slot="select-trigger"])):focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }

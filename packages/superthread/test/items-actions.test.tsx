@@ -310,6 +310,19 @@ describe("badge", () => {
     expect(bare).toContain(`data-variant="${state}"`);
   });
 
+  test("prints 30 px tall, and 24 px at sm, with the status glyph square still evenly set", () => {
+    expect(classes(renderToString(<Badge>orbit</Badge>))).toContain("h-[30px]");
+    expect(classes(renderToString(<Badge size="sm">orbit</Badge>))).toEqual(expect.arrayContaining(["h-6", "px-2"]));
+    const status = renderToString(<Badge size="sm" variant="running" />);
+    expect(classes(status)).toEqual(expect.arrayContaining(["h-6", "pl-1"]));
+    expect(status).toContain('data-size="sm"');
+    expect(classes(renderToString(<Badge variant="running" />))).toContain("pl-[7px]");
+  });
+
+  test("sets in Supreme in a mono aside too", () => {
+    expect(classes(renderToString(<Badge>orbit</Badge>))).toContain("font-sans");
+  });
+
   test("the default prints in foreground, and a linked one takes destructive's hover", () => {
     expect(classes(renderToString(<Badge>orbit</Badge>))).toEqual(
       expect.arrayContaining([
@@ -424,16 +437,20 @@ describe("table", () => {
     expect(classes(cell)).toContain("h-[calc(var(--row)+1px)]");
   });
 
-  test("ids and numbers set in mono, every figure tabular", () => {
+  test("ids and numbers set in mono, every figure tabular, and a head is a word at the instrument step", () => {
     const html = items.table!.html;
     expect(classes(html.match(/<table[^>]*>/)?.[0] ?? "")).toEqual(
       expect.arrayContaining(["tabular-nums", "texture-rowedge"]),
     );
-    for (const cell of html.match(/<t[dh][^>]*data-kind="id"[^>]*>/g) ?? [])
-      expect(classes(cell)).toContain("font-mono");
-    const numbers = html.match(/<t[dh][^>]*data-kind="number"[^>]*>/g) ?? [];
-    expect(numbers.length).toBe(4);
+    for (const cell of html.match(/<td[^>]*data-kind="id"[^>]*>/g) ?? []) expect(classes(cell)).toContain("font-mono");
+    const numbers = html.match(/<td[^>]*data-kind="number"[^>]*>/g) ?? [];
+    expect(numbers.length).toBe(3);
     for (const cell of numbers) expect(classes(cell)).toEqual(expect.arrayContaining(["font-mono", "text-right"]));
+    for (const head of html.match(/<th\s[^>]*>/g) ?? []) {
+      expect(classes(head)).toContain("type-instrument");
+      expect(classes(head)).not.toContain("font-mono");
+    }
+    expect(classes(html.match(/<th[^>]*data-kind="number"[^>]*>/)?.[0] ?? "")).toContain("text-right");
     const plain = html.match(/<td(?![^>]*data-kind)[^>]*>/)?.[0] ?? "";
     expect(classes(plain)).not.toContain("font-mono");
   });

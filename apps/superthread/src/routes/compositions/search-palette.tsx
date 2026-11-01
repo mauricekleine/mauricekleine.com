@@ -181,7 +181,7 @@ function Page() {
           <dt>
             <code>SearchPaletteTrigger</code>
           </dt>
-          <dd>names the search and shows the shortcut when enabled.</dd>
+          <dd>names the search. it prints no keycap.</dd>
           <dt>
             <code>SearchPaletteContent</code>
           </dt>

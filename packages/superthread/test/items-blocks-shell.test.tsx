@@ -280,10 +280,10 @@ describe("search palette", () => {
     expect(trigger.el.getAttribute("type")).toBe("button");
     expect(host.querySelector("input")).toBeNull();
     expect(trigger.el.textContent).toContain("search everything");
-    expect(one(host, "kbd").el.textContent).toBe("⌘/ctrl k");
+    expect(host.querySelector("kbd")).toBeNull();
     expect(trigger.classes).toEqual(expect.arrayContaining(["h-10", "border-input", ...CONTROL_RING]));
     expect(detailsUsed(elements(host), "search-palette")).toEqual([]);
-    expect(forbidden(own(elements(host), "search-palette")).filter((hit) => !hit.startsWith("kbd:"))).toEqual([]);
+    expect(forbidden(own(elements(host), "search-palette"))).toEqual([]);
   });
 
   test("the trigger opens a named dialog with named search and live results", async () => {
@@ -367,7 +367,6 @@ describe("search palette", () => {
       expect(isOpen(view.body)).toBe(false);
       await key(document, "p", { ctrlKey: true });
       expect(isOpen(view.body)).toBe(true);
-      expect(one(view.body, "kbd").el.textContent).toBe("⌘/ctrl p");
     } finally {
       await view.done();
     }
@@ -378,7 +377,6 @@ describe("search palette", () => {
       await key(document, "k", { metaKey: true });
       await key(document, "/");
       expect(isOpen(disabled.body)).toBe(false);
-      expect(disabled.body.querySelector("kbd")).toBeNull();
     } finally {
       await disabled.done();
     }
