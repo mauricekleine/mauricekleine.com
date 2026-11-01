@@ -5,6 +5,7 @@ import { afterAll, beforeAll, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { child, parse, type Rule, value } from "./css.ts";
 
 const root = join(import.meta.dir, "..");
 const scripts = join(root, "scripts/texture");
@@ -313,52 +314,12 @@ print(json.dumps(results))`);
 
 // ---------- texture.css ----------
 
-type Rule = { sel: string; decls: [string, string][]; rules: Rule[] };
-
-/** A block tree of the file: every rule or at-rule with its own declarations and nested rules, whitespace normalised. */
-function parse(css: string): Rule {
-  const norm = (s: string) => s.replace(/\s+/g, " ").replace(/\(\s/g, "(").replace(/\s\)/g, ")").trim();
-  const top: Rule = { sel: "", decls: [], rules: [] };
-  const stack = [top];
-  let buf = "";
-  let parens = 0;
-  const decl = () => {
-    const s = norm(buf);
-    buf = "";
-    if (!s) return;
-    const i = s.indexOf(":");
-    stack.at(-1)!.decls.push([s.slice(0, i).trim(), s.slice(i + 1).trim()]);
-  };
-  for (const ch of css.replace(/\/\*[\s\S]*?\*\//g, "")) {
-    if (ch === "(") parens++;
-    if (ch === ")") parens--;
-    if (parens === 0 && ch === "{") {
-      const rule: Rule = { sel: norm(buf), decls: [], rules: [] };
-      buf = "";
-      stack.at(-1)!.rules.push(rule);
-      stack.push(rule);
-    } else if (parens === 0 && ch === "}") {
-      decl();
-      stack.pop();
-    } else if (parens === 0 && ch === ";") decl();
-    else buf += ch;
-  }
-  expect(stack).toHaveLength(1);
-  return top;
-}
-
 const css = readFileSync(join(root, "tokens/texture.css"), "utf8");
 const sheet = parse(css);
 const tiles: { [name: string]: { w: number; h: number } } = json("texture/tiles.json");
 const details = json("tokens/details.json");
 
-const child = (rule: Rule, sel: string) => {
-  const found = rule.rules.filter((r) => r.sel === sel);
-  expect({ in: rule.sel, sel, count: found.length }).toEqual({ in: rule.sel, sel, count: 1 });
-  return found[0]!;
-};
 const utility = (name: string) => child(sheet, `@utility ${name}`);
-const value = (rule: Rule, prop: string) => Object.fromEntries(rule.decls)[prop];
 const walk = (rule: Rule): Rule[] => [rule, ...rule.rules.flatMap(walk)];
 const declsOf = (rule: Rule) => walk(rule).flatMap((r) => r.decls);
 
@@ -434,6 +395,21 @@ test("off-paper prints the outline inside a dark scope and nowhere else, and kee
     ["box-shadow", "none"],
   ]);
   expect(value(child(enabled, "@variant aria-invalid"), "border-color")).toBe("var(--error)");
+});
+
+test("link-quiet is a muted word with no underline that turns foreground and underlines 4 px down on hover", () => {
+  const quiet = child(parse(readFileSync(join(root, "tokens/utilities.css"), "utf8")), "@utility link-quiet");
+  expect(quiet.decls).toEqual(
+    expect.arrayContaining([
+      ["color", "var(--muted-foreground)"],
+      ["text-decoration-line", "none"],
+      ["text-underline-offset", "4px"],
+    ]),
+  );
+  expect(child(quiet, "@variant hover").decls).toEqual([
+    ["color", "var(--foreground)"],
+    ["text-decoration-line", "underline"],
+  ]);
 });
 
 test("texture-disabled screens the edge on ::before, a field box only for a disabled text control, and a bare input or textarea masks its own border (ruling 3)", () => {

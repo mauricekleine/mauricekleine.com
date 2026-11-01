@@ -35,7 +35,12 @@ function FormSectionHeader({ className, ...props }: React.ComponentProps<"div">)
 function FormSectionTitle({ className, ...props }: Omit<React.ComponentProps<"h2">, "id">) {
   const titleId = useContext(FormSectionContext);
   return (
-    <h2 data-slot="form-section-title" className={cn("type-title text-balance", className)} {...props} id={titleId} />
+    <h2
+      data-slot="form-section-title"
+      className={cn("type-title text-balance text-first", className)}
+      {...props}
+      id={titleId}
+    />
   );
 }
 

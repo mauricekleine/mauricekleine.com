@@ -5,9 +5,9 @@ import { Icon } from "@/components/superthread/ui/glyphs";
 
 // The head of a page: an optional way back, the title, a count or meta line beside it, the actions at the far end,
 // and a lede on its own line below. Children flow in that order and wrap; the description always takes a full line.
-// A working panel's head (size "panel", the default) sets the title as a section head and the text under it as a
-// summary; a page on the stock (size "page") sets the hero title and an Erode lede. No eyebrow above the title: the
-// title carries its own weight.
+// A working panel's head (size "panel", the default) sets the title at the section step in the first ink; a page on
+// the stock (size "page") sets the hero title. Both print the same Erode lede under it. No eyebrow above the title:
+// the title carries its own weight.
 function PageHeader({
   className,
   size = "panel",
@@ -18,10 +18,7 @@ function PageHeader({
       data-slot="page-header"
       data-mk="page-header"
       data-size={size}
-      className={cn(
-        "group/page-header flex flex-wrap items-center gap-x-4 gap-y-3 data-[size=page]:gap-y-4",
-        className,
-      )}
+      className={cn("group/page-header flex flex-wrap items-center gap-x-4 gap-y-4", className)}
       {...props}
     />
   );
@@ -32,10 +29,7 @@ function PageHeaderBack({ className, children = "back", render = <a />, ...props
   return useRender({
     props: mergeProps<"a">(
       {
-        className: cn(
-          "inline-flex basis-full items-center gap-2 type-instrument text-muted-foreground transition-[color] duration-(--duration-instant) ease-(--ease-brand) hover:text-foreground",
-          className,
-        ),
+        className: cn("inline-flex basis-full items-center gap-2 type-instrument link-quiet", className),
         children: (
           <>
             <Icon name="left" />
@@ -54,7 +48,10 @@ function PageHeaderTitle({ className, ...props }: React.ComponentProps<"h1">) {
   return (
     <h1
       data-slot="page-header-title"
-      className={cn("min-w-0 type-section text-balance group-data-[size=page]/page-header:type-hero", className)}
+      className={cn(
+        "min-w-0 type-section text-balance text-first group-data-[size=page]/page-header:type-hero",
+        className,
+      )}
       {...props}
     />
   );
@@ -83,15 +80,12 @@ function PageHeaderActions({ className, ...props }: React.ComponentProps<"div">)
   );
 }
 
-// The sentence under the title, on its own line and held to a reading measure.
+// The sentence under the title, on its own line at the lede step and held to a reading measure.
 function PageHeaderDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
       data-slot="page-header-description"
-      className={cn(
-        "max-w-[66ch] basis-full type-summary text-pretty text-muted-foreground group-data-[size=page]/page-header:type-lede group-data-[size=page]/page-header:text-foreground",
-        className,
-      )}
+      className={cn("max-w-[27.5em] basis-full type-lede text-pretty text-foreground", className)}
       {...props}
     />
   );

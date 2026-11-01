@@ -619,9 +619,9 @@
   text-transform: none;
 }
 
-/* utilities an item carries, beyond the type steps and the screens. a form that changes with the mode sits here on
-   generate.ts's dark scope, as texture-contact's does in texture.css, so no item needs a dark: class. the plain css
-   leaves them out: only an item reads them. */
+/* utilities beyond the type steps and the screens. a form that changes with the mode sits here on generate.ts's dark
+   scope, as texture-contact's does in texture.css, so no item needs a dark: class. the plain css leaves them out, as
+   it does the type steps: an item or a ship's own markup reads them through tailwind. */
 
 /* off paper: a plum fill prints pale pink in a dark scope, which is every surface of a dark page and the frame on any
    page, so there a filled button prints as the outline: an edge in its label's ink, no fill, and the outline's hover
@@ -646,6 +646,38 @@
         border-color: var(--error);
       }
     }
+  }
+}
+
+/* a target reaches 44 px without growing: ::after, centred on its box, takes the pointer at least 44 px each way. the
+   box stays positioned. an item scopes it to the widths that need it. */
+@utility hit-area {
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    translate: -50% -50%;
+  }
+}
+
+/* the one second link form, beside the foreground link: a muted word that turns foreground on hover, underlined 4 px
+   below the baseline. it has no underline at rest, and it takes the hit area on a phone. */
+@utility link-quiet {
+  color: var(--muted-foreground);
+  text-decoration-line: none;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color var(--duration-instant) var(--ease-brand);
+  @variant hover {
+    color: var(--foreground);
+    text-decoration-line: underline;
+  }
+  @media (max-width: 600px) {
+    position: relative;
+    @apply hit-area;
   }
 }
 
@@ -683,10 +715,53 @@
     caret-color: var(--ring);
   }
 
-  /* buttons, tabs, links and rail cells keep a 2 px ring at 2 px; fields own their focus in their skins */
-  :where(a, button, summary, [role="tab"], [role="button"]):where(:not([data-slot="select-trigger"])):focus-visible {
+  /* every focusable control keeps a 2 px ring at 2 px; a field owns its focus in its skin, as its inside edge */
+  :where(
+    a,
+    button,
+    summary,
+    [role="button"],
+    [role="checkbox"],
+    [role="link"],
+    [role="menuitem"],
+    [role="menuitemcheckbox"],
+    [role="menuitemradio"],
+    [role="option"],
+    [role="radio"],
+    [role="slider"],
+    [role="switch"],
+    [role="tab"],
+    [role="treeitem"],
+    [tabindex]:not([tabindex="-1"])
+  ):where(
+    :not(input, select, textarea, [contenteditable], [data-slot="select-trigger"])
+  ):focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
+  }
+
+  /* figures and code that hold a column set in mono; a time in running text or a row's line reads with its words */
+  code,
+  time {
+    font-family: var(--font-mono);
+  }
+
+  :is(p, li) time {
+    font-family: inherit;
+  }
+
+  /* the working panel's text wraps anywhere, so a long id never widens the page; a table keeps its own columns */
+  [data-slot="app-shell-panel"] :is(p, h1, h2, h3, dd, li):not(td *, th *) {
+    overflow-wrap: anywhere;
+  }
+
+  /* an anchor no item owns is running text: foreground, with a 1 px underline at rest, 4 px below the baseline. an
+     item's own link is chrome and underlines on hover. this is the base layer, so every item and utility wins */
+  [data-slot="app-shell-panel"] a:not([data-slot]) {
+    color: var(--foreground);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
   }
 }
 

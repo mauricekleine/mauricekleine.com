@@ -22,7 +22,7 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 | `meta`       | 11 / 14     | Fragment Mono, caps, .14em              | legends                     |
 | `instrument` | 13 / 20     | Supreme 400                            | notes, badges               |
 | `ui`         | 14 / 21     | Supreme 400                            | the interface's body        |
-| `summary`    | 15 / 24     | Supreme 400                            | the text under a section head |
+| `summary`    | 15 / 24     | Supreme 400                            | the text under a form title |
 | `subtitle`   | 18 / 24     | Supreme 500                            | dialog titles               |
 | `read`       | 19 / 32     | Erode 400 (phone 18 / 30)              | the reading page            |
 | `lede`       | 21 / 33     | Erode 400 (phone 19 / 31)              | ledes                       |
@@ -34,12 +34,15 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 
 The reading page sets Erode at 19 px on 32 px with a 27.5em measure (about 66 characters) on a 672 px sheet.
 
+Links print in foreground, 4 px above their underline. A link in running text keeps a 1 px underline at rest, and inside `AppShellPanel` the base layer prints any anchor no item owns that way. A chrome link, such as a row title, a nav word or a door, underlines on hover. `link-quiet` is the one second form: a muted word that turns foreground on hover.
+
 ## space and layout
 
 - Space runs on a 4 px base: 4, 8, 12, 16, 24, 32, 48, 64 and 96.
 - Rows: 56 px on the board, 48 px in a table, 32 px for a nav item (`--spacing-row-board`, `-table`, `-nav`).
 - A section head sits inside its full-bleed rule, 64 px below the section before it and 44 px above its content.
-- On a ship surface the board panel is at most 880 px wide and the reading sheet 672 px, both beside the fleet rail and the ship's nav. The reading page keeps a 264 px margin on the ground for its contents and progress.
+- On a ship surface the working panel is at most 880 px wide and the reading sheet 672 px, both beside the fleet rail and the ship's nav. No ship widens the panel and there is no wide setting, so main content holds its place between pages. The reading page keeps a 264 px margin on the ground for its contents and progress.
+- `AppShellPanel` is a size container, and text in it wraps anywhere, except inside a table's cells.
 - At 900 px and below the fleet rail becomes a 48 px bar above the panel, with 12 px of ground on each side of it. At 600 px and below the phone type steps apply.
 
 ## shape
@@ -50,7 +53,7 @@ The reading page sets Erode at 19 px on 32 px with a 27.5em measure (about 66 ch
 
 ## focus
 
-- **Controls** (buttons, tabs, links, rail cells) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible`. Inside the ship's nav the ring prints in `sidebar-foreground`, so the nav holds no plum.
+- **Controls** (buttons, tabs, links, rail cells) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible` for every control role and anything else in the tab order. Inside the ship's nav the ring prints in `sidebar-foreground`, so the nav holds no plum.
 - **Fields** (input, textarea, input group, the select trigger) own their focus. While the text control holds focus, the box's 1 px edge becomes a 2 px edge drawn inside it (`outline: 2px` at `-2px` offset, in `--fx`) and the caret takes the same ink. `--fx` is plum, or the error ink when the field is invalid. The text never moves, and a disabled field takes no focus.
 - **A button inside a field** (clear, reveal, a toggle) keeps its own 2 px ring, drawn inside itself, and the box stays at 1 px.
 - **The code patch's copy link** draws its ring 4 px inside itself, in plum's dark value.

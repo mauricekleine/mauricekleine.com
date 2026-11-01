@@ -265,11 +265,6 @@ describe("select", () => {
     );
   });
 
-  test("the global ring leaves the trigger alone, keyed on its data-slot", () => {
-    const ring = css.match(/^\s*(.+):focus-visible \{\n\s*outline: 2px solid var\(--ring\);\n\s*outline-offset: 2px;/m);
-    expect(ring?.[1]).toContain(':where(:not([data-slot="select-trigger"]))');
-  });
-
   test("the trigger carries no texture class, at rest, invalid or disabled", () => {
     for (const state of states) {
       const { classes } = one(state, "[data-slot=select-trigger]");

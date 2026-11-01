@@ -166,7 +166,9 @@ describe("the dark scope", () => {
   });
 
   test("the Tailwind outputs carry the item utilities and the plain css leaves them out", () => {
-    for (const out of [OUTPUTS.css, OUTPUTS.site]) expect(read(out)).toContain("\n@utility off-paper {\n");
-    expect(read(OUTPUTS.plain)).not.toContain("off-paper");
+    for (const name of ["off-paper", "hit-area", "link-quiet"]) {
+      for (const out of [OUTPUTS.css, OUTPUTS.site]) expect(read(out)).toContain(`\n@utility ${name} {\n`);
+      expect(read(OUTPUTS.plain)).not.toContain(name);
+    }
   });
 });

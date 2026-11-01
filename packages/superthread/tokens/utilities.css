@@ -1,6 +1,6 @@
-/* utilities an item carries, beyond the type steps and the screens. a form that changes with the mode sits here on
-   generate.ts's dark scope, as texture-contact's does in texture.css, so no item needs a dark: class. the plain css
-   leaves them out: only an item reads them. */
+/* utilities beyond the type steps and the screens. a form that changes with the mode sits here on generate.ts's dark
+   scope, as texture-contact's does in texture.css, so no item needs a dark: class. the plain css leaves them out, as
+   it does the type steps: an item or a ship's own markup reads them through tailwind. */
 
 /* off paper: a plum fill prints pale pink in a dark scope, which is every surface of a dark page and the frame on any
    page, so there a filled button prints as the outline: an edge in its label's ink, no fill, and the outline's hover
@@ -25,5 +25,37 @@
         border-color: var(--error);
       }
     }
+  }
+}
+
+/* a target reaches 44 px without growing: ::after, centred on its box, takes the pointer at least 44 px each way. the
+   box stays positioned. an item scopes it to the widths that need it. */
+@utility hit-area {
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    translate: -50% -50%;
+  }
+}
+
+/* the one second link form, beside the foreground link: a muted word that turns foreground on hover, underlined 4 px
+   below the baseline. it has no underline at rest, and it takes the hit area on a phone. */
+@utility link-quiet {
+  color: var(--muted-foreground);
+  text-decoration-line: none;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color var(--duration-instant) var(--ease-brand);
+  @variant hover {
+    color: var(--foreground);
+    text-decoration-line: underline;
+  }
+  @media (max-width: 600px) {
+    position: relative;
+    @apply hit-area;
   }
 }
