@@ -15,6 +15,7 @@ export type Schedule = { timeZone?: string } & (
 );
 
 const WEEK = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as const;
+const WORK_WEEK = WEEK.slice(0, 5);
 const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
 const DAY_MS = 86_400_000;
@@ -74,6 +75,8 @@ export function untilWords(at: Moment, what: string, now: Moment) {
 const dayWords = (every: Exclude<Schedule["every"], "hour">) => {
   if (typeof every === "string") return every;
   const days = WEEK.filter((day) => every.includes(day));
+  if (days.length === WEEK.length) return "day";
+  if (days.length === 5 && WORK_WEEK.every((day) => days.includes(day))) return "weekday";
   return days.length > 1 ? `${days.slice(0, -1).join(", ")} and ${days.at(-1)}` : days.join("");
 };
 

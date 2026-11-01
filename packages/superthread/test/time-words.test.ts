@@ -86,6 +86,15 @@ describe("scheduleWords", () => {
     [{ every: ["thursday", "monday"], at: "07:00" }, "every monday and thursday at 07:00"],
     [{ every: ["friday", "monday", "wednesday"], at: "07:00" }, "every monday, wednesday and friday at 07:00"],
     [{ every: ["friday"], at: "07:00" }, "every friday at 07:00"],
+    [{ every: ["monday", "tuesday", "wednesday", "thursday", "friday"], at: "09:00" }, "every weekday at 09:00"],
+    [
+      { every: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"], at: "09:00" },
+      "every day at 09:00",
+    ],
+    [
+      { every: ["tuesday", "wednesday", "thursday", "friday", "saturday"], at: "09:00" },
+      "every tuesday, wednesday, thursday, friday and saturday at 09:00",
+    ],
     [{ every: "hour" }, "every hour"],
   ])("%j", (schedule, words) => expect(scheduleWords(schedule, amsterdam)).toBe(words));
 
