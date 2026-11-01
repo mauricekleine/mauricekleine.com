@@ -75,7 +75,8 @@ function Page() {
       </Section>
       <Section id="states" title="states">
         <p className="st-gl-copy">
-          the action keeps the button states, with key ink for destructive work and house ink for keyboard focus.
+          the action keeps the button states: key ink for destructive work on paper, the outline off paper, and the ring
+          for keyboard focus.
         </p>
         <ModePair className="st-gl-pair">
           <AlertDialogStates />

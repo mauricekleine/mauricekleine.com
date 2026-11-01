@@ -22,7 +22,7 @@ function Page() {
     <>
       <PageHead
         title="button"
-        lede="plum marks the primary action on paper, and off paper it prints as an outline. destructive prints in key with the trash glyph and its word, so red stays a status colour."
+        lede="plum marks the primary action on paper, and off paper it prints as an outline. destructive prints in key with the trash glyph and its word, as an outline off paper, so red stays a status colour."
       >
         <InstallLine items={["button"]} />
       </PageHead>

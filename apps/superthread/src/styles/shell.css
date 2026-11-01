@@ -101,7 +101,7 @@
     grid-template-columns: 76px 1fr;
     align-content: center;
     row-gap: 5px;
-    width: 291px;
+    width: 368px;
     margin-left: auto;
     padding: 0 24px;
     border-left: 1px solid var(--rule);
@@ -114,20 +114,6 @@
   }
   .st-mast-menu {
     display: none;
-  }
-  .st-house {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 77px;
-    border-left: 1px solid var(--rule);
-  }
-  .st-house i {
-    width: 46px;
-    height: 46px;
-    background: var(--primary);
-    outline: 1px solid var(--foreground);
-    outline-offset: 3px;
   }
 
   /* the search: the field is the registry's input-group; the matches open 8 px below it as a raised list */
@@ -614,7 +600,7 @@
     padding-top: 20px;
   }
 
-  /* the mock pages: a 32 px strip back to the docs over the app, full bleed on the deep ground */
+  /* the mock pages: a 32 px strip back to the docs over the app, 44 on a phone, full bleed on the deep ground */
   .st-app {
     display: flex;
     flex-direction: column;
@@ -680,7 +666,7 @@
     }
     .st-meta {
       grid-template-columns: 64px 1fr;
-      width: 240px;
+      width: 312px;
       padding: 0 20px;
     }
   }
@@ -739,14 +725,6 @@
       padding: 0 12px;
       border-bottom: 1px solid var(--rule);
     }
-    .st-house {
-      width: 64px;
-      border-bottom: 1px solid var(--rule);
-    }
-    .st-house i {
-      width: 36px;
-      height: 36px;
-    }
     .st-mast-search {
       order: 3;
       flex-basis: calc(100% - 32px);
@@ -786,6 +764,17 @@
     .st-strip-crumb .type-meta {
       display: none;
     }
+    /* hand-built nav holds the phone target an item does: a stacked link grows to 44 px, and so do the strip's cells
+       above its 1 px rule */
+    .st-strip {
+      height: 45px;
+    }
+    .st-sidenav a {
+      height: 44px;
+    }
+    .st-toc a {
+      line-height: 44px;
+    }
     .st-plate[data-phone] {
       width: min(100%, var(--plate-phone-w));
       height: var(--plate-phone-h);
@@ -823,6 +812,8 @@
       padding-inline: 12px;
     }
     .st-code button {
+      justify-content: center;
+      min-width: 44px;
       padding: 0 14px;
     }
     .st-code button span {

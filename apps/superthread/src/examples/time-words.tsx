@@ -46,6 +46,7 @@ export function BeforeWordsExample() {
       rows={[
         ["amsterdam", beforeWords("2026-11-01T10:00:00Z", reader)],
         ["utc", beforeWords("2026-11-01T10:00:00Z", { timeZone: "UTC" })],
+        ["a plain date", beforeWords("2026-11-02", reader)],
       ]}
     />
   );
@@ -59,6 +60,8 @@ export function UntilWordsExample() {
         ["11:32", untilWords("2026-11-01T11:32:00+01:00", "standup", now)],
         ["12:12", untilWords("2026-11-01T12:12:00+01:00", "standup", now)],
         ["10:00", untilWords("2026-11-01T10:00:00+01:00", "standup", now)],
+        ["wednesday", untilWords("2026-11-04", "the deadline", now, reader)],
+        ["today", untilWords("2026-11-01", "the deadline", now, reader)],
       ]}
     />
   );
@@ -70,6 +73,7 @@ const schedules: [string, Schedule][] = [
   ["two days", { every: ["thursday", "monday"], at: "07:15" }],
   ["hourly", { every: "hour" }],
   ["new york", { every: "day", at: "07:00", timeZone: "America/New_York" }],
+  ["no days", { every: [], at: "07:00" }],
 ];
 
 export function ScheduleWordsExample() {

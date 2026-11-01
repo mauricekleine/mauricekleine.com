@@ -46,7 +46,8 @@ function Page() {
       <Section id="before" title="before">
         <p className="st-pass-prose">
           <code>beforeWords(at)</code> prints the 24-hour clock in the reader&rsquo;s zone, so the same 10:00 utc reads
-          differently in amsterdam. a server rendering for someone else passes <code>timeZone</code>.
+          differently in amsterdam. a server rendering for someone else passes <code>timeZone</code>. a plain date has
+          no clock face, so it prints the date.
         </p>
         <ModePair>
           <BeforeWordsExample />
@@ -55,7 +56,8 @@ function Page() {
       <Section id="until" title="until">
         <p className="st-pass-prose">
           <code>untilWords(at, what, now)</code> counts down to something named. a part minute rounds up, so the words
-          match the difference between the two clock faces, and the thing reads as now once its moment arrives.
+          match the difference between the two clock faces, and the thing reads as now once its moment arrives. a plain
+          date counts days in the reader&rsquo;s zone, and reads as now once its day starts.
         </p>
         <ModePair>
           <UntilWordsExample />
@@ -65,7 +67,7 @@ function Page() {
         <p className="st-pass-prose">
           <code>scheduleWords(schedule)</code> says what repeats. an app turns its own schedule format into a{" "}
           <code>Schedule</code> first, so no cron or rule string reaches the words. a schedule set in another zone says
-          so.
+          so, and a list with no days reads as never.
         </p>
         <ModePair>
           <ScheduleWordsExample />

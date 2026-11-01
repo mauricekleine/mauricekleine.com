@@ -69,9 +69,6 @@ export function Masthead() {
       <div className="st-mast-menu">
         <MobileNav />
       </div>
-      <div className="st-house" role="img" aria-label="the house ink: plum" title="the house ink: plum">
-        <i />
-      </div>
     </header>
   );
 }

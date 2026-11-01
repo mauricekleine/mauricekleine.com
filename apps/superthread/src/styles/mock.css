@@ -190,9 +190,10 @@
     font-size: var(--text-ui);
     line-height: 20px;
   }
-  .mock-contents a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
+  @media (hover: hover) {
+    .mock-contents a:not([aria-current]):hover {
+      background: var(--control-hover);
+    }
   }
   .mock-contents a[aria-current] {
     border-color: var(--selected);
@@ -334,6 +335,13 @@
       grid-template-columns: minmax(0, 1fr);
     }
   }
+  /* the phone drawing needs 324 px; a narrower pane takes the same six weeks on 36 px slots */
+  @container (max-width: 323px) {
+    .mock-chart {
+      --slot: 36px;
+      --bar: 24px;
+    }
+  }
 
   /* Paired fields span both columns where they need the full measure. */
   .mock-wide {
@@ -370,6 +378,9 @@
     }
     .mock-field {
       width: min(100%, var(--field-phone-w));
+    }
+    .mock-contents a {
+      padding-block: 11px;
     }
   }
 
