@@ -917,6 +917,10 @@
       --gutter: 32px;
       padding: 0 16px 56px 32px;
     }
+    /* the crop ticks sit 16 px outside the plate, so the plate leaves them that much window on the right */
+    .mk-field {
+      margin-right: 16px;
+    }
   }
 
   /* a phone: the wordmark comes out of the band and sits under it */
@@ -926,6 +930,23 @@
     }
     .mk-mode-compact button {
       padding: 0 8px;
+    }
+    /* hand-built links hold the phone target an item does: a link keeps its box and takes the hit area, and a cell
+       grows to 44 px */
+    .mk-nav a,
+    .mk-foot a,
+    .more-link a,
+    .waypoint-name,
+    .essay-list li > a:not(.essay-cover) {
+      position: relative;
+      @apply hit-area;
+    }
+    .essay-list li > a:not(.essay-cover),
+    .waypoint-name {
+      display: inline-block;
+    }
+    .icons a {
+      height: 44px;
     }
     .mk-field {
       height: 136px;
