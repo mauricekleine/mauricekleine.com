@@ -20,6 +20,7 @@ const variants = [
   { variant: "outline", word: "preview" },
   { variant: "ghost", word: "cancel" },
   { variant: "destructive", word: "delete" },
+  { variant: "key", word: "open in orbit" },
   { variant: "link", word: "read the log" },
 ] as const;
 
@@ -35,10 +36,10 @@ export function ButtonVariants() {
   );
 }
 
-// The world's notes for each state: light overprints key on the ink, dark lifts the ink.
+// The world's notes for each state: light overprints key on the ink, and dark's default takes the outline's states.
 const notes = {
   light: { hover: "+ key 20", pressed: "+ key 36, inset", outline: "key 5", destructive: "key 88" },
-  dark: { hover: "lift 0.04", pressed: "lift 0.08, chroma 95, inset", outline: "paper 1", destructive: "paper 60" },
+  dark: { hover: "paper 1", pressed: "paper 3", outline: "paper 1", destructive: "paper 60" },
 } as const;
 
 // Printed states: data-demo draws each from the button's own classes, so they are specimens, not controls, and
@@ -70,6 +71,11 @@ export function ButtonStates({ mode }: { mode: Mode }) {
         </Specimen>
         <Specimen note={note.destructive}>
           <Button size="sm" variant="destructive" data-demo="hover" tabIndex={-1}>
+            hover
+          </Button>
+        </Specimen>
+        <Specimen note={note.destructive}>
+          <Button size="sm" variant="key" data-demo="hover" tabIndex={-1}>
             hover
           </Button>
         </Specimen>

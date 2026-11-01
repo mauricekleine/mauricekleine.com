@@ -56,16 +56,22 @@
     outline: 0;
   }
 
-  /* links: plum words that underline on hover, 4 px below the baseline */
+  /* links: foreground words 4 px above a 1 px underline, at rest in running text and on hover in chrome */
   .mk-page a,
   .mk-toc a,
   .mk-foot a {
-    color: var(--primary);
+    color: var(--foreground);
     text-decoration-thickness: 1px;
     text-underline-offset: 4px;
   }
+  .mk-page p:not(.type-meta, .more-link) a,
+  .essay li a,
+  .essay blockquote a {
+    text-decoration-line: underline;
+  }
   @media (hover: hover) {
-    .mk-page a:hover {
+    .mk-page a:hover,
+    .mk-foot a:hover {
       text-decoration-line: underline;
     }
   }
@@ -131,7 +137,7 @@
     width: 8px;
     height: 8px;
     margin-right: 2px;
-    background: var(--primary);
+    background: var(--foreground);
   }
   .mk-mast-mode {
     display: none;
@@ -715,11 +721,11 @@
     margin-top: 8px;
   }
   .essay li::marker {
-    color: var(--primary);
+    color: var(--foreground);
   }
   .essay blockquote {
     padding-left: 20px;
-    border-left: 1px solid var(--primary);
+    border-left: 1px solid var(--foreground);
     color: var(--muted-foreground);
   }
   .essay figure {

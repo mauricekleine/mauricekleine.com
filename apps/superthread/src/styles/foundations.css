@@ -491,7 +491,7 @@
     display: block;
     width: 8px;
     height: 8px;
-    background: var(--primary);
+    background: var(--foreground);
     transition-property: width;
     transition-timing-function: var(--ease-brand);
   }
@@ -517,7 +517,7 @@
   }
   .st-f-curve-line {
     fill: none;
-    stroke: var(--primary);
+    stroke: var(--foreground);
     stroke-width: 2;
   }
   .st-f-curve circle {

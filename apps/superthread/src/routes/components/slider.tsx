@@ -19,7 +19,7 @@ function Page() {
     <>
       <PageHead
         title="slider"
-        lede="a flat house range inside an 8 px ruled track. square thumbs set one value or the two ends of a range."
+        lede="a flat foreground range inside an 8 px ruled track. square thumbs set one value or the two ends of a range."
       >
         <InstallLine items={["slider"]} />
       </PageHead>
@@ -42,8 +42,8 @@ function Page() {
       </Section>
       <Section id="states" title="states">
         <p className="st-e-copy">
-          the 16 px thumb takes the accent fill on hover and while dragging. keyboard focus draws the house ring outside
-          it. at either limit, the thumb stays inside the track.
+          the 16 px thumb takes the control hover fill on hover and while dragging. keyboard focus draws the house ring
+          outside it. at either limit, the thumb stays inside the track.
         </p>
         <ModePair className="st-e-wide">
           <SliderStates />

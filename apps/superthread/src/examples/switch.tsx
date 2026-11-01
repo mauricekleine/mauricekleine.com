@@ -34,8 +34,8 @@ export function SwitchSizes() {
 const states = [
   { name: "off", note: "input edge and square" },
   { name: "hover, off", note: "control hover fill", demo: "hover" },
-  { name: "on", note: "solid house ink", checked: true },
-  { name: "hover, on", note: "house hover ink", checked: true, demo: "hover" },
+  { name: "on", note: "solid foreground", checked: true },
+  { name: "hover, on", note: "foreground hover", checked: true, demo: "hover" },
   { name: "focus", note: "2 px ring, 2 px out", demo: "focus-visible" },
   { name: "invalid", note: "error edge", invalid: true },
   { name: "disabled, off", note: "faint stock, dim square", disabled: true },

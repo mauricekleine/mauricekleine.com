@@ -27,7 +27,7 @@ function Page() {
     <>
       <PageHead
         title="toggle group"
-        lede="toggles that share a choice and, by default, a 1 px edge. the pressed item keeps all four house edges visible."
+        lede="toggles that share a choice and, by default, a 1 px edge. the pressed item keeps all four foreground edges visible."
       >
         <InstallLine items={["toggle-group"]} />
       </PageHead>

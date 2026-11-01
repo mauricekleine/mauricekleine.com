@@ -19,7 +19,7 @@ function Page() {
     <>
       <PageHead
         title="switch"
-        lede="a square track and a square thumb. on fills the track with the house ink and moves the thumb to the end."
+        lede="a square track and a square thumb. on fills the track with foreground and moves the thumb to the end."
       >
         <InstallLine items={["switch"]} />
       </PageHead>

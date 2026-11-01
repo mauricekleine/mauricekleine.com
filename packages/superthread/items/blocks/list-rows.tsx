@@ -53,7 +53,7 @@ function ListRowTitle({ className, href, render, ...props }: useRender.Component
       {
         href,
         className: cn(
-          "min-w-0 text-ui font-medium text-foreground [grid-area:title] [overflow-wrap:anywhere] decoration-1 underline-offset-4 [&:is(a):hover]:underline group-data-[closed]/list-row:text-muted-foreground group-data-[closed]/list-row:line-through group-data-[closed]/list-row:[&:is(a):hover]:line-through focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          "min-w-0 text-ui font-medium text-foreground [grid-area:title] [overflow-wrap:anywhere] decoration-1 underline-offset-4 [&:is(a)]:hover:underline group-data-[closed]/list-row:text-muted-foreground group-data-[closed]/list-row:line-through group-data-[closed]/list-row:hover:line-through focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
           className,
         ),
       },

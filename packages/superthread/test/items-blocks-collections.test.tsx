@@ -216,7 +216,7 @@ describe("list rows", () => {
   test("a title prints in foreground, linked or plain, and a linked one underlines on hover", () => {
     const host = list();
     const linked = one(host, "a").classes;
-    expect(linked).toEqual(expect.arrayContaining(["text-foreground", "[&:is(a):hover]:underline"]));
+    expect(linked).toEqual(expect.arrayContaining(["text-foreground", "[&:is(a)]:hover:underline"]));
     expect(linked.filter((c) => c.includes("primary"))).toEqual([]);
     expect(one(host, "li:last-child span").classes).toContain("text-foreground");
   });
@@ -239,7 +239,7 @@ describe("list rows", () => {
       expect.arrayContaining([
         "group-data-[closed]/list-row:text-muted-foreground",
         "group-data-[closed]/list-row:line-through",
-        "group-data-[closed]/list-row:[&:is(a):hover]:line-through",
+        "group-data-[closed]/list-row:hover:line-through",
       ]),
     );
   });

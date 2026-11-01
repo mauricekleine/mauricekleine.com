@@ -130,9 +130,9 @@
   }
   .mock-sheet sup a {
     padding: 0 2px;
-    border-bottom: 1px solid var(--primary);
+    border-bottom: 1px solid var(--foreground);
     font: 500 12px/1 var(--font-sans);
-    color: var(--primary);
+    color: var(--foreground);
   }
   .mock-figure {
     margin-top: 56px;
@@ -165,7 +165,7 @@
   .mock-notes a {
     margin-right: 8px;
     font: 500 12px var(--font-sans);
-    color: var(--primary);
+    color: var(--foreground);
   }
   .mock-margin {
     position: sticky;

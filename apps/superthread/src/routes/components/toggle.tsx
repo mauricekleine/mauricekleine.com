@@ -20,7 +20,7 @@ function Page() {
     <>
       <PageHead
         title="toggle"
-        lede="a button that remembers whether it is pressed. the current state is boxed in the house ink on the accent fill."
+        lede="a button that remembers whether it is pressed. pressed prints a foreground edge and a tick, and the words stay put."
       >
         <InstallLine items={["toggle"]} />
       </PageHead>

@@ -62,7 +62,7 @@ The thesis is flat where you read, screened where you look. Each rule below foll
 - **fleet rail**: the column of ship marks down the left of a ship surface; a 48 px bar at 900 px and below.
 - **selected**: the role a current item in a nav prints in; `foreground` on paper, the words beside it on the frame and the ground.
 - **key**, **stock**: the first ink and the paper it prints on. **wedge**: the eleven tint steps from one to the other.
-- **house ink**: plum, the one control colour. **spot**: a ship's own bright colour.
+- **house ink**: plum, the one chromatic ink a control takes. **spot**: a ship's own bright colour.
 - **deep ground**: the dark field a ship surface prints on, in both modes.
 - **screen**: a 1-bit pattern standing in for a tint. **plate**: one ink's 1-bit image. **crop marks**: the corner ticks around a screened field.
 

@@ -40,7 +40,7 @@ function RowsExample() {
   const [pinned, setPinned] = useState(false);
   return (
     <ListRows aria-label="chapter tasks">
-      <ListRow>
+      <ListRow closed={done}>
         <ListRowLead>
           <Checkbox aria-label="complete the reading layout review" checked={done} onCheckedChange={setDone} />
         </ListRowLead>
@@ -138,7 +138,8 @@ function Page() {
       </Section>
       <Section id="states" title="title states">
         <p className="st-cb-copy">
-          a linked title takes the house ink. hover adds an underline, and keyboard focus draws the control ring.
+          a title prints in foreground, linked or plain. hover adds an underline to a link, and keyboard focus draws the
+          control ring. a closed row stays in the list, with its title muted and struck through.
         </p>
         <ModePair className="st-cb-stack">
           <div className="st-cb-states">
@@ -163,6 +164,13 @@ function Page() {
                 </ListRows>
               </State>
             ))}
+            <State name="closed" note="muted and struck through">
+              <ListRows aria-label="closed row">
+                <ListRow closed>
+                  <ListRowTitle href="#example">read the chapter notes</ListRowTitle>
+                </ListRow>
+              </ListRows>
+            </State>
           </div>
         </ModePair>
       </Section>

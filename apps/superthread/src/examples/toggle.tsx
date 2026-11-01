@@ -58,7 +58,7 @@ export function ToggleStates() {
         { name: "rest", note: "quiet outline" },
         { name: "hover", note: "control hover fill", demo: "hover" },
         { name: "focus", note: "2 px ring, 2 px out", demo: "focus-visible" },
-        { name: "pressed", note: "house edge, accent fill", pressed: true },
+        { name: "pressed", note: "foreground edge, tick", pressed: true },
         { name: "invalid", note: "error edge", invalid: true },
         { name: "disabled", note: "faint stock, dim label", disabled: true },
         { name: "disabled, pressed", note: "pressed box stays visible", disabled: true, pressed: true },

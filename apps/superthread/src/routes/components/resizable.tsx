@@ -53,8 +53,8 @@ function Page() {
       </Section>
       <Section id="states" title="states">
         <p className="st-gl-copy">
-          hover and drag turn the rule plum. a gripped separator draws its focus edge inside the small grip; disabled
-          fixes the split.
+          hover and drag turn the rule foreground. a gripped separator draws its focus edge inside the small grip;
+          disabled fixes the split.
         </p>
         <ModePair className="st-gl-pair">
           <ResizableStates />

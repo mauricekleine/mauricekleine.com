@@ -8,6 +8,10 @@ const theme = tokens.replaceAll("https://superthread.mauricekleine.com/fonts/", 
 const dark = theme.slice(theme.indexOf(".dark {"), theme.indexOf("}", theme.indexOf(".dark {")) + 1);
 const systemDark = `@media (prefers-color-scheme: dark) { ${dark.replace(".dark", "html:not(.light)")} }`;
 
+// Off paper a plum fill prints pale pink, so in a dark scope the button prints as the outline.
+const outline = (scope: string) =>
+  `${scope} button { border-color: currentColor; background: transparent; color: var(--foreground); } ${scope} button:hover { background: var(--control-hover); }`;
+
 export type PinMode = "light" | "dark" | null;
 
 export function pinPage(id: string, challenge: string, mode: PinMode = null) {
@@ -21,8 +25,10 @@ p { margin: 0 0 32px; color: var(--muted-foreground); font-size: 15px; line-heig
 label { display: block; margin-bottom: 8px; font-weight: 500; }
 input, button { width: 100%; height: 40px; border-radius: 0; font: inherit; }
 input { padding: 0 12px; border: 1px solid var(--input); background: var(--background); color: var(--foreground); caret-color: var(--primary); font-family: var(--font-mono); }
-button { margin-top: 16px; border: 0; padding: 0 16px; background: var(--primary); color: var(--primary-foreground); font-weight: 500; cursor: pointer; }
+button { margin-top: 16px; border: 1px solid transparent; padding: 0 16px; background: var(--primary); color: var(--primary-foreground); font-weight: 500; cursor: pointer; }
 button:hover { background: var(--primary-hover); }
+${outline(".dark")}
+@media (prefers-color-scheme: dark) { ${outline("html:not(.light)")} }
 :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 ::selection { background: var(--selection); color: var(--foreground); }
 small { display: block; margin-top: 24px; color: var(--muted-foreground); font-size: 13px; line-height: 20px; }

@@ -2,7 +2,7 @@
   .st-icons-all {
     display: inline-block;
     margin-top: 24px;
-    color: var(--primary);
+    color: var(--foreground);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
@@ -22,7 +22,7 @@
     margin-bottom: 16px;
   }
   .st-icon a {
-    color: var(--primary);
+    color: var(--foreground);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
