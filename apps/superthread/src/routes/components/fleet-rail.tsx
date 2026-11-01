@@ -65,7 +65,7 @@ function Page() {
           wide. it renders inside the sidebar item&rsquo;s <code>Sidebar</code>, so the sidebar&rsquo;s parts go
           straight in. on the bar, the nav sits under it.
         </p>
-        <ModePair>
+        <ModePair className="st-c-stack">
           <RailWithNav />
         </ModePair>
       </Section>
