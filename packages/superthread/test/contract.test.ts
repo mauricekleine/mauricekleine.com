@@ -136,11 +136,10 @@ test("every npm dependency is a caret floor, and none is react, react-dom or a t
     }
 });
 
-test("no icon library outside init's dependency list", () => {
+test("no item carries an icon library, init included", () => {
   for (const item of items) {
-    const { dependencies, ...rest } = item;
-    const text = JSON.stringify(item.name === "init" ? rest : { dependencies, ...rest });
-    for (const banned of ["lucide-react", "IconPlaceholder", "@phosphor-icons/react"])
+    const text = JSON.stringify(item);
+    for (const banned of ["lucide-react", "IconPlaceholder", "@phosphor-icons/react", "iconLibrary"])
       expect(text.includes(banned), `${item.name} mentions ${banned}`).toBe(false);
   }
 });

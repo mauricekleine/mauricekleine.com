@@ -24,7 +24,6 @@ export type InitConfig = {
   style: string;
   rsc: boolean;
   tsx: boolean;
-  iconLibrary: string;
   // build-registry.ts replaces the @mk URL with the base it builds for
   registries: { "@mk": string };
 };
@@ -87,10 +86,9 @@ export const catalog: CatalogItem[] = [
       style: "base-nova",
       rsc: false,
       tsx: true,
-      iconLibrary: "phosphor",
       registries: { "@mk": "https://superthread.mauricekleine.com/r/{name}.json" },
     },
-    dependencies: ["@base-ui/react@^1.8.0", "class-variance-authority@^0.7.1", "@phosphor-icons/react@^2.1.10"],
+    dependencies: ["@base-ui/react@^1.8.0", "class-variance-authority@^0.7.1"],
     registryDependencies: ["@mk/utils", "@mk/tokens", "@mk/button"],
   },
   {

@@ -10,7 +10,6 @@
     "cssVariables": true,
     "prefix": ""
   },
-  "iconLibrary": "phosphor",
   "aliases": {
     "components": "@/components",
     "utils": "@/lib/utils",
