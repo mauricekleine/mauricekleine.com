@@ -87,9 +87,8 @@ function ItemCard({
     if (paper) {
       return (
         <Paper
-          render={<li data-slot="item-card" data-variant="tile" data-paper="" />}
+          render={<li data-slot="item-card" data-variant="tile" data-paper="" {...props} />}
           className={cn(cardVariants.tile, "z-1", className)}
-          {...props}
         >
           {children}
         </Paper>
