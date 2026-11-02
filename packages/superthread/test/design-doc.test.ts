@@ -148,6 +148,7 @@ describe("DESIGN.md type, radius and space", () => {
     const { base, steps } = tokens.space;
     const want = Object.fromEntries(steps.map((px) => [String(px / base), `${px}px`]));
     for (const row of ROWS) want[`row-${row}`] = vars.light[`spacing-row-${row}`]!;
+    want["panel-inset"] = vars.light["spacing-panel-inset"]!;
     expect(fm.spacing).toEqual(want);
   });
 });

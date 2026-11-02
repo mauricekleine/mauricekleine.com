@@ -423,6 +423,17 @@ test("hit-area takes the pointer at least 44 px each way, centred on its box, an
   expect(phone.decls.flat().join(" ")).toContain("@apply hit-");
 });
 
+// Only containment takes a box's overflow out of what a scroller counts and keeps the pointer: every clip tried loses
+// the hit. Containment costs a baseline, so a target contains itself only inside a scroller that asks.
+test("a scroller that holds hit areas contains each one, and a target anywhere else keeps its baseline", () => {
+  const sheet = parse(readFileSync(join(root, "tokens/utilities.css"), "utf8"));
+  expect(value(child(sheet, "@utility hit-area"), "contain")).toBe("var(--hit-contain, none)");
+  expect(value(child(sheet, "@utility hit-area-scroller"), "--hit-contain")).toBe("layout");
+  // containment costs the box its baseline, and a box with none rides 3 px high in a table cell
+  expect(value(child(sheet, "@utility hit-area"), "vertical-align")).toBe("var(--hit-align, baseline)");
+  expect(value(child(sheet, "@utility hit-area-scroller"), "--hit-align")).toBe("top");
+});
+
 test("texture-disabled screens the edge on ::before, a field box only for a disabled text control, and a bare input or textarea masks its own border (ruling 3)", () => {
   const disabled = utility("texture-disabled");
   const variant = child(disabled, "@variant disabled");

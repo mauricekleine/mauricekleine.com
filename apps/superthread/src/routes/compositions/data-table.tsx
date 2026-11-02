@@ -1,6 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { DataTable, SortableHead, TableEmpty, type SortDirection } from "@/components/superthread/blocks/data-table";
+import {
+  DataTable,
+  SortableHead,
+  TableEmpty,
+  TableTitle,
+  type SortDirection,
+} from "@/components/superthread/blocks/data-table";
 import { TableHeader, TableHead, TableBody, TableRow, TableCell } from "@/components/superthread/ui/table";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { Badge } from "@/components/superthread/ui/badge";
@@ -21,6 +27,7 @@ export const Route = createFileRoute("/compositions/data-table")({
     sections: [
       { id: "example", title: "example" },
       { id: "states", title: "sort and row states" },
+      { id: "titles", title: "titles" },
       { id: "empty", title: "empty results" },
     ],
   },
@@ -123,6 +130,41 @@ function SortState({ initial }: { initial: SortDirection }) {
   );
 }
 
+function TitledTable() {
+  return (
+    <DataTable label="drafts by title">
+      <TableHeader>
+        <TableRow>
+          <TableHead scope="col">draft</TableHead>
+          <TableHead scope="col" kind="id">
+            id
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          <TableCell>
+            <TableTitle href="#titles">the reading layout</TableTitle>
+          </TableCell>
+          <TableCell kind="id">qt-014</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>
+            <TableTitle>notes with no page yet</TableTitle>
+          </TableCell>
+          <TableCell kind="id">tr-008</TableCell>
+        </TableRow>
+        <TableRow receding>
+          <TableCell>
+            <TableTitle href="#titles">the old chapter plan</TableTitle>
+          </TableCell>
+          <TableCell kind="id">ar-021</TableCell>
+        </TableRow>
+      </TableBody>
+    </DataTable>
+  );
+}
+
 function Page() {
   return (
     <>
@@ -161,6 +203,16 @@ function Page() {
           </div>
         </ModePair>
         <Caption detail="rowedge" />
+      </Section>
+      <Section id="titles" title="titles">
+        <p className="st-cb-copy">
+          <code>TableTitle</code> is a row&rsquo;s name: plain text until it gets an href or the app&rsquo;s router
+          link, then a link that underlines on hover and reaches 44 px on a phone. a <code>receding</code> row is still
+          live and fading, so it prints muted with no strike.
+        </p>
+        <ModePair className="st-cb-stack">
+          <TitledTable />
+        </ModePair>
       </Section>
       <Section id="empty" title="empty results">
         <p className="st-cb-copy">

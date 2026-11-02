@@ -134,7 +134,9 @@ describe("letter", () => {
 
   test("gives up its side edges for the working panel's width on a phone, and only there", () => {
     const { classes } = one(whole(), '[data-slot="letter"]');
-    expect(classes).toEqual(expect.arrayContaining([`${IN_PANEL}-mx-4`, `${IN_PANEL}border-x-0`]));
+    expect(classes).toEqual(
+      expect.arrayContaining([`${IN_PANEL}-mx-(--spacing-panel-inset)`, `${IN_PANEL}border-x-0`]),
+    );
     expect(classes).toEqual(expect.arrayContaining(["border", "border-border"]));
   });
 

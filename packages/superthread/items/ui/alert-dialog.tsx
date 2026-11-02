@@ -79,9 +79,15 @@ function AlertDialogHeader({ className, ...props }: React.ComponentProps<"div">)
   return <div data-slot="alert-dialog-header" className={cn("flex flex-col gap-2 text-left", className)} {...props} />;
 }
 
-// Actions align right, 24 px below the explanation.
+// Actions align right, 24 px below the explanation, and wrap to stay on the sheet.
 function AlertDialogFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="alert-dialog-footer" className={cn("mt-6 flex justify-end gap-2", className)} {...props} />;
+  return (
+    <div
+      data-slot="alert-dialog-footer"
+      className={cn("mt-6 flex flex-wrap justify-end gap-2", className)}
+      {...props}
+    />
+  );
 }
 
 // A 40 px secondary square holds a caller's confirmation glyph.

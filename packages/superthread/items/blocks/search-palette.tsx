@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useId, useState } from "react";
+import { isPageKey } from "@/components/superthread/lib/hotkey";
 import { cn } from "@/components/superthread/lib/utils";
 import { Command, CommandDialog, CommandEmpty, CommandInput, CommandList } from "@/components/superthread/ui/command";
 import { Icon } from "@/components/superthread/ui/glyphs";
@@ -45,26 +46,11 @@ function SearchPalette({
         (event.metaKey || event.ctrlKey) &&
         !event.altKey &&
         !event.shiftKey &&
-        event.key.toLowerCase() === hotkey.toLowerCase()
+        event.key?.toLowerCase() === hotkey.toLowerCase()
       ) {
         event.preventDefault();
         setOpen(!open);
-      } else if (event.key === "/" && !event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey) {
-        const target = event.target;
-        const field =
-          target instanceof Element
-            ? target.closest(
-                'input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="searchbox"], [role="combobox"]',
-              )
-            : null;
-        if (
-          field &&
-          (!(field instanceof HTMLInputElement) ||
-            !["button", "checkbox", "color", "file", "hidden", "image", "radio", "range", "reset", "submit"].includes(
-              field.type,
-            ))
-        )
-          return;
+      } else if (isPageKey(event, "/")) {
         event.preventDefault();
         setOpen(true);
       }

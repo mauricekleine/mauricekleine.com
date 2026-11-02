@@ -29,11 +29,13 @@ import { Route as ComponentsDropdownMenuRouteImport } from './routes/components/
 import { Route as ComponentsFieldRouteImport } from './routes/components/field'
 import { Route as ComponentsFleetRailRouteImport } from './routes/components/fleet-rail'
 import { Route as ComponentsGlyphsRouteImport } from './routes/components/glyphs'
+import { Route as ComponentsHotkeyRouteImport } from './routes/components/hotkey'
 import { Route as ComponentsInputRouteImport } from './routes/components/input'
 import { Route as ComponentsInputGroupRouteImport } from './routes/components/input-group'
 import { Route as ComponentsKbdRouteImport } from './routes/components/kbd'
 import { Route as ComponentsLabelRouteImport } from './routes/components/label'
 import { Route as ComponentsNativeSelectRouteImport } from './routes/components/native-select'
+import { Route as ComponentsOnwardRouteImport } from './routes/components/onward'
 import { Route as ComponentsPaperRouteImport } from './routes/components/paper'
 import { Route as ComponentsProgressRouteImport } from './routes/components/progress'
 import { Route as ComponentsRadioGroupRouteImport } from './routes/components/radio-group'
@@ -54,10 +56,12 @@ import { Route as ComponentsToastRouteImport } from './routes/components/toast'
 import { Route as ComponentsToggleRouteImport } from './routes/components/toggle'
 import { Route as ComponentsToggleGroupRouteImport } from './routes/components/toggle-group'
 import { Route as ComponentsTooltipRouteImport } from './routes/components/tooltip'
+import { Route as ComponentsUseMinuteRouteImport } from './routes/components/use-minute'
 import { Route as ComponentsUseMobileRouteImport } from './routes/components/use-mobile'
 import { Route as CompositionsAppShellRouteImport } from './routes/compositions/app-shell'
 import { Route as CompositionsCollectionToolbarRouteImport } from './routes/compositions/collection-toolbar'
 import { Route as CompositionsDataTableRouteImport } from './routes/compositions/data-table'
+import { Route as CompositionsDayLineRouteImport } from './routes/compositions/day-line'
 import { Route as CompositionsFactsRouteImport } from './routes/compositions/facts'
 import { Route as CompositionsFormSectionRouteImport } from './routes/compositions/form-section'
 import { Route as CompositionsItemCardsRouteImport } from './routes/compositions/item-cards'
@@ -181,6 +185,11 @@ const ComponentsGlyphsRoute = ComponentsGlyphsRouteImport.update({
   path: '/components/glyphs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComponentsHotkeyRoute = ComponentsHotkeyRouteImport.update({
+  id: '/components/hotkey',
+  path: '/components/hotkey',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComponentsInputRoute = ComponentsInputRouteImport.update({
   id: '/components/input',
   path: '/components/input',
@@ -204,6 +213,11 @@ const ComponentsLabelRoute = ComponentsLabelRouteImport.update({
 const ComponentsNativeSelectRoute = ComponentsNativeSelectRouteImport.update({
   id: '/components/native-select',
   path: '/components/native-select',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComponentsOnwardRoute = ComponentsOnwardRouteImport.update({
+  id: '/components/onward',
+  path: '/components/onward',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsPaperRoute = ComponentsPaperRouteImport.update({
@@ -306,6 +320,11 @@ const ComponentsTooltipRoute = ComponentsTooltipRouteImport.update({
   path: '/components/tooltip',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComponentsUseMinuteRoute = ComponentsUseMinuteRouteImport.update({
+  id: '/components/use-minute',
+  path: '/components/use-minute',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComponentsUseMobileRoute = ComponentsUseMobileRouteImport.update({
   id: '/components/use-mobile',
   path: '/components/use-mobile',
@@ -325,6 +344,11 @@ const CompositionsCollectionToolbarRoute =
 const CompositionsDataTableRoute = CompositionsDataTableRouteImport.update({
   id: '/compositions/data-table',
   path: '/compositions/data-table',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompositionsDayLineRoute = CompositionsDayLineRouteImport.update({
+  id: '/compositions/day-line',
+  path: '/compositions/day-line',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompositionsFactsRoute = CompositionsFactsRouteImport.update({
@@ -461,11 +485,13 @@ export interface FileRoutesByFullPath {
   '/components/field': typeof ComponentsFieldRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
+  '/components/hotkey': typeof ComponentsHotkeyRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
   '/components/label': typeof ComponentsLabelRoute
   '/components/native-select': typeof ComponentsNativeSelectRoute
+  '/components/onward': typeof ComponentsOnwardRoute
   '/components/paper': typeof ComponentsPaperRoute
   '/components/progress': typeof ComponentsProgressRoute
   '/components/radio-group': typeof ComponentsRadioGroupRoute
@@ -486,10 +512,12 @@ export interface FileRoutesByFullPath {
   '/components/toggle': typeof ComponentsToggleRoute
   '/components/toggle-group': typeof ComponentsToggleGroupRoute
   '/components/tooltip': typeof ComponentsTooltipRoute
+  '/components/use-minute': typeof ComponentsUseMinuteRoute
   '/components/use-mobile': typeof ComponentsUseMobileRoute
   '/compositions/app-shell': typeof CompositionsAppShellRoute
   '/compositions/collection-toolbar': typeof CompositionsCollectionToolbarRoute
   '/compositions/data-table': typeof CompositionsDataTableRoute
+  '/compositions/day-line': typeof CompositionsDayLineRoute
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
@@ -534,11 +562,13 @@ export interface FileRoutesByTo {
   '/components/field': typeof ComponentsFieldRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
+  '/components/hotkey': typeof ComponentsHotkeyRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
   '/components/label': typeof ComponentsLabelRoute
   '/components/native-select': typeof ComponentsNativeSelectRoute
+  '/components/onward': typeof ComponentsOnwardRoute
   '/components/paper': typeof ComponentsPaperRoute
   '/components/progress': typeof ComponentsProgressRoute
   '/components/radio-group': typeof ComponentsRadioGroupRoute
@@ -559,10 +589,12 @@ export interface FileRoutesByTo {
   '/components/toggle': typeof ComponentsToggleRoute
   '/components/toggle-group': typeof ComponentsToggleGroupRoute
   '/components/tooltip': typeof ComponentsTooltipRoute
+  '/components/use-minute': typeof ComponentsUseMinuteRoute
   '/components/use-mobile': typeof ComponentsUseMobileRoute
   '/compositions/app-shell': typeof CompositionsAppShellRoute
   '/compositions/collection-toolbar': typeof CompositionsCollectionToolbarRoute
   '/compositions/data-table': typeof CompositionsDataTableRoute
+  '/compositions/day-line': typeof CompositionsDayLineRoute
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
@@ -608,11 +640,13 @@ export interface FileRoutesById {
   '/components/field': typeof ComponentsFieldRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
+  '/components/hotkey': typeof ComponentsHotkeyRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
   '/components/label': typeof ComponentsLabelRoute
   '/components/native-select': typeof ComponentsNativeSelectRoute
+  '/components/onward': typeof ComponentsOnwardRoute
   '/components/paper': typeof ComponentsPaperRoute
   '/components/progress': typeof ComponentsProgressRoute
   '/components/radio-group': typeof ComponentsRadioGroupRoute
@@ -633,10 +667,12 @@ export interface FileRoutesById {
   '/components/toggle': typeof ComponentsToggleRoute
   '/components/toggle-group': typeof ComponentsToggleGroupRoute
   '/components/tooltip': typeof ComponentsTooltipRoute
+  '/components/use-minute': typeof ComponentsUseMinuteRoute
   '/components/use-mobile': typeof ComponentsUseMobileRoute
   '/compositions/app-shell': typeof CompositionsAppShellRoute
   '/compositions/collection-toolbar': typeof CompositionsCollectionToolbarRoute
   '/compositions/data-table': typeof CompositionsDataTableRoute
+  '/compositions/day-line': typeof CompositionsDayLineRoute
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
@@ -683,11 +719,13 @@ export interface FileRouteTypes {
     | '/components/field'
     | '/components/fleet-rail'
     | '/components/glyphs'
+    | '/components/hotkey'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
     | '/components/label'
     | '/components/native-select'
+    | '/components/onward'
     | '/components/paper'
     | '/components/progress'
     | '/components/radio-group'
@@ -708,10 +746,12 @@ export interface FileRouteTypes {
     | '/components/toggle'
     | '/components/toggle-group'
     | '/components/tooltip'
+    | '/components/use-minute'
     | '/components/use-mobile'
     | '/compositions/app-shell'
     | '/compositions/collection-toolbar'
     | '/compositions/data-table'
+    | '/compositions/day-line'
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
@@ -756,11 +796,13 @@ export interface FileRouteTypes {
     | '/components/field'
     | '/components/fleet-rail'
     | '/components/glyphs'
+    | '/components/hotkey'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
     | '/components/label'
     | '/components/native-select'
+    | '/components/onward'
     | '/components/paper'
     | '/components/progress'
     | '/components/radio-group'
@@ -781,10 +823,12 @@ export interface FileRouteTypes {
     | '/components/toggle'
     | '/components/toggle-group'
     | '/components/tooltip'
+    | '/components/use-minute'
     | '/components/use-mobile'
     | '/compositions/app-shell'
     | '/compositions/collection-toolbar'
     | '/compositions/data-table'
+    | '/compositions/day-line'
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
@@ -829,11 +873,13 @@ export interface FileRouteTypes {
     | '/components/field'
     | '/components/fleet-rail'
     | '/components/glyphs'
+    | '/components/hotkey'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
     | '/components/label'
     | '/components/native-select'
+    | '/components/onward'
     | '/components/paper'
     | '/components/progress'
     | '/components/radio-group'
@@ -854,10 +900,12 @@ export interface FileRouteTypes {
     | '/components/toggle'
     | '/components/toggle-group'
     | '/components/tooltip'
+    | '/components/use-minute'
     | '/components/use-mobile'
     | '/compositions/app-shell'
     | '/compositions/collection-toolbar'
     | '/compositions/data-table'
+    | '/compositions/day-line'
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
@@ -903,11 +951,13 @@ export interface RootRouteChildren {
   ComponentsFieldRoute: typeof ComponentsFieldRoute
   ComponentsFleetRailRoute: typeof ComponentsFleetRailRoute
   ComponentsGlyphsRoute: typeof ComponentsGlyphsRoute
+  ComponentsHotkeyRoute: typeof ComponentsHotkeyRoute
   ComponentsInputRoute: typeof ComponentsInputRoute
   ComponentsInputGroupRoute: typeof ComponentsInputGroupRoute
   ComponentsKbdRoute: typeof ComponentsKbdRoute
   ComponentsLabelRoute: typeof ComponentsLabelRoute
   ComponentsNativeSelectRoute: typeof ComponentsNativeSelectRoute
+  ComponentsOnwardRoute: typeof ComponentsOnwardRoute
   ComponentsPaperRoute: typeof ComponentsPaperRoute
   ComponentsProgressRoute: typeof ComponentsProgressRoute
   ComponentsRadioGroupRoute: typeof ComponentsRadioGroupRoute
@@ -928,10 +978,12 @@ export interface RootRouteChildren {
   ComponentsToggleRoute: typeof ComponentsToggleRoute
   ComponentsToggleGroupRoute: typeof ComponentsToggleGroupRoute
   ComponentsTooltipRoute: typeof ComponentsTooltipRoute
+  ComponentsUseMinuteRoute: typeof ComponentsUseMinuteRoute
   ComponentsUseMobileRoute: typeof ComponentsUseMobileRoute
   CompositionsAppShellRoute: typeof CompositionsAppShellRoute
   CompositionsCollectionToolbarRoute: typeof CompositionsCollectionToolbarRoute
   CompositionsDataTableRoute: typeof CompositionsDataTableRoute
+  CompositionsDayLineRoute: typeof CompositionsDayLineRoute
   CompositionsFactsRoute: typeof CompositionsFactsRoute
   CompositionsFormSectionRoute: typeof CompositionsFormSectionRoute
   CompositionsItemCardsRoute: typeof CompositionsItemCardsRoute
@@ -1098,6 +1150,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsGlyphsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/components/hotkey': {
+      id: '/components/hotkey'
+      path: '/components/hotkey'
+      fullPath: '/components/hotkey'
+      preLoaderRoute: typeof ComponentsHotkeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/components/input': {
       id: '/components/input'
       path: '/components/input'
@@ -1131,6 +1190,13 @@ declare module '@tanstack/react-router' {
       path: '/components/native-select'
       fullPath: '/components/native-select'
       preLoaderRoute: typeof ComponentsNativeSelectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/components/onward': {
+      id: '/components/onward'
+      path: '/components/onward'
+      fullPath: '/components/onward'
+      preLoaderRoute: typeof ComponentsOnwardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/components/paper': {
@@ -1273,6 +1339,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsTooltipRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/components/use-minute': {
+      id: '/components/use-minute'
+      path: '/components/use-minute'
+      fullPath: '/components/use-minute'
+      preLoaderRoute: typeof ComponentsUseMinuteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/components/use-mobile': {
       id: '/components/use-mobile'
       path: '/components/use-mobile'
@@ -1299,6 +1372,13 @@ declare module '@tanstack/react-router' {
       path: '/compositions/data-table'
       fullPath: '/compositions/data-table'
       preLoaderRoute: typeof CompositionsDataTableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compositions/day-line': {
+      id: '/compositions/day-line'
+      path: '/compositions/day-line'
+      fullPath: '/compositions/day-line'
+      preLoaderRoute: typeof CompositionsDayLineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compositions/facts': {
@@ -1479,11 +1559,13 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsFieldRoute: ComponentsFieldRoute,
   ComponentsFleetRailRoute: ComponentsFleetRailRoute,
   ComponentsGlyphsRoute: ComponentsGlyphsRoute,
+  ComponentsHotkeyRoute: ComponentsHotkeyRoute,
   ComponentsInputRoute: ComponentsInputRoute,
   ComponentsInputGroupRoute: ComponentsInputGroupRoute,
   ComponentsKbdRoute: ComponentsKbdRoute,
   ComponentsLabelRoute: ComponentsLabelRoute,
   ComponentsNativeSelectRoute: ComponentsNativeSelectRoute,
+  ComponentsOnwardRoute: ComponentsOnwardRoute,
   ComponentsPaperRoute: ComponentsPaperRoute,
   ComponentsProgressRoute: ComponentsProgressRoute,
   ComponentsRadioGroupRoute: ComponentsRadioGroupRoute,
@@ -1504,10 +1586,12 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsToggleRoute: ComponentsToggleRoute,
   ComponentsToggleGroupRoute: ComponentsToggleGroupRoute,
   ComponentsTooltipRoute: ComponentsTooltipRoute,
+  ComponentsUseMinuteRoute: ComponentsUseMinuteRoute,
   ComponentsUseMobileRoute: ComponentsUseMobileRoute,
   CompositionsAppShellRoute: CompositionsAppShellRoute,
   CompositionsCollectionToolbarRoute: CompositionsCollectionToolbarRoute,
   CompositionsDataTableRoute: CompositionsDataTableRoute,
+  CompositionsDayLineRoute: CompositionsDayLineRoute,
   CompositionsFactsRoute: CompositionsFactsRoute,
   CompositionsFormSectionRoute: CompositionsFormSectionRoute,
   CompositionsItemCardsRoute: CompositionsItemCardsRoute,

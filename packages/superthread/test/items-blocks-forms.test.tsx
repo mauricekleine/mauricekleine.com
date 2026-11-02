@@ -9,13 +9,14 @@ import {
   FormSectionFooter,
   FormSectionStatus,
 } from "@/components/superthread/blocks/form-section";
-import { QuickAdd } from "@/components/superthread/blocks/quick-add";
+import { QuickAdd, QuickAddNav } from "@/components/superthread/blocks/quick-add";
 import { Facts, Fact, FactLabel, FactValue } from "@/components/superthread/blocks/facts";
 import { Notice, NoticeTitle, NoticeDescription, NoticeActions } from "@/components/superthread/blocks/notice";
 import { Button } from "@/components/superthread/ui/button";
 import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { Input } from "@/components/superthread/ui/input";
 import { type StatusState } from "@/components/superthread/ui/glyphs";
+import { SidebarProvider } from "@/components/superthread/ui/sidebar";
 import { client, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
 
 // Exercise the actual text control and native form boundary, shared by Enter and the submit button.
@@ -314,6 +315,237 @@ describe("quick add", () => {
       await type(one(view.body, "input").el as HTMLInputElement, "task");
       await submit(one(view.body, "form").el as HTMLFormElement);
       expect(one(view.body, '[role="alert"]').el.textContent).toBe("could not add. try again.");
+    } finally {
+      await view.done();
+    }
+  });
+});
+
+describe("the quiet add in a nav", () => {
+  type Props = Partial<React.ComponentProps<typeof QuickAddNav>>;
+  const nav = (props: Props = {}) => (
+    <SidebarProvider>
+      <QuickAddNav label="add a task" placeholder="add a task" onAdd={() => {}} {...props} />
+    </SidebarProvider>
+  );
+
+  // happy-dom has the attribute and no popover behaviour, so this stands in for the browser's half: it opens the form and
+  // fires the toggle event, and like a browser it fires nothing when the form is already open. The real popover, its
+  // anchor and Escape are proved in a browser.
+  const open: Element[] = [];
+  const withPopover = () => {
+    const proto = HTMLElement.prototype as unknown as { togglePopover?: (force?: boolean) => boolean };
+    proto.togglePopover = function (this: HTMLElement, force?: boolean) {
+      if (force !== false && open.includes(this)) return true;
+      open.push(this);
+      this.dispatchEvent(Object.assign(new Event("toggle"), { newState: force === false ? "closed" : "open" }));
+      return true;
+    };
+    return () => {
+      delete proto.togglePopover;
+      open.length = 0;
+    };
+  };
+  const press = async (key: string, target: EventTarget = document.body) => {
+    await act(async () => {
+      target.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true }));
+    });
+  };
+
+  test("a muted word and a glyph open a named one-line field through a real popover", () => {
+    const host = server(nav());
+    const item = one(host, '[data-slot="quick-add-nav"]');
+    expect(item.el.tagName).toBe("LI");
+    expect(item.el.getAttribute("data-mk")).toBe("quick-add");
+    const trigger = one(host, "button[popovertarget]");
+    const form = one(host, "form");
+    expect(trigger.el.getAttribute("popovertarget")).toBe(form.el.id);
+    expect(trigger.el.getAttribute("type")).toBe("button");
+    expect(trigger.el.getAttribute("aria-label")).toBe("add");
+    expect(trigger.el.querySelector("svg")).not.toBeNull();
+    expect(trigger.classes).toContain("text-muted-foreground");
+    expect(form.el.getAttribute("popover")).toBe("auto");
+    expect(form.el.getAttribute("aria-label")).toBe("add a task");
+    const input = one(host, "input").el;
+    expect(one(host, "label").el.getAttribute("for")).toBe(input.id);
+    expect(input.getAttribute("placeholder")).toBe("add a task");
+  });
+
+  test("the field sits over the trigger, and below 900 px runs edge to edge with its button", () => {
+    const host = server(nav());
+    const anchor = (one(host, '[data-slot="quick-add-nav"]').el as HTMLElement).style.getPropertyValue(
+      "--quick-add-anchor",
+    );
+    expect(anchor).toMatch(/^--quick-add-[A-Za-z0-9_]+$/);
+    expect(one(host, "form").classes).toEqual(
+      expect.arrayContaining([
+        "[position-anchor:var(--quick-add-anchor)]",
+        "left-[anchor(left)]",
+        "bottom-[anchor(bottom)]",
+        "[@media(max-width:900px)]:left-3",
+        "[@media(max-width:900px)]:right-3",
+        "[@media(max-width:900px)]:top-[anchor(top)]",
+      ]),
+    );
+    expect(one(host, "button[popovertarget]").classes).toContain("[anchor-name:var(--quick-add-anchor)]");
+    expect(one(host, 'form button[type="submit"]').classes).toEqual(
+      expect.arrayContaining(["hidden", "[@media(max-width:900px)]:inline-flex"]),
+    );
+  });
+
+  test("it stands above the nav's foot, and on a phone the trigger is a 44 px glyph", () => {
+    const host = server(nav());
+    expect(one(host, '[data-slot="quick-add-nav"]').classes).toEqual(
+      expect.arrayContaining(["mt-auto", "[@media(max-width:900px)]:mt-0", "[@media(max-width:900px)]:ml-auto"]),
+    );
+    expect(one(host, "button[popovertarget]").classes).toEqual(
+      expect.arrayContaining(["[@media(max-width:900px)]:hit-area", "[@media(max-width:600px)]:w-11"]),
+    );
+    expect(one(host, "button[popovertarget] span").classes).toContain("[@media(max-width:600px)]:hidden");
+  });
+
+  test("n opens it and lands in the field, and in any field it stays a letter", async () => {
+    const restore = withPopover();
+    const view = await client(
+      <>
+        <input data-testid="elsewhere" />
+        {nav()}
+      </>,
+    );
+    try {
+      const elsewhere = one(view.body, '[data-testid="elsewhere"]').el as HTMLInputElement;
+      await press("n", elsewhere);
+      expect(open).toEqual([]);
+      await press("n");
+      expect(open).toEqual([one(view.body, '[data-slot="quick-add-nav-field"]').el]);
+      expect(document.activeElement).toBe(one(view.body, '[data-slot="quick-add-nav-field"] input').el);
+    } finally {
+      await view.done();
+      restore();
+    }
+  });
+
+  test("n takes focus back to a field that's already open", async () => {
+    const restore = withPopover();
+    const view = await client(nav());
+    try {
+      await press("n");
+      const trigger = one(view.body, "button[popovertarget]").el as HTMLElement;
+      trigger.focus();
+      await press("n", trigger);
+      expect(document.activeElement).toBe(one(view.body, '[data-slot="quick-add-nav-field"] input').el);
+    } finally {
+      await view.done();
+      restore();
+    }
+  });
+
+  test("a press of n stops before it reaches the field as a typed letter", async () => {
+    const restore = withPopover();
+    const view = await client(nav());
+    try {
+      const event = new KeyboardEvent("keydown", { key: "n", bubbles: true, cancelable: true });
+      await act(async () => {
+        document.body.dispatchEvent(event);
+      });
+      expect(event.defaultPrevented).toBe(true);
+    } finally {
+      await view.done();
+      restore();
+    }
+  });
+
+  test("a ship can move the key or turn it off, and a disabled field takes no key", async () => {
+    const restore = withPopover();
+    const moved = await client(nav({ hotkey: "t" }));
+    await press("n");
+    expect(open).toHaveLength(0);
+    await press("t");
+    expect(open).toHaveLength(1);
+    await moved.done();
+    open.length = 0;
+    for (const props of [{ hotkey: null }, { inputProps: { disabled: true } }]) {
+      const view = await client(nav(props));
+      await press("n");
+      expect(open).toHaveLength(0);
+      await view.done();
+    }
+    restore();
+  });
+
+  test("leaving the page takes the key with it", async () => {
+    const restore = withPopover();
+    const view = await client(nav());
+    await view.done();
+    await press("n");
+    expect(open).toHaveLength(0);
+    restore();
+  });
+
+  test("Enter adds, clears and stays ready for the next one", async () => {
+    const added: string[] = [];
+    const view = await client(nav({ onAdd: (value) => void added.push(value) }));
+    try {
+      const form = one(view.body, "form").el as HTMLFormElement;
+      const input = one(view.body, "input").el as HTMLInputElement;
+      await type(input, "  buy stamps ");
+      await submit(form);
+      expect(added).toEqual(["buy stamps"]);
+      expect(input.value).toBe("");
+      expect(document.activeElement).toBe(input);
+    } finally {
+      await view.done();
+    }
+  });
+
+  test("a failed add keeps the draft and says why, inside the field's own surface", async () => {
+    const view = await client(
+      nav({
+        onAdd: () => {
+          throw new Error("the list is read-only");
+        },
+      }),
+    );
+    try {
+      const form = one(view.body, "form").el as HTMLFormElement;
+      const input = one(view.body, "input").el as HTMLInputElement;
+      await type(input, "buy stamps");
+      await submit(form);
+      expect(input.value).toBe("buy stamps");
+      expect(input.getAttribute("aria-invalid")).toBe("true");
+      const error = one(form, '[data-slot="field-error"]').el;
+      expect(error.textContent).toContain("the list is read-only");
+      expect(input.getAttribute("aria-describedby")).toBe(error.id);
+    } finally {
+      await view.done();
+    }
+  });
+
+  test("one add at a time, and an empty draft adds nothing", async () => {
+    let finish!: () => void;
+    const added: string[] = [];
+    const view = await client(
+      nav({
+        onAdd: (value) => {
+          added.push(value);
+          return new Promise<void>((resolve) => {
+            finish = resolve;
+          });
+        },
+      }),
+    );
+    try {
+      const form = one(view.body, "form").el as HTMLFormElement;
+      const input = one(view.body, "input").el as HTMLInputElement;
+      await submit(form);
+      expect(added).toEqual([]);
+      await type(input, "first");
+      await submit(form);
+      await submit(form);
+      expect(added).toEqual(["first"]);
+      expect(one(view.body, 'form button[type="submit"]').el.hasAttribute("disabled")).toBe(true);
+      await act(async () => finish());
+      expect(form.getAttribute("aria-busy")).toBe("false");
     } finally {
       await view.done();
     }

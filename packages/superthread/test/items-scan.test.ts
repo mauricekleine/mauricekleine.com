@@ -95,6 +95,32 @@ function surfaceProblems(classes: string): string[] {
   return problems;
 }
 
+// ---------- breakpoints ----------
+
+const BAR = "[@media(max-width:900px)]:";
+const PHONE = "[@media(max-width:600px)]:";
+const family = (utility: string) => utility.replace(/-(?:\[.*\]|\(.*\)|[^-]+)$/, "");
+
+/**
+ * A utility a class string sets to two values at the frame's two widths. Tailwind sorts arbitrary variants by their text,
+ * so the 900 px rule prints after the 600 px rule and a phone never gets its value. The wider step takes a range instead:
+ * `[@media(min-width:601px)_and_(max-width:900px)]:`.
+ */
+function stackedWidthProblems(classes: string): string[] {
+  const words = classes
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => split(word));
+  const phone = words.filter((w) => w.variants === PHONE);
+  return words
+    .filter((w) => w.variants === BAR)
+    .flatMap((bar) =>
+      phone
+        .filter((w) => family(w.utility) === family(bar.utility) && w.utility !== bar.utility)
+        .map((w) => `${PHONE}${w.utility} loses to ${BAR}${bar.utility}`),
+    );
+}
+
 // ---------- words ----------
 
 /** The string at `at` and, when it opens an array, every string directly inside it. */
@@ -189,6 +215,12 @@ const c = <button aria-label="Close toast" title={"Toggle"}>x<Icon name="close" 
     expect(servedWords(code).sort()).toEqual(["Close", "Close toast", "Sidebar", "Toggle", "nav", "shows the", "x"]);
   });
 
+  test("breakpoints: two values at the frame's two widths are found, one value and a range are not", () => {
+    expect(stackedWidthProblems(`${BAR}w-auto ${PHONE}w-11`)).toHaveLength(1);
+    expect(stackedWidthProblems(`${BAR}h-8 ${PHONE}h-8`)).toEqual([]);
+    expect(stackedWidthProblems(`[@media(min-width:601px)_and_(max-width:900px)]:w-auto ${PHONE}w-11`)).toEqual([]);
+  });
+
   test("style hooks: a cn-* class is found under any variant, the cn() call and other classes are not", () => {
     const code = served(
       "items/probe.tsx",
@@ -212,6 +244,13 @@ describe("every shipped item, as served", () => {
     test(`${path}: draws with the lifts, the scrim, square corners and the role inks`, () => {
       const problems = literals(served(path)).flatMap((literal) =>
         surfaceProblems(text(literal)).map((problem) => `${literal.slice(0, 60)}: ${problem}`),
+      );
+      expect(problems).toEqual([]);
+    });
+
+    test(`${path}: a phone's value reaches the phone`, () => {
+      const problems = literals(served(path)).flatMap((literal) =>
+        stackedWidthProblems(text(literal)).map((problem) => `${literal.slice(0, 60)}: ${problem}`),
       );
       expect(problems).toEqual([]);
     });

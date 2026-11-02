@@ -22,7 +22,7 @@ function ItemCards({ className, last, ...props }: React.ComponentProps<"ul"> & {
       data-mk="item-cards"
       data-slot="item-cards"
       className={cn(
-        "grid min-w-0 list-none grid-cols-[repeat(auto-fill,minmax(min(220px,100%),1fr))] gap-2 has-[>[data-variant]]:grid-cols-1 has-[>[data-variant]]:gap-0 [@media(min-width:601px)]:in-data-[slot=app-shell-panel]:not-has-[>[data-variant=full]]:has-[>[data-variant=decided]]:-mx-12 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:has-[>[data-variant]]:-mx-4",
+        "grid min-w-0 list-none grid-cols-[repeat(auto-fill,minmax(min(220px,100%),1fr))] gap-2 has-[>[data-variant]]:grid-cols-1 has-[>[data-variant]]:gap-0 [@media(min-width:601px)]:in-data-[slot=app-shell-panel]:not-has-[>[data-variant=full]]:has-[>[data-variant=decided]]:-mx-(--spacing-panel-inset) [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:has-[>[data-variant]]:-mx-(--spacing-panel-inset)",
         last &&
           "[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:has-[>[data-variant]]:-mb-4 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:[&>[data-variant]:last-child]:border-b-0",
         className,
@@ -35,7 +35,7 @@ function ItemCards({ className, last, ...props }: React.ComponentProps<"ul"> & {
 const cardVariants: Record<ItemCardVariant, string> = {
   full: "group/item-card relative grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 border border-border px-6 pt-5 pb-3.5 transition-[border-color] duration-(--duration-quick) ease-(--ease-brand) not-first:mt-3 [grid-template-areas:'title_when'_'lede_lede'_'meta_go'] has-[[data-slot=item-card-link]]:hover:border-input [@media(max-width:600px)]:p-4 [@media(max-width:600px)]:[grid-template-areas:'title_title'_'when_when'_'lede_lede'_'meta_go'] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-x-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-t-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:not-first:mt-0",
   decided:
-    "group/item-card relative grid h-12 min-w-0 grid-cols-[minmax(0,1fr)_152px_88px] items-center gap-x-4 border-b border-border px-3 type-ui text-foreground [grid-template-areas:'title_meta_when'] in-[[data-slot=app-shell-panel]_[data-slot=item-cards]:not(:has(>[data-variant=full]))]:px-12 [@media(max-width:600px)]:h-14 [@media(max-width:600px)]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:content-center [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:[grid-template-areas:'title_title'_'meta_when'] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:px-4",
+    "group/item-card relative grid h-12 min-w-0 grid-cols-[minmax(0,1fr)_152px_88px] items-center gap-x-4 border-b border-border px-3 type-ui text-foreground [grid-template-areas:'title_meta_when'] in-[[data-slot=app-shell-panel]_[data-slot=item-cards]:not(:has(>[data-variant=full]))]:px-(--spacing-panel-inset) [@media(max-width:600px)]:h-14 [@media(max-width:600px)]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:content-center [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:[grid-template-areas:'title_title'_'meta_when'] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:px-(--spacing-panel-inset)",
 };
 
 // The list keeps its semantics and the small card keeps its own surface, which also bounds the title's link. A full or

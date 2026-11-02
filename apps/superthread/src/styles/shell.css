@@ -73,10 +73,10 @@
     display: block;
     image-rendering: pixelated;
   }
-  /* a fixed cell, so the search starts at x 496 on every page. The right padding is 16, not 28, so every page name
-     prints whole ('input group' is the longest); a longer one ellipsises. */
+  /* a fixed cell, so the search starts in one place on every page. It holds the longest page name, 'collection toolbar'
+     under 'compositions'; a longer one ellipsises. */
   .st-crumb {
-    flex: 0 0 232px;
+    flex: 0 0 300px;
     display: flex;
     align-items: center;
     gap: 10px;

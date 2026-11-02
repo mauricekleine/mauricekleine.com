@@ -1,6 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import {
   beforeWords,
+  calendarDate,
+  clockWords,
+  dateWords,
+  isCalendarDate,
   type Schedule,
   scheduleWords,
   sinceWords,
@@ -43,6 +47,52 @@ describe("sinceWords", () => {
 
   test("takes a Date", () => {
     expect(sinceWords(new Date("2026-10-30T09:00:00Z"), new Date(now), amsterdam)).toBe("since friday");
+  });
+});
+
+describe("clockWords", () => {
+  test("prints the 24-hour clock in the reader's zone", () => {
+    expect(clockWords("2026-11-01T08:30:00Z", amsterdam)).toBe("09:30");
+    expect(clockWords(new Date("2026-11-01T08:30:00Z"), { timeZone: "UTC" })).toBe("08:30");
+  });
+
+  test("a calendar date has no clock face, so it names the date in every zone", () => {
+    for (const timeZone of ["Pacific/Auckland", "America/Los_Angeles"])
+      expect(clockWords("2026-11-02", { timeZone })).toBe("2 nov");
+  });
+});
+
+describe("dateWords", () => {
+  test.each([
+    ["a tuesday", "2026-11-03T09:00:00+01:00", "tue 3 nov"],
+    ["a sunday", "2026-11-01T09:00:00+01:00", "sun 1 nov"],
+    ["a monday", "2026-11-02", "mon 2 nov"],
+  ])("%s", (_, moment, words) => expect(dateWords(moment, amsterdam)).toBe(words));
+
+  test("reads the day in the reader's zone", () => {
+    expect(dateWords("2026-11-02T23:30:00Z", amsterdam)).toBe("tue 3 nov");
+    expect(dateWords("2026-11-02T23:30:00Z", { timeZone: "UTC" })).toBe("mon 2 nov");
+  });
+
+  test("a calendar date is the same day in every zone", () => {
+    for (const timeZone of ["Pacific/Auckland", "America/Los_Angeles"])
+      expect(dateWords("2026-11-03", { timeZone })).toBe("tue 3 nov");
+  });
+});
+
+describe("calendarDate", () => {
+  test("names the date a moment falls on in the reader's zone", () => {
+    expect(calendarDate("2026-11-02T23:30:00Z", amsterdam)).toBe("2026-11-03");
+    expect(calendarDate("2026-11-02T23:30:00Z", { timeZone: "UTC" })).toBe("2026-11-02");
+    expect(calendarDate("2026-11-03", { timeZone: "America/Los_Angeles" })).toBe("2026-11-03");
+  });
+});
+
+describe("isCalendarDate", () => {
+  test("tells a plain date from a moment on the clock", () => {
+    expect(isCalendarDate("2026-11-03")).toBe(true);
+    expect(isCalendarDate("2026-11-03T09:00:00+01:00")).toBe(false);
+    expect(isCalendarDate(new Date("2026-11-03"))).toBe(false);
   });
 });
 

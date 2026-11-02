@@ -1,5 +1,5 @@
-// Time in the fleet's words: "since friday", "before 11:00", "48 min until standup", "every day at 07:00". Every
-// function is pure. Each moment comes in as an argument, so nothing here reads a clock, and the words never judge how
+// Time in the fleet's words: "since friday", "before 11:00", "09:30", "tue 3 nov", "48 min until standup", "every day
+// at 07:00". Every function is pure. Each moment comes in as an argument, so nothing here reads a clock, and the words never judge how
 // long something took.
 //
 // A moment is a Date or a date string. A plain "2026-10-30" is a calendar date, the same day in every zone, and it has no
@@ -23,7 +23,10 @@ const DAY_MS = 86_400_000;
 const CALENDAR_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 const readerZone = (options?: TimeOptions) => options?.timeZone ?? new Intl.DateTimeFormat().resolvedOptions().timeZone;
-const isCalendarDate = (moment: Moment): moment is string => typeof moment === "string" && CALENDAR_DATE.test(moment);
+
+/** A plain "2026-10-30": a day with no clock face, the same day in every zone. */
+export const isCalendarDate = (moment: Moment): moment is string =>
+  typeof moment === "string" && CALENDAR_DATE.test(moment);
 
 // The calendar day a moment falls on in the zone, as whole days since the epoch.
 function dayOf(moment: Moment, timeZone: string) {
@@ -50,11 +53,11 @@ export function sinceWords(from: Moment, now: Moment, options?: TimeOptions) {
   return `since ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}${sameYear ? "" : ` ${date.getUTCFullYear()}`}`;
 }
 
-/** "before 11:00", on the 24-hour clock. A calendar date has no clock face, so it reads "before 2 nov". */
-export function beforeWords(at: Moment, options?: TimeOptions) {
+/** "09:30", on the 24-hour clock. A calendar date has no clock face, so it reads "2 nov". */
+export function clockWords(at: Moment, options?: TimeOptions) {
   if (isCalendarDate(at)) {
     const date = new Date(dayOf(at, "UTC") * DAY_MS);
-    return `before ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}`;
+    return `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}`;
   }
   const clock = new Intl.DateTimeFormat("en-GB", {
     timeZone: readerZone(options),
@@ -62,7 +65,25 @@ export function beforeWords(at: Moment, options?: TimeOptions) {
     minute: "2-digit",
     hourCycle: "h23",
   });
-  return `before ${clock.format(new Date(at))}`;
+  return clock.format(new Date(at));
+}
+
+/** "2026-11-03", the calendar date a moment falls on in the reader's zone. */
+export function calendarDate(moment: Moment, options?: TimeOptions) {
+  return new Date(dayOf(moment, readerZone(options)) * DAY_MS).toISOString().slice(0, 10);
+}
+
+/** "before 11:00", on the 24-hour clock. A calendar date has no clock face, so it reads "before 2 nov". */
+export function beforeWords(at: Moment, options?: TimeOptions) {
+  return `before ${clockWords(at, options)}`;
+}
+
+/** "tue 3 nov", the day a moment falls on in the reader's zone. */
+export function dateWords(moment: Moment, options?: TimeOptions) {
+  const date = new Date(dayOf(moment, readerZone(options)) * DAY_MS);
+  // getUTCDay counts from sunday, WEEK from monday
+  const weekday = WEEK[(date.getUTCDay() + 6) % 7]!.slice(0, 3);
+  return `${weekday} ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}`;
 }
 
 /**

@@ -1,3 +1,5 @@
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@/components/superthread/lib/utils";
 import { EmptyState, EmptyStateText } from "@/components/superthread/blocks/states";
 import { Icon } from "@/components/superthread/ui/glyphs";
@@ -60,6 +62,27 @@ function SortableHead({
   );
 }
 
+// A row's name, the table's form of a list row's title. It is plain text until it gets an href or the app's router link
+// through render. Either way it prints in foreground, or muted on a receding row, and a link underlines on hover and takes
+// the hit area on a phone, as an inline-block so the table's scroller can contain it.
+function TableTitle({ className, href, render, ...props }: useRender.ComponentProps<"a">) {
+  return useRender({
+    defaultTagName: "span",
+    render: render ?? (href !== undefined ? <a /> : undefined),
+    state: { slot: "table-title", mk: "data-table" },
+    props: mergeProps<"a">(
+      {
+        href,
+        className: cn(
+          "min-w-0 text-ui font-medium text-foreground decoration-1 underline-offset-4 in-data-[receding]:text-muted-foreground [&:is(a)]:hover:underline [@media(max-width:600px)]:[&:is(a)]:relative [@media(max-width:600px)]:[&:is(a)]:inline-block [@media(max-width:600px)]:[&:is(a)]:hit-area focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          className,
+        ),
+      },
+      props,
+    ),
+  });
+}
+
 // An empty collection still occupies one real row. Its words span every column and announce a changed result.
 function TableEmpty({
   className,
@@ -79,4 +102,4 @@ function TableEmpty({
   );
 }
 
-export { DataTable, SortableHead, TableEmpty, type SortDirection };
+export { DataTable, SortableHead, TableEmpty, TableTitle, type SortDirection };
