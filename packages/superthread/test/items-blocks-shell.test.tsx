@@ -1,6 +1,8 @@
 // The shell composes the rail, section heads and search without taking over the app's routes or commands.
 import { describe, expect, test } from "bun:test";
+import { Window } from "happy-dom";
 import { act, useState } from "react";
+import { createRoot } from "react-dom/client";
 import {
   AppShell,
   AppShellGround,
@@ -734,6 +736,30 @@ describe("search palette", () => {
       expect(isOpen(disabled.body)).toBe(false);
     } finally {
       await disabled.done();
+    }
+  });
+
+  test("in a window of its own, its keys open it there, and a key on the page's own document leaves it shut", async () => {
+    // A second window stands in for an iframe or a window the app opened: its document is the palette's.
+    const other = new Window();
+    const page = other.document as unknown as Document;
+    const host = page.createElement("div");
+    page.body.append(host);
+    const root = createRoot(host);
+    await act(async () => root.render(<Palette />));
+    try {
+      await key(document, "k", { metaKey: true });
+      await key(document, "/");
+      expect(isOpen(host)).toBe(false);
+      expect((await key(page.body, "/")).defaultPrevented).toBe(true);
+      expect(isOpen(host)).toBe(true);
+      await key(page.body, "k", { ctrlKey: true });
+      expect(isOpen(host)).toBe(false);
+      await key(page.body, "k", { metaKey: true });
+      expect(isOpen(host)).toBe(true);
+    } finally {
+      await act(async () => root.unmount());
+      await other.happyDOM.close();
     }
   });
 
