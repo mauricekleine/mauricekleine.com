@@ -139,13 +139,32 @@ describe("send bar", () => {
     expect(retry!.classList.contains("flex-none")).toBe(true);
   });
 
-  test("a long word wraps inside the button instead of leaving the column", () => {
-    const { classes } = one(
-      server(<SendBarButton>send to everyone who asked</SendBarButton>),
-      '[data-slot="send-bar-button"]',
+  test("an unbroken address as a label wraps inside the button or the link instead of leaving the column", () => {
+    const label = "send to christopher.wolfeschlegelsteinhausenberger@quanta.example";
+    const host = server(
+      <SendBarActions>
+        <SendBarButton>{label}</SendBarButton>
+        <SendBarLink href="/outlook">{label}</SendBarLink>
+      </SendBarActions>,
     );
-    expect(classes).toEqual(expect.arrayContaining(["min-h-12", "whitespace-normal"]));
-    expect(classes).not.toContain("whitespace-nowrap");
+    for (const selector of ['[data-slot="send-bar-button"]', 'a[data-slot="send-bar-link"]']) {
+      const { classes } = one(host, selector);
+      expect(classes).toEqual(expect.arrayContaining(["min-h-12", "whitespace-normal", "[overflow-wrap:anywhere]"]));
+      expect(classes).not.toContain("whitespace-nowrap");
+    }
+  });
+
+  test("the send can't be made a form's submit button, which Enter in a field would click", () => {
+    const button = one(
+      server(
+        <form>
+          {/* @ts-expect-error a send takes no type */}
+          <SendBarButton type="submit">send</SendBarButton>
+        </form>,
+      ),
+      "button",
+    );
+    expect(button.el.getAttribute("type")).toBe("button");
   });
 
   test("sent, the button drops its fill for a readable word and keeps its column", () => {

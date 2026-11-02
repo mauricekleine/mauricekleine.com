@@ -52,7 +52,8 @@ const iconSizes: ReadonlySet<ButtonSize> = new Set(["icon", "icon-xs", "icon-sm"
 // Destructive prints in the first ink with the trash glyph and the word, so red stays a status colour. An icon button shows
 // one glyph: the trash, unless it is given its own. ignoreEnter stops Enter on keydown, before the app's own handler and
 // the click it would fire, so a key held from the last field can't send: Space is the keyboard path. It's for a button
-// that sends. A link keeps Enter, its only keyboard path.
+// that sends, which stays type="button": Enter in a field clicks a form's submit button with no keydown on the button.
+// A link keeps Enter, its only keyboard path.
 function Button({
   className,
   variant = "default",

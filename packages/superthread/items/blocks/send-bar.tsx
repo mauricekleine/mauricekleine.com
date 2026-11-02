@@ -121,17 +121,21 @@ function SendBarActions({ className, ...props }: React.ComponentProps<"div">) {
   return <div data-slot="send-bar-actions" className={cn("flex min-w-0 flex-wrap gap-2", className)} {...props} />;
 }
 
-// A long word wraps inside the box, so the button never leaves the column.
-const fills = "h-auto min-h-12 py-2.5 whitespace-normal";
+// A long word or an address as a label wraps inside the box, so the button never leaves the column.
+const fills = "h-auto min-h-12 py-2.5 whitespace-normal [overflow-wrap:anywhere]";
 
 // The send, in key, and a second action in outline beside it. Enter never fires it, so a key held from the last field
-// can't send, and Space is the keyboard path. Sent, it stays where it was at the same width and reads as a receipt: no
-// fill, its word in foreground, its edge at half.
+// can't send, and Space is the keyboard path. It's always type="button", because a browser clicks a form's submit button
+// itself when Enter lands in a field. Sent, it stays where it was at the same width and reads as a receipt: no fill, its
+// word in foreground, its edge at half.
 function SendBarButton({
   className,
   variant = "key",
   ...props
-}: Omit<React.ComponentProps<typeof Button>, "ignoreEnter" | "nativeButton" | "render" | "size" | "variant"> & {
+}: Omit<
+  React.ComponentProps<typeof Button>,
+  "ignoreEnter" | "nativeButton" | "render" | "size" | "type" | "variant"
+> & {
   variant?: "key" | "outline";
 }) {
   return (
@@ -147,6 +151,7 @@ function SendBarButton({
         className,
       )}
       {...props}
+      type="button"
     />
   );
 }
