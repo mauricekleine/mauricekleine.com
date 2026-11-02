@@ -13,6 +13,7 @@ import {
   beforeWords,
   clockWords,
   dateWords,
+  monthWords,
   scheduleWords,
   sinceWords,
   untilWords,
@@ -73,7 +74,17 @@ import {
   InputGroupTextarea,
 } from "@/components/superthread/ui/input-group";
 import { Label } from "@/components/superthread/ui/label";
+import { FitTitle } from "@/components/superthread/ui/fit-title";
+import {
+  InlineAnswer,
+  InlineAnswers,
+  InlineAnswersAsk,
+  InlineAnswersLine,
+  InlineAnswersList,
+  InlineAnswersTrigger,
+} from "@/components/superthread/ui/inline-answers";
 import { Door, Onward } from "@/components/superthread/ui/onward";
+import { SourceLine, SourceLineItem } from "@/components/superthread/ui/source-line";
 import { Paper } from "@/components/superthread/ui/paper";
 import { SourceMark } from "@/components/superthread/ui/source-mark";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
@@ -713,6 +724,9 @@ function Sink({ mode }: { mode: Mode }) {
           <NativeSelect aria-label="small ship" size="sm">
             <NativeSelectOption>orbit</NativeSelectOption>
           </NativeSelect>
+          <NativeSelect aria-label="scope" variant="quiet">
+            <NativeSelectOption>everything</NativeSelectOption>
+          </NativeSelect>
           <NativeSelect aria-label="invalid ship" aria-invalid>
             <NativeSelectOption>choose a ship</NativeSelectOption>
           </NativeSelect>
@@ -760,7 +774,7 @@ function Sink({ mode }: { mode: Mode }) {
         <p className="text-sm">
           {sinceWords("2026-10-30", "2026-11-01")}, {beforeWords("2026-11-01T10:00:00Z", { timeZone: "UTC" })},{" "}
           {clockWords("2026-11-01T10:00:00Z", { timeZone: "UTC" })}, {dateWords("2026-11-01")},{" "}
-          {untilWords("2026-11-01T11:00:00Z", "standup", "2026-11-01T10:12:00Z")},{" "}
+          {monthWords("2026-11-01")}, {untilWords("2026-11-01T11:00:00Z", "standup", "2026-11-01T10:12:00Z")},{" "}
           {scheduleWords({ every: "day", at: "07:00" })}
         </p>
       </Part>
@@ -776,6 +790,25 @@ function Sink({ mode }: { mode: Mode }) {
           <Button>read the draft</Button>
         </Paper>
       </Part>
+      <Part name="fit-title">
+        <div className="h-44 max-w-sm">
+          <FitTitle render={<h3 />} href="#all">
+            reply to sam about the chapter 7 notes and say when the next draft goes up
+          </FitTitle>
+        </div>
+      </Part>
+      <Part name="inline-answers">
+        <InlineAnswers className="type-lede">
+          <InlineAnswersLine>the next draft waits on your answer.</InlineAnswersLine>
+          <InlineAnswersTrigger />
+          <InlineAnswersList>
+            <InlineAnswer>already done</InlineAnswer>
+            <InlineAnswersAsk question="wrong day">
+              <InlineAnswer>tomorrow</InlineAnswer>
+            </InlineAnswersAsk>
+          </InlineAnswersList>
+        </InlineAnswers>
+      </Part>
       <Part name="onward">
         <div className="flex flex-col items-start gap-2">
           <Onward href="#all">the week</Onward>
@@ -784,6 +817,12 @@ function Sink({ mode }: { mode: Mode }) {
           </Onward>
           <Door href="#all">see what you finished</Door>
         </div>
+      </Part>
+      <Part name="source-line">
+        <SourceLine end="written 07:00">
+          <SourceLineItem href="#all">22 sep call recap</SourceLineItem>
+          <SourceLineItem>a call nobody recorded</SourceLineItem>
+        </SourceLine>
       </Part>
       <Part name="source-mark">
         <SourceMark d="M5 5h6v6h-6z" hover="M6 6h4v4h-4z" aria-label="a square mark" />

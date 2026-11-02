@@ -58,8 +58,8 @@ function Page() {
       <Section id="clock-and-date" title="clock and date">
         <p className="st-pass-prose">
           <code>clockWords(at)</code> prints a time on its own, for a row or a timeline. <code>dateWords(moment)</code>{" "}
-          names the day it falls on in the reader&rsquo;s zone. a plain date has no clock face, so the clock prints the
-          date.
+          names the day it falls on in the reader&rsquo;s zone, and <code>monthWords(moment)</code> its month. a plain
+          date has no clock face, so the clock prints the date.
         </p>
         <ModePair>
           <ClockWordsExample />

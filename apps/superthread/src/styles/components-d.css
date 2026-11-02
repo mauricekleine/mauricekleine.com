@@ -59,6 +59,40 @@
     gap: 24px;
   }
 
+  /* month grid: the width of a reader's rail, where it usually sits. a phone gives it the whole pane */
+  @media (min-width: 601px) {
+    .st-month-grid {
+      max-width: 248px;
+    }
+  }
+
+  /* inline answers: the slots a parent would hold, two lines of the lede */
+  .st-answers {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .st-answers-slot {
+    height: 66px;
+    max-width: 560px;
+  }
+
+  /* fit title: the held boxes, each with a hairline at its right edge so its width shows */
+  .st-fit-stack {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .st-fit-box {
+    border-right: 1px solid var(--border);
+  }
+
+  /* job sheet: the panels of one state after another */
+  .st-job-sheet-stack {
+    display: grid;
+    gap: 24px;
+  }
+
   /* card: the footer's facts in the instrument step */
   .st-pass-note {
     color: var(--muted-foreground);

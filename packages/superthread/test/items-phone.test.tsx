@@ -70,6 +70,7 @@ describe("a field's box is 44 px", () => {
     ["sidebar input", <SidebarInput aria-label="find" />, "input", `${PHONE}h-11`],
     ["native select", <NativeSelect aria-label="ship" />, "select", `${PHONE}h-11`],
     ["small native select", <NativeSelect size="sm" aria-label="ship" />, "select", `${PHONE}data-[size=sm]:h-11`],
+    ["quiet native select", <NativeSelect variant="quiet" aria-label="scope" />, "select", "h-11"],
     [
       "select",
       <Select>

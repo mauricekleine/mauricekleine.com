@@ -10,8 +10,9 @@ import {
 } from "@/components/superthread/blocks/states";
 import { Button } from "@/components/superthread/ui/button";
 import { Icon } from "@/components/superthread/ui/glyphs";
-import { Serves } from "@/examples/compositions-a";
+import { GroundFrame, Serves } from "@/examples/compositions-a";
 import { State } from "@/examples/input";
+import { ClearStateExample } from "@/examples/job-sheet";
 import { Caption } from "@/site/Caption";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -25,6 +26,8 @@ export const Route = createFileRoute("/compositions/states")({
       { id: "loading", title: "loading" },
       { id: "failed", title: "failed" },
       { id: "empty", title: "empty" },
+      { id: "clear", title: "clear" },
+      { id: "parts", title: "parts" },
     ],
   },
   component: Page,
@@ -96,7 +99,7 @@ function Page() {
     <>
       <PageHead
         title="states"
-        lede="what takes the rows' place while a collection loads, when it fails and when it has nothing to show. each state says what happened in the collection's own words."
+        lede="what takes the rows' place while a collection loads, when it fails and when it has nothing to show, and the job's place when nothing's left. each state says what happened in its own words."
       >
         <InstallLine items={["states"]} />
       </PageHead>
@@ -152,6 +155,86 @@ function Page() {
             </State>
           </div>
         </ModePair>
+      </Section>
+      <Section id="clear" title="clear">
+        <p className="st-ca-copy">
+          clear is a claim, so it prints only after a complete read. it takes a <code>JobSheet</code>&rsquo;s box with
+          no paper: the sentence starts where the cue does, and the reason and the door land where the why and the
+          primary do. the panel holds the height of the work that&rsquo;s gone at every width, so its edge doesn&rsquo;t
+          jump when the last thing clears.
+        </p>
+        <ModePair
+          className="st-cb-stack"
+          light={
+            <GroundFrame mode="light" title="clear, light" width={1100} height={860}>
+              <ClearStateExample />
+            </GroundFrame>
+          }
+          dark={
+            <GroundFrame mode="dark" title="clear, dark" width={1100} height={860}>
+              <ClearStateExample />
+            </GroundFrame>
+          }
+        />
+        <p className="st-ca-copy">
+          the sentence prints as large as its rows hold it: display at a full panel, hero below it, and a smaller step
+          only when the words need one. its lines fill from the first.
+        </p>
+        <ModePair
+          light={
+            <GroundFrame mode="light" title="clear on a phone, light" height={900}>
+              <ClearStateExample />
+            </GroundFrame>
+          }
+          dark={
+            <GroundFrame mode="dark" title="clear on a phone, dark" height={900}>
+              <ClearStateExample />
+            </GroundFrame>
+          }
+        />
+      </Section>
+      <Section id="parts" title="parts">
+        <dl className="st-ca-parts">
+          <dt>
+            <code>LoadingState</code>
+          </dt>
+          <dd>
+            rows at the table&rsquo;s height, read out once. <code>rows</code> and <code>label</code> set how many and
+            what&rsquo;s loading.
+          </dd>
+          <dt>
+            <code>FailedState</code>
+          </dt>
+          <dd>
+            the failed glyph, what failed and why. pass <code>onRetry</code> when the reader can try again.
+          </dd>
+          <dt>
+            <code>EmptyState</code>, <code>EmptyStateMedia</code>, <code>EmptyStateText</code>,{" "}
+            <code>EmptyStateActions</code>
+          </dt>
+          <dd>an optional figure, what&rsquo;s missing and how to fill it.</dd>
+          <dt>
+            <code>ClearState</code>
+          </dt>
+          <dd>
+            the job sheet&rsquo;s box with no paper. print it in the job&rsquo;s place, right after what stands over it,
+            and name it with <code>aria-labelledby</code> and the title&rsquo;s <code>id</code>.
+          </dd>
+          <dt>
+            <code>ClearStateTitle</code>
+          </dt>
+          <dd>
+            the claim, one sentence with its full stop. an <code>h1</code> until <code>render</code> says otherwise.
+          </dd>
+          <dt>
+            <code>ClearStateReason</code>
+          </dt>
+          <dd>what makes it true, in one sentence.</dd>
+          <dt>
+            <code>ClearStateDoor</code>
+          </dt>
+          <dd>the way to everything that didn&rsquo;t count.</dd>
+        </dl>
       </Section>
     </>
   );

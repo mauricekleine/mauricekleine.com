@@ -16,7 +16,8 @@ export type TypeStep = {
   from: string;
 };
 
-// P2's step names, plus summary, subtitle, lede and title, which the master prints too.
+// P2's step names, plus summary, subtitle, lede and title, which the master prints too, and long and headline, which
+// only the fleet prints.
 export const steps: TypeStep[] = [
   {
     name: "meta",
@@ -60,6 +61,15 @@ export const steps: TypeStep[] = [
     from: "M/src/reach.css .tk h3",
   },
   {
+    name: "long",
+    size: 26,
+    line: 29,
+    tracking: "-0.03em",
+    family: "display",
+    weight: 300,
+    from: "the fleet's step: a title too long for section, the foot of fit-title's ladder",
+  },
+  {
     name: "section",
     size: 30,
     line: 34,
@@ -77,6 +87,15 @@ export const steps: TypeStep[] = [
     weight: 600,
     phone: { size: 28, line: 34, from: "M/src/reach.css .sheet h3 in @media (max-width:900px)" },
     from: "M/src/reach.css .sheet h3",
+  },
+  {
+    name: "headline",
+    size: 40,
+    line: 44,
+    tracking: "-0.03em",
+    family: "display",
+    weight: 300,
+    from: "the fleet's step: a title too long for hero, and the top of fit-title's ladder under a full panel",
   },
   {
     name: "hero",
@@ -132,6 +151,12 @@ export const rows = {
   board: { value: 56, from: "tokens/master.json space.rows.board" },
   table: { value: 48, from: "tokens/master.json space.rows.table" },
   nav: { value: 32, from: "tokens/master.json space.rows.nav item" },
+};
+
+// The row heights the fleet adds. The master prints no plain row, so these stay out of `rows`, whose every value cites it.
+export const fleetRows = {
+  plain: { value: 40, from: "the fleet's step: a row with no rule and no padding, which the master doesn't print" },
+  nested: { value: 36, from: "the fleet's step: a plain row in a list under a section head" },
 };
 
 // The working panel's side padding, which a row reaches past to bleed to its edges. `phone` holds at `phone.maxWidth`

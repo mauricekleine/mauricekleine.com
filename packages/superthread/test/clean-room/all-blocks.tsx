@@ -9,9 +9,11 @@ import {
   AppShellNav,
   AppShellNavItem,
   AppShellNavTier,
+  AppShellPageFoot,
   AppShellPanel,
   AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
+import { JumpLine, JumpLineLink } from "@/components/superthread/blocks/jump-line";
 import {
   Section,
   SectionAction,
@@ -33,6 +35,10 @@ import {
   PageHeaderTitle,
 } from "@/components/superthread/blocks/page-header";
 import {
+  ClearState,
+  ClearStateDoor,
+  ClearStateReason,
+  ClearStateTitle,
   EmptyState,
   EmptyStateActions,
   EmptyStateText,
@@ -61,6 +67,16 @@ import {
   LetterSource,
 } from "@/components/superthread/blocks/letter";
 import {
+  JobSheet,
+  JobSheetActions,
+  JobSheetChanged,
+  JobSheetCue,
+  JobSheetPrimary,
+  JobSheetTitle,
+  JobSheetToggle,
+  JobSheetWhy,
+} from "@/components/superthread/blocks/job-sheet";
+import {
   DayLine,
   DayLineAllDay,
   DayLineDate,
@@ -69,6 +85,33 @@ import {
   DayLineSteps,
   DayLineStrip,
 } from "@/components/superthread/blocks/day-line";
+import { MonthGrid } from "@/components/superthread/blocks/month-grid";
+import {
+  Reader,
+  ReaderLead,
+  ReaderRail,
+  ReaderHead,
+  ReaderLine,
+  ReaderNext,
+  ReaderNextText,
+  ReaderWide,
+  ReaderBody,
+  ReaderSection,
+  ReaderSectionTitle,
+  ReaderText,
+  ReaderEnd,
+  ReaderFoot,
+  ReaderRaised,
+  ReaderBlocks,
+  ReaderBlock,
+  ReaderBlockTitle,
+  ReaderWho,
+  ReaderPerson,
+  ReaderOwed,
+  ReaderOwedRow,
+  ReaderPaper,
+  ReaderGap,
+} from "@/components/superthread/blocks/reader";
 import { Notice, NoticeTitle, NoticeDescription, NoticeActions } from "@/components/superthread/blocks/notice";
 import {
   SendBar,
@@ -100,6 +143,11 @@ import {
 } from "@/components/superthread/blocks/collection-toolbar";
 import {
   ListRows,
+  PlainRow,
+  PlainRowActions,
+  PlainRows,
+  PlainRowTick,
+  PlainRowTitle,
   ListRow,
   ListRowLead,
   ListRowTitle,
@@ -181,6 +229,13 @@ function Sink({ mode }: { mode: Mode }) {
             <Button variant="outline">new task</Button>
           </EmptyStateActions>
         </EmptyState>
+        <ClearState aria-labelledby="clear">
+          <ClearStateTitle id="clear" render={<h3 />}>
+            nothing needs you until 16:30.
+          </ClearStateTitle>
+          <ClearStateReason>the draft and the deck check are done.</ClearStateReason>
+          <ClearStateDoor href="#open">the rest is in open</ClearStateDoor>
+        </ClearState>
       </Part>
 
       {/* blocks: shell */}
@@ -212,6 +267,9 @@ function Sink({ mode }: { mode: Mode }) {
                 <a href="#today">today</a>
               </AppShellPanelFoot>
             </AppShellPanel>
+            <AppShellPageFoot>
+              <a href="#settings">settings</a>
+            </AppShellPageFoot>
           </AppShellGround>
         </AppShell>
       </Part>
@@ -221,6 +279,18 @@ function Sink({ mode }: { mode: Mode }) {
             <SectionTitle>recent runs</SectionTitle>
             <SectionCount>12</SectionCount>
             <SectionAction href="#runs" />
+          </SectionHeader>
+          <p>runs appear here.</p>
+        </Section>
+        <Section>
+          <SectionHeader quiet="subtitle">
+            <SectionTitle>next week</SectionTitle>
+          </SectionHeader>
+          <p>runs appear here.</p>
+        </Section>
+        <Section>
+          <SectionHeader quiet="instrument">
+            <SectionTitle>then</SectionTitle>
           </SectionHeader>
           <p>runs appear here.</p>
         </Section>
@@ -303,6 +373,43 @@ function Sink({ mode }: { mode: Mode }) {
             </ListRowWhen>
           </ListRow>
         </ListRows>
+        <PlainRows aria-label="next" clamp>
+          <PlainRow>
+            <PlainRowTick>
+              <Checkbox aria-label="mark done: check the registry" />
+            </PlainRowTick>
+            <PlainRowTitle render={<a href="#task" />}>check the registry</PlainRowTitle>
+            <ListRowKind>mail</ListRowKind>
+            <ListRowWhen>thu 5 nov</ListRowWhen>
+          </PlainRow>
+          <PlainRow closed>
+            <PlainRowTitle>a closed task</PlainRowTitle>
+          </PlainRow>
+        </PlainRows>
+        <PlainRows aria-label="routines" variant="nested">
+          <PlainRow>
+            <PlainRowTitle href="#routine">a suggestion</PlainRowTitle>
+            <PlainRowActions>
+              <Button variant="ghost" size="sm">
+                keep
+              </Button>
+            </PlainRowActions>
+          </PlainRow>
+        </PlainRows>
+        <PlainRows aria-label="sources" variant="ruled">
+          <PlainRow>
+            <PlainRowTitle href="#source">a source</PlainRowTitle>
+            <ListRowWhen>2h ago</ListRowWhen>
+          </PlainRow>
+        </PlainRows>
+      </Part>
+      <Part name="jump-line">
+        <JumpLine>
+          <JumpLineLink href="#today" count={2}>
+            today
+          </JumpLineLink>
+          <JumpLineLink render={<a href="#later" />}>later</JumpLineLink>
+        </JumpLine>
       </Part>
       <Part name="item-cards">
         <ItemCards aria-label="drafts">
@@ -509,6 +616,25 @@ function Sink({ mode }: { mode: Mode }) {
           </LetterTools>
         </Letter>
       </Part>
+      <Part name="job-sheet">
+        <JobSheet aria-labelledby={`job-title-${mode}`}>
+          <JobSheetCue>48 min until standup</JobSheetCue>
+          <JobSheetTitle id={`job-title-${mode}`} render={<h3 />} href="#job-sheet">
+            reply to sam about chapter 7
+          </JobSheetTitle>
+          <JobSheetWhy>the next draft waits on your answer.</JobSheetWhy>
+          <JobSheetChanged>sam sent the notes an hour ago</JobSheetChanged>
+          <JobSheetActions>
+            <JobSheetPrimary reserve="open the draft" render={<a href="#job-sheet" />} nativeButton={false}>
+              read the draft
+            </JobSheetPrimary>
+            <Button size="lg" variant="ghost">
+              not now
+            </Button>
+            <JobSheetToggle>only what can't slip</JobSheetToggle>
+          </JobSheetActions>
+        </JobSheet>
+      </Part>
       <Part name="send-bar">
         <SendBar aria-label="where it goes">
           <SendBarTo>
@@ -571,6 +697,87 @@ function Sink({ mode }: { mode: Mode }) {
             timeZone="UTC"
           />
         </DayLine>
+      </Part>
+      <Part name="month-grid">
+        <MonthGrid
+          aria-label="briefs by month"
+          days={[
+            { date: "2026-11-02", label: "read the brief", selected: true, href: "#monday" },
+            { date: "2026-11-03", label: "read the brief", href: "#tuesday" },
+          ]}
+          max="2026-11"
+          min="2026-10"
+          month="2026-11"
+          onMonthChange={() => {}}
+          today="2026-11-03"
+          weeks={[{ date: "2026-11-02", label: "read the weekly brief", href: "#week" }]}
+        />
+      </Part>
+      <Part name="reader">
+        <AppShellPanel>
+          <Reader>
+            <ReaderLead>
+              <ReaderHead written="written 07:00">tue 3 nov</ReaderHead>
+              <ReaderLine>reply to sam before standup.</ReaderLine>
+              <ReaderNext>
+                <ReaderNextText label="do next">reply to sam about chapter 7</ReaderNextText>
+                <Button size="lg">read the draft</Button>
+              </ReaderNext>
+            </ReaderLead>
+            <ReaderWide>
+              <ReaderText>the day line goes here.</ReaderText>
+            </ReaderWide>
+            <ReaderBody>
+              <ReaderSection>
+                <ReaderSectionTitle>what changed</ReaderSectionTitle>
+                <ReaderText>
+                  sam sent the notes last night, and <a href="#brief">the brief</a> is ready.
+                </ReaderText>
+              </ReaderSection>
+              <ReaderEnd>that&rsquo;s all for today.</ReaderEnd>
+            </ReaderBody>
+            <ReaderRail>
+              <ReaderBlock>
+                <ReaderBlockTitle>earlier briefs</ReaderBlockTitle>
+              </ReaderBlock>
+            </ReaderRail>
+            <ReaderFoot>
+              <Onward back href="#monday">
+                monday
+              </Onward>
+              <Onward href="#wednesday">wednesday</Onward>
+            </ReaderFoot>
+          </Reader>
+        </AppShellPanel>
+        <AppShellPanel>
+          <ReaderPaper>
+            <ReaderRaised label="one thing to raise">ask sam who signs off the order.</ReaderRaised>
+          </ReaderPaper>
+          <ReaderBlocks>
+            <ReaderBlock>
+              <ReaderBlockTitle>who&rsquo;s in the room</ReaderBlockTitle>
+              <ReaderWho>
+                <ReaderPerson note="edits the series" seen="mail, mon 2 nov">
+                  sam
+                </ReaderPerson>
+                <ReaderPerson>mina</ReaderPerson>
+              </ReaderWho>
+            </ReaderBlock>
+            <ReaderBlock asWritten>
+              <ReaderBlockTitle>what you owe them</ReaderBlockTitle>
+              <ReaderOwed>
+                <ReaderOwedRow href="#notes" when="thu 5 nov">
+                  the chapter 7 notes
+                </ReaderOwedRow>
+                <ReaderOwedRow when="promised for thu">a date for the printer</ReaderOwedRow>
+              </ReaderOwed>
+            </ReaderBlock>
+            <ReaderBlock>
+              <ReaderBlockTitle>what they owe you</ReaderBlockTitle>
+              <ReaderGap>not in the record</ReaderGap>
+            </ReaderBlock>
+          </ReaderBlocks>
+        </AppShellPanel>
       </Part>
       <Part name="notice">
         <Notice variant="quiet">a newer version is waiting.</Notice>

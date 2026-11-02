@@ -7,6 +7,7 @@ import {
   AppShellNav,
   AppShellNavItem,
   AppShellNavTier,
+  AppShellPageFoot,
   AppShellPanel,
   AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
@@ -153,6 +154,47 @@ describe("app shell", () => {
     test("a link in it prints as the quiet link", () => {
       expect(one(nav(null), FOOT).classes).toContain("[&>a]:link-quiet");
     });
+
+    test("its line runs to the column's edge, so a line that fits the column isn't cut", () => {
+      const { classes } = one(nav(null), FOOT);
+      expect(classes).toEqual(expect.arrayContaining(["truncate", "pl-2.5"]));
+      expect(classes).not.toContain("px-2.5");
+    });
+  });
+
+  describe("the page's foot", () => {
+    const FOOT = '[data-slot="app-shell-page-foot"]';
+    const needsYou = <a href="/settings">google needs signing in</a>;
+    const foot = (children?: React.ReactNode) => server(<AppShellPageFoot>{children}</AppShellPageFoot>);
+
+    test("prints only at 900 px and below, where the nav's foot yields, and only with something to say", () => {
+      const { el, classes } = one(foot(needsYou), FOOT);
+      expect(el.getAttribute("data-mk")).toBe("app-shell");
+      expect(classes).toEqual(expect.arrayContaining(["hidden", "[@media(max-width:900px)]:not-empty:flex"]));
+    });
+
+    test("prints in the dark scope, since the ground stays dark on a light page, and holds a link's hit area", () => {
+      expect(one(foot(needsYou), FOOT).classes).toEqual(expect.arrayContaining(["dark", "min-h-11"]));
+    });
+
+    test("prints what the nav's foot prints, the same way", () => {
+      const host = server(
+        <SidebarProvider>
+          <AppShellNav ship="orbit" foot={needsYou}>
+            <AppShellNavItem render={<a href="/board" />}>board</AppShellNavItem>
+          </AppShellNav>
+          <AppShellPageFoot>{needsYou}</AppShellPageFoot>
+        </SidebarProvider>,
+      );
+      const page = one(host, FOOT);
+      const nav = one(host, '[data-slot="app-shell-nav-foot"]');
+      expect(page.el.textContent).toBe("google needs signing in");
+      expect(page.el.textContent).toBe(nav.el.textContent);
+      for (const cls of ["type-instrument", "text-muted-foreground", "[&>a]:link-quiet"]) {
+        expect(page.classes).toContain(cls);
+        expect(nav.classes).toContain(cls);
+      }
+    });
   });
 
   describe("the nav's second tier", () => {
@@ -271,17 +313,21 @@ describe("app shell", () => {
           </AppShellNav>
         </SidebarProvider>,
       );
-      const list = body.querySelector(`${TIER} > ul`)!;
-      await act(async () => {
-        list.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      });
-      expect(closed).toEqual([]);
-      await act(async () => {
-        list.querySelector("button")!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      });
-      expect(closed).toEqual([list]);
-      await done();
-      delete proto.hidePopover;
+      try {
+        const list = body.querySelector(`${TIER} > ul`)!;
+        await act(async () => {
+          list.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+        expect(closed.length).toBe(0);
+        await act(async () => {
+          list.querySelector("button")!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+        expect(closed.length).toBe(1);
+        expect(closed[0]).toBe(list);
+      } finally {
+        await done();
+        delete proto.hidePopover;
+      }
     });
   });
 
@@ -448,6 +494,58 @@ describe("section header", () => {
     expect(one(host, "h2").classes).toContain("type-title");
     expect(detailsUsed(elements(host), "section-header")).toEqual([]);
     expect(forbidden(elements(host))).toEqual([]);
+  });
+
+  describe("a quiet head", () => {
+    const quiet = (step: "subtitle" | "instrument") =>
+      server(
+        <Section>
+          <SectionHeader quiet={step}>
+            <SectionTitle>next week</SectionTitle>
+            <SectionCount>3</SectionCount>
+          </SectionHeader>
+          <p>a list</p>
+        </Section>,
+      );
+
+    test.each(["subtitle", "instrument"] as const)(
+      "at the %s step prints no rule, sits close to its list and claims no detail or forbidden class",
+      (step) => {
+        const host = quiet(step);
+        const header = one(host, "header");
+        expect(header.el.getAttribute("data-quiet")).toBe(step);
+        expect(header.classes).toEqual(
+          expect.arrayContaining(["data-quiet:border-b-0", "data-quiet:pb-0", "data-quiet:mb-1"]),
+        );
+        expect(detailsUsed(elements(host), "section-header")).toEqual([]);
+        expect(forbidden(elements(host))).toEqual([]);
+      },
+    );
+
+    test("sets its title at the subtitle step in foreground, the display face being the only first-ink title", () => {
+      expect(one(quiet("subtitle"), "h2").classes).toEqual(
+        expect.arrayContaining([
+          "group-data-[quiet=subtitle]/section-header:type-subtitle",
+          "group-data-[quiet=subtitle]/section-header:text-foreground",
+        ]),
+      );
+    });
+
+    test("sets its title in muted instrument", () => {
+      expect(one(quiet("instrument"), "h2").classes).toEqual(
+        expect.arrayContaining([
+          "group-data-[quiet=instrument]/section-header:type-instrument",
+          "group-data-[quiet=instrument]/section-header:text-muted-foreground",
+        ]),
+      );
+    });
+
+    test("still names its section, and its step stays off the element, so a loud head carries no quiet mark", () => {
+      const host = quiet("subtitle");
+      expect(one(host, "section").el.getAttribute("aria-labelledby")).toBe(one(host, "h2").el.id);
+      expect(one(host, "header").el.hasAttribute("quiet")).toBe(false);
+      expect(one(server(<SectionHeader />), "header").el.hasAttribute("data-quiet")).toBe(false);
+    });
   });
 
   test("a stray title id cannot unname its section", () => {

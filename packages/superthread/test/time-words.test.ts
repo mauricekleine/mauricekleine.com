@@ -4,6 +4,7 @@ import {
   calendarDate,
   clockWords,
   dateWords,
+  monthWords,
   isCalendarDate,
   type Schedule,
   scheduleWords,
@@ -77,6 +78,24 @@ describe("dateWords", () => {
   test("a calendar date is the same day in every zone", () => {
     for (const timeZone of ["Pacific/Auckland", "America/Los_Angeles"])
       expect(dateWords("2026-11-03", { timeZone })).toBe("tue 3 nov");
+  });
+});
+
+describe("monthWords", () => {
+  test.each([
+    ["a moment", "2026-11-03T09:00:00+01:00", "november 2026"],
+    ["a plain date", "2026-02-01", "february 2026"],
+    ["the year's last", "2026-12-31", "december 2026"],
+  ])("%s", (_, moment, words) => expect(monthWords(moment, amsterdam)).toBe(words));
+
+  test("reads the month in the reader's zone", () => {
+    expect(monthWords("2026-10-31T23:30:00Z", amsterdam)).toBe("november 2026");
+    expect(monthWords("2026-10-31T23:30:00Z", { timeZone: "UTC" })).toBe("october 2026");
+  });
+
+  test("a calendar date is the same month in every zone", () => {
+    for (const timeZone of ["Pacific/Auckland", "America/Los_Angeles"])
+      expect(monthWords("2026-11-01", { timeZone })).toBe("november 2026");
   });
 });
 

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hotkey",
+  "title": "hotkey",
+  "description": "whether a bare key press is the page's to answer, away from typing and from layers that keep their keys",
+  "files": [
+    {
+      "path": "items/lib/hotkey.ts",
+      "content": "const EDITABLE =\n  'input, textarea, select, [contenteditable]:not([contenteditable=\"false\"]), [role=\"textbox\"], [role=\"searchbox\"], [role=\"combobox\"]';\n\n// Input types that take no typed text, so a letter pressed on one is free.\nconst KEYLESS_INPUTS = new Set([\n  \"button\",\n  \"checkbox\",\n  \"color\",\n  \"file\",\n  \"hidden\",\n  \"image\",\n  \"radio\",\n  \"range\",\n  \"reset\",\n  \"submit\",\n]);\n\n// A modal holds the page back, and a menu or a list jumps to the item a letter starts, so keys pressed inside one stay\n// there. A native dialog is a modal with no role attribute to read.\nconst KEEPS_ITS_KEYS = 'dialog, [role=\"dialog\"], [role=\"alertdialog\"], [role=\"menu\"], [role=\"listbox\"]';\n\nfunction typesText(target: Element) {\n  const field = target.closest(EDITABLE);\n  return field !== null && !(field instanceof HTMLInputElement && KEYLESS_INPUTS.has(field.type));\n}\n\n/**\n * Whether a keydown is the bare key a page answers: that key and no modifier, not held down, not part of a composition,\n * not taken by anything else, and pressed away from editable text and from any layer that keeps its own keys. Letters\n * match in either case, so caps lock changes nothing.\n */\nexport function isPageKey(event: KeyboardEvent, key: string) {\n  if (event.defaultPrevented || event.repeat || event.isComposing) return false;\n  if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return false;\n  // A browser's autofill sends a keydown with no key.\n  if (event.key?.toLowerCase() !== key.toLowerCase()) return false;\n  const target = event.target;\n  return !(target instanceof Element && (typesText(target) || target.closest(KEEPS_ITS_KEYS)));\n}\n// @mk/hotkey 2.9.0\n",
+      "type": "registry:lib",
+      "target": "@components/superthread/lib/hotkey.ts"
+    }
+  ],
+  "meta": {
+    "version": "2.9.0",
+    "sha256": "ff1843059c3ba12410caf9f53bf23d80d1b8665a94b3a1a6da540e529b81e7fb",
+    "tier": "lib",
+    "upstream": null
+  },
+  "type": "registry:lib"
+}

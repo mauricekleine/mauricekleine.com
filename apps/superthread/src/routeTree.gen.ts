@@ -27,9 +27,11 @@ import { Route as ComponentsCommandRouteImport } from './routes/components/comma
 import { Route as ComponentsDialogRouteImport } from './routes/components/dialog'
 import { Route as ComponentsDropdownMenuRouteImport } from './routes/components/dropdown-menu'
 import { Route as ComponentsFieldRouteImport } from './routes/components/field'
+import { Route as ComponentsFitTitleRouteImport } from './routes/components/fit-title'
 import { Route as ComponentsFleetRailRouteImport } from './routes/components/fleet-rail'
 import { Route as ComponentsGlyphsRouteImport } from './routes/components/glyphs'
 import { Route as ComponentsHotkeyRouteImport } from './routes/components/hotkey'
+import { Route as ComponentsInlineAnswersRouteImport } from './routes/components/inline-answers'
 import { Route as ComponentsInputRouteImport } from './routes/components/input'
 import { Route as ComponentsInputGroupRouteImport } from './routes/components/input-group'
 import { Route as ComponentsKbdRouteImport } from './routes/components/kbd'
@@ -47,6 +49,7 @@ import { Route as ComponentsSidebarRouteImport } from './routes/components/sideb
 import { Route as ComponentsSkeletonRouteImport } from './routes/components/skeleton'
 import { Route as ComponentsSliderRouteImport } from './routes/components/slider'
 import { Route as ComponentsSonnerRouteImport } from './routes/components/sonner'
+import { Route as ComponentsSourceLineRouteImport } from './routes/components/source-line'
 import { Route as ComponentsSourceMarkRouteImport } from './routes/components/source-mark'
 import { Route as ComponentsSwitchRouteImport } from './routes/components/switch'
 import { Route as ComponentsTableRouteImport } from './routes/components/table'
@@ -66,11 +69,15 @@ import { Route as CompositionsDayLineRouteImport } from './routes/compositions/d
 import { Route as CompositionsFactsRouteImport } from './routes/compositions/facts'
 import { Route as CompositionsFormSectionRouteImport } from './routes/compositions/form-section'
 import { Route as CompositionsItemCardsRouteImport } from './routes/compositions/item-cards'
+import { Route as CompositionsJobSheetRouteImport } from './routes/compositions/job-sheet'
+import { Route as CompositionsJumpLineRouteImport } from './routes/compositions/jump-line'
 import { Route as CompositionsLetterRouteImport } from './routes/compositions/letter'
 import { Route as CompositionsListRowsRouteImport } from './routes/compositions/list-rows'
+import { Route as CompositionsMonthGridRouteImport } from './routes/compositions/month-grid'
 import { Route as CompositionsNoticeRouteImport } from './routes/compositions/notice'
 import { Route as CompositionsPageHeaderRouteImport } from './routes/compositions/page-header'
 import { Route as CompositionsQuickAddRouteImport } from './routes/compositions/quick-add'
+import { Route as CompositionsReaderRouteImport } from './routes/compositions/reader'
 import { Route as CompositionsSearchPaletteRouteImport } from './routes/compositions/search-palette'
 import { Route as CompositionsSectionHeaderRouteImport } from './routes/compositions/section-header'
 import { Route as CompositionsSendBarRouteImport } from './routes/compositions/send-bar'
@@ -175,6 +182,11 @@ const ComponentsFieldRoute = ComponentsFieldRouteImport.update({
   path: '/components/field',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComponentsFitTitleRoute = ComponentsFitTitleRouteImport.update({
+  id: '/components/fit-title',
+  path: '/components/fit-title',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComponentsFleetRailRoute = ComponentsFleetRailRouteImport.update({
   id: '/components/fleet-rail',
   path: '/components/fleet-rail',
@@ -188,6 +200,11 @@ const ComponentsGlyphsRoute = ComponentsGlyphsRouteImport.update({
 const ComponentsHotkeyRoute = ComponentsHotkeyRouteImport.update({
   id: '/components/hotkey',
   path: '/components/hotkey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComponentsInlineAnswersRoute = ComponentsInlineAnswersRouteImport.update({
+  id: '/components/inline-answers',
+  path: '/components/inline-answers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsInputRoute = ComponentsInputRouteImport.update({
@@ -273,6 +290,11 @@ const ComponentsSliderRoute = ComponentsSliderRouteImport.update({
 const ComponentsSonnerRoute = ComponentsSonnerRouteImport.update({
   id: '/components/sonner',
   path: '/components/sonner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComponentsSourceLineRoute = ComponentsSourceLineRouteImport.update({
+  id: '/components/source-line',
+  path: '/components/source-line',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsSourceMarkRoute = ComponentsSourceMarkRouteImport.update({
@@ -371,6 +393,16 @@ const CompositionsItemCardsRoute = CompositionsItemCardsRouteImport.update({
   path: '/compositions/item-cards',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompositionsJobSheetRoute = CompositionsJobSheetRouteImport.update({
+  id: '/compositions/job-sheet',
+  path: '/compositions/job-sheet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompositionsJumpLineRoute = CompositionsJumpLineRouteImport.update({
+  id: '/compositions/jump-line',
+  path: '/compositions/jump-line',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompositionsLetterRoute = CompositionsLetterRouteImport.update({
   id: '/compositions/letter',
   path: '/compositions/letter',
@@ -379,6 +411,11 @@ const CompositionsLetterRoute = CompositionsLetterRouteImport.update({
 const CompositionsListRowsRoute = CompositionsListRowsRouteImport.update({
   id: '/compositions/list-rows',
   path: '/compositions/list-rows',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompositionsMonthGridRoute = CompositionsMonthGridRouteImport.update({
+  id: '/compositions/month-grid',
+  path: '/compositions/month-grid',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompositionsNoticeRoute = CompositionsNoticeRouteImport.update({
@@ -394,6 +431,11 @@ const CompositionsPageHeaderRoute = CompositionsPageHeaderRouteImport.update({
 const CompositionsQuickAddRoute = CompositionsQuickAddRouteImport.update({
   id: '/compositions/quick-add',
   path: '/compositions/quick-add',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompositionsReaderRoute = CompositionsReaderRouteImport.update({
+  id: '/compositions/reader',
+  path: '/compositions/reader',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompositionsSearchPaletteRoute =
@@ -483,9 +525,11 @@ export interface FileRoutesByFullPath {
   '/components/dialog': typeof ComponentsDialogRoute
   '/components/dropdown-menu': typeof ComponentsDropdownMenuRoute
   '/components/field': typeof ComponentsFieldRoute
+  '/components/fit-title': typeof ComponentsFitTitleRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
   '/components/hotkey': typeof ComponentsHotkeyRoute
+  '/components/inline-answers': typeof ComponentsInlineAnswersRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
@@ -503,6 +547,7 @@ export interface FileRoutesByFullPath {
   '/components/skeleton': typeof ComponentsSkeletonRoute
   '/components/slider': typeof ComponentsSliderRoute
   '/components/sonner': typeof ComponentsSonnerRoute
+  '/components/source-line': typeof ComponentsSourceLineRoute
   '/components/source-mark': typeof ComponentsSourceMarkRoute
   '/components/switch': typeof ComponentsSwitchRoute
   '/components/table': typeof ComponentsTableRoute
@@ -522,11 +567,15 @@ export interface FileRoutesByFullPath {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/job-sheet': typeof CompositionsJobSheetRoute
+  '/compositions/jump-line': typeof CompositionsJumpLineRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
+  '/compositions/month-grid': typeof CompositionsMonthGridRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
+  '/compositions/reader': typeof CompositionsReaderRoute
   '/compositions/search-palette': typeof CompositionsSearchPaletteRoute
   '/compositions/section-header': typeof CompositionsSectionHeaderRoute
   '/compositions/send-bar': typeof CompositionsSendBarRoute
@@ -560,9 +609,11 @@ export interface FileRoutesByTo {
   '/components/dialog': typeof ComponentsDialogRoute
   '/components/dropdown-menu': typeof ComponentsDropdownMenuRoute
   '/components/field': typeof ComponentsFieldRoute
+  '/components/fit-title': typeof ComponentsFitTitleRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
   '/components/hotkey': typeof ComponentsHotkeyRoute
+  '/components/inline-answers': typeof ComponentsInlineAnswersRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
@@ -580,6 +631,7 @@ export interface FileRoutesByTo {
   '/components/skeleton': typeof ComponentsSkeletonRoute
   '/components/slider': typeof ComponentsSliderRoute
   '/components/sonner': typeof ComponentsSonnerRoute
+  '/components/source-line': typeof ComponentsSourceLineRoute
   '/components/source-mark': typeof ComponentsSourceMarkRoute
   '/components/switch': typeof ComponentsSwitchRoute
   '/components/table': typeof ComponentsTableRoute
@@ -599,11 +651,15 @@ export interface FileRoutesByTo {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/job-sheet': typeof CompositionsJobSheetRoute
+  '/compositions/jump-line': typeof CompositionsJumpLineRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
+  '/compositions/month-grid': typeof CompositionsMonthGridRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
+  '/compositions/reader': typeof CompositionsReaderRoute
   '/compositions/search-palette': typeof CompositionsSearchPaletteRoute
   '/compositions/section-header': typeof CompositionsSectionHeaderRoute
   '/compositions/send-bar': typeof CompositionsSendBarRoute
@@ -638,9 +694,11 @@ export interface FileRoutesById {
   '/components/dialog': typeof ComponentsDialogRoute
   '/components/dropdown-menu': typeof ComponentsDropdownMenuRoute
   '/components/field': typeof ComponentsFieldRoute
+  '/components/fit-title': typeof ComponentsFitTitleRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
   '/components/hotkey': typeof ComponentsHotkeyRoute
+  '/components/inline-answers': typeof ComponentsInlineAnswersRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
@@ -658,6 +716,7 @@ export interface FileRoutesById {
   '/components/skeleton': typeof ComponentsSkeletonRoute
   '/components/slider': typeof ComponentsSliderRoute
   '/components/sonner': typeof ComponentsSonnerRoute
+  '/components/source-line': typeof ComponentsSourceLineRoute
   '/components/source-mark': typeof ComponentsSourceMarkRoute
   '/components/switch': typeof ComponentsSwitchRoute
   '/components/table': typeof ComponentsTableRoute
@@ -677,11 +736,15 @@ export interface FileRoutesById {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/job-sheet': typeof CompositionsJobSheetRoute
+  '/compositions/jump-line': typeof CompositionsJumpLineRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
+  '/compositions/month-grid': typeof CompositionsMonthGridRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
+  '/compositions/reader': typeof CompositionsReaderRoute
   '/compositions/search-palette': typeof CompositionsSearchPaletteRoute
   '/compositions/section-header': typeof CompositionsSectionHeaderRoute
   '/compositions/send-bar': typeof CompositionsSendBarRoute
@@ -717,9 +780,11 @@ export interface FileRouteTypes {
     | '/components/dialog'
     | '/components/dropdown-menu'
     | '/components/field'
+    | '/components/fit-title'
     | '/components/fleet-rail'
     | '/components/glyphs'
     | '/components/hotkey'
+    | '/components/inline-answers'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
@@ -737,6 +802,7 @@ export interface FileRouteTypes {
     | '/components/skeleton'
     | '/components/slider'
     | '/components/sonner'
+    | '/components/source-line'
     | '/components/source-mark'
     | '/components/switch'
     | '/components/table'
@@ -756,11 +822,15 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/job-sheet'
+    | '/compositions/jump-line'
     | '/compositions/letter'
     | '/compositions/list-rows'
+    | '/compositions/month-grid'
     | '/compositions/notice'
     | '/compositions/page-header'
     | '/compositions/quick-add'
+    | '/compositions/reader'
     | '/compositions/search-palette'
     | '/compositions/section-header'
     | '/compositions/send-bar'
@@ -794,9 +864,11 @@ export interface FileRouteTypes {
     | '/components/dialog'
     | '/components/dropdown-menu'
     | '/components/field'
+    | '/components/fit-title'
     | '/components/fleet-rail'
     | '/components/glyphs'
     | '/components/hotkey'
+    | '/components/inline-answers'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
@@ -814,6 +886,7 @@ export interface FileRouteTypes {
     | '/components/skeleton'
     | '/components/slider'
     | '/components/sonner'
+    | '/components/source-line'
     | '/components/source-mark'
     | '/components/switch'
     | '/components/table'
@@ -833,11 +906,15 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/job-sheet'
+    | '/compositions/jump-line'
     | '/compositions/letter'
     | '/compositions/list-rows'
+    | '/compositions/month-grid'
     | '/compositions/notice'
     | '/compositions/page-header'
     | '/compositions/quick-add'
+    | '/compositions/reader'
     | '/compositions/search-palette'
     | '/compositions/section-header'
     | '/compositions/send-bar'
@@ -871,9 +948,11 @@ export interface FileRouteTypes {
     | '/components/dialog'
     | '/components/dropdown-menu'
     | '/components/field'
+    | '/components/fit-title'
     | '/components/fleet-rail'
     | '/components/glyphs'
     | '/components/hotkey'
+    | '/components/inline-answers'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
@@ -891,6 +970,7 @@ export interface FileRouteTypes {
     | '/components/skeleton'
     | '/components/slider'
     | '/components/sonner'
+    | '/components/source-line'
     | '/components/source-mark'
     | '/components/switch'
     | '/components/table'
@@ -910,11 +990,15 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/job-sheet'
+    | '/compositions/jump-line'
     | '/compositions/letter'
     | '/compositions/list-rows'
+    | '/compositions/month-grid'
     | '/compositions/notice'
     | '/compositions/page-header'
     | '/compositions/quick-add'
+    | '/compositions/reader'
     | '/compositions/search-palette'
     | '/compositions/section-header'
     | '/compositions/send-bar'
@@ -949,9 +1033,11 @@ export interface RootRouteChildren {
   ComponentsDialogRoute: typeof ComponentsDialogRoute
   ComponentsDropdownMenuRoute: typeof ComponentsDropdownMenuRoute
   ComponentsFieldRoute: typeof ComponentsFieldRoute
+  ComponentsFitTitleRoute: typeof ComponentsFitTitleRoute
   ComponentsFleetRailRoute: typeof ComponentsFleetRailRoute
   ComponentsGlyphsRoute: typeof ComponentsGlyphsRoute
   ComponentsHotkeyRoute: typeof ComponentsHotkeyRoute
+  ComponentsInlineAnswersRoute: typeof ComponentsInlineAnswersRoute
   ComponentsInputRoute: typeof ComponentsInputRoute
   ComponentsInputGroupRoute: typeof ComponentsInputGroupRoute
   ComponentsKbdRoute: typeof ComponentsKbdRoute
@@ -969,6 +1055,7 @@ export interface RootRouteChildren {
   ComponentsSkeletonRoute: typeof ComponentsSkeletonRoute
   ComponentsSliderRoute: typeof ComponentsSliderRoute
   ComponentsSonnerRoute: typeof ComponentsSonnerRoute
+  ComponentsSourceLineRoute: typeof ComponentsSourceLineRoute
   ComponentsSourceMarkRoute: typeof ComponentsSourceMarkRoute
   ComponentsSwitchRoute: typeof ComponentsSwitchRoute
   ComponentsTableRoute: typeof ComponentsTableRoute
@@ -988,11 +1075,15 @@ export interface RootRouteChildren {
   CompositionsFactsRoute: typeof CompositionsFactsRoute
   CompositionsFormSectionRoute: typeof CompositionsFormSectionRoute
   CompositionsItemCardsRoute: typeof CompositionsItemCardsRoute
+  CompositionsJobSheetRoute: typeof CompositionsJobSheetRoute
+  CompositionsJumpLineRoute: typeof CompositionsJumpLineRoute
   CompositionsLetterRoute: typeof CompositionsLetterRoute
   CompositionsListRowsRoute: typeof CompositionsListRowsRoute
+  CompositionsMonthGridRoute: typeof CompositionsMonthGridRoute
   CompositionsNoticeRoute: typeof CompositionsNoticeRoute
   CompositionsPageHeaderRoute: typeof CompositionsPageHeaderRoute
   CompositionsQuickAddRoute: typeof CompositionsQuickAddRoute
+  CompositionsReaderRoute: typeof CompositionsReaderRoute
   CompositionsSearchPaletteRoute: typeof CompositionsSearchPaletteRoute
   CompositionsSectionHeaderRoute: typeof CompositionsSectionHeaderRoute
   CompositionsSendBarRoute: typeof CompositionsSendBarRoute
@@ -1136,6 +1227,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsFieldRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/components/fit-title': {
+      id: '/components/fit-title'
+      path: '/components/fit-title'
+      fullPath: '/components/fit-title'
+      preLoaderRoute: typeof ComponentsFitTitleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/components/fleet-rail': {
       id: '/components/fleet-rail'
       path: '/components/fleet-rail'
@@ -1155,6 +1253,13 @@ declare module '@tanstack/react-router' {
       path: '/components/hotkey'
       fullPath: '/components/hotkey'
       preLoaderRoute: typeof ComponentsHotkeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/components/inline-answers': {
+      id: '/components/inline-answers'
+      path: '/components/inline-answers'
+      fullPath: '/components/inline-answers'
+      preLoaderRoute: typeof ComponentsInlineAnswersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/components/input': {
@@ -1274,6 +1379,13 @@ declare module '@tanstack/react-router' {
       path: '/components/sonner'
       fullPath: '/components/sonner'
       preLoaderRoute: typeof ComponentsSonnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/components/source-line': {
+      id: '/components/source-line'
+      path: '/components/source-line'
+      fullPath: '/components/source-line'
+      preLoaderRoute: typeof ComponentsSourceLineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/components/source-mark': {
@@ -1409,6 +1521,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompositionsItemCardsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compositions/job-sheet': {
+      id: '/compositions/job-sheet'
+      path: '/compositions/job-sheet'
+      fullPath: '/compositions/job-sheet'
+      preLoaderRoute: typeof CompositionsJobSheetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compositions/jump-line': {
+      id: '/compositions/jump-line'
+      path: '/compositions/jump-line'
+      fullPath: '/compositions/jump-line'
+      preLoaderRoute: typeof CompositionsJumpLineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compositions/letter': {
       id: '/compositions/letter'
       path: '/compositions/letter'
@@ -1421,6 +1547,13 @@ declare module '@tanstack/react-router' {
       path: '/compositions/list-rows'
       fullPath: '/compositions/list-rows'
       preLoaderRoute: typeof CompositionsListRowsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compositions/month-grid': {
+      id: '/compositions/month-grid'
+      path: '/compositions/month-grid'
+      fullPath: '/compositions/month-grid'
+      preLoaderRoute: typeof CompositionsMonthGridRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compositions/notice': {
@@ -1442,6 +1575,13 @@ declare module '@tanstack/react-router' {
       path: '/compositions/quick-add'
       fullPath: '/compositions/quick-add'
       preLoaderRoute: typeof CompositionsQuickAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compositions/reader': {
+      id: '/compositions/reader'
+      path: '/compositions/reader'
+      fullPath: '/compositions/reader'
+      preLoaderRoute: typeof CompositionsReaderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compositions/search-palette': {
@@ -1557,9 +1697,11 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsDialogRoute: ComponentsDialogRoute,
   ComponentsDropdownMenuRoute: ComponentsDropdownMenuRoute,
   ComponentsFieldRoute: ComponentsFieldRoute,
+  ComponentsFitTitleRoute: ComponentsFitTitleRoute,
   ComponentsFleetRailRoute: ComponentsFleetRailRoute,
   ComponentsGlyphsRoute: ComponentsGlyphsRoute,
   ComponentsHotkeyRoute: ComponentsHotkeyRoute,
+  ComponentsInlineAnswersRoute: ComponentsInlineAnswersRoute,
   ComponentsInputRoute: ComponentsInputRoute,
   ComponentsInputGroupRoute: ComponentsInputGroupRoute,
   ComponentsKbdRoute: ComponentsKbdRoute,
@@ -1577,6 +1719,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsSkeletonRoute: ComponentsSkeletonRoute,
   ComponentsSliderRoute: ComponentsSliderRoute,
   ComponentsSonnerRoute: ComponentsSonnerRoute,
+  ComponentsSourceLineRoute: ComponentsSourceLineRoute,
   ComponentsSourceMarkRoute: ComponentsSourceMarkRoute,
   ComponentsSwitchRoute: ComponentsSwitchRoute,
   ComponentsTableRoute: ComponentsTableRoute,
@@ -1596,11 +1739,15 @@ const rootRouteChildren: RootRouteChildren = {
   CompositionsFactsRoute: CompositionsFactsRoute,
   CompositionsFormSectionRoute: CompositionsFormSectionRoute,
   CompositionsItemCardsRoute: CompositionsItemCardsRoute,
+  CompositionsJobSheetRoute: CompositionsJobSheetRoute,
+  CompositionsJumpLineRoute: CompositionsJumpLineRoute,
   CompositionsLetterRoute: CompositionsLetterRoute,
   CompositionsListRowsRoute: CompositionsListRowsRoute,
+  CompositionsMonthGridRoute: CompositionsMonthGridRoute,
   CompositionsNoticeRoute: CompositionsNoticeRoute,
   CompositionsPageHeaderRoute: CompositionsPageHeaderRoute,
   CompositionsQuickAddRoute: CompositionsQuickAddRoute,
+  CompositionsReaderRoute: CompositionsReaderRoute,
   CompositionsSearchPaletteRoute: CompositionsSearchPaletteRoute,
   CompositionsSectionHeaderRoute: CompositionsSectionHeaderRoute,
   CompositionsSendBarRoute: CompositionsSendBarRoute,

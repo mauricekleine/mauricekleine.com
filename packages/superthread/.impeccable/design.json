@@ -2862,7 +2862,7 @@
       },
       "instrument": {
         "displayName": "instrument",
-        "purpose": "notes, captions, badges, small controls, fact labels, toolbar group labels and table heads"
+        "purpose": "notes, captions, badges, small controls, fact labels, toolbar group labels, table heads and a quiet section head"
       },
       "ui": {
         "displayName": "ui",
@@ -2874,7 +2874,7 @@
       },
       "subtitle": {
         "displayName": "subtitle",
-        "purpose": "dialog titles"
+        "purpose": "dialog titles, and a quiet section head"
       },
       "read": {
         "displayName": "read",
@@ -2886,15 +2886,19 @@
       },
       "lede": {
         "displayName": "lede",
-        "purpose": "the sentence under a page title"
+        "purpose": "the sentence under a page title, and in italic a reading page's closing line"
       },
       "lede-phone": {
         "displayName": "lede on a phone",
-        "purpose": "type-lede at 600 px and below: the sentence under a page title"
+        "purpose": "type-lede at 600 px and below: the sentence under a page title, and in italic a reading page's closing line"
       },
       "title": {
         "displayName": "title",
         "purpose": "card, board and form titles, and a section head in a panel"
+      },
+      "long": {
+        "displayName": "long",
+        "purpose": "fit-title's last step, for a title too long for section"
       },
       "section": {
         "displayName": "section",
@@ -2902,15 +2906,19 @@
       },
       "page": {
         "displayName": "page",
-        "purpose": "a reading sheet's heading"
+        "purpose": "a reading sheet's heading and a reader's lead line"
       },
       "page-phone": {
         "displayName": "page on a phone",
-        "purpose": "type-page at 600 px and below: a reading sheet's heading"
+        "purpose": "type-page at 600 px and below: a reading sheet's heading and a reader's lead line"
+      },
+      "headline": {
+        "displayName": "headline",
+        "purpose": "fit-title's step for a title too long for hero, and its first step under a full panel's 784 px measure"
       },
       "hero": {
         "displayName": "hero",
-        "purpose": "a page head's title on the stock, or at size=\"page\""
+        "purpose": "a page head's title on the stock, or at size=\"page\", fit-title's first step at a full panel's measure, and clear's claim below one"
       },
       "hero-phone": {
         "displayName": "hero on a phone",
@@ -2918,7 +2926,7 @@
       },
       "display": {
         "displayName": "display",
-        "purpose": "the overview's wordmark line"
+        "purpose": "the overview's wordmark line, and clear's claim at a full panel's measure"
       },
       "wordmark": {
         "displayName": "wordmark",
@@ -3158,6 +3166,11 @@
         "section": "layout"
       },
       {
+        "name": "The First Viewport Rule",
+        "body": "On a 390 x 844 phone the job, its reason and its primary sit inside the first viewport.",
+        "section": "layout"
+      },
+      {
         "name": "The One Light Rule",
         "body": "Every shadow falls right and down from one upper-left light, and its length grows with the lift. No stock shadow, no centred glow and no backdrop blur.",
         "section": "elevation"
@@ -3189,7 +3202,7 @@
       },
       {
         "name": "The One Paper Rule",
-        "body": "A page prints one paper, and it stays white in every theme: it never reverses on a dark page. On a dark panel the white is its edge, so it prints flat. On a light panel, white on white, it lifts by the slip rake and the contact edge.",
+        "body": "A page prints one paper, and it stays white in every theme: it never reverses on a dark page. On a dark panel the white is its edge, so it prints flat. On a light panel, white on white, it lifts by the slip rake and the contact edge. A `send-bar` on a phone runs to the panel's edges and has no room to lift, so on a light page it rules its top edge.",
         "section": "components"
       },
       {
@@ -3223,8 +3236,18 @@
         "section": "components"
       },
       {
+        "name": "The Quiet Below Rule",
+        "body": "Below a `job-sheet`, nothing looks like work: plain rows and a door, no boxes.",
+        "section": "components"
+      },
+      {
         "name": "The Solid Event Rule",
         "body": "On a timeline solid means an event and nothing else. There is no elapsed fill, and a loading timeline holds its height with nothing solid on the track.",
+        "section": "components"
+      },
+      {
+        "name": "The Closing Line Rule",
+        "body": "A reading page ends on one closing line in Erode italic at the lede step, in muted ink: `that's all for today.` It tells the reader the page is finished.",
         "section": "components"
       },
       {
@@ -3245,6 +3268,16 @@
       {
         "name": "The Plain Schedule Rule",
         "body": "A schedule prints in plain words, `every day at 07:00` or `when mail arrives`: no cron, and a timezone only when it differs.",
+        "section": "components"
+      },
+      {
+        "name": "The Plain Gap Rule",
+        "body": "A cue states the gap in plain words: `48 min until standup`, never `before standup`, which implies a deadline.",
+        "section": "components"
+      },
+      {
+        "name": "The Proven Reason Rule",
+        "body": "A stated reason says only what the record proves, in one sentence of at most 80 characters.",
         "section": "components"
       },
       {

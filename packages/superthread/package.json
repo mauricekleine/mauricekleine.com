@@ -1,6 +1,6 @@
 {
   "name": "@mauricekleine/superthread",
-  "version": "2.6.0",
+  "version": "2.9.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -36,6 +36,7 @@
     "clsx": "~2.1.1",
     "cmdk": "~1.1.1",
     "cn": "~0.4.0",
+    "happy-dom": "~21.0.4",
     "react": "~19.3.0",
     "react-dom": "~19.3.0",
     "react-resizable-panels": "~4.14.1",

@@ -58,6 +58,12 @@ describe("send bar", () => {
     expect(classes).toEqual(expect.arrayContaining(["light", "bg-card", "extra"]));
   });
 
+  test("on a phone's panel a light page's bar has no room to lift, so it rules its top edge", () => {
+    expect(one(several(), "section").classes).toContain(
+      "[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:not-dark:border-t",
+    );
+  });
+
   test("on a dark page, everything in the bar reads the light roles", () => {
     const host = several();
     host.className = "dark";

@@ -28,13 +28,23 @@ function Section({
   );
 }
 
-// The title, count and way onward share a baseline, then a rule, before the section's content starts.
-function SectionHeader({ className, ...props }: React.ComponentProps<"header">) {
+// The title, count and way onward share a baseline, then a rule, before the section's content starts. A quiet head
+// prints no rule and sits 4 px over its content, its title at the subtitle step or in muted instrument, so a page of
+// sections reads as one list of words.
+function SectionHeader({
+  className,
+  quiet,
+  ...props
+}: React.ComponentProps<"header"> & { quiet?: "subtitle" | "instrument" }) {
   return (
     <header
       data-mk="section-header"
       data-slot="section-header"
-      className={cn("mb-4 flex flex-wrap items-baseline gap-3 border-b border-foreground pb-3", className)}
+      data-quiet={quiet}
+      className={cn(
+        "group/section-header mb-4 flex flex-wrap items-baseline gap-3 border-b border-foreground pb-3 data-quiet:mb-1 data-quiet:border-b-0 data-quiet:pb-0",
+        className,
+      )}
       {...props}
     />
   );
@@ -47,7 +57,10 @@ function SectionTitle({ className, ...props }: Omit<React.ComponentProps<"h2">, 
     <h2
       data-mk="section-header"
       data-slot="section-title"
-      className={cn("min-w-0 type-title break-words text-first", className)}
+      className={cn(
+        "min-w-0 type-title break-words text-first group-data-[quiet=instrument]/section-header:type-instrument group-data-[quiet=instrument]/section-header:text-muted-foreground group-data-[quiet=subtitle]/section-header:type-subtitle group-data-[quiet=subtitle]/section-header:text-foreground",
+        className,
+      )}
       {...props}
       id={titleId}
     />

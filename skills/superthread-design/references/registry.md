@@ -8,15 +8,15 @@
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | style | `init`, `tokens`                                                                                                                                                           |
 | lib   | `tokens-plain`, `utils`, `fleet`, `theme`, `time-words`, `use-minute`, `hotkey`                                                                                            |
-| brand | `glyphs`, `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`, `input`, `input-group`, `textarea`, `field`, `select`, `native-select`, `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`, `paper`, `onward`, `source-mark`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
+| brand | `glyphs`, `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`, `input`, `input-group`, `textarea`, `field`, `select`, `native-select`, `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`, `paper`, `fit-title`, `inline-answers`, `onward`, `source-line`, `source-mark`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
 | pass  | `card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile` |
-| block | `app-shell`, `page-header`, `section-header`, `collection-toolbar`, `list-rows`, `item-cards`, `data-table`, `states`, `facts`, `form-section`, `quick-add`, `letter`, `send-bar`, `day-line`, `notice`, `search-palette` |
+| block | `app-shell`, `page-header`, `section-header`, `collection-toolbar`, `list-rows`, `jump-line`, `item-cards`, `data-table`, `states`, `facts`, `form-section`, `quick-add`, `letter`, `send-bar`, `job-sheet`, `day-line`, `month-grid`, `reader`, `notice`, `search-palette` |
 
 - **style**: `init` sets up an app; `tokens` is the theme (colour roles, type, motion, shape and the texture tiles).
-- **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `theme` holds the fleet's light and dark choice; `time-words` puts time in the fleet's words (`since friday`, `before 11:00`, `09:30`, `tue 3 nov`, `48 min until standup`, `every day at 07:00`); `use-minute` is the clock's minute and the reader's day, from one shared timer that stops while the page is hidden; `hotkey` says whether a bare key press is the page's to answer, away from text and from layers that keep their keys; `tokens-plain` is the theme as plain CSS and a typed module.
+- **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `theme` holds the fleet's light and dark choice; `time-words` puts time in the fleet's words (`since friday`, `before 11:00`, `09:30`, `tue 3 nov`, `november 2026`, `48 min until standup`, `every day at 07:00`); `use-minute` is the clock's minute and the reader's day, from one shared timer that stops while the page is hidden; `hotkey` says whether a bare key press is the page's to answer, away from text and from layers that keep their keys; `tokens-plain` is the theme as plain CSS and a typed module.
 - **brand**: superthread's own components. They keep shadcn's Base UI API (exports, props, `data-slot`, variants) and add `data-mk="<item>"` on the root.
 - **pass**: base-nova's items as shadcn ships them, on the superthread tokens.
-- **block**: the compositions the fleet's apps repeat, built from the items: a shell, headers, collections, forms, a letter, a send bar, a day line, notices and states. Each installs at `components/superthread/blocks/<name>.tsx`; its meta names the apps it serves. Reach for a block before composing the same pattern by hand.
+- **block**: the compositions the fleet's apps repeat, built from the items: a shell, headers, collections, forms, a letter, a send bar, a job sheet, a day line, a month grid, a reader, notices and states. Each installs at `components/superthread/blocks/<name>.tsx`; its meta names the apps it serves. Reach for a block before composing the same pattern by hand.
 
 ## install
 
@@ -78,7 +78,7 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.6.0/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.9.0/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions with a snapshot. A snapshot never changes once it is published.
@@ -87,7 +87,8 @@ Nested dependencies resolve through the same mapping, so every item comes from t
 
 - Every installed file names its item and version: `// @mk/<item> <version>` after the imports in TS and TSX, `/* @mk/<item> <version> */` on line 1 in CSS.
 - A fleet ship takes a release with `mk apps sync <app> --pr`, or `--superthread <version>` for a release the template sits out.
-- `bunx --bun shadcn@latest add @mk/<item> --diff` shows how the installed file differs from the registry; `--overwrite` takes the registry's version.
+- `bunx --bun shadcn@latest add @mk/<item> --overwrite --yes` takes the registry's version.
+- To prove an app's items match the registry, copy the app, run `bunx --bun shadcn@latest add <items> --overwrite --yes` in the copy, then `diff -r` the copy against the app. `add --diff` is a preview, not that proof: it prints at most five of the files an add resolves, dependencies first, and exits 0 whether or not a file differs, so a change past the fifth file never shows.
 - Installed files stay as the registry writes them. A fix goes into `packages/superthread/items/` in the mauricekleine.com repo, and any change to a served item after its version is published ships as the next version: a patch for a fix, a minor for a new item or variant.
 - A ship never restyles an item from outside: no `[data-slot]` rule and no look class at a call site. Margins, widths and grid placement stay composition.
 
