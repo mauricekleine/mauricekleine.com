@@ -60,8 +60,8 @@ function Page() {
       <Section id="quiet" title="the quiet form">
         <p className="st-e-copy">
           <code>variant=&quot;quiet&quot;</code> sets a scope beside a list: a muted word and its chevron, right-aligned
-          with no box, 44 px at every width. the word turns foreground on hover, and with no box to draw inside,
-          keyboard focus takes the control ring. the browser still supplies the menu.
+          with no box, 44 px at every width. the word turns foreground on hover, and keyboard focus draws the same 2 px
+          edge inside its 44 px. the browser still supplies the menu.
         </p>
         <ModePair>
           <NativeSelectQuiet />

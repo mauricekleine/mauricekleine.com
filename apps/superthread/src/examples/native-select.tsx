@@ -75,8 +75,8 @@ export function NativeSelectQuietStates() {
       {[
         { name: "rest", note: "muted word and chevron" },
         { name: "hover", note: "foreground word", demo: "hover" },
-        { name: "focus", note: "2 px house ring", demo: "focus-visible" },
-        { name: "disabled", note: "disabled word", disabled: true },
+        { name: "focus", note: "2 px inside edge", demo: "focus-visible" },
+        { name: "disabled", note: "disabled word and chevron", disabled: true },
       ].map((s) => (
         <State key={s.name} name={s.name} note={s.note}>
           <NativeSelect

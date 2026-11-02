@@ -654,7 +654,7 @@ Fieldsets keep their upstream parts and orientation variants. Legends set in mon
 
 ### Native select
 
-The native select is a flat 40 px field box, or 32 px at the small size, and 44 px at either size at 600 px and below, with the input edge and the same inside focus edge as the select trigger. Invalid changes the edge and focus ink together; disabled uses the faint fill and disabled label. A pixel chevron sits at the right without taking pointer input, and options keep native platform semantics. The quiet form sets a scope beside a list: a muted word and its chevron with no box, right-aligned, 44 px at every width and size. The word turns foreground on hover, and with no box to draw inside, keyboard focus takes the control ring.
+The native select is a flat 40 px field box, or 32 px at the small size, and 44 px at either size at 600 px and below, with the input edge and the same inside focus edge as the select trigger. Invalid changes the edge and focus ink together; disabled uses the faint fill and disabled label. A pixel chevron sits at the right without taking pointer input, and options keep native platform semantics. The quiet form sets a scope beside a list: a muted word and its chevron with no box, right-aligned, 44 px at every width and size. The word turns foreground on hover, and keyboard focus draws the same 2 px edge inside its 44 px; that box hangs 4 px past the column, so the chevron ends on the column's edge and the edge clears it. Disabled prints the word and the chevron in the disabled ink.
 
 ### Accordion
 
