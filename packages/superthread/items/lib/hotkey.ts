@@ -16,8 +16,8 @@ const KEYLESS_INPUTS = new Set([
 ]);
 
 // A modal holds the page back, and a menu or a list jumps to the item a letter starts, so keys pressed inside one stay
-// there.
-const KEEPS_ITS_KEYS = '[role="dialog"], [role="alertdialog"], [role="menu"], [role="listbox"]';
+// there. A native dialog is a modal with no role attribute to read.
+const KEEPS_ITS_KEYS = 'dialog, [role="dialog"], [role="alertdialog"], [role="menu"], [role="listbox"]';
 
 function typesText(target: Element) {
   const field = target.closest(EDITABLE);

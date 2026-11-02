@@ -55,6 +55,10 @@ describe("isPageKey", () => {
       expect(press(`<div role="${role}"><button data-target>x</button></div>`), role).toBe(false);
   });
 
+  test("a native dialog keeps the key, though it has no role to read", () => {
+    expect(press("<dialog open><button data-target>x</button></dialog>")).toBe(false);
+  });
+
   test("takes no modifier, no held key, no composition and no other key", () => {
     for (const init of [
       { metaKey: true },
