@@ -68,6 +68,7 @@ import { Route as CompositionsPageHeaderRouteImport } from './routes/composition
 import { Route as CompositionsQuickAddRouteImport } from './routes/compositions/quick-add'
 import { Route as CompositionsSearchPaletteRouteImport } from './routes/compositions/search-palette'
 import { Route as CompositionsSectionHeaderRouteImport } from './routes/compositions/section-header'
+import { Route as CompositionsSendBarRouteImport } from './routes/compositions/send-bar'
 import { Route as CompositionsStatesRouteImport } from './routes/compositions/states'
 import { Route as FoundationsColourRouteImport } from './routes/foundations/colour'
 import { Route as FoundationsMarksRouteImport } from './routes/foundations/marks'
@@ -377,6 +378,11 @@ const CompositionsSectionHeaderRoute =
     path: '/compositions/section-header',
     getParentRoute: () => rootRouteImport,
   } as any)
+const CompositionsSendBarRoute = CompositionsSendBarRouteImport.update({
+  id: '/compositions/send-bar',
+  path: '/compositions/send-bar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompositionsStatesRoute = CompositionsStatesRouteImport.update({
   id: '/compositions/states',
   path: '/compositions/states',
@@ -488,6 +494,7 @@ export interface FileRoutesByFullPath {
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
   '/compositions/search-palette': typeof CompositionsSearchPaletteRoute
   '/compositions/section-header': typeof CompositionsSectionHeaderRoute
+  '/compositions/send-bar': typeof CompositionsSendBarRoute
   '/compositions/states': typeof CompositionsStatesRoute
   '/foundations/colour': typeof FoundationsColourRoute
   '/foundations/marks': typeof FoundationsMarksRoute
@@ -559,6 +566,7 @@ export interface FileRoutesByTo {
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
   '/compositions/search-palette': typeof CompositionsSearchPaletteRoute
   '/compositions/section-header': typeof CompositionsSectionHeaderRoute
+  '/compositions/send-bar': typeof CompositionsSendBarRoute
   '/compositions/states': typeof CompositionsStatesRoute
   '/foundations/colour': typeof FoundationsColourRoute
   '/foundations/marks': typeof FoundationsMarksRoute
@@ -631,6 +639,7 @@ export interface FileRoutesById {
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
   '/compositions/search-palette': typeof CompositionsSearchPaletteRoute
   '/compositions/section-header': typeof CompositionsSectionHeaderRoute
+  '/compositions/send-bar': typeof CompositionsSendBarRoute
   '/compositions/states': typeof CompositionsStatesRoute
   '/foundations/colour': typeof FoundationsColourRoute
   '/foundations/marks': typeof FoundationsMarksRoute
@@ -704,6 +713,7 @@ export interface FileRouteTypes {
     | '/compositions/quick-add'
     | '/compositions/search-palette'
     | '/compositions/section-header'
+    | '/compositions/send-bar'
     | '/compositions/states'
     | '/foundations/colour'
     | '/foundations/marks'
@@ -775,6 +785,7 @@ export interface FileRouteTypes {
     | '/compositions/quick-add'
     | '/compositions/search-palette'
     | '/compositions/section-header'
+    | '/compositions/send-bar'
     | '/compositions/states'
     | '/foundations/colour'
     | '/foundations/marks'
@@ -846,6 +857,7 @@ export interface FileRouteTypes {
     | '/compositions/quick-add'
     | '/compositions/search-palette'
     | '/compositions/section-header'
+    | '/compositions/send-bar'
     | '/compositions/states'
     | '/foundations/colour'
     | '/foundations/marks'
@@ -918,6 +930,7 @@ export interface RootRouteChildren {
   CompositionsQuickAddRoute: typeof CompositionsQuickAddRoute
   CompositionsSearchPaletteRoute: typeof CompositionsSearchPaletteRoute
   CompositionsSectionHeaderRoute: typeof CompositionsSectionHeaderRoute
+  CompositionsSendBarRoute: typeof CompositionsSendBarRoute
   CompositionsStatesRoute: typeof CompositionsStatesRoute
   FoundationsColourRoute: typeof FoundationsColourRoute
   FoundationsMarksRoute: typeof FoundationsMarksRoute
@@ -1345,6 +1358,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompositionsSectionHeaderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compositions/send-bar': {
+      id: '/compositions/send-bar'
+      path: '/compositions/send-bar'
+      fullPath: '/compositions/send-bar'
+      preLoaderRoute: typeof CompositionsSendBarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compositions/states': {
       id: '/compositions/states'
       path: '/compositions/states'
@@ -1478,6 +1498,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompositionsQuickAddRoute: CompositionsQuickAddRoute,
   CompositionsSearchPaletteRoute: CompositionsSearchPaletteRoute,
   CompositionsSectionHeaderRoute: CompositionsSectionHeaderRoute,
+  CompositionsSendBarRoute: CompositionsSendBarRoute,
   CompositionsStatesRoute: CompositionsStatesRoute,
   FoundationsColourRoute: FoundationsColourRoute,
   FoundationsMarksRoute: FoundationsMarksRoute,

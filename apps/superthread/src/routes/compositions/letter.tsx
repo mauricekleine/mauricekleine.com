@@ -10,8 +10,15 @@ import {
   LetterSubject,
   LetterTools,
 } from "@/components/superthread/blocks/letter";
+import {
+  SendBar,
+  SendBarActions,
+  SendBarAddress,
+  SendBarButton,
+  SendBarTitle,
+  SendBarTo,
+} from "@/components/superthread/blocks/send-bar";
 import { Button } from "@/components/superthread/ui/button";
-import { Paper } from "@/components/superthread/ui/paper";
 import { Serves, ViewportFrame } from "@/examples/compositions-a";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -107,10 +114,15 @@ function LetterWithFoot() {
       </LetterHead>
       <LetterBody>the next draft goes up on thursday.</LetterBody>
       <Tools />
-      <Paper render={<section aria-label="where it goes" />} className="st-paper-foot">
-        <p className="type-title text-first">goes up on thursday</p>
-        <Button size="lg">approve the draft</Button>
-      </Paper>
+      <SendBar aria-label="where it goes">
+        <SendBarTo>
+          <SendBarTitle>sam okafor</SendBarTitle>
+          <SendBarAddress>sam@quanta.example</SendBarAddress>
+        </SendBarTo>
+        <SendBarActions>
+          <SendBarButton>send to sam</SendBarButton>
+        </SendBarActions>
+      </SendBar>
     </Letter>
   );
 }
@@ -145,7 +157,8 @@ function Page() {
       </Section>
       <Section id="foot" title="with a foot">
         <p className="st-ca-copy">
-          the box takes no padding of its own, so a block after the tools reaches both edges. this foot is paper.
+          the box takes no padding of its own, so a block after the tools reaches both edges. this foot is a{" "}
+          <a href="/compositions/send-bar">send bar</a>.
         </p>
         <ModePair className="st-ca-wide-pair">
           <LetterWithFoot />

@@ -691,6 +691,16 @@ export const catalog: CatalogItem[] = [
     serves: ["orbit", "artifacts"],
   },
   {
+    name: "send-bar",
+    type: "registry:block",
+    title: "send bar",
+    description: "the foot of a review: who it goes to, every address and file, the send and a note under it",
+    files: [block("send-bar")],
+    tier: "block",
+    upstream: null,
+    serves: ["orbit", "artifacts"],
+  },
+  {
     name: "notice",
     type: "registry:block",
     title: "notice",

@@ -102,6 +102,7 @@ export const nav: readonly NavEntry[] = [
   composition("form-section"),
   composition("quick-add"),
   composition("letter"),
+  composition("send-bar"),
   composition("notice"),
   composition("states"),
   composition("search-palette"),

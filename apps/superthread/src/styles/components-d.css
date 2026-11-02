@@ -40,13 +40,6 @@
     display: grid;
     gap: 24px;
   }
-  .st-paper-foot {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
 
   /* card: the footer's facts in the instrument step */
   .st-pass-note {

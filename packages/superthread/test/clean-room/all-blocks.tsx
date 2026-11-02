@@ -59,6 +59,20 @@ import {
   LetterSource,
 } from "@/components/superthread/blocks/letter";
 import { Notice, NoticeTitle, NoticeDescription, NoticeActions } from "@/components/superthread/blocks/notice";
+import {
+  SendBar,
+  SendBarTo,
+  SendBarTitle,
+  SendBarAddress,
+  SendBarFacts,
+  SendBarLabel,
+  SendBarFact,
+  SendBarFile,
+  SendBarActions,
+  SendBarButton,
+  SendBarLink,
+  SendBarNote,
+} from "@/components/superthread/blocks/send-bar";
 import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { Input } from "@/components/superthread/ui/input";
 import { cn } from "@/components/superthread/lib/utils";
@@ -387,6 +401,33 @@ function Sink({ mode }: { mode: Mode }) {
             <LetterSource href="#letter">sam's mail, mon 2 nov</LetterSource>
           </LetterTools>
         </Letter>
+      </Part>
+      <Part name="send-bar">
+        <SendBar aria-label="where it goes">
+          <SendBarTo>
+            <SendBarTitle>goes to 3 people</SendBarTitle>
+            <SendBarFacts>
+              <SendBarLabel>to</SendBarLabel>
+              <SendBarFact address="sam@quanta.example">sam okafor</SendBarFact>
+              <SendBarLabel>attaches</SendBarLabel>
+              <SendBarFile>notes.pdf</SendBarFile>
+            </SendBarFacts>
+          </SendBarTo>
+          <SendBarActions>
+            <SendBarButton>send to 3 people</SendBarButton>
+            <SendBarNote>you can't undo a send.</SendBarNote>
+          </SendBarActions>
+        </SendBar>
+        <SendBar aria-label="where it went">
+          <SendBarTo>
+            <SendBarTitle>this may have gone out</SendBarTitle>
+            <SendBarAddress>sam@quanta.example</SendBarAddress>
+          </SendBarTo>
+          <SendBarActions>
+            <SendBarLink href="#sent">open sent items</SendBarLink>
+            <SendBarButton variant="outline">retry</SendBarButton>
+          </SendBarActions>
+        </SendBar>
       </Part>
       <Part name="notice">
         <Notice variant="quiet">a newer version is waiting.</Notice>
