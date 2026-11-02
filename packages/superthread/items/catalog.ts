@@ -500,6 +500,16 @@ export const catalog: CatalogItem[] = [
     texture: "contact",
   },
   {
+    name: "fit-title",
+    type: "registry:ui",
+    title: "fit title",
+    description:
+      "a title that steps down until it fits its box, by measurement, and cuts at a word only when the whole title can't",
+    files: [ui("fit-title")],
+    tier: "brand",
+    upstream: null,
+  },
+  {
     name: "onward",
     type: "registry:ui",
     title: "onward",
@@ -733,6 +743,16 @@ export const catalog: CatalogItem[] = [
     tier: "block",
     upstream: null,
     serves: ["orbit", "artifacts"],
+  },
+  {
+    name: "job-sheet",
+    type: "registry:block",
+    title: "job sheet",
+    description: "the one job on paper: a cue, its title, why, one quiet line and its actions, each in a held slot",
+    files: [block("job-sheet")],
+    tier: "block",
+    upstream: null,
+    serves: ["quanta", "trisys", "orbit"],
   },
   {
     name: "day-line",

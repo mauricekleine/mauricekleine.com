@@ -60,6 +60,16 @@ import {
   LetterSource,
 } from "@/components/superthread/blocks/letter";
 import {
+  JobSheet,
+  JobSheetActions,
+  JobSheetChanged,
+  JobSheetCue,
+  JobSheetPrimary,
+  JobSheetTitle,
+  JobSheetToggle,
+  JobSheetWhy,
+} from "@/components/superthread/blocks/job-sheet";
+import {
   DayLine,
   DayLineAllDay,
   DayLineDate,
@@ -448,6 +458,25 @@ function Sink({ mode }: { mode: Mode }) {
             <LetterSource href="#letter">sam's mail, mon 2 nov</LetterSource>
           </LetterTools>
         </Letter>
+      </Part>
+      <Part name="job-sheet">
+        <JobSheet aria-labelledby={`job-title-${mode}`}>
+          <JobSheetCue>48 min until standup</JobSheetCue>
+          <JobSheetTitle id={`job-title-${mode}`} render={<h3 />} href="#job-sheet">
+            reply to sam about chapter 7
+          </JobSheetTitle>
+          <JobSheetWhy>the next draft waits on your answer.</JobSheetWhy>
+          <JobSheetChanged>sam sent the notes an hour ago</JobSheetChanged>
+          <JobSheetActions>
+            <JobSheetPrimary reserve="open the draft" render={<a href="#job-sheet" />} nativeButton={false}>
+              read the draft
+            </JobSheetPrimary>
+            <Button size="lg" variant="ghost">
+              not now
+            </Button>
+            <JobSheetToggle>only what can't slip</JobSheetToggle>
+          </JobSheetActions>
+        </JobSheet>
       </Part>
       <Part name="send-bar">
         <SendBar aria-label="where it goes">

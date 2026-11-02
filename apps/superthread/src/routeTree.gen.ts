@@ -27,6 +27,7 @@ import { Route as ComponentsCommandRouteImport } from './routes/components/comma
 import { Route as ComponentsDialogRouteImport } from './routes/components/dialog'
 import { Route as ComponentsDropdownMenuRouteImport } from './routes/components/dropdown-menu'
 import { Route as ComponentsFieldRouteImport } from './routes/components/field'
+import { Route as ComponentsFitTitleRouteImport } from './routes/components/fit-title'
 import { Route as ComponentsFleetRailRouteImport } from './routes/components/fleet-rail'
 import { Route as ComponentsGlyphsRouteImport } from './routes/components/glyphs'
 import { Route as ComponentsHotkeyRouteImport } from './routes/components/hotkey'
@@ -65,6 +66,7 @@ import { Route as CompositionsDayLineRouteImport } from './routes/compositions/d
 import { Route as CompositionsFactsRouteImport } from './routes/compositions/facts'
 import { Route as CompositionsFormSectionRouteImport } from './routes/compositions/form-section'
 import { Route as CompositionsItemCardsRouteImport } from './routes/compositions/item-cards'
+import { Route as CompositionsJobSheetRouteImport } from './routes/compositions/job-sheet'
 import { Route as CompositionsLetterRouteImport } from './routes/compositions/letter'
 import { Route as CompositionsListRowsRouteImport } from './routes/compositions/list-rows'
 import { Route as CompositionsNoticeRouteImport } from './routes/compositions/notice'
@@ -172,6 +174,11 @@ const ComponentsDropdownMenuRoute = ComponentsDropdownMenuRouteImport.update({
 const ComponentsFieldRoute = ComponentsFieldRouteImport.update({
   id: '/components/field',
   path: '/components/field',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComponentsFitTitleRoute = ComponentsFitTitleRouteImport.update({
+  id: '/components/fit-title',
+  path: '/components/fit-title',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsFleetRailRoute = ComponentsFleetRailRouteImport.update({
@@ -365,6 +372,11 @@ const CompositionsItemCardsRoute = CompositionsItemCardsRouteImport.update({
   path: '/compositions/item-cards',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompositionsJobSheetRoute = CompositionsJobSheetRouteImport.update({
+  id: '/compositions/job-sheet',
+  path: '/compositions/job-sheet',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompositionsLetterRoute = CompositionsLetterRouteImport.update({
   id: '/compositions/letter',
   path: '/compositions/letter',
@@ -477,6 +489,7 @@ export interface FileRoutesByFullPath {
   '/components/dialog': typeof ComponentsDialogRoute
   '/components/dropdown-menu': typeof ComponentsDropdownMenuRoute
   '/components/field': typeof ComponentsFieldRoute
+  '/components/fit-title': typeof ComponentsFitTitleRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
   '/components/hotkey': typeof ComponentsHotkeyRoute
@@ -515,6 +528,7 @@ export interface FileRoutesByFullPath {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/job-sheet': typeof CompositionsJobSheetRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
@@ -553,6 +567,7 @@ export interface FileRoutesByTo {
   '/components/dialog': typeof ComponentsDialogRoute
   '/components/dropdown-menu': typeof ComponentsDropdownMenuRoute
   '/components/field': typeof ComponentsFieldRoute
+  '/components/fit-title': typeof ComponentsFitTitleRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
   '/components/hotkey': typeof ComponentsHotkeyRoute
@@ -591,6 +606,7 @@ export interface FileRoutesByTo {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/job-sheet': typeof CompositionsJobSheetRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
@@ -630,6 +646,7 @@ export interface FileRoutesById {
   '/components/dialog': typeof ComponentsDialogRoute
   '/components/dropdown-menu': typeof ComponentsDropdownMenuRoute
   '/components/field': typeof ComponentsFieldRoute
+  '/components/fit-title': typeof ComponentsFitTitleRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
   '/components/hotkey': typeof ComponentsHotkeyRoute
@@ -668,6 +685,7 @@ export interface FileRoutesById {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/job-sheet': typeof CompositionsJobSheetRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
@@ -708,6 +726,7 @@ export interface FileRouteTypes {
     | '/components/dialog'
     | '/components/dropdown-menu'
     | '/components/field'
+    | '/components/fit-title'
     | '/components/fleet-rail'
     | '/components/glyphs'
     | '/components/hotkey'
@@ -746,6 +765,7 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/job-sheet'
     | '/compositions/letter'
     | '/compositions/list-rows'
     | '/compositions/notice'
@@ -784,6 +804,7 @@ export interface FileRouteTypes {
     | '/components/dialog'
     | '/components/dropdown-menu'
     | '/components/field'
+    | '/components/fit-title'
     | '/components/fleet-rail'
     | '/components/glyphs'
     | '/components/hotkey'
@@ -822,6 +843,7 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/job-sheet'
     | '/compositions/letter'
     | '/compositions/list-rows'
     | '/compositions/notice'
@@ -860,6 +882,7 @@ export interface FileRouteTypes {
     | '/components/dialog'
     | '/components/dropdown-menu'
     | '/components/field'
+    | '/components/fit-title'
     | '/components/fleet-rail'
     | '/components/glyphs'
     | '/components/hotkey'
@@ -898,6 +921,7 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/job-sheet'
     | '/compositions/letter'
     | '/compositions/list-rows'
     | '/compositions/notice'
@@ -937,6 +961,7 @@ export interface RootRouteChildren {
   ComponentsDialogRoute: typeof ComponentsDialogRoute
   ComponentsDropdownMenuRoute: typeof ComponentsDropdownMenuRoute
   ComponentsFieldRoute: typeof ComponentsFieldRoute
+  ComponentsFitTitleRoute: typeof ComponentsFitTitleRoute
   ComponentsFleetRailRoute: typeof ComponentsFleetRailRoute
   ComponentsGlyphsRoute: typeof ComponentsGlyphsRoute
   ComponentsHotkeyRoute: typeof ComponentsHotkeyRoute
@@ -975,6 +1000,7 @@ export interface RootRouteChildren {
   CompositionsFactsRoute: typeof CompositionsFactsRoute
   CompositionsFormSectionRoute: typeof CompositionsFormSectionRoute
   CompositionsItemCardsRoute: typeof CompositionsItemCardsRoute
+  CompositionsJobSheetRoute: typeof CompositionsJobSheetRoute
   CompositionsLetterRoute: typeof CompositionsLetterRoute
   CompositionsListRowsRoute: typeof CompositionsListRowsRoute
   CompositionsNoticeRoute: typeof CompositionsNoticeRoute
@@ -1121,6 +1147,13 @@ declare module '@tanstack/react-router' {
       path: '/components/field'
       fullPath: '/components/field'
       preLoaderRoute: typeof ComponentsFieldRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/components/fit-title': {
+      id: '/components/fit-title'
+      path: '/components/fit-title'
+      fullPath: '/components/fit-title'
+      preLoaderRoute: typeof ComponentsFitTitleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/components/fleet-rail': {
@@ -1389,6 +1422,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompositionsItemCardsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compositions/job-sheet': {
+      id: '/compositions/job-sheet'
+      path: '/compositions/job-sheet'
+      fullPath: '/compositions/job-sheet'
+      preLoaderRoute: typeof CompositionsJobSheetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compositions/letter': {
       id: '/compositions/letter'
       path: '/compositions/letter'
@@ -1537,6 +1577,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsDialogRoute: ComponentsDialogRoute,
   ComponentsDropdownMenuRoute: ComponentsDropdownMenuRoute,
   ComponentsFieldRoute: ComponentsFieldRoute,
+  ComponentsFitTitleRoute: ComponentsFitTitleRoute,
   ComponentsFleetRailRoute: ComponentsFleetRailRoute,
   ComponentsGlyphsRoute: ComponentsGlyphsRoute,
   ComponentsHotkeyRoute: ComponentsHotkeyRoute,
@@ -1575,6 +1616,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompositionsFactsRoute: CompositionsFactsRoute,
   CompositionsFormSectionRoute: CompositionsFormSectionRoute,
   CompositionsItemCardsRoute: CompositionsItemCardsRoute,
+  CompositionsJobSheetRoute: CompositionsJobSheetRoute,
   CompositionsLetterRoute: CompositionsLetterRoute,
   CompositionsListRowsRoute: CompositionsListRowsRoute,
   CompositionsNoticeRoute: CompositionsNoticeRoute,
