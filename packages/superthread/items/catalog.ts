@@ -166,6 +166,16 @@ export const catalog: CatalogItem[] = [
     upstream: null,
   },
   {
+    name: "hotkey",
+    type: "registry:lib",
+    title: "hotkey",
+    description:
+      "whether a bare key press is the page's to answer, away from typing and from layers that keep their keys",
+    files: [lib("hotkey")],
+    tier: "lib",
+    upstream: null,
+  },
+  {
     name: "glyphs",
     type: "registry:ui",
     title: "glyphs",
