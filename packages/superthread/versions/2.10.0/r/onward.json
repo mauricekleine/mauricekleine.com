@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "onward",
+  "title": "onward",
+  "description": "the way onward from a page: a word and its arrow, or a door, one line of words with an arrow",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/glyphs",
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/onward.tsx",
+      "content": "import { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cn } from \"@/components/superthread/lib/utils\";\nimport { Icon } from \"@/components/superthread/ui/glyphs\";\n// @mk/onward 2.10.0\n\nconst FOCUS = \"focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)\";\n\n// The way onward from a page, in foreground at the ui step with its arrow: `the week`, and with back `today`, whose\n// arrow leads. It underlines on hover, as a chrome link does, and reaches 44 px on a phone through its hit area. Give\n// render the app's router link.\nfunction Onward({\n  back,\n  children,\n  className,\n  render = <a />,\n  ...props\n}: useRender.ComponentProps<\"a\"> & { back?: boolean }) {\n  return useRender({\n    render,\n    state: { slot: \"onward\", mk: \"onward\" },\n    props: mergeProps<\"a\">(\n      {\n        className: cn(\n          \"relative inline-flex items-center gap-2 type-ui text-foreground decoration-1 underline-offset-4 hover:underline [@media(max-width:600px)]:hit-area\",\n          FOCUS,\n          className,\n        ),\n        children: back ? (\n          <>\n            <Icon name=\"left\" />\n            <span>{children}</span>\n          </>\n        ) : (\n          <>\n            <span>{children}</span>\n            <Icon name=\"arrow\" />\n          </>\n        ),\n      },\n      props,\n    ),\n  });\n}\n\n// A door out of a finished place: one line of words with an arrow, 40 px tall and 44 px on a phone, so it is a target\n// through its own box. Only the words underline on hover, and they truncate before they wrap. It carries no number.\nfunction Door({ children, className, render = <a />, ...props }: useRender.ComponentProps<\"a\">) {\n  return useRender({\n    render,\n    state: { slot: \"door\", mk: \"onward\" },\n    props: mergeProps<\"a\">(\n      {\n        className: cn(\n          \"flex h-10 w-fit max-w-full items-center gap-2 type-ui text-foreground decoration-1 underline-offset-4 [@media(max-width:600px)]:h-11\",\n          FOCUS,\n          className,\n        ),\n        children: (\n          <>\n            <span className=\"min-w-0 truncate [a:hover>&]:underline\">{children}</span>\n            <Icon name=\"arrow\" className=\"shrink-0\" />\n          </>\n        ),\n      },\n      props,\n    ),\n  });\n}\n\nexport { Door, Onward };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/onward.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.10.0",
+    "sha256": "397b7a5f760897a2edd9e2bbc647235ccef5c4ad57239986c7b4d370d4ac266b",
+    "tier": "brand",
+    "upstream": null
+  },
+  "type": "registry:ui"
+}

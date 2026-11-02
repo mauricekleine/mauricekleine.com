@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-minute",
+  "title": "use minute",
+  "description": "the clock's minute and the reader's day, from one shared timer that stops while the page is hidden",
+  "registryDependencies": [
+    "@mk/time-words"
+  ],
+  "files": [
+    {
+      "path": "items/hooks/use-minute.ts",
+      "content": "import { useMemo, useSyncExternalStore } from \"react\";\nimport { calendarDate, type TimeOptions } from \"@/components/superthread/lib/time-words\";\n// @mk/use-minute 2.10.0\n\nconst MINUTE_MS = 60_000;\n\n// One timer for the whole page, set to the clock's next whole minute, so every caller turns over together and midnight\n// is an ordinary tick. A hidden page holds no timer and catches up the moment it shows again.\nconst listeners = new Set<() => void>();\nlet timer: ReturnType<typeof setTimeout> | undefined;\n\nfunction arm() {\n  clearTimeout(timer);\n  if (document.hidden || listeners.size === 0) return;\n  timer = setTimeout(tick, MINUTE_MS - (Date.now() % MINUTE_MS));\n}\n\nfunction tick() {\n  for (const listener of listeners) listener();\n  arm();\n}\n\nfunction subscribe(listener: () => void) {\n  if (listeners.size === 0) document.addEventListener(\"visibilitychange\", tick);\n  listeners.add(listener);\n  arm();\n  return () => {\n    listeners.delete(listener);\n    if (listeners.size > 0) return;\n    document.removeEventListener(\"visibilitychange\", tick);\n    arm();\n  };\n}\n\nconst currentMinute = () => Math.floor(Date.now() / MINUTE_MS) * MINUTE_MS;\nconst noClock = () => null;\n\n/**\n * The clock's current minute and the calendar date it falls on in the reader's zone. Null until the page hydrates,\n * because a prerendered page has no clock. Rereads keyed on `day` are the midnight rollover.\n */\nexport function useMinute(options?: TimeOptions) {\n  const minute = useSyncExternalStore(subscribe, currentMinute, noClock);\n  const timeZone = options?.timeZone;\n  return useMemo(() => {\n    if (minute === null) return null;\n    const now = new Date(minute);\n    return { now, day: calendarDate(now, { timeZone }) };\n  }, [minute, timeZone]);\n}\n",
+      "type": "registry:hook",
+      "target": "@components/superthread/hooks/use-minute.ts"
+    }
+  ],
+  "meta": {
+    "version": "2.10.0",
+    "sha256": "02408bfac162d0e9346325a2d2d181dfe1fedaee77b0bf6fae22f8dda039b649",
+    "tier": "lib",
+    "upstream": null
+  },
+  "type": "registry:hook"
+}
