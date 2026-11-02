@@ -202,6 +202,13 @@ describe("the parts", () => {
     );
   });
 
+  test("on a phone the primary's words take two lines inside the button rather than lose the end of the step", () => {
+    const primary = one(sheet(), '[data-slot="job-sheet-primary"]').el;
+    const label = one(primary, ":not([aria-hidden]).row-start-1");
+    expect(label.classes).toEqual(expect.arrayContaining([`${PHONE}line-clamp-2`, `${PHONE}whitespace-normal`]));
+    expect(one(primary, '[aria-hidden="true"]').classes).toContain(`${PHONE}whitespace-normal`);
+  });
+
   test("on a phone the toggle sets its words on two lines at the instrument step", () => {
     expect(one(sheet(), '[data-slot="job-sheet-toggle"]').classes).toEqual(
       expect.arrayContaining([`${PHONE}whitespace-normal`, `${PHONE}type-instrument`, `${PHONE}w-25`]),
