@@ -8,9 +8,11 @@ import {
   AppShellGround,
   AppShellNav,
   AppShellNavItem,
+  AppShellPageFoot,
   AppShellPanel,
   AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
+import { JumpLine, JumpLineLink } from "@/components/superthread/blocks/jump-line";
 import {
   Section,
   SectionAction,
@@ -32,6 +34,10 @@ import {
   PageHeaderTitle,
 } from "@/components/superthread/blocks/page-header";
 import {
+  ClearState,
+  ClearStateDoor,
+  ClearStateReason,
+  ClearStateTitle,
   EmptyState,
   EmptyStateActions,
   EmptyStateText,
@@ -59,6 +65,16 @@ import {
   LetterActions,
   LetterSource,
 } from "@/components/superthread/blocks/letter";
+import {
+  JobSheet,
+  JobSheetActions,
+  JobSheetChanged,
+  JobSheetCue,
+  JobSheetPrimary,
+  JobSheetTitle,
+  JobSheetToggle,
+  JobSheetWhy,
+} from "@/components/superthread/blocks/job-sheet";
 import {
   DayLine,
   DayLineAllDay,
@@ -125,6 +141,11 @@ import {
 } from "@/components/superthread/blocks/collection-toolbar";
 import {
   ListRows,
+  PlainRow,
+  PlainRowActions,
+  PlainRows,
+  PlainRowTick,
+  PlainRowTitle,
   ListRow,
   ListRowLead,
   ListRowTitle,
@@ -197,6 +218,13 @@ function Sink({ mode }: { mode: Mode }) {
             <Button variant="outline">new task</Button>
           </EmptyStateActions>
         </EmptyState>
+        <ClearState aria-labelledby="clear">
+          <ClearStateTitle id="clear" render={<h3 />}>
+            nothing needs you until 16:30.
+          </ClearStateTitle>
+          <ClearStateReason>the draft and the deck check are done.</ClearStateReason>
+          <ClearStateDoor href="#open">the rest is in open</ClearStateDoor>
+        </ClearState>
       </Part>
 
       {/* blocks: shell */}
@@ -225,6 +253,9 @@ function Sink({ mode }: { mode: Mode }) {
                 <a href="#today">today</a>
               </AppShellPanelFoot>
             </AppShellPanel>
+            <AppShellPageFoot>
+              <a href="#settings">settings</a>
+            </AppShellPageFoot>
           </AppShellGround>
         </AppShell>
       </Part>
@@ -234,6 +265,18 @@ function Sink({ mode }: { mode: Mode }) {
             <SectionTitle>recent runs</SectionTitle>
             <SectionCount>12</SectionCount>
             <SectionAction href="#runs" />
+          </SectionHeader>
+          <p>runs appear here.</p>
+        </Section>
+        <Section>
+          <SectionHeader quiet="subtitle">
+            <SectionTitle>next week</SectionTitle>
+          </SectionHeader>
+          <p>runs appear here.</p>
+        </Section>
+        <Section>
+          <SectionHeader quiet="instrument">
+            <SectionTitle>then</SectionTitle>
           </SectionHeader>
           <p>runs appear here.</p>
         </Section>
@@ -316,6 +359,43 @@ function Sink({ mode }: { mode: Mode }) {
             </ListRowWhen>
           </ListRow>
         </ListRows>
+        <PlainRows aria-label="next" clamp>
+          <PlainRow>
+            <PlainRowTick>
+              <Checkbox aria-label="mark done: check the registry" />
+            </PlainRowTick>
+            <PlainRowTitle render={<a href="#task" />}>check the registry</PlainRowTitle>
+            <ListRowKind>mail</ListRowKind>
+            <ListRowWhen>thu 5 nov</ListRowWhen>
+          </PlainRow>
+          <PlainRow closed>
+            <PlainRowTitle>a closed task</PlainRowTitle>
+          </PlainRow>
+        </PlainRows>
+        <PlainRows aria-label="routines" variant="nested">
+          <PlainRow>
+            <PlainRowTitle href="#routine">a suggestion</PlainRowTitle>
+            <PlainRowActions>
+              <Button variant="ghost" size="sm">
+                keep
+              </Button>
+            </PlainRowActions>
+          </PlainRow>
+        </PlainRows>
+        <PlainRows aria-label="sources" variant="ruled">
+          <PlainRow>
+            <PlainRowTitle href="#source">a source</PlainRowTitle>
+            <ListRowWhen>2h ago</ListRowWhen>
+          </PlainRow>
+        </PlainRows>
+      </Part>
+      <Part name="jump-line">
+        <JumpLine>
+          <JumpLineLink href="#today" count={2}>
+            today
+          </JumpLineLink>
+          <JumpLineLink render={<a href="#later" />}>later</JumpLineLink>
+        </JumpLine>
       </Part>
       <Part name="item-cards">
         <ItemCards aria-label="drafts">
@@ -475,6 +555,25 @@ function Sink({ mode }: { mode: Mode }) {
             <LetterSource href="#letter">sam's mail, mon 2 nov</LetterSource>
           </LetterTools>
         </Letter>
+      </Part>
+      <Part name="job-sheet">
+        <JobSheet aria-labelledby={`job-title-${mode}`}>
+          <JobSheetCue>48 min until standup</JobSheetCue>
+          <JobSheetTitle id={`job-title-${mode}`} render={<h3 />} href="#job-sheet">
+            reply to sam about chapter 7
+          </JobSheetTitle>
+          <JobSheetWhy>the next draft waits on your answer.</JobSheetWhy>
+          <JobSheetChanged>sam sent the notes an hour ago</JobSheetChanged>
+          <JobSheetActions>
+            <JobSheetPrimary reserve="open the draft" render={<a href="#job-sheet" />} nativeButton={false}>
+              read the draft
+            </JobSheetPrimary>
+            <Button size="lg" variant="ghost">
+              not now
+            </Button>
+            <JobSheetToggle>only what can't slip</JobSheetToggle>
+          </JobSheetActions>
+        </JobSheet>
       </Part>
       <Part name="send-bar">
         <SendBar aria-label="where it goes">

@@ -4,13 +4,15 @@ import { join } from "node:path";
 import { oklchCss } from "../scripts/color.ts";
 import { blockVars, emittedVars, root } from "../scripts/generate.ts";
 import { ELEVATIONS, type Mode } from "../tokens/roles.ts";
-import { phone } from "../tokens/scale.ts";
+import { fleetRows, phone, rows } from "../tokens/scale.ts";
 
 // DESIGN.md restates the emitted tokens for impeccable and designmd lint, and .impeccable/design.json carries what
 // its frontmatter has no place for. The frontmatter and the sidecar are held here to the generated
 // dist/v2/superthread.css and dist/v2/tokens.json, so neither can drift from what ships. The prose is held only for
 // its hex colours and its em dashes; its other numbers are not checked. A frontmatter colour `x` is --x on :root and
 // .light, and `dark-x` is --x under .dark.
+
+const ROWS = [...Object.keys(rows), ...Object.keys(fleetRows)];
 
 const read = (path: string) => readFileSync(join(root, path), "utf8");
 const doc = read("DESIGN.md");
@@ -139,15 +141,13 @@ describe("DESIGN.md type, radius and space", () => {
     const radii = [...css.matchAll(/--radius-[a-z0-9]+: ([^;]+);/g)].map((m) => m[1]);
     expect(radii.length).toBeGreaterThan(0);
     expect(new Set(radii)).toEqual(new Set([vars.light.radius]));
-    for (const row of ["board", "table", "nav"]) {
-      expect(fm.spacing[`row-${row}`]).toBe(vars.light[`spacing-row-${row}`]!);
-    }
+    for (const row of ROWS) expect(fm.spacing[`row-${row}`]).toBe(vars.light[`spacing-row-${row}`]!);
   });
 
   test("the spacing steps are the emitted steps, keyed by Tailwind's multiplier", () => {
     const { base, steps } = tokens.space;
     const want = Object.fromEntries(steps.map((px) => [String(px / base), `${px}px`]));
-    for (const row of ["board", "table", "nav"]) want[`row-${row}`] = vars.light[`spacing-row-${row}`]!;
+    for (const row of ROWS) want[`row-${row}`] = vars.light[`spacing-row-${row}`]!;
     want["panel-inset"] = vars.light["spacing-panel-inset"]!;
     expect(fm.spacing).toEqual(want);
   });
@@ -239,7 +239,7 @@ describe(".impeccable/design.json", () => {
     expect(keyCharacteristics).toEqual(bullets("**Key Characteristics:**", "\n## Colors"));
     expect(dos).toEqual(bullets("### Do:", "### Don't:"));
     expect(donts).toEqual(bullets("### Don't:"));
-    for (const rule of rules) expect(body).toContain(`**${rule.name}.** ${rule.body}`);
+    for (const rule of rules) expect(body).toContain(`**${rule.name}.** ${rule.body}\n`);
     expect(rules.length).toBe(body.match(/\*\*The [^*]+ Rule\.\*\*/g)?.length ?? 0);
   });
 });

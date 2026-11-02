@@ -70,8 +70,10 @@ const stepClass = {
   read: "type-read",
   lede: "type-lede",
   title: "type-title",
+  long: "type-long",
   section: "type-section",
   page: "type-page",
+  headline: "type-headline",
   hero: "type-hero",
   display: "type-display",
 } as const satisfies Record<Step, string>;
@@ -85,8 +87,10 @@ const stepSample: Record<Step, string> = {
   read: "the reading column sets erode at nineteen on thirty-two, about sixty-six characters to the line, so a long page stays easy to follow.",
   lede: "a page opens with one short paragraph that says what it is for.",
   title: "fleet status",
+  long: "check whether the deck still matches",
   section: "ship spots",
   page: "notes on dithering",
+  headline: "reply to the chapter notes",
   hero: "runs",
   display: "fleet",
 };

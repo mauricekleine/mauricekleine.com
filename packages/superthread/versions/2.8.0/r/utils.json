@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "utils",
+  "title": "utils",
+  "description": "cn, with superthread's type steps taught to the class merger",
+  "dependencies": [
+    "cn@^0.4.0"
+  ],
+  "files": [
+    {
+      "path": "items/lib/utils.ts",
+      "content": "import { createCn } from \"cn/config\";\n// @mk/utils 2.8.0\n\n// The type steps are font sizes (`text-<step>`), so cn merges them with Tailwind's own sizes.\nexport const cn = createCn({\n  extend: {\n    classGroups: {\n      \"font-size\": [\n        {\n          text: [\n            \"meta\",\n            \"instrument\",\n            \"ui\",\n            \"summary\",\n            \"subtitle\",\n            \"read\",\n            \"lede\",\n            \"title\",\n            \"long\",\n            \"section\",\n            \"page\",\n            \"headline\",\n            \"hero\",\n            \"display\",\n          ],\n        },\n      ],\n    },\n  },\n});\n",
+      "type": "registry:lib",
+      "target": "@components/superthread/lib/utils.ts"
+    }
+  ],
+  "meta": {
+    "version": "2.8.0",
+    "sha256": "09c6e43f40ac4a204ff404f3b75fb0db7a76f2c760da90e0688af888e17aee19",
+    "tier": "lib",
+    "upstream": {
+      "style": "base-nova",
+      "item": "utils",
+      "sha256": "74f5bc88a74dfc19f7cbfaa0c152a5e9b9d3a62823b32b48677652968b442593",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:lib"
+}

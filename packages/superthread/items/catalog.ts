@@ -500,6 +500,26 @@ export const catalog: CatalogItem[] = [
     texture: "contact",
   },
   {
+    name: "fit-title",
+    type: "registry:ui",
+    title: "fit title",
+    description:
+      "a title that steps down until it fits its box, by measurement, and cuts at a word only when the whole title can't",
+    files: [ui("fit-title")],
+    tier: "brand",
+    upstream: null,
+  },
+  {
+    name: "inline-answers",
+    type: "registry:ui",
+    title: "inline answers",
+    description:
+      "a suggestion that takes correction in its own slot: a wrong? control swaps the line for plain answers there",
+    files: [ui("inline-answers")],
+    tier: "brand",
+    upstream: null,
+  },
+  {
     name: "onward",
     type: "registry:ui",
     title: "onward",
@@ -616,7 +636,8 @@ export const catalog: CatalogItem[] = [
     name: "states",
     type: "registry:block",
     title: "states",
-    description: "what a collection shows while it loads, when it fails and when it is empty",
+    description:
+      "what a collection shows while it loads, when it fails and when it is empty, and a page when it's clear",
     files: [block("states")],
     tier: "block",
     upstream: null,
@@ -666,7 +687,8 @@ export const catalog: CatalogItem[] = [
     name: "list-rows",
     type: "registry:block",
     title: "list rows",
-    description: "ruled rows, each a title with its time, a meta line and its actions",
+    description:
+      "ruled rows, each a title with its time, a meta line and its actions, and plain rows that read as words",
     files: [block("list-rows")],
     tier: "block",
     upstream: null,
@@ -734,6 +756,16 @@ export const catalog: CatalogItem[] = [
     serves: ["orbit", "artifacts"],
   },
   {
+    name: "jump-line",
+    type: "registry:block",
+    title: "jump line",
+    description: "a line of anchors to a long page's sections, each with how many it holds",
+    files: [block("jump-line")],
+    tier: "block",
+    upstream: null,
+    serves: ["quanta", "trisys", "orbit"],
+  },
+  {
     name: "send-bar",
     type: "registry:block",
     title: "send bar",
@@ -742,6 +774,16 @@ export const catalog: CatalogItem[] = [
     tier: "block",
     upstream: null,
     serves: ["orbit", "artifacts"],
+  },
+  {
+    name: "job-sheet",
+    type: "registry:block",
+    title: "job sheet",
+    description: "the one job on paper: a cue, its title, why, one quiet line and its actions, each in a held slot",
+    files: [block("job-sheet")],
+    tier: "block",
+    upstream: null,
+    serves: ["quanta", "trisys", "orbit"],
   },
   {
     name: "day-line",

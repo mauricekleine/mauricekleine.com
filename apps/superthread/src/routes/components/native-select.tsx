@@ -1,5 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { NativeSelectExample, NativeSelectSizes, NativeSelectStates } from "@/examples/native-select";
+import {
+  NativeSelectExample,
+  NativeSelectQuiet,
+  NativeSelectQuietStates,
+  NativeSelectSizes,
+  NativeSelectStates,
+} from "@/examples/native-select";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -10,6 +16,7 @@ export const Route = createFileRoute("/components/native-select")({
       { id: "example", title: "example" },
       { id: "sizes", title: "sizes" },
       { id: "states", title: "states" },
+      { id: "quiet", title: "the quiet form" },
     ],
   },
   component: Page,
@@ -19,7 +26,7 @@ function Page() {
     <>
       <PageHead
         title="native select"
-        lede="the native browser choice inside a square field box. the chevron stays quiet while the box draws the inside focus edge."
+        lede="the native browser choice inside a square field box, or a quiet word beside a list. the chevron stays quiet while the box draws the inside focus edge."
       >
         <InstallLine items={["native-select"]} />
       </PageHead>
@@ -48,6 +55,19 @@ function Page() {
         </p>
         <ModePair className="st-e-wide">
           <NativeSelectStates />
+        </ModePair>
+      </Section>
+      <Section id="quiet" title="the quiet form">
+        <p className="st-e-copy">
+          <code>variant=&quot;quiet&quot;</code> sets a scope beside a list: a muted word and its chevron, right-aligned
+          with no box, 44 px at every width. the word turns foreground on hover, and keyboard focus draws the same 2 px
+          edge inside its 44 px. the browser still supplies the menu.
+        </p>
+        <ModePair>
+          <NativeSelectQuiet />
+        </ModePair>
+        <ModePair className="st-e-wide">
+          <NativeSelectQuietStates />
         </ModePair>
       </Section>
     </>

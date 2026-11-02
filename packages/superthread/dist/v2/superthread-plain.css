@@ -207,12 +207,18 @@
   --text-title: 22px;
   --text-title--line-height: 28px;
   --text-title--letter-spacing: -0.02em;
+  --text-long: 26px;
+  --text-long--line-height: 29px;
+  --text-long--letter-spacing: -0.03em;
   --text-section: 30px;
   --text-section--line-height: 34px;
   --text-section--letter-spacing: -0.03em;
   --text-page: 34px;
   --text-page--line-height: 40px;
   --text-page--letter-spacing: -0.01em;
+  --text-headline: 40px;
+  --text-headline--line-height: 44px;
+  --text-headline--letter-spacing: -0.03em;
   --text-hero: 64px;
   --text-hero--line-height: 68px;
   --text-hero--letter-spacing: -0.04em;
@@ -226,6 +232,8 @@
   --spacing-row-board: 56px;
   --spacing-row-table: 48px;
   --spacing-row-nav: 32px;
+  --spacing-row-plain: 40px;
+  --spacing-row-nested: 36px;
   --spacing-panel-inset: 48px;
   --code-ring-offset: -4px;
   color-scheme: light;
