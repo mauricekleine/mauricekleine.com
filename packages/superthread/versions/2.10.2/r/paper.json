@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "paper",
+  "title": "paper",
+  "description": "the one white block on a page, white in every theme and on the slip lift in light",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/paper.tsx",
+      "content": "import { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/paper 2.10.2\n\n// The one white block on a page, in every theme. It is a .light island on the card fill, so everything inside reads the\n// light roles: on a dark page a default button fills with plum and the ring takes the deep value. Its own root still\n// reads the page's mode, and texture-contact keys on that. On a light page, white on white, it lifts by the slip rake\n// with its screened contact edge. On a dark page the white is its edge, so it prints flat, which is why no shadow-slip\n// sits beside the utility. It stays positioned and never clips, or the contact edge goes. --surface names its white for a\n// part that knocks a line out. Render a section when the block names itself.\nfunction Paper({ className, render = <div />, ...props }: useRender.ComponentProps<\"div\">) {\n  return useRender({\n    render,\n    state: { slot: \"paper\", mk: \"paper\" },\n    props: mergeProps<\"div\">(\n      {\n        className: cn(\n          \"light relative min-w-0 bg-card p-6 text-card-foreground texture-contact [--contact-lift:var(--elevation-slip-rake)] [--surface:var(--card)] [@media(max-width:600px)]:p-4\",\n          className,\n        ),\n      },\n      props,\n    ),\n  });\n}\n\nexport { Paper };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/paper.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.10.2",
+    "sha256": "24a209bca6a84a6dfe76bebbf89f4b7dbf86dff02bc2970a48622838b02f6b5f",
+    "tier": "brand",
+    "upstream": null
+  },
+  "type": "registry:ui"
+}
