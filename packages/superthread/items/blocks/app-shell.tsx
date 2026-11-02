@@ -102,7 +102,8 @@ function AppShellNav({
 // The nav's quiet second tier: a nested list under a rule, its words muted and its current item back in the nav's own
 // ink. Below 900 px the rule yields and its items join the row. Under a nav with overflow, one list carries both forms:
 // at 600 px and below it is a native popover the `...` opens, so its links stay the app's own and it keeps the frame's
-// dark scope, and a choice in it closes it, since a client-side route keeps the page. An open list prints its words in
+// dark scope, and a choice in it closes it, since a client-side route keeps the page. While it's closed there its list
+// item goes too, so a screen reader counts no empty item in the row. An open list prints its words in
 // the popover's ink, a 44 px row each. A window that grows past 600 px while it is open closes it, since the `...` it
 // hangs from yields there, and its links go back to the row.
 function AppShellNavTier({ className, onClick, onToggle, ...props }: ComponentProps<"ul">) {
@@ -111,7 +112,10 @@ function AppShellNavTier({ className, onClick, onToggle, ...props }: ComponentPr
     <li
       data-mk="app-shell"
       data-slot="app-shell-nav-tier"
-      className="mt-[5px] min-w-0 border-t border-sidebar-border pt-[9px] [@media(max-width:900px)]:contents"
+      className={cn(
+        "mt-[5px] min-w-0 border-t border-sidebar-border pt-[9px] [@media(max-width:900px)]:contents",
+        listId && "[@media(max-width:600px)]:has-[>ul:not(:popover-open)]:hidden",
+      )}
     >
       <ul
         id={listId ?? undefined}

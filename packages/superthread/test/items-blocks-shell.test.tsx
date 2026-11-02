@@ -256,11 +256,13 @@ describe("app shell", () => {
       expect(logs!.getAttribute("aria-current")).toBeNull();
     });
 
-    test("with overflow, a more at 600 px and below opens the tier's own list through a real popover", () => {
+    test("with overflow, a more at 600 px and below opens the tier's own list through a real popover, and the closed list leaves no empty item", () => {
       const host = nav("runs and logs");
       const list = one(host, `${TIER} > ul`);
       expect(list.el.getAttribute("popover")).toBe("auto");
       expect(list.classes).toContain("[@media(max-width:600px)]:not-open:hidden");
+      expect(one(host, TIER).classes).toContain("[@media(max-width:600px)]:has-[>ul:not(:popover-open)]:hidden");
+      expect(one(nav(), TIER).classes.join(" ")).not.toContain("has-[>ul");
       expect(one(host, MORE).classes).toEqual(expect.arrayContaining(["hidden", "[@media(max-width:600px)]:block"]));
       const trigger = one(host, `${MORE} button`);
       expect(trigger.el.getAttribute("type")).toBe("button");
