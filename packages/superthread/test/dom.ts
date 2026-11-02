@@ -41,9 +41,17 @@ function reachesDom(values: unknown[]): boolean {
       return true;
     }
     seen.add(value);
+    // The loop reaches what it pushes. An accessor stays unread, as it does in the diff.
     for (const key of Reflect.ownKeys(value)) {
-      // The loop reaches what it pushes. An accessor stays unread, as it does in the diff.
       values.push(Object.getOwnPropertyDescriptor(value, key)?.value);
+    }
+    // A map or a set holds its entries apart from its properties, and the diff prints them.
+    if (value instanceof Map) {
+      for (const [key, entry] of value) {
+        values.push(key, entry);
+      }
+    } else if (value instanceof Set) {
+      values.push(...value);
     }
   }
   return false;
@@ -62,9 +70,15 @@ expect.extend({
 
 /**
  * The diff behind these matchers ignores the hook and reads every property by every path, so on a value that reaches
- * the DOM it grows until the machine stops it: 1.7 GB for one rendered button. They refuse that value up front.
+ * the DOM it grows until the machine stops it: 1.7 GB for one rendered button. They refuse that value up front. Bun's
+ * aliases, such as toBeCalledWith, are matchers of their own, so the list names them too.
  */
 const diffMatchers = [
+  "lastCalledWith",
+  "lastReturnedWith",
+  "nthCalledWith",
+  "nthReturnedWith",
+  "toBeCalledWith",
   "toEqual",
   "toHaveBeenCalledWith",
   "toHaveBeenLastCalledWith",

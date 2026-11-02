@@ -70,6 +70,9 @@ describe("a failed expect on the DOM", () => {
     ["a node it expects", () => expect<unknown>({ a: 1 }).toEqual(document.createElement("p"))],
     ["a node deep in a value", () => expect<unknown>({ a: [document.createElement("p")] }).toEqual({})],
     ["a node in a symbol key", () => expect<unknown>({ [Symbol("a")]: new Text("b") }).toMatchObject({})],
+    ["a node in a map", () => expect<unknown>({ a: new Map([["b", new Text("c")]]) }).toEqual({})],
+    ["a node keying a map", () => expect<unknown>(new Map([[new Text("a"), 1]])).toEqual(new Map())],
+    ["a node in a set", () => expect<unknown>(new Set([new Text("a")])).toStrictEqual(new Set())],
     ["the window", () => expect<unknown>(window).toStrictEqual({})],
     [
       "a node in a mock's calls",
@@ -79,19 +82,44 @@ describe("a failed expect on the DOM", () => {
         expect(called).toHaveBeenCalledWith("save");
       },
     ],
+    [
+      "a node in a mock's calls, by an alias",
+      () => {
+        const called = mock();
+        called(document.createElement("p"));
+        expect(called).toBeCalledWith("save");
+      },
+    ],
+    // Without the guard this one passes: it writes the node's whole graph to a snapshot file.
+    ["a node it would snapshot", () => expect<unknown>(new Map([["a", new Text("b")]])).toMatchSnapshot()],
   ])("refuses to diff %s", (_, assertion) => {
     expect(failure(assertion)).toContain("can't print a DOM node");
   });
 });
 
 describe("every matcher Bun ships", () => {
-  const names = Object.getOwnPropertyNames(Object.getPrototypeOf(expect(null))).filter((name) => /^to[A-Z]/.test(name));
+  // Bun's aliases, such as toBeCalledWith and lastCalledWith, are matchers of their own.
+  const names = Object.getOwnPropertyNames(Object.getPrototypeOf(expect(null))).filter((name) =>
+    /^(to[A-Z]|last|nth)/.test(name),
+  );
+  const holding = (node: Node) => [
+    node,
+    [node],
+    { a: node },
+    new Map([["a", node]]),
+    new Map([[node, 1]]),
+    new Set([node]),
+  ];
 
   // Detached nodes again. The names come from Bun, so one it adds later lands here too.
   test.each(names)("%s fails on a node without walking it", (name) => {
     const node = document.createElement("p");
-    for (const received of [node, [node], { a: node }]) {
-      for (const expected of [[{ a: 1 }], [node], [[node]], ["a", { b: 1 }]]) {
+    const called = mock();
+    called(node);
+    const returned = mock(() => node);
+    returned();
+    for (const received of [...holding(node), called, returned]) {
+      for (const expected of [[{ a: 1 }], ["a", { b: 1 }], [1, "save"], ...holding(node).map((value) => [value])]) {
         const matchers = expect<unknown>(received) as unknown as Record<string, Matcher>;
         expect(said(() => matchers[name]?.(...expected)).length).toBeLessThan(2000);
       }
