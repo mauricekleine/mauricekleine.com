@@ -7,8 +7,10 @@ import {
   AppShellNav,
   AppShellNavItem,
   AppShellPanel,
+  AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
 import { Facts, Fact, FactLabel, FactValue } from "@/components/superthread/blocks/facts";
+import { QuickAddNav } from "@/components/superthread/blocks/quick-add";
 import { Serves, ViewportFrame } from "@/examples/compositions-a";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -20,6 +22,7 @@ export const Route = createFileRoute("/compositions/app-shell")({
     sections: [
       { id: "example", title: "example" },
       { id: "states", title: "states" },
+      { id: "feet", title: "feet" },
       { id: "phone", title: "phone" },
       { id: "parts", title: "parts" },
     ],
@@ -98,6 +101,50 @@ function Workspace({ printed = false }: { printed?: boolean }) {
   );
 }
 
+// Both feet at once: the nav's slot with the quiet add above it, and the row that closes the panel.
+function FootedWorkspace() {
+  const [added, setAdded] = useState<string[]>([]);
+  return (
+    <AppShell
+      current="orbit"
+      markBase="/marks"
+      hrefs={hrefs}
+      skipLink={false}
+      sidebar={
+        <AppShellNav ship="orbit" foot={<a href="#feet">settings</a>}>
+          <AppShellNavItem render={<button type="button" />} isActive number={1}>
+            now
+          </AppShellNavItem>
+          <AppShellNavItem render={<button type="button" />} number={2}>
+            week
+          </AppShellNavItem>
+          <QuickAddNav
+            label="add a task"
+            placeholder="add a task"
+            hotkey={null}
+            onAdd={(title) => setAdded((current) => [...current, title])}
+          />
+        </AppShellNav>
+      }
+    >
+      <AppShellGround render={<div />}>
+        <AppShellPanel>
+          <h1 className="type-section text-first">now</h1>
+          <p className="st-ca-panel-copy">
+            {added.length > 0 ? `added: ${added.join(", ")}` : "add a task from the nav. it lands here."}
+          </p>
+          <AppShellPanelFoot render={<nav aria-label="briefs" />}>
+            <span>briefs</span>
+            <a href="#feet">today</a>
+            <a href="#feet">yesterday</a>
+            <a href="#feet">last week</a>
+          </AppShellPanelFoot>
+        </AppShellPanel>
+      </AppShellGround>
+    </AppShell>
+  );
+}
+
 function Page() {
   return (
     <>
@@ -146,6 +193,40 @@ function Page() {
           }
         />
       </Section>
+      <Section id="feet" title="feet">
+        <p className="st-ca-copy">
+          pass <code>foot</code> to the nav, even as <code>null</code>, and its column runs to full height with a slot
+          at the bottom. the slot holds its place while it&rsquo;s empty, so a line that comes and goes moves nothing.
+          at 900 px and below it steps aside with the ship&rsquo;s name. <code>AppShellPanelFoot</code> closes the panel
+          with a row under a rule that reaches both edges of the sheet.
+        </p>
+        <ModePair
+          className="st-ca-wide-pair"
+          light={
+            <ViewportFrame mode="light" title="orbit with both feet, light" width={1100} height={470}>
+              <FootedWorkspace />
+            </ViewportFrame>
+          }
+          dark={
+            <ViewportFrame mode="dark" title="orbit with both feet, dark" width={1100} height={470}>
+              <FootedWorkspace />
+            </ViewportFrame>
+          }
+        />
+        <p className="st-ca-copy">on a phone the slot is gone and each link in the row is a 44 px box.</p>
+        <ModePair
+          light={
+            <ViewportFrame mode="light" title="orbit with both feet on a phone, light" height={420}>
+              <FootedWorkspace />
+            </ViewportFrame>
+          }
+          dark={
+            <ViewportFrame mode="dark" title="orbit with both feet on a phone, dark" height={420}>
+              <FootedWorkspace />
+            </ViewportFrame>
+          }
+        />
+      </Section>
       <Section id="phone" title="phone">
         <p className="st-ca-copy">
           at 900 px the rail becomes a bar and the ship nav wraps below it. at 600 px the panel keeps 16 px beside its
@@ -177,8 +258,8 @@ function Page() {
             <code>AppShellNav</code>
           </dt>
           <dd>
-            holds the ship name and its named nav. each <code>AppShellNavItem</code> takes a number, a live count and
-            the app's link or button.
+            holds the ship name and its named nav, with an optional <code>foot</code>. each <code>AppShellNavItem</code>{" "}
+            takes a number, a live count and the app's link or button.
           </dd>
           <dt>
             <code>AppShellGround</code>
@@ -186,7 +267,15 @@ function Page() {
           <dd>
             is the page's main, named workspace, with <code>id="main"</code> for the rail&rsquo;s skip link, and leaves
             the gutter around <code>AppShellPanel</code>, the raised working surface. inside a layout that already owns
-            main, render a div and pass <code>role="group"</code> to <code>AppShellNav</code>.
+            main, render a div and pass <code>role="group"</code> to <code>AppShellNav</code>. the panel takes{" "}
+            <code>render</code> too, so a hand-built main needs no wrapper.
+          </dd>
+          <dt>
+            <code>AppShellPanelFoot</code>
+          </dt>
+          <dd>
+            the panel&rsquo;s last row. a span prints as the muted lead word, and links read as chrome. render a named
+            nav for a row of links.
           </dd>
         </dl>
       </Section>

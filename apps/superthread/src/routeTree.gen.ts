@@ -29,6 +29,7 @@ import { Route as ComponentsDropdownMenuRouteImport } from './routes/components/
 import { Route as ComponentsFieldRouteImport } from './routes/components/field'
 import { Route as ComponentsFleetRailRouteImport } from './routes/components/fleet-rail'
 import { Route as ComponentsGlyphsRouteImport } from './routes/components/glyphs'
+import { Route as ComponentsHotkeyRouteImport } from './routes/components/hotkey'
 import { Route as ComponentsInputRouteImport } from './routes/components/input'
 import { Route as ComponentsInputGroupRouteImport } from './routes/components/input-group'
 import { Route as ComponentsKbdRouteImport } from './routes/components/kbd'
@@ -181,6 +182,11 @@ const ComponentsFleetRailRoute = ComponentsFleetRailRouteImport.update({
 const ComponentsGlyphsRoute = ComponentsGlyphsRouteImport.update({
   id: '/components/glyphs',
   path: '/components/glyphs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComponentsHotkeyRoute = ComponentsHotkeyRouteImport.update({
+  id: '/components/hotkey',
+  path: '/components/hotkey',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsInputRoute = ComponentsInputRouteImport.update({
@@ -473,6 +479,7 @@ export interface FileRoutesByFullPath {
   '/components/field': typeof ComponentsFieldRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
+  '/components/hotkey': typeof ComponentsHotkeyRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
@@ -548,6 +555,7 @@ export interface FileRoutesByTo {
   '/components/field': typeof ComponentsFieldRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
+  '/components/hotkey': typeof ComponentsHotkeyRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
@@ -624,6 +632,7 @@ export interface FileRoutesById {
   '/components/field': typeof ComponentsFieldRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
+  '/components/hotkey': typeof ComponentsHotkeyRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
@@ -701,6 +710,7 @@ export interface FileRouteTypes {
     | '/components/field'
     | '/components/fleet-rail'
     | '/components/glyphs'
+    | '/components/hotkey'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
@@ -776,6 +786,7 @@ export interface FileRouteTypes {
     | '/components/field'
     | '/components/fleet-rail'
     | '/components/glyphs'
+    | '/components/hotkey'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
@@ -851,6 +862,7 @@ export interface FileRouteTypes {
     | '/components/field'
     | '/components/fleet-rail'
     | '/components/glyphs'
+    | '/components/hotkey'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
@@ -927,6 +939,7 @@ export interface RootRouteChildren {
   ComponentsFieldRoute: typeof ComponentsFieldRoute
   ComponentsFleetRailRoute: typeof ComponentsFleetRailRoute
   ComponentsGlyphsRoute: typeof ComponentsGlyphsRoute
+  ComponentsHotkeyRoute: typeof ComponentsHotkeyRoute
   ComponentsInputRoute: typeof ComponentsInputRoute
   ComponentsInputGroupRoute: typeof ComponentsInputGroupRoute
   ComponentsKbdRoute: typeof ComponentsKbdRoute
@@ -1122,6 +1135,13 @@ declare module '@tanstack/react-router' {
       path: '/components/glyphs'
       fullPath: '/components/glyphs'
       preLoaderRoute: typeof ComponentsGlyphsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/components/hotkey': {
+      id: '/components/hotkey'
+      path: '/components/hotkey'
+      fullPath: '/components/hotkey'
+      preLoaderRoute: typeof ComponentsHotkeyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/components/input': {
@@ -1519,6 +1539,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsFieldRoute: ComponentsFieldRoute,
   ComponentsFleetRailRoute: ComponentsFleetRailRoute,
   ComponentsGlyphsRoute: ComponentsGlyphsRoute,
+  ComponentsHotkeyRoute: ComponentsHotkeyRoute,
   ComponentsInputRoute: ComponentsInputRoute,
   ComponentsInputGroupRoute: ComponentsInputGroupRoute,
   ComponentsKbdRoute: ComponentsKbdRoute,

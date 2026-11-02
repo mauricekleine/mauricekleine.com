@@ -4,9 +4,10 @@
 // Layers (the dialog, the select popup, toasts) open from in-flow triggers. Their portals render
 // only on the client, outside the section, so they take the mode of the document they portal into,
 // as in any shadcn app with the mode class on <html>: add .dark to <body> to see them dark.
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMinute } from "@/components/superthread/hooks/use-minute";
+import { isPageKey } from "@/components/superthread/lib/hotkey";
 import { fleet } from "@/components/superthread/lib/fleet";
 import {
   beforeWords,
@@ -747,6 +748,9 @@ function Sink({ mode }: { mode: Mode }) {
       <Part name="use-minute">
         <MinuteSink />
       </Part>
+      <Part name="hotkey">
+        <KeySink />
+      </Part>
       <Part name="paper">
         <Paper render={<section aria-label="the next job" />}>
           <p>reply to sam about chapter 7</p>
@@ -805,6 +809,18 @@ function Contained({ children }: { children: ReactNode }) {
 function MinuteSink() {
   const minute = useMinute();
   return <p className="text-sm">{minute ? `${clockWords(minute.now)}, ${minute.day}` : "no clock yet"}</p>;
+}
+
+function KeySink() {
+  const [presses, setPresses] = useState(0);
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (isPageKey(event, "n")) setPresses((count) => count + 1);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
+  return <p className="text-sm">n pressed {presses} times</p>;
 }
 
 function ToastSink({ mode }: { mode: Mode }) {

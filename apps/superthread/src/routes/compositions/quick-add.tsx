@@ -1,8 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useId, useRef, useState } from "react";
-import { QuickAdd } from "@/components/superthread/blocks/quick-add";
+import {
+  AppShell,
+  AppShellGround,
+  AppShellNav,
+  AppShellNavItem,
+  AppShellPanel,
+} from "@/components/superthread/blocks/app-shell";
+import { QuickAdd, QuickAddNav } from "@/components/superthread/blocks/quick-add";
+import { fleet } from "@/components/superthread/lib/fleet";
 import { Button } from "@/components/superthread/ui/button";
 import { catalog } from "@/components/superthread/catalog";
+import { ViewportFrame } from "@/examples/compositions-a";
 import { State } from "@/examples/input";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -19,6 +28,7 @@ export const Route = createFileRoute("/compositions/quick-add")({
       { id: "example", title: "example" },
       { id: "states", title: "submission states" },
       { id: "labels", title: "compact label" },
+      { id: "nav", title: "in a nav" },
     ],
   },
   component: Page,
@@ -116,6 +126,43 @@ function CompactAdd() {
   );
 }
 
+const hrefs = { ...Object.fromEntries(fleet.map((ship) => [ship.id, null])), home: "/" };
+
+// The key reaches every copy on a page, so only one specimen answers it.
+function NavAdd({ hotkey = null }: { hotkey?: string | null }) {
+  const [tasks, setTasks] = useState<string[]>([]);
+  return (
+    <AppShell
+      current="orbit"
+      markBase="/marks"
+      hrefs={hrefs}
+      skipLink={false}
+      sidebar={
+        <AppShellNav ship="orbit" foot={null}>
+          <AppShellNavItem render={<button type="button" />} isActive>
+            now
+          </AppShellNavItem>
+          <QuickAddNav
+            label="add a task"
+            placeholder="add a task"
+            hotkey={hotkey}
+            onAdd={(title) => setTasks((current) => [...current, title])}
+          />
+        </AppShellNav>
+      }
+    >
+      <AppShellGround render={<div />}>
+        <AppShellPanel>
+          <h1 className="type-section text-first">to sort</h1>
+          <ul className="st-cb-preview-rows" aria-label="added tasks" aria-live="polite">
+            {tasks.length > 0 ? tasks.map((title, index) => <li key={index}>{title}</li>) : <li>nothing here yet</li>}
+          </ul>
+        </AppShellPanel>
+      </AppShellGround>
+    </AppShell>
+  );
+}
+
 function Page() {
   return (
     <>
@@ -172,6 +219,42 @@ function Page() {
         <ModePair className="st-cb-stack">
           <CompactAdd />
         </ModePair>
+      </Section>
+      <Section id="nav" title="in a nav">
+        <p className="st-cb-copy">
+          <code>QuickAddNav</code> goes among a ship&rsquo;s nav items. it prints a muted word above the nav&rsquo;s
+          foot and opens a one-line field over itself. enter adds, clears and stays open for the next one. escape closes
+          it and keeps the draft. press <kbd>n</kbd> away from a field and the light copy opens.
+        </p>
+        <ModePair
+          className="st-ca-wide-pair"
+          light={
+            <ViewportFrame mode="light" title="quiet add, light" width={1100} height={470}>
+              <NavAdd hotkey="n" />
+            </ViewportFrame>
+          }
+          dark={
+            <ViewportFrame mode="dark" title="quiet add, dark" width={1100} height={470}>
+              <NavAdd />
+            </ViewportFrame>
+          }
+        />
+        <p className="st-cb-copy">
+          at 900 px and below the word moves to the end of the nav&rsquo;s row, and the field runs 12 px from each edge
+          with its button. on a phone the trigger is the glyph alone, in a 44 px target.
+        </p>
+        <ModePair
+          light={
+            <ViewportFrame mode="light" title="quiet add on a phone, light" height={380}>
+              <NavAdd />
+            </ViewportFrame>
+          }
+          dark={
+            <ViewportFrame mode="dark" title="quiet add on a phone, dark" height={380}>
+              <NavAdd />
+            </ViewportFrame>
+          }
+        />
       </Section>
     </>
   );

@@ -13,6 +13,7 @@ import {
   ListRowTime,
   ListRowWhen,
 } from "@/components/superthread/blocks/list-rows";
+import { SectionCount, SectionHeader, SectionTitle } from "@/components/superthread/blocks/section-header";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { Badge } from "@/components/superthread/ui/badge";
 import { Button } from "@/components/superthread/ui/button";
@@ -32,6 +33,8 @@ export const Route = createFileRoute("/compositions/list-rows")({
     sections: [
       { id: "example", title: "example" },
       { id: "states", title: "title states" },
+      { id: "header", title: "under a section header" },
+      { id: "markers", title: "markers" },
       { id: "phone", title: "on a phone" },
       { id: "day", title: "a day's rows" },
     ],
@@ -83,6 +86,60 @@ function RowsExample() {
           <span>chapter 05</span>
           <time dateTime="2026-10-25T08:12:00Z">08:12</time>
         </ListRowMeta>
+      </ListRow>
+    </ListRows>
+  );
+}
+
+// Hangs from the header's rule, so one rule prints above the rows.
+function UnderHeaderExample() {
+  return (
+    <div>
+      <SectionHeader>
+        <SectionTitle>this week</SectionTitle>
+        <SectionCount>2</SectionCount>
+      </SectionHeader>
+      <ListRows aria-label="this week">
+        <ListRow>
+          <ListRowTitle>draft the release note</ListRowTitle>
+        </ListRow>
+        <ListRow>
+          <ListRowTitle>read the chapter notes</ListRowTitle>
+        </ListRow>
+      </ListRows>
+    </div>
+  );
+}
+
+// A piece that decides on its own to print nothing, as a component reading its own data does.
+function NoReviewer() {
+  return null;
+}
+
+function MarkersExample() {
+  return (
+    <ListRows aria-label="exports">
+      <ListRow>
+        <ListRowTitle kind="id">ex-2041</ListRowTitle>
+        <ListRowMeta>
+          <span>quanta</span>
+          <span>chapter 03</span>
+          <NoReviewer />
+        </ListRowMeta>
+        <ListRowActions variant="markers">
+          <span>pdf</span>
+          <span>epub</span>
+          <span>shared</span>
+        </ListRowActions>
+      </ListRow>
+      <ListRow>
+        <ListRowTitle kind="id">ex-2040</ListRowTitle>
+        <ListRowMeta>
+          <NoReviewer />
+        </ListRowMeta>
+        <ListRowActions variant="markers">
+          <NoReviewer />
+        </ListRowActions>
       </ListRow>
     </ListRows>
   );
@@ -192,7 +249,8 @@ function Page() {
       <Section id="states" title="title states">
         <p className="st-cb-copy">
           a title prints in foreground, linked or plain. hover adds an underline to a link, and keyboard focus draws the
-          control ring. a closed row stays in the list, with its title muted and struck through.
+          control ring. a closed row stays in the list, with its title muted and struck through. a receding row is still
+          live and fading, so its title prints muted with no strike.
         </p>
         <ModePair className="st-cb-stack">
           <div className="st-cb-states">
@@ -224,7 +282,33 @@ function Page() {
                 </ListRow>
               </ListRows>
             </State>
+            <State name="receding" note="muted, no strike">
+              <ListRows aria-label="receding row">
+                <ListRow receding>
+                  <ListRowTitle href="#example">read the chapter notes</ListRowTitle>
+                </ListRow>
+              </ListRows>
+            </State>
           </div>
+        </ModePair>
+      </Section>
+      <Section id="header" title="under a section header">
+        <p className="st-cb-copy">
+          straight under a <code>SectionHeader</code> the rows hang from its rule, so one rule prints above them.
+        </p>
+        <ModePair className="st-cb-stack">
+          <UnderHeaderExample />
+        </ModePair>
+      </Section>
+      <Section id="markers" title="markers">
+        <p className="st-cb-copy">
+          <code>variant=&quot;markers&quot;</code> makes <code>ListRowActions</code> a muted line of facts, read from
+          the row&rsquo;s start. <code>kind=&quot;id&quot;</code> sets a title in mono. a piece that renders nothing
+          takes its dot with it, and an empty meta line or actions line takes no room, so the second row here is one
+          line.
+        </p>
+        <ModePair className="st-cb-stack">
+          <MarkersExample />
         </ModePair>
       </Section>
       <Section id="phone" title="on a phone">

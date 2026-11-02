@@ -32,7 +32,8 @@ function Page() {
         <p className="st-b-copy">
           seven variants on one height and one 1&nbsp;px edge. the names and props are shadcn&apos;s, from base-nova, so
           markup written for shadcn&apos;s button works unchanged. key is the one we added: the first ink with a stock
-          label, for an action that leaves the app or any strong action where plum isn&apos;t the fill.
+          label, for an action that leaves the app or any strong action where plum isn&apos;t the fill. link drops its
+          sides, so its word lines up with the text beside it.
         </p>
         <p className="st-b-copy">
           off paper, in a dark scope, a plum fill prints pale pink, so the default prints as the outline. that&apos;s

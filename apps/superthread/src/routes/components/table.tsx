@@ -41,7 +41,8 @@ function Page() {
       <Section id="board" title="board rows">
         <p className="st-b-copy">
           set <code>rows=&quot;board&quot;</code> for 56&nbsp;px rows. a table wider than its column scrolls sideways
-          inside its own box, with no fade at the cut edge.
+          inside its own box, with no fade at the cut edge. <code>receding</code> on a row prints it muted with no
+          strike, for something still live and fading.
         </p>
         <ModePair className="st-b-stack">
           <TableBoard />

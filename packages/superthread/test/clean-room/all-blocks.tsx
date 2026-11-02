@@ -9,6 +9,7 @@ import {
   AppShellNav,
   AppShellNavItem,
   AppShellPanel,
+  AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
 import {
   Section,
@@ -46,7 +47,7 @@ import {
   FormSectionFooter,
   FormSectionStatus,
 } from "@/components/superthread/blocks/form-section";
-import { QuickAdd } from "@/components/superthread/blocks/quick-add";
+import { QuickAdd, QuickAddNav } from "@/components/superthread/blocks/quick-add";
 import { Facts, Fact, FactLabel, FactValue } from "@/components/superthread/blocks/facts";
 import {
   Letter,
@@ -118,7 +119,7 @@ import {
   ItemCardMeta,
   ItemCardActions,
 } from "@/components/superthread/blocks/item-cards";
-import { DataTable, SortableHead, TableEmpty } from "@/components/superthread/blocks/data-table";
+import { DataTable, SortableHead, TableEmpty, TableTitle } from "@/components/superthread/blocks/data-table";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { Icon } from "@/components/superthread/ui/glyphs";
 import { Badge } from "@/components/superthread/ui/badge";
@@ -178,18 +179,25 @@ function Sink({ mode }: { mode: Mode }) {
           markBase="/marks"
           hrefs={{ home: "#home", orbit: "#orbit" }}
           sidebar={
-            <AppShellNav ship="orbit">
+            <AppShellNav ship="orbit" foot={<a href="#settings">settings</a>}>
               <AppShellNavItem isActive number="01" count={12} render={<a href="#board" />}>
                 board
               </AppShellNavItem>
               <AppShellNavItem number="02" render={<a href="#runs" />}>
                 runs
               </AppShellNavItem>
+              <QuickAddNav label="add a task" placeholder="add a task" hotkey={null} onAdd={async () => {}} />
             </AppShellNav>
           }
         >
           <AppShellGround>
-            <AppShellPanel>the working panel</AppShellPanel>
+            <AppShellPanel render={<section aria-label="the working panel" />}>
+              the working panel
+              <AppShellPanelFoot render={<nav aria-label="briefs" />}>
+                <span>briefs</span>
+                <a href="#today">today</a>
+              </AppShellPanelFoot>
+            </AppShellPanel>
           </AppShellGround>
         </AppShell>
       </Part>
@@ -260,6 +268,13 @@ function Sink({ mode }: { mode: Mode }) {
           </ListRow>
           <ListRow>
             <ListRowTitle>plain task</ListRowTitle>
+          </ListRow>
+          <ListRow receding>
+            <ListRowTitle kind="id">or-12</ListRowTitle>
+            <ListRowActions variant="markers">
+              <span>pdf</span>
+              <span>shared</span>
+            </ListRowActions>
           </ListRow>
         </ListRows>
         <ListRows aria-label="today">
@@ -339,6 +354,13 @@ function Sink({ mode }: { mode: Mode }) {
               <TableCell kind="id">or-12</TableCell>
               <TableCell>check the registry</TableCell>
               <TableCell kind="number">2h</TableCell>
+            </TableRow>
+            <TableRow receding>
+              <TableCell kind="id">or-11</TableCell>
+              <TableCell>
+                <TableTitle href="#or-11">an old run</TableTitle>
+              </TableCell>
+              <TableCell kind="number">9d</TableCell>
             </TableRow>
             <TableEmpty columns={3} title="no other runs">
               a new run lands here.
