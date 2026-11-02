@@ -216,10 +216,10 @@ describe("the parts", () => {
     expect(one(outline, "button").el.getAttribute("data-variant")).toBe("outline");
   });
 
-  test("on a phone the primary takes what the row leaves, and can shrink rather than push the toggle out", () => {
-    expect(one(sheet(), '[data-slot="job-sheet-primary"]').classes).toEqual(
-      expect.arrayContaining([`${PHONE}flex-1`, `${PHONE}min-w-0`, `${PHONE}shrink`]),
-    );
+  test("on a phone the primary takes what the row leaves, and gives a toggle its width down to 84 px", () => {
+    const { classes } = one(sheet(), '[data-slot="job-sheet-primary"]');
+    expect(classes).toEqual(expect.arrayContaining([`${PHONE}flex-1`, `${PHONE}min-w-21`, `${PHONE}shrink`]));
+    expect(classes).not.toContain(`${PHONE}min-w-0`);
   });
 
   test("on a phone the primary's words take two lines inside the button rather than lose the end of the step", () => {
@@ -229,10 +229,14 @@ describe("the parts", () => {
     expect(one(primary, '[aria-hidden="true"]').classes).toContain(`${PHONE}whitespace-normal`);
   });
 
-  test("on a phone the toggle sets its words on two lines at the instrument step", () => {
-    expect(one(sheet(), '[data-slot="job-sheet-toggle"]').classes).toEqual(
-      expect.arrayContaining([`${PHONE}whitespace-normal`, `${PHONE}type-instrument`, `${PHONE}w-25`]),
+  test("on a phone the toggle keeps its words on one line at the instrument step, and wraps only when the row runs out", () => {
+    // No width of its own, so its words set on one line while the row holds them; it can shrink, and wrap, once the
+    // primary is at its floor.
+    const { classes } = one(sheet(), '[data-slot="job-sheet-toggle"]');
+    expect(classes).toEqual(
+      expect.arrayContaining([`${PHONE}shrink`, `${PHONE}whitespace-normal`, `${PHONE}type-instrument`]),
     );
+    expect(classes.filter((cls) => /^w-/.test(parts(cls).utility))).toEqual([]);
   });
 
   test("keeps the system's rules and claims no detail of its own", () => {

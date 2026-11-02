@@ -113,7 +113,7 @@ function Page() {
       <Section id="phone" title="on a phone">
         <p className="st-cb-copy">
           the title takes six lines of long and the why takes two. the primary takes what the row leaves, with its words
-          on two lines when the step needs them, and a toggle sets its words on two lines beside it.
+          on two lines when the step needs them, and a toggle keeps its words on one line beside it.
         </p>
         <ModePair
           className="st-cb-stack"

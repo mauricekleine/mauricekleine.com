@@ -84,7 +84,7 @@ function JobSheetChanged({ className, ...props }: Omit<React.ComponentProps<"div
   );
 }
 
-// The row of actions, at the sheet's foot. A phone gives the first action what the others leave.
+// The row of actions, at the sheet's foot. A phone gives the first action what the others leave, down to its floor.
 function JobSheetActions({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -101,7 +101,8 @@ function JobSheetActions({ className, ...props }: React.ComponentProps<"div">) {
 // The one primary, which names the step. reserve takes the longest word it can print: it sits unseen and unread in the
 // same cell, so the button holds its width when its word changes. It's a link when it leads somewhere: pass render and
 // nativeButton={false}. It fills with plum on paper; a sheet with nothing pressing passes variant="outline". On a phone
-// the row is narrow, so its words take two lines inside the button's 48 px rather than lose the end of the step.
+// the row is narrow, so its words take two lines inside the button's 48 px rather than lose the end of the step, and it
+// gives the row's width to a toggle beside it down to 84 px, which holds a short step on two lines.
 function JobSheetPrimary({
   className,
   children,
@@ -113,7 +114,7 @@ function JobSheetPrimary({
       data-slot="job-sheet-primary"
       size="lg"
       className={cn(
-        "min-w-28 [@media(max-width:600px)]:min-w-0 [@media(max-width:600px)]:flex-1 [@media(max-width:600px)]:shrink [@media(max-width:600px)]:px-3",
+        "min-w-28 [@media(max-width:600px)]:min-w-21 [@media(max-width:600px)]:flex-1 [@media(max-width:600px)]:shrink [@media(max-width:600px)]:px-3",
         className,
       )}
       {...props}
@@ -136,14 +137,15 @@ function JobSheetPrimary({
 }
 
 // A way of holding the whole page, such as `only what can't slip`: a toggle after the actions, with its tick holding its
-// space. A phone sets its words on two lines at the instrument step, so the primary keeps its width.
+// space. A phone sets its words at the instrument step, on one line beside the other actions; only a row too narrow for
+// them and the primary's floor wraps them.
 function JobSheetToggle({ className, ...props }: Omit<React.ComponentProps<typeof Toggle>, "size" | "variant">) {
   return (
     <Toggle
       data-slot="job-sheet-toggle"
       size="lg"
       className={cn(
-        "[@media(max-width:600px)]:w-25 [@media(max-width:600px)]:gap-1 [@media(max-width:600px)]:px-2 [@media(max-width:600px)]:text-left [@media(max-width:600px)]:type-instrument [@media(max-width:600px)]:whitespace-normal",
+        "[@media(max-width:600px)]:shrink [@media(max-width:600px)]:gap-1 [@media(max-width:600px)]:px-2 [@media(max-width:600px)]:text-left [@media(max-width:600px)]:type-instrument [@media(max-width:600px)]:whitespace-normal",
         className,
       )}
       {...props}
