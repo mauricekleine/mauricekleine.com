@@ -120,7 +120,7 @@ function InputGroupInput({ className, ...props }: React.ComponentProps<"input">)
     <InputPrimitive
       data-slot="input-group-control"
       className={cn(
-        "min-w-0 flex-1 self-stretch border-0 bg-transparent px-3 text-ui shadow-none outline-0 caret-(--fx) placeholder:text-muted-foreground disabled:cursor-not-allowed",
+        "min-w-0 flex-1 self-stretch border-0 bg-transparent px-3 text-ui [@media(max-width:600px)]:text-[16px] shadow-none outline-0 caret-(--fx) placeholder:text-muted-foreground disabled:cursor-not-allowed",
         className,
       )}
       {...props}
@@ -133,7 +133,7 @@ function InputGroupTextarea({ className, ...props }: React.ComponentProps<"texta
     <textarea
       data-slot="input-group-control"
       className={cn(
-        "field-sizing-content min-h-[78px] w-full flex-1 resize-none border-0 bg-transparent px-3 py-[9px] text-ui leading-5 shadow-none outline-0 caret-(--fx) placeholder:text-muted-foreground disabled:cursor-not-allowed",
+        "field-sizing-content min-h-[calc(3lh+18px)] w-full flex-1 resize-none border-0 bg-transparent px-3 py-[9px] text-ui leading-5 [@media(max-width:600px)]:text-[16px] [@media(max-width:600px)]:leading-6 shadow-none outline-0 caret-(--fx) placeholder:text-muted-foreground disabled:cursor-not-allowed",
         className,
       )}
       {...props}

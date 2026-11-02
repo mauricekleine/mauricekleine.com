@@ -3057,9 +3057,9 @@
       "name": "Text Field",
       "kind": "input",
       "refersTo": "input",
-      "description": "a 40 px box with the field edge; on focus the edge becomes 2 px inside the box and the caret takes the same plum.",
+      "description": "a 40 px box with the field edge, 44 px with its text at 16 px at 600 px and below, so iOS Safari never zooms in on focus; on focus the edge becomes 2 px inside the box and the caret takes the same plum.",
       "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"search runs\" aria-label=\"search runs\">",
-      "css": ".ds-input { height: 40px; width: 280px; padding: 0 12px; border: 1px solid var(--input); border-radius: var(--radius); background: var(--background); color: var(--foreground); caret-color: var(--primary); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); } .ds-input::placeholder { color: var(--muted-foreground); } .ds-input:focus { border-color: var(--primary); outline: 2px solid var(--primary); outline-offset: -2px; } .ds-input[aria-invalid=\"true\"] { border-color: var(--error); caret-color: var(--error); } .ds-input[aria-invalid=\"true\"]:focus { outline-color: var(--error); }"
+      "css": ".ds-input { height: 40px; width: 280px; padding: 0 12px; border: 1px solid var(--input); border-radius: var(--radius); background: var(--background); color: var(--foreground); caret-color: var(--primary); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); } .ds-input::placeholder { color: var(--muted-foreground); } .ds-input:focus { border-color: var(--primary); outline: 2px solid var(--primary); outline-offset: -2px; } .ds-input[aria-invalid=\"true\"] { border-color: var(--error); caret-color: var(--error); } .ds-input[aria-invalid=\"true\"]:focus { outline-color: var(--error); } @media (max-width: 600px) { .ds-input { height: 44px; font-size: 16px; } }"
     },
     {
       "name": "Status Badges",

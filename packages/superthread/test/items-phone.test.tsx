@@ -7,7 +7,7 @@ import { FilterChip } from "@/components/superthread/blocks/collection-toolbar";
 import { SortableHead } from "@/components/superthread/blocks/data-table";
 import { ListRow, ListRows, ListRowTitle } from "@/components/superthread/blocks/list-rows";
 import { PageHeaderBack } from "@/components/superthread/blocks/page-header";
-import { QuickAddNav } from "@/components/superthread/blocks/quick-add";
+import { QuickAdd, QuickAddNav } from "@/components/superthread/blocks/quick-add";
 import { SearchPalette, SearchPaletteTrigger } from "@/components/superthread/blocks/search-palette";
 import { SectionAction } from "@/components/superthread/blocks/section-header";
 import { Badge } from "@/components/superthread/ui/badge";
@@ -15,10 +15,12 @@ import { BreadcrumbLink } from "@/components/superthread/ui/breadcrumb";
 import { Button } from "@/components/superthread/ui/button";
 import { ButtonGroup } from "@/components/superthread/ui/button-group";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
+import { Combobox, ComboboxChips, ComboboxChipsInput, ComboboxInput } from "@/components/superthread/ui/combobox";
+import { Command, CommandInput } from "@/components/superthread/ui/command";
 import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { FleetRail } from "@/components/superthread/ui/fleet-rail";
 import { Input } from "@/components/superthread/ui/input";
-import { InputGroup } from "@/components/superthread/ui/input-group";
+import { InputGroup, InputGroupInput, InputGroupTextarea } from "@/components/superthread/ui/input-group";
 import { NativeSelect } from "@/components/superthread/ui/native-select";
 import { RadioGroup, RadioGroupItem } from "@/components/superthread/ui/radio-group";
 import { Select, SelectTrigger, SelectValue } from "@/components/superthread/ui/select";
@@ -34,6 +36,7 @@ import { Slider } from "@/components/superthread/ui/slider";
 import { Switch } from "@/components/superthread/ui/switch";
 import { Table, TableHeader, TableRow } from "@/components/superthread/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/superthread/ui/tabs";
+import { Textarea } from "@/components/superthread/ui/textarea";
 import { Toggle } from "@/components/superthread/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/superthread/ui/toggle-group";
 import { one, server } from "./rendered.tsx";
@@ -115,6 +118,91 @@ describe("a field's box is 44 px", () => {
       '[data-slot="button-group"]',
       `${PHONE}has-[>input,>[data-slot=input-group],>[data-slot=select-trigger]]:*:h-11`,
     );
+  });
+});
+
+// iOS Safari zooms the page in on a focused text control set under 16 px, and the page stays zoomed after it.
+describe("a field's text is 16 px, so a phone never zooms in on focus", () => {
+  test.each<[string, ReactNode, string]>([
+    ["input", <Input aria-label="name" />, "input"],
+    ["sidebar input", <SidebarInput aria-label="find" />, "input"],
+    ["textarea", <Textarea aria-label="notes" />, "textarea"],
+    ["textarea's code kind", <Textarea kind="code" aria-label="key" />, "textarea"],
+    [
+      "input group input",
+      <InputGroup>
+        <InputGroupInput aria-label="find" />
+      </InputGroup>,
+      "input",
+    ],
+    [
+      "input group textarea",
+      <InputGroup>
+        <InputGroupTextarea aria-label="note" />
+      </InputGroup>,
+      "textarea",
+    ],
+    ["native select", <NativeSelect aria-label="ship" />, "select"],
+    ["quiet native select", <NativeSelect variant="quiet" aria-label="scope" />, "select"],
+    [
+      "select",
+      <Select>
+        <SelectTrigger>
+          <SelectValue />
+        </SelectTrigger>
+      </Select>,
+      '[data-slot="select-trigger"]',
+    ],
+    [
+      "combobox",
+      <Combobox items={["orbit"]}>
+        <ComboboxInput aria-label="ship" />
+      </Combobox>,
+      'input[role="combobox"]',
+    ],
+    [
+      "combobox chips",
+      <Combobox items={["orbit"]} multiple>
+        <ComboboxChips>
+          <ComboboxChipsInput aria-label="ships" />
+        </ComboboxChips>
+      </Combobox>,
+      '[data-slot="combobox-chip-input"]',
+    ],
+    [
+      "command",
+      <Command>
+        <CommandInput aria-label="search" />
+      </Command>,
+      '[data-slot="command-input"]',
+    ],
+    ["quick add", <QuickAdd label="add a task" onAdd={() => {}} />, "input"],
+  ])("%s", (_, node, selector) => reaches(node, selector, `${PHONE}text-[16px]`));
+
+  test.each<[string, ReactNode]>([
+    ["a textarea", <Textarea aria-label="notes" />],
+    [
+      "an input group's textarea",
+      <InputGroup>
+        <InputGroupTextarea aria-label="note" />
+      </InputGroup>,
+    ],
+  ])("%s sets 16 on 24 and still opens three lines tall", (_, node) => {
+    const { classes } = one(server(node), "textarea");
+    expect(classes).toContain(`${PHONE}leading-6`);
+    // three of whatever line it sets, plus its padding and edge
+    expect(classes.filter((cls) => cls.startsWith("min-h-"))).toEqual([
+      expect.stringMatching(/^min-h-\[calc\(3lh\+\d+px\)\]$/),
+    ]);
+  });
+
+  test("the code kind sets 16 on 24 and still opens five lines tall", () => {
+    const { classes } = one(server(<Textarea kind="code" aria-label="key" />), "textarea");
+    expect(classes).toEqual(expect.arrayContaining([`${PHONE}leading-6`, "text-instrument", "font-mono"]));
+    // five of whatever line it sets, plus its padding and edge, so a phone's 24 px line keeps all five
+    expect(classes.filter((cls) => cls.startsWith("min-h-"))).toEqual([
+      expect.stringMatching(/^min-h-\[calc\(5lh\+\d+px\)\]$/),
+    ]);
   });
 });
 

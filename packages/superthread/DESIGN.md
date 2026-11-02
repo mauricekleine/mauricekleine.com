@@ -451,7 +451,7 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking, weigh
 
 - **Meta** (Fragment Mono 400, 11/14 px, 0.14em, caps): legends and the group labels inside a select, menu or command list. A label anywhere else sets at the instrument step, so a page prints no stack of caps labels.
 - **Instrument** (Supreme 400, 13/20 px): notes, captions, badges, small controls, fact labels, toolbar group labels, table heads and a quiet section head.
-- **UI** (Supreme 400, 14/21 px): the interface's body; the base layer sets `body` to 14 px at 1.5.
+- **UI** (Supreme 400, 14/21 px): the interface's body; the base layer sets `body` to 14 px at 1.5. A field's text sets 16 px at 600 px and below (see Fields).
 - **Summary** (Supreme 400, 15/24 px): the text under a form section's title and a page head's meta line.
 - **Subtitle** (Supreme 500, 18/24 px): dialog titles, and a quiet section head.
 - **Read** (Erode 400, 19/32 px; phone 18/30): the reading page, on a 27.5em measure (about 66 characters).
@@ -582,10 +582,11 @@ Square, one chromatic ink, quick to answer.
 ### Fields
 
 - **Style:** input, textarea and the select trigger are 40 px boxes, 44 px at 600 px and below (the textarea grows from three lines) with a 1 px `input` edge on the stock, 12 px sides, Supreme at 14 px. The input group is one box holding a text control with addons and buttons beside it; its controls carry no box of their own.
+- **Text on a phone:** at 600 px and below every control that takes text sets at 16 px: the input, the textarea and its code kind, the select trigger, the native select in both forms, the input group's input and textarea, the combobox's input and chips input, and the command input. iOS Safari zooms the page in on a focused text control under 16 px and leaves it zoomed, so 16 px keeps the page at its own scale. A textarea sets 16 on 24 there and still opens three lines tall, and the code kind five. Addons, labels and options keep their own steps, and a hand-built field takes 16 px too.
 - **One row, one height:** controls side by side share a height, so a button or toggle beside a field stays at the 40 px default. `sm` is for a control inside a field and for a row of nothing but `sm` controls. At 600 px and below a `sm` field is 44 px too, and a joined `ButtonGroup` holding a field takes 44 px across every child.
 - **Focus:** the box's edge becomes 2 px inside it in `--fx`, and the caret follows (see Shapes).
 - **Error / Disabled:** `aria-invalid` turns the edge and `--fx` to the error ink, and the error message leads with the bang glyph. Disabled prints a faint fill, the disabled label and the edge screened back to 50 percent; a disabled button inside an input group screens itself, never the box.
-- **Code:** `kind="code"` on a textarea is the form for json and keys: Fragment Mono at the instrument step, five lines tall. A long line wraps anywhere, so nothing scrolls sideways, and spellcheck, autocorrect, autocapitalize and autocomplete stay off, so a key stays what was typed.
+- **Code:** `kind="code"` on a textarea is the form for json and keys: Fragment Mono at the instrument step, and at 16 on 24 on a phone like every field, five lines tall at either size. A long line wraps anywhere, so nothing scrolls sideways, and spellcheck, autocorrect, autocapitalize and autocomplete stay off, so a key stays what was typed.
 
 ### Select
 

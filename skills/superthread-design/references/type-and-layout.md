@@ -36,6 +36,8 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 
 The reading page sets Erode at 19 px on 32 px with a 27.5em measure (about 66 characters) on a 672 px sheet.
 
+At 600 px and below every control that takes text (input, textarea and its code kind, select trigger, native select, the input group's and the combobox's inputs, the command input) sets 16 px, and a textarea 16 on 24, so iOS Safari never zooms the page in on focus. A hand-built field does the same.
+
 The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or an `li` reads with its words; `ListRowAside` prints in mono, so a time there holds its column, and `ListRowWhen` holds a plain row's column in mono until a phone folds it under the title.
 
 Links print in foreground, 4 px above their underline. A link in running text keeps a 1 px underline at rest, and inside `AppShellPanel` the base layer prints any anchor no item owns that way. A chrome link with no box, such as a row title or a door, underlines on hover. A nav item has a box, so it hovers with its fill. `link-quiet` is the one second form: a muted word that turns foreground on hover.
@@ -50,7 +52,7 @@ Links print in foreground, 4 px above their underline. A link in running text ke
 - `AppShellPanel` is a size container, and text in it wraps anywhere, except inside a table's cells.
 - A table that is a panel's main content takes `fold`: it reaches the panel's edges, and below 776 px of its own width each row folds into two lines, with no sideways scroll.
 - A row that opens a detail sits in `TableDetail` on `data-table`: `TableDetailTrigger` is the row's name as a button that covers the row with a chevron at its end, and `TableDetailRow` opens underneath, lined up with the title. `TableSubRow` hangs a sub-entry off the row above, with a connector in the `rule` ink. Both take the same rows in a plain table and in the fold, and controls in a covered row stay their own targets.
-- Json and keys go in `kind="code"` on `textarea`: mono at the instrument step, wrapped anywhere, with spellcheck and autocorrect off. Never `font-mono` on a plain field.
+- Json and keys go in `kind="code"` on `textarea`: mono at the instrument step, 16 on 24 on a phone like every field and five lines tall at either size, wrapped anywhere, with spellcheck and autocorrect off. Never `font-mono` on a plain field.
 - A grid of things a person holds, such as sources, takes `tiles` on `item-cards`: ruled cells that reach the panel's edges under one rule in foreground, four columns from 832 px of list, three from 624 px and two below. One tile may print on paper, and it comes first.
 - A nav's quiet second tier goes in `AppShellNavTier`, under a rule in muted words. `overflow` on `AppShellNav` puts that tier behind a `...` at 600 px and below.
 - At 900 px and below the fleet rail becomes a 48 px bar above the panel, with 12 px of ground on each side of it. The frame scrolls with the page, and no ship re-sticks it. At 600 px and below the phone type steps apply.

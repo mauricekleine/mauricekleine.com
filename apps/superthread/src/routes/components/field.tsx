@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { FieldExample, FieldOrientations, FieldParts, FieldStates } from "@/examples/field";
+import { FieldExample, FieldOrientations, FieldParts, FieldsOnPhone, FieldStates } from "@/examples/field";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -11,6 +11,7 @@ export const Route = createFileRoute("/components/field")({
       { id: "orientations", title: "orientations" },
       { id: "parts", title: "parts" },
       { id: "states", title: "states" },
+      { id: "phone", title: "phone" },
     ],
   },
   component: Page,
@@ -59,6 +60,14 @@ function Page() {
         <ModePair className="st-e-wide">
           <FieldStates />
         </ModePair>
+      </Section>
+      <Section id="phone" title="phone">
+        <p className="st-e-copy">
+          at 600 px and below every control that takes text sets 16 px, so ios safari never zooms the page in on focus.
+          a textarea sets 16 on 24 and still opens three lines tall. labels and descriptions keep their steps. these
+          frames have a 390 px viewport.
+        </p>
+        <ModePair light={<FieldsOnPhone mode="light" />} dark={<FieldsOnPhone mode="dark" />} />
       </Section>
     </>
   );
