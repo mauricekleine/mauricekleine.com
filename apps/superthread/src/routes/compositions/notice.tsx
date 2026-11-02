@@ -47,12 +47,17 @@ function ActionNotice() {
   );
 }
 
-// The line is there from the first paint and empty, so the words arrive without moving the button under it.
+const newerLine = "a newer version is waiting. it won't replace this one.";
+
+// The line is there from the first paint and reserves its words, so they arrive without moving the button under it,
+// even where they wrap.
 function QuietLine() {
   const [newer, setNewer] = useState(true);
   return (
     <div className="st-ca-stack">
-      <Notice variant="quiet">{newer && "a newer version is waiting. it won't replace this one."}</Notice>
+      <Notice variant="quiet" reserve={newerLine}>
+        {newer && newerLine}
+      </Notice>
       <Button variant="outline" size="sm" onClick={() => setNewer(!newer)}>
         {newer ? "clear the line" : "print the line"}
       </Button>
@@ -112,8 +117,9 @@ function Page() {
       <Section id="quiet" title="the quiet line">
         <p className="st-ca-copy">
           one muted line: no box, no glyph and no state, for a fact that asks for nothing, such as a newer version
-          waiting. it takes its line while it&rsquo;s empty, so the button below stays put, and it wraps on a phone
-          rather than clip. it&rsquo;s always a status, so a screen reader hears it without being interrupted.
+          waiting. it takes its line while it&rsquo;s empty, and it wraps on a phone rather than clip, so it takes the
+          longest words it can print as <code>reserve</code> and holds their height, and the button below stays put.
+          it&rsquo;s always a status, so a screen reader hears it without being interrupted.
         </p>
         <ModePair className="st-ca-wide-pair">
           <QuietLine />
@@ -148,7 +154,7 @@ function Page() {
           <dd>
             sets the glyph and announcement role from <code>state</code>, or prints one line with{" "}
             <code>variant=&quot;quiet&quot;</code>. the quiet line takes its words as children, with none of the parts
-            below.
+            below, and <code>reserve</code> takes the longest words it can print.
           </dd>
           <dt>
             <code>NoticeTitle</code>

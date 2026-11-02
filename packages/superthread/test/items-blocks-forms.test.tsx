@@ -420,6 +420,37 @@ describe("notice", () => {
     expect(line.classes).toContain("min-h-lh");
   });
 
+  test("an empty quiet line holds the height of the words it reserves, unread and in the live words' cell", () => {
+    const words = "a newer version is waiting.";
+    const rendered = server(<Notice variant="quiet" reserve={words} />);
+    const line = one(rendered, '[role="status"]');
+    const [held, live] = [...line.el.children];
+    expect(held?.textContent).toBe(words);
+    expect(held?.getAttribute("aria-hidden")).toBe("true");
+    expect(held?.classList.contains("invisible")).toBe(true);
+    expect(live?.textContent).toBe("");
+    expect(live?.hasAttribute("aria-hidden")).toBe(false);
+    // two rows would print the reserve above the words, at twice the height
+    for (const cell of [held, live]) {
+      expect(cell?.classList.contains("col-start-1")).toBe(true);
+      expect(cell?.classList.contains("row-start-1")).toBe(true);
+    }
+    expect(line.classes).toContain("grid");
+  });
+
+  test("a quiet line prints its words once when it reserves them", () => {
+    const words = "a newer version is waiting.";
+    const rendered = server(
+      <Notice variant="quiet" reserve={words}>
+        {words}
+      </Notice>,
+    );
+    const seen = [...one(rendered, '[role="status"]').el.children].filter(
+      (cell) => !cell.classList.contains("invisible"),
+    );
+    expect(seen.map((cell) => cell.textContent)).toEqual([words]);
+  });
+
   test("a long quiet line wraps rather than clipping on a phone", () => {
     const { classes } = one(server(<Notice variant="quiet">words</Notice>), '[role="status"]');
     expect(classes).toContain("[overflow-wrap:anywhere]");
