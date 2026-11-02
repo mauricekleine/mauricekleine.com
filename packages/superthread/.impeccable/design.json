@@ -2934,7 +2934,7 @@
       {
         "name": "dark-shadow-slip",
         "value": "6px 4px 6px -2px oklch(0 0 0 / 0.85), 1px .7px 1px oklch(0 0 0 / 0.4), inset 0 0 0 1px var(--raised-edge)",
-        "purpose": "the lowest lift, for paper on a light page. dark: the rake and contact in black, and the 1 px raised edge"
+        "purpose": "the lowest lift. dark: the rake and contact in black, and the 1 px raised edge"
       },
       {
         "name": "shadow-slip-rake",
@@ -3254,7 +3254,7 @@
       },
       {
         "name": "The Enter Rule",
-        "body": "Enter never sends. A button that sends takes `ignoreEnter`, so a key held from the last field can't fire it, and Space is its keyboard path. A handoff is a link, and a link keeps Enter.",
+        "body": "Enter never sends. A button that sends takes `ignoreEnter` and stays `type=\"button\"`, so a key held from the last field can't fire it, and Space is its keyboard path. A handoff is a link, and a link keeps Enter.",
         "section": "components"
       },
       {
