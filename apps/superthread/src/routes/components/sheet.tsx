@@ -41,8 +41,9 @@ function Page() {
         <p className="st-pass-prose">
           base-nova&rsquo;s sheet, built on base ui&rsquo;s dialog. superthread changes its imports and draws the close
           button with the close glyph, labelled in lowercase. a few classes change too. the sheet sits on the sheet lift
-          over the scrim, with no blur, as the dialog does. its title takes the display face, and only its opacity and
-          position animate.
+          over the scrim, with no blur, and names its fill as <code>--surface</code>, so a field separator&rsquo;s words
+          on it print no box, as the dialog does. its title takes the display face, and only its opacity and position
+          animate.
         </p>
         <p className="st-pass-prose">
           the sheet renders at the end of the page, so it takes the page&rsquo;s mode. to give it another, pass the mode

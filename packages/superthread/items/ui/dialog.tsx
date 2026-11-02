@@ -56,7 +56,7 @@ function DialogContent({
         data-slot="dialog-content"
         data-mk="dialog"
         className={cn(
-          "fixed top-[round(50%,1px)] left-[round(50%,1px)] z-50 grid w-full max-w-[calc(100%-2rem)] [translate:round(-50%,1px)_round(-50%,1px)] gap-6 border bg-popover px-7 pt-7 pb-6 text-ui text-popover-foreground shadow-sheet texture-contact [--contact-lift:var(--elevation-sheet-rake)] transition-none duration-(--duration-quick) ease-(--ease-brand) sm:max-w-[440px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+          "fixed top-[round(50%,1px)] left-[round(50%,1px)] z-50 grid w-full max-w-[calc(100%-2rem)] [translate:round(-50%,1px)_round(-50%,1px)] gap-6 border bg-popover [--surface:var(--popover)] px-7 pt-7 pb-6 text-ui text-popover-foreground shadow-sheet texture-contact [--contact-lift:var(--elevation-sheet-rake)] transition-none duration-(--duration-quick) ease-(--ease-brand) sm:max-w-[440px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
           className,
         )}
         {...props}

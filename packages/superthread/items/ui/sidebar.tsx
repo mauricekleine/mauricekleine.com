@@ -22,11 +22,12 @@ const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
 // The sidebar prints on the deep ground, and what sits on the ground takes the dark palette in both modes, as the
 // world's gutter does: status glyphs, badges, buttons, skeletons and rules. The ground keeps the mode it is in. The
-// element that paints it holds that mode's ground roles (GROUND), and the dark scope inside it (ON_GROUND) pins them
-// back, important so they outrank the token block's .dark. The same pin holds the current item to the words beside
-// it and turns focus neutral: the ship's nav prints no plum.
+// element that paints it holds that mode's ground roles (GROUND) and names the ground as the surface, so a part that
+// knocks a line out on it prints no box, and the dark scope inside it (ON_GROUND) pins them back, important so they
+// outrank the token block's .dark. The same pin holds the current item to the words beside it and turns focus
+// neutral: the ship's nav prints no plum.
 const GROUND =
-  "[--sidebar-ground:var(--sidebar)] [--sidebar-ground-foreground:var(--sidebar-foreground)] [--sidebar-ground-hover:var(--sidebar-hover)]";
+  "[--sidebar-ground:var(--sidebar)] [--sidebar-ground-foreground:var(--sidebar-foreground)] [--sidebar-ground-hover:var(--sidebar-hover)] [--surface:var(--sidebar)]";
 const ON_GROUND =
   "dark [--sidebar:var(--sidebar-ground)]! [--sidebar-foreground:var(--sidebar-ground-foreground)]! [--sidebar-hover:var(--sidebar-ground-hover)]! [--selected:var(--sidebar-foreground)]! [--ring:var(--sidebar-foreground)]!";
 

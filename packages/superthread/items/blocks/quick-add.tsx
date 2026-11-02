@@ -134,9 +134,10 @@ type QuickAddNavProps = Omit<React.ComponentProps<"form">, "onSubmit" | "childre
 // The quiet add in a ship's nav: a muted word above the nav's foot that opens a one-line field over itself. Enter adds,
 // clears and stays open for the next one; Escape or a click away closes and keeps the draft. Escape hands focus back to
 // where it was when the key opened the field, or else to the trigger, so it never drops to the page's body. A native
-// popover carries it, so it clears the frame's scroll and stays in the frame's dark scope. Below 900 px it sits 12 px
-// from each edge with a button, and on a phone the trigger is the glyph alone in a 44 px target. Its key opens it away
-// from typing, through the helper search-palette shares.
+// popover carries it, so it clears the frame's scroll and stays in the frame's dark scope, and it names the popover's
+// fill as the surface, not the ground's. Below 900 px it sits 12 px from each edge with a button, and on a phone the
+// trigger is the glyph alone in a 44 px target. Its key opens it away from typing, through the helper search-palette
+// shares.
 function QuickAddNav({
   className,
   id: formId,
@@ -212,7 +213,7 @@ function QuickAddNav({
         aria-label={props["aria-label"] ?? label}
         aria-busy={busy}
         className={cn(
-          "fixed inset-auto bottom-[anchor(bottom)] left-[anchor(left)] m-0 w-[anchor-size(width)] flex-wrap overflow-visible border-0 bg-popover p-0 text-popover-foreground shadow-leaf [position-anchor:var(--quick-add-anchor)] open:flex [@media(max-width:900px)]:top-[anchor(top)] [@media(max-width:900px)]:right-3 [@media(max-width:900px)]:bottom-auto [@media(max-width:900px)]:left-3 [@media(max-width:900px)]:w-auto",
+          "fixed inset-auto bottom-[anchor(bottom)] left-[anchor(left)] m-0 w-[anchor-size(width)] flex-wrap overflow-visible border-0 bg-popover [--surface:var(--popover)] p-0 text-popover-foreground shadow-leaf [position-anchor:var(--quick-add-anchor)] open:flex [@media(max-width:900px)]:top-[anchor(top)] [@media(max-width:900px)]:right-3 [@media(max-width:900px)]:bottom-auto [@media(max-width:900px)]:left-3 [@media(max-width:900px)]:w-auto",
           className,
         )}
         onSubmit={submit}

@@ -11,6 +11,7 @@ import {
   AppShellPanel,
   AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
+import { QuickAddNav } from "@/components/superthread/blocks/quick-add";
 import {
   Section,
   SectionAction,
@@ -64,6 +65,26 @@ describe("app shell", () => {
   test("the panel names its card fill as the surface, so a part that knocks a line out prints no box of the stock", () => {
     const panel = one(frame(), '[data-slot="app-shell-panel"]');
     expect(panel.classes).toEqual(expect.arrayContaining(["bg-card", "[--surface:var(--card)]"]));
+  });
+
+  test("a popover the nav opens names its own fill as the surface, not the ground's, wherever it paints it", () => {
+    const host = server(
+      <SidebarProvider>
+        <AppShellNav ship="orbit" overflow="runs and logs">
+          <AppShellNavTier>
+            <AppShellNavItem render={<a href="/runs" />}>runs</AppShellNavItem>
+          </AppShellNavTier>
+          <QuickAddNav label="add a task" onAdd={() => {}} />
+        </AppShellNav>
+      </SidebarProvider>,
+    );
+    // each popover fill, under whatever variant paints it, beside the surface that variant names
+    const popovers = [...host.querySelectorAll("[popover]")].map((el) =>
+      classesOf(el)
+        .filter((cls) => cls.endsWith("bg-popover"))
+        .map((fill) => [fill, classesOf(el).includes(fill.replace("bg-popover", "[--surface:var(--popover)]"))]),
+    );
+    expect(popovers).toEqual([[["open:bg-popover", true]], [["bg-popover", true]]]);
   });
 
   test("the panel renders as the app's own element, keeping its slot and its look", () => {

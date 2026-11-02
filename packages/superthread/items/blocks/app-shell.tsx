@@ -103,9 +103,9 @@ function AppShellNav({
 // ink. Below 900 px the rule yields and its items join the row. Under a nav with overflow, one list carries both forms:
 // at 600 px and below it is a native popover the `...` opens, so its links stay the app's own and it keeps the frame's
 // dark scope, and a choice in it closes it, since a client-side route keeps the page. While it's closed there its list
-// item goes too, so a screen reader counts no empty item in the row. An open list prints its words in
-// the popover's ink, a 44 px row each. A window that grows past 600 px while it is open closes it, since the `...` it
-// hangs from yields there, and its links go back to the row.
+// item goes too, so a screen reader counts no empty item in the row. An open list prints its words in the popover's
+// ink, a 44 px row each, and names the popover's fill as the surface, not the ground's. A window that grows past 600 px
+// while it is open closes it, since the `...` it hangs from yields there, and its links go back to the row.
 function AppShellNavTier({ className, onClick, onToggle, ...props }: ComponentProps<"ul">) {
   const listId = useContext(NavOverflow);
   return (
@@ -138,7 +138,7 @@ function AppShellNavTier({ className, onClick, onToggle, ...props }: ComponentPr
         className={cn(
           "flex min-w-0 flex-col gap-1 [@media(max-width:900px)]:contents",
           listId &&
-            "static m-0 size-auto overflow-visible border-0 bg-transparent p-0 text-inherit open:fixed open:inset-auto open:top-[anchor(bottom)] open:right-[anchor(right)] open:mt-1.5 open:flex open:w-max open:min-w-44 open:border open:border-border open:bg-popover open:p-1 open:text-popover-foreground open:shadow-leaf open:[position-anchor:var(--nav-more)] open:[&_[data-slot=sidebar-menu-button]]:h-11 open:[&_[data-slot=sidebar-menu-button]]:w-full open:[&_[data-slot=sidebar-menu-button]]:text-popover-foreground [@media(max-width:600px)]:not-open:hidden",
+            "static m-0 size-auto overflow-visible border-0 bg-transparent p-0 text-inherit open:fixed open:inset-auto open:top-[anchor(bottom)] open:right-[anchor(right)] open:mt-1.5 open:flex open:w-max open:min-w-44 open:border open:border-border open:bg-popover open:[--surface:var(--popover)] open:p-1 open:text-popover-foreground open:shadow-leaf open:[position-anchor:var(--nav-more)] open:[&_[data-slot=sidebar-menu-button]]:h-11 open:[&_[data-slot=sidebar-menu-button]]:w-full open:[&_[data-slot=sidebar-menu-button]]:text-popover-foreground [@media(max-width:600px)]:not-open:hidden",
           className,
         )}
         {...props}

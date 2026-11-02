@@ -73,6 +73,21 @@
     padding-top: 64px;
     min-height: 128px;
   }
+  /* a field on a layer: each frame plays the window and holds its open layer, a containing block for fixed boxes */
+  .st-e-layers {
+    display: grid;
+    gap: 16px;
+  }
+  .st-e-screen {
+    position: relative;
+    height: 360px;
+    border: 1px solid var(--rule);
+    background: var(--background);
+    contain: layout paint;
+  }
+  .st-e-sheet-fields {
+    padding-inline: 16px;
+  }
   @media (max-width: 600px) {
     .st-e-stack {
       gap: 16px;
