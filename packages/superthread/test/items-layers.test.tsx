@@ -276,7 +276,19 @@ describe("the layers rendered", () => {
     expect(classesOf(frame)).toContain(SELECTED);
     expect(classesOf(nav)).toEqual(expect.arrayContaining([SELECTED, NEUTRAL_FOCUS]));
     expect(classesOf(frame)).not.toContain(NEUTRAL_FOCUS);
-    expect(classesOf(dom.querySelector('[data-mk="fleet-rail"]')!)).toContain("[--ring:var(--sidebar-ring)]");
+  });
+
+  // A hand-built sheet beside the frame sits inside the provider, so a ring set there would reach it and print pale.
+  test("the rail's pale ring stops at the frame, so paper beside it keeps the house ink", () => {
+    const dom = server(
+      <FleetRail current="orbit">
+        <div data-testid="paper">hand-built paper</div>
+      </FleetRail>,
+    );
+    const RING = /^\[--ring:/;
+    expect(classesOf(dom.querySelector('[data-mk="fleet-rail"]')!).filter((cls) => RING.test(cls))).toEqual([]);
+    expect(classesOf(dom.querySelector('[data-slot="fleet-rail-frame"]')!)).toContain("[--ring:var(--sidebar-ring)]!");
+    expect(classesOf(dom.querySelector('[data-slot="fleet-rail-skip"]')!)).toContain("[--ring:var(--sidebar-ring)]");
   });
 
   test("a current nav item prints the selected role: the word, its edge and its square, with no fill", () => {
