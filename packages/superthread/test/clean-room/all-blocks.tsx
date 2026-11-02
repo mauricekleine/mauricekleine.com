@@ -288,7 +288,7 @@ function Sink({ mode }: { mode: Mode }) {
             </ItemCardActions>
           </ItemCard>
         </ItemCards>
-        <ItemCards aria-label="decided drafts">
+        <ItemCards aria-label="decided drafts" last>
           <ItemCard variant="decided">
             <ItemCardTitle href="#draft">reply to sam</ItemCardTitle>
             <ItemCardMeta>sent</ItemCardMeta>
@@ -384,7 +384,7 @@ function Sink({ mode }: { mode: Mode }) {
         </Facts>
       </Part>
       <Part name="letter">
-        <Letter aria-label="the draft, as it goes out">
+        <Letter aria-label="the draft, as it goes out" last>
           <LetterHead>
             <LetterSubject>re: chapter 7 notes</LetterSubject>
             <LetterKind>reply · mail</LetterKind>

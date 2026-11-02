@@ -536,6 +536,23 @@ describe("item cards", () => {
       expect(actions.classes).toContain("group-has-[[data-slot=item-card-link]]/item-card:mr-7");
     });
 
+    test("an unlinked title claims no link, so its card neither lifts nor saves the arrow's room", () => {
+      const host = server(
+        <ItemCards>
+          <ItemCard variant="full">
+            <ItemCardTitle>a plain card</ItemCardTitle>
+            <ItemCardActions>
+              <Button variant="outline" size="sm">
+                reject
+              </Button>
+            </ItemCardActions>
+          </ItemCard>
+        </ItemCards>,
+      );
+      expect(host.querySelector('[data-slot="item-card-link"]')).toBeNull();
+      expect(host.querySelector('[data-slot="item-card-arrow"]')).toBeNull();
+    });
+
     test("a clock prints in foreground and an age stays muted", () => {
       const [clock, age] = [...full().querySelectorAll('[data-slot="item-card-when"]')];
       expect(clock!.classList.contains("text-foreground")).toBe(true);
@@ -550,6 +567,34 @@ describe("item cards", () => {
       expect(pieces).toHaveLength(3);
       expect(pieces[0]!.classList.contains("first:text-foreground")).toBe(true);
       expect(pieces[2]!.querySelector('[aria-hidden="true"]')).toBeNull();
+    });
+
+    test("text that runs together in its meta is one piece, however JSX split it", () => {
+      const name = "dana";
+      const pieces = (meta: React.ReactNode) => {
+        const host = server(
+          <ItemCards>
+            <ItemCard variant="full">
+              <ItemCardMeta>{meta}</ItemCardMeta>
+            </ItemCard>
+          </ItemCards>,
+        );
+        const list = one(host, '[data-slot="item-card-meta"]').el.firstElementChild!;
+        return [...list.children].map((piece) => piece.childNodes[0]!.textContent);
+      };
+      expect(pieces(["to ", name])).toEqual(["to dana"]);
+      expect(
+        pieces([
+          "to ",
+          name,
+          ", ",
+          2,
+          " more ",
+          <span key="re">re: notes</span>,
+          " ",
+          <span key="pdf">notes.pdf</span>,
+        ]),
+      ).toEqual(["to dana, 2 more", "re: notes", "notes.pdf"]);
     });
 
     test("keeps its lede in reading type, whole", () => {
@@ -585,7 +630,7 @@ describe("item cards", () => {
 
     test("collapses the same parts to one line: its title, its word and its date", () => {
       const host = decided();
-      expect(one(host, "li").classes).toEqual(expect.arrayContaining(["h-12", "border-b", "last:border-b-0"]));
+      expect(one(host, "li").classes).toEqual(expect.arrayContaining(["h-12", "border-b"]));
       expect(host.querySelector('[data-slot="item-card-lede"]')).toBeNull();
       expect(host.querySelector('[data-slot="item-card-actions"]')).toBeNull();
       expect(host.querySelector("button")).toBeNull();
@@ -600,15 +645,59 @@ describe("item cards", () => {
       expect(title.el.hasAttribute("role")).toBe(false);
     });
 
-    test("the whole row is one link, ringed inside so the panel's edge can't clip it", () => {
-      expect(one(decided(), "a").classes).toEqual(expect.arrayContaining(["absolute", "inset-0", ...insideRing]));
+    test("a phone folds the line into a 56 px row: the title, then the word and the date", () => {
+      expect(one(decided(), "li").classes).toEqual(
+        expect.arrayContaining([
+          "[@media(max-width:600px)]:h-14",
+          "[@media(max-width:600px)]:[grid-template-areas:'title_title'_'meta_when']",
+        ]),
+      );
     });
 
-    test("reaches the panel's edges, so its rules do", () => {
-      const prefix = "in-data-[slot=app-shell-panel]:";
+    test("the row itself is the link's box, and its padding keeps the ring off its words", () => {
       const host = decided();
-      expect(one(host, "ul").classes).toContain(`${prefix}has-[>[data-variant=decided]]:-mx-12`);
-      expect(one(host, "li").classes).toContain(`${prefix}px-12`);
+      const row = one(host, "li");
+      expect(one(host, "a").classes).toEqual(expect.arrayContaining(["absolute", "inset-0", ...insideRing]));
+      expect(row.classes).toEqual(expect.arrayContaining(["relative", "px-3"]));
+      expect(host.querySelector('[data-slot="card"]')).toBeNull();
+    });
+
+    test("a phone's dot prints only on a row with a date to join", () => {
+      const dot = one(decided(), '[data-slot="item-card-meta"] [aria-hidden="true"]');
+      expect(dot.classes).toEqual([
+        "hidden",
+        "[@media(max-width:600px)]:group-has-[[data-slot=item-card-when]]/item-card:inline",
+      ]);
+    });
+
+    test("a list of decided rows reaches the panel's edges, so its rules do", () => {
+      const host = decided();
+      expect(one(host, "ul").classes).toContain(
+        "[@media(min-width:601px)]:in-data-[slot=app-shell-panel]:not-has-[>[data-variant=full]]:has-[>[data-variant=decided]]:-mx-12",
+      );
+      expect(one(host, "li").classes).toContain(
+        "in-[[data-slot=app-shell-panel]_[data-slot=item-cards]:not(:has(>[data-variant=full]))]:px-12",
+      );
+    });
+
+    test("nothing in a list reaches the panel's foot until the page says nothing follows it", () => {
+      const foot = (classes: string[]) =>
+        classes.filter((cls) => parts(cls).utility === "mb-4" || cls.includes("border-b-0"));
+      for (const variant of ["full", "decided"] as const) {
+        const list = (last?: boolean) =>
+          server(
+            <ItemCards last={last}>
+              <ItemCard variant={variant}>
+                <ItemCardTitle>a draft</ItemCardTitle>
+              </ItemCard>
+            </ItemCards>,
+          );
+        expect(foot(elements(list()).flatMap(({ classes }) => classes))).toEqual([]);
+        expect(foot(one(list(true), "ul").classes)).toEqual([
+          "[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:has-[>[data-variant]]:-mb-4",
+          "[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:[&>[data-variant]:last-child]:border-b-0",
+        ]);
+      }
     });
 
     test("claims no detail or forbidden class", () => {

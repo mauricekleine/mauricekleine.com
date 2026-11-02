@@ -138,9 +138,12 @@ describe("letter", () => {
     expect(classes).toEqual(expect.arrayContaining(["border", "border-border"]));
   });
 
-  test("runs down to the panel's foot only as the panel's last block", () => {
-    const { classes } = one(whole(), '[data-slot="letter"]');
-    expect(classes).toEqual(expect.arrayContaining([`${IN_PANEL}last:-mb-4`, `${IN_PANEL}last:border-b-0`]));
+  test("runs down to the panel's foot only when the page says nothing follows it", () => {
+    const foot = [`${IN_PANEL}-mb-4`, `${IN_PANEL}border-b-0`];
+    const held = one(whole(), '[data-slot="letter"]').classes;
+    expect(held.filter((cls) => ["mb-4", "border-b-0"].includes(parts(cls).utility))).toEqual([]);
+    const last = one(server(<Letter last>the draft</Letter>), '[data-slot="letter"]').classes;
+    expect(last).toEqual(expect.arrayContaining(foot));
   });
 
   test("the subject is a heading that takes its level from the page", () => {

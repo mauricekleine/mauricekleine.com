@@ -11,15 +11,20 @@ type ItemCardVariant = "full" | "decided";
 const VariantContext = createContext<ItemCardVariant | undefined>(undefined);
 
 // Cards fill the available measure, keeping a single column when the space is narrower than one card. A full or decided
-// card turns the grid into one column. Inside the working panel a decided list reaches the panel's edges so its rules do,
-// and on a phone a full list does too; as the panel's last block either runs down to the panel's foot.
-function ItemCards({ className, ...props }: React.ComponentProps<"ul">) {
+// card turns the grid into one column. Inside the working panel a list of decided rows reaches the panel's edges so its
+// rules do, and on a phone a full list does too; a list that mixes the two forms keeps its measure, so a card changing
+// form never widens the others. last says nothing follows the list in the panel, wrappers included, so on a phone it
+// also runs down to the panel's foot and drops its closing rule; a page has to say so, because a selector can't see past
+// a wrapper or a tab's hidden panel.
+function ItemCards({ className, last, ...props }: React.ComponentProps<"ul"> & { last?: boolean }) {
   return (
     <ul
       data-mk="item-cards"
       data-slot="item-cards"
       className={cn(
-        "grid min-w-0 list-none grid-cols-[repeat(auto-fill,minmax(min(220px,100%),1fr))] gap-2 has-[>[data-variant]]:grid-cols-1 has-[>[data-variant]]:gap-0 in-data-[slot=app-shell-panel]:has-[>[data-variant=decided]]:-mx-12 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:has-[>[data-variant]]:-mx-4 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:has-[>[data-variant]]:last:-mb-4",
+        "grid min-w-0 list-none grid-cols-[repeat(auto-fill,minmax(min(220px,100%),1fr))] gap-2 has-[>[data-variant]]:grid-cols-1 has-[>[data-variant]]:gap-0 [@media(min-width:601px)]:in-data-[slot=app-shell-panel]:not-has-[>[data-variant=full]]:has-[>[data-variant=decided]]:-mx-12 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:has-[>[data-variant]]:-mx-4",
+        last &&
+          "[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:has-[>[data-variant]]:-mb-4 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:[&>[data-variant]:last-child]:border-b-0",
         className,
       )}
       {...props}
@@ -28,9 +33,9 @@ function ItemCards({ className, ...props }: React.ComponentProps<"ul">) {
 }
 
 const cardVariants: Record<ItemCardVariant, string> = {
-  full: "group/item-card relative grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 border border-border px-6 pt-5 pb-3.5 transition-[border-color] duration-(--duration-quick) ease-(--ease-brand) not-first:mt-3 [grid-template-areas:'title_when'_'lede_lede'_'meta_go'] has-[[data-slot=item-card-link]]:hover:border-input [@media(max-width:600px)]:p-4 [@media(max-width:600px)]:[grid-template-areas:'title_title'_'when_when'_'lede_lede'_'meta_go'] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-x-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-t-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:not-first:mt-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:last:border-b-0",
+  full: "group/item-card relative grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 border border-border px-6 pt-5 pb-3.5 transition-[border-color] duration-(--duration-quick) ease-(--ease-brand) not-first:mt-3 [grid-template-areas:'title_when'_'lede_lede'_'meta_go'] has-[[data-slot=item-card-link]]:hover:border-input [@media(max-width:600px)]:p-4 [@media(max-width:600px)]:[grid-template-areas:'title_title'_'when_when'_'lede_lede'_'meta_go'] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-x-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-t-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:not-first:mt-0",
   decided:
-    "group/item-card relative grid h-12 min-w-0 grid-cols-[minmax(0,1fr)_152px_88px] items-center gap-x-4 border-b border-border type-ui text-foreground last:border-b-0 [grid-template-areas:'title_meta_when'] in-data-[slot=app-shell-panel]:px-12 [@media(max-width:600px)]:h-14 [@media(max-width:600px)]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:content-center [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:[grid-template-areas:'title_title'_'meta_when'] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:px-4",
+    "group/item-card relative grid h-12 min-w-0 grid-cols-[minmax(0,1fr)_152px_88px] items-center gap-x-4 border-b border-border px-3 type-ui text-foreground [grid-template-areas:'title_meta_when'] in-[[data-slot=app-shell-panel]_[data-slot=item-cards]:not(:has(>[data-variant=full]))]:px-12 [@media(max-width:600px)]:h-14 [@media(max-width:600px)]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:content-center [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:[grid-template-areas:'title_title'_'meta_when'] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:px-4",
 };
 
 // The list keeps its semantics and the small card keeps its own surface, which also bounds the title's link. A full or
@@ -96,7 +101,8 @@ const titleVariants: Record<ItemCardVariant, string> = {
   decided: "min-w-0 truncate [grid-area:title]",
 };
 
-// A small card's ring sits inside the link, as a decided row's does, because that row reaches the panel's edges.
+// A small card's ring sits inside the link, as a decided row's does, because that row reaches the panel's edges. The
+// row's own padding keeps the ring off its words.
 const linkInside =
   "absolute inset-0 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)";
 
@@ -121,7 +127,7 @@ function ItemCardTitle({
   const title = useRender({
     defaultTagName: "span",
     render: render ?? (href !== undefined ? <a /> : undefined),
-    state: { slot: "item-card-link" },
+    state: linked ? { slot: "item-card-link" } : undefined,
     props: mergeProps<"a">(
       {
         href,
@@ -199,11 +205,24 @@ function ItemCardLede({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
-// A full card's foot writes only its pieces: the first prints in foreground, the rest stay muted, and the dot between them
-// is decoration a screen reader skips. It stays with the piece before it, so it ends a wrapped line rather than starting
-// the next. On a phone each piece takes its own line.
+// JSX hands `to {name}` over as two strings, so text that runs together joins into one piece, and the blank text between
+// two elements is no piece at all.
+function metaPieces(children: ReactNode) {
+  const pieces: ReactNode[] = [];
+  for (const child of Children.toArray(children)) {
+    const text = typeof child === "string" || typeof child === "number";
+    const before = pieces.at(-1);
+    if (text && typeof before === "string") pieces[pieces.length - 1] = `${before}${child}`;
+    else pieces.push(text ? String(child) : child);
+  }
+  return pieces.map((piece) => (typeof piece === "string" ? piece.trim() : piece)).filter((piece) => piece !== "");
+}
+
+// A full card's foot writes only its pieces, one to an element or a run of text: the first prints in foreground, the rest
+// stay muted, and the dot between them is decoration a screen reader skips. It stays with the piece before it, so it ends
+// a wrapped line rather than starting the next. On a phone each piece takes its own line.
 function fullMeta(children: ReactNode) {
-  const pieces = Children.toArray(children);
+  const pieces = metaPieces(children);
   return (
     <div className="min-w-0">
       {pieces.map((piece, index) => (
@@ -221,7 +240,7 @@ function fullMeta(children: ReactNode) {
 }
 
 // The bottom line pairs context with a time. Times carry their own mono face, without changing the context's face. A
-// decided row's meta is the one word it was decided with, which a phone joins to the date with a dot.
+// decided row's meta is the one word it was decided with, which a phone joins to the date with a dot, when there is one.
 function ItemCardMeta({ className, children, ...props }: React.ComponentProps<"div">) {
   const variant = useContext(VariantContext);
   if (variant === "full") {
@@ -249,7 +268,10 @@ function ItemCardMeta({ className, children, ...props }: React.ComponentProps<"d
         {...props}
       >
         {children}
-        <span aria-hidden="true" className="hidden [@media(max-width:600px)]:inline">
+        <span
+          aria-hidden="true"
+          className="hidden [@media(max-width:600px)]:group-has-[[data-slot=item-card-when]]/item-card:inline"
+        >
           {" · "}
         </span>
       </div>

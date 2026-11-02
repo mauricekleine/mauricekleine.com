@@ -4,14 +4,17 @@ import { cn } from "@/components/superthread/lib/utils";
 
 // One piece of writing, read whole before someone acts on it. The box takes no padding of its own, so a foot such as
 // paper reaches both edges, and it never clips or clamps. Inside the working panel on a phone it gives up its side edges
-// for the panel's whole width, and as the panel's last block it runs down to the panel's foot.
-function Letter({ className, ...props }: React.ComponentProps<"article">) {
+// for the panel's whole width. last says nothing follows it in the panel, wrappers included, so there it also runs down
+// to the panel's foot; a page has to say so, because a selector can't see past a wrapper or a tab's hidden panel.
+function Letter({ className, last, ...props }: React.ComponentProps<"article"> & { last?: boolean }) {
   return (
     <article
       data-mk="letter"
       data-slot="letter"
       className={cn(
-        "min-w-0 border border-border [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mx-4 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-x-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:last:-mb-4 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:last:border-b-0",
+        "min-w-0 border border-border [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mx-4 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-x-0",
+        last &&
+          "[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mb-4 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-b-0",
         className,
       )}
       {...props}
