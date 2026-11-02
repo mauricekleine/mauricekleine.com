@@ -1864,9 +1864,12 @@ describe("data table", () => {
         // folded, a head that only names its columns leaves the screen, so the body's rule opens the fold and hangs
         expect(reachedAt(named, FOLDED, "border-t-0")).toEqual(["tbody"]);
         expect(reachedAt(named, FOLDED, "-mt-4")).toEqual(["table"]);
+        expect(reachedAt(named, FOLDED, "mt-4")).toEqual([]);
         const sorted = page({ head: "loud", tableHead: "sorts" });
         expect(reachedAt(sorted, WIDE, "-mt-4")).toEqual([]);
-        expect(reachedAt(sorted, FOLDED, "-mt-4")).toEqual([]);
+        // folded, the table rises as every fold under a ruled head does, and a head that sorts takes the 16 px back
+        expect(reachedAt(sorted, FOLDED, "-mt-4")).toEqual(["table"]);
+        expect(reachedAt(sorted, FOLDED, "mt-4")).toEqual(["thead"]);
       });
 
       test("a quiet head has no rule to hang from, so the fold keeps its own, as it does with no head above it", () => {
@@ -1876,8 +1879,73 @@ describe("data table", () => {
           for (const band of [WIDE, FOLDED]) {
             expect(reachedAt(host, band, "border-t-0")).toEqual([]);
             expect(reachedAt(host, band, "-mt-4")).toEqual([]);
+            expect(reachedAt(host, band, "mt-4")).toEqual([]);
           }
         }
+      });
+
+      // A fold under a ruled head whose second row opens a detail that holds its own section: a quiet head over a fold
+      // with no head row, or with one that sorts.
+      const nested = (innerHead?: "sorts") =>
+        server(
+          <Section>
+            <SectionHeader>
+              <SectionTitle>today</SectionTitle>
+            </SectionHeader>
+            <DataTable label="what ran today" fold>
+              <TableBody>
+                <TableRow>
+                  <TableCell fold="lead">09:12</TableCell>
+                  <TableCell fold="title">wrote the brief</TableCell>
+                </TableRow>
+                <TableDetail open>
+                  <TableRow>
+                    <TableCell fold="lead">08:40</TableCell>
+                    <TableCell fold="title">
+                      <TableDetailTrigger>sorted the inbox</TableDetailTrigger>
+                    </TableCell>
+                  </TableRow>
+                  <TableDetailRow columns={2}>
+                    <Section>
+                      <SectionHeader quiet="subtitle">
+                        <SectionTitle>its steps</SectionTitle>
+                      </SectionHeader>
+                      <DataTable label="its steps" fold>
+                        {innerHead && (
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>time</TableHead>
+                              <SortableHead onSort={() => {}}>step</SortableHead>
+                            </TableRow>
+                          </TableHeader>
+                        )}
+                        <TableBody>
+                          <TableRow>
+                            <TableCell fold="lead">08:41</TableCell>
+                            <TableCell fold="title">read the inbox</TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </DataTable>
+                    </Section>
+                  </TableDetailRow>
+                </TableDetail>
+              </TableBody>
+            </DataTable>
+          </Section>,
+        );
+
+      test("a fold nested in a row's detail answers to its own quiet head, not to the outer table's ruled one", () => {
+        const host = nested();
+        expect(reachedAt(host, WIDE, "-mt-4")).toEqual(["table"]);
+        expect(reachedAt(host, WIDE, "border-t-0")).toEqual(firstRow);
+        expect(reachedAt(host, FOLDED, "-mt-4")).toEqual(["table"]);
+        expect(reachedAt(host, FOLDED, "border-t-0")).toEqual(["tbody"]);
+      });
+
+      test("a head that sorts in a nested fold leaves the outer fold hanging from its head's rule", () => {
+        const host = nested("sorts");
+        expect(reachedAt(host, FOLDED, "-mt-4")).toEqual(["table"]);
+        expect(reachedAt(host, FOLDED, "mt-4")).toEqual([]);
       });
     });
   });

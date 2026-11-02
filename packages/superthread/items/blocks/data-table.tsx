@@ -9,9 +9,11 @@ import { Table, TableCell, TableHead, TableRow } from "@/components/superthread/
 // Straight under a ruled section header, a fold that opens on its own rule hangs from the header's rule instead, as
 // list rows do, so the two never print 16 px apart: at width when it has no head row, and folded when no head sorts,
 // since a folded head that only names its columns leaves the screen. A head row that prints keeps the header's 16 px
-// above it, and a quiet head has no rule to hang from, so the fold keeps its own.
+// above it: folded, the table rises and a head that sorts takes the 16 px back as its own margin. A quiet head has no
+// rule to hang from, so the fold keeps its own. Each selector runs from the header through this table's own wrapper and
+// container to its own head and body, so a table nested in a row's detail answers to its own header alone.
 const hangFromHeader =
-  "@min-[776px]/fold:[[data-slot=section-header]:not([data-quiet])+[data-slot=data-table]_&:not(:has(>thead))]:-mt-4 @min-[776px]/fold:[[data-slot=section-header]:not([data-quiet])+[data-slot=data-table]_&>tbody:not(thead+*)>tr:first-child>*]:border-t-0 @max-[776px]/fold:[[data-slot=section-header]:not([data-quiet])+[data-slot=data-table]_&:not(:has([data-slot=sortable-head]))]:-mt-4 @max-[776px]/fold:[[data-slot=section-header]:not([data-quiet])+[data-slot=data-table]_&>tbody]:border-t-0";
+  "@min-[776px]/fold:[[data-slot=section-header]:not([data-quiet])+[data-slot=data-table]>[data-slot=table-container]>&:not(:has(>thead))]:-mt-4 @min-[776px]/fold:[[data-slot=section-header]:not([data-quiet])+[data-slot=data-table]>[data-slot=table-container]>&>tbody:not(thead+*)>tr:first-child>*]:border-t-0 @max-[776px]/fold:[[data-slot=section-header]:not([data-quiet])+[data-slot=data-table]>[data-slot=table-container]>&]:-mt-4 @max-[776px]/fold:[[data-slot=section-header]:not([data-quiet])+[data-slot=data-table]>[data-slot=table-container]>&>thead:has([data-slot=sortable-head])]:mt-4 @max-[776px]/fold:[[data-slot=section-header]:not([data-quiet])+[data-slot=data-table]>[data-slot=table-container]>&>tbody]:border-t-0";
 
 // A named collection with the table item's own scrolling box, row measures and selection edge, or its full-bleed fold
 // through fold. The app supplies its columns and rows, including aria-selected or data-state="selected" when a row is
