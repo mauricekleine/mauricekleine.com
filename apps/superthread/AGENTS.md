@@ -15,7 +15,7 @@ bun apps/superthread/tools/shoot.ts --base http://127.0.0.1:3001 --tag <name>
 bun apps/superthread/tools/shoot.ts --focus --base http://127.0.0.1:3001 --tag <name>
 ```
 
-`build:superthread` stamps `public/api/deploy.json`, regenerates the v2 CSS in `packages/superthread`, writes the registry into `public/r/`, writes every item's files from those payloads into `.payload/` (`tools/payload.mjs`; all three gitignored), then runs the app's `build`: `vite build`, `bun --check` and `tools/check-build.mjs`. The Vite config generates the mark PNGs, zips and `public/marks/DOWNLOADS.json` before build and dev; all are gitignored. A build renders the items from `.payload/`, so each page shows the bytes an app installs; `dev:superthread` writes it too, but dev renders the item sources so an edit reloads at once. The build output is `.cloudflare/output/v0/workers/default/assets`. `SUPERTHREAD_BASE_URL` changes the `@mk` URL in `r/init.json` and nothing else. `deploy:superthread` deploys that output, and only Maurice runs it.
+`build:superthread` stamps `public/api/deploy.json`, regenerates the v2 CSS in `packages/superthread`, writes the registry into `public/r/`, writes every item's files from those payloads into `.payload/` (`tools/payload.mjs`; all three gitignored), then runs the app's `build`: `vite build`, `bun --check` and `tools/check-build.mjs`. The Vite config generates the mark PNGs, zips and `public/marks/DOWNLOADS.json` before build and dev; all are gitignored. A build renders the items from `.payload/`, so each page shows the bytes an app installs; `dev:superthread` writes it too, but dev renders the item sources so an edit reloads at once. The build output is `.cloudflare/output/v0/workers/default/assets`. `SUPERTHREAD_BASE_URL` changes the `@mk` URL in `r/init.json` and nothing else. `deploy:superthread` deploys that output; Workers Builds runs it after a merge to `main` that touches `apps/superthread/`, `packages/superthread/`, `package.json` or `bun.lock`.
 
 ## Layout
 
@@ -63,7 +63,7 @@ bun apps/superthread/tools/shoot.ts --focus --base http://127.0.0.1:3001 --tag <
 - Change a snapshot under `packages/superthread/versions/` once it is on main.
 - Copy the surface contract's prose, or print a private host, a client's name or real data on any page.
 - Load fonts at runtime from Fontshare or Google; the faces are served from `/fonts/`.
-- Add a domain, a Workers Builds project or a deploy. Those are Maurice's steps.
+- Add a domain, change the Workers Builds trigger or deploy by hand. Those are Maurice's steps.
 
 ## Shots
 

@@ -3,8 +3,8 @@
 `artifact-share` serves snapshot copies at `share.mauricekleine.com`. The private
 Soliton store remains the source; nothing here reads it. Shares expire 30 days after
 their commit, or earlier when deleted.
-Maurice deploys it by hand from the M5 in the Superthread account, when `apps/share/`,
-`packages/superthread/`, `package.json` or `bun.lock` changes. It builds with
+Workers Builds deploys it in the Superthread account after a merge to `main` that
+changes `apps/share/`, `packages/superthread/`, `package.json` or `bun.lock`. It builds with
 `bun install --frozen-lockfile && bun run --cwd apps/share build` and deploys with
 `bun run --cwd apps/share deploy`. Deploys keep the Worker's existing secrets.
 Root `bun run deploy:verify <sha>` waits for both Workers.

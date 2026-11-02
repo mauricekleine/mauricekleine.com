@@ -18,4 +18,4 @@ bun run test     # worker regression tests
 bun run deploy   # deploy the build output with cf
 ```
 
-Maurice deploys from the repo root on the M5. Site guidance is in `apps/web/AGENTS.md`.
+A merge to `main` deploys through Workers Builds in the Superthread account; `bun run deploy:verify <sha>` confirms it. Site guidance is in `apps/web/AGENTS.md`.

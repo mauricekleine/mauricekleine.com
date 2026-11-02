@@ -17,8 +17,6 @@ Scope: the site's overview and every page under it (foundations, components, moc
 
 Chosen direction: the master, Maurice's own remix of the direction round (scratch `week1/i1/MASTER-BRIEF.md`, built in `worlds/master/`). Memorable moment: the cropped opener band, a thread screened in key and plum, with the wordmark set over it.
 
-Unresolved: the custom domain and its Workers Builds project wait for Maurice's go-ahead.
-
 ## Direction contract
 
 THESIS: superthread is a printed proof sheet for the fleet: two inks on white stock, exact and spacious, with texture only where you look. It refuses the stock shadcn docs shell (rounded cards, grey sidebar, gradient accents) and neon dev-tool dark.
