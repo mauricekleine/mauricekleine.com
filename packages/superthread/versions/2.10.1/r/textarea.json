@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea",
+  "title": "textarea",
+  "description": "a multi-line text field with the one focus edge, and a code form for json and keys",
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/textarea.tsx",
+      "content": "import * as React from \"react\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/textarea 2.10.1\n\nconst CODE_TEXT = { autoCapitalize: \"off\", autoComplete: \"off\", autoCorrect: \"off\", spellCheck: false };\n\n// A field whose box is its own text control, as the input is: focus thickens the 1 px edge to 2 px inside the box,\n// in --fx (the ring's ink, or the error ink when invalid), the caret follows, and the text never moves. It grows with\n// its words from three lines. Disabled: never focused, a flat fill and the edge screened back. At 600 px and below it\n// sets 16 on 24, so iOS Safari never zooms the page in on focus, and its lines grow with the line. kind=\"code\" is the\n// form for json and keys: mono at the instrument step, and at 16 on 24 on a phone like every field, five lines tall at\n// either size, its line breaks kept and a long line wrapped anywhere, so nothing scrolls sideways, and the browser\n// leaves the text as typed.\nfunction Textarea({ className, kind, ...props }: React.ComponentProps<\"textarea\"> & { kind?: \"code\" }) {\n  return (\n    <textarea\n      data-slot=\"textarea\"\n      data-mk=\"textarea\"\n      data-kind={kind}\n      {...(kind === \"code\" && CODE_TEXT)}\n      className={cn(\n        \"flex field-sizing-content min-h-[calc(3lh+20px)] w-full resize-none border border-input bg-background px-3 py-[9px] text-ui leading-5 text-foreground [@media(max-width:600px)]:text-[16px] [@media(max-width:600px)]:leading-6 caret-(--fx) [--fx:var(--ring)] placeholder:text-muted-foreground focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled texture-disabled\",\n        kind === \"code\" && \"min-h-[calc(5lh+20px)] font-mono text-instrument [overflow-wrap:anywhere]\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Textarea };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/textarea.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.10.1",
+    "sha256": "fe3bd4d4903437e199f6c036fbb14471caed0eaaffc8901808d4a6ed7acd9759",
+    "tier": "brand",
+    "upstream": {
+      "style": "base-nova",
+      "item": "textarea",
+      "sha256": "8f01f6bc4ee556263bae7644e8b527022fa77ff203f33a258bb47142ef7d9c81",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

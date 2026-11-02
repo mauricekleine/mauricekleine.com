@@ -1,6 +1,8 @@
 // The shell composes the rail, section heads and search without taking over the app's routes or commands.
 import { describe, expect, test } from "bun:test";
+import { Window } from "happy-dom";
 import { act, useState } from "react";
+import { createRoot } from "react-dom/client";
 import {
   AppShell,
   AppShellGround,
@@ -11,6 +13,7 @@ import {
   AppShellPanel,
   AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
+import { QuickAddNav } from "@/components/superthread/blocks/quick-add";
 import {
   Section,
   SectionAction,
@@ -64,6 +67,26 @@ describe("app shell", () => {
   test("the panel names its card fill as the surface, so a part that knocks a line out prints no box of the stock", () => {
     const panel = one(frame(), '[data-slot="app-shell-panel"]');
     expect(panel.classes).toEqual(expect.arrayContaining(["bg-card", "[--surface:var(--card)]"]));
+  });
+
+  test("a popover the nav opens names its own fill as the surface, not the ground's, wherever it paints it", () => {
+    const host = server(
+      <SidebarProvider>
+        <AppShellNav ship="orbit" overflow="runs and logs">
+          <AppShellNavTier>
+            <AppShellNavItem render={<a href="/runs" />}>runs</AppShellNavItem>
+          </AppShellNavTier>
+          <QuickAddNav label="add a task" onAdd={() => {}} />
+        </AppShellNav>
+      </SidebarProvider>,
+    );
+    // each popover fill, under whatever variant paints it, beside the surface that variant names
+    const popovers = [...host.querySelectorAll("[popover]")].map((el) =>
+      classesOf(el)
+        .filter((cls) => cls.endsWith("bg-popover"))
+        .map((fill) => [fill, classesOf(el).includes(fill.replace("bg-popover", "[--surface:var(--popover)]"))]),
+    );
+    expect(popovers).toEqual([[["open:bg-popover", true]], [["bg-popover", true]]]);
   });
 
   test("the panel renders as the app's own element, keeping its slot and its look", () => {
@@ -714,6 +737,53 @@ describe("search palette", () => {
     } finally {
       await disabled.done();
     }
+  });
+
+  test("in a window of its own, its keys open it there, and a key on the page's own document leaves it shut", async () => {
+    // A second window stands in for an iframe or a window the app opened: its document is the palette's.
+    const other = new Window();
+    const page = other.document as unknown as Document;
+    const host = page.createElement("div");
+    page.body.append(host);
+    const root = createRoot(host);
+    await act(async () => root.render(<Palette />));
+    try {
+      await key(document, "k", { metaKey: true });
+      await key(document, "/");
+      expect(isOpen(host)).toBe(false);
+      expect((await key(page.body, "/")).defaultPrevented).toBe(true);
+      expect(isOpen(host)).toBe(true);
+      await key(page.body, "k", { ctrlKey: true });
+      expect(isOpen(host)).toBe(false);
+      await key(page.body, "k", { metaKey: true });
+      expect(isOpen(host)).toBe(true);
+    } finally {
+      await act(async () => root.unmount());
+      await other.happyDOM.close();
+    }
+  });
+
+  test("the app's ref takes the root, and a callback ref's cleanup runs on detach in place of a call with null", async () => {
+    const object: { current: HTMLDivElement | null } = { current: null };
+    const plain: string[] = [];
+    const cleaned: string[] = [];
+    const view = await client(
+      <>
+        <Palette data-testid="object" ref={object} />
+        <Palette ref={(el) => void plain.push(el?.getAttribute("data-slot") ?? "null")} />
+        <Palette
+          ref={(el) => {
+            cleaned.push(el?.getAttribute("data-slot") ?? "null");
+            return () => void cleaned.push("cleanup");
+          }}
+        />
+      </>,
+    );
+    expect(object.current === one(view.body, '[data-testid="object"]').el).toBe(true);
+    await view.done();
+    expect(object.current).toBeNull();
+    expect(plain).toEqual(["search-palette", "null"]);
+    expect(cleaned).toEqual(["search-palette", "cleanup"]);
   });
 
   test("a keydown with no key leaves it closed and throws nothing, held modifier or not", async () => {

@@ -1,7 +1,13 @@
 // The forms 2.0 adds keep native semantics while their boxes, rules and labels print in the house inks.
 import { describe, expect, test } from "bun:test";
-import { act } from "react";
+import { act, type ReactNode } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/superthread/ui/accordion";
+import { AlertDialog, AlertDialogContent } from "@/components/superthread/ui/alert-dialog";
+import { Card } from "@/components/superthread/ui/card";
+import { Dialog, DialogContent } from "@/components/superthread/ui/dialog";
+import { FleetRail } from "@/components/superthread/ui/fleet-rail";
+import { Sheet, SheetContent } from "@/components/superthread/ui/sheet";
+import { Sidebar, SidebarContent, SidebarProvider, SidebarTrigger } from "@/components/superthread/ui/sidebar";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -38,6 +44,9 @@ import {
   own,
   server,
 } from "./rendered.tsx";
+
+// The size happy-dom gives the window, and a way to change it.
+const viewport = (window as unknown as { happyDOM: { setViewport(size: { width: number }): void } }).happyDOM;
 
 function clean(hosts: HTMLElement[], item: string) {
   const rendered = hosts.flatMap(elements);
@@ -161,6 +170,108 @@ describe("field", () => {
       expect.arrayContaining(["bg-(--surface,var(--background))", "type-instrument", "text-muted-foreground"]),
     );
   });
+  // What prints beneath a separator's words, read from the classes a browser keys on: the nearest element that paints a
+  // fill, and the element whose --surface the words fill with, or the page's background when none names one. The words
+  // print no box when that is one element naming its own fill, which holds in either mode and in a scoped island.
+  const FILL = /^bg-(background|card|popover|sidebar)$/;
+  const SURFACE = /^\[--surface:var\(--([a-z]+)\)\]$/;
+  const named = (el: Element, pattern: RegExp) => [...el.classList].map((c) => pattern.exec(c)?.[1]).find(Boolean);
+  function beneath(words: Element) {
+    let fill: Element | null = words.parentElement;
+    while (fill && !named(fill, FILL)) fill = fill.parentElement;
+    let surface: Element | null = words;
+    while (surface && !named(surface, SURFACE)) surface = surface.parentElement;
+    return {
+      fill: fill && named(fill, FILL),
+      surface: surface ? named(surface, SURFACE) : "background",
+      same: fill === surface,
+    };
+  }
+  const separator = <FieldSeparator>or</FieldSeparator>;
+  const wordsIn = (scope: ParentNode) => one(scope, '[data-slot="field-separator-content"]').el;
+
+  test("on every layer that can hold it, the separator's words take the layer's own fill, so they print no box", async () => {
+    const layers: [string, ReactNode][] = [
+      [
+        "dialog",
+        <Dialog open>
+          <DialogContent>{separator}</DialogContent>
+        </Dialog>,
+      ],
+      [
+        "alert dialog",
+        <AlertDialog open>
+          <AlertDialogContent>{separator}</AlertDialogContent>
+        </AlertDialog>,
+      ],
+      [
+        "sheet",
+        <Sheet open>
+          <SheetContent>{separator}</SheetContent>
+        </Sheet>,
+      ],
+    ];
+    for (const [layer, node] of layers) {
+      const view = await client(node);
+      try {
+        expect({ layer, ...beneath(wordsIn(view.body)) }).toEqual({
+          layer,
+          fill: "popover",
+          surface: "popover",
+          same: true,
+        });
+      } finally {
+        await view.done();
+      }
+    }
+    expect(beneath(wordsIn(server(<Card>{separator}</Card>)))).toEqual({ fill: "card", surface: "card", same: true });
+    // the app's ground, beside the working panel, where the rail's frame paints it
+    expect(beneath(wordsIn(server(<FleetRail current="orbit">{separator}</FleetRail>)))).toEqual({
+      fill: "sidebar",
+      surface: "sidebar",
+      same: true,
+    });
+    for (const collapsible of ["offcanvas", "none"] as const) {
+      const nav = server(
+        <SidebarProvider>
+          <Sidebar collapsible={collapsible}>
+            <SidebarContent>{separator}</SidebarContent>
+          </Sidebar>
+        </SidebarProvider>,
+      );
+      expect({ collapsible, ...beneath(wordsIn(nav)) }).toEqual({
+        collapsible,
+        fill: "sidebar",
+        surface: "sidebar",
+        same: true,
+      });
+    }
+  });
+
+  test("on a phone the nav's sheet holds the separator's words to the ground, not the sheet's fill", async () => {
+    const width = window.innerWidth;
+    await act(async () => viewport.setViewport({ width: 500 }));
+    const view = await client(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarContent>{separator}</SidebarContent>
+        </Sidebar>
+        <SidebarTrigger />
+      </SidebarProvider>,
+    );
+    try {
+      await act(async () => (one(view.body, '[data-slot="sidebar-trigger"]').el as HTMLElement).click());
+      expect(beneath(wordsIn(one(view.body, '[data-slot="sidebar"][data-mobile="true"]').el))).toEqual({
+        fill: "sidebar",
+        surface: "sidebar",
+        same: true,
+      });
+    } finally {
+      await view.done();
+      await act(async () => viewport.setViewport({ width }));
+    }
+  });
+
   test("no texture or forbidden class across states and choice cards", () => {
     clean(
       [

@@ -17,13 +17,14 @@ const MARK_BASE = "https://superthread.mauricekleine.com/marks";
 // neither.
 //
 // The ground keeps the mode it is in, and the frame on it (the rail and the ship's sidebar) prints in the dark palette
-// in both modes, as the world's gutter does. GROUND holds the ground's roles where the frame paints them, and
-// ON_GROUND opens the dark scope and pins them back, important so they outrank the token block's .dark, with the
-// current item held to the words beside it and the ring to the sidebar's pale ring. The ring stays on the frame, and the
-// skip link carries its own, so paper the app builds beside the frame keeps the house ink. The page beside the frame
-// stays in the page's mode. The sidebar item scopes its own content the same way.
+// in both modes, as the world's gutter does. GROUND holds the ground's roles where the frame paints them and names the
+// ground as the surface, so a part that knocks a line out on it prints no box. ON_GROUND opens the dark scope and pins
+// the roles back, important so they outrank the token block's .dark, with the current item held to the words beside it
+// and the ring to the sidebar's pale ring. The ring stays on the frame, and the skip link carries its own, so paper the
+// app builds beside the frame keeps the house ink. The page beside the frame stays in the page's mode. The sidebar item
+// scopes its own content the same way.
 const GROUND =
-  "[--sidebar-ground:var(--sidebar)] [--sidebar-ground-foreground:var(--sidebar-foreground)] [--sidebar-ground-hover:var(--sidebar-hover)]";
+  "[--sidebar-ground:var(--sidebar)] [--sidebar-ground-foreground:var(--sidebar-foreground)] [--sidebar-ground-hover:var(--sidebar-hover)] [--surface:var(--sidebar)]";
 const ON_GROUND =
   "dark [--sidebar:var(--sidebar-ground)]! [--sidebar-foreground:var(--sidebar-ground-foreground)]! [--sidebar-hover:var(--sidebar-ground-hover)]! [--selected:var(--sidebar-foreground)]! [--ring:var(--sidebar-ring)]!";
 const nav =

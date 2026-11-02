@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "source-mark",
+  "title": "source mark",
+  "description": "the 96 px frame a third-party mark prints in, in one ink, with a second frame on hover",
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/source-mark.tsx",
+      "content": "import { cn } from \"@/components/superthread/lib/utils\";\n// @mk/source-mark 2.10.1\n\n// The notched 16-cell tile. A drawing sits in the same path, so it knocks out of the tile and the surface shows through\n// it: one ink prints the whole mark, on any fill and through any hover.\nconst TILE = \"M1 0h14v1h1v14h-1v1h-14v-1h-1v-14h1z\";\n\n// The frame a third-party mark prints in: 96 px, or 80 px on a phone, which keeps the 16 cells on whole pixels, always in\n// the first ink. d and hover are the drawing's two frames, each made of whole cells that never overlap and stay inside the\n// tile, because the knock-out is even-odd. The second frame cuts in with no transition while the pointer or the visible\n// focus is inside the nearest group/source-mark: the mark itself, or a tile whose title links. held keeps it up for a\n// moment that settles on it. The words beside a mark carry its meaning, so it stays hidden from readers unless it's\n// labelled.\nfunction SourceMark({\n  d,\n  hover,\n  held,\n  className,\n  ...props\n}: Omit<React.ComponentProps<\"svg\">, \"children\"> & { d: string; hover?: string; held?: boolean }) {\n  const named = props[\"aria-label\"] !== undefined || props[\"aria-labelledby\"] !== undefined;\n  const second = held\n    ? { rest: \"hidden\", hover: undefined }\n    : {\n        rest: \"group-hover/source-mark:hidden group-has-[:focus-visible]/source-mark:hidden\",\n        hover: \"hidden group-hover/source-mark:inline group-has-[:focus-visible]/source-mark:inline\",\n      };\n  return (\n    <svg\n      data-mk=\"source-mark\"\n      data-slot=\"source-mark\"\n      viewBox=\"0 0 16 16\"\n      shapeRendering=\"crispEdges\"\n      fill=\"currentColor\"\n      fillRule=\"evenodd\"\n      role={named ? \"img\" : undefined}\n      aria-hidden={named ? undefined : true}\n      className={cn(\"group/source-mark block size-24 shrink-0 text-first [@media(max-width:600px)]:size-20\", className)}\n      {...props}\n    >\n      <path d={`${TILE}${d}`} className={hover === undefined ? undefined : second.rest} />\n      {hover !== undefined && <path d={`${TILE}${hover}`} className={second.hover} />}\n    </svg>\n  );\n}\n\nexport { SourceMark };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/source-mark.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.10.1",
+    "sha256": "7b79b1d30bf1ab725d3b3b0ac197a95c6291f8330e688178511d86e1b2786b90",
+    "tier": "brand",
+    "upstream": null
+  },
+  "type": "registry:ui"
+}

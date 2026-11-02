@@ -19,6 +19,14 @@ import { Input } from "@/components/superthread/ui/input";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { Switch } from "@/components/superthread/ui/switch";
 import { Button } from "@/components/superthread/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/superthread/ui/dialog";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/superthread/ui/sheet";
 import { State } from "@/examples/input";
 export function FieldExample() {
   const id = useId();
@@ -176,6 +184,69 @@ export function FieldStates() {
           </Field>
         </State>
       ))}
+    </div>
+  );
+}
+
+// A form on each raised layer, printed open inside a frame that plays the window, as the dialog and sheet pages print
+// theirs: the frame is a containing block for fixed boxes, the layer's portalProps hand its portal the frame, and the
+// frame comes from state, so the portal waits for it. Inert: nothing in the print takes focus or the pointer.
+function LayerFrame({ children }: { children: (frame: HTMLDivElement | null) => React.ReactNode }) {
+  const [frame, setFrame] = useState<HTMLDivElement | null>(null);
+  return (
+    <div ref={setFrame} className="st-e-screen" inert>
+      {children(frame)}
+    </div>
+  );
+}
+
+export function FieldOnLayers() {
+  const id = useId();
+  return (
+    <div className="st-e-layers">
+      <LayerFrame>
+        {(frame) => (
+          <Dialog open modal={false}>
+            <DialogContent portalProps={{ container: frame }} initialFocus={false} finalFocus={false}>
+              <DialogHeader>
+                <DialogTitle>share the draft</DialogTitle>
+                <DialogDescription>chapter 9, what a measurement does</DialogDescription>
+              </DialogHeader>
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor={`${id}-invite`}>invite by email</FieldLabel>
+                  <Input id={`${id}-invite`} placeholder="reader@example.com" />
+                </Field>
+                <FieldSeparator>or</FieldSeparator>
+                <Button variant="outline">copy the link</Button>
+              </FieldGroup>
+            </DialogContent>
+          </Dialog>
+        )}
+      </LayerFrame>
+      <LayerFrame>
+        {(frame) => (
+          <Sheet open modal={false}>
+            <SheetContent portalProps={{ container: frame }} initialFocus={false} finalFocus={false}>
+              <SheetHeader>
+                <SheetTitle>run-024</SheetTitle>
+                <SheetDescription>what the next run starts with</SheetDescription>
+              </SheetHeader>
+              <FieldGroup className="st-e-sheet-fields">
+                <Field>
+                  <FieldLabel htmlFor={`${id}-prefix`}>branch prefix</FieldLabel>
+                  <Input id={`${id}-prefix`} defaultValue="agent/" />
+                </Field>
+                <FieldSeparator>notifications</FieldSeparator>
+                <Field orientation="horizontal">
+                  <FieldLabel htmlFor={`${id}-notify`}>notify on completion</FieldLabel>
+                  <Switch id={`${id}-notify`} defaultChecked />
+                </Field>
+              </FieldGroup>
+            </SheetContent>
+          </Sheet>
+        )}
+      </LayerFrame>
     </div>
   );
 }

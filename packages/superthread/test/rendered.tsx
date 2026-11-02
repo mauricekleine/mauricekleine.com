@@ -12,6 +12,24 @@ const root = join(import.meta.dir, "..");
 const details = JSON.parse(readFileSync(join(root, "tokens/details.json"), "utf8")) as { DETAILS: { key: string }[] };
 const DETAIL_UTILITIES = new Set(details.DETAILS.map((d) => `texture-${d.key}`));
 
+/**
+ * A browser gives each window its own classes, so an element in an iframe or a window the page opened is no instance of
+ * the page's Element. happy-dom shares one set across its windows, so this gives every element under root a copy of its
+ * class chain: the same methods and accessors, on prototypes no class of the page owns.
+ */
+export function ownClasses(root: Element) {
+  const copy = (proto: object | null): object =>
+    !proto || proto === Object.prototype
+      ? Object.prototype
+      : Object.create(copy(Object.getPrototypeOf(proto)), Object.getOwnPropertyDescriptors(proto));
+  const copies = new Map<object, object>();
+  for (const el of [root, ...root.querySelectorAll("*")]) {
+    const proto = Object.getPrototypeOf(el) as object;
+    if (!copies.has(proto)) copies.set(proto, copy(proto));
+    Object.setPrototypeOf(el, copies.get(proto)!);
+  }
+}
+
 /** An item's source, as committed. */
 export const source = (name: string) => readFileSync(join(root, `items/ui/${name}.tsx`), "utf8");
 

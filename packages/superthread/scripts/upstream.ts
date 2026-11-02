@@ -96,10 +96,12 @@ export const STYLE_HOOKS: Record<string, string[]> = {
 };
 
 /**
- * Per pass item, an upstream class word and the words that replace it. A word the upstream file no longer carries
- * fails `regen`, so the table cannot go stale silently.
+ * Per pass item, an upstream class word and the words that replace it, which may keep the word and add to it. A word
+ * the upstream file no longer carries fails `regen`, so the table cannot go stale silently.
  */
 export const PASS_CLASSES: Record<string, Record<string, string[]>> = {
+  // the card names its fill as the surface, so a field separator's words on it print no box of the page's fill
+  card: { "bg-card": ["bg-card", "[--surface:var(--card)]"] },
   sheet: {
     // a bare `transition` also fades outline-color, so the close button's focus ring would fade in with the popup;
     // the popup moves only these two
@@ -107,6 +109,8 @@ export const PASS_CLASSES: Record<string, Record<string, string[]>> = {
     // the overlay is the world's scrim, as the dialog's is, with no blur
     "bg-black/10": ["bg-scrim"],
     "supports-backdrop-filter:backdrop-blur-xs": [],
+    // the panel names its fill as the surface, as the dialog does
+    "bg-popover": ["bg-popover", "[--surface:var(--popover)]"],
     // the panel lifts as a sheet, as the dialog does
     "shadow-lg": ["shadow-sheet"],
     // the title's display face already brings the first ink

@@ -143,7 +143,7 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
-// A quiet rule runs behind an instrument label on the stock.
+// A quiet rule runs behind an instrument label, which knocks the rule out in the fill of the surface it sits on.
 function FieldSeparator({
   children,
   className,

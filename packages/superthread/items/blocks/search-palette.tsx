@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useId, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useId, useRef, useState } from "react";
 import { isPageKey } from "@/components/superthread/lib/hotkey";
 import { cn } from "@/components/superthread/lib/utils";
 import { Command, CommandDialog, CommandEmpty, CommandInput, CommandList } from "@/components/superthread/ui/command";
@@ -13,13 +13,15 @@ function usePalette() {
   return palette;
 }
 
-// One search over the app. The modified letter toggles anywhere; slash opens it away from editable text.
+// One search over the app. The modified letter toggles anywhere in the document the palette renders in, which may be an
+// iframe's or another window's; slash opens it away from editable text.
 function SearchPalette({
   open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
   hotkey = "k",
   className,
+  ref,
   ...props
 }: React.ComponentProps<"div"> & {
   open?: boolean;
@@ -30,6 +32,25 @@ function SearchPalette({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const open = controlledOpen ?? uncontrolledOpen;
   const contentId = useId();
+  const root = useRef<HTMLDivElement | null>(null);
+  // The app's ref takes the root too. A callback ref that returns a cleanup gets it run on detach, in place of a call
+  // with null, as React runs it for a ref it holds itself.
+  const attach = useCallback(
+    (el: HTMLDivElement | null) => {
+      root.current = el;
+      if (typeof ref !== "function") {
+        if (ref) ref.current = el;
+        return;
+      }
+      const cleanup = ref(el);
+      if (typeof cleanup !== "function") return;
+      return () => {
+        root.current = null;
+        cleanup();
+      };
+    },
+    [ref],
+  );
   const setOpen = useCallback(
     (next: boolean) => {
       if (controlledOpen === undefined) setUncontrolledOpen(next);
@@ -39,7 +60,8 @@ function SearchPalette({
   );
 
   useEffect(() => {
-    if (hotkey === null) return;
+    const page = root.current?.ownerDocument;
+    if (hotkey === null || !page) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.defaultPrevented || event.repeat || event.isComposing) return;
       if (
@@ -55,13 +77,19 @@ function SearchPalette({
         setOpen(true);
       }
     };
-    document.addEventListener("keydown", onKeyDown, true);
-    return () => document.removeEventListener("keydown", onKeyDown, true);
+    page.addEventListener("keydown", onKeyDown, true);
+    return () => page.removeEventListener("keydown", onKeyDown, true);
   }, [hotkey, open, setOpen]);
 
   return (
     <PaletteContext value={{ open, setOpen, contentId }}>
-      <div data-mk="search-palette" data-slot="search-palette" className={cn("contents", className)} {...props} />
+      <div
+        data-mk="search-palette"
+        data-slot="search-palette"
+        className={cn("contents", className)}
+        {...props}
+        ref={attach}
+      />
     </PaletteContext>
   );
 }

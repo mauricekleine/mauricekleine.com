@@ -62,11 +62,21 @@ function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
 function Toast({ className, swipeDirection, ref, ...props }: ToastPrimitive.Root.Props) {
   const root = useRef<HTMLDivElement | null>(null);
   const phone = usePhone(root);
+  // The app's ref takes the root too. A callback ref that returns a cleanup gets it run on detach, in place of a call
+  // with null, as React runs it for a ref it holds itself.
   const attach = useCallback(
     (el: HTMLDivElement | null) => {
       root.current = el;
-      if (typeof ref === "function") ref(el);
-      else if (ref) ref.current = el;
+      if (typeof ref !== "function") {
+        if (ref) ref.current = el;
+        return;
+      }
+      const cleanup = ref(el);
+      if (typeof cleanup !== "function") return;
+      return () => {
+        root.current = null;
+        cleanup();
+      };
     },
     [ref],
   );

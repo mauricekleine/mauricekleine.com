@@ -134,9 +134,10 @@ type QuickAddNavProps = Omit<React.ComponentProps<"form">, "onSubmit" | "childre
 // The quiet add in a ship's nav: a muted word above the nav's foot that opens a one-line field over itself. Enter adds,
 // clears and stays open for the next one; Escape or a click away closes and keeps the draft. Escape hands focus back to
 // where it was when the key opened the field, or else to the trigger, so it never drops to the page's body. A native
-// popover carries it, so it clears the frame's scroll and stays in the frame's dark scope. Below 900 px it sits 12 px
-// from each edge with a button, and on a phone the trigger is the glyph alone in a 44 px target. Its key opens it away
-// from typing, through the helper search-palette shares.
+// popover carries it, so it clears the frame's scroll and stays in the frame's dark scope, and it names the popover's
+// fill as the surface, not the ground's. Below 900 px it sits 12 px from each edge with a button, and on a phone the
+// trigger is the glyph alone in a 44 px target. Its key opens it away from typing, through the helper search-palette
+// shares.
 function QuickAddNav({
   className,
   id: formId,
@@ -158,24 +159,28 @@ function QuickAddNav({
   const form = useRef<HTMLFormElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   // Where Escape hands focus back: the control focused when the key opened the field. Null sends it to the trigger.
-  const returnTo = useRef<HTMLElement | null>(null);
+  const returnTo = useRef<(Element & HTMLOrSVGElement) | null>(null);
   const disabled = inputProps.disabled;
   const { input, value, setValue, busy, error, submit } = useAdd(onAdd, disabled);
 
+  // The key and the focus belong to the document the field renders in, which may be an iframe's or another window's.
+  // An element there is an instance of that window's classes, so the control that holds focus is read without
+  // instanceof: whatever holds focus can take it again.
   useEffect(() => {
-    if (hotkey === null || disabled) return;
+    const page = form.current?.ownerDocument;
+    if (hotkey === null || disabled || !page) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (!isPageKey(event, hotkey)) return;
       event.preventDefault();
-      const active = document.activeElement;
+      const active = page.activeElement;
       if (!form.current?.contains(active)) {
-        returnTo.current = active instanceof HTMLElement && active !== document.body ? active : null;
+        returnTo.current = active && active !== page.body ? (active as Element & HTMLOrSVGElement) : null;
       }
       form.current?.togglePopover(true);
       input.current?.focus();
     };
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    page.addEventListener("keydown", onKeyDown);
+    return () => page.removeEventListener("keydown", onKeyDown);
   }, [hotkey, disabled, input]);
 
   return (
@@ -208,7 +213,7 @@ function QuickAddNav({
         aria-label={props["aria-label"] ?? label}
         aria-busy={busy}
         className={cn(
-          "fixed inset-auto bottom-[anchor(bottom)] left-[anchor(left)] m-0 w-[anchor-size(width)] flex-wrap overflow-visible border-0 bg-popover p-0 text-popover-foreground shadow-leaf [position-anchor:var(--quick-add-anchor)] open:flex [@media(max-width:900px)]:top-[anchor(top)] [@media(max-width:900px)]:right-3 [@media(max-width:900px)]:bottom-auto [@media(max-width:900px)]:left-3 [@media(max-width:900px)]:w-auto",
+          "fixed inset-auto bottom-[anchor(bottom)] left-[anchor(left)] m-0 w-[anchor-size(width)] flex-wrap overflow-visible border-0 bg-popover [--surface:var(--popover)] p-0 text-popover-foreground shadow-leaf [position-anchor:var(--quick-add-anchor)] open:flex [@media(max-width:900px)]:top-[anchor(top)] [@media(max-width:900px)]:right-3 [@media(max-width:900px)]:bottom-auto [@media(max-width:900px)]:left-3 [@media(max-width:900px)]:w-auto",
           className,
         )}
         onSubmit={submit}
@@ -225,7 +230,9 @@ function QuickAddNav({
           returnTo.current = null;
           form.current?.hidePopover();
           back?.focus({ preventScroll: true });
-          if (!back || document.activeElement !== back) trigger.current?.focus({ preventScroll: true });
+          if (!back || event.currentTarget.ownerDocument.activeElement !== back) {
+            trigger.current?.focus({ preventScroll: true });
+          }
         }}
       >
         <FieldLabel htmlFor={inputId} className="sr-only">

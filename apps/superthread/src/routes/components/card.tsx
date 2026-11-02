@@ -31,8 +31,9 @@ function Page() {
       </Section>
       <Section id="upstream" title="upstream">
         <p className="st-pass-prose">
-          card is a pass item: base-nova&rsquo;s card with its imports pointed at superthread and every class left as
-          upstream wrote it. the tokens set the look. the radius is zero, so the corners are square. the edge is{" "}
+          card is a pass item: base-nova&rsquo;s card with its imports pointed at superthread and its classes as
+          upstream wrote them, with one added: it names its fill as <code>--surface</code>, so a field separator&rsquo;s
+          words on it print no box. the tokens set the look. the radius is zero, so the corners are square. the edge is{" "}
           <code>--foreground</code> at 10 percent, and the fill is <code>--card</code>, which matches the stock in light
           and sits a step above it in dark.
         </p>

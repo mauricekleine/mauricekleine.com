@@ -151,16 +151,16 @@ describe("the transforms", () => {
   });
 
   test("regen applies a pass item's class table, and fails on a stale entry or a style hook with no rule", () => {
-    expect(Object.keys(PASS_CLASSES).sort()).toEqual(["sheet", "tooltip"]);
+    expect(Object.keys(PASS_CLASSES).sort()).toEqual(["card", "sheet", "tooltip"]);
     for (const [name, table] of Object.entries(PASS_CLASSES)) {
       const words = classWords(transform(upstreamFile(name).content, name, { pass: name }));
       for (const [word, replacement] of Object.entries(table)) {
-        expect(words.has(word), `${name}: ${word}`).toBe(false);
+        expect(words.has(word), `${name}: ${word}`).toBe(replacement.includes(word));
         for (const replaced of replacement) expect(words.has(replaced), `${name}: ${replaced}`).toBe(true);
       }
     }
     expect(() => transform(`const c = "px-2"\n`, "probe", { pass: "sheet" })).toThrow(/no longer has/);
-    expect(() => transform(`const c = "cn-menu-target px-2"\n`, "probe", { pass: "card" })).toThrow(
+    expect(() => transform(`const c = "cn-menu-target px-2"\n`, "probe", { pass: "label" })).toThrow(
       /style hook cn-menu-target has no rule/,
     );
     // a brand seed keeps its other hooks for its slice to decide

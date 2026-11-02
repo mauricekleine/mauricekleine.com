@@ -1,5 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { FieldExample, FieldOrientations, FieldParts, FieldsOnPhone, FieldStates } from "@/examples/field";
+import {
+  FieldExample,
+  FieldOnLayers,
+  FieldOrientations,
+  FieldParts,
+  FieldsOnPhone,
+  FieldStates,
+} from "@/examples/field";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -10,6 +17,7 @@ export const Route = createFileRoute("/components/field")({
       { id: "example", title: "example" },
       { id: "orientations", title: "orientations" },
       { id: "parts", title: "parts" },
+      { id: "layers", title: "on a layer" },
       { id: "states", title: "states" },
       { id: "phone", title: "phone" },
     ],
@@ -50,6 +58,15 @@ function Page() {
         </p>
         <ModePair className="st-e-wide">
           <FieldParts />
+        </ModePair>
+      </Section>
+      <Section id="layers" title="on a layer">
+        <p className="st-e-copy">
+          a separator&rsquo;s words take the fill beneath them, so in a dialog or a sheet they sit on the layer&rsquo;s
+          own fill, with no box. each frame stands in for the window.
+        </p>
+        <ModePair className="st-e-wide">
+          <FieldOnLayers />
         </ModePair>
       </Section>
       <Section id="states" title="states">
