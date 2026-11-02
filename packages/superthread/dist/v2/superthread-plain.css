@@ -226,8 +226,16 @@
   --spacing-row-board: 56px;
   --spacing-row-table: 48px;
   --spacing-row-nav: 32px;
+  --spacing-panel-inset: 48px;
   --code-ring-offset: -4px;
   color-scheme: light;
+}
+
+@media (max-width: 600px) {
+  :root,
+  .light {
+    --spacing-panel-inset: 16px;
+  }
 }
 
 .dark {

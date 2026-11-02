@@ -5,6 +5,7 @@ import { DARK, FONT_BASE, OUTPUTS, plainTexture, root } from "../scripts/generat
 import { fonts } from "../fonts.ts";
 import { fleet } from "../items/lib/fleet.ts";
 import { steps } from "../tokens/scale.ts";
+import { child, parse, value } from "./css.ts";
 import { type Chain, inScope } from "./scope.ts";
 
 const read = (path: string) => readFileSync(join(root, path), "utf8");
@@ -24,6 +25,17 @@ describe("generate", () => {
     expect(fontUrls(site)).toEqual(fonts.map((face) => `${FONT_BASE.site}${face.file}`));
     expect(pkg.replaceAll(`url("${FONT_BASE.package}`, `url("${FONT_BASE.site}`)).toBe(site);
     expect(pkg).not.toBe(site);
+  });
+
+  // A `.light` island restates :root, so a phone value it left out would snap back to the wide one inside the island.
+  test("the panel inset is 48 px, and 16 px on a phone on the root and a light island, in every sheet", () => {
+    for (const out of [OUTPUTS.css, OUTPUTS.site, OUTPUTS.plain]) {
+      const sheet = parse(read(out));
+      expect(value(child(sheet, ":root, .light"), "--spacing-panel-inset")).toBe("48px");
+      const phone = child(child(sheet, "@media (max-width: 600px)"), ":root, .light");
+      expect(value(phone, "--spacing-panel-inset")).toBe("16px");
+    }
+    expect(read(OUTPUTS.css)).toContain("--spacing-panel-inset: var(--spacing-panel-inset);");
   });
 
   test("the texture section is present exactly when texture/tiles.json exists", () => {
@@ -134,7 +146,7 @@ describe("the dark scope", () => {
   });
 
   test("the Tailwind outputs carry the item utilities and the plain css leaves them out", () => {
-    for (const name of ["off-paper", "hit-area", "link-quiet"]) {
+    for (const name of ["off-paper", "hit-area", "hit-area-scroller", "link-quiet"]) {
       for (const out of [OUTPUTS.css, OUTPUTS.site]) expect(read(out)).toContain(`\n@utility ${name} {\n`);
       expect(read(OUTPUTS.plain)).not.toContain(name);
     }

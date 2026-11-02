@@ -12,7 +12,7 @@ function Letter({ className, last, ...props }: React.ComponentProps<"article"> &
       data-mk="letter"
       data-slot="letter"
       className={cn(
-        "min-w-0 border border-border [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mx-4 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-x-0",
+        "min-w-0 border border-border [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mx-(--spacing-panel-inset) [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-x-0",
         last &&
           "[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mb-4 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-b-0",
         className,

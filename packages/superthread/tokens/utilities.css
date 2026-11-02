@@ -31,6 +31,7 @@
 /* a target reaches 44 px without growing: ::after, centred on its box, takes the pointer at least 44 px each way. the
    box stays positioned. an item scopes it to the widths that need it. */
 @utility hit-area {
+  contain: var(--hit-contain, none);
   &::after {
     content: "";
     position: absolute;
@@ -40,6 +41,13 @@
     height: max(100%, 44px);
     translate: -50% -50%;
   }
+}
+
+/* a scroller counts a hit area's reach as content, so a box near its edge would add a scrollbar. a scroller holding hit
+   areas takes this, and each target it holds contains its own, which still takes the pointer. containment skips an
+   inline box and costs a baseline, so a link in there is an inline-block and its row doesn't align to baselines. */
+@utility hit-area-scroller {
+  --hit-contain: layout;
 }
 
 /* the one second link form, beside the foreground link: a muted word that turns foreground on hover, underlined 4 px
