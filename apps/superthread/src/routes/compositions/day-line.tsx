@@ -86,8 +86,8 @@ function Page() {
       <Section id="heavy" title="a heavy day">
         <p className="st-cb-copy">
           when names can&rsquo;t sit side by side they stagger on two rows and drop their times, and a tentative name
-          keeps its word on the title&rsquo;s line. each name truncates before the next one in its row, and a long late
-          name stops short of the one before it.
+          keeps its word on the title&rsquo;s line. each name truncates before the next one in its row, and a long name
+          at the end of the day stops short of the one before it.
         </p>
         <ModePair className="st-cb-stack">
           <DayLineHeavy />
