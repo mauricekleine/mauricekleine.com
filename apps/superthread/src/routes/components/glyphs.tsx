@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { IconsExample, StatusGlyphsExample } from "@/examples/glyphs";
+import { IconsExample, StateWordsExample, StatusGlyphsExample } from "@/examples/glyphs";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/components/glyphs")({
     sections: [
       { id: "icons", title: "icons" },
       { id: "status", title: "status glyphs" },
+      { id: "state", title: "state words" },
       { id: "use", title: "use" },
     ],
   },
@@ -21,7 +22,7 @@ function Page() {
     <>
       <PageHead
         title="glyphs"
-        lede="the pixel icons and status glyphs, drawn as whole-pixel squares in the current colour."
+        lede="the pixel icons and status glyphs, drawn as whole-pixel squares in the current colour, and a state word beside its 8 px square."
       >
         <InstallLine items={["glyphs"]} />
       </PageHead>
@@ -40,6 +41,17 @@ function Page() {
         </p>
         <ModePair>
           <StatusGlyphsExample />
+        </ModePair>
+      </Section>
+      <Section id="state" title="state words">
+        <p className="st-pass-prose">
+          <code>StateWord</code> prints a state as a word beside an 8 px square in the word&rsquo;s ink: filled and in
+          foreground when it&rsquo;s on, empty and muted when it&rsquo;s off. the word is the ship&rsquo;s own, and it
+          reads <code>on</code> or <code>off</code> when given none. it prints where an on or off fact sits in a list,
+          such as a schedule that&rsquo;s running.
+        </p>
+        <ModePair>
+          <StateWordsExample />
         </ModePair>
       </Section>
       <Section id="use" title="use">

@@ -8,7 +8,7 @@ import { renderToString } from "react-dom/server";
 import { catalog } from "@/components/superthread/catalog";
 import { Badge } from "@/components/superthread/ui/badge";
 import { Button } from "@/components/superthread/ui/button";
-import { Icon, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
+import { Icon, StateWord, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import { Skeleton } from "@/components/superthread/ui/skeleton";
 import {
@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "@/components/superthread/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/superthread/ui/tabs";
-import { client, server } from "./rendered.tsx";
+import { client, one, server } from "./rendered.tsx";
 
 const root = join(import.meta.dir, "..");
 const details: { key: string }[] = JSON.parse(readFileSync(join(root, "tokens/details.json"), "utf8")).DETAILS;
@@ -384,6 +384,35 @@ describe("button", () => {
       expect(classes(html)).toEqual(expect.arrayContaining(["text-foreground", "hover:underline"]));
       expect(classes(html)).not.toContain("text-primary");
     }
+  });
+});
+
+describe("state word", () => {
+  const word = (node: React.ReactNode) => one(server(node), '[data-slot="state-word"]');
+  // Each run of the path is a row of whole cells, so the widths add up to the cells it inks.
+  const inked = (el: Element) =>
+    [...(el.querySelector("path")?.getAttribute("d") ?? "").matchAll(/h(\d+)v1/g)].reduce((sum, m) => sum + +m[1]!, 0);
+
+  test("on prints in foreground beside a filled 8 px square, off in muted beside its edge alone", () => {
+    const on = word(<StateWord on />);
+    expect(on.classes).toContain("text-foreground");
+    expect(inked(on.el)).toBe(64);
+    const off = word(<StateWord />);
+    expect(off.classes).toContain("text-muted-foreground");
+    expect(inked(off.el)).toBe(28);
+    for (const { el } of [on, off]) {
+      const square = el.querySelector("svg")!;
+      expect([square.getAttribute("width"), square.getAttribute("height")]).toEqual(["8", "8"]);
+      expect(square.getAttribute("fill")).toBe("currentColor");
+    }
+  });
+
+  test("the word is the ship's own, names the state when given none, and the square stays out of it", () => {
+    expect(word(<StateWord on />).el.textContent).toBe("on");
+    expect(word(<StateWord />).el.textContent).toBe("off");
+    const paused = word(<StateWord>paused</StateWord>);
+    expect(paused.el.textContent).toBe("paused");
+    expect(paused.el.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
   });
 });
 

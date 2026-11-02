@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Icon, StatusGlyph, type IconName, type StatusState } from "@/components/superthread/ui/glyphs";
+import { Icon, StateWord, StatusGlyph, type IconName, type StatusState } from "@/components/superthread/ui/glyphs";
 
 // Every glyph the set draws, and what each 14-cell glyph marks (null for a 12-cell icon). Keyed by IconName, so a
 // glyph added to the generated set fails the type check here until this page shows it.
@@ -88,5 +88,25 @@ export function StatusGlyphsExample() {
         ))}
       </ul>
     </>
+  );
+}
+
+// A schedule's two states and a ship's own words for them. The square and the ink change, and the word stays the ship's.
+export function StateWordsExample() {
+  return (
+    <ul className="st-state-words">
+      <li>
+        <StateWord on />
+      </li>
+      <li>
+        <StateWord />
+      </li>
+      <li>
+        <StateWord on>every day at 07:00</StateWord>
+      </li>
+      <li>
+        <StateWord>paused</StateWord>
+      </li>
+    </ul>
   );
 }
