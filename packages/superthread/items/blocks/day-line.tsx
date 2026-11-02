@@ -239,14 +239,16 @@ function blockWords({ event, past, started, group, startsAt, endsAt }: Placed, o
 // A block is the one solid thing on the strip. Its ink lives in --ink, so a form and a state set one value each and a
 // link's hover raises it. The seam on a block that touches the one before is a clear edge, so it shows any surface.
 const BLOCK =
-  "@container/block relative block size-full min-w-0.5 overflow-hidden border-0 border-transparent bg-(--ink) bg-clip-padding text-background transition-[background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) [--ink:var(--muted-foreground)] data-[ink=past]:[--ink:var(--disabled)] data-[ink=selected]:[--ink:var(--first)] data-[seam=left]:border-l data-[seam=top]:border-t data-[form=outline]:border data-[form=outline]:border-(--ink) data-[form=outline]:bg-transparent data-[form=outline]:text-foreground data-[form=dotted]:border data-[form=dotted]:border-dotted data-[form=dotted]:border-(--ink) data-[form=dotted]:bg-transparent data-[form=dotted]:text-(--ink) [&:is(a)]:data-[ink=rest]:hover:[--ink:var(--foreground)] [&:is(a)]:data-[ink=past]:hover:[--ink:var(--muted-foreground)] focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:600px)]:pointer-events-none";
+  "group/block @container/block relative block size-full min-w-0.5 overflow-hidden border-0 border-transparent bg-(--ink) bg-clip-padding text-background transition-[background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) [--ink:var(--muted-foreground)] data-[ink=past]:[--ink:var(--disabled)] data-[ink=selected]:[--ink:var(--first)] data-[seam=left]:border-l data-[seam=top]:border-t data-[form=outline]:border data-[form=outline]:border-(--ink) data-[form=outline]:bg-transparent data-[form=outline]:text-foreground data-[form=dotted]:border data-[form=dotted]:border-dotted data-[form=dotted]:border-(--ink) data-[form=dotted]:bg-transparent data-[form=dotted]:text-(--ink) [&:is(a)]:data-[ink=rest]:hover:[--ink:var(--foreground)] [&:is(a)]:data-[ink=past]:hover:[--ink:var(--muted-foreground)] focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:600px)]:pointer-events-none";
 
-// A brief prints only on a block still to come with the track to itself. The block's own width picks the word or the
-// glyph, and a phone always takes the glyph.
+// A brief prints on a block still to come or underway, with the track to itself: a meeting that has started is when its
+// brief is read. The block's own width picks the word or the glyph, and a phone always takes the glyph. Either sits on
+// the block's own face above the now mark, so the mark passes behind it and never through it. An outline or a dotted
+// block has no face of its own, so there the brief takes the fill of the surface it sits on.
 function DayLineBlock({ item, options }: { item: Placed; options: TimeOptions }) {
-  const { event, past, started, lanes, seam } = item;
+  const { event, past, lanes, seam } = item;
   const linked = event.render !== undefined || event.href !== undefined;
-  const marked = event.brief && !past && !started && lanes === 1;
+  const marked = event.brief && !past && lanes === 1;
   return useRender({
     defaultTagName: "span",
     render: event.render ?? (event.href !== undefined ? <a /> : undefined),
@@ -264,11 +266,16 @@ function DayLineBlock({ item, options }: { item: Placed; options: TimeOptions })
       className: BLOCK,
       children: marked ? (
         <span aria-hidden="true" className="flex h-full items-center justify-center type-instrument">
-          <span className="hidden [@media(min-width:601px)]:@min-[36px]/block:inline">brief</span>
-          <Icon
-            name="brief"
-            className="hidden @min-[14px]/block:block [@media(min-width:601px)]:@min-[36px]/block:hidden"
-          />
+          <span
+            data-slot="day-line-brief"
+            className="relative z-1 flex items-center bg-(--ink) px-1 transition-[background-color] duration-(--duration-instant) ease-(--ease-brand) group-data-[form=dotted]/block:bg-(--surface,var(--background)) group-data-[form=outline]/block:bg-(--surface,var(--background))"
+          >
+            <span className="hidden [@media(min-width:601px)]:@min-[36px]/block:inline">brief</span>
+            <Icon
+              name="brief"
+              className="hidden @min-[14px]/block:block [@media(min-width:601px)]:@min-[36px]/block:hidden"
+            />
+          </span>
         </span>
       ) : undefined,
     },
@@ -392,7 +399,7 @@ function DayLineStrip({
       </div>
       <div
         data-slot="day-line-track"
-        className="relative mt-1 h-[29px] border-b border-rule @max-[560px]/day-line:h-[25px]"
+        className="relative isolate mt-1 h-[29px] border-b border-rule @max-[560px]/day-line:h-[25px]"
       >
         <ol className="absolute inset-0 list-none">
           {placed.map((item) => (

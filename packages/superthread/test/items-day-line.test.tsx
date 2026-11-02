@@ -177,10 +177,30 @@ describe("a block's states", () => {
     expect(ahead?.hasAttribute("data-past")).toBe(false);
   });
 
-  test("a meeting underway loses its word, so the mark never crosses one", () => {
+  test("a meeting underway keeps its brief, since that's when it's read", () => {
     const host = strip([renewal], { now: clock("11:12") });
     expect(ink(host, "renewal call")).toBe("rest");
-    expect(word(host, "renewal call")).toBe("");
+    expect(word(host, "renewal call")).toBe("brief");
+  });
+
+  test("a brief sits over the mark on the block's own face, so the mark passes behind it and never through it", () => {
+    const host = strip([renewal, meeting("hold", "13:00", "13:45", { brief: true, tentative: true })], {
+      now: clock("11:12"),
+    });
+    const brief = one(block(host, "renewal call"), '[data-slot="day-line-brief"]');
+    expect(brief.classes).toEqual(expect.arrayContaining(["relative", "z-1", "bg-(--ink)"]));
+    // an outline or a dotted block has no fill, so its brief takes the fill of the surface the strip sits on, the
+    // panel's card or else the stock, as the mark's own edge does
+    const hold = block(host, "hold");
+    expect(hold.classList).toContain("group/block");
+    expect(one(hold, '[data-slot="day-line-brief"]').classes).toEqual(
+      expect.arrayContaining([
+        "group-data-[form=outline]/block:bg-(--surface,var(--background))",
+        "group-data-[form=dotted]/block:bg-(--surface,var(--background))",
+      ]),
+    );
+    // the track keeps that stacking to itself
+    expect(one(host, '[data-slot="day-line-track"]').classes).toContain("isolate");
   });
 
   test("a meeting that ends this minute is over, and one that starts this minute is underway", () => {
@@ -275,8 +295,8 @@ describe("a block's states", () => {
 
   test("a brief carries the word and the drawn glyph, and the block's width and the viewport pick one", () => {
     const host = strip([renewal]);
-    const mark = block(host, "renewal call").firstElementChild!;
-    expect(mark.getAttribute("aria-hidden")).toBe("true");
+    const mark = one(block(host, "renewal call"), '[data-slot="day-line-brief"]').el;
+    expect(mark.closest('[aria-hidden="true"]')).not.toBeNull();
     const [word, glyph] = mark.children;
     expect(word?.textContent).toBe("brief");
     expect(word?.getAttribute("class")).toContain("[@media(min-width:601px)]:@min-[36px]/block:inline");
@@ -493,7 +513,11 @@ describe("the strip", () => {
   test("on a timeline solid means an event: past the blocks, nothing on the track carries a fill but the rule's ticks and the mark", () => {
     const host = strip([standup, renewal], { now: clock("11:12") });
     const track = one(host, '[data-slot="day-line-track"]').el;
-    const filled = elements(track).filter(({ classes }) => classes.some((cls) => /^bg-(?!clip|transparent)/.test(cls)));
+    // a brief inside a block stands on the block's own face, so it's part of the event
+    const outsideBlocks = elements(track).filter(
+      ({ el }) => !el.parentElement?.closest('[data-slot="day-line-block"]'),
+    );
+    const filled = outsideBlocks.filter(({ classes }) => classes.some((cls) => /^bg-(?!clip|transparent)/.test(cls)));
     expect(filled.map(({ el }) => el.getAttribute("data-slot")).sort()).toEqual([
       "day-line-block",
       "day-line-block",

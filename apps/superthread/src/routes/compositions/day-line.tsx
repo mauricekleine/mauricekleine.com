@@ -65,8 +65,9 @@ function Page() {
       <Section id="through-the-day" title="through the day">
         <p className="st-cb-copy">
           on a timeline solid means an event and nothing else, so nothing fills in behind the mark. a meeting that has
-          ended dims and loses its word. a meeting that has started loses its word too, so the mark never crosses one. a
-          day gone by reads as spent all through, with no mark. two blocks that touch keep a 1 px seam.
+          ended dims and loses its word. a meeting underway keeps its brief, since that&rsquo;s when it&rsquo;s read,
+          and the word sits on the block&rsquo;s own face, so the mark passes behind it. a day gone by reads as spent
+          all through, with no mark. two blocks that touch keep a 1 px seam.
         </p>
         <ModePair className="st-cb-stack">
           <DayLineThroughTheDay />
