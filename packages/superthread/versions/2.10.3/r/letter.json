@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "letter",
+  "title": "letter",
+  "description": "a piece of writing read whole: its subject and kind, the body at the reading measure, and its tools",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/blocks/letter.tsx",
+      "content": "import { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/letter 2.10.3\n\n// One piece of writing, read whole before someone acts on it. The box takes no padding of its own, so a foot such as\n// paper reaches both edges, and it never clips or clamps. Inside the working panel on a phone it gives up its side edges\n// for the panel's whole width. last says nothing follows it in the panel, wrappers included, so there it also runs down\n// to the panel's foot; a page has to say so, because a selector can't see past a wrapper or a tab's hidden panel.\nfunction Letter({ className, last, ...props }: React.ComponentProps<\"article\"> & { last?: boolean }) {\n  return (\n    <article\n      data-mk=\"letter\"\n      data-slot=\"letter\"\n      className={cn(\n        \"min-w-0 border border-border [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mx-(--spacing-panel-inset) [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-x-0\",\n        last &&\n          \"[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mb-4 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-b-0\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// The subject and kind share a baseline on the table's row height, and a long subject wraps beside the kind.\nfunction LetterHead({ className, ...props }: React.ComponentProps<\"header\">) {\n  return (\n    <header\n      data-slot=\"letter-head\"\n      className={cn(\n        \"flex min-w-0 items-baseline justify-between gap-4 border-b border-border px-6 pt-3.5 pb-[13px] [@media(max-width:600px)]:px-4 [@media(max-width:600px)]:pt-3 [@media(max-width:600px)]:pb-[11px]\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// The subject is a heading, so a screen reader can jump to the writing itself. A letter under a section's title renders\n// the level below it.\nfunction LetterSubject({ className, render = <h2 />, ...props }: useRender.ComponentProps<\"h2\">) {\n  return useRender({\n    render,\n    state: { slot: \"letter-subject\" },\n    props: mergeProps<\"h2\">(\n      { className: cn(\"min-w-0 text-ui font-medium text-foreground [overflow-wrap:anywhere]\", className) },\n      props,\n    ),\n  });\n}\n\n// What the writing is and where it comes from, one muted line that stays whole beside the subject.\nfunction LetterKind({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p data-slot=\"letter-kind\" className={cn(\"shrink-0 type-instrument text-muted-foreground\", className)} {...props} />\n  );\n}\n\n// The whole body at the reading measure, never clamped. Text keeps the line breaks it was written with, so a plain string\n// reads as it was sent; paragraphs passed as elements sit 12 px apart. The measure sits on the content box, in the read\n// step's own em, so the padding never eats it. A long address or link wraps, so the letter holds its width.\nfunction LetterBody({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"letter-body\"\n      className={cn(\n        \"box-content max-w-[27.5em] px-6 py-5 type-read whitespace-pre-wrap [overflow-wrap:anywhere] [&>p+p]:mt-3 [@media(max-width:600px)]:p-4\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// The row under the body: what can be done to the writing at the start, where it came from at the end. The body's bottom\n// padding is the gap above it.\nfunction LetterTools({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"letter-tools\"\n      className={cn(\n        \"flex min-w-0 flex-wrap items-center justify-between gap-x-4 gap-y-2 px-6 pb-4 [@media(max-width:600px)]:px-4\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// The app's buttons. A leading ghost has no edge to line up, so its word takes the text's edge instead of its box: 18 px\n// of padding and the 1 px edge it hides.\nfunction LetterActions({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"letter-actions\"\n      className={cn(\n        \"flex min-w-0 flex-wrap items-center gap-2 [&>[data-variant=ghost]:first-child]:-ml-[19px]\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\n// A way back to what the writing answers, in the quiet link form. It keeps the row's end when no actions sit beside it.\nfunction LetterSource({ className, href, render, ...props }: useRender.ComponentProps<\"a\">) {\n  return useRender({\n    defaultTagName: \"a\",\n    render,\n    state: { slot: \"letter-source\" },\n    props: mergeProps<\"a\">(\n      { href, className: cn(\"ml-auto min-w-0 type-instrument link-quiet [overflow-wrap:anywhere]\", className) },\n      props,\n    ),\n  });\n}\n\nexport { Letter, LetterHead, LetterSubject, LetterKind, LetterBody, LetterTools, LetterActions, LetterSource };\n",
+      "type": "registry:component",
+      "target": "@components/superthread/blocks/letter.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.10.3",
+    "sha256": "cfd14a1a6301bc4a3587ce1a61fb5f62ac4254bcf8c561e05819aa679dc5c6f1",
+    "tier": "block",
+    "upstream": null,
+    "serves": [
+      "orbit",
+      "artifacts"
+    ]
+  },
+  "type": "registry:block"
+}
