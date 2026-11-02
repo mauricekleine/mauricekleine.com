@@ -539,17 +539,17 @@
 /* row edge, on the table: every row's first cell takes 16 px of left padding, and the row under the pointer prints
    a 4 px strip of foreground at 50 percent at its left edge, inside that padding, so the strip sits inside the
    table's box (a scrolling wrapper cannot clip it) and 12 px clear of the cell's content. a selected row
-   (aria-selected, or shadcn's data-state) prints the strip solid. */
+   (aria-selected, or shadcn's data-state) prints the strip solid. a body row's first cell may be its row head. */
 .texture-rowedge {
   & :is(th, td):first-child {
     padding-left: 16px;
   }
-  & :where(td:first-child) {
+  & :where(td:first-child, tbody th:first-child) {
     position: relative;
   }
   & tbody tr {
     &:hover {
-      &:not([aria-selected="true"], [data-state="selected"]) > td:first-child::before {
+      &:not([aria-selected="true"], [data-state="selected"]) > :is(td, th):first-child::before {
         content: "";
         position: absolute;
         left: 0;
@@ -561,7 +561,7 @@
         mask: var(--texture-b50) 0 0 / 4px 4px;
       }
     }
-    &:is([aria-selected="true"], [data-state="selected"]) > td:first-child::before {
+    &:is([aria-selected="true"], [data-state="selected"]) > :is(td, th):first-child::before {
       content: "";
       position: absolute;
       left: 0;

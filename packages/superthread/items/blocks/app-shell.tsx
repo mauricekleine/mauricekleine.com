@@ -103,8 +103,9 @@ function AppShellNav({
 // ink. Below 900 px the rule yields and its items join the row. Under a nav with overflow, one list carries both forms:
 // at 600 px and below it is a native popover the `...` opens, so its links stay the app's own and it keeps the frame's
 // dark scope, and a choice in it closes it, since a client-side route keeps the page. An open list prints its words in
-// the popover's ink, a 44 px row each.
-function AppShellNavTier({ className, onClick, ...props }: ComponentProps<"ul">) {
+// the popover's ink, a 44 px row each. A window that grows past 600 px while it is open closes it, since the `...` it
+// hangs from yields there, and its links go back to the row.
+function AppShellNavTier({ className, onClick, onToggle, ...props }: ComponentProps<"ul">) {
   const listId = useContext(NavOverflow);
   return (
     <li
@@ -118,6 +119,17 @@ function AppShellNavTier({ className, onClick, ...props }: ComponentProps<"ul">)
         onClick={(event) => {
           onClick?.(event);
           if (listId && (event.target as Element).closest("a, button")) event.currentTarget.hidePopover?.();
+        }}
+        onToggle={(event) => {
+          onToggle?.(event);
+          const list = event.currentTarget;
+          const phone = list.ownerDocument.defaultView?.matchMedia("(max-width: 600px)");
+          if (!listId || !phone || event.newState !== "open") return;
+          const close = () => {
+            if (!phone.matches) list.hidePopover?.();
+          };
+          phone.addEventListener("change", close);
+          list.addEventListener("toggle", () => phone.removeEventListener("change", close), { once: true });
         }}
         className={cn(
           "flex min-w-0 flex-col gap-1 [@media(max-width:900px)]:contents",

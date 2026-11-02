@@ -63,6 +63,41 @@ export async function client(node: ReactNode): Promise<{ body: HTMLElement; done
   };
 }
 
+/**
+ * The elements a class on host gives a utility through a descendant variant (`[&_selector]:utility`), behind any
+ * `has-data-[...]` variants stacked before it. happy-dom paints nothing, so this is where such a rule meets the markup.
+ */
+export function reached(host: Element, utility: string): Element[] {
+  const found = new Set<Element>();
+  for (const cls of classesOf(host)) {
+    const { variants, utility: own } = parts(cls);
+    const descendant = variants.at(-1);
+    if (own !== utility || !descendant?.startsWith("[&_")) continue;
+    const gates = variants.slice(0, -1).map((gate) => /^has-data-\[(.+)\]$/.exec(gate)?.[1]);
+    if (gates.some((gate) => gate === undefined || !host.querySelector(`[data-${gate}]`))) continue;
+    for (const el of host.querySelectorAll(descendant.slice(3, -1).replaceAll("_", " "))) found.add(el);
+  }
+  return [...found];
+}
+
+/**
+ * Whether an element takes a utility from its own classes, reading only the variants that ask about an ancestor
+ * (`in-[...]`, `in-data-[...]` and their `not-` forms); every other variant counts as met.
+ */
+export function takes(el: Element, utility: string): boolean {
+  const holds = (variant: string) => {
+    const ancestor = /^(not-)?in-(?:\[(.+)\]|data-\[(.+)\])$/.exec(variant);
+    if (!ancestor) return true;
+    const selector = ancestor[2] ?? `[data-${ancestor[3]}]`;
+    const inside = el.parentElement?.closest(selector.replaceAll("_", " ")) != null;
+    return ancestor[1] ? !inside : inside;
+  };
+  return classesOf(el).some((cls) => {
+    const { variants, utility: own } = parts(cls);
+    return own === utility && variants.every(holds);
+  });
+}
+
 export function one(scope: ParentNode, selector: string): Rendered {
   const el = scope.querySelector(selector);
   expect(el, selector).not.toBeNull();

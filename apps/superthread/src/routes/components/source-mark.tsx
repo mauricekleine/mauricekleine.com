@@ -37,8 +37,8 @@ function Page() {
       </Section>
       <Section id="frames" title="its two frames">
         <p className="st-pass-prose">
-          the second frame cuts in, with no transition, while the pointer or the focus is on the mark or in its tile.{" "}
-          <code>held</code> keeps it up, for a moment that settles on it.
+          the second frame cuts in, with no transition, while the pointer or the focus is on the mark or in a linked
+          tile. <code>held</code> keeps it up, for a moment that settles on it.
         </p>
         <ModePair>
           <SourceMarkFrames />
@@ -61,7 +61,7 @@ function Page() {
             <a href="/compositions/item-cards#tiles">
               <code>item-cards</code>
             </a>
-            , and the whole tile drives its second frame.
+            , and a tile whose title links drives its second frame from anywhere in it.
           </dd>
         </dl>
       </Section>

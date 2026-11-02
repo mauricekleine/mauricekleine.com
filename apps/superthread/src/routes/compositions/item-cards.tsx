@@ -462,14 +462,14 @@ function Page() {
         </p>
         <ModePair
           light={
-            <GroundFrame mode="light" title="full cards phone, light" height={640}>
+            <GroundFrame mode="light" title="full cards phone, light" height={660}>
               <AppShellPanel>
                 <FullCards last />
               </AppShellPanel>
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="full cards phone, dark" height={640}>
+            <GroundFrame mode="dark" title="full cards phone, dark" height={660}>
               <AppShellPanel>
                 <FullCards last />
               </AppShellPanel>
@@ -504,14 +504,14 @@ function Page() {
         <ModePair
           className="st-cb-stack"
           light={
-            <GroundFrame mode="light" title="tiles in the panel, light" width={960} height={620}>
+            <GroundFrame mode="light" title="tiles in the panel, light" width={960} height={640}>
               <AppShellPanel>
                 <Tiles last />
               </AppShellPanel>
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="tiles in the panel, dark" width={960} height={620}>
+            <GroundFrame mode="dark" title="tiles in the panel, dark" width={960} height={640}>
               <AppShellPanel>
                 <Tiles last />
               </AppShellPanel>
@@ -527,14 +527,14 @@ function Page() {
         </p>
         <ModePair
           light={
-            <GroundFrame mode="light" title="tiles phone, light" height={1000}>
+            <GroundFrame mode="light" title="tiles phone, light" height={1020}>
               <AppShellPanel>
                 <Tiles last />
               </AppShellPanel>
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="tiles phone, dark" height={1000}>
+            <GroundFrame mode="dark" title="tiles phone, dark" height={1020}>
               <AppShellPanel>
                 <Tiles last />
               </AppShellPanel>

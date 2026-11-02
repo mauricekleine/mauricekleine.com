@@ -8,9 +8,12 @@ import { renderToString } from "react-dom/server";
 import { catalog } from "@/components/superthread/catalog";
 import { Badge } from "@/components/superthread/ui/badge";
 import { Button } from "@/components/superthread/ui/button";
+import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { Icon, StateWord, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
+import { Input } from "@/components/superthread/ui/input";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import { Skeleton } from "@/components/superthread/ui/skeleton";
+import { Switch } from "@/components/superthread/ui/switch";
 import {
   Table,
   TableBody,
@@ -22,7 +25,7 @@ import {
   TableRow,
 } from "@/components/superthread/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/superthread/ui/tabs";
-import { client, one, server } from "./rendered.tsx";
+import { client, one, reached, server } from "./rendered.tsx";
 
 const root = join(import.meta.dir, "..");
 const details: { key: string }[] = JSON.parse(readFileSync(join(root, "tokens/details.json"), "utf8")).DETAILS;
@@ -668,6 +671,35 @@ describe("table", () => {
       expect(list(row.lastElementChild)).toContain("last:pr-(--spacing-panel-inset)");
     });
 
+    test("above the fold every cell after the first starts 4 px in, level with its head, so a ring fits the clip", () => {
+      const host = server(foldedTable);
+      for (const cell of host.querySelectorAll("tr > *"))
+        expect(list(cell)).toEqual(
+          expect.arrayContaining(["@min-[776px]/fold:not-first:pl-1", "@min-[776px]/fold:not-last:pr-3"]),
+        );
+      expect(list(host.querySelector("tbody td"))).toEqual(
+        expect.arrayContaining(["overflow-hidden", "text-ellipsis", "first:pl-(--spacing-panel-inset)!"]),
+      );
+    });
+
+    test("a caption closes the table in both forms", () => {
+      const host = server(
+        <Table fold>
+          <TableCaption>runs this week</TableCaption>
+          <TableBody>
+            <TableRow>
+              <TableCell>a run</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>,
+      );
+      expect(list(host.querySelector("table"))).toEqual(
+        expect.arrayContaining(["caption-bottom", "@max-[776px]/fold:flex", "@max-[776px]/fold:flex-col"]),
+      );
+      expect(list(host.querySelector("table"))).not.toContain("@max-[776px]/fold:block");
+      expect(list(host.querySelector("caption"))).toContain("@max-[776px]/fold:order-last");
+    });
+
     test("the row, not its first cell, anchors the row edge and what covers the row", () => {
       const row = server(foldedTable).querySelector("tbody tr")!;
       expect(list(row)).toContain("relative");
@@ -690,17 +722,18 @@ describe("table", () => {
       expect(list(cells[3])).toContain("@max-[776px]/fold:col-span-full");
     });
 
-    test("folded, words wrap rather than clip, and the rule moves to the row", () => {
+    test("folded, words wrap rather than clip, a long word breaks anywhere, and the rule moves to the row", () => {
       const host = server(foldedTable);
-      const cell = list(host.querySelector("tbody td"));
-      expect(cell).toEqual(
-        expect.arrayContaining([
-          "@max-[776px]/fold:whitespace-normal",
-          "@max-[776px]/fold:overflow-visible",
-          "@max-[776px]/fold:border-0",
-          "@max-[776px]/fold:h-auto",
-        ]),
-      );
+      for (const cell of host.querySelectorAll("tbody tr > *"))
+        expect(list(cell)).toEqual(
+          expect.arrayContaining([
+            "@max-[776px]/fold:whitespace-normal",
+            "@max-[776px]/fold:[overflow-wrap:anywhere]",
+            "@max-[776px]/fold:overflow-visible",
+            "@max-[776px]/fold:border-0",
+            "@max-[776px]/fold:h-auto",
+          ]),
+        );
       expect(list(host.querySelector("tbody tr"))).toEqual(
         expect.arrayContaining(["@max-[776px]/fold:border-b", "@max-[776px]/fold:border-border"]),
       );
@@ -722,12 +755,41 @@ describe("table", () => {
       expect(list(cell)).toEqual(expect.arrayContaining(["text-left", "font-normal"]));
     });
 
-    test("a control in a cell stays above the link that covers the row, and the cover itself stays out of it", () => {
-      const cell = list(server(foldedTable).querySelector("tbody td"));
-      const raised = cell.find((cls) => cls.endsWith(":z-1"));
-      expect(raised).toContain("a,button,[role=checkbox]");
-      expect(raised).toContain("[data-slot=table-title]");
-      expect(raised).toContain("[data-slot=table-detail-trigger]");
+    test("every control in a row stays above the link that covers the row, and the cover itself stays under", () => {
+      const row = server(
+        <Table fold>
+          <TableBody>
+            <TableRow>
+              <TableCell fold="lead">
+                <Switch aria-label="on" />
+              </TableCell>
+              <TableCell fold="title">
+                <a data-slot="table-title" href="/routines/digest">
+                  the digest
+                </a>
+              </TableCell>
+              <TableCell fold="aside">
+                <Checkbox aria-label="chosen" />
+                <Button size="sm">run now</Button>
+              </TableCell>
+              <TableCell fold="meta">
+                <Input aria-label="from" />
+                <a href="/runs/12">last run</a>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>,
+      ).querySelector("tbody tr")!;
+      const lifted = reached(row, "z-1").filter((el) => reached(row, "relative").includes(el));
+      for (const control of [
+        '[role="switch"]',
+        '[role="checkbox"]',
+        "button",
+        "input[aria-label]",
+        'a[href="/runs/12"]',
+      ])
+        expect({ control, lifted: lifted.includes(row.querySelector(control)!) }).toEqual({ control, lifted: true });
+      expect(lifted.includes(row.querySelector('[data-slot="table-title"]')!)).toBe(false);
     });
   });
 });

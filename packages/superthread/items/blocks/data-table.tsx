@@ -79,7 +79,7 @@ function TableTitle({ className, href, render, ...props }: useRender.ComponentPr
       {
         href,
         className: cn(
-          "min-w-0 text-ui font-medium text-foreground decoration-1 underline-offset-4 in-data-[fold]:font-normal in-data-[receding]:text-muted-foreground [&:is(a)]:hover:underline not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:relative not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:inline-block not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:hit-area in-data-[fold]:[&:is(a)]:after:absolute in-data-[fold]:[&:is(a)]:after:inset-0 in-data-[fold]:[&:is(a)]:after:content-[''] in-data-[fold]:[tr:hover_&:is(a)]:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) in-data-[fold]:[&:is(a)]:focus-visible:outline-0 in-data-[fold]:[&:is(a)]:focus-visible:after:outline-2 in-data-[fold]:[&:is(a)]:focus-visible:after:-outline-offset-2 in-data-[fold]:[&:is(a)]:focus-visible:after:outline-(--ring)",
+          "min-w-0 text-ui font-medium text-foreground decoration-1 underline-offset-4 in-[table[data-fold]]:font-normal in-data-[receding]:text-muted-foreground [&:is(a)]:hover:underline not-in-[table[data-fold]]:[@media(max-width:600px)]:[&:is(a)]:relative not-in-[table[data-fold]]:[@media(max-width:600px)]:[&:is(a)]:inline-block not-in-[table[data-fold]]:[@media(max-width:600px)]:[&:is(a)]:hit-area in-[table[data-fold]]:[&:is(a)]:after:absolute in-[table[data-fold]]:[&:is(a)]:after:inset-0 in-[table[data-fold]]:[&:is(a)]:after:content-[''] [@media(hover:hover)]:in-[table[data-fold]]:[tr:hover_&:is(a)]:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) in-[table[data-fold]]:[&:is(a)]:focus-visible:outline-0 in-[table[data-fold]]:[&:is(a)]:focus-visible:after:outline-2 in-[table[data-fold]]:[&:is(a)]:focus-visible:after:-outline-offset-2 in-[table[data-fold]]:[&:is(a)]:focus-visible:after:outline-(--ring)",
           className,
         ),
       },
@@ -159,20 +159,25 @@ function TableDetailTrigger({ className, children, onClick, ...props }: React.Co
         toggle();
       }}
       className={cn(
-        "group/detail block w-full cursor-pointer truncate text-left @max-[776px]/fold:whitespace-normal text-ui text-foreground decoration-1 underline-offset-4 not-in-data-[fold]:font-medium in-data-[receding]:text-muted-foreground after:absolute after:inset-0 after:content-[''] [tr:hover_&]:underline focus-visible:outline-0 focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-(--ring)",
+        "group/detail block w-full cursor-pointer truncate text-left @max-[776px]/fold:whitespace-normal text-ui text-foreground decoration-1 underline-offset-4 not-in-[table[data-fold]]:font-medium in-data-[receding]:text-muted-foreground after:absolute after:inset-0 after:content-[''] [@media(hover:hover)]:[tr:hover_&]:underline focus-visible:outline-0 focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-(--ring)",
         className,
       )}
     >
       {children}
       <Icon
         name="chevron"
-        className="absolute top-1/2 right-1 -translate-y-1/2 text-muted-foreground group-aria-expanded/detail:rotate-180 in-data-[fold]:right-[calc((var(--spacing-panel-inset)-12px)/2)] @max-[776px]/fold:right-(--spacing-panel-inset)"
+        className="absolute top-1/2 right-1 -translate-y-1/2 text-muted-foreground group-aria-expanded/detail:rotate-180 in-[table[data-fold]]:right-[calc((var(--spacing-panel-inset)-12px)/2)] @max-[776px]/fold:right-(--spacing-panel-inset)"
       />
     </button>
   );
 }
 
 type UnderRowProps = React.ComponentProps<typeof TableRow> & { columns: number; lead?: boolean };
+
+// A row under another belongs to it, so it prints no row edge of its own, and its words break anywhere, so a long id
+// never widens the table.
+const underRow = "[&>:first-child]:before:hidden";
+const underCell = "overflow-visible whitespace-normal text-foreground [overflow-wrap:anywhere]";
 
 // The row under the trigger's: the detail lines up with the row's title, under an empty lead cell unless lead is false,
 // and its words print in the first ink at the UI step. It stays mounted while closed, so what the reader typed in it
@@ -185,14 +190,14 @@ function TableDetailRow({ className, columns, lead = true, children, ...props }:
       data-slot="table-detail"
       id={id}
       hidden={!open}
-      className={cn("@max-[776px]/fold:min-h-0 @max-[776px]/fold:pt-0 @max-[776px]/fold:pb-4", className)}
+      className={cn(underRow, "@max-[776px]/fold:min-h-0 @max-[776px]/fold:pt-0 @max-[776px]/fold:pb-4", className)}
       {...props}
     >
       {lead && <TableCell fold="lead" className="h-auto" />}
       <TableCell
         fold="title"
         colSpan={lead ? columns - 1 : columns}
-        className="h-auto overflow-visible pt-1 pb-5 align-top text-ui whitespace-normal text-foreground @max-[776px]/fold:pt-0 @max-[776px]/fold:pb-0"
+        className={cn(underCell, "h-auto pt-1 pb-5 align-top text-ui @max-[776px]/fold:pt-0 @max-[776px]/fold:pb-0")}
       >
         {children}
       </TableCell>
@@ -200,25 +205,29 @@ function TableDetailRow({ className, columns, lead = true, children, ...props }:
   );
 }
 
-// A sub-entry hanging off the row above: a line at the instrument step under that row's title, whose connector starts
-// under the row's lead column and turns in to the words, in the rule's ink.
+// A sub-entry hanging off the row above: a line at the instrument step under that row's title, whose connector turns in
+// to the words in the rule's ink. It starts under the row's lead column, or, with no lead, at the title's edge, and the
+// words step in past it.
 function TableSubRow({ className, columns, lead = true, children, ...props }: UnderRowProps) {
   return (
     <TableRow
       data-mk="data-table"
       data-slot="table-sub"
-      className={cn("@max-[776px]/fold:min-h-0 @max-[776px]/fold:pt-1 @max-[776px]/fold:pb-3", className)}
+      className={cn(underRow, "@max-[776px]/fold:min-h-0 @max-[776px]/fold:pt-1 @max-[776px]/fold:pb-3", className)}
       {...props}
     >
       {lead && <TableCell fold="lead" className="h-auto" />}
       <TableCell
         fold="title"
         colSpan={lead ? columns - 1 : columns}
-        className="h-9 overflow-visible pb-3 type-instrument whitespace-normal text-foreground @max-[776px]/fold:pb-0"
+        className={cn(underCell, "h-9 pb-3 type-instrument @max-[776px]/fold:pb-0")}
       >
         <span
           data-slot="table-sub-line"
-          className="relative block before:absolute before:-top-1.5 before:-left-5 before:h-4 before:w-3 before:border-b before:border-l before:border-rule before:content-['']"
+          className={cn(
+            "relative block before:absolute before:-top-1.5 before:h-4 before:w-3 before:border-b before:border-l before:border-rule before:content-['']",
+            lead ? "before:-left-5" : "pl-5 before:left-0",
+          )}
         >
           {children}
         </span>

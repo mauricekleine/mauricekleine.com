@@ -1,4 +1,4 @@
-import { Children, createContext, useContext, type ReactNode } from "react";
+import { Children, createContext, isValidElement, useContext, type ReactNode } from "react";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@/components/superthread/lib/utils";
@@ -64,7 +64,7 @@ const cardVariants: Record<ItemCardVariant, string> = {
   full: "group/item-card relative grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 border border-border px-6 pt-5 pb-3.5 transition-[border-color] duration-(--duration-quick) ease-(--ease-brand) not-first:mt-3 [grid-template-areas:'title_when'_'lede_lede'_'meta_go'] has-[[data-slot=item-card-link]]:hover:border-input [@media(max-width:600px)]:p-4 [@media(max-width:600px)]:[grid-template-areas:'title_title'_'when_when'_'lede_lede'_'meta_go'] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-x-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-t-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:not-first:mt-0",
   decided:
     "group/item-card relative grid h-12 min-w-0 grid-cols-[minmax(0,1fr)_152px_88px] items-center gap-x-4 border-b border-border px-3 type-ui text-foreground [grid-template-areas:'title_meta_when'] in-[[data-slot=app-shell-panel]_[data-slot=item-cards]:not(:has(>[data-variant=full]))]:px-(--spacing-panel-inset) [@media(max-width:600px)]:h-14 [@media(max-width:600px)]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:content-center [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:[grid-template-areas:'title_title'_'meta_when'] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:px-(--spacing-panel-inset)",
-  tile: "group/item-card group/source-mark relative -ml-px grid min-h-63 min-w-0 grid-cols-[minmax(0,1fr)_auto] content-start border-l border-border pt-7 pr-3 pb-6 pl-(--spacing-panel-inset) transition-[background-color] duration-(--duration-quick) ease-(--ease-brand) [grid-template-areas:'media_media'_'title_title'_'lede_lede'_'when_when'_'meta_meta'_'go_go'] before:absolute before:right-0 before:-bottom-px before:-left-px before:z-10 before:h-px before:bg-border last:-mr-px last:border-r @min-[880px]/tiles:[grid-template-areas:'media_media'_'title_title'_'lede_lede'_'when_when'_'meta_go'] [@media(max-width:600px)]:min-h-56 [@media(max-width:600px)]:pt-6 [@media(max-width:600px)]:pr-3 [@media(max-width:600px)]:pb-5 [@media(max-width:600px)]:pl-(--spacing-panel-inset)",
+  tile: "group/item-card relative -ml-px grid min-h-63 min-w-0 grid-cols-[minmax(0,1fr)_auto] content-start border-l border-border pt-7 pr-3 pb-6 pl-(--spacing-panel-inset) transition-[background-color] duration-(--duration-quick) ease-(--ease-brand) [grid-template-areas:'media_media'_'title_title'_'lede_lede'_'when_when'_'meta_meta'_'go_go'] before:absolute before:right-0 before:-bottom-px before:-left-px before:z-10 before:h-px before:bg-border last:-mr-px last:border-r @min-[880px]/tiles:[grid-template-areas:'media_media'_'title_title'_'lede_lede'_'when_when'_'meta_go'] [@media(max-width:600px)]:min-h-56 [@media(max-width:600px)]:pt-6 [@media(max-width:600px)]:pr-3 [@media(max-width:600px)]:pb-5 [@media(max-width:600px)]:pl-(--spacing-panel-inset)",
 };
 
 // The list keeps its semantics and the small card keeps its own surface, which also bounds the title's link. A full or
@@ -74,8 +74,9 @@ const cardVariants: Record<ItemCardVariant, string> = {
 // A tile's minimum height holds a three-line tile, so a row keeps its cells level and a state word leaves the rows where
 // they are. Its row rule is a pseudo-element above every cell, because the next row's hover fill would cover a border. A
 // linked tile takes the faint fill under the pointer, and paper asks for the one tile that prints on paper, which keeps
-// its fill and sits above its neighbours, so their fill never covers its contact edge. The last tile's right edge closes
-// a short row, and the list clips it off a full one.
+// its fill and sits above its neighbours, so their fill never covers its contact edge. A tile whose title links drives
+// its mark's second frame too, from anywhere in the tile. The last tile's right edge closes a short row, and the list
+// clips it off a full one.
 function ItemCard({
   className,
   variant,
@@ -84,11 +85,12 @@ function ItemCard({
   ...props
 }: React.ComponentProps<"li"> & { variant?: Exclude<ItemCardVariant, "tile">; paper?: boolean }) {
   if (useContext(VariantContext) === "tile") {
+    const linked = linkedTitle(children) && "group/source-mark";
     if (paper) {
       return (
         <Paper
           render={<li data-slot="item-card" data-variant="tile" data-paper="" {...props} />}
-          className={cn(cardVariants.tile, "z-1", className)}
+          className={cn(cardVariants.tile, linked, "z-1", className)}
         >
           {children}
         </Paper>
@@ -99,7 +101,7 @@ function ItemCard({
         data-mk="item-cards"
         data-slot="item-card"
         data-variant="tile"
-        className={cn(cardVariants.tile, "has-[[data-slot=item-card-link]]:hover:bg-faint", className)}
+        className={cn(cardVariants.tile, linked, "has-[[data-slot=item-card-link]]:hover:bg-faint", className)}
         {...props}
       >
         {children}
@@ -124,6 +126,16 @@ function ItemCard({
         )}
       </li>
     </VariantContext.Provider>
+  );
+}
+
+// Whether a tile's own title links, by href or by the app's router link.
+function linkedTitle(children: ReactNode) {
+  return Children.toArray(children).some(
+    (child) =>
+      isValidElement<{ href?: string; render?: unknown }>(child) &&
+      child.type === ItemCardTitle &&
+      (child.props.href !== undefined || child.props.render !== undefined),
   );
 }
 

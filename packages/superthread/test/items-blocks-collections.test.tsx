@@ -48,7 +48,18 @@ import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { StatusGlyph } from "@/components/superthread/ui/glyphs";
 import { SourceMark } from "@/components/superthread/ui/source-mark";
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/superthread/ui/table";
-import { client, CONTROL_RING, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
+import {
+  client,
+  CONTROL_RING,
+  detailsUsed,
+  elements,
+  forbidden,
+  one,
+  parts,
+  reached,
+  server,
+  takes,
+} from "./rendered.tsx";
 
 const views = [
   { value: "rows", label: "rows" },
@@ -965,6 +976,9 @@ describe("item cards", () => {
       expect(host.querySelectorAll("ul > li")).toHaveLength(3);
       expect(tile(host, 1).classes).toEqual(expect.arrayContaining(["border-l", "border-border"]));
       expect(host.querySelector('[data-slot="card"]')).toBeNull();
+      const rendered = elements(host);
+      expect(detailsUsed(rendered, "item-cards")).toEqual([]);
+      expect(forbidden(rendered.filter(({ el }) => el.getAttribute("data-slot")?.startsWith("item-card")))).toEqual([]);
     });
 
     test("a mark above a heading that links the whole tile, with no arrow and its ring inside", () => {
@@ -1048,8 +1062,22 @@ describe("item cards", () => {
       expect(list.el.getAttribute("data-variant")).toBe("tile");
     });
 
-    test("the whole tile drives its mark's second frame", () => {
-      expect(tile(tiles(), 1).classes).toContain("group/source-mark");
+    test("a tile whose title links drives its mark's second frame, on paper too, and an unlinked tile leaves it be", () => {
+      const host = tiles();
+      expect(tile(host, 0).classes).toContain("group/source-mark");
+      expect(tile(host, 1).classes).toContain("group/source-mark");
+      expect(tile(host, 2).classes).not.toContain("group/source-mark");
+      const routed = one(
+        server(
+          <ItemCards tiles>
+            <ItemCard>
+              <ItemCardTitle render={<a href="/sources/files" />}>files</ItemCardTitle>
+            </ItemCard>
+          </ItemCards>,
+        ),
+        "li",
+      );
+      expect(routed.classes).toContain("group/source-mark");
     });
 
     test("last runs the grid to the panel's foot at every width and drops the closing rule", () => {
@@ -1061,12 +1089,6 @@ describe("item cards", () => {
           `${PHONE}in-data-[slot=app-shell-panel]:-mb-4`,
         ]),
       );
-    });
-
-    test("claims no detail of its own and no forbidden class", () => {
-      const rendered = elements(tiles());
-      expect(detailsUsed(rendered, "item-cards")).toEqual([]);
-      expect(forbidden(rendered.filter(({ el }) => el.getAttribute("data-slot")?.startsWith("item-card")))).toEqual([]);
     });
   });
 });
@@ -1086,9 +1108,9 @@ describe("data table", () => {
       expect(title({ href: "/runs/12" }).classes).toEqual(
         expect.arrayContaining([
           "[&:is(a)]:hover:underline",
-          "not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:relative",
-          "not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:inline-block",
-          "not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:hit-area",
+          "not-in-[table[data-fold]]:[@media(max-width:600px)]:[&:is(a)]:relative",
+          "not-in-[table[data-fold]]:[@media(max-width:600px)]:[&:is(a)]:inline-block",
+          "not-in-[table[data-fold]]:[@media(max-width:600px)]:[&:is(a)]:hit-area",
           ...CONTROL_RING,
         ]),
       );
@@ -1219,14 +1241,42 @@ describe("data table", () => {
       const { classes } = one(server(<TableTitle href="/runs/12">a row</TableTitle>), '[data-slot="table-title"]');
       expect(classes).toEqual(
         expect.arrayContaining([
-          "in-data-[fold]:[&:is(a)]:after:absolute",
-          "in-data-[fold]:[&:is(a)]:after:inset-0",
-          "in-data-[fold]:[tr:hover_&:is(a)]:underline",
-          "in-data-[fold]:[&:is(a)]:focus-visible:outline-0",
-          "in-data-[fold]:[&:is(a)]:focus-visible:after:outline-2",
-          "in-data-[fold]:[&:is(a)]:focus-visible:after:-outline-offset-2",
+          "in-[table[data-fold]]:[&:is(a)]:after:absolute",
+          "in-[table[data-fold]]:[&:is(a)]:after:inset-0",
+          "[@media(hover:hover)]:in-[table[data-fold]]:[tr:hover_&:is(a)]:underline",
+          "in-[table[data-fold]]:[&:is(a)]:focus-visible:outline-0",
+          "in-[table[data-fold]]:[&:is(a)]:focus-visible:after:outline-2",
+          "in-[table[data-fold]]:[&:is(a)]:focus-visible:after:-outline-offset-2",
         ]),
       );
+    });
+
+    test("only a folding table makes a title its row's cover, so a plain table's detail keeps the plain link", () => {
+      const tables = (fold: boolean) =>
+        server(
+          <DataTable label="runs" fold={fold}>
+            <TableBody>
+              <TableDetail open>
+                <TableRow>
+                  <TableCell fold="title">
+                    <TableDetailTrigger>sent the digest</TableDetailTrigger>
+                  </TableCell>
+                </TableRow>
+                <TableDetailRow columns={2}>
+                  <TableTitle href="/runs/12">the run</TableTitle>
+                </TableDetailRow>
+              </TableDetail>
+            </TableBody>
+          </DataTable>,
+        ).querySelector('[data-slot="table-title"]')!;
+      const plain = tables(false);
+      expect(takes(plain, "font-normal")).toBe(false);
+      expect(takes(plain, "absolute")).toBe(false);
+      expect(takes(plain, "hit-area")).toBe(true);
+      const folded = tables(true);
+      expect(takes(folded, "font-normal")).toBe(true);
+      expect(takes(folded, "absolute")).toBe(true);
+      expect(takes(folded, "hit-area")).toBe(false);
     });
 
     test("a sortable head stays on screen, so the sort stays in reach", () => {
@@ -1363,12 +1413,12 @@ describe("data table", () => {
       expect(server(rows(true)).querySelectorAll(`${DETAIL} > td`)[1]?.getAttribute("colspan")).toBe("1");
     });
 
-    test("a row loses its rule to the detail or sub-entry under it", () => {
+    test("a row loses its rule to the detail or sub-entry under it, and to a sub-entry under its closed detail", () => {
       const row = one(server(rows(true)), '[data-slot="table-row"]:not([data-slot="table-detail"])');
+      const under =
+        ":has(+[data-slot=table-detail]:not([hidden]),+[data-slot=table-sub],+[data-slot=table-detail][hidden]+[data-slot=table-sub])";
       expect(row.classes).toEqual(
-        expect.arrayContaining([
-          "[&:has(+[data-slot=table-detail]:not([hidden]),+[data-slot=table-sub])>*]:border-b-transparent",
-        ]),
+        expect.arrayContaining([`[&${under}]:border-b-transparent`, `[&${under}>*]:border-b-transparent`]),
       );
     });
 
@@ -1381,8 +1431,10 @@ describe("data table", () => {
           "focus-visible:after:outline-2",
           "focus-visible:after:-outline-offset-2",
           "focus-visible:after:outline-(--ring)",
+          "[@media(hover:hover)]:[tr:hover_&]:underline",
         ]),
       );
+      expect(one(host, TRIGGER).classes).not.toContain("[tr:hover_&]:underline");
       expect(one(host, `${TRIGGER} svg`).classes).toContain("group-aria-expanded/detail:rotate-180");
     });
 
@@ -1407,9 +1459,79 @@ describe("data table", () => {
         expect.arrayContaining([
           "has-data-[slot=table-detail-trigger]:relative",
           "has-data-[slot=table-detail-trigger]:[&>:first-child]:static",
-          "has-data-[slot=table-detail-trigger]:[&>:last-child]:pr-7",
         ]),
       );
+    });
+
+    test("every control in a plain table's covered row stays its own target, and an uncovered row lifts none", () => {
+      const host = server(
+        <DataTable label="runs">
+          <TableBody>
+            <TableDetail>
+              <TableRow>
+                <TableCell>
+                  <Checkbox aria-label="chosen" />
+                </TableCell>
+                <TableCell>
+                  <Button size="sm">run now</Button>
+                </TableCell>
+                <TableCell>
+                  <TableTitle href="/runs/12">last run</TableTitle>
+                </TableCell>
+                <TableCell>
+                  <TableDetailTrigger>sent the digest</TableDetailTrigger>
+                </TableCell>
+              </TableRow>
+            </TableDetail>
+            <TableRow>
+              <TableCell>
+                <Checkbox aria-label="also chosen" />
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </DataTable>,
+      );
+      const [covered, plain] = [...host.querySelectorAll("tbody tr")];
+      const lifted = (row: Element) => reached(row, "z-1").filter((el) => reached(row, "relative").includes(el));
+      for (const control of ['[role="checkbox"]', 'button:not([data-slot="table-detail-trigger"])', "a"])
+        expect({ control, lifted: lifted(covered!).includes(covered!.querySelector(control)!) }).toEqual({
+          control,
+          lifted: true,
+        });
+      expect(lifted(covered!).includes(covered!.querySelector(TRIGGER)!)).toBe(false);
+      expect(lifted(plain!).length).toBe(0);
+    });
+
+    test("a plain table that holds a trigger keeps every row's last cell clear of its chevron, head included", () => {
+      const table = (trigger: boolean) =>
+        server(
+          <DataTable label="runs">
+            <TableHeader>
+              <TableRow>
+                <TableHead>run</TableHead>
+                <TableHead kind="number">pages</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableDetail>
+                <TableRow>
+                  <TableCell>{trigger ? <TableDetailTrigger>the digest</TableDetailTrigger> : "the digest"}</TableCell>
+                  <TableCell kind="number">12</TableCell>
+                </TableRow>
+              </TableDetail>
+              <TableRow>
+                <TableCell>the brief</TableCell>
+                <TableCell kind="number">4</TableCell>
+              </TableRow>
+            </TableBody>
+          </DataTable>,
+        ).querySelector("table")!;
+      // Cells are named by their words, so a failure prints them rather than a whole DOM node.
+      const cleared = (host: Element) => reached(host, "pr-7").map((cell) => cell.textContent);
+      expect(cleared(table(true))).toEqual(["pages", "12", "4"]);
+      expect(cleared(table(false))).toEqual([]);
+      const held = table(true);
+      for (const row of held.querySelectorAll("tr")) expect(row.className).not.toContain("pr-7");
     });
 
     test("an open trigger fills no row, while another expanded control in a row still does", () => {
@@ -1440,18 +1562,45 @@ describe("data table", () => {
       expect(cells[1]?.className.split(/\s+/)).toEqual(expect.arrayContaining(["h-9", "type-instrument"]));
     });
 
-    test("its connector turns in to the words in the rule's ink", () => {
+    test("its connector turns in to the words in the rule's ink, from under the lead column", () => {
       const line = one(sub(), '[data-slot="table-sub-line"]');
       expect(line.el.textContent).toBe("plate 1 of 3");
       expect(line.classes).toEqual(
         expect.arrayContaining(["before:border-b", "before:border-l", "before:border-rule", "before:-left-5"]),
       );
+      expect(line.classes).not.toContain("pl-5");
     });
 
-    test("lead={false} spans every column", () => {
-      const cells = sub(false).querySelectorAll(`${ROW} > td`);
+    test("lead={false} spans every column, and its connector starts at the title's edge with the words stepped in", () => {
+      const host = sub(false);
+      const cells = host.querySelectorAll(`${ROW} > td`);
       expect(cells.length).toBe(1);
       expect(cells[0]?.getAttribute("colspan")).toBe("3");
+      const line = one(host, '[data-slot="table-sub-line"]').classes;
+      expect(line).toEqual(expect.arrayContaining(["pl-5", "before:left-0", "before:w-3"]));
+      expect(line).not.toContain("before:-left-5");
+    });
+
+    test("a row under another prints no row edge of its own, and its words break anywhere", () => {
+      const host = server(
+        <table>
+          <tbody>
+            <TableDetail open>
+              <TableDetailRow columns={3}>a long id</TableDetailRow>
+            </TableDetail>
+            <TableSubRow columns={3}>a long id</TableSubRow>
+            <TableSubRow columns={3} lead={false}>
+              a long id
+            </TableSubRow>
+          </tbody>
+        </table>,
+      );
+      for (const row of host.querySelectorAll("tr")) {
+        expect(row.className.split(/\s+/)).toContain("[&>:first-child]:before:hidden");
+        expect(row.lastElementChild!.className.split(/\s+/)).toEqual(
+          expect.arrayContaining(["whitespace-normal", "[overflow-wrap:anywhere]"]),
+        );
+      }
     });
   });
 

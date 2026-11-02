@@ -65,7 +65,7 @@ An icon is decorative until it gets an `aria-label`. A surface uses these icons 
 
 A mark that belongs to someone else prints in one ink, never in its owner's colours and never a spot. A ship prints a real mark only where it names one, and every other source takes a pixel or letter drawing on the same 16 cells.
 
-`@mk/source-mark` is the frame: `SourceMark` knocks a drawing out of a notched 16-cell tile in the first ink, at 96 px, or 80 px on a phone. `d` and `hover` are the drawing's two frames, as path data in whole cells that never overlap and stay inside the tile. The second frame cuts in while the pointer or the focus is on the mark or in its tile, and `held` keeps it up. The frame lives in the registry and the drawings stay in the ship, so the public registry holds no one else's mark.
+`@mk/source-mark` is the frame: `SourceMark` knocks a drawing out of a notched 16-cell tile in the first ink, at 96 px, or 80 px on a phone. `d` and `hover` are the drawing's two frames, as path data in whole cells that never overlap and stay inside the tile. The second frame cuts in while the pointer or the focus is on the mark or in a linked tile, and `held` keeps it up. The frame lives in the registry and the drawings stay in the ship, so the public registry holds no one else's mark.
 
 ## adding a ship or redrawing a mark
 

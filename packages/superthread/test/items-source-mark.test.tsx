@@ -82,6 +82,7 @@ describe("source mark", () => {
     expect(inked(second!.getAttribute("d")!, 6, 6)).toBe(false);
     expect(classes).toContain("group/source-mark");
     expect([...el.outerHTML.matchAll(/\btransition/g)]).toEqual([]);
+    expect(forbidden(elements(el.parentElement!))).toEqual([]);
   });
 
   test("held keeps the second frame up", () => {
@@ -104,9 +105,5 @@ describe("source mark", () => {
     expect(named.getAttribute("role")).toBe("img");
     expect(named.getAttribute("aria-label")).toBe("mail");
     expect(named.hasAttribute("aria-hidden")).toBe(false);
-  });
-
-  test("holds the rules every skin keeps", () => {
-    expect(forbidden(elements(server(<SourceMark d={DRAWING} hover={SECOND} />)))).toEqual([]);
   });
 });

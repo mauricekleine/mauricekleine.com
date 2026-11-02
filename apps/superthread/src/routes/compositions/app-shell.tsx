@@ -216,12 +216,12 @@ function Page() {
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <ViewportFrame mode="light" title="orbit desktop, light" width={1100} height={470}>
+            <ViewportFrame mode="light" title="orbit desktop, light" width={1100} height={490}>
               <Workspace />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="orbit desktop, dark" width={1100} height={470}>
+            <ViewportFrame mode="dark" title="orbit desktop, dark" width={1100} height={490}>
               <Workspace />
             </ViewportFrame>
           }
@@ -235,12 +235,12 @@ function Page() {
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <ViewportFrame mode="light" title="orbit nav states, light" width={1100} height={470}>
+            <ViewportFrame mode="light" title="orbit nav states, light" width={1100} height={490}>
               <Workspace printed />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="orbit nav states, dark" width={1100} height={470}>
+            <ViewportFrame mode="dark" title="orbit nav states, dark" width={1100} height={490}>
               <Workspace printed />
             </ViewportFrame>
           }
@@ -256,12 +256,12 @@ function Page() {
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <ViewportFrame mode="light" title="orbit with both feet, light" width={1100} height={470}>
+            <ViewportFrame mode="light" title="orbit with both feet, light" width={1100} height={490}>
               <FootedWorkspace />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="orbit with both feet, dark" width={1100} height={470}>
+            <ViewportFrame mode="dark" title="orbit with both feet, dark" width={1100} height={490}>
               <FootedWorkspace />
             </ViewportFrame>
           }
@@ -288,12 +288,12 @@ function Page() {
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <ViewportFrame mode="light" title="a nav with two tiers, light" width={1100} height={470}>
+            <ViewportFrame mode="light" title="a nav with two tiers, light" width={1100} height={490}>
               <TieredWorkspace initial="schedules" />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="a nav with two tiers, dark" width={1100} height={470}>
+            <ViewportFrame mode="dark" title="a nav with two tiers, dark" width={1100} height={490}>
               <TieredWorkspace initial="schedules" />
             </ViewportFrame>
           }

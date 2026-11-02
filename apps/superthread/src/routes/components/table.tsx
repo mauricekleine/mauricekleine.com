@@ -62,14 +62,14 @@ function Page() {
         <ModePair
           className="st-b-stack"
           light={
-            <GroundFrame mode="light" title="a folding table at full width, light" width={960} height={330}>
+            <GroundFrame mode="light" title="a folding table at full width, light" width={960} height={340}>
               <AppShellPanel>
                 <TableFold />
               </AppShellPanel>
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a folding table at full width, dark" width={960} height={330}>
+            <GroundFrame mode="dark" title="a folding table at full width, dark" width={960} height={340}>
               <AppShellPanel>
                 <TableFold />
               </AppShellPanel>

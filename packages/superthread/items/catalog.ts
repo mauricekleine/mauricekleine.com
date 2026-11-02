@@ -695,7 +695,7 @@ export const catalog: CatalogItem[] = [
     files: [block("data-table")],
     tier: "block",
     upstream: null,
-    serves: ["constellation", "quanta", "trisys", "artifacts"],
+    serves: ["constellation", "quanta", "trisys", "orbit", "artifacts"],
   },
   {
     name: "form-section",

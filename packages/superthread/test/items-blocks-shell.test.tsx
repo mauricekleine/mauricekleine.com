@@ -173,12 +173,15 @@ describe("app shell", () => {
         </SidebarProvider>,
       );
 
-    test("hangs a nested list off the nav's list, so the links stay one list to a screen reader", () => {
+    test("hangs a nested list off the nav's list, one list to a screen reader, with no more until overflow asks", () => {
       const host = nav();
       const tier = one(host, TIER);
       expect(tier.el.tagName).toBe("LI");
       expect(tier.el.parentElement?.getAttribute("data-slot")).toBe("sidebar-menu");
       expect(tier.el.querySelector(":scope > ul")?.querySelectorAll("a").length).toBe(2);
+      expect(host.querySelector(MORE)).toBeNull();
+      expect(host.querySelector("[popover]")).toBeNull();
+      expect(host.querySelector("button")).toBeNull();
     });
 
     test("a rule opens it, with 9 px on each side, and yields below 900 px with its items in the row", () => {
@@ -204,13 +207,6 @@ describe("app shell", () => {
       expect(runs!.getAttribute("aria-current")).toBe("page");
       expect(classesOf(runs!)).toContain("data-active:text-selected");
       expect(logs!.getAttribute("aria-current")).toBeNull();
-    });
-
-    test("overflow is opt-in: without it the tier is a plain list and no more prints", () => {
-      const host = nav();
-      expect(host.querySelector(MORE)).toBeNull();
-      expect(host.querySelector("[popover]")).toBeNull();
-      expect(host.querySelector("button")).toBeNull();
     });
 
     test("with overflow, a more at 600 px and below opens the tier's own list through a real popover", () => {

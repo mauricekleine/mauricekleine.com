@@ -534,7 +534,7 @@ function Page() {
           <code>TableTitle</code> link covers its whole row, and a sortable head stays on screen as one line of sort
           buttons. <code>flag</code> lifts a fact that is still open to foreground.
         </p>
-        <PanelPair title="a folding table" height={350} phoneHeight={460}>
+        <PanelPair title="a folding table" height={390} phoneHeight={460}>
           <SchedulesTable />
         </PanelPair>
       </Section>
@@ -546,7 +546,7 @@ function Page() {
           closed, so what you typed in it survives. the first row here starts open; open the others. a plain table takes
           the same rows.
         </p>
-        <PanelPair title="rows that open a detail" height={350} phoneHeight={420}>
+        <PanelPair title="rows that open a detail" height={480} phoneHeight={420}>
           <EventsTable />
         </PanelPair>
         <ModePair className="st-cb-stack">
@@ -559,7 +559,7 @@ function Page() {
           the row keeps its rule for the last entry. <code>lead={"{false}"}</code> on a detail or a sub-entry drops the
           empty lead cell, for a table with no lead column.
         </p>
-        <PanelPair title="runs and their steps" height={350} phoneHeight={420}>
+        <PanelPair title="runs and their steps" height={440} phoneHeight={420}>
           <SubEntriesTable />
         </PanelPair>
       </Section>
@@ -570,7 +570,7 @@ function Page() {
           lifts a result that still waits on someone to foreground, and a closed one stays muted, so a failure a retry
           closed prints as quietly as done. a ship&rsquo;s word is its own.
         </p>
-        <PanelPair title="a log of results" height={420} phoneHeight={460}>
+        <PanelPair title="a log of results" height={490} phoneHeight={470}>
           <ResultsTable />
         </PanelPair>
       </Section>
