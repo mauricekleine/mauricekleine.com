@@ -184,7 +184,7 @@
       ],
       "meta": {
         "version": "2.6.0",
-        "sha256": "8b1b6b51dbfe3b193449a2f6c7de5c95ebb9aa342076aa9a41dc1c67b4c00756",
+        "sha256": "947607410748ea9a3f17b5cfeeec155b1efe59d846c44e8a071cfaa307da9cb4",
         "tier": "lib",
         "upstream": null
       }
@@ -1935,7 +1935,7 @@
       ],
       "meta": {
         "version": "2.6.0",
-        "sha256": "710e378aef7f07711928c055e6e48fb0ecdb7e8af8017085ce721213ea772ebd",
+        "sha256": "77a6fa36343c17399fac000bd8f80ecb62c0e1d8e8030e8bfcfa5241c44f12d6",
         "tier": "block",
         "upstream": null,
         "serves": [
