@@ -618,6 +618,10 @@ The one white block on a page, for the thing the page is there for. It is a `.li
 
 **The One Paper Rule.** A page prints one paper, and it stays white in every theme: it never reverses on a dark page. On a dark panel the white is its edge, so it prints flat. On a light panel, white on white, it lifts by the slip rake and the contact edge.
 
+### Onward
+
+The way onward from a page. `Onward` is a foreground link at the ui step with the arrow after its word, or with `back` the left arrow before it. It underlines on hover, 4 px below the baseline, and reaches 44 px on a phone through its hit area. `Door` is one line of words with an arrow, 40 px tall and 44 px at 600 px and below. Only its words underline, and they truncate before they wrap. A door carries no number.
+
 ### Switch
 
 A square track with the input edge on the stock and an input-ink square inside it. On, the track fills with foreground and the square crosses to the right in the stock ink, on the quick duration; hover overprints the fill. The track is a control, with the outside ring and a 44 px hit area. Disabled, the track and its square take the disabled ink on faint stock. The world rejected a screened track: on must read as settled.

@@ -82,6 +82,7 @@ export const nav: readonly NavEntry[] = [
   component("resizable"),
   component("glyphs"),
   component("paper"),
+  component("onward"),
   component("card"),
   component("collapsible"),
   component("label"),

@@ -72,6 +72,7 @@ import {
   InputGroupTextarea,
 } from "@/components/superthread/ui/input-group";
 import { Label } from "@/components/superthread/ui/label";
+import { Door, Onward } from "@/components/superthread/ui/onward";
 import { Paper } from "@/components/superthread/ui/paper";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import {
@@ -751,6 +752,15 @@ function Sink({ mode }: { mode: Mode }) {
           <p>reply to sam about chapter 7</p>
           <Button>read the draft</Button>
         </Paper>
+      </Part>
+      <Part name="onward">
+        <div className="flex flex-col items-start gap-2">
+          <Onward href="#all">the week</Onward>
+          <Onward back href="#all">
+            today
+          </Onward>
+          <Door href="#all">see what you finished</Door>
+        </div>
       </Part>
       <Part name="resizable">
         <div className="h-48 max-w-lg border border-border">

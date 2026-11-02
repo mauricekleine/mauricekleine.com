@@ -490,6 +490,15 @@ export const catalog: CatalogItem[] = [
     texture: "contact",
   },
   {
+    name: "onward",
+    type: "registry:ui",
+    title: "onward",
+    description: "the way onward from a page: a word and its arrow, or a door, one line of words with an arrow",
+    files: [ui("onward")],
+    tier: "brand",
+    upstream: null,
+  },
+  {
     name: "collapsible",
     type: "registry:ui",
     title: "collapsible",

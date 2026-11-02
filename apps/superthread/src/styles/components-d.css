@@ -41,6 +41,17 @@
     gap: 24px;
   }
 
+  /* onward: the two links side by side, and the doors stacked in the width the example leaves them */
+  .st-onward {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .st-doors {
+    display: grid;
+    min-width: 0;
+  }
+
   /* card: the footer's facts in the instrument step */
   .st-pass-note {
     color: var(--muted-foreground);
