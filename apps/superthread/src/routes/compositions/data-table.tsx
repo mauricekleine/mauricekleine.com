@@ -37,6 +37,7 @@ export const Route = createFileRoute("/compositions/data-table")({
       { id: "fold", title: "fold" },
       { id: "detail", title: "detail" },
       { id: "sub-entries", title: "sub-entries" },
+      { id: "results", title: "results" },
       { id: "empty", title: "empty results" },
     ],
   },
@@ -271,6 +272,50 @@ const events = [
     detail: "nothing changed since sunday.",
   },
 ];
+
+// A log of what ran today. The results still waiting on someone are flagged, so the failure the retry closed at 08:06
+// reads as quietly as the retry.
+const results = [
+  { time: "09:12", title: "wrote the morning brief", result: "done" },
+  { time: "08:40", title: "sorted what came in", result: "needs you", open: true },
+  { time: "08:06", title: "refreshed the calendar", result: "done" },
+  { time: "08:05", title: "refreshed the calendar", result: "failed" },
+  { time: "07:30", title: "refreshed the reading list", result: "skipped" },
+  { time: "07:00", title: "checked the invoices", result: "paused", open: true },
+];
+
+function ResultsTable() {
+  return (
+    <DataTable label="what ran today and how each ended" fold className="[--fold-lead:60px]">
+      <TableHeader>
+        <TableRow>
+          <TableHead scope="col" className="w-[116px]">
+            time
+          </TableHead>
+          <TableHead scope="col">event</TableHead>
+          <TableHead scope="col" className="w-[188px]">
+            result
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {results.map((entry) => (
+          <TableRow key={entry.time}>
+            <TableCell fold="lead" kind="id">
+              {entry.time}
+            </TableCell>
+            <TableCell fold="title" scope="row">
+              <TableTitle>{entry.title}</TableTitle>
+            </TableCell>
+            <TableCell fold="aside" flag={entry.open}>
+              {entry.result}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </DataTable>
+  );
+}
 
 function EventsTable() {
   return (
@@ -516,6 +561,17 @@ function Page() {
         </p>
         <PanelPair title="runs and their steps" height={350} phoneHeight={420}>
           <SubEntriesTable />
+        </PanelPair>
+      </Section>
+      <Section id="results" title="results">
+        <p className="st-cb-copy">
+          a log prints how each entry ended as a plain word, with no badge: <code>done</code>, <code>needs you</code>,{" "}
+          <code>failed</code>, <code>skipped</code> or <code>paused</code>. ink follows what is open: <code>flag</code>{" "}
+          lifts a result that still waits on someone to foreground, and a closed one stays muted, so a failure a retry
+          closed prints as quietly as done. a ship&rsquo;s word is its own.
+        </p>
+        <PanelPair title="a log of results" height={420} phoneHeight={460}>
+          <ResultsTable />
         </PanelPair>
       </Section>
       <Section id="empty" title="empty results">

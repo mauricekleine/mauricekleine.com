@@ -5,6 +5,7 @@ import { MarkChromes, MarkDrawing } from "@/foundations/Mark";
 import { drawn, markBase, markFile, markUrl, shipSpot, tabColor, type MarkId } from "@/foundations/marks";
 import { modes, spotName, type Mode } from "@/foundations/master";
 import { Copy, Legend } from "@/foundations/parts";
+import { SourceMarksExample } from "@/examples/source-mark";
 import { PageHead } from "@/site/PageHead";
 import { Section } from "@/site/Section";
 
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/foundations/marks")({
       { id: "drawings", title: "drawings" },
       { id: "home", title: "home mark" },
       { id: "dark", title: "on dark chrome" },
+      { id: "third-party", title: "third-party marks" },
       { id: "files", title: "files" },
     ],
   },
@@ -102,6 +104,16 @@ function Page() {
           <Legend>dark · paper tile, key silhouette</Legend>
           <Drawings mode="dark" />
         </div>
+      </Section>
+
+      <Section id="third-party" title="third-party marks">
+        <Copy>
+          a mark that belongs to someone else prints in one ink, in the source-mark frame: never in its owner&rsquo;s
+          colours and never in a spot. a ship prints a real mark only where it names one, and every other source takes a
+          pixel or letter drawing on the same 16 cells. the frame lives here and the drawings stay in the ship. these
+          are fictional.
+        </Copy>
+        <SourceMarksExample />
       </Section>
 
       <Section id="files" title="files">

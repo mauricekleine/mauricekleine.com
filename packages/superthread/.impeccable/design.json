@@ -3178,6 +3178,11 @@
         "section": "shapes"
       },
       {
+        "name": "The One Ink Mark Rule",
+        "body": "A third-party mark prints in one ink, never in its owner's colours and never a spot. A ship prints a real mark only where it names one, and every other source takes a pixel or letter drawing on the same 16 cells. The frame is `source-mark`; the drawings stay in the ship.",
+        "section": "shapes"
+      },
+      {
         "name": "The Two Links Rule",
         "body": "A link prints in foreground, with a 1 px underline at rest in running text and on hover in chrome. `link-quiet` is the one second form.",
         "section": "components"
@@ -3194,7 +3199,12 @@
       },
       {
         "name": "The Row Status Rule",
-        "body": "A status on a row is a fact the row is about. It prints through `Badge`, and only where the list exists to show status, such as a run or board table. A personal list prints none.",
+        "body": "A status on a row is a fact the row is about. It prints through `Badge`, and only where the list exists to show status, such as a run or board table. A personal list prints none, and a log prints results.",
+        "section": "components"
+      },
+      {
+        "name": "The Result Word Rule",
+        "body": "A log prints how each entry ended as a plain word, with no badge: `done`, `needs you`, `failed`, `skipped` or `paused`. Ink follows what is open: a result that still waits on someone prints in foreground through `flag`, and a closed one prints muted, so a failure a retry closed prints as quietly as done. A ship's word is its own: `Badge` prints a state's name only when given no word, so a ship hands it the word it uses.",
         "section": "components"
       },
       {
@@ -3280,7 +3290,7 @@
     ],
     "dos": [
       "**Do** name roles and utilities, never values: `bg-primary`, `text-muted-foreground`, `border-input`, `type-<step>`, `shadow-<lift>`, `texture-<detail>`. The `.dark` class on `<html>` sets the mode.",
-      "**Do** print every status with its glyph square and its word, through `Badge`'s status variants, `StatusGlyph` or `ToastIcon`.",
+      "**Do** print every status with its glyph square and its word, through `Badge`'s status variants, `StatusGlyph` or `ToastIcon`. A log's result is a word alone.",
       "**Do** keep focus visible on everything focusable: the 2 px ring at 2 px for a control, plum in the panel, neutral in the ship's nav and first ink in a key block, the 2 px inside edge in `--fx` for a field.",
       "**Do** lift a raised layer by its size, `shadow-leaf` for lists and toasts and `shadow-sheet` for dialogs and panels, and on the stock add `texture-contact` with its `--elevation-<lift>-rake`.",
       "**Do** transition named properties at a brand duration on `--ease-brand`, for example `transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand)`.",
@@ -3303,7 +3313,7 @@
       "**Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink, or the outline off paper, with the trash glyph and the word.",
       "**Don't** print a spot or a status ink as a large flat field.",
       "**Don't** fade or screen the cut edge of a scrolling table.",
-      "**Don't** take icons from an icon library; every icon and glyph is drawn in whole-pixel squares.",
+      "**Don't** take icons from an icon library; every icon and glyph is drawn in whole-pixel squares. A third-party mark prints in `SourceMark`.",
       "**Don't** draw a ring outside a field's box or a second frame around it.",
       "**Don't** print a plum fill off paper, or a second one in a viewport.",
       "**Don't** print a second paper on a page, or reverse one on a dark page.",
