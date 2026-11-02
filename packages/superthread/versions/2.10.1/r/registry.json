@@ -540,7 +540,7 @@
       ],
       "meta": {
         "version": "2.10.1",
-        "sha256": "c8d17358da0460a6b0c525f2a3bdc107b0645fb2a57edae7d181a2e6f8fb8d3c",
+        "sha256": "50eefb7ad44965a24637062402408ab4cd84d73dca5a6e06304977c66bd6173a",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -1719,7 +1719,7 @@
       ],
       "meta": {
         "version": "2.10.1",
-        "sha256": "e3c3612bc012c9171565fb19197c939587d8cc12993c2e935cd952e450b1b331",
+        "sha256": "c65ef66f01c1dca4cbe2a53e543e5e7517b3bb088552e2c6ea7c0fe4cefd6ce4",
         "tier": "block",
         "upstream": null,
         "serves": [
