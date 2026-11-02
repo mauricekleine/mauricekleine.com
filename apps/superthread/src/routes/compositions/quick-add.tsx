@@ -224,7 +224,8 @@ function Page() {
         <p className="st-cb-copy">
           <code>QuickAddNav</code> goes among a ship&rsquo;s nav items. it prints a muted word above the nav&rsquo;s
           foot and opens a one-line field over itself. enter adds, clears and stays open for the next one. escape closes
-          it and keeps the draft. press <kbd>n</kbd> away from a field and the light copy opens.
+          it, keeps the draft and hands focus back to where it was, or else to the trigger. press <kbd>n</kbd> away from
+          a field and the light copy opens.
         </p>
         <ModePair
           className="st-ca-wide-pair"

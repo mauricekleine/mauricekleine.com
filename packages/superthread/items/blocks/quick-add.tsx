@@ -132,10 +132,11 @@ type QuickAddNavProps = Omit<React.ComponentProps<"form">, "onSubmit" | "childre
   };
 
 // The quiet add in a ship's nav: a muted word above the nav's foot that opens a one-line field over itself. Enter adds,
-// clears and stays open for the next one; Escape or a click away closes and keeps the draft. A native popover carries it,
-// so it clears the frame's scroll and stays in the frame's dark scope. Below 900 px it sits 12 px from each edge with a
-// button, and on a phone the trigger is the glyph alone in a 44 px target. Its key opens it away from typing, through the
-// helper search-palette shares.
+// clears and stays open for the next one; Escape or a click away closes and keeps the draft. Escape hands focus back to
+// where it was when the key opened the field, or else to the trigger, so it never drops to the page's body. A native
+// popover carries it, so it clears the frame's scroll and stays in the frame's dark scope. Below 900 px it sits 12 px
+// from each edge with a button, and on a phone the trigger is the glyph alone in a 44 px target. Its key opens it away
+// from typing, through the helper search-palette shares.
 function QuickAddNav({
   className,
   id: formId,
@@ -147,6 +148,7 @@ function QuickAddNav({
   onAdd,
   inputProps = {},
   onToggle,
+  onKeyDown,
   ...props
 }: QuickAddNavProps) {
   const id = useId();
@@ -154,6 +156,9 @@ function QuickAddNav({
   const inputId = inputProps.id ?? `${id}-input`;
   const errorId = `${id}-error`;
   const form = useRef<HTMLFormElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  // Where Escape hands focus back: the control focused when the key opened the field. Null sends it to the trigger.
+  const returnTo = useRef<HTMLElement | null>(null);
   const disabled = inputProps.disabled;
   const { input, value, setValue, busy, error, submit } = useAdd(onAdd, disabled);
 
@@ -162,6 +167,10 @@ function QuickAddNav({
     const onKeyDown = (event: KeyboardEvent) => {
       if (!isPageKey(event, hotkey)) return;
       event.preventDefault();
+      const active = document.activeElement;
+      if (!form.current?.contains(active)) {
+        returnTo.current = active instanceof HTMLElement && active !== document.body ? active : null;
+      }
       form.current?.togglePopover(true);
       input.current?.focus();
     };
@@ -177,8 +186,12 @@ function QuickAddNav({
       style={{ "--quick-add-anchor": `--quick-add-${id.replace(/\W/g, "")}` } as React.CSSProperties}
     >
       <SidebarMenuButton
+        ref={trigger}
         type="button"
         popoverTarget={fieldId}
+        onClick={() => {
+          returnTo.current = null;
+        }}
         aria-label={triggerLabel}
         disabled={disabled}
         className="text-muted-foreground [anchor-name:var(--quick-add-anchor)] hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:900px)]:h-8 [@media(max-width:900px)]:hit-area [@media(min-width:601px)_and_(max-width:900px)]:w-auto [@media(max-width:600px)]:w-11 [@media(max-width:600px)]:justify-center [@media(max-width:600px)]:px-0"
@@ -202,6 +215,17 @@ function QuickAddNav({
         onToggle={(event) => {
           onToggle?.(event);
           if (event.newState === "open") input.current?.focus();
+        }}
+        onKeyDown={(event) => {
+          onKeyDown?.(event);
+          if (event.key !== "Escape" || event.defaultPrevented || event.nativeEvent.isComposing) return;
+          // The browser's own close hands focus to whatever held it when the field opened, which is the body after `n`.
+          event.preventDefault();
+          const back = returnTo.current?.isConnected ? returnTo.current : null;
+          returnTo.current = null;
+          form.current?.hidePopover();
+          back?.focus({ preventScroll: true });
+          if (!back || document.activeElement !== back) trigger.current?.focus({ preventScroll: true });
         }}
       >
         <FieldLabel htmlFor={inputId} className="sr-only">
