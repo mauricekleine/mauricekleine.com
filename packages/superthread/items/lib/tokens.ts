@@ -1102,6 +1102,10 @@ export const tokens = {
       "board": 56,
       "table": 48,
       "nav": 32
+    },
+    "panelInset": {
+      "value": 48,
+      "phone": 16
     }
   },
   "radius": "0px",

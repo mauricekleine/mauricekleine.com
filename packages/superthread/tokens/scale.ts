@@ -134,6 +134,10 @@ export const rows = {
   nav: { value: 32, from: "tokens/master.json space.rows.nav item" },
 };
 
+// The working panel's side padding, which a row reaches past to bleed to its edges. `phone` holds at `phone.maxWidth`
+// and below.
+export const panelInset = { value: 48, phone: 16, from: "the fleet's step: AppShellPanel's sides" };
+
 export const codeRingOffset = { value: "-4px", from: "tokens/master.json code.ring offset" };
 
 // The soft rake's alpha and the contact shadow's, per mode. Light inks the key printed twice, dark inks black.

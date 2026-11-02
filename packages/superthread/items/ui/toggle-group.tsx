@@ -43,7 +43,7 @@ function ToggleGroup({
       orientation={orientation}
       style={{ "--gap": spacing } as React.CSSProperties}
       className={cn(
-        "group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-vertical:flex-col data-vertical:items-stretch",
+        "group/toggle-group isolate flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-vertical:flex-col data-vertical:items-stretch",
         className,
       )}
       {...props}
@@ -55,7 +55,8 @@ function ToggleGroup({
   );
 }
 
-// Shared edges overlap by 1 px. The pressed edge rises above its neighbour; joined focus draws inside. On a phone a joined
+// Shared edges overlap by 1 px. The pressed edge rises above its neighbour, inside the group's own stack, so it never
+// climbs over what the page lays on top; joined focus draws inside. On a phone a joined
 // item's box reaches 44 px along the group, since a hit area there would take taps from its neighbour. The item renders
 // the primitive itself, so it draws the tick a Toggle draws.
 function ToggleGroupItem({

@@ -9,6 +9,7 @@ import {
   AppShellNav,
   AppShellNavItem,
   AppShellPanel,
+  AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
 import {
   Section,
@@ -46,7 +47,7 @@ import {
   FormSectionFooter,
   FormSectionStatus,
 } from "@/components/superthread/blocks/form-section";
-import { QuickAdd } from "@/components/superthread/blocks/quick-add";
+import { QuickAdd, QuickAddNav } from "@/components/superthread/blocks/quick-add";
 import { Facts, Fact, FactLabel, FactValue } from "@/components/superthread/blocks/facts";
 import {
   Letter,
@@ -58,6 +59,15 @@ import {
   LetterActions,
   LetterSource,
 } from "@/components/superthread/blocks/letter";
+import {
+  DayLine,
+  DayLineAllDay,
+  DayLineDate,
+  DayLineHead,
+  DayLineNote,
+  DayLineSteps,
+  DayLineStrip,
+} from "@/components/superthread/blocks/day-line";
 import { Notice, NoticeTitle, NoticeDescription, NoticeActions } from "@/components/superthread/blocks/notice";
 import {
   SendBar,
@@ -77,6 +87,7 @@ import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { Input } from "@/components/superthread/ui/input";
 import { cn } from "@/components/superthread/lib/utils";
 import { Button } from "@/components/superthread/ui/button";
+import { Onward } from "@/components/superthread/ui/onward";
 import {
   CollectionToolbar,
   ToolbarGroup,
@@ -93,6 +104,9 @@ import {
   ListRowAside,
   ListRowMeta,
   ListRowActions,
+  ListRowKind,
+  ListRowTime,
+  ListRowWhen,
 } from "@/components/superthread/blocks/list-rows";
 import {
   ItemCards,
@@ -105,7 +119,7 @@ import {
   ItemCardMeta,
   ItemCardActions,
 } from "@/components/superthread/blocks/item-cards";
-import { DataTable, SortableHead, TableEmpty } from "@/components/superthread/blocks/data-table";
+import { DataTable, SortableHead, TableEmpty, TableTitle } from "@/components/superthread/blocks/data-table";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { Icon } from "@/components/superthread/ui/glyphs";
 import { Badge } from "@/components/superthread/ui/badge";
@@ -165,18 +179,25 @@ function Sink({ mode }: { mode: Mode }) {
           markBase="/marks"
           hrefs={{ home: "#home", orbit: "#orbit" }}
           sidebar={
-            <AppShellNav ship="orbit">
+            <AppShellNav ship="orbit" foot={<a href="#settings">settings</a>}>
               <AppShellNavItem isActive number="01" count={12} render={<a href="#board" />}>
                 board
               </AppShellNavItem>
               <AppShellNavItem number="02" render={<a href="#runs" />}>
                 runs
               </AppShellNavItem>
+              <QuickAddNav label="add a task" placeholder="add a task" hotkey={null} onAdd={async () => {}} />
             </AppShellNav>
           }
         >
           <AppShellGround>
-            <AppShellPanel>the working panel</AppShellPanel>
+            <AppShellPanel render={<section aria-label="the working panel" />}>
+              the working panel
+              <AppShellPanelFoot render={<nav aria-label="briefs" />}>
+                <span>briefs</span>
+                <a href="#today">today</a>
+              </AppShellPanelFoot>
+            </AppShellPanel>
           </AppShellGround>
         </AppShell>
       </Part>
@@ -248,6 +269,25 @@ function Sink({ mode }: { mode: Mode }) {
           <ListRow>
             <ListRowTitle>plain task</ListRowTitle>
           </ListRow>
+          <ListRow receding>
+            <ListRowTitle kind="id">or-12</ListRowTitle>
+            <ListRowActions variant="markers">
+              <span>pdf</span>
+              <span>shared</span>
+            </ListRowActions>
+          </ListRow>
+        </ListRows>
+        <ListRows aria-label="today">
+          <ListRow variant="day">
+            <ListRowTime dateTime="2026-11-03T11:00:00Z">11:00</ListRowTime>
+            <ListRowTitle>renewal call</ListRowTitle>
+            <ListRowKind href="#brief">brief</ListRowKind>
+            <ListRowWhen>
+              <Button variant="outline" size="sm">
+                join
+              </Button>
+            </ListRowWhen>
+          </ListRow>
         </ListRows>
       </Part>
       <Part name="item-cards">
@@ -314,6 +354,13 @@ function Sink({ mode }: { mode: Mode }) {
               <TableCell kind="id">or-12</TableCell>
               <TableCell>check the registry</TableCell>
               <TableCell kind="number">2h</TableCell>
+            </TableRow>
+            <TableRow receding>
+              <TableCell kind="id">or-11</TableCell>
+              <TableCell>
+                <TableTitle href="#or-11">an old run</TableTitle>
+              </TableCell>
+              <TableCell kind="number">9d</TableCell>
             </TableRow>
             <TableEmpty columns={3} title="no other runs">
               a new run lands here.
@@ -428,6 +475,42 @@ function Sink({ mode }: { mode: Mode }) {
             <SendBarButton variant="outline">retry</SendBarButton>
           </SendBarActions>
         </SendBar>
+      </Part>
+      <Part name="day-line">
+        <DayLine>
+          <DayLineHead>
+            <DayLineDate href="#day">tue 3 nov</DayLineDate>
+            <DayLineNote>personal calendar isn&rsquo;t answering</DayLineNote>
+            <DayLineAllDay>anna out of office</DayLineAllDay>
+            <DayLineSteps>
+              <Onward href="#tomorrow">wed 4 nov</Onward>
+            </DayLineSteps>
+          </DayLineHead>
+          <DayLineStrip
+            aria-label="tuesday's meetings"
+            asOf="as of 08:10"
+            day="2026-11-03"
+            events={[
+              {
+                id: "standup",
+                title: "team standup",
+                start: "2026-11-03T09:30:00Z",
+                end: "2026-11-03T10:00:00Z",
+                href: "#standup",
+              },
+              {
+                id: "renewal",
+                title: "renewal call",
+                start: "2026-11-03T11:00:00Z",
+                end: "2026-11-03T11:45:00Z",
+                brief: true,
+                selected: true,
+              },
+            ]}
+            now="2026-11-03T08:42:00Z"
+            timeZone="UTC"
+          />
+        </DayLine>
       </Part>
       <Part name="notice">
         <Notice variant="quiet">a newer version is waiting.</Notice>

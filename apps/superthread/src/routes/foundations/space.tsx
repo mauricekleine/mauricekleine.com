@@ -15,6 +15,7 @@ export const Route = createFileRoute("/foundations/space")({
     sections: [
       { id: "scale", title: "scale" },
       { id: "rows", title: "rows" },
+      { id: "panel-inset", title: "panel inset" },
       { id: "breakpoints", title: "breakpoints" },
       { id: "shape", title: "shape" },
       { id: "elevation", title: "elevation" },
@@ -135,6 +136,14 @@ function Page() {
             </li>
           ))}
         </ul>
+      </Section>
+
+      <Section id="panel-inset" title="panel inset">
+        <Copy>
+          the working panel&rsquo;s sides: {tokens.space.panelInset.value} px, and {tokens.space.panelInset.phone} px at{" "}
+          {breakpoints.phone} px and below. a row that reaches the panel&rsquo;s edges uses{" "}
+          <code>-mx-panel-inset px-panel-inset</code>, so it never repeats the number.
+        </Copy>
       </Section>
 
       <Section id="breakpoints" title="breakpoints">

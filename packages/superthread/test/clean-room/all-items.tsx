@@ -4,10 +4,19 @@
 // Layers (the dialog, the select popup, toasts) open from in-flow triggers. Their portals render
 // only on the client, outside the section, so they take the mode of the document they portal into,
 // as in any shadcn app with the mode class on <html>: add .dark to <body> to see them dark.
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useMinute } from "@/components/superthread/hooks/use-minute";
+import { isPageKey } from "@/components/superthread/lib/hotkey";
 import { fleet } from "@/components/superthread/lib/fleet";
-import { beforeWords, scheduleWords, sinceWords, untilWords } from "@/components/superthread/lib/time-words";
+import {
+  beforeWords,
+  clockWords,
+  dateWords,
+  scheduleWords,
+  sinceWords,
+  untilWords,
+} from "@/components/superthread/lib/time-words";
 import { cn } from "@/components/superthread/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/superthread/ui/accordion";
 import {
@@ -64,6 +73,7 @@ import {
   InputGroupTextarea,
 } from "@/components/superthread/ui/input-group";
 import { Label } from "@/components/superthread/ui/label";
+import { Door, Onward } from "@/components/superthread/ui/onward";
 import { Paper } from "@/components/superthread/ui/paper";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import {
@@ -174,6 +184,8 @@ const ICONS: IconName[] = [
   "close",
   "trash",
   "plus",
+  "more",
+  "brief",
   "tick",
   "i",
   "pause",
@@ -728,15 +740,31 @@ function Sink({ mode }: { mode: Mode }) {
       <Part name="time-words">
         <p className="text-sm">
           {sinceWords("2026-10-30", "2026-11-01")}, {beforeWords("2026-11-01T10:00:00Z", { timeZone: "UTC" })},{" "}
+          {clockWords("2026-11-01T10:00:00Z", { timeZone: "UTC" })}, {dateWords("2026-11-01")},{" "}
           {untilWords("2026-11-01T11:00:00Z", "standup", "2026-11-01T10:12:00Z")},{" "}
           {scheduleWords({ every: "day", at: "07:00" })}
         </p>
+      </Part>
+      <Part name="use-minute">
+        <MinuteSink />
+      </Part>
+      <Part name="hotkey">
+        <KeySink />
       </Part>
       <Part name="paper">
         <Paper render={<section aria-label="the next job" />}>
           <p>reply to sam about chapter 7</p>
           <Button>read the draft</Button>
         </Paper>
+      </Part>
+      <Part name="onward">
+        <div className="flex flex-col items-start gap-2">
+          <Onward href="#all">the week</Onward>
+          <Onward back href="#all">
+            today
+          </Onward>
+          <Door href="#all">see what you finished</Door>
+        </div>
       </Part>
       <Part name="resizable">
         <div className="h-48 max-w-lg border border-border">
@@ -778,6 +806,23 @@ function Contained({ children }: { children: ReactNode }) {
 }
 
 // Each section has its own manager, so a toast opens only in the viewport its button belongs to.
+function MinuteSink() {
+  const minute = useMinute();
+  return <p className="text-sm">{minute ? `${clockWords(minute.now)}, ${minute.day}` : "no clock yet"}</p>;
+}
+
+function KeySink() {
+  const [presses, setPresses] = useState(0);
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (isPageKey(event, "n")) setPresses((count) => count + 1);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
+  return <p className="text-sm">n pressed {presses} times</p>;
+}
+
 function ToastSink({ mode }: { mode: Mode }) {
   const [manager] = useState(() => createToastManager());
   return (

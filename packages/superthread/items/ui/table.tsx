@@ -27,7 +27,7 @@ function Table({
   ...props
 }: React.ComponentProps<"table"> & VariantProps<typeof tableVariants>) {
   return (
-    <div data-slot="table-container" data-mk="table" className="relative w-full overflow-x-auto">
+    <div data-slot="table-container" data-mk="table" className="relative w-full overflow-x-auto hit-area-scroller">
       <table data-slot="table" data-rows={rows} className={cn(tableVariants({ rows }), className)} {...props} />
     </div>
   );
@@ -45,13 +45,15 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
   return <tfoot data-slot="table-footer" className={cn("bg-muted font-medium", className)} {...props} />;
 }
 
-// No hover fill: hover shows only the strip. A selected row keeps its strip over the control hover fill.
-function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
+// No hover fill: hover shows only the strip. A selected row keeps its strip over the control hover fill. A receding row
+// is still live and fading, so it prints muted and takes no strike.
+function TableRow({ className, receding, ...props }: React.ComponentProps<"tr"> & { receding?: boolean }) {
   return (
     <tr
       data-slot="table-row"
+      data-receding={receding || undefined}
       className={cn(
-        "transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) has-aria-expanded:bg-control-hover aria-selected:bg-control-hover data-[state=selected]:bg-control-hover",
+        "transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) has-aria-expanded:bg-control-hover aria-selected:bg-control-hover data-[state=selected]:bg-control-hover data-[receding]:text-muted-foreground",
         className,
       )}
       {...props}

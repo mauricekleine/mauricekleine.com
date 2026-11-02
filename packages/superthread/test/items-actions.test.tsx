@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "@/components/superthread/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/superthread/ui/tabs";
-import { client } from "./rendered.tsx";
+import { client, server } from "./rendered.tsx";
 
 const root = join(import.meta.dir, "..");
 const details: { key: string }[] = JSON.parse(readFileSync(join(root, "tokens/details.json"), "utf8")).DETAILS;
@@ -249,6 +249,23 @@ describe("button", () => {
     expect(pathOf(own)).not.toBe(trashPath);
   });
 
+  test("sets in Supreme wherever it lands, so a reading container's face stays outside it", () => {
+    for (const variant of ["default", "outline", "ghost", "link"] as const)
+      expect(classes(renderToString(<Button variant={variant}>save</Button>))).toContain("font-sans");
+  });
+
+  test.each(["default", "sm", "xs", "lg"] as const)("a link at size %s drops its inline padding", (size) => {
+    const link = classes(
+      renderToString(
+        <Button variant="link" size={size}>
+          read more
+        </Button>,
+      ),
+    );
+    expect(link).toContain("px-0");
+    expect(link.filter((cls) => /^px-(?!0$)/.test(cls))).toEqual([]);
+  });
+
   test("other variants print only their children", () => {
     expect(renderToString(<Button>save</Button>)).not.toContain("<svg");
   });
@@ -383,13 +400,32 @@ describe("badge", () => {
     expect(bare).toContain(`data-variant="${state}"`);
   });
 
-  test("prints 30 px tall, and 24 px at sm, with the status glyph square still evenly set", () => {
-    expect(classes(renderToString(<Badge>orbit</Badge>))).toContain("h-[30px]");
-    expect(classes(renderToString(<Badge size="sm">orbit</Badge>))).toEqual(expect.arrayContaining(["h-6", "px-2"]));
+  test("prints at least 30 px tall, and 24 px at sm, with the status glyph square still evenly set", () => {
+    expect(classes(renderToString(<Badge>orbit</Badge>))).toContain("min-h-[30px]");
+    expect(classes(renderToString(<Badge size="sm">orbit</Badge>))).toEqual(
+      expect.arrayContaining(["min-h-6", "px-2"]),
+    );
     const status = renderToString(<Badge size="sm" variant="running" />);
-    expect(classes(status)).toEqual(expect.arrayContaining(["h-6", "pl-1"]));
+    expect(classes(status)).toEqual(expect.arrayContaining(["min-h-6", "pl-1"]));
     expect(status).toContain('data-size="sm"');
     expect(classes(renderToString(<Badge variant="running" />))).toContain("pl-[7px]");
+  });
+
+  // overflow-wrap: anywhere counts in min-content, so a badge in a wrapper that can shrink stacks by the letter. happy-dom
+  // has no layout, so the value stands in for that measurement: the browser's half is in the release's proof.
+  test("a long badge stays inside its parent and wraps, and a short one holds its word in a shrinkable wrapper", () => {
+    const badge = classes(renderToString(<Badge variant="outline">a label long enough to pass a phone's edge</Badge>));
+    expect(badge).toEqual(expect.arrayContaining(["max-w-full", "[overflow-wrap:break-word]"]));
+    expect(badge).not.toContain("[overflow-wrap:anywhere]");
+    expect(badge).not.toContain("whitespace-nowrap");
+  });
+
+  test("a word wider than its parent breaks, in a box that can shrink past it", () => {
+    for (const element of [<Badge>averyveryverylongword</Badge>, <Badge variant="done">averyveryverylongword</Badge>]) {
+      const word = [...server(element).querySelectorAll('[data-slot="badge"] > span')].at(-1);
+      expect(word?.textContent).toBe("averyveryverylongword");
+      expect(word?.getAttribute("class")).toBe("min-w-0");
+    }
   });
 
   test("sets in Supreme in a mono aside too", () => {

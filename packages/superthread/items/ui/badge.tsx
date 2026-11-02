@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -9,10 +10,12 @@ const STATES = ["done", "running", "waiting", "failed", "queued"] as const satis
 // Square, 1 px edge, 13 px words, in Supreme wherever it lands, a mono row aside included. A status badge is the
 // sanctioned exception to one colour, at badge scale only: a fill near the stock, the edge at about half strength, the
 // 14 px glyph square at full strength and the word. failed is the one solid badge, so it is the most urgent by its
-// form, not by a louder ink. sm is 24 px, the height of an xs button, with the glyph square as evenly set in it. The
-// link variant is a link part: it lets its 44 px hit area out of the clip on a phone.
+// form, not by a louder ink. sm is 24 px, the height of an xs button, with the glyph square as evenly set in it. A long
+// badge wraps inside its parent's width and grows downward, and a table cell's no-wrap holds it to one line. Its words
+// break only as a last resort, so a wrapper that can shrink stops at its longest word. The link variant is a link part:
+// it lets its 44 px hit area out of the clip on a phone.
 const badgeVariants = cva(
-  "group/badge inline-flex w-fit shrink-0 items-center justify-center overflow-hidden border border-transparent font-sans text-instrument leading-none font-medium whitespace-nowrap transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) aria-invalid:border-error [&>svg]:pointer-events-none [&>svg]:shrink-0",
+  "group/badge inline-flex w-fit max-w-full shrink-0 items-center justify-center overflow-hidden border border-transparent font-sans text-instrument leading-4 font-medium [overflow-wrap:break-word] transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) aria-invalid:border-error [&>svg]:pointer-events-none [&>svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -30,8 +33,9 @@ const badgeVariants = cva(
         queued: "border-neutral-edge bg-neutral-wash text-neutral-foreground",
       },
       size: {
-        default: "h-[30px] gap-2 px-[11px] has-data-[icon=inline-end]:pr-[7px] has-data-[icon=inline-start]:pl-[7px]",
-        sm: "h-6 gap-1.5 px-2 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1",
+        default:
+          "min-h-[30px] gap-2 px-[11px] py-1 has-data-[icon=inline-end]:pr-[7px] has-data-[icon=inline-start]:pl-[7px]",
+        sm: "min-h-6 gap-1.5 px-2 py-0.5 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1",
       },
     },
     compoundVariants: [
@@ -46,6 +50,11 @@ const badgeVariants = cva(
 );
 
 const isState = (variant: string): variant is StatusState => (STATES as readonly string[]).includes(variant);
+
+// Plain words in a box that can shrink past them, so a word wider than its parent breaks rather than running out of the
+// clip on both sides. A wrapper still measures the longest word.
+const words = (children: ReactNode) =>
+  typeof children === "string" ? <span className="min-w-0">{children}</span> : children;
 
 // A status variant prints its glyph square before the word, and the state's own name when it is given no word.
 // On the failed solid the square takes the label ink, so its cross still knocks out to the solid.
@@ -67,10 +76,10 @@ function Badge({
         children: state ? (
           <>
             <StatusGlyph state={state} className={state === "failed" ? "text-error-solid-foreground" : undefined} />
-            {children ?? state}
+            {words(children ?? state)}
           </>
         ) : (
-          children
+          words(children)
         ),
       },
       props,

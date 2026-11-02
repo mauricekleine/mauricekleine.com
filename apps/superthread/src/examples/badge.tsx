@@ -65,6 +65,16 @@ const variants = [
   { variant: "link", word: "changelog" },
 ] as const;
 
+// A narrow parent stands in for a phone column.
+export function BadgeLong() {
+  return (
+    <div className="st-b-row max-w-[240px]">
+      <Badge variant="outline">a label long enough to reach the end of its column and carry on</Badge>
+      <Badge variant="waiting">waiting on the second reader of the chapter</Badge>
+    </div>
+  );
+}
+
 export function BadgeVariants() {
   return (
     <div className="st-b-row st-b-specimens">

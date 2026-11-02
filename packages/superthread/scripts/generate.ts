@@ -123,8 +123,15 @@ function shared(): string[] {
     out.push(`--duration-${name}: ${scale.motion[name].value};`);
   out.push(`--ease-brand: ${scale.motion.ease.value};`);
   for (const [name, row] of Object.entries(scale.rows)) out.push(`--spacing-row-${name}: ${px(row.value)};`);
+  out.push(`--spacing-panel-inset: ${px(scale.panelInset.value)};`);
   out.push(`--code-ring-offset: ${scale.codeRingOffset.value};`);
   return out;
+}
+
+// The vars a phone sees differently. A `.light` island restates :root, so it restates these too.
+function phoneVars(): string {
+  const vars = `--spacing-panel-inset: ${px(scale.panelInset.phone)};`;
+  return `@media (max-width: ${scale.phone.maxWidth}px) {\n  :root,\n  .light {\n    ${vars}\n  }\n}`;
 }
 
 export const RADII = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl"];
@@ -141,6 +148,7 @@ function theme(all: Role[]): string[] {
   for (const e of ELEVATIONS) out.push(`--shadow-${e}: var(--elevation-${e});`);
   out.push("--ease-brand: var(--ease-brand);");
   for (const name of Object.keys(scale.rows)) out.push(`--spacing-row-${name}: var(--spacing-row-${name});`);
+  out.push("--spacing-panel-inset: var(--spacing-panel-inset);");
   return out;
 }
 
@@ -311,6 +319,7 @@ function tokenData(master: Master, all: Role[], texture: Texture | null, details
       base: master.space.base,
       steps: master.space.steps,
       rows: Object.fromEntries(Object.entries(scale.rows).map(([k, v]) => [k, v.value])),
+      panelInset: { value: scale.panelInset.value, phone: scale.panelInset.phone },
     },
     radius: scale.radius.value,
     codeRingOffset: scale.codeRingOffset.value,
@@ -553,6 +562,7 @@ export function build(): Map<string, string> {
     if (!plain) parts.push(`@custom-variant dark (${DARK});`);
     parts.push(fontFaces(fontBase));
     parts.push(block(":root,\n.light", [...declarations(master, all, "light"), ...shared(), "color-scheme: light;"]));
+    parts.push(phoneVars());
     parts.push(block(".dark", [...declarations(master, all, "dark"), "color-scheme: dark;"]));
     if (!plain) parts.push(block("@theme inline", theme(all)), typeUtilities(), utilities);
     parts.push(base);

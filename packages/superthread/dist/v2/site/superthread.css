@@ -228,8 +228,16 @@
   --spacing-row-board: 56px;
   --spacing-row-table: 48px;
   --spacing-row-nav: 32px;
+  --spacing-panel-inset: 48px;
   --code-ring-offset: -4px;
   color-scheme: light;
+}
+
+@media (max-width: 600px) {
+  :root,
+  .light {
+    --spacing-panel-inset: 16px;
+  }
 }
 
 .dark {
@@ -489,6 +497,7 @@
   --spacing-row-board: var(--spacing-row-board);
   --spacing-row-table: var(--spacing-row-table);
   --spacing-row-nav: var(--spacing-row-nav);
+  --spacing-panel-inset: var(--spacing-panel-inset);
 }
 
 @utility type-meta {
@@ -652,6 +661,8 @@
 /* a target reaches 44 px without growing: ::after, centred on its box, takes the pointer at least 44 px each way. the
    box stays positioned. an item scopes it to the widths that need it. */
 @utility hit-area {
+  contain: var(--hit-contain, none);
+  vertical-align: var(--hit-align, baseline);
   &::after {
     content: "";
     position: absolute;
@@ -661,6 +672,15 @@
     height: max(100%, 44px);
     translate: -50% -50%;
   }
+}
+
+/* a scroller counts a hit area's reach as content, so a box near its edge would add a scrollbar. a scroller holding hit
+   areas takes this, and each target it holds contains its own, which still takes the pointer. containment skips an
+   inline box, so a link in there is an inline-block. it also costs the box its baseline, which would lift it off the
+   line's middle, so the box aligns to the line's top instead. */
+@utility hit-area-scroller {
+  --hit-contain: layout;
+  --hit-align: top;
 }
 
 /* the one second link form, beside the foreground link: a muted word that turns foreground on hover, underlined 4 px

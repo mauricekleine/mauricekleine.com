@@ -7,6 +7,7 @@ import {
   AppShellNav,
   AppShellNavItem,
   AppShellPanel,
+  AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
 import {
   Section,
@@ -21,6 +22,7 @@ import {
   SearchPaletteTrigger,
 } from "@/components/superthread/blocks/search-palette";
 import { CommandGroup, CommandItem, CommandShortcut } from "@/components/superthread/ui/command";
+import { SidebarProvider } from "@/components/superthread/ui/sidebar";
 import { client, CONTROL_RING, detailsUsed, elements, forbidden, one, own, server } from "./rendered.tsx";
 
 const classesOf = (el: Element) => (el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean);
@@ -49,10 +51,107 @@ describe("app shell", () => {
       </AppShell>,
     );
 
-  test("the panel takes the ring back to the house ink, so the rail's pale ring stays on the frame", () => {
-    const panel = one(frame(), '[data-slot="app-shell-panel"]');
+  test("the ground keeps the pale ring, since plum falls short on it, and the panel takes the house ink back", () => {
+    const host = frame();
+    expect(one(host, '[data-slot="app-shell-ground"]').classes).toContain("[--ring:var(--sidebar-ring)]");
+    const panel = one(host, '[data-slot="app-shell-panel"]');
     expect(panel.classes).toContain("[--ring:var(--primary)]");
     expect(panel.classes).toContain("[--selected:var(--foreground)]");
+  });
+
+  test("the panel renders as the app's own element, keeping its slot and its look", () => {
+    const panel = one(
+      server(<AppShellPanel render={<main id="main" />}>working panel</AppShellPanel>),
+      '[data-slot="app-shell-panel"]',
+    );
+    expect(panel.el.tagName).toBe("MAIN");
+    expect(panel.el.id).toBe("main");
+    expect(panel.el.getAttribute("data-mk")).toBe("app-shell");
+    expect(panel.classes).toEqual(expect.arrayContaining(["max-w-[880px]", "shadow-sheet"]));
+    expect(one(server(<AppShellPanel>panel</AppShellPanel>), '[data-slot="app-shell-panel"]').el.tagName).toBe("DIV");
+  });
+
+  describe("the panel's foot", () => {
+    const foot = (node: React.ReactElement) => one(server(node), '[data-slot="app-shell-panel-foot"]');
+
+    test("is a full-bleed row under a rule, cancelling the panel's inset and its bottom padding", () => {
+      const { el, classes } = foot(<AppShellPanelFoot>the last row</AppShellPanelFoot>);
+      expect(el.tagName).toBe("FOOTER");
+      expect(el.getAttribute("data-mk")).toBe("app-shell");
+      expect(classes).toEqual(
+        expect.arrayContaining([
+          "-mx-(--spacing-panel-inset)",
+          "px-(--spacing-panel-inset)",
+          "-mb-7",
+          "[@media(max-width:600px)]:-mb-4",
+          "border-t",
+          "min-h-12",
+        ]),
+      );
+    });
+
+    test("renders as a named nav for a row of links", () => {
+      const { el } = foot(
+        <AppShellPanelFoot render={<nav aria-label="briefs" />}>
+          <span>briefs</span>
+          <a href="/briefs/today">today</a>
+        </AppShellPanelFoot>,
+      );
+      expect(el.tagName).toBe("NAV");
+      expect(el.getAttribute("aria-label")).toBe("briefs");
+      expect(el.querySelector("a")?.getAttribute("href")).toBe("/briefs/today");
+    });
+
+    test("its links are chrome at rest, and each is a 44 px box on a phone, so neighbours never overlap", () => {
+      const { classes } = foot(<AppShellPanelFoot />);
+      expect(classes).toEqual(
+        expect.arrayContaining([
+          "[&>a]:no-underline",
+          "[&>a:hover]:underline",
+          "[@media(max-width:600px)]:[&>a]:min-h-11",
+          "[@media(max-width:600px)]:[&>a]:min-w-11",
+        ]),
+      );
+    });
+  });
+
+  describe("the nav's foot", () => {
+    const nav = (foot?: React.ReactNode) =>
+      server(
+        <SidebarProvider>
+          <AppShellNav ship="orbit" foot={foot}>
+            <AppShellNavItem render={<a href="/board" />}>board</AppShellNavItem>
+          </AppShellNav>
+        </SidebarProvider>,
+      );
+    const FOOT = '[data-slot="app-shell-nav-foot"]';
+
+    test("is opt-in: without foot the nav keeps its height and prints no slot", () => {
+      const host = nav();
+      expect(host.querySelector(FOOT)).toBeNull();
+      expect(one(host, '[data-slot="app-shell-nav"]').classes).not.toContain("min-h-[calc(100svh-2rem)]");
+    });
+
+    test("runs the column to the frame's height and holds the slot's place while it's empty", () => {
+      for (const host of [nav(null), nav(<a href="/settings">thu 12 nov</a>)]) {
+        expect(one(host, '[data-slot="app-shell-nav"]').classes).toEqual(
+          expect.arrayContaining(["flex", "flex-col", "min-h-[calc(100svh-2rem)]"]),
+        );
+        expect(one(host, FOOT).classes).toEqual(expect.arrayContaining(["h-[37px]", "shrink-0"]));
+      }
+      expect(one(nav(null), FOOT).el.textContent).toBe("");
+      expect(one(nav(null), FOOT).classes).toContain("empty:border-t-transparent");
+    });
+
+    test("yields below 900 px with the ship's name, and the column gives up its height", () => {
+      const host = nav(null);
+      expect(one(host, FOOT).classes).toContain("[@media(max-width:900px)]:hidden");
+      expect(one(host, '[data-slot="app-shell-nav"]').classes).toContain("[@media(max-width:900px)]:min-h-0");
+    });
+
+    test("a link in it prints as the quiet link", () => {
+      expect(one(nav(null), FOOT).classes).toContain("[&>a]:link-quiet");
+    });
   });
 
   test("passes the rail's identity, destinations, marks, label and classes through", () => {
@@ -168,14 +267,7 @@ describe("app shell", () => {
     );
     expect(one(host, "main").el.getAttribute("aria-label")).toBe("orbit workspace");
     expect(one(host, '[data-slot="app-shell-panel"]').classes).toEqual(
-      expect.arrayContaining([
-        "max-w-[880px]",
-        "px-12",
-        "pt-10",
-        "pb-7",
-        "shadow-sheet",
-        "[@media(max-width:600px)]:px-4",
-      ]),
+      expect.arrayContaining(["max-w-[880px]", "px-(--spacing-panel-inset)", "pt-10", "pb-7", "shadow-sheet"]),
     );
     const rendered = elements(host);
     expect(detailsUsed(rendered, "app-shell")).toEqual([]);
@@ -385,6 +477,25 @@ describe("search palette", () => {
       expect(isOpen(disabled.body)).toBe(false);
     } finally {
       await disabled.done();
+    }
+  });
+
+  test("a keydown with no key leaves it closed and throws nothing, held modifier or not", async () => {
+    const view = await client(<Palette />);
+    const uncaught: unknown[] = [];
+    const onError = (event: ErrorEvent) => uncaught.push(event.error);
+    window.addEventListener("error", onError);
+    try {
+      for (const modifiers of [{}, { metaKey: true }]) {
+        await act(async () => {
+          document.dispatchEvent(Object.assign(new Event("keydown", { bubbles: true }), modifiers));
+        });
+      }
+      expect(uncaught).toEqual([]);
+      expect(isOpen(view.body)).toBe(false);
+    } finally {
+      window.removeEventListener("error", onError);
+      await view.done();
     }
   });
 

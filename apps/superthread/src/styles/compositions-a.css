@@ -5,6 +5,9 @@
   color: var(--muted-foreground);
   font: 400 14px/21px var(--font-sans);
 }
+.st-modepair + .st-ca-copy {
+  margin-top: 24px;
+}
 .st-ca-serves {
   margin-top: 24px;
   color: var(--muted-foreground);

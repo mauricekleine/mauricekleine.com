@@ -19,12 +19,13 @@ const MARK_BASE = "https://superthread.mauricekleine.com/marks";
 // The ground keeps the mode it is in, and the frame on it (the rail and the ship's sidebar) prints in the dark palette
 // in both modes, as the world's gutter does. GROUND holds the ground's roles where the frame paints them, and
 // ON_GROUND opens the dark scope and pins them back, important so they outrank the token block's .dark, with the
-// current item held to the words beside it. The page beside the frame stays in the page's mode. The sidebar item
-// scopes its own content the same way.
+// current item held to the words beside it and the ring to the sidebar's pale ring. The ring stays on the frame, and the
+// skip link carries its own, so paper the app builds beside the frame keeps the house ink. The page beside the frame
+// stays in the page's mode. The sidebar item scopes its own content the same way.
 const GROUND =
   "[--sidebar-ground:var(--sidebar)] [--sidebar-ground-foreground:var(--sidebar-foreground)] [--sidebar-ground-hover:var(--sidebar-hover)]";
 const ON_GROUND =
-  "dark [--sidebar:var(--sidebar-ground)]! [--sidebar-foreground:var(--sidebar-ground-foreground)]! [--sidebar-hover:var(--sidebar-ground-hover)]! [--selected:var(--sidebar-foreground)]!";
+  "dark [--sidebar:var(--sidebar-ground)]! [--sidebar-foreground:var(--sidebar-ground-foreground)]! [--sidebar-hover:var(--sidebar-ground-hover)]! [--selected:var(--sidebar-foreground)]! [--ring:var(--sidebar-ring)]!";
 const nav =
   "relative z-20 flex w-[58px] shrink-0 flex-col border border-sidebar-border [@media(max-width:900px)]:w-max [@media(max-width:900px)]:flex-row [@media(max-width:420px)]:w-full!";
 const home =
@@ -56,7 +57,8 @@ const tabName = "text-summary/[18px] font-medium";
 const tabDesc = "light text-[12px]/[16px] text-muted-foreground";
 
 // The way past the frame, off the page until focus lands on it: the first stop on the page, to #main.
-const skip = "absolute top-[-100px] left-4 z-40 bg-background p-3 text-foreground focus:top-4";
+const skip =
+  "absolute top-[-100px] left-4 z-40 bg-background p-3 text-foreground [--ring:var(--sidebar-ring)] focus:top-4";
 
 // The mode cell's glyph: a disc, half ink and half outline, in the rail's whole pixels. Its one drawing serves both
 // modes, so the prerendered rail never shows the wrong one.
@@ -107,11 +109,7 @@ export function FleetRail({
     <TooltipProvider>
       <SidebarProvider
         data-mk="fleet-rail"
-        className={cn(
-          "bg-sidebar text-sidebar-foreground [--ring:var(--sidebar-ring)] [@media(max-width:900px)]:flex-col",
-          GROUND,
-          className,
-        )}
+        className={cn("bg-sidebar text-sidebar-foreground [@media(max-width:900px)]:flex-col", GROUND, className)}
       >
         {skipLink && (
           <a data-slot="fleet-rail-skip" href="#main" className={skip}>

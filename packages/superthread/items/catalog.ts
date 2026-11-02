@@ -166,6 +166,16 @@ export const catalog: CatalogItem[] = [
     upstream: null,
   },
   {
+    name: "hotkey",
+    type: "registry:lib",
+    title: "hotkey",
+    description:
+      "whether a bare key press is the page's to answer, away from typing and from layers that keep their keys",
+    files: [lib("hotkey")],
+    tier: "lib",
+    upstream: null,
+  },
+  {
     name: "glyphs",
     type: "registry:ui",
     title: "glyphs",
@@ -490,6 +500,15 @@ export const catalog: CatalogItem[] = [
     texture: "contact",
   },
   {
+    name: "onward",
+    type: "registry:ui",
+    title: "onward",
+    description: "the way onward from a page: a word and its arrow, or a door, one line of words with an arrow",
+    files: [ui("onward")],
+    tier: "brand",
+    upstream: null,
+  },
+  {
     name: "collapsible",
     type: "registry:ui",
     title: "collapsible",
@@ -557,6 +576,21 @@ export const catalog: CatalogItem[] = [
     ],
     tier: "pass",
     upstream: "use-mobile",
+  },
+  {
+    name: "use-minute",
+    type: "registry:hook",
+    title: "use minute",
+    description: "the clock's minute and the reader's day, from one shared timer that stops while the page is hidden",
+    files: [
+      {
+        path: "items/hooks/use-minute.ts",
+        type: "registry:hook",
+        target: "@components/superthread/hooks/use-minute.ts",
+      },
+    ],
+    tier: "lib",
+    upstream: null,
   },
   // compositions: the patterns the fleet's apps repeat, composed from the items above
   {
@@ -699,6 +733,17 @@ export const catalog: CatalogItem[] = [
     tier: "block",
     upstream: null,
     serves: ["orbit", "artifacts"],
+  },
+  {
+    name: "day-line",
+    type: "registry:block",
+    title: "day line",
+    description:
+      "a day at true scale: the date, names over blocks, ticks and a now mark, with every state a calendar has",
+    files: [block("day-line")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "trisys", "orbit"],
   },
   {
     name: "notice",

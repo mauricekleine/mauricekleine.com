@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { BadgeSizes, BadgeStates, BadgeVariants, BadgeWords } from "@/examples/badge";
+import { BadgeLong, BadgeSizes, BadgeStates, BadgeVariants, BadgeWords } from "@/examples/badge";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -11,6 +11,7 @@ export const Route = createFileRoute("/components/badge")({
       { id: "status", title: "status" },
       { id: "variants", title: "variants" },
       { id: "sizes", title: "sizes" },
+      { id: "long", title: "long words" },
     ],
   },
   component: Page,
@@ -54,6 +55,16 @@ function Page() {
         </p>
         <ModePair className="st-b-stack">
           <BadgeSizes />
+        </ModePair>
+      </Section>
+
+      <Section id="long" title="long words">
+        <p className="st-b-copy">
+          a long badge wraps inside its parent and grows downward, so it never runs a phone page past its edge. a table
+          cell keeps it on one line and scrolls instead.
+        </p>
+        <ModePair className="st-b-stack">
+          <BadgeLong />
         </ModePair>
       </Section>
     </>

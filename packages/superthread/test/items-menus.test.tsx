@@ -375,6 +375,9 @@ describe("alert-dialog", () => {
     ]);
     has(body, "[data-slot=alert-dialog-overlay]", ["bg-scrim"]);
   });
+  test("three long actions wrap, so they stay on the sheet", () => {
+    has(body, "[data-slot=alert-dialog-footer]", ["flex-wrap"]);
+  });
   test("the title, media and right-aligned footer keep the sheet hierarchy and house buttons", () => {
     has(body, "[data-slot=alert-dialog-title]", ["type-subtitle"]);
     has(body, "[data-slot=alert-dialog-description]", ["text-ui", "text-muted-foreground", "[&_a]:text-foreground"]);

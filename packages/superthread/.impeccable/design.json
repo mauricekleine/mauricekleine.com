@@ -3213,6 +3213,11 @@
         "section": "components"
       },
       {
+        "name": "The Solid Event Rule",
+        "body": "On a timeline solid means an event and nothing else. There is no elapsed fill, and a loading timeline holds its height with nothing solid on the track.",
+        "section": "components"
+      },
+      {
         "name": "The No Guilt Rule",
         "body": "No word says someone is behind: overdue, late and missed print nowhere.",
         "section": "components"
@@ -3255,6 +3260,11 @@
       {
         "name": "The Enter Rule",
         "body": "Enter never sends. A button that sends takes `ignoreEnter` and stays `type=\"button\"`, so a key held from the last field can't fire it, and Space is its keyboard path. A handoff is a link, and a link keeps Enter.",
+        "section": "components"
+      },
+      {
+        "name": "The Page Key Rule",
+        "body": "A bare key answers only on the page: away from text, and outside a modal, a menu or a list that jumps by letter. Every one goes through `isPageKey` from `@mk/hotkey`, so a letter never lands in a field by surprise.",
         "section": "components"
       },
       {
