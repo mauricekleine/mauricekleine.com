@@ -268,9 +268,9 @@ describe("clear", () => {
     expect(Math.floor(span(rows(host, NARROW, ROWS), 8) / step("hero").phone!.line)).toBe(3);
   });
 
-  test("keeps the height of the work that's gone above a phone, so the panel's edge stays put when the job clears", () => {
-    // The work under the sheet: a then head, three rows, a door and the panel's foot.
-    const below = { full: 240, compact: 240 };
+  test("keeps the height of the work that's gone in every band, so the panel's edge stays put when the job clears", () => {
+    // The work under the sheet: a then head, three rows, a door and the panel's foot. A phone's rows take two lines.
+    const below = { full: 240, compact: 240, phone: 291 };
     const held = (band: (variants: string[]) => boolean) => {
       const found = one(clear(), `[data-slot="${ROWS}"]`).classes.filter((cls) => {
         const { variants, utility } = parts(cls);
@@ -283,10 +283,7 @@ describe("clear", () => {
       Object.values(rows(sheet(), band)).reduce((sum, row) => sum + row, 0) + 4 * gap;
     expect(held(FULL)).toBe(work(FULL, 12) + below.full);
     expect(held(COMPACT)).toBe(work(COMPACT, 12) + below.compact);
-    const phone = one(clear(), `[data-slot="${ROWS}"]`).classes.filter(
-      (cls) => NARROW(parts(cls).variants) && parts(cls).utility.startsWith("min-h-"),
-    );
-    expect(phone).toEqual([`${PHONE}min-h-0`]);
+    expect(held(NARROW)).toBe(work(NARROW, 8) + below.phone);
   });
 
   test("the title fits through fit-title from display down, and its lines fill from the first", () => {

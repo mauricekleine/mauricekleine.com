@@ -109,8 +109,9 @@ function EmptyStateActions({ className, ...props }: React.ComponentProps<"div">)
 
 // Clear: nothing is waiting, in one sentence on the panel, with no sheet. It takes the job sheet's box and held rows in
 // each width band, so the sentence starts where the cue does, and the reason and the door land where the why and the
-// primary do. Above a phone it holds the height of the work that's gone, a job sheet over a then head, three rows, a door
-// and the panel's foot, so the panel's edge stays put when the last thing clears. A phone's panel ends at the door.
+// primary do. It holds the height of the work that's gone in every band, a job sheet over a then head, three rows, a door
+// and the panel's foot, so the panel's edge stays put when the last thing clears. A phone's rows take two lines each, so
+// its work runs 51 px further.
 function ClearState({ className, children, ...props }: React.ComponentProps<"section">) {
   return (
     <section
@@ -124,7 +125,7 @@ function ClearState({ className, children, ...props }: React.ComponentProps<"sec
     >
       <div
         data-slot="clear-state-rows"
-        className="grid min-h-[549px] grid-cols-[minmax(0,1fr)] grid-rows-[24px_136px_33px_20px_48px] gap-y-3 [grid-template-areas:'title'_'title'_'reason'_'.'_'door'] [@media(max-width:600px)]:min-h-0 [@media(max-width:600px)]:grid-rows-[24px_176px_62px_20px_48px] [@media(max-width:600px)]:gap-y-2 [@media(min-width:601px)]:@max-[784px]/clear-state:min-h-[622px] [@media(min-width:601px)]:@max-[784px]/clear-state:grid-rows-[24px_176px_66px_20px_48px]"
+        className="grid min-h-[549px] grid-cols-[minmax(0,1fr)] grid-rows-[24px_136px_33px_20px_48px] gap-y-3 [grid-template-areas:'title'_'title'_'reason'_'.'_'door'] [@media(max-width:600px)]:min-h-[653px] [@media(max-width:600px)]:grid-rows-[24px_176px_62px_20px_48px] [@media(max-width:600px)]:gap-y-2 [@media(min-width:601px)]:@max-[784px]/clear-state:min-h-[622px] [@media(min-width:601px)]:@max-[784px]/clear-state:grid-rows-[24px_176px_66px_20px_48px]"
       >
         {children}
       </div>
