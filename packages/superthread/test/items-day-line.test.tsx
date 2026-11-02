@@ -552,6 +552,14 @@ describe("the strip", () => {
     expect(one(host, '[data-slot="day-line-now"] time').el.textContent).toBe("11:12");
   });
 
+  test("a stale read says when, on the side away from now", () => {
+    const morning = one(strip([standup], { asOf: "as of 08:10", now: clock("09:00") }), '[data-slot="day-line-as-of"]');
+    expect(morning.el.textContent).toBe("as of 08:10");
+    expect((morning.el as HTMLElement).style.right).toBe("0px");
+    const evening = one(strip([standup], { asOf: "as of 08:10", now: clock("16:00") }), '[data-slot="day-line-as-of"]');
+    expect((evening.el as HTMLElement).style.left).toBe("0px");
+  });
+
   test("a day with no timed event prints its children in the names' place, to every reader", () => {
     const host = strip([], { children: "nothing fixed today", now: clock("11:12") });
     const message = one(host, '[data-slot="day-line-message"]');

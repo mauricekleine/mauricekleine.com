@@ -349,9 +349,11 @@ function Names({ names }: { names: Name[] }) {
  * `children` print in the names' place when the day holds no timed event, such as `nothing fixed today`. A read that
  * failed leaves them out and says why in DayLineFoot, so a failed read never reads as an empty day. A read that may be
  * behind prints its blocks dotted, and DayLineFoot says why and when it was last good. `loading` holds the shape until
- * the first read.
+ * the first read. `asOf` prints when a stale read was last good beside the now time, on the side away from it, for a
+ * strip with no DayLineFoot under it; a day line with a foot says it there, so the time prints once.
  */
 function DayLineStrip({
+  asOf,
   children,
   className,
   day,
@@ -367,6 +369,7 @@ function DayLineStrip({
   now?: Moment | null;
   timeZone?: string;
   loading?: boolean;
+  asOf?: ReactNode;
 }) {
   const options = { timeZone };
   const { at, from, to, placed, names, position } = layOut(day, events, now, options);
@@ -445,6 +448,19 @@ function DayLineStrip({
           >
             <span className="sr-only">now </span>
             <time dateTime={new Date(now).toISOString()}>{clockWords(now, options)}</time>
+          </p>
+        )}
+        {asOf !== undefined && (
+          <p
+            data-slot="day-line-as-of"
+            className="absolute top-[5px] truncate text-muted-foreground"
+            style={
+              nowAt !== null && nowAt > 50
+                ? { left: 0, maxWidth: "calc(var(--now) - 32px)" }
+                : { right: 0, maxWidth: nowAt === null ? "100%" : "calc(100% - var(--now) - 32px)" }
+            }
+          >
+            {asOf}
           </p>
         )}
       </div>
