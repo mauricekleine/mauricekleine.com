@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
+import { ReaderEnd } from "@/components/superthread/blocks/reader";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import { chapter, contents, quantaNav } from "@/mock/data";
 import { PlateField, ShipMark } from "@/mock/parts";
@@ -88,6 +89,8 @@ function Page() {
                 </li>
               </ol>
             </footer>
+
+            <ReaderEnd>that&rsquo;s the chapter.</ReaderEnd>
           </article>
         </AppShellPanel>
 

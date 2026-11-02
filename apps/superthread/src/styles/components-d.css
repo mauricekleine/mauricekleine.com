@@ -59,6 +59,13 @@
     gap: 24px;
   }
 
+  /* month grid: the width of a reader's rail, where it usually sits. a phone gives it the whole pane */
+  @media (min-width: 601px) {
+    .st-month-grid {
+      max-width: 248px;
+    }
+  }
+
   /* inline answers: the slots a parent would hold, two lines of the lede */
   .st-answers {
     display: grid;

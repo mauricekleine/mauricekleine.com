@@ -2886,11 +2886,11 @@
       },
       "lede": {
         "displayName": "lede",
-        "purpose": "the sentence under a page title"
+        "purpose": "the sentence under a page title, and in italic a reading page's closing line"
       },
       "lede-phone": {
         "displayName": "lede on a phone",
-        "purpose": "type-lede at 600 px and below: the sentence under a page title"
+        "purpose": "type-lede at 600 px and below: the sentence under a page title, and in italic a reading page's closing line"
       },
       "title": {
         "displayName": "title",
@@ -2906,11 +2906,11 @@
       },
       "page": {
         "displayName": "page",
-        "purpose": "a reading sheet's heading"
+        "purpose": "a reading sheet's heading and a reader's lead line"
       },
       "page-phone": {
         "displayName": "page on a phone",
-        "purpose": "type-page at 600 px and below: a reading sheet's heading"
+        "purpose": "type-page at 600 px and below: a reading sheet's heading and a reader's lead line"
       },
       "headline": {
         "displayName": "headline",
@@ -3233,6 +3233,11 @@
       {
         "name": "The Solid Event Rule",
         "body": "On a timeline solid means an event and nothing else. There is no elapsed fill, and a loading timeline holds its height with nothing solid on the track.",
+        "section": "components"
+      },
+      {
+        "name": "The Closing Line Rule",
+        "body": "A reading page ends on one closing line in Erode italic at the lede step, in muted ink: `that's all for today.` It tells the reader the page is finished.",
         "section": "components"
       },
       {

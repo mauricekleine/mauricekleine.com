@@ -84,6 +84,33 @@ import {
   DayLineSteps,
   DayLineStrip,
 } from "@/components/superthread/blocks/day-line";
+import { MonthGrid } from "@/components/superthread/blocks/month-grid";
+import {
+  Reader,
+  ReaderLead,
+  ReaderRail,
+  ReaderHead,
+  ReaderLine,
+  ReaderNext,
+  ReaderNextText,
+  ReaderWide,
+  ReaderBody,
+  ReaderSection,
+  ReaderSectionTitle,
+  ReaderText,
+  ReaderEnd,
+  ReaderFoot,
+  ReaderRaised,
+  ReaderBlocks,
+  ReaderBlock,
+  ReaderBlockTitle,
+  ReaderWho,
+  ReaderPerson,
+  ReaderOwed,
+  ReaderOwedRow,
+  ReaderPaper,
+  ReaderGap,
+} from "@/components/superthread/blocks/reader";
 import { Notice, NoticeTitle, NoticeDescription, NoticeActions } from "@/components/superthread/blocks/notice";
 import {
   SendBar,
@@ -610,6 +637,87 @@ function Sink({ mode }: { mode: Mode }) {
             timeZone="UTC"
           />
         </DayLine>
+      </Part>
+      <Part name="month-grid">
+        <MonthGrid
+          aria-label="briefs by month"
+          days={[
+            { date: "2026-11-02", label: "read the brief", selected: true, href: "#monday" },
+            { date: "2026-11-03", label: "read the brief", href: "#tuesday" },
+          ]}
+          max="2026-11"
+          min="2026-10"
+          month="2026-11"
+          onMonthChange={() => {}}
+          today="2026-11-03"
+          weeks={[{ date: "2026-11-02", label: "read the weekly brief", href: "#week" }]}
+        />
+      </Part>
+      <Part name="reader">
+        <AppShellPanel>
+          <Reader>
+            <ReaderLead>
+              <ReaderHead written="written 07:00">tue 3 nov</ReaderHead>
+              <ReaderLine>reply to sam before standup.</ReaderLine>
+              <ReaderNext>
+                <ReaderNextText label="do next">reply to sam about chapter 7</ReaderNextText>
+                <Button size="lg">read the draft</Button>
+              </ReaderNext>
+            </ReaderLead>
+            <ReaderWide>
+              <ReaderText>the day line goes here.</ReaderText>
+            </ReaderWide>
+            <ReaderBody>
+              <ReaderSection>
+                <ReaderSectionTitle>what changed</ReaderSectionTitle>
+                <ReaderText>
+                  sam sent the notes last night, and <a href="#brief">the brief</a> is ready.
+                </ReaderText>
+              </ReaderSection>
+              <ReaderEnd>that&rsquo;s all for today.</ReaderEnd>
+            </ReaderBody>
+            <ReaderRail>
+              <ReaderBlock>
+                <ReaderBlockTitle>earlier briefs</ReaderBlockTitle>
+              </ReaderBlock>
+            </ReaderRail>
+            <ReaderFoot>
+              <Onward back href="#monday">
+                monday
+              </Onward>
+              <Onward href="#wednesday">wednesday</Onward>
+            </ReaderFoot>
+          </Reader>
+        </AppShellPanel>
+        <AppShellPanel>
+          <ReaderPaper>
+            <ReaderRaised label="one thing to raise">ask sam who signs off the order.</ReaderRaised>
+          </ReaderPaper>
+          <ReaderBlocks>
+            <ReaderBlock>
+              <ReaderBlockTitle>who&rsquo;s in the room</ReaderBlockTitle>
+              <ReaderWho>
+                <ReaderPerson note="edits the series" seen="mail, mon 2 nov">
+                  sam
+                </ReaderPerson>
+                <ReaderPerson>mina</ReaderPerson>
+              </ReaderWho>
+            </ReaderBlock>
+            <ReaderBlock asWritten>
+              <ReaderBlockTitle>what you owe them</ReaderBlockTitle>
+              <ReaderOwed>
+                <ReaderOwedRow href="#notes" when="thu 5 nov">
+                  the chapter 7 notes
+                </ReaderOwedRow>
+                <ReaderOwedRow when="promised for thu">a date for the printer</ReaderOwedRow>
+              </ReaderOwed>
+            </ReaderBlock>
+            <ReaderBlock>
+              <ReaderBlockTitle>what they owe you</ReaderBlockTitle>
+              <ReaderGap>not in the record</ReaderGap>
+            </ReaderBlock>
+          </ReaderBlocks>
+        </AppShellPanel>
       </Part>
       <Part name="notice">
         <Notice variant="quiet">a newer version is waiting.</Notice>

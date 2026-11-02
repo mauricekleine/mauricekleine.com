@@ -25,11 +25,11 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 | `summary`    | 15 / 24     | Supreme 400                            | the text under a form title and a page head's meta line |
 | `subtitle`   | 18 / 24     | Supreme 500                            | dialog titles, a quiet section head |
 | `read`       | 19 / 32     | Erode 400 (phone 18 / 30)              | the reading page            |
-| `lede`       | 21 / 33     | Erode 400 (phone 19 / 31)              | ledes                       |
+| `lede`       | 21 / 33     | Erode 400 (phone 19 / 31)              | ledes, and in italic a reading page's closing line |
 | `title`      | 22 / 28     | Unbounded 300, -0.02em                 | card, board and form titles, a section head in a panel |
 | `long`       | 26 / 29     | Unbounded 300, -0.03em                 | `fit-title`'s last step, for a title too long for section |
 | `section`    | 30 / 34     | Unbounded 300, -0.03em                 | a page head's title in a panel, a section head on the stock |
-| `page`       | 34 / 40     | Erode 600 (phone 28 / 34)              | a reading sheet's heading   |
+| `page`       | 34 / 40     | Erode 600 (phone 28 / 34)              | a reading sheet's heading and a reader's lead line |
 | `headline`   | 40 / 44     | Unbounded 300, -0.03em                 | `fit-title`'s step for a title too long for hero, and its first step under a full panel's 784 px measure |
 | `hero`       | 64 / 68     | Unbounded 300 (phone 52 / 56)          | a page head's title on the stock, or at `size="page"`, `fit-title`'s first step at a full panel's measure, and clear's claim below one |
 | `display`    | 76 / 80     | Unbounded 300                          | the overview wordmark, and clear's claim at a full panel's measure |
