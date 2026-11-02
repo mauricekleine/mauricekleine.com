@@ -19,9 +19,14 @@ const KEYLESS_INPUTS = new Set([
 // there. A native dialog is a modal with no role attribute to read.
 const KEEPS_ITS_KEYS = 'dialog, [role="dialog"], [role="alertdialog"], [role="menu"], [role="listbox"]';
 
+// A key pressed in an iframe or a window the page opened targets an instance of that window's classes, so these read
+// the node itself and never ask instanceof.
+const isElement = (target: EventTarget | null): target is Element =>
+  (target as Node | null)?.nodeType === Node.ELEMENT_NODE;
+
 function typesText(target: Element) {
   const field = target.closest(EDITABLE);
-  return field !== null && !(field instanceof HTMLInputElement && KEYLESS_INPUTS.has(field.type));
+  return field !== null && !(field.localName === "input" && KEYLESS_INPUTS.has((field as HTMLInputElement).type));
 }
 
 /**
@@ -35,5 +40,5 @@ export function isPageKey(event: KeyboardEvent, key: string) {
   // A browser's autofill sends a keydown with no key.
   if (event.key?.toLowerCase() !== key.toLowerCase()) return false;
   const target = event.target;
-  return !(target instanceof Element && (typesText(target) || target.closest(KEEPS_ITS_KEYS)));
+  return !(isElement(target) && (typesText(target) || target.closest(KEEPS_ITS_KEYS)));
 }

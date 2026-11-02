@@ -158,24 +158,28 @@ function QuickAddNav({
   const form = useRef<HTMLFormElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   // Where Escape hands focus back: the control focused when the key opened the field. Null sends it to the trigger.
-  const returnTo = useRef<HTMLElement | null>(null);
+  const returnTo = useRef<(Element & HTMLOrSVGElement) | null>(null);
   const disabled = inputProps.disabled;
   const { input, value, setValue, busy, error, submit } = useAdd(onAdd, disabled);
 
+  // The key and the focus belong to the document the field renders in, which may be an iframe's or another window's.
+  // An element there is an instance of that window's classes, so the control that holds focus is read without
+  // instanceof: whatever holds focus can take it again.
   useEffect(() => {
-    if (hotkey === null || disabled) return;
+    const page = form.current?.ownerDocument;
+    if (hotkey === null || disabled || !page) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (!isPageKey(event, hotkey)) return;
       event.preventDefault();
-      const active = document.activeElement;
+      const active = page.activeElement;
       if (!form.current?.contains(active)) {
-        returnTo.current = active instanceof HTMLElement && active !== document.body ? active : null;
+        returnTo.current = active && active !== page.body ? (active as Element & HTMLOrSVGElement) : null;
       }
       form.current?.togglePopover(true);
       input.current?.focus();
     };
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    page.addEventListener("keydown", onKeyDown);
+    return () => page.removeEventListener("keydown", onKeyDown);
   }, [hotkey, disabled, input]);
 
   return (
@@ -225,7 +229,9 @@ function QuickAddNav({
           returnTo.current = null;
           form.current?.hidePopover();
           back?.focus({ preventScroll: true });
-          if (!back || document.activeElement !== back) trigger.current?.focus({ preventScroll: true });
+          if (!back || event.currentTarget.ownerDocument.activeElement !== back) {
+            trigger.current?.focus({ preventScroll: true });
+          }
         }}
       >
         <FieldLabel htmlFor={inputId} className="sr-only">

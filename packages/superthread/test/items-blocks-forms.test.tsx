@@ -1,5 +1,7 @@
 import { describe, expect, test } from "bun:test";
+import { Window } from "happy-dom";
 import { act, useState } from "react";
+import { createRoot } from "react-dom/client";
 import {
   FormSection,
   FormSectionHeader,
@@ -17,7 +19,7 @@ import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { Input } from "@/components/superthread/ui/input";
 import { type StatusState } from "@/components/superthread/ui/glyphs";
 import { SidebarProvider } from "@/components/superthread/ui/sidebar";
-import { client, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
+import { client, detailsUsed, elements, forbidden, one, ownClasses, parts, server } from "./rendered.tsx";
 
 // Exercise the actual text control and native form boundary, shared by Enter and the submit button.
 async function type(input: HTMLInputElement, value: string) {
@@ -333,9 +335,10 @@ describe("the quiet add in a nav", () => {
   // the form and fires the toggle event, and like a browser it fires nothing when the form is already open. Its close
   // does what Chrome's does: focus inside the form goes back to the element that held it when the form opened, and to
   // the body when nothing did or that element has left the page. An Escape that no handler cancelled closes the open
-  // form, as the browser's light dismiss does. The real popover and its anchor are proved in a browser.
+  // form, as the browser's light dismiss does, in the document the stand-in is given. The real popover and its anchor
+  // are proved in a browser.
   const open: Element[] = [];
-  const withPopover = () => {
+  const withPopover = (page: Document = document) => {
     const proto = HTMLElement.prototype as unknown as {
       togglePopover?: (force?: boolean) => boolean;
       hidePopover?: () => void;
@@ -344,7 +347,7 @@ describe("the quiet add in a nav", () => {
     proto.togglePopover = function (this: HTMLElement, force?: boolean) {
       if (force !== false && open.includes(this)) return true;
       open.push(this);
-      before.set(this, document.activeElement);
+      before.set(this, this.ownerDocument.activeElement);
       this.dispatchEvent(Object.assign(new Event("toggle"), { newState: force === false ? "closed" : "open" }));
       return true;
     };
@@ -356,9 +359,10 @@ describe("the quiet add in a nav", () => {
         open.splice(open.indexOf(this), 1);
         const back = before.get(this);
         before.delete(this);
-        if (this.contains(document.activeElement)) {
-          if (back instanceof HTMLElement && back !== document.body && back.isConnected) back.focus();
-          else (document.activeElement as HTMLElement).blur();
+        const { activeElement, body } = this.ownerDocument;
+        if (this.contains(activeElement)) {
+          if (back && back !== body && back.isConnected) (back as HTMLElement).focus();
+          else (activeElement as HTMLElement).blur();
         }
         this.dispatchEvent(Object.assign(new Event("toggle"), { newState: "closed" }));
       },
@@ -366,9 +370,9 @@ describe("the quiet add in a nav", () => {
     const dismiss = (event: KeyboardEvent) => {
       if (event.key === "Escape" && !event.defaultPrevented) (open.at(-1) as HTMLElement | undefined)?.hidePopover();
     };
-    document.addEventListener("keydown", dismiss);
+    page.addEventListener("keydown", dismiss);
     return () => {
-      document.removeEventListener("keydown", dismiss);
+      page.removeEventListener("keydown", dismiss);
       delete proto.togglePopover;
       delete proto.hidePopover;
       open.length = 0;
@@ -500,6 +504,34 @@ describe("the quiet add in a nav", () => {
       row.remove();
       await view.done();
       restore();
+    }
+  });
+
+  test("in a window of its own, n opens the field there and Escape hands focus back there", async () => {
+    // A second window stands in for an iframe or a window the app opened: its document is the nav's, no key pressed
+    // in it reaches the page's, and the row that holds focus there answers to that window's classes.
+    const other = new Window();
+    const page = other.document as unknown as Document;
+    const restore = withPopover(page);
+    const host = page.createElement("div");
+    const row = page.createElement("button");
+    page.body.append(host, row);
+    ownClasses(row);
+    const root = createRoot(host);
+    await act(async () => root.render(nav()));
+    try {
+      const input = one(host, '[data-slot="quick-add-nav-field"] input').el;
+      row.focus();
+      await press("n", row);
+      expect(open.map((el) => el.getAttribute("data-slot"))).toEqual(["quick-add-nav-field"]);
+      expect(page.activeElement).toBe(input);
+      await press("Escape", input);
+      expect(open).toEqual([]);
+      expect(page.activeElement).toBe(row);
+    } finally {
+      await act(async () => root.unmount());
+      restore();
+      await other.happyDOM.close();
     }
   });
 
