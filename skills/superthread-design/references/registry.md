@@ -15,7 +15,7 @@
 - **style**: `init` sets up an app; `tokens` is the theme (colour roles, type, motion, shape and the texture tiles).
 - **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `theme` holds the fleet's light and dark choice; `time-words` puts time in the fleet's words (`since friday`, `before 11:00`, `09:30`, `tue 3 nov`, `november 2026`, `48 min until standup`, `every day at 07:00`); `use-minute` is the clock's minute and the reader's day, from one shared timer that stops while the page is hidden; `hotkey` says whether a bare key press is the page's to answer, away from text and from layers that keep their keys; `tokens-plain` is the theme as plain CSS and a typed module.
 - **brand**: superthread's own components. They keep shadcn's Base UI API (exports, props, `data-slot`, variants) and add `data-mk="<item>"` on the root.
-- **pass**: base-nova's items as shadcn ships them, on the superthread tokens.
+- **pass**: base-nova's items as shadcn ships them, on the superthread tokens, plus the few rules upstream leaves out, such as the turn of `collapsible`'s chevron.
 - **block**: the compositions the fleet's apps repeat, built from the items: a shell, headers, collections, forms, a letter, a send bar, a job sheet, a day line, a month grid, a reader, notices and states. Each installs at `components/superthread/blocks/<name>.tsx`; its meta names the apps it serves. Reach for a block before composing the same pattern by hand.
 
 ## install
@@ -78,7 +78,7 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.10.2/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.10.3/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions with a snapshot. A snapshot never changes once it is published.

@@ -8,8 +8,9 @@ import {
   PageHeaderMeta,
   PageHeaderTitle,
 } from "@/components/superthread/blocks/page-header";
+import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
 import { Button } from "@/components/superthread/ui/button";
-import { Serves, ViewportFrame } from "@/examples/compositions-a";
+import { GroundFrame, Serves, ViewportFrame } from "@/examples/compositions-a";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/compositions/page-header")({
       { id: "example", title: "example" },
       { id: "sizes", title: "sizes" },
       { id: "phone", title: "phone" },
+      { id: "short", title: "a short title" },
       { id: "parts", title: "parts" },
     ],
   },
@@ -82,6 +84,44 @@ function Pair({ size = "panel", phone = false }: { size?: "panel" | "page"; phon
   );
 }
 
+// A short title with no meta or actions, in a working panel at full width: room beside the title, and the lede still
+// takes the line below it.
+function ShortPair({ phone = false }: { phone?: boolean }) {
+  const header = (
+    <AppShellPanel>
+      <PageHeader>
+        <PageHeaderTitle>drafts</PageHeaderTitle>
+        <PageHeaderDescription>what waits for a first read, newest first.</PageHeaderDescription>
+      </PageHeader>
+    </AppShellPanel>
+  );
+  return (
+    <ModePair
+      className={phone ? undefined : "st-ca-wide-pair"}
+      light={
+        <GroundFrame
+          mode="light"
+          title={`a short title, ${phone ? "phone" : "full width"}, light`}
+          width={phone ? 390 : 960}
+          height={phone ? 160 : 220}
+        >
+          {header}
+        </GroundFrame>
+      }
+      dark={
+        <GroundFrame
+          mode="dark"
+          title={`a short title, ${phone ? "phone" : "full width"}, dark`}
+          width={phone ? 390 : 960}
+          height={phone ? 160 : 220}
+        >
+          {header}
+        </GroundFrame>
+      }
+    />
+  );
+}
+
 function Page() {
   return (
     <>
@@ -111,6 +151,14 @@ function Page() {
         </p>
         <Pair phone />
         <Pair size="page" phone />
+      </Section>
+      <Section id="short" title="a short title">
+        <p className="st-ca-copy">
+          with no meta or actions a short title leaves room beside it in a working panel. the lede still takes the line
+          below, held to its measure.
+        </p>
+        <ShortPair />
+        <ShortPair phone />
       </Section>
       <Section id="parts" title="parts">
         <dl className="st-ca-parts">

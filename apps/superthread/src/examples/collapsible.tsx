@@ -6,8 +6,8 @@ export function CollapsibleExample({ open = false }: { open?: boolean }) {
   return (
     <Collapsible defaultOpen={open} className="st-gl-stack">
       <CollapsibleTrigger render={<Button variant="outline" />}>
-        <Icon name="chevron" />
         run logs
+        <Icon name="chevron" data-icon="inline-end" />
       </CollapsibleTrigger>
       <CollapsibleContent>
         <ul className="st-gl-logs">
@@ -37,7 +37,7 @@ export function CollapsibleStates() {
           name={state}
           note={
             state === "open"
-              ? "panel follows the trigger"
+              ? "panel follows, chevron turns"
               : state === "disabled"
                 ? "disclosure cannot open"
                 : state === "focus"
@@ -53,6 +53,7 @@ export function CollapsibleStates() {
                 tabIndex={-1}
               >
                 run logs
+                <Icon name="chevron" data-icon="inline-end" />
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <p className="st-gl-note">3 logs available.</p>

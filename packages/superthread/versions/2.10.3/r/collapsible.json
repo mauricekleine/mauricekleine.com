@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collapsible",
+  "title": "collapsible",
+  "description": "base-nova's collapsible, on the superthread tokens",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/collapsible.tsx",
+      "content": "import { Collapsible as CollapsiblePrimitive } from \"@base-ui/react/collapsible\"\nimport { cn } from \"@/components/superthread/lib/utils\"\n// @mk/collapsible 2.10.3\n\nfunction Collapsible({ ...props }: CollapsiblePrimitive.Root.Props) {\n  return <CollapsiblePrimitive.Root data-slot=\"collapsible\" {...props} />\n}\n\nfunction CollapsibleTrigger({ className, ...props }: CollapsiblePrimitive.Trigger.Props) {\n  return (\n    <CollapsiblePrimitive.Trigger data-slot=\"collapsible-trigger\" className={(state) => cn(\"[&_[data-icon=inline-end]]:transition-[rotate] [&_[data-icon=inline-end]]:duration-(--duration-quick) [&_[data-icon=inline-end]]:ease-(--ease-brand) [&[data-panel-open]_[data-icon=inline-end]]:rotate-180\", typeof className === \"function\" ? className(state) : className)} {...props} />\n  )\n}\n\nfunction CollapsibleContent({ ...props }: CollapsiblePrimitive.Panel.Props) {\n  return (\n    <CollapsiblePrimitive.Panel data-slot=\"collapsible-content\" {...props} />\n  )\n}\n\nexport { Collapsible, CollapsibleTrigger, CollapsibleContent }\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/collapsible.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.10.3",
+    "sha256": "d97c4ccca8385f5b138d7de70443e46aef0b44f449b2ed78d38f843a2041ac5b",
+    "tier": "pass",
+    "upstream": {
+      "style": "base-nova",
+      "item": "collapsible",
+      "sha256": "74f78cd88a30185243847968977cf1de9ffbf576547f2ec1f14b5ef55505b90d",
+      "cli": "4.22.1"
+    }
+  },
+  "type": "registry:ui"
+}

@@ -12,6 +12,7 @@ import {
   TableTitle,
   type SortDirection,
 } from "@/components/superthread/blocks/data-table";
+import { Section as BlockSection, SectionHeader, SectionTitle } from "@/components/superthread/blocks/section-header";
 import { TableHeader, TableHead, TableBody, TableRow, TableCell } from "@/components/superthread/ui/table";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { Badge } from "@/components/superthread/ui/badge";
@@ -38,6 +39,7 @@ export const Route = createFileRoute("/compositions/data-table")({
       { id: "detail", title: "detail" },
       { id: "sub-entries", title: "sub-entries" },
       { id: "results", title: "results" },
+      { id: "under-a-head", title: "under a head" },
       { id: "empty", title: "empty results" },
     ],
   },
@@ -317,6 +319,45 @@ function ResultsTable() {
   );
 }
 
+// A day's log under each day's head, as an activity page prints it: each fold hangs from its ruled head's rule, and
+// the last day's quiet head has no rule, so its fold keeps its own.
+const days: { day: string; entries: typeof results; quiet?: "subtitle" }[] = [
+  { day: "today", entries: results.slice(0, 3) },
+  { day: "yesterday", entries: results.slice(3, 5) },
+  { day: "monday", entries: results.slice(5), quiet: "subtitle" },
+];
+
+function DaysTable() {
+  return (
+    <div>
+      {days.map(({ day, entries, quiet }) => (
+        <BlockSection key={day}>
+          <SectionHeader quiet={quiet}>
+            <SectionTitle>{day}</SectionTitle>
+          </SectionHeader>
+          <DataTable label={`what ran ${day}`} fold className="[--fold-lead:60px]">
+            <TableBody>
+              {entries.map((entry) => (
+                <TableRow key={entry.time}>
+                  <TableCell fold="lead" kind="id" className="@min-[776px]/fold:w-[116px]">
+                    {entry.time}
+                  </TableCell>
+                  <TableCell fold="title" scope="row">
+                    <TableTitle>{entry.title}</TableTitle>
+                  </TableCell>
+                  <TableCell fold="aside" flag={entry.open} className="@min-[776px]/fold:w-[188px]">
+                    {entry.result}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </DataTable>
+        </BlockSection>
+      ))}
+    </div>
+  );
+}
+
 function EventsTable() {
   return (
     <DataTable label="what ran today" fold className="[--fold-lead:60px]">
@@ -572,6 +613,16 @@ function Page() {
         </p>
         <PanelPair title="a log of results" height={490} phoneHeight={470}>
           <ResultsTable />
+        </PanelPair>
+      </Section>
+      <Section id="under-a-head" title="under a head">
+        <p className="st-cb-copy">
+          a fold with no head row opens on its own rule. straight under a section header it hangs from the
+          header&rsquo;s rule instead, as list rows do, so the two never print 16&nbsp;px apart. monday&rsquo;s quiet
+          head prints no rule, so its fold keeps its own.
+        </p>
+        <PanelPair title="a day's log under its heads" height={640} phoneHeight={700}>
+          <DaysTable />
         </PanelPair>
       </Section>
       <Section id="empty" title="empty results">

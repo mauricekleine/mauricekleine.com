@@ -3,9 +3,12 @@ import { describe, expect, test } from "bun:test";
 import { act, type ReactNode } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/superthread/ui/accordion";
 import { AlertDialog, AlertDialogContent } from "@/components/superthread/ui/alert-dialog";
+import { Button } from "@/components/superthread/ui/button";
 import { Card } from "@/components/superthread/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/superthread/ui/collapsible";
 import { Dialog, DialogContent } from "@/components/superthread/ui/dialog";
 import { FleetRail } from "@/components/superthread/ui/fleet-rail";
+import { Icon } from "@/components/superthread/ui/glyphs";
 import { Sheet, SheetContent } from "@/components/superthread/ui/sheet";
 import { Sidebar, SidebarContent, SidebarProvider, SidebarTrigger } from "@/components/superthread/ui/sidebar";
 import {
@@ -42,6 +45,7 @@ import {
   forbidden,
   one,
   own,
+  reached,
   server,
 } from "./rendered.tsx";
 
@@ -535,6 +539,68 @@ describe("accordion", () => {
   });
   test("no texture or forbidden class across open, closed and disabled rows", () => {
     clean([server(accordion())], "accordion");
+  });
+});
+
+// A disclosure built the way the site and the ships build one: a button trigger, a glyph before its words and the
+// chevron at its end.
+function collapsible() {
+  return (
+    <Collapsible>
+      <CollapsibleTrigger render={<Button variant="outline" />}>
+        <Icon name="search" data-icon="inline-start" />
+        run logs
+        <Icon name="chevron" data-icon="inline-end" />
+      </CollapsibleTrigger>
+      <CollapsibleContent>3 logs available.</CollapsibleContent>
+    </Collapsible>
+  );
+}
+
+describe("collapsible", () => {
+  test("the chevron at the trigger's end turns while the panel is open, and the glyph before the words never does", async () => {
+    const view = await client(collapsible());
+    try {
+      const trigger = view.body.querySelector<HTMLButtonElement>('[data-slot="collapsible-trigger"]')!;
+      const turned = () => reached(trigger, "rotate-180").map((el) => el.getAttribute("data-icon"));
+      expect(turned()).toEqual([]);
+      await act(async () => trigger.click());
+      expect(trigger.getAttribute("aria-expanded")).toBe("true");
+      expect(turned()).toEqual(["inline-end"]);
+      await act(async () => trigger.click());
+      expect(turned()).toEqual([]);
+    } finally {
+      await view.done();
+    }
+  });
+  test("a caller's className that reads the trigger's state still reaches it, beside the chevron's turn", async () => {
+    const view = await client(
+      <Collapsible>
+        <CollapsibleTrigger className={(state) => (state.open ? "is-open" : "is-closed")}>
+          run logs
+          <Icon name="chevron" data-icon="inline-end" />
+        </CollapsibleTrigger>
+        <CollapsibleContent>3 logs available.</CollapsibleContent>
+      </Collapsible>,
+    );
+    try {
+      const trigger = view.body.querySelector<HTMLButtonElement>('[data-slot="collapsible-trigger"]')!;
+      const own = () => [...trigger.classList].filter((cls) => cls.startsWith("is-"));
+      expect(own()).toEqual(["is-closed"]);
+      await act(async () => trigger.click());
+      expect(own()).toEqual(["is-open"]);
+      expect(reached(trigger, "rotate-180").map((el) => el.getAttribute("data-icon"))).toEqual(["inline-end"]);
+    } finally {
+      await view.done();
+    }
+  });
+  test("it turns at the quick duration on the brand ease, the accordion's motion, which reduced motion makes zero", () => {
+    const trigger = one(server(collapsible()), '[data-slot="collapsible-trigger"]').el;
+    for (const utility of ["transition-[rotate]", "duration-(--duration-quick)", "ease-(--ease-brand)"])
+      expect(
+        reached(trigger, utility).map((el) => el.getAttribute("data-icon")),
+        utility,
+      ).toEqual(["inline-end"]);
   });
 });
 

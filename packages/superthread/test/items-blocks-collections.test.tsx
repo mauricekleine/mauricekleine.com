@@ -50,6 +50,7 @@ import {
 } from "@/components/superthread/blocks/list-rows";
 import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
 import { JumpLine, JumpLineLink } from "@/components/superthread/blocks/jump-line";
+import { Section, SectionHeader, SectionTitle } from "@/components/superthread/blocks/section-header";
 import { Button } from "@/components/superthread/ui/button";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { StatusGlyph } from "@/components/superthread/ui/glyphs";
@@ -1779,6 +1780,173 @@ describe("data table", () => {
       expect(sorted).not.toContain("@max-[776px]/fold:sr-only");
       expect(host.querySelector("table")?.getAttribute("role")).toBe("table");
       expect(host.querySelector("table")?.getAttribute("aria-label")).toBe("runs");
+    });
+
+    describe("under a section header", () => {
+      const WIDE = "@min-[776px]/fold";
+      const FOLDED = "@max-[776px]/fold";
+
+      /**
+       * What a container band gives a utility across the rendered page, by name: every class in the tree under that band
+       * whose own selector, with `&` as the element carrying it, matches as a browser would match it, so a sibling head,
+       * the table's head row and its first row decide it. happy-dom has no container queries, so the band is read off
+       * the class. A cell is named by its words.
+       */
+      function reachedAt(host: HTMLElement, band: string, utility: string): string[] {
+        const found = new Set<Element>();
+        elements(host).forEach(({ el, classes }, index) => {
+          el.setAttribute("data-probe", String(index));
+          for (const cls of classes) {
+            const { variants } = parts(cls);
+            if (variants[0] !== band || cls.slice(variants.join(":").length + 1) !== utility) continue;
+            const own = variants.slice(1);
+            if (own.length === 0) found.add(el);
+            else if (own.length === 1 && own[0]!.startsWith("[") && own[0]!.includes("&")) {
+              const selector = own[0]!.slice(1, -1).replaceAll("_", " ").replaceAll("&", `[data-probe="${index}"]`);
+              for (const hit of host.querySelectorAll(selector)) found.add(hit);
+            }
+          }
+        });
+        return [...found].map((el) =>
+          el.children.length ? el.tagName.toLowerCase() : `${el.tagName.toLowerCase()} ${el.textContent}`,
+        );
+      }
+
+      const page = ({ head, tableHead }: { head?: "loud" | "quiet"; tableHead?: "names" | "sorts" }) =>
+        server(
+          <Section>
+            {head && (
+              <SectionHeader quiet={head === "quiet" ? "subtitle" : undefined}>
+                <SectionTitle>today</SectionTitle>
+              </SectionHeader>
+            )}
+            <DataTable label="what ran today" fold>
+              {tableHead && (
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>time</TableHead>
+                    {tableHead === "sorts" ? (
+                      <SortableHead onSort={() => {}}>event</SortableHead>
+                    ) : (
+                      <TableHead>event</TableHead>
+                    )}
+                  </TableRow>
+                </TableHeader>
+              )}
+              <TableBody>
+                {["09:12", "08:40"].map((time) => (
+                  <TableRow key={time}>
+                    <TableCell fold="lead">{time}</TableCell>
+                    <TableCell fold="title">wrote the brief</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </DataTable>
+          </Section>,
+        );
+      const firstRow = ["td 09:12", "td wrote the brief"];
+
+      test("a fold that opens on its own rule hangs from a ruled head's rule, at width and folded", () => {
+        // At width a fold with no head row draws its rule on its first row's cells, and folded on its body: under a
+        // ruled head that rule goes, and the table rises into the head's 16 px, as list rows do.
+        const host = page({ head: "loud" });
+        expect(reachedAt(host, WIDE, "border-t")).toEqual(firstRow);
+        expect(reachedAt(host, WIDE, "border-t-0")).toEqual(firstRow);
+        expect(reachedAt(host, WIDE, "-mt-4")).toEqual(["table"]);
+        expect(reachedAt(host, FOLDED, "border-t")).toEqual(["tbody"]);
+        expect(reachedAt(host, FOLDED, "border-t-0")).toEqual(["tbody"]);
+        expect(reachedAt(host, FOLDED, "-mt-4")).toEqual(["table"]);
+      });
+
+      test("a head row that prints keeps the head's 16 px above it: at width, and folded when it sorts", () => {
+        const named = page({ head: "loud", tableHead: "names" });
+        expect(reachedAt(named, WIDE, "-mt-4")).toEqual([]);
+        // folded, a head that only names its columns leaves the screen, so the body's rule opens the fold and hangs
+        expect(reachedAt(named, FOLDED, "border-t-0")).toEqual(["tbody"]);
+        expect(reachedAt(named, FOLDED, "-mt-4")).toEqual(["table"]);
+        expect(reachedAt(named, FOLDED, "mt-4")).toEqual([]);
+        const sorted = page({ head: "loud", tableHead: "sorts" });
+        expect(reachedAt(sorted, WIDE, "-mt-4")).toEqual([]);
+        // folded, the table rises as every fold under a ruled head does, and a head that sorts takes the 16 px back
+        expect(reachedAt(sorted, FOLDED, "-mt-4")).toEqual(["table"]);
+        expect(reachedAt(sorted, FOLDED, "mt-4")).toEqual(["thead"]);
+      });
+
+      test("a quiet head has no rule to hang from, so the fold keeps its own, as it does with no head above it", () => {
+        for (const host of [page({ head: "quiet" }), page({})]) {
+          expect(reachedAt(host, WIDE, "border-t")).toEqual(firstRow);
+          expect(reachedAt(host, FOLDED, "border-t")).toEqual(["tbody"]);
+          for (const band of [WIDE, FOLDED]) {
+            expect(reachedAt(host, band, "border-t-0")).toEqual([]);
+            expect(reachedAt(host, band, "-mt-4")).toEqual([]);
+            expect(reachedAt(host, band, "mt-4")).toEqual([]);
+          }
+        }
+      });
+
+      // A fold under a ruled head whose second row opens a detail that holds its own section: a quiet head over a fold
+      // with no head row, or with one that sorts.
+      const nested = (innerHead?: "sorts") =>
+        server(
+          <Section>
+            <SectionHeader>
+              <SectionTitle>today</SectionTitle>
+            </SectionHeader>
+            <DataTable label="what ran today" fold>
+              <TableBody>
+                <TableRow>
+                  <TableCell fold="lead">09:12</TableCell>
+                  <TableCell fold="title">wrote the brief</TableCell>
+                </TableRow>
+                <TableDetail open>
+                  <TableRow>
+                    <TableCell fold="lead">08:40</TableCell>
+                    <TableCell fold="title">
+                      <TableDetailTrigger>sorted the inbox</TableDetailTrigger>
+                    </TableCell>
+                  </TableRow>
+                  <TableDetailRow columns={2}>
+                    <Section>
+                      <SectionHeader quiet="subtitle">
+                        <SectionTitle>its steps</SectionTitle>
+                      </SectionHeader>
+                      <DataTable label="its steps" fold>
+                        {innerHead && (
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>time</TableHead>
+                              <SortableHead onSort={() => {}}>step</SortableHead>
+                            </TableRow>
+                          </TableHeader>
+                        )}
+                        <TableBody>
+                          <TableRow>
+                            <TableCell fold="lead">08:41</TableCell>
+                            <TableCell fold="title">read the inbox</TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </DataTable>
+                    </Section>
+                  </TableDetailRow>
+                </TableDetail>
+              </TableBody>
+            </DataTable>
+          </Section>,
+        );
+
+      test("a fold nested in a row's detail answers to its own quiet head, not to the outer table's ruled one", () => {
+        const host = nested();
+        expect(reachedAt(host, WIDE, "-mt-4")).toEqual(["table"]);
+        expect(reachedAt(host, WIDE, "border-t-0")).toEqual(firstRow);
+        expect(reachedAt(host, FOLDED, "-mt-4")).toEqual(["table"]);
+        expect(reachedAt(host, FOLDED, "border-t-0")).toEqual(["tbody"]);
+      });
+
+      test("a head that sorts in a nested fold leaves the outer fold hanging from its head's rule", () => {
+        const host = nested("sorts");
+        expect(reachedAt(host, FOLDED, "-mt-4")).toEqual(["table"]);
+        expect(reachedAt(host, FOLDED, "mt-4")).toEqual([]);
+      });
     });
   });
 
