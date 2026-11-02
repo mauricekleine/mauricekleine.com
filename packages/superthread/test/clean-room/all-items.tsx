@@ -174,6 +174,8 @@ const ICONS: IconName[] = [
   "close",
   "trash",
   "plus",
+  "more",
+  "brief",
   "tick",
   "i",
   "pause",
