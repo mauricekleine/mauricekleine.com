@@ -337,6 +337,20 @@ describe("list rows", () => {
       expect(line.classList.contains("overflow-x-clip")).toBe(true);
     });
 
+    test("hold 8 px either side of the dot's advance, in a gap the slot and its pull-back share", () => {
+      const line = meta(
+        <>
+          <span>orbit</span>
+          <span>queued</span>
+        </>,
+      );
+      const [, second] = line.querySelectorAll('[data-slot="list-row-meta-piece"]');
+      expect(line.classList.contains("[--meta-gap:calc(1rem+0.525em)]")).toBe(true);
+      expect(line.classList.contains("gap-x-(--meta-gap)")).toBe(true);
+      expect(second!.classList.contains("-ml-(--meta-gap)")).toBe(true);
+      expect(dots(line)[0]!.classList.contains("w-(--meta-gap)")).toBe(true);
+    });
+
     test("hold the clip past a focus ring, with padding its margin pulls back", () => {
       const { classList } = meta(<span>orbit</span>);
       expect(classList.contains("px-1")).toBe(true);

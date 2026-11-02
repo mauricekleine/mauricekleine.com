@@ -171,21 +171,21 @@ function metaPieces(children: ReactNode): ReactNode[] {
   );
 }
 
-// The second line holds context, and it prints the dot between its pieces, so a row writes only the pieces. Each dot
-// leads the piece after it, in a slot as wide as the gap and pulled back over it, so the row's clip takes the dot of the
-// piece that starts a line: a wrap leaves no dot hanging at either end. The clip falls on the padding edge, so the
-// line's padding, pulled back by its margin, keeps a link's focus ring inside it. The dot sits outside the piece's own
-// element, so a link keeps it out of its underline and a hit area keeps its ::after, and it is decoration, so a screen
-// reader skips it. A component can render nothing, which only the page can see, so the page hides that piece with its
-// dot, and a line with nothing on it. Each piece may wrap without truncating the title. A status sits outside it, in
-// the aside.
+// The second line holds context, and it prints the dot between its pieces, so a row writes only the pieces. The gap is
+// 8 px either side of the dot's advance in the sans. Each dot leads the piece after it, in a slot as wide as the gap
+// and pulled back over it, so the row's clip takes the dot of the piece that starts a line: a wrap leaves no dot hanging
+// at either end. The clip falls on the padding edge, so the line's padding, pulled back by its margin, keeps a link's
+// focus ring inside it. The dot sits outside the piece's own element, so a link keeps it out of its underline and a hit
+// area keeps its ::after, and it is decoration, so a screen reader skips it. A component can render nothing, which only
+// the page can see, so the page hides that piece with its dot, and a line with nothing on it. Each piece may wrap
+// without truncating the title. A status sits outside it, in the aside.
 function ListRowMeta({ className, children, ...props }: React.ComponentProps<"div">) {
   const pieces = metaPieces(children);
   return (
     <div
       data-slot="list-row-meta"
       className={cn(
-        "-mx-1 flex min-w-0 flex-wrap items-center gap-x-5 gap-y-1 overflow-x-clip px-1 type-instrument text-muted-foreground [grid-area:meta] [overflow-wrap:anywhere] [&:not(:has([data-slot=list-row-meta-text]:not(:empty)))]:hidden [&>[data-slot=list-row-meta-piece]:has(>[data-slot=list-row-meta-text]:empty)]:hidden",
+        "-mx-1 flex min-w-0 flex-wrap items-center gap-x-(--meta-gap) gap-y-1 overflow-x-clip px-1 type-instrument [--meta-gap:calc(1rem+0.525em)] text-muted-foreground [grid-area:meta] [overflow-wrap:anywhere] [&:not(:has([data-slot=list-row-meta-text]:not(:empty)))]:hidden [&>[data-slot=list-row-meta-piece]:has(>[data-slot=list-row-meta-text]:empty)]:hidden",
         className,
       )}
       {...props}
@@ -194,10 +194,10 @@ function ListRowMeta({ className, children, ...props }: React.ComponentProps<"di
         <span
           key={index}
           data-slot="list-row-meta-piece"
-          className={cn("flex min-w-0 items-baseline", index > 0 && "-ml-5")}
+          className={cn("flex min-w-0 items-baseline", index > 0 && "-ml-(--meta-gap)")}
         >
           {index > 0 && (
-            <span aria-hidden="true" data-slot="list-row-meta-dot" className="w-5 shrink-0 text-center">
+            <span aria-hidden="true" data-slot="list-row-meta-dot" className="w-(--meta-gap) shrink-0 text-center">
               ·
             </span>
           )}
