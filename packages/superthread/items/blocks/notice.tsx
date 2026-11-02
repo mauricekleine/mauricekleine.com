@@ -2,12 +2,31 @@ import { cn } from "@/components/superthread/lib/utils";
 import { Icon, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
 
 // A flat notice in the page's own fill. Only the small glyph takes status ink; failures interrupt, other updates wait.
+// The quiet form is one muted line: no box, no glyph and no state, for a fact that never asks for anything, such as a
+// newer version waiting. It takes its line while it's empty, so the words arrive without moving a target and a screen
+// reader hears them. A line too long for a phone wraps, so nothing is clipped.
 function Notice({
   className,
   state,
+  variant,
   children,
   ...props
-}: Omit<React.ComponentProps<"div">, "role"> & { state?: StatusState }) {
+}: Omit<React.ComponentProps<"div">, "role"> &
+  ({ state?: StatusState; variant?: undefined } | { state?: undefined; variant: "quiet" })) {
+  if (variant === "quiet") {
+    return (
+      <div
+        {...props}
+        data-mk="notice"
+        data-slot="notice"
+        data-variant="quiet"
+        role="status"
+        className={cn("min-h-lh min-w-0 type-instrument text-muted-foreground [overflow-wrap:anywhere]", className)}
+      >
+        {children}
+      </div>
+    );
+  }
   return (
     <div
       {...props}

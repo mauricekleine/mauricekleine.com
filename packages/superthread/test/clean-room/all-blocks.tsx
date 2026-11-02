@@ -389,3 +389,4 @@ function Part({ name, children }: { name: string; children: ReactNode }) {
     </div>
   );
 }
+<Notice variant="quiet">a newer version is waiting.</Notice>;

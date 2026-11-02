@@ -693,7 +693,7 @@ export const catalog: CatalogItem[] = [
     name: "notice",
     type: "registry:block",
     title: "notice",
-    description: "a flat notice in the flow: its status glyph, what happened and what to do",
+    description: "a flat notice in the flow: its status glyph, what happened and what to do, or one quiet line",
     files: [block("notice")],
     tier: "block",
     upstream: null,

@@ -16,7 +16,7 @@ import { Button } from "@/components/superthread/ui/button";
 import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { Input } from "@/components/superthread/ui/input";
 import { type StatusState } from "@/components/superthread/ui/glyphs";
-import { client, detailsUsed, elements, forbidden, one, server } from "./rendered.tsx";
+import { client, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
 
 // Exercise the actual text control and native form boundary, shared by Enter and the submit button.
 async function type(input: HTMLInputElement, value: string) {
@@ -400,6 +400,31 @@ describe("notice", () => {
       expect(one(rendered, "button").el.textContent).toBe("try again");
     },
   );
+
+  test("the quiet line prints one muted line: no box, no glyph, and a status that never interrupts", () => {
+    const rendered = server(<Notice variant="quiet">a newer version is waiting.</Notice>);
+    const line = one(rendered, '[data-mk="notice"]');
+    expect(line.el.getAttribute("role")).toBe("status");
+    expect(line.el.textContent).toBe("a newer version is waiting.");
+    expect(line.classes).toEqual(expect.arrayContaining(["type-instrument", "text-muted-foreground"]));
+    expect(line.classes.filter((cls) => /^(border|p-|bg-)/.test(parts(cls).utility))).toEqual([]);
+    expect(rendered.querySelector('[data-slot="notice-glyph"]')).toBeNull();
+    expect(rendered.querySelector("svg")).toBeNull();
+    expect(forbidden(elements(rendered))).toEqual([]);
+  });
+
+  test("an empty quiet line keeps its height and its live region, so the words move nothing", () => {
+    const rendered = server(<Notice variant="quiet" />);
+    const line = one(rendered, '[role="status"]');
+    expect(line.el.textContent).toBe("");
+    expect(line.classes).toContain("min-h-lh");
+  });
+
+  test("a long quiet line wraps rather than clipping on a phone", () => {
+    const { classes } = one(server(<Notice variant="quiet">words</Notice>), '[role="status"]');
+    expect(classes).toContain("[overflow-wrap:anywhere]");
+    expect(classes.filter((cls) => /^(truncate|whitespace-nowrap)$/.test(parts(cls).utility))).toEqual([]);
+  });
 
   test("notice actions keep the app's handlers", async () => {
     let retried = false;
