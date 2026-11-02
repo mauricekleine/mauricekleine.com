@@ -282,6 +282,10 @@ describe("toggle-group", () => {
       </ToggleGroup>,
     );
 
+  test("its items' stacking stays inside the group, so a pressed edge never climbs over a layer", () => {
+    expect(one(sample("horizontal"), '[data-slot="toggle-group"]').classes).toContain("isolate");
+  });
+
   test.each(["horizontal", "vertical"] as const)(
     "%s joins by default, preserves every pressed edge and draws focus inside",
     (orientation) => {

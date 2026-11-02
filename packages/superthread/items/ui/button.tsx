@@ -3,7 +3,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/components/superthread/lib/utils";
 import { Icon } from "@/components/superthread/ui/glyphs";
 
-// Square, 1 px edges, one chromatic ink. The default fills with plum on paper; off-paper turns it into the outline in a
+// Square, 1 px edges, one chromatic ink, Supreme wherever it lands. A link keeps its size's height and drops the inline
+// padding, so its word lines up with the text beside it. The default fills with plum on paper; off-paper turns it into the outline in a
 // dark scope, where a plum fill prints pale pink. Destructive takes the same outline there, so the action that throws
 // work away never outranks the page's one job. Key keeps its fill: it takes the first ink and destructive's hover and
 // press, for an action that leaves the app. Hover and press come from the --*-hover and --*-press roles (light overprints key, dark
@@ -12,7 +13,7 @@ import { Icon } from "@/components/superthread/ui/glyphs";
 // texture-disabled screens its edge back to the half on ::before, which is why every button stays positioned. On a
 // phone every size keeps its box and takes the pointer through a 44 px hit area on ::after.
 const buttonVariants = cva(
-  "group/button relative inline-flex shrink-0 items-center justify-center border border-transparent font-medium whitespace-nowrap transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none disabled:pointer-events-none disabled:bg-faint disabled:text-disabled aria-invalid:border-error texture-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0 [@media(max-width:600px)]:hit-area",
+  "group/button relative inline-flex shrink-0 items-center justify-center border border-transparent font-sans font-medium whitespace-nowrap transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none disabled:pointer-events-none disabled:bg-faint disabled:text-disabled aria-invalid:border-error texture-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0 [@media(max-width:600px)]:hit-area",
   {
     variants: {
       variant: {
@@ -38,6 +39,7 @@ const buttonVariants = cva(
         "icon-lg": "size-12",
       },
     },
+    compoundVariants: [{ variant: "link", className: "px-0" }],
     defaultVariants: {
       variant: "default",
       size: "default",

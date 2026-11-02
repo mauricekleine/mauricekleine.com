@@ -9,7 +9,13 @@ import {
   ToolbarSpacer,
   ViewSwitch,
 } from "@/components/superthread/blocks/collection-toolbar";
-import { DataTable, SortableHead, TableEmpty, type SortDirection } from "@/components/superthread/blocks/data-table";
+import {
+  DataTable,
+  SortableHead,
+  TableEmpty,
+  TableTitle,
+  type SortDirection,
+} from "@/components/superthread/blocks/data-table";
 import {
   ItemCard,
   ItemCardActions,
@@ -220,10 +226,82 @@ describe("list rows", () => {
     expect(one(host, "a").classes).toEqual(expect.arrayContaining(CONTROL_RING));
   });
 
+  test("hangs from a section header's rule, so the two rules never print 16 px apart", () => {
+    const { classes } = one(list(), "ul");
+    expect(classes).toEqual(
+      expect.arrayContaining(["[[data-slot=section-header]+&]:border-t-0", "[[data-slot=section-header]+&]:-mt-4"]),
+    );
+  });
+
+  test("a receding row prints muted and takes no strike, and a closed one keeps its strike", () => {
+    const row = (props: { receding?: boolean; closed?: boolean }) =>
+      server(
+        <ListRow {...props}>
+          <ListRowTitle>a task</ListRowTitle>
+        </ListRow>,
+      );
+    expect(one(row({ receding: true }), "li").el.hasAttribute("data-receding")).toBe(true);
+    expect(one(row({}), "li").el.hasAttribute("data-receding")).toBe(false);
+    expect(one(row({ receding: true }), "li").el.hasAttribute("data-closed")).toBe(false);
+    expect(one(row({}), '[data-slot="list-row-title"]').classes).toContain(
+      "group-data-[receding]/list-row:text-muted-foreground",
+    );
+  });
+
+  test('kind="id" sets a title in mono at the regular weight, a link or not', () => {
+    for (const props of [{}, { href: "/runs/or-12" }]) {
+      const title = one(
+        server(
+          <ListRowTitle kind="id" {...props}>
+            or-12
+          </ListRowTitle>,
+        ),
+        '[data-slot="list-row-title"]',
+      );
+      expect(title.classes).toEqual(expect.arrayContaining(["font-mono", "font-normal"]));
+      expect(title.classes).not.toContain("font-medium");
+      expect(title.el.getAttribute("data-kind")).toBe("id");
+    }
+    expect(one(server(<ListRowTitle>a title</ListRowTitle>), '[data-slot="list-row-title"]').classes).toContain(
+      "font-medium",
+    );
+  });
+
+  test("a line of actions with nothing in it takes no room, and markers read from the row's start", () => {
+    const actions = (variant?: "markers") =>
+      one(server(<ListRowActions variant={variant} />), '[data-slot="list-row-actions"]').classes;
+    expect(actions()).toEqual(expect.arrayContaining(["empty:hidden", "justify-end"]));
+    expect(actions("markers")).toEqual(
+      expect.arrayContaining(["empty:hidden", "justify-start", "type-instrument", "text-muted-foreground"]),
+    );
+    expect(actions("markers")).not.toContain("justify-end");
+  });
+
   describe("the meta line's dots", () => {
     const meta = (children: React.ReactNode) =>
       one(server(<ListRowMeta>{children}</ListRowMeta>), '[data-slot="list-row-meta"]').el;
     const dots = (line: Element) => [...line.querySelectorAll('[data-slot="list-row-meta-dot"]')];
+
+    // What a component renders is only on the page, so the line leaves the piece in place and hides it there.
+    test("a component that renders nothing leaves an empty piece the line can see past", () => {
+      const Nothing = () => null;
+      const line = meta(
+        <>
+          <span>orbit</span>
+          <Nothing />
+        </>,
+      );
+      const texts = [...line.querySelectorAll('[data-slot="list-row-meta-text"]')];
+      expect(texts.map((text) => text.textContent)).toEqual(["orbit", ""]);
+      expect(texts[1]!.childNodes).toHaveLength(0);
+      expect(line.getAttribute("class")).toContain(
+        "[&>[data-slot=list-row-meta-piece]:has(>[data-slot=list-row-meta-text]:empty)]:hidden",
+      );
+      expect(line.getAttribute("class")).toContain(
+        "[&>[data-slot=list-row-meta-piece]:not(:has(~[data-slot=list-row-meta-piece]>[data-slot=list-row-meta-text]:not(:empty)))>[data-slot=list-row-meta-dot]]:hidden",
+      );
+      expect(line.getAttribute("class")).toContain("[&:not(:has([data-slot=list-row-meta-text]:not(:empty)))]:hidden");
+    });
 
     test("sit between the pieces, one fewer than the pieces, and a screen reader skips them", () => {
       const line = meta(
@@ -788,10 +866,10 @@ describe("item cards", () => {
     test("a list of decided rows reaches the panel's edges, so its rules do", () => {
       const host = decided();
       expect(one(host, "ul").classes).toContain(
-        "[@media(min-width:601px)]:in-data-[slot=app-shell-panel]:not-has-[>[data-variant=full]]:has-[>[data-variant=decided]]:-mx-12",
+        "[@media(min-width:601px)]:in-data-[slot=app-shell-panel]:not-has-[>[data-variant=full]]:has-[>[data-variant=decided]]:-mx-(--spacing-panel-inset)",
       );
       expect(one(host, "li").classes).toContain(
-        "in-[[data-slot=app-shell-panel]_[data-slot=item-cards]:not(:has(>[data-variant=full]))]:px-12",
+        "in-[[data-slot=app-shell-panel]_[data-slot=item-cards]:not(:has(>[data-variant=full]))]:px-(--spacing-panel-inset)",
       );
     });
 
@@ -830,6 +908,59 @@ describe("item cards", () => {
 });
 
 describe("data table", () => {
+  describe("a table title", () => {
+    const title = (props: Parameters<typeof TableTitle>[0]) =>
+      one(server(<TableTitle {...props}>a row</TableTitle>), '[data-slot="table-title"]');
+
+    test("is plain text until it gets an href or the app's router link", () => {
+      expect(title({}).el.tagName).toBe("SPAN");
+      expect(title({ href: "/runs/12" }).el.getAttribute("href")).toBe("/runs/12");
+      expect(title({ render: <a href="/runs/13" /> }).el.getAttribute("href")).toBe("/runs/13");
+    });
+
+    test("a link underlines on hover and reaches 44 px on a phone in a box the table's scroller can contain", () => {
+      expect(title({ href: "/runs/12" }).classes).toEqual(
+        expect.arrayContaining([
+          "[&:is(a)]:hover:underline",
+          "[@media(max-width:600px)]:[&:is(a)]:relative",
+          "[@media(max-width:600px)]:[&:is(a)]:inline-block",
+          "[@media(max-width:600px)]:[&:is(a)]:hit-area",
+          ...CONTROL_RING,
+        ]),
+      );
+    });
+
+    test("prints in foreground, and muted on a receding row, which takes no strike", () => {
+      expect(title({}).classes).toEqual(
+        expect.arrayContaining(["text-foreground", "in-data-[receding]:text-muted-foreground"]),
+      );
+      const row = one(
+        server(
+          <table>
+            <tbody>
+              <TableRow receding>
+                <TableCell>
+                  <TableTitle>a row</TableTitle>
+                </TableCell>
+              </TableRow>
+            </tbody>
+          </table>,
+        ),
+        '[data-slot="table-row"]',
+      );
+      expect(row.el.hasAttribute("data-receding")).toBe(true);
+      expect(row.classes).toContain("data-[receding]:text-muted-foreground");
+      expect(row.classes.filter((cls) => cls.includes("line-through"))).toEqual([]);
+    });
+  });
+
+  test("the table's scroller contains its hit areas, so a row's target adds no scrollbar", () => {
+    const host = server(<DataTable label="runs" />);
+    expect(one(host, '[data-slot="table-container"]').classes).toEqual(
+      expect.arrayContaining(["overflow-x-auto", "hit-area-scroller"]),
+    );
+  });
+
   test("names the region and table, passing row measures, number cells and selected rows to the item", () => {
     const host = server(
       <DataTable label="runs" rows="board">
