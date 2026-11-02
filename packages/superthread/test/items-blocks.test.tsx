@@ -26,7 +26,7 @@ import {
 } from "@/components/superthread/blocks/states";
 import { Button } from "@/components/superthread/ui/button";
 import { type App, catalog } from "../items/catalog.ts";
-import { detailsUsed, elements, forbidden, one, server } from "./rendered.tsx";
+import { detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
 
 const root = join(import.meta.dir, "..");
 const APPS: readonly App[] = ["constellation", "quanta", "trisys", "orbit", "artifacts", "www"];
@@ -121,6 +121,15 @@ describe("page header", () => {
       expect(one(head, '[data-slot="page-header-description"]').classes).toEqual(
         expect.arrayContaining(["basis-full", "type-lede", "text-foreground"]),
       );
+  });
+
+  test("the lede's box takes the whole line, so a short title with no actions leaves it no room beside the title", () => {
+    // A max width capped the box's full basis, so beside a short title the lede fit on the title's line. The measure
+    // stays, held on the words rather than the box.
+    const { classes } = one(page, '[data-slot="page-header-description"]');
+    expect(classes).toContain("basis-full");
+    expect(classes.filter((cls) => /^(max-w|w)-/.test(parts(cls).utility))).toEqual([]);
+    expect(classes.filter((cls) => cls.includes("27.5em"))).toHaveLength(1);
   });
 
   test("the meta line is read out when it changes and pushes the actions to the end", () => {

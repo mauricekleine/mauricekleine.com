@@ -80,12 +80,15 @@ function PageHeaderActions({ className, ...props }: React.ComponentProps<"div">)
   );
 }
 
-// The sentence under the title, on its own line at the lede step and held to a reading measure.
+// The sentence under the title, on its own line at the lede step and held to a reading measure. The box takes the whole
+// line, so a short title with no actions never leaves the lede room beside it, and the measure lives on the words: the
+// end padding gives back whatever the line holds past 27.5em. The measure is the item's and runs from the line's
+// start, so a width class on the lede doesn't change it.
 function PageHeaderDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
       data-slot="page-header-description"
-      className={cn("max-w-[27.5em] basis-full type-lede text-pretty text-foreground", className)}
+      className={cn("basis-full pe-[max(0px,calc(100%-27.5em))] type-lede text-pretty text-foreground", className)}
       {...props}
     />
   );
