@@ -48,6 +48,52 @@ export function NativeSelectSizes() {
     </div>
   );
 }
+export function NativeSelectQuiet() {
+  const [scope, setScope] = useState("everything");
+  return (
+    <div className="st-e-stack">
+      <NativeSelect
+        variant="quiet"
+        aria-label="scope"
+        className="ml-auto"
+        value={scope}
+        onChange={(event) => setScope(event.target.value)}
+      >
+        <NativeSelectOption value="everything">everything</NativeSelectOption>
+        <NativeSelectOption value="quanta">quanta</NativeSelectOption>
+        <NativeSelectOption value="trisys">trisys</NativeSelectOption>
+      </NativeSelect>
+      <p role="status" className="st-e-hint">
+        {scope === "everything" ? "showing every ship" : `showing ${scope}`}
+      </p>
+    </div>
+  );
+}
+export function NativeSelectQuietStates() {
+  return (
+    <div className="st-e-states">
+      {[
+        { name: "rest", note: "muted word and chevron" },
+        { name: "hover", note: "foreground word", demo: "hover" },
+        { name: "focus", note: "2 px house ring", demo: "focus-visible" },
+        { name: "disabled", note: "disabled word", disabled: true },
+      ].map((s) => (
+        <State key={s.name} name={s.name} note={s.note}>
+          <NativeSelect
+            variant="quiet"
+            defaultValue="orbit"
+            aria-label={`scope, ${s.name}`}
+            disabled={s.disabled}
+            data-demo={s.demo}
+            tabIndex={-1}
+          >
+            <Options />
+          </NativeSelect>
+        </State>
+      ))}
+    </div>
+  );
+}
 export function NativeSelectStates() {
   return (
     <div className="st-e-states">

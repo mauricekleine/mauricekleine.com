@@ -255,9 +255,63 @@ describe("native-select", () => {
       expect(one(host, '[data-slot="native-select-icon"]').classes).toContain("pointer-events-none");
     }
   });
+  describe("the quiet form", () => {
+    const quiet = (props: React.ComponentProps<typeof NativeSelect> = {}) =>
+      server(
+        <NativeSelect variant="quiet" aria-label="scope" {...props}>
+          <NativeSelectOption>everything</NativeSelectOption>
+        </NativeSelect>,
+      );
+
+    test("prints a muted word with no box, right-aligned", () => {
+      const select = one(quiet(), "select");
+      expect(select.classes).toEqual(
+        expect.arrayContaining(["text-right", "[text-align-last:right]", "text-muted-foreground", "bg-transparent"]),
+      );
+      expect(select.classes.filter((c) => /^(border|bg-background)/.test(c))).toEqual([]);
+    });
+
+    test.each(["default", "sm"] as const)("is 44 px at every width at size %s", (size) => {
+      const select = one(quiet({ size }), "select");
+      expect(select.classes).toContain("h-11");
+      expect(select.classes.filter((c) => /(^|:)h-(8|10)$/.test(c))).toEqual([]);
+    });
+
+    test("turns foreground on hover and takes the control ring, having no box to draw inside", () => {
+      const select = one(quiet(), "select");
+      expect(select.classes).toEqual(expect.arrayContaining(["hover:text-foreground", ...CONTROL_RING]));
+      expect(select.classes.filter((c) => c.startsWith("focus:"))).toEqual([]);
+    });
+
+    test("sets its chevron on the right edge, where the word's padding clears it", () => {
+      const host = quiet();
+      expect(one(host, '[data-mk="native-select"]').el.getAttribute("data-variant")).toBe("quiet");
+      expect(one(host, '[data-slot="native-select-icon"]').classes).toContain(
+        "group-data-[variant=quiet]/native-select:right-0",
+      );
+      expect(one(host, "select").classes).toContain("pr-5");
+    });
+
+    test("keeps the native choice and the caller's props", () => {
+      const select = one(quiet({ name: "scope", disabled: true }), "select");
+      expect(select.el.tagName).toBe("SELECT");
+      expect(select.el.getAttribute("name")).toBe("scope");
+      expect(select.el.getAttribute("aria-label")).toBe("scope");
+      expect(select.classes).toEqual(expect.arrayContaining(["disabled:text-disabled", "disabled:cursor-not-allowed"]));
+    });
+
+    test("leaves the boxed select as it was", () => {
+      expect(one(server(<NativeSelect aria-label="ship" />), "select").classes).toContain("border-input");
+    });
+  });
   test("no texture or forbidden class in any state", () => {
     clean(
-      [server(<NativeSelect />), server(<NativeSelect size="sm" />), server(<NativeSelect disabled aria-invalid />)],
+      [
+        server(<NativeSelect />),
+        server(<NativeSelect size="sm" />),
+        server(<NativeSelect disabled aria-invalid />),
+        server(<NativeSelect variant="quiet" />),
+      ],
       "native-select",
     );
   });
