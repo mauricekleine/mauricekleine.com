@@ -1,8 +1,9 @@
-import type { ComponentProps, ReactNode } from "react";
+import { createContext, useContext, useId, type ComponentProps, type CSSProperties, type ReactNode } from "react";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@/components/superthread/lib/utils";
 import { FleetRail } from "@/components/superthread/ui/fleet-rail";
+import { Icon } from "@/components/superthread/ui/glyphs";
 import {
   SidebarContent,
   SidebarHeader,
@@ -20,19 +21,27 @@ function AppShell(props: ComponentProps<typeof FleetRail>) {
   );
 }
 
+// The id of the list a nav's `...` opens, while the nav holds one.
+const NavOverflow = createContext<string | null>(null);
+
 // The ship's name lines up with home in the rail. Below 900 px the name yields to a wrapped row of links.
 // Its banner keeps the ship's name and named navigation in one landmark. Passing foot, even null, runs the column to the
 // frame's full height and holds a 37 px slot at its bottom, so a line that comes and goes moves nothing; the slot's rule
-// prints with its line, and the slot yields below 900 px.
+// prints with its line, and the slot yields below 900 px. Passing overflow, the words that name what it holds, puts the
+// nav's second tier behind a `...` at the row's end at 600 px and below, boxed while the current page sits behind it, and
+// tightens the row at 420 px so it holds one line down to 360.
 function AppShellNav({
   ship,
   foot,
+  overflow,
   children,
   className,
   role = "banner",
   ...props
-}: ComponentProps<"div"> & { ship: string; foot?: ReactNode }) {
+}: ComponentProps<"div"> & { ship: string; foot?: ReactNode; overflow?: string }) {
   const footed = foot !== undefined;
+  const id = useId();
+  const listId = `${id}-more`;
   return (
     <div
       data-mk="app-shell"
@@ -50,8 +59,31 @@ function AppShellNav({
       </SidebarHeader>
       <SidebarContent className="overflow-visible py-2 [@media(max-width:900px)]:py-0">
         <nav aria-label={ship} className="flex min-h-0 flex-1">
-          <SidebarMenu className="[@media(max-width:900px)]:flex-row [@media(max-width:900px)]:flex-wrap [@media(max-width:900px)]:gap-x-1 [@media(max-width:900px)]:gap-y-3">
-            {children}
+          <SidebarMenu
+            className={cn(
+              "group/nav [@media(max-width:900px)]:flex-row [@media(max-width:900px)]:flex-wrap [@media(max-width:900px)]:gap-x-1 [@media(max-width:900px)]:gap-y-3",
+              overflow &&
+                "[@media(max-width:420px)]:gap-x-0! [@media(max-width:420px)]:[&>li>[data-slot=sidebar-menu-button]]:px-2",
+            )}
+            style={overflow ? ({ "--nav-more": `--more-${id.replace(/\W/g, "")}` } as CSSProperties) : undefined}
+          >
+            <NavOverflow.Provider value={overflow ? listId : null}>{children}</NavOverflow.Provider>
+            {overflow && (
+              <SidebarMenuItem
+                data-mk="app-shell"
+                data-slot="app-shell-nav-more"
+                className="ml-auto hidden [[data-slot=quick-add-nav]~&]:ml-0 [@media(max-width:600px)]:block"
+              >
+                <SidebarMenuButton
+                  type="button"
+                  popoverTarget={listId}
+                  aria-label={overflow}
+                  className="w-11 justify-center px-0 text-muted-foreground [anchor-name:var(--nav-more)] group-has-[[data-slot=app-shell-nav-tier]_[aria-current=page]]/nav:border-selected group-has-[[data-slot=app-shell-nav-tier]_[aria-current=page]]/nav:text-selected hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:900px)]:h-8 [@media(max-width:900px)]:hit-area"
+                >
+                  <Icon name="more" />
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )}
           </SidebarMenu>
         </nav>
       </SidebarContent>
@@ -64,6 +96,38 @@ function AppShellNav({
         </div>
       )}
     </div>
+  );
+}
+
+// The nav's quiet second tier: a nested list under a rule, its words muted and its current item back in the nav's own
+// ink. Below 900 px the rule yields and its items join the row. Under a nav with overflow, one list carries both forms:
+// at 600 px and below it is a native popover the `...` opens, so its links stay the app's own and it keeps the frame's
+// dark scope, and a choice in it closes it, since a client-side route keeps the page. An open list prints its words in
+// the popover's ink, a 44 px row each.
+function AppShellNavTier({ className, onClick, ...props }: ComponentProps<"ul">) {
+  const listId = useContext(NavOverflow);
+  return (
+    <li
+      data-mk="app-shell"
+      data-slot="app-shell-nav-tier"
+      className="mt-[5px] min-w-0 border-t border-sidebar-border pt-[9px] [@media(max-width:900px)]:contents"
+    >
+      <ul
+        id={listId ?? undefined}
+        popover={listId ? "auto" : undefined}
+        onClick={(event) => {
+          onClick?.(event);
+          if (listId && (event.target as Element).closest("a, button")) event.currentTarget.hidePopover?.();
+        }}
+        className={cn(
+          "flex min-w-0 flex-col gap-1 [@media(max-width:900px)]:contents",
+          listId &&
+            "static m-0 size-auto overflow-visible border-0 bg-transparent p-0 text-inherit open:fixed open:inset-auto open:top-[anchor(bottom)] open:right-[anchor(right)] open:mt-1.5 open:flex open:w-max open:min-w-44 open:border open:border-border open:bg-popover open:p-1 open:text-popover-foreground open:shadow-leaf open:[position-anchor:var(--nav-more)] open:[&_[data-slot=sidebar-menu-button]]:h-11 open:[&_[data-slot=sidebar-menu-button]]:w-full open:[&_[data-slot=sidebar-menu-button]]:text-popover-foreground [@media(max-width:600px)]:not-open:hidden",
+          className,
+        )}
+        {...props}
+      />
+    </li>
   );
 }
 
@@ -86,7 +150,7 @@ function AppShellNavItem({
         isActive={isActive}
         aria-current={isActive ? "page" : undefined}
         className={cn(
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:900px)]:h-8 [@media(max-width:600px)]:h-8 [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:hit-area",
+          "in-data-[slot=app-shell-nav-tier]:text-muted-foreground in-data-[slot=app-shell-nav-tier]:hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:900px)]:h-8 [@media(max-width:600px)]:h-8 [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:hit-area",
           className,
         )}
         {...props}
@@ -179,4 +243,4 @@ function AppShellPanelFoot({ className, render, ...props }: useRender.ComponentP
   });
 }
 
-export { AppShell, AppShellGround, AppShellNav, AppShellNavItem, AppShellPanel, AppShellPanelFoot };
+export { AppShell, AppShellGround, AppShellNav, AppShellNavItem, AppShellNavTier, AppShellPanel, AppShellPanelFoot };

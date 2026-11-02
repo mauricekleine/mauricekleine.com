@@ -6,6 +6,7 @@ import {
   AppShellGround,
   AppShellNav,
   AppShellNavItem,
+  AppShellNavTier,
   AppShellPanel,
   AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/compositions/app-shell")({
       { id: "example", title: "example" },
       { id: "states", title: "states" },
       { id: "feet", title: "feet" },
+      { id: "tiers", title: "tiers" },
       { id: "phone", title: "phone" },
       { id: "parts", title: "parts" },
     ],
@@ -145,6 +147,57 @@ function FootedWorkspace() {
   );
 }
 
+const firstTier = ["today", "inbox", "drafts", "notes"];
+const secondTier = ["schedules", "history", "sources"];
+
+// The second tier holds the pages a reader visits now and then. Open it on a phone and pick history: the more prints
+// selected, since the current page now sits behind it.
+function TieredWorkspace({ initial = "inbox" }: { initial?: string }) {
+  const [page, setPage] = useState(initial);
+  const [added, setAdded] = useState<string[]>([]);
+  const link = (name: string) => (
+    <AppShellNavItem
+      key={name}
+      render={<button type="button" />}
+      isActive={page === name}
+      onClick={() => setPage(name)}
+    >
+      {name}
+    </AppShellNavItem>
+  );
+  return (
+    <AppShell
+      current="orbit"
+      markBase="/marks"
+      hrefs={hrefs}
+      skipLink={false}
+      sidebar={
+        <AppShellNav ship="orbit" overflow="schedules, history and sources">
+          {firstTier.map(link)}
+          <AppShellNavTier>{secondTier.map(link)}</AppShellNavTier>
+          <QuickAddNav
+            label="add a task"
+            placeholder="add a task"
+            hotkey={null}
+            onAdd={(title) => setAdded((current) => [...current, title])}
+          />
+        </AppShellNav>
+      }
+    >
+      <AppShellGround render={<div />}>
+        <AppShellPanel>
+          <h1 className="type-section text-first">{page}</h1>
+          <p className="st-ca-panel-copy">
+            {added.length > 0
+              ? `added: ${added.join(", ")}`
+              : "the first tier is the day's work. the second is the rest."}
+          </p>
+        </AppShellPanel>
+      </AppShellGround>
+    </AppShell>
+  );
+}
+
 function Page() {
   return (
     <>
@@ -227,6 +280,42 @@ function Page() {
           }
         />
       </Section>
+      <Section id="tiers" title="tiers">
+        <p className="st-ca-copy">
+          <code>AppShellNavTier</code> holds the pages a reader visits now and then, under a rule, in muted words. the
+          current one prints like any current item. at 900 px and below the rule steps aside and its items join the row.
+        </p>
+        <ModePair
+          className="st-ca-wide-pair"
+          light={
+            <ViewportFrame mode="light" title="a nav with two tiers, light" width={1100} height={470}>
+              <TieredWorkspace initial="schedules" />
+            </ViewportFrame>
+          }
+          dark={
+            <ViewportFrame mode="dark" title="a nav with two tiers, dark" width={1100} height={470}>
+              <TieredWorkspace initial="schedules" />
+            </ViewportFrame>
+          }
+        />
+        <p className="st-ca-copy">
+          set <code>overflow</code> on the nav to the words that name the tier, and at 600 px and below it sits behind a{" "}
+          <code>...</code> at the row&rsquo;s end. the <code>...</code> opens a list of 44 px rows, and prints selected
+          while the current page sits behind it. open it here and pick one.
+        </p>
+        <ModePair
+          light={
+            <ViewportFrame mode="light" title="a nav with overflow on a phone, light" height={420}>
+              <TieredWorkspace />
+            </ViewportFrame>
+          }
+          dark={
+            <ViewportFrame mode="dark" title="a nav with overflow on a phone, dark" height={420}>
+              <TieredWorkspace />
+            </ViewportFrame>
+          }
+        />
+      </Section>
       <Section id="phone" title="phone">
         <p className="st-ca-copy">
           at 900 px the rail becomes a bar and the ship nav wraps below it. at 600 px the panel keeps 16 px beside its
@@ -258,8 +347,15 @@ function Page() {
             <code>AppShellNav</code>
           </dt>
           <dd>
-            holds the ship name and its named nav, with an optional <code>foot</code>. each <code>AppShellNavItem</code>{" "}
-            takes a number, a live count and the app's link or button.
+            holds the ship name and its named nav, with an optional <code>foot</code> and <code>overflow</code>. each{" "}
+            <code>AppShellNavItem</code> takes a number, a live count and the app's link or button.
+          </dd>
+          <dt>
+            <code>AppShellNavTier</code>
+          </dt>
+          <dd>
+            the nav&rsquo;s quiet second tier, a list of <code>AppShellNavItem</code>s. it sits after the first tier and
+            before a <code>QuickAddNav</code>, so on a phone the row reads first tier, add, <code>...</code>.
           </dd>
           <dt>
             <code>AppShellGround</code>

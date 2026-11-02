@@ -8,6 +8,7 @@ import {
   AppShellGround,
   AppShellNav,
   AppShellNavItem,
+  AppShellNavTier,
   AppShellPanel,
   AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
@@ -188,13 +189,16 @@ function Sink({ mode }: { mode: Mode }) {
           markBase="/marks"
           hrefs={{ home: "#home", orbit: "#orbit" }}
           sidebar={
-            <AppShellNav ship="orbit" foot={<a href="#settings">settings</a>}>
+            <AppShellNav ship="orbit" foot={<a href="#settings">settings</a>} overflow="logs">
               <AppShellNavItem isActive number="01" count={12} render={<a href="#board" />}>
                 board
               </AppShellNavItem>
               <AppShellNavItem number="02" render={<a href="#runs" />}>
                 runs
               </AppShellNavItem>
+              <AppShellNavTier>
+                <AppShellNavItem render={<a href="#logs" />}>logs</AppShellNavItem>
+              </AppShellNavTier>
               <QuickAddNav label="add a task" placeholder="add a task" hotkey={null} onAdd={async () => {}} />
             </AppShellNav>
           }
