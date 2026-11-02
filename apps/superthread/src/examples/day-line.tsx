@@ -168,7 +168,7 @@ export function DayLineHeavy() {
         meeting("sam", "1:1 with sam", "11:30", "12:00", { href: "#heavy" }),
         meeting("lunch", "lunch with the team", "12:00", "13:00"),
         meeting("planning", "quarter planning", "13:00", "14:00", { href: "#heavy", brief: true }),
-        meeting("hiring", "hiring sync", "14:15", "14:45", { href: "#heavy" }),
+        meeting("hiring", "hiring sync", "14:15", "14:45", { href: "#heavy", tentative: true }),
         meeting("support", "support review", "15:00", "15:30", { href: "#heavy" }),
         meeting("kickoff", "project kickoff", "15:30", "16:30", { href: "#heavy", brief: true }),
         meeting("wrap", "weekly wrap", "17:00", "17:30", { href: "#heavy" }),

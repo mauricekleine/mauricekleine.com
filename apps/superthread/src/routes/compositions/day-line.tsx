@@ -65,8 +65,8 @@ function Page() {
       <Section id="through-the-day" title="through the day">
         <p className="st-cb-copy">
           on a timeline solid means an event and nothing else, so nothing fills in behind the mark. a meeting that has
-          ended dims and loses its word. a meeting that has started loses its word too, so the mark never crosses one.
-          two blocks that touch keep a 1 px seam.
+          ended dims and loses its word. a meeting that has started loses its word too, so the mark never crosses one. a
+          day gone by reads as spent all through, with no mark. two blocks that touch keep a 1 px seam.
         </p>
         <ModePair className="st-cb-stack">
           <DayLineThroughTheDay />
@@ -85,8 +85,9 @@ function Page() {
       </Section>
       <Section id="heavy" title="a heavy day">
         <p className="st-cb-copy">
-          when names can&rsquo;t sit side by side they stagger on two rows and drop their times. each name truncates
-          before the next one in its row.
+          when names can&rsquo;t sit side by side they stagger on two rows and drop their times, and a tentative name
+          keeps its word on the title&rsquo;s line. each name truncates before the next one in its row, and a long late
+          name stops short of the one before it.
         </p>
         <ModePair className="st-cb-stack">
           <DayLineHeavy />
@@ -155,12 +156,13 @@ function Page() {
             <code>DayLineDate</code>
           </dt>
           <dd>
-            the date, as words or a link. render an <code>h1</code> when it titles the page.
+            the date, as words, a link, or a button that opens the day in place. render an <code>h1</code> when it
+            titles the page.
           </dd>
           <dt>
             <code>DayLineNote</code>
           </dt>
-          <dd>a calendar&rsquo;s note beside the date, and under it on a phone.</dd>
+          <dd>a calendar&rsquo;s note beside the date. on a phone it drops under the date at its whole width.</dd>
           <dt>
             <code>DayLineAllDay</code>
           </dt>

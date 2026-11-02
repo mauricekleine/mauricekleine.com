@@ -341,8 +341,8 @@ function Page() {
           <DayRowsExample />
         </ModePair>
         <p className="st-cb-copy">
-          on a phone the time column is 44 px and the end column 48 px. each row stays 44 px, and a small button fills
-          its column.
+          on a phone the time column is 44 px and the end column 48 px. the title keeps half the row, so the kind gives
+          way first. each row stays 44 px, and a small button fills its column.
         </p>
         <ModePair
           className="st-cb-stack"
