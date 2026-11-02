@@ -291,7 +291,7 @@ describe("native-select", () => {
       expect(select.classes.filter((c) => c.startsWith("focus:"))).toEqual([]);
     });
 
-    test("hangs its box 4 px past the column, so the chevron keeps the edge and clears the focus edge", () => {
+    test("hangs its box 4 px past the column, so the chevron keeps the edge and clears the focus edge, unless a caller places it", () => {
       const host = quiet();
       const wrapper = one(host, '[data-mk="native-select"]');
       expect(wrapper.el.getAttribute("data-variant")).toBe("quiet");
@@ -300,10 +300,9 @@ describe("native-select", () => {
         "group-data-[variant=quiet]/native-select:right-1",
       );
       expect(one(host, "select").classes).toContain("pr-6");
-    });
-
-    test("lets a caller set its own right margin", () => {
-      expect(one(quiet({ className: "mr-4" }), '[data-mk="native-select"]').classes).not.toContain("-mr-1");
+      const placed = one(quiet({ className: "mr-4" }), '[data-mk="native-select"]').classes;
+      expect(placed).toContain("mr-4");
+      expect(placed).not.toContain("-mr-1");
     });
 
     test("keeps the native choice and the caller's props, and its variant stays off the element", () => {

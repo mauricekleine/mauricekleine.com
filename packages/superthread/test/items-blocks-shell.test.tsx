@@ -240,13 +240,16 @@ describe("section header", () => {
       );
 
     test.each(["subtitle", "instrument"] as const)(
-      "at the %s step prints no rule and sits close to its list",
+      "at the %s step prints no rule, sits close to its list and claims no detail or forbidden class",
       (step) => {
-        const header = one(quiet(step), "header");
+        const host = quiet(step);
+        const header = one(host, "header");
         expect(header.el.getAttribute("data-quiet")).toBe(step);
         expect(header.classes).toEqual(
           expect.arrayContaining(["data-quiet:border-b-0", "data-quiet:pb-0", "data-quiet:mb-1"]),
         );
+        expect(detailsUsed(elements(host), "section-header")).toEqual([]);
+        expect(forbidden(elements(host))).toEqual([]);
       },
     );
 
@@ -268,17 +271,11 @@ describe("section header", () => {
       );
     });
 
-    test("still names its section, and a loud head carries no quiet mark", () => {
+    test("still names its section, and its step stays off the element, so a loud head carries no quiet mark", () => {
       const host = quiet("subtitle");
       expect(one(host, "section").el.getAttribute("aria-labelledby")).toBe(one(host, "h2").el.id);
-      const loud = server(<SectionHeader />);
-      expect(one(loud, "header").el.hasAttribute("data-quiet")).toBe(false);
-    });
-
-    test("claims no detail or forbidden class", () => {
-      const rendered = elements(quiet("subtitle"));
-      expect(detailsUsed(rendered, "section-header")).toEqual([]);
-      expect(forbidden(rendered)).toEqual([]);
+      expect(one(host, "header").el.hasAttribute("quiet")).toBe(false);
+      expect(one(server(<SectionHeader />), "header").el.hasAttribute("data-quiet")).toBe(false);
     });
   });
 
