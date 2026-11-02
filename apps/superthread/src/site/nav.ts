@@ -101,6 +101,7 @@ export const nav: readonly NavEntry[] = [
   composition("section-header"),
   composition("collection-toolbar"),
   composition("list-rows"),
+  composition("jump-line"),
   composition("item-cards"),
   composition("data-table"),
   composition("facts"),

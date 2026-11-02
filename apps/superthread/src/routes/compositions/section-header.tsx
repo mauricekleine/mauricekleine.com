@@ -7,6 +7,7 @@ import {
   SectionHeader,
   SectionTitle,
 } from "@/components/superthread/blocks/section-header";
+import { ListRowKind, PlainRow, PlainRows, PlainRowTitle } from "@/components/superthread/blocks/list-rows";
 import { Button } from "@/components/superthread/ui/button";
 import { Serves } from "@/examples/compositions-a";
 import { State } from "@/examples/input";
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/compositions/section-header")({
     sections: [
       { id: "example", title: "example" },
       { id: "states", title: "states" },
+      { id: "quiet", title: "a quiet head" },
       { id: "parts", title: "parts" },
     ],
   },
@@ -62,12 +64,46 @@ function Example() {
   );
 }
 
+function QuietExample() {
+  return (
+    <div className="st-ca-stack">
+      {[
+        { quiet: "subtitle", title: "this week", note: "the subtitle step, in foreground" },
+        { quiet: "instrument", title: "then", note: "muted instrument" },
+      ].map((head) => (
+        <State className="st-ca-state" key={head.quiet} name={head.quiet} note={head.note}>
+          <BlockSection>
+            <SectionHeader quiet={head.quiet as "subtitle" | "instrument"}>
+              <SectionTitle>{head.title}</SectionTitle>
+              <SectionCount>2</SectionCount>
+            </SectionHeader>
+            <PlainRows variant="nested" aria-label={head.title}>
+              <PlainRow>
+                <PlainRowTitle href="#quiet" tabIndex={-1}>
+                  run-024
+                </PlainRowTitle>
+                <ListRowKind>orbit</ListRowKind>
+              </PlainRow>
+              <PlainRow>
+                <PlainRowTitle href="#quiet" tabIndex={-1}>
+                  run-023
+                </PlainRowTitle>
+                <ListRowKind>quanta</ListRowKind>
+              </PlainRow>
+            </PlainRows>
+          </BlockSection>
+        </State>
+      ))}
+    </div>
+  );
+}
+
 function Page() {
   return (
     <>
       <PageHead
         title="section header"
-        lede="a named section with its title, a live count and a way to the rest. a full rule separates the head from the content."
+        lede="a named section with its title, a live count and a way to the rest. a full rule separates the head from the content, or a quiet head prints no rule."
       >
         <InstallLine items={["section-header"]} />
       </PageHead>
@@ -107,6 +143,16 @@ function Page() {
           </div>
         </ModePair>
       </Section>
+      <Section id="quiet" title="a quiet head">
+        <p className="st-ca-copy">
+          a list of plain rows has no rules, so its head has none: <code>quiet</code> drops the rule and sits 4 px over
+          the content. use <code>subtitle</code> for a section the page is made of and <code>instrument</code> for a
+          muted line over a short list.
+        </p>
+        <ModePair>
+          <QuietExample />
+        </ModePair>
+      </Section>
       <Section id="parts" title="parts">
         <dl className="st-ca-parts">
           <dt>
@@ -118,7 +164,10 @@ function Page() {
           <dt>
             <code>SectionHeader</code>
           </dt>
-          <dd>aligns the title, count and action on their baseline, with wrapping when they need it.</dd>
+          <dd>
+            aligns the title, count and action on their baseline, with wrapping when they need it. <code>quiet</code> is{" "}
+            <code>subtitle</code> or <code>instrument</code>.
+          </dd>
           <dt>
             <code>SectionCount</code>
           </dt>

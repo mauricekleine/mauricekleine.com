@@ -678,7 +678,8 @@ export const catalog: CatalogItem[] = [
     name: "list-rows",
     type: "registry:block",
     title: "list rows",
-    description: "ruled rows, each a title with its time, a meta line and its actions",
+    description:
+      "ruled rows, each a title with its time, a meta line and its actions, and plain rows that read as words",
     files: [block("list-rows")],
     tier: "block",
     upstream: null,
@@ -744,6 +745,16 @@ export const catalog: CatalogItem[] = [
     tier: "block",
     upstream: null,
     serves: ["orbit", "artifacts"],
+  },
+  {
+    name: "jump-line",
+    type: "registry:block",
+    title: "jump line",
+    description: "a line of anchors to a long page's sections, each with how many it holds",
+    files: [block("jump-line")],
+    tier: "block",
+    upstream: null,
+    serves: ["quanta", "trisys", "orbit"],
   },
   {
     name: "send-bar",
