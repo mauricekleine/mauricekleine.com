@@ -69,6 +69,9 @@ type Cell = {
 
 const isLinked = ({ entry }: Cell) => entry?.href !== undefined || entry?.render !== undefined;
 
+const isBareArrow = ({ altKey, ctrlKey, key, metaKey, shiftKey }: React.KeyboardEvent) =>
+  key.startsWith("Arrow") && !altKey && !ctrlKey && !metaKey && !shiftKey;
+
 function monthRows(month: string, days: MonthGridEntry[], weeks: MonthGridEntry[] | undefined, today?: string) {
   const start = mondayOf(dayNumber(`${month}-01`));
   const dayEntries = new Map(days.map((entry) => [entry.date, entry]));
@@ -120,7 +123,7 @@ function linkFrom(rows: Cell[][], key: string, arrow: string) {
   return undefined;
 }
 
-const INK = "text-disabled data-[ink=off]:text-muted-foreground data-[ink=on]:text-foreground";
+const INK = "text-disabled data-[ink=quiet]:text-muted-foreground data-[ink=on]:text-foreground";
 // shadcn's tailwind.css narrows data-selected: to data-selected="true", and useRender sets it empty.
 const MARK =
   "data-today:shadow-[inset_0_0_0_1px_var(--foreground)] data-[selected]:shadow-[inset_0_-2px_0_var(--foreground)] data-today:data-[selected]:shadow-[inset_0_0_0_1px_var(--foreground),inset_0_-2px_0_var(--foreground)]";
@@ -142,7 +145,7 @@ function MonthGridCell({ cell, stop, loading }: { cell: Cell; stop: boolean; loa
     render: entry?.render ?? (entry?.href !== undefined ? <a /> : undefined),
     state: {
       slot: week ? "month-grid-week" : "month-grid-day",
-      ink: today ? "on" : content ? (off ? "off" : "on") : undefined,
+      ink: today || (content && !off) ? "on" : content || !off ? "quiet" : undefined,
       today,
       selected: entry?.selected,
     },
@@ -169,8 +172,10 @@ function MonthGridCell({ cell, stop, loading }: { cell: Cell; stop: boolean; loa
 const MONTH_HEAD =
   "flex h-8 items-center justify-between gap-2 in-data-[slot=reader-rail]:-mt-0.5 [@media(max-width:600px)]:h-11";
 const HEAD = "h-7 p-0 text-center type-instrument font-normal text-muted-foreground";
-const WEEK_COLUMN = "border-r border-border";
-// With the week column eight cells share a phone's panel, so the grid hangs 9 px into each side to give every one 44 px.
+// The rule draws over the column's edge, so it takes no width from the cells beside it and a week's fill leaves it whole.
+const WEEK_COLUMN = "relative after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-border";
+// With the week column eight cells share a phone's panel, so the grid hangs 9 px into each side. That makes each 44 px
+// wide at 390 px; a narrower phone gives up width, never the 44 px of height, and the cells never overlap.
 const WEEKS_HANG =
   "[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mx-[9px] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:w-[calc(100%+18px)] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:max-w-none";
 const STEP =
@@ -181,7 +186,7 @@ const STEP =
  * `useMinute`'s `day`. Give it an `aria-label` that says what the month holds. `days` print a dot and link where they say,
  * and `weeks`, even an empty list, print the week column. `onMonthChange` prints the two steps, which `min` and `max`
  * bound, as plain months. `loading` says the days aren't read yet, so a month holding nothing reads as nothing only once
- * they are.
+ * they are. Set it in the render that changes `month`, so focus waits for the days.
  */
 function MonthGrid({
   className,
@@ -229,15 +234,30 @@ function MonthGrid({
 
   const focusCell = (key: string) => table.current?.querySelector<HTMLElement>(`[data-cell="${key}"]`)?.focus();
 
+  // Every render, because a month's days can arrive after the month: until then focus waits on the step it was heading
+  // for. If the reader has left the grid by the time the days land, focus stays with them.
   useEffect(() => {
     const turn = turning.current;
     if (turn?.to !== month) return;
+    const page = table.current?.ownerDocument;
+    const active = page?.activeElement;
+    const lost = !active || active === page?.body;
+    if (!lost && !table.current?.closest(`[data-slot="month-grid"]`)?.contains(active)) {
+      turning.current = null;
+      return;
+    }
+    const heading = (turn.back ? backStep : onStep).current;
+    if (loading) {
+      if (lost) heading?.focus();
+      return;
+    }
     turning.current = null;
+    const closed = turn.back ? !canGoBack : !canGoOn;
     const next = turn.back
-      ? links.filter((cell) => cell.date < turn.from).at(-1)
-      : links.find((cell) => cell.date > turn.from);
+      ? (links.filter((cell) => cell.date < turn.from).at(-1) ?? (closed ? links[0] : undefined))
+      : (links.find((cell) => cell.date > turn.from) ?? (closed ? links.at(-1) : undefined));
     if (next) focusCell(next.key);
-    else (turn.back ? backStep : onStep).current?.focus();
+    else heading?.focus();
   });
 
   function step(target: string) {
@@ -245,22 +265,32 @@ function MonthGrid({
     onMonthChange?.(target);
   }
 
+  function turn(from: string, back: boolean) {
+    if (!onMonthChange || !(back ? canGoBack : canGoOn)) return;
+    const to = back ? earlier : later;
+    turning.current = { to, from, back };
+    onMonthChange(to);
+  }
+
   function onKeyDown(event: React.KeyboardEvent<HTMLTableElement>) {
-    if (!event.key.startsWith("Arrow") || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    if (!isBareArrow(event)) return;
     const key = (event.target as Element).closest("[data-cell]")?.getAttribute("data-cell");
     if (!key) return;
     event.preventDefault();
     const next = linkFrom(rows, key, event.key);
     if (next) focusCell(next.key);
-    else if (event.key === "ArrowLeft" && canGoBack) turn(key, true);
-    else if (event.key === "ArrowRight" && canGoOn) turn(key, false);
+    else if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      turn(links.find((cell) => cell.key === key)?.date ?? `${month}-01`, event.key === "ArrowLeft");
+    }
   }
 
-  function turn(key: string, back: boolean) {
-    if (!onMonthChange) return;
-    const to = back ? earlier : later;
-    turning.current = { to, from: links.find((cell) => cell.key === key)?.date ?? `${month}-01`, back };
-    onMonthChange(to);
+  // A step answers left and right as the links do, from the edge of its month, so a walk that lands on one keeps going and
+  // a month with no links still turns by key. Up and down stay the page's.
+  function onStepKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (!isBareArrow(event) || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) return;
+    event.preventDefault();
+    if (event.key === "ArrowLeft") turn(`${month}-01`, true);
+    else turn(plainDate(dayNumber(`${later}-01`) - 1), false);
   }
 
   return (
@@ -270,7 +300,7 @@ function MonthGrid({
           {named(month)}
         </p>
         {onMonthChange && (
-          <div className="flex shrink-0">
+          <div className="flex shrink-0" onKeyDown={onStepKeyDown}>
             <Button
               ref={backStep}
               aria-label={`show ${named(earlier)}`}

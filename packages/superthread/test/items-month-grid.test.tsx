@@ -42,7 +42,8 @@ describe("six weeks from a monday", () => {
     try {
       expect(read("Pacific/Auckland")).toEqual(read("America/Los_Angeles"));
     } finally {
-      process.env.TZ = machine;
+      if (machine === undefined) delete process.env.TZ;
+      else process.env.TZ = machine;
     }
   });
 
@@ -95,11 +96,19 @@ describe("the week column", () => {
     expect(weekFigures("2026-01")).toEqual(["1", "2", "3", "4", "5", "6"]);
   });
 
-  test("a week's own cell is a row head under a rule", () => {
+  test("a week's own cell is a row head, with a rule over its edge that takes no width from the cells beside it", () => {
     const host = server(<MonthGrid month="2026-11" weeks={[]} />);
     const cell = one(host, 'tbody th[scope="row"]');
-    expect(cell.classes).toEqual(expect.arrayContaining(["border-r", "border-border"]));
+    expect(cell.classes).toEqual(expect.arrayContaining(["after:right-0", "after:w-px", "after:bg-border"]));
+    expect(cell.classes).not.toContain("border-r");
     expect(cell.el.querySelector(slot("month-grid-week"))).not.toBeNull();
+  });
+
+  test("a week with nothing on it prints its number in quiet ink, so it can still be read", () => {
+    const host = server(<MonthGrid month="2026-11" weeks={[link("2026-11-02")]} />);
+    const [empty, full] = [...host.querySelectorAll(slot("month-grid-week"))];
+    expect(empty?.getAttribute("data-ink")).toBe("quiet");
+    expect(full?.getAttribute("data-ink")).toBe("on");
   });
 
   test("any day names its week, and a week with a link says which", () => {
@@ -129,16 +138,19 @@ describe("what a day prints", () => {
     expect(host.querySelectorAll(`${slot("month-grid-day")} > span[aria-hidden]`)).toHaveLength(1);
   });
 
-  test("ink says what a day holds: content, content in the month beside it, or nothing", () => {
+  test("ink says what a day holds and where it falls, and only an empty day outside the month prints faint", () => {
     const host = month({ days: [link("2026-11-02"), link("2026-10-26")], today: undefined });
     expect(inkOf(host.querySelector('a[href="/briefs/2026-11-02"]'))).toBe("on");
-    expect(inkOf(host.querySelector('a[href="/briefs/2026-10-26"]'))).toBe("off");
-    expect(inkOf(dayCell(host, 12))).toBeNull();
+    expect(inkOf(host.querySelector('a[href="/briefs/2026-10-26"]'))).toBe("quiet");
+    expect(dayCell(host, 12).textContent).toBe("7");
+    expect(inkOf(dayCell(host, 12))).toBe("quiet");
+    expect(dayCell(host, 41).textContent).toBe("6");
+    expect(inkOf(dayCell(host, 41))).toBeNull();
     expect(one(host, `a${slot("month-grid-day")}`).classes).toEqual(
       expect.arrayContaining([
         "text-disabled",
         "data-[ink=on]:text-foreground",
-        "data-[ink=off]:text-muted-foreground",
+        "data-[ink=quiet]:text-muted-foreground",
       ]),
     );
   });
@@ -235,14 +247,14 @@ describe("while the days are unread", () => {
 });
 
 describe("on a phone", () => {
-  test("every cell and step reaches 44 px on a box of its own, so two reaches never overlap", () => {
+  test("every cell stands 44 px tall and every step reaches 44 px on a box of its own, so two reaches never overlap", () => {
     const host = server(<MonthGrid month="2026-11" onMonthChange={() => {}} days={[link("2026-11-02")]} />);
     expect(one(host, slot("month-grid-day")).classes).toContain(`${PHONE}h-11`);
     expect(one(host, slot("month-grid-step")).classes).toContain(`${PHONE}size-11`);
     expect(one(host, slot("month-grid-head")).classes).toContain(`${PHONE}h-11`);
   });
 
-  test("with the week column the grid hangs into a panel's margin, so eight cells fit at 44 px", () => {
+  test("with the week column the grid hangs 9 px into a panel's margin, the width eight 44 px cells need at 390 px", () => {
     const hang = `${PHONE}${IN_PANEL}-mx-[9px]`;
     const grid = (weeks?: MonthGridEntry[]) =>
       one(
@@ -323,10 +335,23 @@ describe("the keys", () => {
   const october = [link("2026-10-05"), link("2026-10-19"), link("2026-10-26")];
   const everything: Record<string, MonthGridEntry[]> = { "2026-10": october, "2026-11": november, "2026-12": [] };
 
-  // An app holding the month, whose days arrive with it, as a real one does.
+  // An app that already holds every month, so the days come with it.
   function Holder({ start = "2026-11", ...props }: Partial<ComponentProps<typeof MonthGrid>> & { start?: string }) {
     const [month, setMonth] = useState(start);
     return <MonthGrid days={everything[month]} month={month} onMonthChange={setMonth} {...props} />;
+  }
+
+  // An app that reads a month's days once the month has opened. The test says when they arrive.
+  let arrive = () => {};
+  function SlowHolder() {
+    const [month, setMonth] = useState("2026-10");
+    const [read, setRead] = useState(true);
+    arrive = () => setRead(true);
+    const open = (next: string) => {
+      setMonth(next);
+      setRead(false);
+    };
+    return <MonthGrid days={read ? everything[month] : []} loading={!read} month={month} onMonthChange={open} />;
   }
 
   const after: (() => Promise<void>)[] = [];
@@ -342,6 +367,8 @@ describe("the keys", () => {
 
   const dayLink = (body: HTMLElement, date: string) => body.querySelector<HTMLElement>(`[data-cell="${date}"]`)!;
   const focused = () => document.activeElement?.getAttribute("data-cell");
+  const onStep = () => document.activeElement?.getAttribute("aria-label");
+  const showing = (body: HTMLElement) => body.querySelector(`${slot("month-grid-head")} p`)?.textContent;
   const stops = (body: HTMLElement) =>
     [...body.querySelectorAll('[data-cell][tabindex="0"]')].map((el) => el.getAttribute("data-cell"));
 
@@ -439,12 +466,114 @@ describe("the keys", () => {
     expect(focused()).toBe("2026-10-19");
   });
 
-  test("a month with no link past that date hands the keys to its step, so the walk has somewhere to go", async () => {
+  test("a month with no link past that date moves focus to its step, and the keys walk on from there", async () => {
     const body = await open(<Holder />);
     await focus(dayLink(body, "2026-11-24"));
     await press("ArrowRight");
-    expect(body.querySelector(`${slot("month-grid-head")} p`)?.textContent).toBe("december 2026");
-    expect(document.activeElement?.getAttribute("aria-label")).toBe("show january 2027");
+    expect(showing(body)).toBe("december 2026");
+    expect(onStep()).toBe("show january 2027");
+    await press("ArrowRight");
+    expect(showing(body)).toBe("january 2027");
+    expect(onStep()).toBe("show february 2027");
+  });
+
+  test("left from a step in an empty month carries on to the last link before it", async () => {
+    const body = await open(<Holder start="2026-12" />);
+    await focus(body.querySelector<HTMLElement>('[aria-label="show november 2026"]')!);
+    await press("ArrowLeft");
+    expect(showing(body)).toBe("november 2026");
+    expect(focused()).toBe("2026-11-24");
+  });
+
+  test("right from a step opens the next month on its own first link, past what the grid shows of this one", async () => {
+    const body = await open(<Holder start="2026-10" />);
+    await focus(body.querySelector<HTMLElement>('[aria-label="show november 2026"]')!);
+    await press("ArrowRight");
+    expect(showing(body)).toBe("november 2026");
+    expect(focused()).toBe("2026-11-02");
+  });
+
+  test("a step takes left and right alone, and leaves up, down and the browser's shortcuts to the page", async () => {
+    const body = await open(<Holder start="2026-12" />);
+    await focus(body.querySelector<HTMLElement>('[aria-label="show january 2027"]')!);
+    for (const key of ["ArrowUp", "ArrowDown"]) expect((await press(key)).defaultPrevented).toBe(false);
+    expect((await press("ArrowRight", { altKey: true })).defaultPrevented).toBe(false);
+    expect(showing(body)).toBe("december 2026");
+  });
+
+  test.each([
+    [
+      "going back, on to the first",
+      "ArrowLeft",
+      { start: "2026-10", min: "2026-09", days: [link("2026-09-28"), link("2026-09-29"), link("2026-10-05")] },
+      "2026-09-28",
+      "september 2026",
+    ],
+    [
+      "going on, back to the last",
+      "ArrowRight",
+      { start: "2026-10", max: "2026-11", days: [link("2026-10-30"), link("2026-11-02")] },
+      "2026-11-02",
+      "november 2026",
+    ],
+  ])("a closed step moves focus to the month's nearest link: %s", async (_, key, props, date, name) => {
+    const body = await open(<Holder {...props} />);
+    await focus(dayLink(body, date));
+    await press(key);
+    expect(showing(body)).toBe(name);
+    expect(focused()).toBe(date);
+  });
+
+  test("a month with no links behind a closed step holds focus there, and the keys can still go back", async () => {
+    const body = await open(<Holder max="2026-12" />);
+    await focus(dayLink(body, "2026-11-24"));
+    await press("ArrowRight");
+    expect(showing(body)).toBe("december 2026");
+    expect(document.activeElement?.getAttribute("aria-disabled")).toBe("true");
+    await press("ArrowRight");
+    expect(showing(body)).toBe("december 2026");
+    await press("ArrowLeft");
+    expect(focused()).toBe("2026-11-24");
+  });
+
+  test("focus waits on the step while a month's days are read, then carries on from that date", async () => {
+    const body = await open(<SlowHolder />);
+    await focus(dayLink(body, "2026-10-26"));
+    await press("ArrowRight");
+    expect(showing(body)).toBe("november 2026");
+    expect(onStep()).toBe("show december 2026");
+    await act(async () => arrive());
+    expect(focused()).toBe("2026-11-02");
+  });
+
+  test("a click drops a turn still waiting on its days, so focus stays on the step", async () => {
+    const body = await open(<SlowHolder />);
+    await focus(dayLink(body, "2026-10-26"));
+    await press("ArrowRight");
+    const [back, on] = [...body.querySelectorAll<HTMLButtonElement>(slot("month-grid-step"))];
+    await focus(back!);
+    await act(async () => back?.click());
+    await act(async () => arrive());
+    await focus(on!);
+    await act(async () => on?.click());
+    await act(async () => arrive());
+    expect(showing(body)).toBe("november 2026");
+    expect(document.activeElement).toBe(on!);
+  });
+
+  test("a slow read leaves focus where the reader took it", async () => {
+    const body = await open(
+      <>
+        <SlowHolder />
+        <button type="button">elsewhere</button>
+      </>,
+    );
+    await focus(dayLink(body, "2026-10-26"));
+    await press("ArrowRight");
+    const elsewhere = body.querySelector<HTMLElement>("button:not([data-slot])")!;
+    await focus(elsewhere);
+    await act(async () => arrive());
+    expect(document.activeElement).toBe(elsewhere);
   });
 
   test("a bound stops the walk where it stands", async () => {

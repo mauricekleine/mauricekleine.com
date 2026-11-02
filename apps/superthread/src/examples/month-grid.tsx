@@ -94,7 +94,7 @@ export function MonthGridLoading() {
   );
 }
 
-// A whole panel's width on a phone, where every cell reaches 44 px.
+// A whole panel's width on a phone, where every cell stands 44 px tall and is 44 px wide at 390 px.
 export function MonthGridPhone() {
   return (
     <MonthGrid

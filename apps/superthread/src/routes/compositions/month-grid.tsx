@@ -50,10 +50,10 @@ function Page() {
       </Section>
       <Section id="marks" title="the marks">
         <p className="st-cb-copy">
-          a dot says a day holds something, and ink says where it falls: foreground in the month, muted in the month
-          beside it, faint with nothing on it. today prints a 1 px edge and the open day a 2 px bar along its foot.
-          they&rsquo;re separate marks, so a day that is both prints both, and its aria label says <code>selected</code>{" "}
-          because aria-current is already saying the date.
+          a dot says a day holds something. ink says what it holds and where it falls: foreground with something on it,
+          muted when it&rsquo;s empty or sits in the month beside it, faint when it&rsquo;s both. today prints a 1 px
+          edge and the open day a 2 px bar along its foot. they&rsquo;re separate marks, so a day that is both prints
+          both, and its aria label says <code>selected</code> because aria-current is already saying the date.
         </p>
         <ModePair>
           <MonthGridMarks />
@@ -77,6 +77,11 @@ function Page() {
           day, else today, else the first link, and it follows the keys. left and right walk the links in reading order,
           and past either end they turn the month and carry on from that date. up and down keep the column.
         </p>
+        <p className="st-cb-copy">
+          when the month that opens has no link past that date, focus moves to its step, or to the month&rsquo;s nearest
+          link if that step is closed. a step answers left and right too, so a month with no links still turns by key.
+          while <code>loading</code> is set, focus waits on the step until the days arrive.
+        </p>
         <ModePair>
           <MonthGridBounded />
         </ModePair>
@@ -92,8 +97,9 @@ function Page() {
       </Section>
       <Section id="phone" title="on a phone">
         <p className="st-cb-copy">
-          every cell and step reaches 44 px on its own box, so no two reaches overlap. a panel&rsquo;s margin holds
-          eight columns at that size, so with the week column the grid hangs 9 px into each side.
+          every cell stands 44 px tall and every step reaches 44 px, each on its own box, so no two reaches overlap.
+          with the week column the grid hangs 9 px into each side of a panel, which makes eight cells 44 px wide at 390
+          px. a narrower phone gives up width, about 40 px at 360.
         </p>
         <ModePair
           light={
