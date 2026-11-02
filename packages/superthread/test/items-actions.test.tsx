@@ -602,14 +602,17 @@ describe("table", () => {
     const list = (el: Element | null | undefined) => (el?.getAttribute("class") ?? "").split(/\s+/).filter(Boolean);
     const CONTAINER = '[data-slot="table-container"]';
 
-    test("the box reaches the panel's edges and measures itself, with no sideways scroll", () => {
+    test("the box reaches the panel's edges and measures itself, where a plain table's keeps its scroller", () => {
       const box = list(server(foldedTable).querySelector(CONTAINER));
       expect(box).toEqual(expect.arrayContaining(["@container/fold", "-mx-(--spacing-panel-inset)"]));
       expect(box).not.toContain("overflow-x-auto");
       expect(box).not.toContain("hit-area-scroller");
+      const plain = list(server(<Table />).querySelector(CONTAINER));
+      expect(plain).toEqual(expect.arrayContaining(["overflow-x-auto", "hit-area-scroller"]));
+      expect(plain).not.toContain("@container/fold");
     });
 
-    test("a table carries its roles out loud, since a display change strips them in some browsers", () => {
+    test("a folding table sets its own roles, which a display change strips in some browsers; a plain one needs none", () => {
       const host = server(foldedTable);
       const roles = (selector: string) => [...host.querySelectorAll(selector)].map((el) => el.getAttribute("role"));
       expect(roles("table")).toEqual(["table"]);
@@ -617,16 +620,8 @@ describe("table", () => {
       expect(roles("tr")).toEqual(["row", "row"]);
       expect(roles("thead th")).toEqual(["columnheader", "columnheader", "columnheader"]);
       expect(roles("tbody tr > *")).toEqual(["cell", "rowheader", "cell", "cell"]);
-    });
-
-    test("a table that doesn't fold keeps its scroller and its native semantics", () => {
-      const host = server(
+      const plain = server(
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>run</TableHead>
-            </TableRow>
-          </TableHeader>
           <TableBody>
             <TableRow>
               <TableCell>a cell</TableCell>
@@ -634,12 +629,8 @@ describe("table", () => {
           </TableBody>
         </Table>,
       );
-      expect(host.querySelector("[role]")).toBeNull();
-      expect(list(host.querySelector(CONTAINER))).toEqual(
-        expect.arrayContaining(["overflow-x-auto", "hit-area-scroller"]),
-      );
-      expect(host.querySelector("[data-fold]")).toBeNull();
-      expect(list(host.querySelector("td")).filter((cls) => cls.includes("/fold"))).toEqual([]);
+      expect(plain.querySelector("[role]")).toBeNull();
+      expect(plain.querySelector("[data-fold]")).toBeNull();
     });
 
     test("above the fold the first and last cells keep the panel's inset over the row edge's padding", () => {

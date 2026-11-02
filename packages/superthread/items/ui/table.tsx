@@ -27,7 +27,7 @@ const tableVariants = cva(
 // The fold reaches the panel's edges and answers to its own width, so it needs no panel to measure: above 776 px of
 // container, the panel's 680 px of measure, it is a table of fixed columns whose first and last cells keep the panel's
 // inset and whose words end in an ellipsis. Below that each row folds into two lines on one grid, with no sideways
-// scroll. Display changes strip a table's meaning in some browsers, so a folding table carries its roles out loud.
+// scroll. Display changes strip a table's meaning in some browsers, so a folding table sets its own roles.
 const Folding = React.createContext(false);
 
 function Table({

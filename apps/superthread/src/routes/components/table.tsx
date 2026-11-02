@@ -93,10 +93,10 @@ function Page() {
           }
         />
         <p className="st-b-copy">
-          a head leaves the screen when the row folds and stays with a screen reader. the table carries its roles out
-          loud, since a display change strips a table&rsquo;s meaning in some browsers. <code>flag</code> on a cell
-          lifts a fact that is still open to foreground, and <code>scope=&quot;row&quot;</code> makes a cell its
-          row&rsquo;s head. a lead column is 72&nbsp;px; set <code>--fold-lead</code> on the table for shorter words.
+          a head leaves the screen when the row folds and stays with a screen reader. the table sets its own roles,
+          since a display change strips a table&rsquo;s meaning in some browsers. <code>flag</code> on a cell lifts a
+          fact that is still open to foreground, and <code>scope=&quot;row&quot;</code> makes a cell its row&rsquo;s
+          head. a lead column is 72&nbsp;px; set <code>--fold-lead</code> on the table for shorter words.
         </p>
       </Section>
     </>
