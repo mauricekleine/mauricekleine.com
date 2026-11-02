@@ -42,18 +42,19 @@ function Page() {
         <p className="st-ca-copy">
           the line says what the day comes to, and the paper under it holds the one next step. the rail opens 248 px of
           margin beside them when the reader has 640 px of its own, here for a <code>month-grid</code>, and the day line
-          and the writing run the whole width under both. in a panel the paper hangs 24 px into the margin, so its words
-          keep the line&rsquo;s left edge.
+          and the writing run the whole width under both. in a panel the paper hangs 24 px into the left margin, so its
+          words keep the line&rsquo;s left edge. a written brief prints no now mark, because it can&rsquo;t keep a live
+          time.
         </p>
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <GroundFrame mode="light" title="a brief, light" width={960} height={966}>
+            <GroundFrame mode="light" title="a brief, light" width={960} height={964}>
               <ReaderBrief />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a brief, dark" width={960} height={966}>
+            <GroundFrame mode="dark" title="a brief, dark" width={960} height={964}>
               <ReaderBrief />
             </GroundFrame>
           }
@@ -70,10 +71,10 @@ function Page() {
       </Section>
       <Section id="a-meeting-brief" title="a meeting brief">
         <p className="st-ca-copy">
-          the paper holds the meeting and the one thing to raise. under it the blocks sit two to a row at 640 px of
-          their own width. names, notes and sightings share their columns, and a note wraps rather than cuts. a row with
-          a link underlines only its words. a block with nothing to say prints <code>not in the record</code> where its
-          first row would sit.
+          the paper holds the meeting and the one thing to raise, and hangs 24 px into both margins, so its words keep
+          the blocks&rsquo; left edge. under it the blocks sit two to a row at 640 px of their own width. names, notes
+          and sightings share their columns, and a note wraps rather than cuts. a row with a link underlines only its
+          words. a block with nothing to say prints <code>not in the record</code> where its first row would sit.
         </p>
         <ModePair
           className="st-ca-wide-pair"
@@ -123,17 +124,17 @@ function Page() {
       <Section id="phone" title="on a phone">
         <p className="st-ca-copy">
           below 640 px the rail folds into the source&rsquo;s order, after the closing line and before the foot, which
-          stays last in the panel. the paper runs the panel&rsquo;s whole width. a person takes a 12 px row, and an owed
-          row reaches 44 px with its date under its words.
+          stays last in the panel. the paper runs the panel&rsquo;s whole width. a person&rsquo;s row takes 12 px of
+          padding above and below, and an owed row reaches 44 px with its date under its words.
         </p>
         <ModePair
           light={
-            <GroundFrame mode="light" title="a brief on a phone, light" height={1220}>
+            <GroundFrame mode="light" title="a brief on a phone, light" height={1218}>
               <ReaderBrief />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a brief on a phone, dark" height={1220}>
+            <GroundFrame mode="dark" title="a brief on a phone, dark" height={1218}>
               <ReaderBrief />
             </GroundFrame>
           }
@@ -178,9 +179,16 @@ function Page() {
             <code>h1</code> when it titles the page.
           </dd>
           <dt>
+            <code>ReaderPaper</code>
+          </dt>
+          <dd>
+            the page&rsquo;s one paper, 24 px into both margins of a panel and the panel&rsquo;s whole width on a phone.
+            it holds a meeting&rsquo;s head.
+          </dd>
+          <dt>
             <code>ReaderNext</code>
           </dt>
-          <dd>the page&rsquo;s one paper, with the one action in it. a long pair wraps.</dd>
+          <dd>the next step on the page&rsquo;s one paper, with the one action in it. a long pair wraps.</dd>
           <dt>
             <code>ReaderNextText</code>
           </dt>

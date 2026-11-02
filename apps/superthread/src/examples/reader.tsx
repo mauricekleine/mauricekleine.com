@@ -18,6 +18,7 @@ import {
   ReaderNextText,
   ReaderOwed,
   ReaderOwedRow,
+  ReaderPaper,
   ReaderPerson,
   ReaderRail,
   ReaderRaised,
@@ -29,7 +30,6 @@ import {
 } from "@/components/superthread/blocks/reader";
 import { Button } from "@/components/superthread/ui/button";
 import { Onward } from "@/components/superthread/ui/onward";
-import { Paper } from "@/components/superthread/ui/paper";
 import { SourceLine, SourceLineItem } from "@/components/superthread/ui/source-line";
 
 // A fixed day, clock and zone, so the page prints the same strip whenever it's built and wherever it's read.
@@ -89,7 +89,6 @@ export function ReaderBrief() {
               asOf="as of 07:00"
               day={day}
               events={tuesday}
-              now={clock("07:00")}
               timeZone={timeZone}
             />
           </DayLine>
@@ -127,7 +126,7 @@ export function ReaderBrief() {
 function MeetingPaper({ label, line, actions = false }: { label: string; line: string; actions?: boolean }) {
   const titleId = useId();
   return (
-    <Paper render={<section aria-labelledby={titleId} />}>
+    <ReaderPaper render={<section aria-labelledby={titleId} />}>
       <p className="type-instrument text-muted-foreground">16:30 to 17:30 · video</p>
       <h2 id={titleId} className="mt-1 type-title text-first">
         project kickoff
@@ -143,7 +142,7 @@ function MeetingPaper({ label, line, actions = false }: { label: string; line: s
           </Button>
         </div>
       )}
-    </Paper>
+    </ReaderPaper>
   );
 }
 
@@ -180,7 +179,7 @@ export function ReaderMeeting() {
             <ReaderOwedRow href="#a-meeting-brief" when="thu 5 nov">
               the chapter 7 notes
             </ReaderOwedRow>
-            <ReaderOwedRow when="since friday">a date for the printer</ReaderOwedRow>
+            <ReaderOwedRow when="promised for thu">a date for the printer</ReaderOwedRow>
           </ReaderOwed>
         </ReaderBlock>
         <ReaderBlock>

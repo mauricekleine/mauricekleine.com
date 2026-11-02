@@ -28,7 +28,7 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 | `lede`       | 21 / 33     | Erode 400 (phone 19 / 31)              | ledes, and in italic a reading page's closing line |
 | `title`      | 22 / 28     | Unbounded 300, -0.02em                 | card, board and form titles, a section head in a panel |
 | `section`    | 30 / 34     | Unbounded 300, -0.03em                 | a page head's title in a panel, a section head on the stock |
-| `page`       | 34 / 40     | Erode 600 (phone 28 / 34)              | a reading sheet's heading   |
+| `page`       | 34 / 40     | Erode 600 (phone 28 / 34)              | a reading sheet's heading and a reader's lead line |
 | `hero`       | 64 / 68     | Unbounded 300 (phone 52 / 56)          | a page head's title on the stock, or at `size="page"` |
 | `display`    | 76 / 80     | Unbounded 300                          | the overview wordmark       |
 

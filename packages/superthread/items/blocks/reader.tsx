@@ -105,9 +105,22 @@ function ReaderLine({ className, render = <h2 />, ...props }: useRender.Componen
   });
 }
 
-// What to do next, on the page's one paper. In a working panel the paper hangs 24 px into the margin, so its words keep
-// the lead's left edge, and on a phone it runs the panel's whole width. Name it with ReaderNextText and put the one
-// action beside it; a long pair wraps, so the action never leaves the paper.
+// A page's one paper. In a working panel it hangs 24 px into both margins, so its words keep the left edge of the page
+// around it, and on a phone it runs the panel's whole width.
+function ReaderPaper({ className, ...props }: React.ComponentProps<typeof Paper>) {
+  return (
+    <Paper
+      className={cn(
+        "[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mx-(--spacing-panel-inset) [@media(min-width:601px)]:in-data-[slot=app-shell-panel]:-mx-6",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+// What to do next, on the page's one paper. Its right edge stays on the reading column, so the rail keeps its 40 px. Name
+// it with ReaderNextText and put the one action beside it; a long pair wraps, so the action never leaves the paper.
 function ReaderNext({
   className,
   children,
@@ -117,10 +130,10 @@ function ReaderNext({
   const titleId = useTitleId(suppliedTitleId);
   return (
     <TitleContext value={titleId}>
-      <Paper
+      <ReaderPaper
         render={<section aria-labelledby={titleId} {...props} />}
         className={cn(
-          "mt-6 py-4 pr-4 pl-6 [@media(max-width:600px)]:mt-4 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mx-(--spacing-panel-inset) [@media(min-width:601px)]:in-data-[slot=app-shell-panel]:-ml-6",
+          "mt-6 py-4 pr-4 pl-6 [@media(max-width:600px)]:mt-4 [@media(min-width:601px)]:in-data-[slot=app-shell-panel]:mr-0",
           className,
         )}
       >
@@ -131,7 +144,7 @@ function ReaderNext({
         >
           {children}
         </div>
-      </Paper>
+      </ReaderPaper>
     </TitleContext>
   );
 }
@@ -410,6 +423,7 @@ export {
   ReaderRail,
   ReaderHead,
   ReaderLine,
+  ReaderPaper,
   ReaderNext,
   ReaderNextText,
   ReaderWide,

@@ -75,8 +75,6 @@ function Page() {
               </figcaption>
             </figure>
 
-            <ReaderEnd>that&rsquo;s the chapter.</ReaderEnd>
-
             <footer className="mock-notes">
               <h2 id="notes" className="sr-only">
                 notes
@@ -91,6 +89,8 @@ function Page() {
                 </li>
               </ol>
             </footer>
+
+            <ReaderEnd>that&rsquo;s the chapter.</ReaderEnd>
           </article>
         </AppShellPanel>
 

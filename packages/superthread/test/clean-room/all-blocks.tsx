@@ -92,6 +92,7 @@ import {
   ReaderPerson,
   ReaderOwed,
   ReaderOwedRow,
+  ReaderPaper,
   ReaderGap,
 } from "@/components/superthread/blocks/reader";
 import { Notice, NoticeTitle, NoticeDescription, NoticeActions } from "@/components/superthread/blocks/notice";
@@ -590,7 +591,9 @@ function Sink({ mode }: { mode: Mode }) {
           </Reader>
         </AppShellPanel>
         <AppShellPanel>
-          <ReaderRaised label="one thing to raise">ask sam who signs off the order.</ReaderRaised>
+          <ReaderPaper>
+            <ReaderRaised label="one thing to raise">ask sam who signs off the order.</ReaderRaised>
+          </ReaderPaper>
           <ReaderBlocks>
             <ReaderBlock>
               <ReaderBlockTitle>who&rsquo;s in the room</ReaderBlockTitle>
@@ -607,7 +610,7 @@ function Sink({ mode }: { mode: Mode }) {
                 <ReaderOwedRow href="#notes" when="thu 5 nov">
                   the chapter 7 notes
                 </ReaderOwedRow>
-                <ReaderOwedRow when="since friday">a date for the printer</ReaderOwedRow>
+                <ReaderOwedRow when="promised for thu">a date for the printer</ReaderOwedRow>
               </ReaderOwed>
             </ReaderBlock>
             <ReaderBlock>

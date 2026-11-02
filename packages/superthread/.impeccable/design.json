@@ -2886,11 +2886,11 @@
       },
       "lede": {
         "displayName": "lede",
-        "purpose": "the sentence under a page title"
+        "purpose": "the sentence under a page title, and in italic a reading page's closing line"
       },
       "lede-phone": {
         "displayName": "lede on a phone",
-        "purpose": "type-lede at 600 px and below: the sentence under a page title"
+        "purpose": "type-lede at 600 px and below: the sentence under a page title, and in italic a reading page's closing line"
       },
       "title": {
         "displayName": "title",
@@ -2902,11 +2902,11 @@
       },
       "page": {
         "displayName": "page",
-        "purpose": "a reading sheet's heading"
+        "purpose": "a reading sheet's heading and a reader's lead line"
       },
       "page-phone": {
         "displayName": "page on a phone",
-        "purpose": "type-page at 600 px and below: a reading sheet's heading"
+        "purpose": "type-page at 600 px and below: a reading sheet's heading and a reader's lead line"
       },
       "hero": {
         "displayName": "hero",

@@ -19,6 +19,7 @@ import {
   ReaderNextText,
   ReaderOwed,
   ReaderOwedRow,
+  ReaderPaper,
   ReaderPerson,
   ReaderRail,
   ReaderRaised,
@@ -30,13 +31,14 @@ import {
 } from "@/components/superthread/blocks/reader";
 import { Button } from "@/components/superthread/ui/button";
 import { Onward } from "@/components/superthread/ui/onward";
-import { Paper } from "@/components/superthread/ui/paper";
 import { DARK } from "../scripts/generate.ts";
 import { claim, CONTROL_RING, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
 import { chainOf, inScope } from "./scope.ts";
 
 const PHONE = "[@media(max-width:600px)]:";
 const WIDE_READER = "@min-[640px]/reader:";
+const WIDE = "[@media(min-width:601px)]:";
+const IN_PANEL = "in-data-[slot=app-shell-panel]:";
 const slot = (name: string) => `[data-slot="${name}"]`;
 const readsDark = (el: Element) => inScope(DARK, chainOf(el));
 
@@ -81,10 +83,10 @@ function brief(rail = true) {
 function meeting() {
   return server(
     <AppShellPanel>
-      <Paper>
+      <ReaderPaper>
         <ReaderSectionTitle render={<h2 />}>project kickoff</ReaderSectionTitle>
         <ReaderRaised label="one thing to raise">the chapter order, before anything is printed.</ReaderRaised>
-      </Paper>
+      </ReaderPaper>
       <ReaderBlocks>
         <ReaderBlock titleId="room">
           <ReaderBlockTitle>who's in the room</ReaderBlockTitle>
@@ -249,18 +251,16 @@ describe("reader", () => {
       expect(readsDark(one(paper, slot("reader-next-text")).el)).toBe(false);
     });
 
-    test("hangs 24 px into the margin in a panel, so its words keep the lead's left edge", () => {
+    test("hangs 24 px into the left margin in a panel, so its words keep the lead's edge and its right edge the column's", () => {
       const classes = next().className.split(" ");
       expect(classes).toEqual(
-        expect.arrayContaining(["pl-6", "[@media(min-width:601px)]:in-data-[slot=app-shell-panel]:-ml-6"]),
+        expect.arrayContaining([
+          "pl-6",
+          `${WIDE}${IN_PANEL}-mx-6`,
+          `${WIDE}${IN_PANEL}mr-0`,
+          `${PHONE}${IN_PANEL}-mx-(--spacing-panel-inset)`,
+        ]),
       );
-      expect(classes).not.toContain("-ml-6");
-    });
-
-    test("runs the panel's whole width on a phone, and only in a panel", () => {
-      const classes = next().className.split(" ");
-      expect(classes).toContain(`${PHONE}in-data-[slot=app-shell-panel]:-mx-(--spacing-panel-inset)`);
-      expect(classes).not.toContain(`${PHONE}-mx-(--spacing-panel-inset)`);
     });
 
     test("the words give way and a long pair wraps, so the action stays on the paper", () => {
@@ -361,6 +361,14 @@ describe("reader", () => {
 });
 
 describe("a meeting brief's parts", () => {
+  test("the paper hangs 24 px into both margins of a panel and runs its whole width on a phone, only in a panel", () => {
+    const { classes } = one(meeting(), slot("paper"));
+    expect(classes).toEqual(
+      expect.arrayContaining([`${WIDE}${IN_PANEL}-mx-6`, `${PHONE}${IN_PANEL}-mx-(--spacing-panel-inset)`]),
+    );
+    expect(classes.join(" ")).not.toMatch(/(^| )-m[xlr]-/);
+  });
+
   test("the raised line is its muted label over the lede step, held to a 32 em measure", () => {
     const { el, classes } = one(meeting(), slot("reader-raised"));
     expect(el.getAttribute("data-mk")).toBe("reader");
@@ -442,7 +450,7 @@ describe("a meeting brief's parts", () => {
       expect(seen?.className).toContain("col-start-3");
     });
 
-    test("each person takes a 12 px row on a phone", () => {
+    test("a person's row takes 12 px of padding above and below on a phone", () => {
       expect(one(who().el, "li").classes).toEqual(expect.arrayContaining(["py-1", `${PHONE}py-3`]));
     });
   });
