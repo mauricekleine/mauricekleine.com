@@ -77,6 +77,15 @@ describe("the paper", () => {
     expect(classes).toEqual(expect.arrayContaining(["p-6", "-mx-6", `${PHONE}p-4`, `${PHONE}-mx-4`]));
   });
 
+  test("on a light page it draws a 1 px edge in border inside its box, since white on a white panel can't show its top and left", () => {
+    // An outline set inside the box moves nothing, and only a light page draws it: a dark page's white is its own edge.
+    const { classes } = one(sheet(), '[data-slot="paper"]');
+    expect(classes).toEqual(
+      expect.arrayContaining(["not-dark:outline", "not-dark:-outline-offset-1", "not-dark:outline-border"]),
+    );
+    expect(classes.filter((cls) => /^-?outline/.test(parts(cls).utility) && !cls.startsWith("not-dark:"))).toEqual([]);
+  });
+
   test("answers to its own width, with a guard so the phone band's rows win on a phone", () => {
     expect(one(sheet(), '[data-slot="paper"]').classes).toContain("@container/job-sheet");
     const compact = grid(sheet()).classes.filter((cls) => COMPACT(parts(cls).variants));

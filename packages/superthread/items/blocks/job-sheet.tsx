@@ -8,13 +8,15 @@ import { Toggle } from "@/components/superthread/ui/toggle";
 // The one job, on the page's paper. Its rows are held by the grid and not by what's in them, so a state that drops a part
 // or a read that answers after the sheet prints moves nothing. Paper reaches past the panel by its own padding, so the
 // words share the panel's left edge; it answers to its own width, so a full panel and everything narrower hold one height
-// each, and a phone a third. The space above it is held too, so the sheet keeps one y through the day.
+// each, and a phone a third. The space above it is held too, so the sheet keeps one y through the day. On a light page it
+// is white on a white panel, where the lift alone can't show its top and left: it draws a 1 px edge in border inside its
+// box, as an outline, so nothing moves. On a dark page the white is its edge.
 function JobSheet({ className, children, ...props }: React.ComponentProps<"section">) {
   return (
     <Paper
       render={<section {...props} />}
       className={cn(
-        "@container/job-sheet -mx-6 mt-5 py-7 [@media(max-width:600px)]:-mx-4 [@media(max-width:600px)]:mt-4",
+        "@container/job-sheet -mx-6 mt-5 py-7 not-dark:outline not-dark:-outline-offset-1 not-dark:outline-border [@media(max-width:600px)]:-mx-4 [@media(max-width:600px)]:mt-4",
         className,
       )}
     >
