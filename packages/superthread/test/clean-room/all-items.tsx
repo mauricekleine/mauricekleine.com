@@ -6,8 +6,16 @@
 // as in any shadcn app with the mode class on <html>: add .dark to <body> to see them dark.
 import { type ReactNode, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useMinute } from "@/components/superthread/hooks/use-minute";
 import { fleet } from "@/components/superthread/lib/fleet";
-import { beforeWords, scheduleWords, sinceWords, untilWords } from "@/components/superthread/lib/time-words";
+import {
+  beforeWords,
+  clockWords,
+  dateWords,
+  scheduleWords,
+  sinceWords,
+  untilWords,
+} from "@/components/superthread/lib/time-words";
 import { cn } from "@/components/superthread/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/superthread/ui/accordion";
 import {
@@ -730,9 +738,13 @@ function Sink({ mode }: { mode: Mode }) {
       <Part name="time-words">
         <p className="text-sm">
           {sinceWords("2026-10-30", "2026-11-01")}, {beforeWords("2026-11-01T10:00:00Z", { timeZone: "UTC" })},{" "}
+          {clockWords("2026-11-01T10:00:00Z", { timeZone: "UTC" })}, {dateWords("2026-11-01")},{" "}
           {untilWords("2026-11-01T11:00:00Z", "standup", "2026-11-01T10:12:00Z")},{" "}
           {scheduleWords({ every: "day", at: "07:00" })}
         </p>
+      </Part>
+      <Part name="use-minute">
+        <MinuteSink />
       </Part>
       <Part name="paper">
         <Paper render={<section aria-label="the next job" />}>
@@ -780,6 +792,11 @@ function Contained({ children }: { children: ReactNode }) {
 }
 
 // Each section has its own manager, so a toast opens only in the viewport its button belongs to.
+function MinuteSink() {
+  const minute = useMinute();
+  return <p className="text-sm">{minute ? `${clockWords(minute.now)}, ${minute.day}` : "no clock yet"}</p>;
+}
+
 function ToastSink({ mode }: { mode: Mode }) {
   const [manager] = useState(() => createToastManager());
   return (

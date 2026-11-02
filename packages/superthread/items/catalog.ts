@@ -558,6 +558,21 @@ export const catalog: CatalogItem[] = [
     tier: "pass",
     upstream: "use-mobile",
   },
+  {
+    name: "use-minute",
+    type: "registry:hook",
+    title: "use minute",
+    description: "the clock's minute and the reader's day, from one shared timer that stops while the page is hidden",
+    files: [
+      {
+        path: "items/hooks/use-minute.ts",
+        type: "registry:hook",
+        target: "@components/superthread/hooks/use-minute.ts",
+      },
+    ],
+    tier: "lib",
+    upstream: null,
+  },
   // compositions: the patterns the fleet's apps repeat, composed from the items above
   {
     name: "page-header",

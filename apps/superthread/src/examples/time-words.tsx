@@ -2,6 +2,8 @@ import { Fragment } from "react";
 import { ListRow, ListRowMeta, ListRows, ListRowTitle } from "@/components/superthread/blocks/list-rows";
 import {
   beforeWords,
+  clockWords,
+  dateWords,
   type Schedule,
   scheduleWords,
   sinceWords,
@@ -47,6 +49,19 @@ export function BeforeWordsExample() {
         ["amsterdam", beforeWords("2026-11-01T10:00:00Z", reader)],
         ["utc", beforeWords("2026-11-01T10:00:00Z", { timeZone: "UTC" })],
         ["a plain date", beforeWords("2026-11-02", reader)],
+      ]}
+    />
+  );
+}
+
+export function ClockWordsExample() {
+  return (
+    <Readout
+      rows={[
+        ["clock 2026-11-03T08:30:00Z", clockWords("2026-11-03T08:30:00Z", reader)],
+        ["clock 2026-11-02", clockWords("2026-11-02", reader)],
+        ["date 2026-11-03T08:30:00Z", dateWords("2026-11-03T08:30:00Z", reader)],
+        ["date 2026-11-02", dateWords("2026-11-02", reader)],
       ]}
     />
   );

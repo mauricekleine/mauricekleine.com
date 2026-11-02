@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   BeforeWordsExample,
+  ClockWordsExample,
   ScheduleWordsExample,
   SinceWordsExample,
   TimeWordsInARow,
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/components/time-words")({
     sections: [
       { id: "since", title: "since" },
       { id: "before", title: "before" },
+      { id: "clock-and-date", title: "clock and date" },
       { id: "until", title: "until" },
       { id: "schedule", title: "schedule" },
       { id: "in-a-row", title: "in a row" },
@@ -51,6 +53,16 @@ function Page() {
         </p>
         <ModePair>
           <BeforeWordsExample />
+        </ModePair>
+      </Section>
+      <Section id="clock-and-date" title="clock and date">
+        <p className="st-pass-prose">
+          <code>clockWords(at)</code> prints a time on its own, for a row or a timeline. <code>dateWords(moment)</code>{" "}
+          names the day it falls on in the reader&rsquo;s zone. a plain date has no clock face, so the clock prints the
+          date.
+        </p>
+        <ModePair>
+          <ClockWordsExample />
         </ModePair>
       </Section>
       <Section id="until" title="until">
