@@ -287,7 +287,8 @@ describe("clear", () => {
   });
 
   test("keeps the height of the work that's gone in every band, so the panel's edge stays put when the job clears", () => {
-    // The work under the sheet: a then head, three rows, a door and the panel's foot. A phone's rows take two lines.
+    // The work under the sheet: a quiet then head, three plain rows and a door. The panel's foot stays under both. A phone's
+    // plain rows are 56 px.
     const below = { full: 240, compact: 240, phone: 291 };
     const held = (band: (variants: string[]) => boolean) => {
       const found = one(clear(), `[data-slot="${ROWS}"]`).classes.filter((cls) => {

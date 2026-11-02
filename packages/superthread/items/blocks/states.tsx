@@ -109,9 +109,9 @@ function EmptyStateActions({ className, ...props }: React.ComponentProps<"div">)
 
 // Clear: nothing is waiting, in one sentence on the panel, with no sheet. It takes the job sheet's box and held rows in
 // each width band, so the sentence starts where the cue does, and the reason and the door land where the why and the
-// primary do. It holds the height of the work that's gone in every band, a job sheet over a then head, three rows, a door
-// and the panel's foot, so the panel's edge stays put when the last thing clears. A phone's rows take two lines each, so
-// its work runs 51 px further.
+// primary do. It holds the height of the work that's gone in every band, a job sheet over a quiet then head, three plain
+// rows and a door, so the panel's edge stays put when the last thing clears. The panel's foot isn't part of it: it stays
+// under both. A phone's plain rows are 56 px, so its work runs 51 px further.
 function ClearState({ className, children, ...props }: React.ComponentProps<"section">) {
   return (
     <section
