@@ -91,6 +91,8 @@ export function cssOf(master: Master, source: Source): string {
 
 const px = (n: number) => `${n}px`;
 
+const allRows = Object.entries({ ...scale.rows, ...scale.fleetRows });
+
 export function elevation(master: Master, mode: Mode, e: string, rake = false): string {
   const { ink, rake: soft, contact } = scale.shadowInk[mode];
   const lift = `${lookup(master, `shadow.${e}`)} ${oklchCss(ink, soft)}`;
@@ -122,7 +124,7 @@ function shared(): string[] {
   for (const name of ["instant", "quick", "travel"] as const)
     out.push(`--duration-${name}: ${scale.motion[name].value};`);
   out.push(`--ease-brand: ${scale.motion.ease.value};`);
-  for (const [name, row] of Object.entries(scale.rows)) out.push(`--spacing-row-${name}: ${px(row.value)};`);
+  for (const [name, row] of allRows) out.push(`--spacing-row-${name}: ${px(row.value)};`);
   out.push(`--spacing-panel-inset: ${px(scale.panelInset.value)};`);
   out.push(`--code-ring-offset: ${scale.codeRingOffset.value};`);
   return out;
@@ -147,7 +149,7 @@ function theme(all: Role[]): string[] {
   for (const r of RADII) out.push(`--radius-${r}: 0px;`);
   for (const e of ELEVATIONS) out.push(`--shadow-${e}: var(--elevation-${e});`);
   out.push("--ease-brand: var(--ease-brand);");
-  for (const name of Object.keys(scale.rows)) out.push(`--spacing-row-${name}: var(--spacing-row-${name});`);
+  for (const [name] of allRows) out.push(`--spacing-row-${name}: var(--spacing-row-${name});`);
   out.push("--spacing-panel-inset: var(--spacing-panel-inset);");
   return out;
 }
@@ -318,7 +320,7 @@ function tokenData(master: Master, all: Role[], texture: Texture | null, details
     space: {
       base: master.space.base,
       steps: master.space.steps,
-      rows: Object.fromEntries(Object.entries(scale.rows).map(([k, v]) => [k, v.value])),
+      rows: Object.fromEntries(allRows.map(([k, v]) => [k, v.value])),
       panelInset: { value: scale.panelInset.value, phone: scale.panelInset.phone },
     },
     radius: scale.radius.value,

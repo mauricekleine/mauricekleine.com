@@ -228,6 +228,8 @@
   --spacing-row-board: 56px;
   --spacing-row-table: 48px;
   --spacing-row-nav: 32px;
+  --spacing-row-plain: 40px;
+  --spacing-row-nested: 36px;
   --spacing-panel-inset: 48px;
   --code-ring-offset: -4px;
   color-scheme: light;
@@ -497,6 +499,8 @@
   --spacing-row-board: var(--spacing-row-board);
   --spacing-row-table: var(--spacing-row-table);
   --spacing-row-nav: var(--spacing-row-nav);
+  --spacing-row-plain: var(--spacing-row-plain);
+  --spacing-row-nested: var(--spacing-row-nested);
   --spacing-panel-inset: var(--spacing-panel-inset);
 }
 

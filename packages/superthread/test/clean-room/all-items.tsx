@@ -694,6 +694,9 @@ function Sink({ mode }: { mode: Mode }) {
           <NativeSelect aria-label="small ship" size="sm">
             <NativeSelectOption>orbit</NativeSelectOption>
           </NativeSelect>
+          <NativeSelect aria-label="scope" variant="quiet">
+            <NativeSelectOption>everything</NativeSelectOption>
+          </NativeSelect>
           <NativeSelect aria-label="invalid ship" aria-invalid>
             <NativeSelectOption>choose a ship</NativeSelectOption>
           </NativeSelect>

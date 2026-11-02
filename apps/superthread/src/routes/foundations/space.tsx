@@ -28,12 +28,16 @@ const rowHeight = {
   board: "var(--spacing-row-board)",
   table: "var(--spacing-row-table)",
   nav: "var(--spacing-row-nav)",
+  plain: "var(--spacing-row-plain)",
+  nested: "var(--spacing-row-nested)",
 } as const satisfies Record<keyof typeof tokens.space.rows, string>;
 
 const rowUse: Record<keyof typeof tokens.space.rows, string> = {
   board: "a board's rows",
   table: "a table's rows",
   nav: "a nav item",
+  plain: "a plain row, with no rule",
+  nested: "a plain row under a section head, with no rule",
 };
 
 const breakpointUse: Record<keyof typeof breakpoints, string> = {
@@ -126,10 +130,14 @@ function Page() {
       </Section>
 
       <Section id="rows" title="rows">
-        <Copy>three row heights, each with a 1 px rule under it.</Copy>
+        <Copy>five row heights. the first three carry a 1 px rule under them, and the plain two carry none.</Copy>
         <ul className="st-f-rows">
           {(Object.keys(rowHeight) as (keyof typeof rowHeight)[]).map((row) => (
-            <li key={row} style={{ height: rowHeight[row] }}>
+            <li
+              key={row}
+              style={{ height: rowHeight[row] }}
+              data-plain={row === "plain" || row === "nested" || undefined}
+            >
               <b>{row}</b>
               <span>{rowUse[row]}</span>
               <code>{tokens.space.rows[row]} px</code>

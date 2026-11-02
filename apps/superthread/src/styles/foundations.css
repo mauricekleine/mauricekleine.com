@@ -377,6 +377,9 @@
     gap: 16px;
     border-bottom: 1px solid var(--border);
   }
+  .st-f-rows li[data-plain] {
+    border-bottom: 0;
+  }
   .st-f-rows b {
     font-weight: 500;
   }

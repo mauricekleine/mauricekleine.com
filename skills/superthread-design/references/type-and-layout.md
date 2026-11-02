@@ -20,10 +20,10 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 | step         | size / line | face                                   | use                         |
 | ------------ | ----------- | -------------------------------------- | --------------------------- |
 | `meta`       | 11 / 14     | Fragment Mono, caps, .14em              | legends and a list's group labels |
-| `instrument` | 13 / 20     | Supreme 400                            | notes, badges, fact and toolbar labels, table heads |
+| `instrument` | 13 / 20     | Supreme 400                            | notes, badges, fact and toolbar labels, table heads, a quiet section head |
 | `ui`         | 14 / 21     | Supreme 400                            | the interface's body        |
 | `summary`    | 15 / 24     | Supreme 400                            | the text under a form title and a page head's meta line |
-| `subtitle`   | 18 / 24     | Supreme 500                            | dialog titles               |
+| `subtitle`   | 18 / 24     | Supreme 500                            | dialog titles, a quiet section head |
 | `read`       | 19 / 32     | Erode 400 (phone 18 / 30)              | the reading page            |
 | `lede`       | 21 / 33     | Erode 400 (phone 19 / 31)              | ledes                       |
 | `title`      | 22 / 28     | Unbounded 300, -0.02em                 | card, board and form titles, a section head in a panel |
@@ -34,16 +34,16 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 
 The reading page sets Erode at 19 px on 32 px with a 27.5em measure (about 66 characters) on a 672 px sheet.
 
-The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or an `li` reads with its words; `ListRowAside` prints in mono, so a time there holds its column.
+The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or an `li` reads with its words; `ListRowAside` prints in mono, so a time there holds its column, and `ListRowWhen` holds a plain row's column in mono until a phone folds it under the title.
 
 Links print in foreground, 4 px above their underline. A link in running text keeps a 1 px underline at rest, and inside `AppShellPanel` the base layer prints any anchor no item owns that way. A chrome link with no box, such as a row title or a door, underlines on hover. A nav item has a box, so it hovers with its fill. `link-quiet` is the one second form: a muted word that turns foreground on hover.
 
 ## space and layout
 
 - Space runs on a 4 px base: 4, 8, 12, 16, 24, 32, 48, 64 and 96.
-- Rows: 56 px on the board, 48 px in a table, 32 px for a nav item (`--spacing-row-board`, `-table`, `-nav`).
+- Rows: 56 px on the board, 48 px in a table, 32 px for a nav item (`--spacing-row-board`, `-table`, `-nav`), 40 px for a plain row and 36 px for one nested under a section head (`-plain`, `-nested`).
 - The working panel's sides are `--spacing-panel-inset`, 48 px and 16 px at 600 px and below. A row that bleeds to the panel's edges reaches by that token: `-mx-panel-inset px-panel-inset`.
-- On the stock a section head sits under its full-bleed rule, 64 px below the section before it and 44 px below the rule, with 24 px to its content. In a panel `section-header` leaves 48 px between sections and 16 px between its rule and its content, and `list-rows` straight under it hangs from that rule.
+- On the stock a section head sits under its full-bleed rule, 64 px below the section before it and 44 px below the rule, with 24 px to its content. In a panel `section-header` leaves 48 px between sections and 16 px between its rule and its content, and `list-rows` straight under it hangs from that rule. A quiet head prints no rule and sits 4 px over its content, so a page of plain rows reads as one list of words, and its page sets the gap between sections.
 - On a ship surface the working panel is at most 880 px wide and the reading sheet 672 px, both beside the fleet rail and the ship's nav. No ship widens the panel and there is no wide setting, so main content holds its place between pages. The reading page keeps a 264 px margin on the ground for its contents and progress.
 - `AppShellPanel` is a size container, and text in it wraps anywhere, except inside a table's cells.
 - At 900 px and below the fleet rail becomes a 48 px bar above the panel, with 12 px of ground on each side of it. The frame scrolls with the page, and no ship re-sticks it. At 600 px and below the phone type steps apply.

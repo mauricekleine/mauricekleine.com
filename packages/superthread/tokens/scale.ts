@@ -134,6 +134,12 @@ export const rows = {
   nav: { value: 32, from: "tokens/master.json space.rows.nav item" },
 };
 
+// The row heights the fleet adds. The master prints no plain row, so these stay out of `rows`, whose every value cites it.
+export const fleetRows = {
+  plain: { value: 40, from: "the fleet's step: a row with no rule and no padding, which the master doesn't print" },
+  nested: { value: 36, from: "the fleet's step: a plain row in a list under a section head" },
+};
+
 // The working panel's side padding, which a row reaches past to bleed to its edges. `phone` holds at `phone.maxWidth`
 // and below.
 export const panelInset = { value: 48, phone: 16, from: "the fleet's step: AppShellPanel's sides" };

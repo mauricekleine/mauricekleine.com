@@ -255,9 +255,82 @@ describe("native-select", () => {
       expect(one(host, '[data-slot="native-select-icon"]').classes).toContain("pointer-events-none");
     }
   });
+  describe("the quiet form", () => {
+    const quiet = (props: React.ComponentProps<typeof NativeSelect> = {}) =>
+      server(
+        <NativeSelect variant="quiet" aria-label="scope" {...props}>
+          <NativeSelectOption>everything</NativeSelectOption>
+        </NativeSelect>,
+      );
+
+    test("prints a muted word with no box, right-aligned", () => {
+      const select = one(quiet(), "select");
+      expect(select.classes).toEqual(
+        expect.arrayContaining(["text-right", "[text-align-last:right]", "text-muted-foreground", "bg-transparent"]),
+      );
+      expect(select.classes.filter((c) => /^(border|bg-background)/.test(c))).toEqual([]);
+    });
+
+    test.each(["default", "sm"] as const)("is 44 px at every width at size %s", (size) => {
+      const select = one(quiet({ size }), "select");
+      expect(select.classes).toContain("h-11");
+      expect(select.classes.filter((c) => /(^|:)h-(8|10)$/.test(c))).toEqual([]);
+    });
+
+    test("turns foreground on hover and draws one focus edge inside its box, on the keyboard only", () => {
+      const select = one(quiet(), "select");
+      expect(select.classes).toEqual(
+        expect.arrayContaining([
+          "hover:text-foreground",
+          "focus-visible:outline-2",
+          "focus-visible:-outline-offset-2",
+          "focus-visible:outline-(--ring)",
+        ]),
+      );
+      expect(select.classes).not.toContain("focus-visible:outline-offset-2");
+      expect(select.classes.filter((c) => c.startsWith("focus:"))).toEqual([]);
+    });
+
+    test("hangs its box 4 px past the column, so the chevron keeps the edge and clears the focus edge, unless a caller places it", () => {
+      const host = quiet();
+      const wrapper = one(host, '[data-mk="native-select"]');
+      expect(wrapper.el.getAttribute("data-variant")).toBe("quiet");
+      expect(wrapper.classes).toContain("-mr-1");
+      expect(one(host, '[data-slot="native-select-icon"]').classes).toContain(
+        "group-data-[variant=quiet]/native-select:right-1",
+      );
+      expect(one(host, "select").classes).toContain("pr-6");
+      const placed = one(quiet({ className: "mr-4" }), '[data-mk="native-select"]').classes;
+      expect(placed).toContain("mr-4");
+      expect(placed).not.toContain("-mr-1");
+    });
+
+    test("keeps the native choice and the caller's props, and its variant stays off the element", () => {
+      const select = one(quiet({ name: "scope" }), "select");
+      expect(select.el.tagName).toBe("SELECT");
+      expect(select.el.getAttribute("name")).toBe("scope");
+      expect(select.el.getAttribute("aria-label")).toBe("scope");
+      expect(select.el.hasAttribute("variant")).toBe(false);
+    });
+
+    test("disabled prints the word and the chevron in the disabled ink, with nothing darker in the control", () => {
+      const host = quiet({ disabled: true });
+      expect(one(host, "select").classes).toEqual(
+        expect.arrayContaining(["disabled:text-disabled", "disabled:cursor-not-allowed"]),
+      );
+      expect(one(host, '[data-slot="native-select-icon"]').classes).toContain(
+        "group-data-[variant=quiet]/native-select:group-has-[select:disabled]/native-select:text-disabled",
+      );
+    });
+  });
   test("no texture or forbidden class in any state", () => {
     clean(
-      [server(<NativeSelect />), server(<NativeSelect size="sm" />), server(<NativeSelect disabled aria-invalid />)],
+      [
+        server(<NativeSelect />),
+        server(<NativeSelect size="sm" />),
+        server(<NativeSelect disabled aria-invalid />),
+        server(<NativeSelect variant="quiet" />),
+      ],
       "native-select",
     );
   });
