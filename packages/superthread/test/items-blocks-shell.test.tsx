@@ -227,6 +227,61 @@ describe("section header", () => {
     expect(forbidden(elements(host))).toEqual([]);
   });
 
+  describe("a quiet head", () => {
+    const quiet = (step: "subtitle" | "instrument") =>
+      server(
+        <Section>
+          <SectionHeader quiet={step}>
+            <SectionTitle>next week</SectionTitle>
+            <SectionCount>3</SectionCount>
+          </SectionHeader>
+          <p>a list</p>
+        </Section>,
+      );
+
+    test.each(["subtitle", "instrument"] as const)(
+      "at the %s step prints no rule and sits close to its list",
+      (step) => {
+        const header = one(quiet(step), "header");
+        expect(header.el.getAttribute("data-quiet")).toBe(step);
+        expect(header.classes).toEqual(
+          expect.arrayContaining(["data-quiet:border-b-0", "data-quiet:pb-0", "data-quiet:mb-1"]),
+        );
+      },
+    );
+
+    test("sets its title at the subtitle step in foreground, the display face being the only first-ink title", () => {
+      expect(one(quiet("subtitle"), "h2").classes).toEqual(
+        expect.arrayContaining([
+          "group-data-[quiet=subtitle]/section-header:type-subtitle",
+          "group-data-[quiet=subtitle]/section-header:text-foreground",
+        ]),
+      );
+    });
+
+    test("sets its title in muted instrument", () => {
+      expect(one(quiet("instrument"), "h2").classes).toEqual(
+        expect.arrayContaining([
+          "group-data-[quiet=instrument]/section-header:type-instrument",
+          "group-data-[quiet=instrument]/section-header:text-muted-foreground",
+        ]),
+      );
+    });
+
+    test("still names its section, and a loud head carries no quiet mark", () => {
+      const host = quiet("subtitle");
+      expect(one(host, "section").el.getAttribute("aria-labelledby")).toBe(one(host, "h2").el.id);
+      const loud = server(<SectionHeader />);
+      expect(one(loud, "header").el.hasAttribute("data-quiet")).toBe(false);
+    });
+
+    test("claims no detail or forbidden class", () => {
+      const rendered = elements(quiet("subtitle"));
+      expect(detailsUsed(rendered, "section-header")).toEqual([]);
+      expect(forbidden(rendered)).toEqual([]);
+    });
+  });
+
   test("a stray title id cannot unname its section", () => {
     const stray = { id: "elsewhere" } as object;
     const host = server(
