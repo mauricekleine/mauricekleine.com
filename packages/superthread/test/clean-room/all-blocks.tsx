@@ -89,6 +89,7 @@ import { Input } from "@/components/superthread/ui/input";
 import { cn } from "@/components/superthread/lib/utils";
 import { Button } from "@/components/superthread/ui/button";
 import { Onward } from "@/components/superthread/ui/onward";
+import { SourceMark } from "@/components/superthread/ui/source-mark";
 import {
   CollectionToolbar,
   ToolbarGroup,
@@ -346,6 +347,26 @@ function Sink({ mode }: { mode: Mode }) {
             <ItemCardTitle href="#draft">reply to sam</ItemCardTitle>
             <ItemCardMeta>sent</ItemCardMeta>
             <ItemCardWhen>mon 2 nov</ItemCardWhen>
+          </ItemCard>
+        </ItemCards>
+        <ItemCards tiles aria-label="sources">
+          <ItemCard paper>
+            <ItemCardMedia>
+              <SourceMark d="M5 5h6v6h-6z" hover="M6 6h4v4h-4z" />
+            </ItemCardMedia>
+            <ItemCardTitle href="#draft">mail</ItemCardTitle>
+            <ItemCardLede>work mail and the shared inbox</ItemCardLede>
+            <ItemCardMeta>needs signing in</ItemCardMeta>
+            <ItemCardActions>
+              <Button size="sm">sign in</Button>
+            </ItemCardActions>
+          </ItemCard>
+          <ItemCard>
+            <ItemCardMedia>
+              <SourceMark d="M5 5h6v6h-6z" />
+            </ItemCardMedia>
+            <ItemCardTitle href="#draft">calendar</ItemCardTitle>
+            <ItemCardLede>the day's fixed points</ItemCardLede>
           </ItemCard>
         </ItemCards>
       </Part>

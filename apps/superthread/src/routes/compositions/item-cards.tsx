@@ -16,9 +16,11 @@ import {
 import { Button } from "@/components/superthread/ui/button";
 import { Icon } from "@/components/superthread/ui/glyphs";
 import { Badge } from "@/components/superthread/ui/badge";
+import { SourceMark } from "@/components/superthread/ui/source-mark";
 import { catalog } from "@/components/superthread/catalog";
 import { GroundFrame } from "@/examples/compositions-a";
 import { State } from "@/examples/input";
+import { marks } from "@/examples/source-mark";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -37,11 +39,73 @@ export const Route = createFileRoute("/compositions/item-cards")({
       { id: "full", title: "full width" },
       { id: "decided", title: "decided" },
       { id: "panel", title: "in the panel" },
+      { id: "tiles", title: "tiles" },
       { id: "parts", title: "parts" },
     ],
   },
   component: Page,
 });
+
+// Fictional sources with generic drawings. The first needs the reader, so it alone prints on paper with an action.
+function Tiles({ last }: { last?: boolean }) {
+  return (
+    <ItemCards tiles last={last} aria-label="sources">
+      <ItemCard paper>
+        <ItemCardMedia>
+          <SourceMark {...marks.mail} />
+        </ItemCardMedia>
+        <ItemCardTitle href="#tiles">mail</ItemCardTitle>
+        <ItemCardLede>work mail and the shared inbox</ItemCardLede>
+        <ItemCardMeta>needs signing in</ItemCardMeta>
+        <ItemCardActions>
+          <Button size="sm">sign in</Button>
+        </ItemCardActions>
+      </ItemCard>
+      <ItemCard>
+        <ItemCardMedia>
+          <SourceMark {...marks.calendar} />
+        </ItemCardMedia>
+        <ItemCardTitle href="#tiles">calendar</ItemCardTitle>
+        <ItemCardLede>the day&rsquo;s fixed points, across two accounts</ItemCardLede>
+      </ItemCard>
+      <ItemCard>
+        <ItemCardMedia>
+          <SourceMark {...marks.card} />
+        </ItemCardMedia>
+        <ItemCardTitle href="#tiles">card</ItemCardTitle>
+        <ItemCardLede>the card for checkouts on your word</ItemCardLede>
+      </ItemCard>
+      <ItemCard>
+        <ItemCardMedia>
+          <SourceMark {...marks.phone} />
+        </ItemCardMedia>
+        <ItemCardTitle href="#tiles">phone</ItemCardTitle>
+        <ItemCardLede>where you call in</ItemCardLede>
+      </ItemCard>
+      <ItemCard>
+        <ItemCardMedia>
+          <SourceMark {...marks.chat} />
+        </ItemCardMedia>
+        <ItemCardTitle href="#tiles">chat</ItemCardTitle>
+        <ItemCardLede>messages, voice notes and groups</ItemCardLede>
+      </ItemCard>
+      <ItemCard>
+        <ItemCardMedia>
+          <SourceMark {...marks.notes} />
+        </ItemCardMedia>
+        <ItemCardTitle href="#tiles">notes</ItemCardTitle>
+        <ItemCardLede>meeting notes and their summaries, kept as they were written</ItemCardLede>
+      </ItemCard>
+      <ItemCard>
+        <ItemCardMedia>
+          <SourceMark {...marks.files} />
+        </ItemCardMedia>
+        <ItemCardTitle href="#tiles">files</ItemCardTitle>
+        <ItemCardLede>the shared drive</ItemCardLede>
+      </ItemCard>
+    </ItemCards>
+  );
+}
 
 function CardsExample() {
   const [saved, setSaved] = useState(false);
@@ -429,6 +493,55 @@ function Page() {
           }
         />
       </Section>
+      <Section id="tiles" title="tiles">
+        <p className="st-cb-copy">
+          <code>tiles</code> on the list makes it a full-bleed grid of ruled cells, for the things a person holds, such
+          as the sources an app reads. the grid hangs from one rule in foreground, and each tile prints a 96 px mark, a
+          name, what it holds and, when it needs someone, its state and one action. four columns from 832 px of list,
+          three from 624 px, two below. the last tile closes a short row. these frames hold the panel at its full 880
+          px.
+        </p>
+        <ModePair
+          className="st-cb-stack"
+          light={
+            <GroundFrame mode="light" title="tiles in the panel, light" width={960} height={620}>
+              <AppShellPanel>
+                <Tiles last />
+              </AppShellPanel>
+            </GroundFrame>
+          }
+          dark={
+            <GroundFrame mode="dark" title="tiles in the panel, dark" width={960} height={620}>
+              <AppShellPanel>
+                <Tiles last />
+              </AppShellPanel>
+            </GroundFrame>
+          }
+        />
+        <p className="st-cb-copy">
+          <code>paper</code> on a card makes it the one tile that prints on paper: the tile that needs the reader. it
+          comes first, so its contact edge lands on the grid, and it keeps its fill under the pointer. a linked tile
+          takes the faint fill and its mark&rsquo;s second frame. the action sits level with the state in a 220 px cell
+          and takes its own line anywhere narrower. on a phone the mark drops to 80 px and the action stretches to a 44
+          px target. these frames use a 390 px viewport.
+        </p>
+        <ModePair
+          light={
+            <GroundFrame mode="light" title="tiles phone, light" height={1000}>
+              <AppShellPanel>
+                <Tiles last />
+              </AppShellPanel>
+            </GroundFrame>
+          }
+          dark={
+            <GroundFrame mode="dark" title="tiles phone, dark" height={1000}>
+              <AppShellPanel>
+                <Tiles last />
+              </AppShellPanel>
+            </GroundFrame>
+          }
+        />
+      </Section>
       <Section id="parts" title="parts">
         <dl className="st-ca-parts">
           <dt>
@@ -436,14 +549,15 @@ function Page() {
           </dt>
           <dd>
             the list. <code>ItemCard</code> is one card, and its <code>variant</code> sets the form every part prints
-            in. set <code>last</code> when nothing follows the list in the working panel.
+            in. set <code>last</code> when nothing follows the list in the working panel, and <code>tiles</code> for the
+            grid of ruled cells, where <code>paper</code> on one <code>ItemCard</code> prints that tile on paper.
           </dd>
           <dt>
             <code>ItemCardTitle</code>
           </dt>
           <dd>
-            links the whole card with <code>href</code> or <code>render</code>. a full card&rsquo;s title is a heading:
-            set <code>level</code> under a section&rsquo;s title.
+            links the whole card with <code>href</code> or <code>render</code>. a full card&rsquo;s title and a
+            tile&rsquo;s are headings: set <code>level</code> under a section&rsquo;s title.
           </dd>
           <dt>
             <code>ItemCardWhen</code>
@@ -454,23 +568,31 @@ function Page() {
           <dt>
             <code>ItemCardLede</code>
           </dt>
-          <dd>why the card is here, in reading type. it prints on a full card only.</dd>
+          <dd>
+            why a full card is here, in reading type, or what a tile holds, at the instrument step. no other card prints
+            it.
+          </dd>
           <dt>
             <code>ItemCardMeta</code>
           </dt>
           <dd>
             a small card&rsquo;s bottom line. on a full card it takes pieces, one to an element or a run of text, and
-            prints the dot between them, with the first in foreground. on a decided card it&rsquo;s the one word.
+            prints the dot between them, with the first in foreground. on a decided card it&rsquo;s the one word, and on
+            a tile the state.
           </dd>
           <dt>
             <code>ItemCardActions</code>
           </dt>
-          <dd>the app&rsquo;s buttons: the corner of a small card, the foot of a full card, nothing when decided.</dd>
+          <dd>
+            the app&rsquo;s buttons: the corner of a small card, the foot of a full card, a tile&rsquo;s one action,
+            nothing when decided.
+          </dd>
           <dt>
             <code>ItemCardMedia</code>
           </dt>
           <dd>
-            a small card&rsquo;s thumbnail. <code>ItemCardId</code> is its quiet id line. both stay on the small card.
+            a small card&rsquo;s thumbnail, or a tile&rsquo;s mark, usually a <code>SourceMark</code>.{" "}
+            <code>ItemCardId</code> is the small card&rsquo;s quiet id line.
           </dd>
         </dl>
       </Section>

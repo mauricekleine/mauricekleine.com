@@ -46,6 +46,7 @@ import {
 import { Button } from "@/components/superthread/ui/button";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { StatusGlyph } from "@/components/superthread/ui/glyphs";
+import { SourceMark } from "@/components/superthread/ui/source-mark";
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/superthread/ui/table";
 import { client, CONTROL_RING, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
 
@@ -914,6 +915,159 @@ describe("item cards", () => {
     const host = cards();
     expect(one(host, "li").el.hasAttribute("data-variant")).toBe(false);
     expect(one(host, "li").classes).toEqual(["min-w-0"]);
+  });
+
+  describe("tiles", () => {
+    const PHONE = "[@media(max-width:600px)]:";
+    const tiles = (last?: boolean) =>
+      server(
+        <ItemCards tiles last={last} aria-label="sources">
+          <ItemCard paper>
+            <ItemCardMedia>
+              <SourceMark d="M5 5h6v6h-6z" />
+            </ItemCardMedia>
+            <ItemCardTitle href="/sources/mail" level={3}>
+              mail
+            </ItemCardTitle>
+            <ItemCardLede>work mail and the shared inbox</ItemCardLede>
+            <ItemCardMeta>needs signing in</ItemCardMeta>
+            <ItemCardActions>
+              <Button size="sm">sign in</Button>
+            </ItemCardActions>
+          </ItemCard>
+          <ItemCard>
+            <ItemCardTitle href="/sources/calendar">calendar</ItemCardTitle>
+            <ItemCardLede>the day&rsquo;s fixed points</ItemCardLede>
+          </ItemCard>
+          <ItemCard>
+            <ItemCardTitle>files</ItemCardTitle>
+          </ItemCard>
+        </ItemCards>,
+      );
+    const tile = (host: HTMLElement, index: number) => {
+      const el = host.querySelectorAll("ul > li")[index]!;
+      return { el, classes: el.className.split(/\s+/) };
+    };
+
+    test("a named list of ruled cells that reaches the panel's edges under a foreground rule", () => {
+      const host = tiles();
+      const list = one(host, "ul");
+      expect(list.el.getAttribute("aria-label")).toBe("sources");
+      expect(list.classes).toEqual(
+        expect.arrayContaining([
+          "border-t-foreground",
+          "border-b-border",
+          "in-data-[slot=app-shell-panel]:-mx-(--spacing-panel-inset)",
+        ]),
+      );
+      expect(list.classes).not.toContain("gap-2");
+      expect(list.classes).not.toContain("has-[>[data-variant]]:grid-cols-1");
+      expect(host.querySelectorAll("ul > li")).toHaveLength(3);
+      expect(tile(host, 1).classes).toEqual(expect.arrayContaining(["border-l", "border-border"]));
+      expect(host.querySelector('[data-slot="card"]')).toBeNull();
+    });
+
+    test("a mark above a heading that links the whole tile, with no arrow and its ring inside", () => {
+      const host = tiles();
+      expect(one(host, '[data-slot="item-card-media"]').classes).toEqual(
+        expect.arrayContaining(["size-24", `${PHONE}size-20`]),
+      );
+      const heading = one(host, '[data-slot="item-card-title"]');
+      expect(heading.el.getAttribute("role")).toBe("heading");
+      expect(heading.el.getAttribute("aria-level")).toBe("3");
+      expect(heading.classes).toContain("type-subtitle");
+      const link = one(host, '[data-slot="item-card-link"]');
+      expect(link.classes).toEqual(expect.arrayContaining(["absolute", "inset-0", ...insideRing]));
+      expect(host.querySelector('[data-slot="item-card-arrow"]')).toBeNull();
+    });
+
+    test("what it holds prints muted at the instrument step, and its state in foreground", () => {
+      const host = tiles();
+      expect(one(host, '[data-slot="item-card-lede"]').classes).toEqual(
+        expect.arrayContaining(["type-instrument", "text-muted-foreground"]),
+      );
+      const state = one(host, '[data-slot="item-card-meta"]');
+      expect(state.classes).toEqual(expect.arrayContaining(["type-instrument", "text-foreground"]));
+      expect(state.el.textContent).toBe("needs signing in");
+    });
+
+    test("a when takes its own line, above the state", () => {
+      const when = one(
+        server(
+          <ItemCards tiles>
+            <ItemCard>
+              <ItemCardTitle>mail</ItemCardTitle>
+              <ItemCardWhen>since friday</ItemCardWhen>
+            </ItemCard>
+          </ItemCards>,
+        ),
+        '[data-slot="item-card-when"]',
+      );
+      expect(when.classes).toEqual(expect.arrayContaining(["[grid-area:when]", "text-muted-foreground"]));
+    });
+
+    test("its action sits above the link, and stretches to a 44 px target on a phone", () => {
+      expect(one(tiles(), '[data-slot="item-card-actions"]').classes).toEqual(
+        expect.arrayContaining(["relative", "z-10", `${PHONE}[&>*]:h-11`, `${PHONE}[&>*]:w-full`]),
+      );
+    });
+
+    test("paper prints the tile on paper, still a list item of the list, and keeps its fill under the pointer", () => {
+      const host = tiles();
+      const paper = tile(host, 0);
+      expect(paper.el.tagName).toBe("LI");
+      expect(paper.el.getAttribute("data-slot")).toBe("item-card");
+      expect(paper.classes).toEqual(expect.arrayContaining(["light", "bg-card", "texture-contact", "z-1"]));
+      expect(paper.classes).not.toContain("has-[[data-slot=item-card-link]]:hover:bg-faint");
+      expect(tile(host, 1).classes).toContain("has-[[data-slot=item-card-link]]:hover:bg-faint");
+      expect(tile(host, 1).classes).not.toContain("light");
+    });
+
+    test("paper means nothing outside tiles, and a tile's list overrides a variant", () => {
+      const small = one(
+        server(
+          <ItemCards>
+            <ItemCard paper>
+              <ItemCardTitle>plain card</ItemCardTitle>
+            </ItemCard>
+          </ItemCards>,
+        ),
+        "li",
+      );
+      expect(small.classes).toEqual(["min-w-0"]);
+      const list = one(
+        server(
+          <ItemCards tiles>
+            <ItemCard variant="decided">
+              <ItemCardTitle>mail</ItemCardTitle>
+            </ItemCard>
+          </ItemCards>,
+        ),
+        "li",
+      );
+      expect(list.el.getAttribute("data-variant")).toBe("tile");
+    });
+
+    test("the whole tile drives its mark's second frame", () => {
+      expect(tile(tiles(), 1).classes).toContain("group/source-mark");
+    });
+
+    test("last runs the grid to the panel's foot at every width and drops the closing rule", () => {
+      expect(one(tiles(), "ul").classes).not.toContain("border-b-0");
+      expect(one(tiles(true), "ul").classes).toEqual(
+        expect.arrayContaining([
+          "border-b-0",
+          "in-data-[slot=app-shell-panel]:-mb-7",
+          `${PHONE}in-data-[slot=app-shell-panel]:-mb-4`,
+        ]),
+      );
+    });
+
+    test("claims no detail of its own and no forbidden class", () => {
+      const rendered = elements(tiles());
+      expect(detailsUsed(rendered, "item-cards")).toEqual([]);
+      expect(forbidden(rendered.filter(({ el }) => el.getAttribute("data-slot")?.startsWith("item-card")))).toEqual([]);
+    });
   });
 });
 
