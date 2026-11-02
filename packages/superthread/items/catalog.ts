@@ -754,7 +754,7 @@ export const catalog: CatalogItem[] = [
     files: [block("reader")],
     tier: "block",
     upstream: null,
-    serves: ["orbit", "quanta", "trisys"],
+    serves: ["quanta", "trisys", "orbit"],
   },
   {
     name: "notice",
