@@ -3166,6 +3166,11 @@
         "section": "layout"
       },
       {
+        "name": "The First Viewport Rule",
+        "body": "On a 390 x 844 phone the job, its reason and its primary sit inside the first viewport.",
+        "section": "layout"
+      },
+      {
         "name": "The One Light Rule",
         "body": "Every shadow falls right and down from one upper-left light, and its length grows with the lift. No stock shadow, no centred glow and no backdrop blur.",
         "section": "elevation"
@@ -3221,6 +3226,11 @@
         "section": "components"
       },
       {
+        "name": "The Quiet Below Rule",
+        "body": "Below a `job-sheet`, nothing looks like work: plain rows and a door, no boxes.",
+        "section": "components"
+      },
+      {
         "name": "The Solid Event Rule",
         "body": "On a timeline solid means an event and nothing else. There is no elapsed fill, and a loading timeline holds its height with nothing solid on the track.",
         "section": "components"
@@ -3243,6 +3253,16 @@
       {
         "name": "The Plain Schedule Rule",
         "body": "A schedule prints in plain words, `every day at 07:00` or `when mail arrives`: no cron, and a timezone only when it differs.",
+        "section": "components"
+      },
+      {
+        "name": "The Plain Gap Rule",
+        "body": "A cue states the gap in plain words: `48 min until standup`, never `before standup`, which implies a deadline.",
+        "section": "components"
+      },
+      {
+        "name": "The Proven Reason Rule",
+        "body": "A stated reason says only what the record proves, in one sentence of at most 80 characters.",
         "section": "components"
       },
       {

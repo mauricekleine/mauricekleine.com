@@ -8,7 +8,7 @@
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | style | `init`, `tokens`                                                                                                                                                           |
 | lib   | `tokens-plain`, `utils`, `fleet`, `theme`, `time-words`, `use-minute`, `hotkey`                                                                                            |
-| brand | `glyphs`, `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`, `input`, `input-group`, `textarea`, `field`, `select`, `native-select`, `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`, `paper`, `fit-title`, `onward`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
+| brand | `glyphs`, `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`, `input`, `input-group`, `textarea`, `field`, `select`, `native-select`, `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`, `paper`, `fit-title`, `inline-answers`, `onward`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
 | pass  | `card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile` |
 | block | `app-shell`, `page-header`, `section-header`, `collection-toolbar`, `list-rows`, `item-cards`, `data-table`, `states`, `facts`, `form-section`, `quick-add`, `letter`, `send-bar`, `job-sheet`, `day-line`, `notice`, `search-palette` |
 
