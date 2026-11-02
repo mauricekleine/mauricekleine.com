@@ -199,24 +199,27 @@ function PlainRowTick({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// The title takes one line and cuts at its end, and the words stay in a tooltip. Linked, its link stretches over the
-// row, carries the name, and takes the ring: outside the row, or inside a ruled row that reaches the panel's edges. The
-// words underline while the link is under the pointer. Without an href or render it stays plain text.
+const plainRowWords =
+  "decoration-1 underline-offset-4 peer-hover/plain-row-link:underline group-data-[closed]/plain-row:line-through group-data-[closed]/plain-row:peer-hover/plain-row-link:line-through";
+
+// The title takes one line and cuts at its end, and the words stay in a tooltip. With an href or the app's router link
+// through render, its link stretches over the row and carries the name, and the words beside it underline while the
+// link is under the pointer. The ring prints outside the row, or inside a ruled row, which reaches the panel's edges.
+// With neither it stays plain text.
 function PlainRowTitle({ className, children, href, render, ...props }: useRender.ComponentProps<"a">) {
   const linked = href !== undefined || render !== undefined;
-  const words = typeof children === "string" ? children : undefined;
-  const link = useRender({
-    enabled: linked,
-    defaultTagName: "a",
-    render,
-    state: { slot: "plain-row-link" },
+  const title = useRender({
+    defaultTagName: "span",
+    render: render ?? (href !== undefined ? <a /> : undefined),
+    state: linked ? { slot: "plain-row-link" } : undefined,
     props: mergeProps<"a">(
       {
         href,
-        title: words,
-        className:
-          "peer/plain-row-link absolute inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) group-data-[variant=ruled]/plain-rows:focus-visible:-outline-offset-2",
-        children: <span className="sr-only">{children}</span>,
+        title: typeof children === "string" ? children : undefined,
+        className: linked
+          ? "peer/plain-row-link absolute inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) group-data-[variant=ruled]/plain-rows:focus-visible:-outline-offset-2"
+          : plainRowWords,
+        children: linked ? <span className="sr-only">{children}</span> : children,
       },
       props,
     ),
@@ -224,19 +227,17 @@ function PlainRowTitle({ className, children, href, render, ...props }: useRende
   return (
     <span
       data-slot="plain-row-title"
-      title={linked ? undefined : words}
       className={cn(
         "min-w-0 flex-1 truncate text-ui font-normal text-foreground group-data-[closed]/plain-row:text-muted-foreground [@media(max-width:600px)]:col-span-full [@media(max-width:600px)]:group-data-[clamp]/plain-rows:line-clamp-2 [@media(max-width:600px)]:group-data-[clamp]/plain-rows:whitespace-normal",
         className,
       )}
     >
-      {link}
-      <span
-        aria-hidden={linked || undefined}
-        className="decoration-1 underline-offset-4 peer-hover/plain-row-link:underline group-data-[closed]/plain-row:line-through group-data-[closed]/plain-row:peer-hover/plain-row-link:line-through"
-      >
-        {children}
-      </span>
+      {title}
+      {linked && (
+        <span aria-hidden="true" className={plainRowWords}>
+          {children}
+        </span>
+      )}
     </span>
   );
 }

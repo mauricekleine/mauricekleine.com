@@ -699,7 +699,7 @@ export const catalog: CatalogItem[] = [
     files: [block("jump-line")],
     tier: "block",
     upstream: null,
-    serves: ["orbit", "quanta", "trisys"],
+    serves: ["quanta", "trisys", "orbit"],
   },
   {
     name: "send-bar",

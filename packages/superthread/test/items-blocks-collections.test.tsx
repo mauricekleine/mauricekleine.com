@@ -424,18 +424,32 @@ describe("plain rows", () => {
     expect(one(host, '[data-slot="plain-row-title"]').el.textContent).toBe("write the plan");
   });
 
+  test("a title with no link keeps the caller's props, and a closed one strikes its words", () => {
+    const host = server(
+      <PlainRows>
+        <PlainRow closed>
+          <PlainRowTitle id="the-title">write the plan</PlainRowTitle>
+        </PlainRow>
+      </PlainRows>,
+    );
+    expect(one(host, "#the-title").classes).toContain("group-data-[closed]/plain-row:line-through");
+  });
+
   test("a title holds one line at weight 400 and keeps its words in a tooltip", () => {
     const host = list();
     expect(one(host, '[data-slot="plain-row-title"]').classes).toEqual(
       expect.arrayContaining(["truncate", "min-w-0", "font-normal", "text-ui", "text-foreground"]),
     );
     expect(one(host, "a").el.getAttribute("title")).toBe("write the plan");
-    const plain = server(
+    expect(one(server(<PlainRowTitle>write the plan</PlainRowTitle>), "[title]").el.getAttribute("title")).toBe(
+      "write the plan",
+    );
+    const authored = server(
       <PlainRowTitle>
         <em>write</em>
       </PlainRowTitle>,
     );
-    expect(one(plain, '[data-slot="plain-row-title"]').el.hasAttribute("title")).toBe(false);
+    expect(authored.querySelector("[title]")).toBeNull();
   });
 
   test("the columns are 80 and 128 px, and when holds its figures in mono", () => {
