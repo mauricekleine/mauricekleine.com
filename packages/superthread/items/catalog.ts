@@ -633,7 +633,8 @@ export const catalog: CatalogItem[] = [
     name: "item-cards",
     type: "registry:block",
     title: "item cards",
-    description: "a grid of cards, each a title with its status, meta and actions",
+    description:
+      "a grid of cards, each a title with its status, meta and actions, or full-width cards that collapse to one line once decided",
     files: [block("item-cards")],
     tier: "block",
     upstream: null,

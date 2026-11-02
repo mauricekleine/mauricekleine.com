@@ -14,10 +14,12 @@ import {
   ItemCard,
   ItemCardActions,
   ItemCardId,
+  ItemCardLede,
   ItemCardMedia,
   ItemCardMeta,
   ItemCards,
   ItemCardTitle,
+  ItemCardWhen,
 } from "@/components/superthread/blocks/item-cards";
 import {
   ListRow,
@@ -32,7 +34,7 @@ import { Button } from "@/components/superthread/ui/button";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { StatusGlyph } from "@/components/superthread/ui/glyphs";
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/superthread/ui/table";
-import { client, CONTROL_RING, detailsUsed, elements, forbidden, one, server } from "./rendered.tsx";
+import { client, CONTROL_RING, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
 
 const views = [
   { value: "rows", label: "rows" },
@@ -445,6 +447,181 @@ describe("item cards", () => {
     expect(detailsUsed(rendered, "item-cards")).toEqual([]);
     // Card is a pass item: its upstream classes belong to that item's tests, rather than this composition.
     expect(forbidden(rendered.filter(({ el }) => el.getAttribute("data-slot")?.startsWith("item-card")))).toEqual([]);
+  });
+
+  describe("a full card", () => {
+    const full = (reject = true) =>
+      server(
+        <ItemCards aria-label="drafts">
+          <ItemCard variant="full">
+            <ItemCardTitle href="/drafts/12">reply to sam</ItemCardTitle>
+            <ItemCardWhen clock>before 11:00</ItemCardWhen>
+            <ItemCardLede>first in today&rsquo;s brief.</ItemCardLede>
+            <ItemCardMeta>
+              <span>to sam okafor</span>
+              <span>re: notes</span>
+              <span>notes.pdf</span>
+            </ItemCardMeta>
+            {reject && (
+              <ItemCardActions>
+                <Button variant="outline" size="sm">
+                  reject
+                </Button>
+              </ItemCardActions>
+            )}
+          </ItemCard>
+          <ItemCard variant="full">
+            <ItemCardTitle>a plain card</ItemCardTitle>
+            <ItemCardWhen>since monday</ItemCardWhen>
+          </ItemCard>
+        </ItemCards>,
+      );
+
+    test("takes the whole measure: the list drops to one column and the card prints no small card", () => {
+      const host = full();
+      expect(one(host, "ul").classes).toContain("has-[>[data-variant]]:grid-cols-1");
+      expect(host.querySelector('[data-slot="card"]')).toBeNull();
+      expect(one(host, "li").el.getAttribute("data-variant")).toBe("full");
+      expect(one(host, "li").classes).toEqual(expect.arrayContaining(["relative", "border", "border-border"]));
+    });
+
+    test("its link covers the card's edge and rings outside it, so focus outlines the whole card", () => {
+      const link = one(full(), "a");
+      expect(link.classes).toEqual(
+        expect.arrayContaining([
+          "absolute",
+          "-inset-px",
+          "focus-visible:outline-2",
+          "focus-visible:outline-offset-2",
+          "focus-visible:outline-(--ring)",
+        ]),
+      );
+      expect(link.el.textContent).toBe("reply to sam");
+      expect(link.classes).not.toContain("focus-visible:-outline-offset-2");
+    });
+
+    test("reaching a phone's edges inside the panel, its ring comes back in", () => {
+      const prefix = "[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:";
+      expect(one(full(), "a").classes).toEqual(
+        expect.arrayContaining([`${prefix}inset-0`, `${prefix}focus-visible:-outline-offset-2`]),
+      );
+    });
+
+    test("its title is a heading, level 2 unless it says otherwise", () => {
+      const host = full();
+      const title = one(host, '[data-slot="item-card-title"]').el;
+      expect(title.getAttribute("role")).toBe("heading");
+      expect(title.getAttribute("aria-level")).toBe("2");
+      const nested = server(
+        <ItemCards>
+          <ItemCard variant="full">
+            <ItemCardTitle level={3}>a draft</ItemCardTitle>
+          </ItemCard>
+        </ItemCards>,
+      );
+      expect(one(nested, '[data-slot="item-card-title"]').el.getAttribute("aria-level")).toBe("3");
+    });
+
+    test("an arrow ends a linked card's foot, and an unlinked card prints none", () => {
+      const host = full();
+      expect(host.querySelectorAll('[data-slot="item-card-arrow"]')).toHaveLength(1);
+      expect(one(host, "li").el.querySelector('[data-slot="item-card-arrow"] svg')).not.toBeNull();
+    });
+
+    test("an action sits above the link, outside it, and leaves the arrow its room", () => {
+      const host = full();
+      const actions = one(host, '[data-slot="item-card-actions"]');
+      expect(actions.classes).toEqual(expect.arrayContaining(["relative", "z-10"]));
+      expect(one(host, "a").el.contains(actions.el)).toBe(false);
+      expect(actions.classes).toContain("group-has-[[data-slot=item-card-link]]/item-card:mr-7");
+    });
+
+    test("a clock prints in foreground and an age stays muted", () => {
+      const [clock, age] = [...full().querySelectorAll('[data-slot="item-card-when"]')];
+      expect(clock!.classList.contains("text-foreground")).toBe(true);
+      expect(age!.classList.contains("text-muted-foreground")).toBe(true);
+    });
+
+    test("its meta prints a dot a screen reader skips between pieces, with the first in foreground", () => {
+      const meta = one(full(), '[data-slot="item-card-meta"]').el;
+      const dots = [...meta.querySelectorAll('[aria-hidden="true"]')];
+      expect(dots.map((dot) => dot.textContent!.trim())).toEqual(["·", "·"]);
+      const pieces = [...meta.firstElementChild!.children];
+      expect(pieces).toHaveLength(3);
+      expect(pieces[0]!.classList.contains("first:text-foreground")).toBe(true);
+      expect(pieces[2]!.querySelector('[aria-hidden="true"]')).toBeNull();
+    });
+
+    test("keeps its lede in reading type, whole", () => {
+      const lede = one(full(), '[data-slot="item-card-lede"]');
+      expect(lede.classes).toContain("type-read");
+      expect(lede.classes.filter((cls) => /^(line-clamp-|truncate$)/.test(parts(cls).utility))).toEqual([]);
+    });
+
+    test("claims no detail or forbidden class", () => {
+      const rendered = elements(full());
+      expect(detailsUsed(rendered, "item-cards")).toEqual([]);
+      expect(forbidden(rendered.filter(({ el }) => el.getAttribute("data-slot")?.startsWith("item-card")))).toEqual([]);
+    });
+  });
+
+  describe("a decided card", () => {
+    const decided = () =>
+      server(
+        <ItemCards aria-label="decided drafts">
+          <ItemCard variant="decided">
+            <ItemCardTitle href="/drafts/12">reply to sam</ItemCardTitle>
+            <ItemCardLede>first in today&rsquo;s brief.</ItemCardLede>
+            <ItemCardMeta>sent</ItemCardMeta>
+            <ItemCardWhen>mon 2 nov</ItemCardWhen>
+            <ItemCardActions>
+              <Button variant="outline" size="sm">
+                reject
+              </Button>
+            </ItemCardActions>
+          </ItemCard>
+        </ItemCards>,
+      );
+
+    test("collapses the same parts to one line: its title, its word and its date", () => {
+      const host = decided();
+      expect(one(host, "li").classes).toEqual(expect.arrayContaining(["h-12", "border-b", "last:border-b-0"]));
+      expect(host.querySelector('[data-slot="item-card-lede"]')).toBeNull();
+      expect(host.querySelector('[data-slot="item-card-actions"]')).toBeNull();
+      expect(host.querySelector("button")).toBeNull();
+      expect(host.querySelector('[data-slot="item-card-arrow"]')).toBeNull();
+      expect(one(host, '[data-slot="item-card-meta"]').el.childNodes[0]!.textContent).toBe("sent");
+      expect(one(host, '[data-slot="item-card-when"]').el.textContent).toBe("mon 2 nov");
+    });
+
+    test("a long title stays on its line and the row is no heading", () => {
+      const title = one(decided(), '[data-slot="item-card-title"]');
+      expect(title.classes).toContain("truncate");
+      expect(title.el.hasAttribute("role")).toBe(false);
+    });
+
+    test("the whole row is one link, ringed inside so the panel's edge can't clip it", () => {
+      expect(one(decided(), "a").classes).toEqual(expect.arrayContaining(["absolute", "inset-0", ...insideRing]));
+    });
+
+    test("reaches the panel's edges, so its rules do", () => {
+      const prefix = "in-data-[slot=app-shell-panel]:";
+      const host = decided();
+      expect(one(host, "ul").classes).toContain(`${prefix}has-[>[data-variant=decided]]:-mx-12`);
+      expect(one(host, "li").classes).toContain(`${prefix}px-12`);
+    });
+
+    test("claims no detail or forbidden class", () => {
+      const rendered = elements(decided());
+      expect(detailsUsed(rendered, "item-cards")).toEqual([]);
+      expect(forbidden(rendered.filter(({ el }) => el.getAttribute("data-slot")?.startsWith("item-card")))).toEqual([]);
+    });
+  });
+
+  test("a plain card takes no variant and keeps its surface", () => {
+    const host = cards();
+    expect(one(host, "li").el.hasAttribute("data-variant")).toBe(false);
+    expect(one(host, "li").classes).toEqual(["min-w-0"]);
   });
 });
 

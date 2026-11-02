@@ -86,6 +86,8 @@ import {
   ItemCardMedia,
   ItemCardId,
   ItemCardTitle,
+  ItemCardWhen,
+  ItemCardLede,
   ItemCardMeta,
   ItemCardActions,
 } from "@/components/superthread/blocks/item-cards";
@@ -256,6 +258,29 @@ function Sink({ mode }: { mode: Mode }) {
             <ItemCardTitle>plain draft</ItemCardTitle>
           </ItemCard>
         </ItemCards>
+        <ItemCards aria-label="drafts to review">
+          <ItemCard variant="full">
+            <ItemCardTitle href="#draft">reply to sam</ItemCardTitle>
+            <ItemCardWhen clock>before 11:00</ItemCardWhen>
+            <ItemCardLede>first in today's brief.</ItemCardLede>
+            <ItemCardMeta>
+              <span>to sam</span>
+              <span>re: chapter 7</span>
+            </ItemCardMeta>
+            <ItemCardActions>
+              <Button variant="outline" size="sm">
+                reject
+              </Button>
+            </ItemCardActions>
+          </ItemCard>
+        </ItemCards>
+        <ItemCards aria-label="decided drafts">
+          <ItemCard variant="decided">
+            <ItemCardTitle href="#draft">reply to sam</ItemCardTitle>
+            <ItemCardMeta>sent</ItemCardMeta>
+            <ItemCardWhen>mon 2 nov</ItemCardWhen>
+          </ItemCard>
+        </ItemCards>
       </Part>
       <Part name="data-table">
         <DataTable label="runs" rows="board">
@@ -364,6 +389,7 @@ function Sink({ mode }: { mode: Mode }) {
         </Letter>
       </Part>
       <Part name="notice">
+        <Notice variant="quiet">a newer version is waiting.</Notice>
         <Notice>
           <NoticeTitle>draft kept here</NoticeTitle>
           <NoticeDescription>choose when to save it.</NoticeDescription>
@@ -389,4 +415,3 @@ function Part({ name, children }: { name: string; children: ReactNode }) {
     </div>
   );
 }
-<Notice variant="quiet">a newer version is waiting.</Notice>;
