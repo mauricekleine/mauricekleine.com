@@ -3294,7 +3294,7 @@
     "donts": [
       "**Don't** write a hex value, a `dark:` class or a literal radius in item or app code: the mode and the ink come from the tokens.",
       "**Don't** round a corner. Every radius is 0.",
-      "**Don't** use `outline-none` or `outline-hidden`: in Tailwind 4 both hide the focus ring. The text control inside a field keeps `outline-0`, because its box draws the focus.",
+      "**Don't** use `outline-none` or `outline-hidden`: in Tailwind 4 both hide the focus ring. The text control inside a field keeps `outline-0`, because its box draws the focus, and a control that covers its row keeps it too, because the cover draws the focus.",
       "**Don't** use `transition`, `transition-all` or `transition-colors`, or a duration with no property beside it: each fades the focus ring.",
       "**Don't** use a stock shadow (`shadow-md`, `shadow-lg`) or a backdrop blur.",
       "**Don't** print a screen behind words, numbers, data or code, or give a component a second texture detail.",

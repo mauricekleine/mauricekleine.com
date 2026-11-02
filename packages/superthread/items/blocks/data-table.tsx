@@ -79,7 +79,7 @@ function TableTitle({ className, href, render, ...props }: useRender.ComponentPr
       {
         href,
         className: cn(
-          "min-w-0 text-ui font-medium text-foreground decoration-1 underline-offset-4 in-data-[fold]:font-normal in-data-[receding]:text-muted-foreground [&:is(a)]:hover:underline not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:relative not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:inline-block not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:hit-area in-data-[fold]:[&:is(a)]:after:absolute in-data-[fold]:[&:is(a)]:after:inset-0 in-data-[fold]:[&:is(a)]:after:content-[''] in-data-[fold]:[tr:hover_&:is(a)]:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) in-data-[fold]:[&:is(a)]:focus-visible:outline-none in-data-[fold]:[&:is(a)]:focus-visible:after:outline-2 in-data-[fold]:[&:is(a)]:focus-visible:after:-outline-offset-2 in-data-[fold]:[&:is(a)]:focus-visible:after:outline-(--ring)",
+          "min-w-0 text-ui font-medium text-foreground decoration-1 underline-offset-4 in-data-[fold]:font-normal in-data-[receding]:text-muted-foreground [&:is(a)]:hover:underline not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:relative not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:inline-block not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:hit-area in-data-[fold]:[&:is(a)]:after:absolute in-data-[fold]:[&:is(a)]:after:inset-0 in-data-[fold]:[&:is(a)]:after:content-[''] in-data-[fold]:[tr:hover_&:is(a)]:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) in-data-[fold]:[&:is(a)]:focus-visible:outline-0 in-data-[fold]:[&:is(a)]:focus-visible:after:outline-2 in-data-[fold]:[&:is(a)]:focus-visible:after:-outline-offset-2 in-data-[fold]:[&:is(a)]:focus-visible:after:outline-(--ring)",
           className,
         ),
       },
@@ -159,7 +159,7 @@ function TableDetailTrigger({ className, children, onClick, ...props }: React.Co
         toggle();
       }}
       className={cn(
-        "group/detail block w-full cursor-pointer truncate text-left @max-[776px]/fold:whitespace-normal text-ui text-foreground decoration-1 underline-offset-4 not-in-data-[fold]:font-medium in-data-[receding]:text-muted-foreground after:absolute after:inset-0 after:content-[''] [tr:hover_&]:underline focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-(--ring)",
+        "group/detail block w-full cursor-pointer truncate text-left @max-[776px]/fold:whitespace-normal text-ui text-foreground decoration-1 underline-offset-4 not-in-data-[fold]:font-medium in-data-[receding]:text-muted-foreground after:absolute after:inset-0 after:content-[''] [tr:hover_&]:underline focus-visible:outline-0 focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-(--ring)",
         className,
       )}
     >

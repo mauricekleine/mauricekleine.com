@@ -1068,7 +1068,7 @@ describe("data table", () => {
           "in-data-[fold]:[&:is(a)]:after:absolute",
           "in-data-[fold]:[&:is(a)]:after:inset-0",
           "in-data-[fold]:[tr:hover_&:is(a)]:underline",
-          "in-data-[fold]:[&:is(a)]:focus-visible:outline-none",
+          "in-data-[fold]:[&:is(a)]:focus-visible:outline-0",
           "in-data-[fold]:[&:is(a)]:focus-visible:after:outline-2",
           "in-data-[fold]:[&:is(a)]:focus-visible:after:-outline-offset-2",
         ]),
@@ -1311,6 +1311,20 @@ describe("data table", () => {
         </TableHeader>
         <TableBody>
           <TableEmpty columns={1} />
+          <TableRow>
+            <TableCell>
+              <TableTitle href="/runs/12">a run</TableTitle>
+            </TableCell>
+          </TableRow>
+          <TableDetail open>
+            <TableRow>
+              <TableCell>
+                <TableDetailTrigger>a run</TableDetailTrigger>
+              </TableCell>
+            </TableRow>
+            <TableDetailRow columns={1}>what it did</TableDetailRow>
+          </TableDetail>
+          <TableSubRow columns={1}>a step</TableSubRow>
         </TableBody>
       </DataTable>,
     );

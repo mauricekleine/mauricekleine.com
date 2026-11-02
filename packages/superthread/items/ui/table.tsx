@@ -62,7 +62,7 @@ function Table({
 // Folded, a head leaves the screen and stays with a screen reader, unless it sorts: then the row stands as one line of
 // sort buttons over a foreground rule, so the sort stays in reach.
 const foldedHeader =
-  "@max-[776px]/fold:block @max-[776px]/fold:[&>tr]:flex @max-[776px]/fold:[&>tr]:min-h-0 @max-[776px]/fold:[&>tr]:gap-x-4 @max-[776px]/fold:[&>tr]:border-0 @max-[776px]/fold:[&>tr]:py-0 @max-[776px]/fold:has-data-[slot=sortable-head]:[&>tr]:border-b @max-[776px]/fold:has-data-[slot=sortable-head]:[&>tr]:border-foreground @max-[776px]/fold:has-data-[slot=sortable-head]:[&>tr]:pb-2";
+  "@max-[776px]/fold:block @max-[776px]/fold:[&>tr]:flex @max-[776px]/fold:[&>tr]:min-h-0 @max-[776px]/fold:[&>tr]:gap-x-4 @max-[776px]/fold:[&>tr]:border-0 @max-[776px]/fold:[&>tr]:py-0 @max-[776px]/fold:has-data-[slot=sortable-head]:[&>tr]:border-b @max-[776px]/fold:has-data-[slot=sortable-head]:[&>tr]:border-foreground @max-[776px]/fold:has-data-[slot=sortable-head]:[&>tr]:pb-3";
 
 function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   const fold = React.useContext(Folding);
