@@ -2862,7 +2862,7 @@
       },
       "instrument": {
         "displayName": "instrument",
-        "purpose": "notes, captions, badges, small controls, fact labels, toolbar group labels and table heads"
+        "purpose": "notes, captions, badges, small controls, fact labels, toolbar group labels, table heads and a quiet section head"
       },
       "ui": {
         "displayName": "ui",
@@ -2874,7 +2874,7 @@
       },
       "subtitle": {
         "displayName": "subtitle",
-        "purpose": "dialog titles"
+        "purpose": "dialog titles, and a quiet section head"
       },
       "read": {
         "displayName": "read",

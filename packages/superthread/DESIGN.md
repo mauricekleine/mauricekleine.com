@@ -437,7 +437,7 @@ The faces load from superthread's own host. Unbounded and Fragment Mono load on 
 Each step is a `type-<step>` utility that sets face, size, line, tracking, weight and case together. Steps with a phone value change at 600 px and below.
 
 - **Meta** (Fragment Mono 400, 11/14 px, 0.14em, caps): legends and the group labels inside a select, menu or command list. A label anywhere else sets at the instrument step, so a page prints no stack of caps labels.
-- **Instrument** (Supreme 400, 13/20 px): notes, captions, badges, small controls, fact labels, toolbar group labels and table heads.
+- **Instrument** (Supreme 400, 13/20 px): notes, captions, badges, small controls, fact labels, toolbar group labels, table heads and a quiet section head.
 - **UI** (Supreme 400, 14/21 px): the interface's body; the base layer sets `body` to 14 px at 1.5.
 - **Summary** (Supreme 400, 15/24 px): the text under a form section's title and a page head's meta line.
 - **Subtitle** (Supreme 500, 18/24 px): dialog titles, and a quiet section head.

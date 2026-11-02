@@ -20,7 +20,7 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 | step         | size / line | face                                   | use                         |
 | ------------ | ----------- | -------------------------------------- | --------------------------- |
 | `meta`       | 11 / 14     | Fragment Mono, caps, .14em              | legends and a list's group labels |
-| `instrument` | 13 / 20     | Supreme 400                            | notes, badges, fact and toolbar labels, table heads |
+| `instrument` | 13 / 20     | Supreme 400                            | notes, badges, fact and toolbar labels, table heads, a quiet section head |
 | `ui`         | 14 / 21     | Supreme 400                            | the interface's body        |
 | `summary`    | 15 / 24     | Supreme 400                            | the text under a form title and a page head's meta line |
 | `subtitle`   | 18 / 24     | Supreme 500                            | dialog titles, a quiet section head |
@@ -34,7 +34,7 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 
 The reading page sets Erode at 19 px on 32 px with a 27.5em measure (about 66 characters) on a 672 px sheet.
 
-The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or an `li` reads with its words; `ListRowAside` prints in mono, so a time there holds its column.
+The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or an `li` reads with its words; `ListRowAside` prints in mono, so a time there holds its column, and `PlainRowWhen` holds its column in mono until a phone folds it under the title.
 
 Links print in foreground, 4 px above their underline. A link in running text keeps a 1 px underline at rest, and inside `AppShellPanel` the base layer prints any anchor no item owns that way. A chrome link with no box, such as a row title or a door, underlines on hover. A nav item has a box, so it hovers with its fill. `link-quiet` is the one second form: a muted word that turns foreground on hover.
 
