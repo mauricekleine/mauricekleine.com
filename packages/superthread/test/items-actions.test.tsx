@@ -3,6 +3,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { act } from "react";
 import { renderToString } from "react-dom/server";
 import { catalog } from "@/components/superthread/catalog";
 import { Badge } from "@/components/superthread/ui/badge";
@@ -21,6 +22,7 @@ import {
   TableRow,
 } from "@/components/superthread/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/superthread/ui/tabs";
+import { client } from "./rendered.tsx";
 
 const root = join(import.meta.dir, "..");
 const details: { key: string }[] = JSON.parse(readFileSync(join(root, "tokens/details.json"), "utf8")).DETAILS;
@@ -249,6 +251,77 @@ describe("button", () => {
 
   test("other variants print only their children", () => {
     expect(renderToString(<Button>save</Button>)).not.toContain("<svg");
+  });
+
+  describe("ignoreEnter", () => {
+    const keydown = (el: Element, key: string) => {
+      const event = new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true });
+      el.dispatchEvent(event);
+      return event;
+    };
+
+    // happy-dom never turns a key into a click, so a native button's guard reads the default a browser would act on.
+    test("stops Enter on keydown and leaves Space alone", async () => {
+      const { body, done } = await client(<Button ignoreEnter>send</Button>);
+      try {
+        const button = body.querySelector("button")!;
+        expect(keydown(button, "Enter").defaultPrevented).toBe(true);
+        expect(keydown(button, " ").defaultPrevented).toBe(false);
+      } finally {
+        await done();
+      }
+    });
+
+    test("is opt in: a plain button keeps Enter", async () => {
+      const { body, done } = await client(<Button>save</Button>);
+      try {
+        expect(keydown(body.querySelector("button")!, "Enter").defaultPrevented).toBe(false);
+      } finally {
+        await done();
+      }
+    });
+
+    test("still calls the app's handler, which sees Enter already stopped", async () => {
+      const seen: boolean[] = [];
+      const { body, done } = await client(
+        <Button ignoreEnter onKeyDown={(event) => seen.push(event.defaultPrevented)}>
+          send
+        </Button>,
+      );
+      try {
+        keydown(body.querySelector("button")!, "Enter");
+        expect(seen).toEqual([true]);
+      } finally {
+        await done();
+      }
+    });
+
+    // On a non-native element the click comes from Base UI, so this one reads the click itself.
+    test("stops the click a non-native button fires on Enter", async () => {
+      let guarded = 0;
+      let plain = 0;
+      const { body, done } = await client(
+        <>
+          <Button ignoreEnter nativeButton={false} render={<span />} onClick={() => guarded++}>
+            send
+          </Button>
+          <Button nativeButton={false} render={<span />} onClick={() => plain++}>
+            save
+          </Button>
+        </>,
+      );
+      try {
+        const [send, save] = [...body.querySelectorAll('[data-slot="button"]')];
+        await act(async () => {
+          keydown(send!, "Enter");
+          keydown(save!, "Enter");
+        });
+        expect(guarded).toBe(0);
+        expect(plain).toBe(1);
+      } finally {
+        await done();
+      }
+    });
   });
 
   test("disabled is the faint fill with the disabled label, screened", () => {

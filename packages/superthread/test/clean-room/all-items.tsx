@@ -235,6 +235,9 @@ function Sink({ mode }: { mode: Mode }) {
               size {size}
             </Button>
           ))}
+          <Button variant="key" ignoreEnter>
+            send
+          </Button>
           <Button size="icon" aria-label="add">
             <Icon name="plus" />
           </Button>

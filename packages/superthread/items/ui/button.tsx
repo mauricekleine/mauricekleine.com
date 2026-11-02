@@ -50,14 +50,18 @@ type ButtonSize = NonNullable<VariantProps<typeof buttonVariants>["size"]>;
 const iconSizes: ReadonlySet<ButtonSize> = new Set(["icon", "icon-xs", "icon-sm", "icon-lg"]);
 
 // Destructive prints in the first ink with the trash glyph and the word, so red stays a status colour. An icon button shows
-// one glyph: the trash, unless it is given its own.
+// one glyph: the trash, unless it is given its own. ignoreEnter stops Enter on keydown, before the app's own handler and
+// the click it would fire, so a key held from the last field can't send: Space is the keyboard path. It's for a button
+// that sends. A link keeps Enter, its only keyboard path.
 function Button({
   className,
   variant = "default",
   size = "default",
+  ignoreEnter,
+  onKeyDown,
   children,
   ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants> & { ignoreEnter?: boolean }) {
   const trash = <Icon name="trash" data-icon="inline-start" />;
   let content = children;
   if (variant === "destructive") {
@@ -77,6 +81,14 @@ function Button({
       data-mk="button"
       data-variant={variant}
       className={cn(buttonVariants({ variant, size, className }))}
+      onKeyDown={
+        ignoreEnter
+          ? (event) => {
+              if (event.key === "Enter") event.preventDefault();
+              onKeyDown?.(event);
+            }
+          : onKeyDown
+      }
       {...props}
     >
       {content}

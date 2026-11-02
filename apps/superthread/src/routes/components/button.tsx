@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ButtonSizes, ButtonStates, ButtonVariants } from "@/examples/button";
+import { ButtonEnter, ButtonSizes, ButtonStates, ButtonVariants } from "@/examples/button";
 import { Caption } from "@/site/Caption";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -12,6 +12,7 @@ export const Route = createFileRoute("/components/button")({
       { id: "variants", title: "variants" },
       { id: "states", title: "states" },
       { id: "sizes", title: "sizes" },
+      { id: "enter", title: "enter" },
     ],
   },
   component: Page,
@@ -60,6 +61,16 @@ function Page() {
         </p>
         <ModePair className="st-b-stack">
           <ButtonSizes />
+        </ModePair>
+      </Section>
+
+      <Section id="enter" title="enter">
+        <p className="st-b-copy">
+          a button that sends takes <code>ignoreEnter</code>. enter stops on keydown, so a key held from the last field
+          can&apos;t send, and space is the keyboard path. a link never takes it: enter is the only key a link has.
+        </p>
+        <ModePair className="st-b-stack">
+          <ButtonEnter />
         </ModePair>
       </Section>
     </>
