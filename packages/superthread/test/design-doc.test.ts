@@ -239,7 +239,7 @@ describe(".impeccable/design.json", () => {
     expect(keyCharacteristics).toEqual(bullets("**Key Characteristics:**", "\n## Colors"));
     expect(dos).toEqual(bullets("### Do:", "### Don't:"));
     expect(donts).toEqual(bullets("### Don't:"));
-    for (const rule of rules) expect(body).toContain(`**${rule.name}.** ${rule.body}`);
+    for (const rule of rules) expect(body).toContain(`**${rule.name}.** ${rule.body}\n`);
     expect(rules.length).toBe(body.match(/\*\*The [^*]+ Rule\.\*\*/g)?.length ?? 0);
   });
 });
