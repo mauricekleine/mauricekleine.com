@@ -1101,7 +1101,9 @@ export const tokens = {
     "rows": {
       "board": 56,
       "table": 48,
-      "nav": 32
+      "nav": 32,
+      "plain": 40,
+      "nested": 36
     }
   },
   "radius": "0px",

@@ -226,6 +226,8 @@
   --spacing-row-board: 56px;
   --spacing-row-table: 48px;
   --spacing-row-nav: 32px;
+  --spacing-row-plain: 40px;
+  --spacing-row-nested: 36px;
   --code-ring-offset: -4px;
   color-scheme: light;
 }

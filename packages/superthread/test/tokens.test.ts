@@ -250,6 +250,26 @@ describe("scale.ts", () => {
   });
 });
 
+describe("the fleet's row heights", () => {
+  test("print 40 and 36 px beside the master's rows, in the css, the theme and tokens.json", () => {
+    const tokens = JSON.parse(read("dist/v2/tokens.json"));
+    expect(Object.fromEntries(Object.entries(scale.fleetRows).map(([k, v]) => [k, v.value]))).toEqual({
+      plain: 40,
+      nested: 36,
+    });
+    for (const [name, row] of Object.entries(scale.fleetRows)) {
+      expect(emitted.light[`spacing-row-${name}`]).toBe(`${row.value}px`);
+      expect(css).toContain(`--spacing-row-${name}: var(--spacing-row-${name});`);
+      expect(tokens.space.rows[name]).toBe(row.value);
+    }
+  });
+
+  test("stay out of the vendored master, whose rows the scale cites one by one", () => {
+    const names = Object.keys(scale.fleetRows);
+    expect(names.filter((name) => name in scale.rows || name in master.space.rows)).toEqual([]);
+  });
+});
+
 describe("the fleet's line screens", () => {
   const cells = (ship: string) => {
     const encoded = new RegExp(`--texture-line-${ship}: url\\("data:image/svg\\+xml;base64,([^"]+)"`).exec(css)![1]!;

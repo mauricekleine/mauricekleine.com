@@ -41,7 +41,7 @@ Links print in foreground, 4 px above their underline. A link in running text ke
 ## space and layout
 
 - Space runs on a 4 px base: 4, 8, 12, 16, 24, 32, 48, 64 and 96.
-- Rows: 56 px on the board, 48 px in a table, 32 px for a nav item (`--spacing-row-board`, `-table`, `-nav`).
+- Rows: 56 px on the board, 48 px in a table, 32 px for a nav item (`--spacing-row-board`, `-table`, `-nav`), 40 px for a plain row and 36 px for one nested under a section head (`-plain`, `-nested`).
 - On the stock a section head sits under its full-bleed rule, 64 px below the section before it and 44 px below the rule, with 24 px to its content. In a panel `section-header` leaves 48 px between sections and 16 px between its rule and its content.
 - On a ship surface the working panel is at most 880 px wide and the reading sheet 672 px, both beside the fleet rail and the ship's nav. No ship widens the panel and there is no wide setting, so main content holds its place between pages. The reading page keeps a 264 px margin on the ground for its contents and progress.
 - `AppShellPanel` is a size container, and text in it wraps anywhere, except inside a table's cells.

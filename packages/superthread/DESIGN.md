@@ -308,6 +308,8 @@ spacing:
   row-board: 56px
   row-table: 48px
   row-nav: 32px
+  row-plain: 40px
+  row-nested: 36px
 ---
 
 # Design System: superthread
@@ -461,7 +463,7 @@ The superthread wordmark sets in Unbounded 400 at -0.02em.
 
 ## Layout
 
-Space runs on Tailwind's default 4 px step, used at 4, 8, 12, 16, 24, 32, 48, 64 and 96 px; the frontmatter keys are the Tailwind multipliers (`gap-4` is 16 px). Rows have their own tokens: 56 px on a board (`--spacing-row-board`), 48 px in a table (`--spacing-row-table`) and 32 px for a nav item (`--spacing-row-nav`), each plus its 1 px rule.
+Space runs on Tailwind's default 4 px step, used at 4, 8, 12, 16, 24, 32, 48, 64 and 96 px; the frontmatter keys are the Tailwind multipliers (`gap-4` is 16 px). Rows have their own tokens: 56 px on a board (`--spacing-row-board`), 48 px in a table (`--spacing-row-table`) and 32 px for a nav item (`--spacing-row-nav`), each plus its 1 px rule, and the fleet adds two rows with no rule: 40 px for a plain row (`--spacing-row-plain`) and 36 px for a plain row nested under a section head (`--spacing-row-nested`).
 
 - **Sections.** On the stock a section head sits under its full-bleed rule, 64 px below the section before it and 44 px below the rule, with 24 px to its content. In a panel `section-header` leaves 48 px between sections and 16 px between its rule and its content; panes pad 36 to 48 px.
 - **Docs and public pages** print on the stock, with full-bleed rules, a boxed nav and an aside, and no fleet rail.
