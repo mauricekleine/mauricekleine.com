@@ -369,6 +369,17 @@ describe("a meeting brief's parts", () => {
     expect(classes.join(" ")).not.toMatch(/(^| )-m[xlr]-/);
   });
 
+  test("where the paper hangs, a light page draws its 1 px edge in border inside its box, since white on a white panel can't show its top and left", () => {
+    // An outline set inside the box moves nothing. A dark page's white is its own edge, and a paper outside a panel
+    // hangs into nothing, so neither draws it.
+    const { classes } = one(meeting(), slot("paper"));
+    const edge = `${IN_PANEL}not-dark:`;
+    expect(classes).toEqual(
+      expect.arrayContaining([`${edge}outline`, `${edge}-outline-offset-1`, `${edge}outline-border`]),
+    );
+    expect(classes.filter((cls) => /^-?outline/.test(parts(cls).utility) && !cls.startsWith(edge))).toEqual([]);
+  });
+
   test("the raised line is its muted label over the lede step, held to a 32 em measure", () => {
     const { el, classes } = one(meeting(), slot("reader-raised"));
     expect(el.getAttribute("data-mk")).toBe("reader");

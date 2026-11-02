@@ -20,6 +20,8 @@ import { steps } from "../tokens/scale.ts";
 import { claim, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
 
 const PHONE = "[@media(max-width:600px)]:";
+// Tailwind compiles @max-[328px] to `width < 328px`, read inside the sheet's 16 px phone padding: a sheet under 360 px.
+const NARROW_SHEET = `${PHONE}@max-[328px]/job-sheet:`;
 const step = (name: string) => steps.find((entry) => entry.name === name)!;
 
 function sheet(more?: { changed?: string; why?: boolean }) {
@@ -75,6 +77,15 @@ describe("the paper", () => {
   test("reaches past the panel by its own padding, so the words share the panel's left edge", () => {
     const { classes } = one(sheet(), '[data-slot="paper"]');
     expect(classes).toEqual(expect.arrayContaining(["p-6", "-mx-6", `${PHONE}p-4`, `${PHONE}-mx-4`]));
+  });
+
+  test("on a light page it draws a 1 px edge in border inside its box, since white on a white panel can't show its top and left", () => {
+    // An outline set inside the box moves nothing, and only a light page draws it: a dark page's white is its own edge.
+    const { classes } = one(sheet(), '[data-slot="paper"]');
+    expect(classes).toEqual(
+      expect.arrayContaining(["not-dark:outline", "not-dark:-outline-offset-1", "not-dark:outline-border"]),
+    );
+    expect(classes.filter((cls) => /^-?outline/.test(parts(cls).utility) && !cls.startsWith("not-dark:"))).toEqual([]);
   });
 
   test("answers to its own width, with a guard so the phone band's rows win on a phone", () => {
@@ -190,6 +201,13 @@ describe("the parts", () => {
     expect(one(primary.el, ":not([aria-hidden]).row-start-1").el.textContent).toBe("read the draft");
   });
 
+  test("the primary's words sit in the middle of the reserve's lines, so a short word stays centred and a long one keeps to two lines", () => {
+    // The word and the reserve share one grid cell. Stretched to a reserve on two lines, `done` sat on the first; stretched
+    // to one on three, the clamp let a third line print past the button's fill.
+    const primary = one(sheet(), '[data-slot="job-sheet-primary"]').el;
+    expect(one(primary, ":scope > span").classes).toContain("items-center");
+  });
+
   test("a primary with no reserve prints its word alone", () => {
     const host = server(<JobSheetPrimary>read the draft</JobSheetPrimary>);
     expect(host.querySelector('[aria-hidden="true"]')).toBeNull();
@@ -207,10 +225,10 @@ describe("the parts", () => {
     expect(one(outline, "button").el.getAttribute("data-variant")).toBe("outline");
   });
 
-  test("on a phone the primary takes what the row leaves, and can shrink rather than push the toggle out", () => {
-    expect(one(sheet(), '[data-slot="job-sheet-primary"]').classes).toEqual(
-      expect.arrayContaining([`${PHONE}flex-1`, `${PHONE}min-w-0`, `${PHONE}shrink`]),
-    );
+  test("on a phone the primary takes what the row leaves, and gives a toggle its width down to 84 px", () => {
+    const { classes } = one(sheet(), '[data-slot="job-sheet-primary"]');
+    expect(classes).toEqual(expect.arrayContaining([`${PHONE}flex-1`, `${PHONE}min-w-21`, `${PHONE}shrink`]));
+    expect(classes).not.toContain(`${PHONE}min-w-0`);
   });
 
   test("on a phone the primary's words take two lines inside the button rather than lose the end of the step", () => {
@@ -220,10 +238,23 @@ describe("the parts", () => {
     expect(one(primary, '[aria-hidden="true"]').classes).toContain(`${PHONE}whitespace-normal`);
   });
 
-  test("on a phone the toggle sets its words on two lines at the instrument step", () => {
-    expect(one(sheet(), '[data-slot="job-sheet-toggle"]').classes).toEqual(
-      expect.arrayContaining([`${PHONE}whitespace-normal`, `${PHONE}type-instrument`, `${PHONE}w-25`]),
+  test("on a phone the toggle keeps its words on one line at the instrument step, and wraps only when the row runs out", () => {
+    // No width of its own above a narrow sheet, so its words set on one line while the row holds them; it can shrink,
+    // and wrap, once the primary is at its floor.
+    const { classes } = one(sheet(), '[data-slot="job-sheet-toggle"]');
+    expect(classes).toEqual(
+      expect.arrayContaining([`${PHONE}shrink`, `${PHONE}whitespace-normal`, `${PHONE}type-instrument`]),
     );
+    expect(classes.filter((cls) => /^w-/.test(parts(cls).utility) && !cls.startsWith(NARROW_SHEET))).toEqual([]);
+  });
+
+  test("on a sheet under 360 px the toggle takes a 100 px column of two lines and leaves the primary the rest", () => {
+    // There the toggle's line can't sit beside the primary's floor, and a wrapped toggle would keep its line's width,
+    // which the primary needs.
+    expect(one(sheet(), '[data-slot="job-sheet-toggle"]').classes).toEqual(
+      expect.arrayContaining([`${NARROW_SHEET}w-25`, `${NARROW_SHEET}shrink-0`]),
+    );
+    expect(one(sheet(), '[data-slot="job-sheet-primary"]').classes).toContain(`${NARROW_SHEET}min-w-0`);
   });
 
   test("keeps the system's rules and claims no detail of its own", () => {

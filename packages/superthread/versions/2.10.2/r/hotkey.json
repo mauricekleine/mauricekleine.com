@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hotkey",
+  "title": "hotkey",
+  "description": "whether a bare key press is the page's to answer, away from typing and from layers that keep their keys",
+  "files": [
+    {
+      "path": "items/lib/hotkey.ts",
+      "content": "const EDITABLE =\n  'input, textarea, select, [contenteditable]:not([contenteditable=\"false\"]), [role=\"textbox\"], [role=\"searchbox\"], [role=\"combobox\"]';\n\n// Input types that take no typed text, so a letter pressed on one is free.\nconst KEYLESS_INPUTS = new Set([\n  \"button\",\n  \"checkbox\",\n  \"color\",\n  \"file\",\n  \"hidden\",\n  \"image\",\n  \"radio\",\n  \"range\",\n  \"reset\",\n  \"submit\",\n]);\n\n// A modal holds the page back, and a menu or a list jumps to the item a letter starts, so keys pressed inside one stay\n// there. A native dialog is a modal with no role attribute to read.\nconst KEEPS_ITS_KEYS = 'dialog, [role=\"dialog\"], [role=\"alertdialog\"], [role=\"menu\"], [role=\"listbox\"]';\n\n// A key pressed in an iframe or a window the page opened targets an instance of that window's classes, so these read\n// the node itself and never ask instanceof.\nconst isElement = (target: EventTarget | null): target is Element =>\n  (target as Node | null)?.nodeType === Node.ELEMENT_NODE;\n\nfunction typesText(target: Element) {\n  const field = target.closest(EDITABLE);\n  return field !== null && !(field.localName === \"input\" && KEYLESS_INPUTS.has((field as HTMLInputElement).type));\n}\n\n/**\n * Whether a keydown is the bare key a page answers: that key and no modifier, not held down, not part of a composition,\n * not taken by anything else, and pressed away from editable text and from any layer that keeps its own keys. Letters\n * match in either case, so caps lock changes nothing.\n */\nexport function isPageKey(event: KeyboardEvent, key: string) {\n  if (event.defaultPrevented || event.repeat || event.isComposing) return false;\n  if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return false;\n  // A browser's autofill sends a keydown with no key.\n  if (event.key?.toLowerCase() !== key.toLowerCase()) return false;\n  const target = event.target;\n  return !(isElement(target) && (typesText(target) || target.closest(KEEPS_ITS_KEYS)));\n}\n// @mk/hotkey 2.10.2\n",
+      "type": "registry:lib",
+      "target": "@components/superthread/lib/hotkey.ts"
+    }
+  ],
+  "meta": {
+    "version": "2.10.2",
+    "sha256": "a501349601984399c1e787cfa06c7bacda78c49039af88c111363ff335f3598f",
+    "tier": "lib",
+    "upstream": null
+  },
+  "type": "registry:lib"
+}
