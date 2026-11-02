@@ -179,7 +179,8 @@ export const catalog: CatalogItem[] = [
     name: "glyphs",
     type: "registry:ui",
     title: "glyphs",
-    description: "the pixel icons and status glyphs, drawn as whole-pixel squares in the current colour",
+    description:
+      "the pixel icons and status glyphs, drawn as whole-pixel squares in the current colour, and a state word beside its 8 px square",
     files: [ui("glyphs")],
     tier: "brand",
     upstream: null,
@@ -510,6 +511,15 @@ export const catalog: CatalogItem[] = [
     upstream: null,
   },
   {
+    name: "source-mark",
+    type: "registry:ui",
+    title: "source mark",
+    description: "the 96 px frame a third-party mark prints in, in one ink, with a second frame on hover",
+    files: [ui("source-mark")],
+    tier: "brand",
+    upstream: null,
+  },
+  {
     name: "collapsible",
     type: "registry:ui",
     title: "collapsible",
@@ -670,7 +680,7 @@ export const catalog: CatalogItem[] = [
     type: "registry:block",
     title: "item cards",
     description:
-      "a grid of cards, each a title with its status, meta and actions, or full-width cards that collapse to one line once decided",
+      "a grid of cards, each a title with its status, meta and actions, full-width cards that collapse to one line once decided, or full-bleed tiles in ruled cells",
     files: [block("item-cards")],
     tier: "block",
     upstream: null,

@@ -62,7 +62,7 @@ import {
   DialogTrigger,
 } from "@/components/superthread/ui/dialog";
 import { FleetRail } from "@/components/superthread/ui/fleet-rail";
-import { Icon, type IconName, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
+import { Icon, type IconName, StateWord, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
 import { Input } from "@/components/superthread/ui/input";
 import {
   InputGroup,
@@ -75,6 +75,7 @@ import {
 import { Label } from "@/components/superthread/ui/label";
 import { Door, Onward } from "@/components/superthread/ui/onward";
 import { Paper } from "@/components/superthread/ui/paper";
+import { SourceMark } from "@/components/superthread/ui/source-mark";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import {
   Select,
@@ -230,6 +231,10 @@ function Sink({ mode }: { mode: Mode }) {
           {STATES.map((state) => (
             <StatusGlyph key={state} state={state} aria-label={state} />
           ))}
+        </div>
+        <div className="flex flex-wrap items-center gap-4">
+          <StateWord on>every day at 07:00</StateWord>
+          <StateWord />
         </div>
       </Part>
 
@@ -779,6 +784,9 @@ function Sink({ mode }: { mode: Mode }) {
           </Onward>
           <Door href="#all">see what you finished</Door>
         </div>
+      </Part>
+      <Part name="source-mark">
+        <SourceMark d="M5 5h6v6h-6z" hover="M6 6h4v4h-4z" aria-label="a square mark" />
       </Part>
       <Part name="resizable">
         <div className="h-48 max-w-lg border border-border">
