@@ -31,6 +31,21 @@ for (const window of [globalThis, GlobalWindow.prototype]) {
   Object.defineProperty(window, inspect, { value: () => "[window]" });
 }
 
+/**
+ * An objectContaining matcher holds its sample apart from its properties, and the diff prints it, so the guard keeps each
+ * sample beside its matcher. Bun's other asymmetric matchers print as a name.
+ */
+const samples = new WeakMap<object, unknown>();
+type Factories = { objectContaining: (this: unknown, sample: unknown) => object };
+for (const factories of [expect, Object.getPrototypeOf(expect.not)] as Factories[]) {
+  const { objectContaining } = factories;
+  factories.objectContaining = function (sample) {
+    const matcher = objectContaining.call(this, sample);
+    samples.set(matcher, sample);
+    return matcher;
+  };
+}
+
 function reachesDom(values: unknown[]): boolean {
   const seen = new Set<unknown>();
   for (const value of values) {
@@ -51,7 +66,12 @@ function reachesDom(values: unknown[]): boolean {
         values.push(key, entry);
       }
     } else if (value instanceof Set) {
-      values.push(...value);
+      // One at a time: a spread of 700k entries or more overflows the stack.
+      for (const entry of value) {
+        values.push(entry);
+      }
+    } else if (samples.has(value)) {
+      values.push(samples.get(value));
     }
   }
   return false;
