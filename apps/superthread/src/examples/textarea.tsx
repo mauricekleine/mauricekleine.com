@@ -37,6 +37,33 @@ export function TextareaExample() {
   );
 }
 
+const config = `{
+  "schedule": "every day at 07:00",
+  "notify": ["mail", "phone"],
+  "retries": 2
+}`;
+
+// A settings file and a key, the two things the code form is for. The key runs past its box and wraps anywhere.
+export function TextareaCode() {
+  const file = useId();
+  const key = useId();
+  return (
+    <div className="st-a-grid">
+      <Field id={file} label="settings" hint="json, as the app reads it">
+        <Textarea id={file} kind="code" defaultValue={config} aria-describedby={noteId(file)} />
+      </Field>
+      <Field id={key} label="public key" hint="paste it whole">
+        <Textarea
+          id={key}
+          kind="code"
+          defaultValue="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIExampleOnlyExampleOnlyExampleOnlyExampleOnly0000 reader@example.com"
+          aria-describedby={noteId(key)}
+        />
+      </Field>
+    </div>
+  );
+}
+
 // The states, printed through data-demo, which the site's variants read as the real state; a typing state adds the
 // printed caret, and disabled is the real disabled box. An invalid state carries aria-invalid, which draws the error
 // ink, and its label ends in "invalid", so a screen reader hears it too.

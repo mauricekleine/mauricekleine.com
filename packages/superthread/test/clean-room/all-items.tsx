@@ -310,6 +310,7 @@ function Sink({ mode }: { mode: Mode }) {
         <div className="grid max-w-md gap-3">
           <Textarea placeholder="what changed" />
           <Textarea defaultValue="too short" aria-invalid />
+          <Textarea kind="code" aria-label="a settings file" defaultValue="{}" />
         </div>
       </Part>
 

@@ -239,6 +239,40 @@ describe("textarea", () => {
     expect(claim("textarea")).toEqual(["texture-disabled"]);
     expect(forbidden(rendered)).toEqual([]);
   });
+
+  describe("the code form", () => {
+    const code = (props: ComponentProps<typeof Textarea> = {}) =>
+      one(server(<Textarea kind="code" {...props} />), "textarea");
+
+    test("sets json and keys in mono at the instrument step, and breaks a long key anywhere", () => {
+      const { classes } = code();
+      expect(classes).toEqual(expect.arrayContaining(["font-mono", "text-instrument", "[overflow-wrap:anywhere]"]));
+      expect(classes).not.toContain("text-ui");
+    });
+
+    test("a phone keeps its hands off the text, so a key stays what was typed", () => {
+      const { el } = code();
+      expect(el.getAttribute("spellcheck")).toBe("false");
+      expect(el.getAttribute("autocapitalize")).toBe("off");
+      expect(el.getAttribute("autocomplete")).toBe("off");
+      expect(el.getAttribute("autocorrect")).toBe("off");
+    });
+
+    test("a caller's own attribute wins", () => {
+      expect(code({ autoComplete: "new-password" }).el.getAttribute("autocomplete")).toBe("new-password");
+    });
+
+    test("keeps the focus edge and the error ink of the plain box", () => {
+      const { classes } = code({ "aria-invalid": true });
+      expect(classes).toEqual(expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", "aria-invalid:border-error"]));
+    });
+
+    test("the plain box takes none of it", () => {
+      const { el, classes } = one(states[0]!, "textarea");
+      expect(el.getAttribute("spellcheck")).toBeNull();
+      expect(classes).not.toContain("font-mono");
+    });
+  });
 });
 
 describe("select", () => {
