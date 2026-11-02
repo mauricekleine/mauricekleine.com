@@ -235,11 +235,11 @@ describe("list rows", () => {
     expect(one(host, "a").classes).toEqual(expect.arrayContaining(CONTROL_RING));
   });
 
-  test("hangs from a section header's rule, so the two rules never print 16 px apart", () => {
+  test("hangs from a ruled section header, and keeps its own rule under a quiet head, which prints none", () => {
     const { classes } = one(list(), "ul");
-    expect(classes).toEqual(
-      expect.arrayContaining(["[[data-slot=section-header]+&]:border-t-0", "[[data-slot=section-header]+&]:-mt-4"]),
-    );
+    const ruledHead = "[[data-slot=section-header]:not([data-quiet])+&]";
+    expect(classes).toEqual(expect.arrayContaining([`${ruledHead}:border-t-0`, `${ruledHead}:-mt-4`]));
+    expect(classes.filter((c) => c.includes("section-header") && !c.startsWith(ruledHead))).toEqual([]);
   });
 
   test("a receding row prints muted and takes no strike, and a closed one keeps its strike", () => {

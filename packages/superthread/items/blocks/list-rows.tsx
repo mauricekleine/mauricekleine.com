@@ -4,14 +4,15 @@ import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@/components/superthread/lib/utils";
 
 // A collection of ruled rows. The list owns the first rule and every row owns the one below it. Straight under a section
-// header the rows hang from the header's rule, so the two never print 16 px apart.
+// header the rows hang from the header's rule, so the two never print 16 px apart. A quiet head has no rule to hang
+// from, so the list keeps its own.
 function ListRows({ className, ...props }: React.ComponentProps<"ul">) {
   return (
     <ul
       data-mk="list-rows"
       data-slot="list-rows"
       className={cn(
-        "min-w-0 list-none border-t border-border has-[>[data-variant=day]]:border-t-0 [[data-slot=section-header]+&]:-mt-4 [[data-slot=section-header]+&]:border-t-0",
+        "min-w-0 list-none border-t border-border has-[>[data-variant=day]]:border-t-0 [[data-slot=section-header]:not([data-quiet])+&]:-mt-4 [[data-slot=section-header]:not([data-quiet])+&]:border-t-0",
         className,
       )}
       {...props}
