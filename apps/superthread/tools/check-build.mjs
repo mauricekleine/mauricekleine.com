@@ -267,8 +267,11 @@ else {
 
 // 7. the deploy stamp is the commit built
 const stamp = join(out, "api/deploy.json");
-const head =
-  process.env.WORKERS_CI_COMMIT_SHA || execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+// A Workers Builds run without a commit (a deploy hook or a manual build) sets the branch name here.
+const builds = process.env.WORKERS_CI_COMMIT_SHA ?? "";
+const head = /^[0-9a-f]{40}$/.test(builds)
+  ? builds
+  : execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 if (!existsSync(stamp)) fail("deploy stamp", "api/deploy.json is missing");
 else if (JSON.parse(readFileSync(stamp, "utf8")).sha !== head) fail("deploy stamp", `api/deploy.json is not ${head}`);
 else done("deploy stamp", head.slice(0, 12));
