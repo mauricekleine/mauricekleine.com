@@ -20,6 +20,8 @@ import { steps } from "../tokens/scale.ts";
 import { claim, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
 
 const PHONE = "[@media(max-width:600px)]:";
+// Tailwind compiles @max-[328px] to `width < 328px`, read inside the sheet's 16 px phone padding: a sheet under 360 px.
+const NARROW_SHEET = `${PHONE}@max-[328px]/job-sheet:`;
 const step = (name: string) => steps.find((entry) => entry.name === name)!;
 
 function sheet(more?: { changed?: string; why?: boolean }) {
@@ -230,13 +232,22 @@ describe("the parts", () => {
   });
 
   test("on a phone the toggle keeps its words on one line at the instrument step, and wraps only when the row runs out", () => {
-    // No width of its own, so its words set on one line while the row holds them; it can shrink, and wrap, once the
-    // primary is at its floor.
+    // No width of its own above a narrow sheet, so its words set on one line while the row holds them; it can shrink,
+    // and wrap, once the primary is at its floor.
     const { classes } = one(sheet(), '[data-slot="job-sheet-toggle"]');
     expect(classes).toEqual(
       expect.arrayContaining([`${PHONE}shrink`, `${PHONE}whitespace-normal`, `${PHONE}type-instrument`]),
     );
-    expect(classes.filter((cls) => /^w-/.test(parts(cls).utility))).toEqual([]);
+    expect(classes.filter((cls) => /^w-/.test(parts(cls).utility) && !cls.startsWith(NARROW_SHEET))).toEqual([]);
+  });
+
+  test("on a sheet under 360 px the toggle takes a 100 px column of two lines and leaves the primary the rest", () => {
+    // There the toggle's line can't sit beside the primary's floor, and a wrapped toggle would keep its line's width,
+    // which the primary needs.
+    expect(one(sheet(), '[data-slot="job-sheet-toggle"]').classes).toEqual(
+      expect.arrayContaining([`${NARROW_SHEET}w-25`, `${NARROW_SHEET}shrink-0`]),
+    );
+    expect(one(sheet(), '[data-slot="job-sheet-primary"]').classes).toContain(`${NARROW_SHEET}min-w-0`);
   });
 
   test("keeps the system's rules and claims no detail of its own", () => {
