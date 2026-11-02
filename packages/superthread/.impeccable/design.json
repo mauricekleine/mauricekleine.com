@@ -3324,7 +3324,7 @@
     "dos": [
       "**Do** name roles and utilities, never values: `bg-primary`, `text-muted-foreground`, `border-input`, `type-<step>`, `shadow-<lift>`, `texture-<detail>`. The `.dark` class on `<html>` sets the mode.",
       "**Do** print every status with its glyph square and its word, through `Badge`'s status variants, `StatusGlyph` or `ToastIcon`. A log's result is a word alone.",
-      "**Do** keep focus visible on everything focusable: the 2 px ring at 2 px for a control, plum in the panel, neutral in the ship's nav and first ink in a key block, the 2 px inside edge in `--fx` for a field.",
+      "**Do** keep focus visible on everything focusable: the 2 px ring at 2 px for a control, flush to the sides of a link in running text, plum in the panel, neutral in the ship's nav and first ink in a key block, the 2 px inside edge in `--fx` for a field.",
       "**Do** lift a raised layer by its size, `shadow-leaf` for lists and toasts and `shadow-sheet` for dialogs and panels, and on the stock add `texture-contact` with its `--elevation-<lift>-rake`.",
       "**Do** transition named properties at a brand duration on `--ease-brand`, for example `transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand)`.",
       "**Do** run horizontal rules to both window edges.",

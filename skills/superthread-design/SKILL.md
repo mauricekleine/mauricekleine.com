@@ -35,7 +35,7 @@ The thesis is flat where you read, screened where you look. Each rule below foll
 - **Third-party marks.** A mark that belongs to someone else prints in one ink through `@mk/source-mark`, never in its owner's colours and never a spot. A ship prints a real mark only where it names one, and the drawings stay in the ship. Detail: [marks](references/marks.md).
 - **Four faces, one job each.** Unbounded for display, Supreme for the interface, Erode for reading, Fragment Mono for ids, times, figures that hold a column, code and caps legends. Chrome is lowercase. Detail: [type and layout](references/type-and-layout.md).
 - **Square and ruled.** Radius 0, 1 px edges, and horizontal rules that reach both edges of the window.
-- **Focus.** A control takes a 2 px plum ring at a 2 px offset. A field's box draws a 2 px edge inside itself. Every focusable element shows one of the two.
+- **Focus.** A control takes a 2 px plum ring at a 2 px offset, flush to the sides of a link in running text so it clears the words beside it. A field's box draws a 2 px edge inside itself. Every focusable element shows one of the two.
 - **Screens.** 1-bit texture prints in five places and as at most one small detail per component, always beside words, numbers, data and code. Everything else stays flat, with no grain, noise or glow, and no screen moves. Detail: [texture](references/texture.md).
 - **Motion.** Three durations (120, 180 and 240 ms) share one ease, `--ease-brand`. Reduced motion makes every duration zero.
 - **Two surfaces.** Docs and public pages print on stock. A ship surface prints on the deep ground: the fleet rail and the ship's nav flat on it, the working panel raised on it.

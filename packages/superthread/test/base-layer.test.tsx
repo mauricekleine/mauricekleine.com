@@ -85,6 +85,32 @@ describe("the focus ring", () => {
     '<main tabindex="-1"></main>',
     "<div></div>",
   ])("leaves %s to its own edge, or has nothing to ring", (html) => expect(reaches(html)).toBe(false));
+
+  // the cascade's answer on focus: every ring rule that reaches the element, later rules over earlier ones
+  const focused = (el: Element) =>
+    Object.fromEntries(
+      base.rules
+        .filter((rule) => rule.sel.endsWith(":focus-visible") && el.matches(rule.sel.replace(/:focus-visible$/, "")))
+        .flatMap((rule) => rule.decls),
+    );
+
+  test("rings a link in running text flush to its sides, so the word space keeps the ring off the words beside it", () => {
+    const link = one(fragment('<p>mail needs a sign-in. <a href="/sources">see sources</a></p>'), "a").el;
+    expect(focused(link)).toEqual({
+      outline: "2px solid var(--ring)",
+      "outline-offset": "0",
+      // 2 px above and below the words, as every ring sits; the margin gives the padding back, so the line never moves
+      "padding-block": "2px",
+      "margin-block": "-2px",
+    });
+  });
+
+  test.each([
+    ["a link on its own", '<nav><a href="/runs">all runs</a></nav>'],
+    ["an item's link in a sentence", '<p>open <a data-slot="button" href="/runs">all runs</a></p>'],
+  ])("keeps %s 2 px out", (_, html) => {
+    expect(focused(one(fragment(html), "a").el)).toEqual({ outline: "2px solid var(--ring)", "outline-offset": "2px" });
+  });
 });
 
 describe("the faces", () => {

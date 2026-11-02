@@ -59,6 +59,15 @@
     outline-offset: 2px;
   }
 
+  /* a link in running text has a word space on each side, narrower than a ring at 2 px out, so its ring sits flush to
+     the link's sides and the space keeps it off the words beside it. its padding keeps the ring 2 px above and below
+     the words, and the margin cancels it, so the line never moves */
+  p a:not([data-slot]):focus-visible {
+    outline-offset: 0;
+    padding-block: 2px;
+    margin-block: -2px;
+  }
+
   /* figures and code that hold a column set in mono; a time in running text or a row's line reads with its words */
   code,
   time {

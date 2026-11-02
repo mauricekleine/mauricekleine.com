@@ -191,7 +191,8 @@ function Page() {
         <Copy>
           a link in running text prints in foreground with a 1 px underline at rest. in a working panel the base layer
           does this for any anchor no item owns. <code>link-quiet</code> is the one second form: a muted word that turns
-          foreground on hover, for a way onward beside a head or a row.
+          foreground on hover, for a way onward beside a head or a row. a link in a paragraph rings flush to its sides,
+          so the word space beside it keeps the ring off the words around it. the last line prints keyboard focus.
         </Copy>
         <ModePair>
           <AppShellPanel className="grid justify-items-start gap-3">
@@ -201,6 +202,12 @@ function Page() {
             <a className="type-instrument link-quiet" href="#links">
               all runs
             </a>
+            <p className="type-instrument text-muted-foreground">
+              mail needs a sign-in.{" "}
+              <a href="#links" data-demo="focus-visible" tabIndex={-1}>
+                see sources
+              </a>
+            </p>
           </AppShellPanel>
         </ModePair>
       </Section>
