@@ -58,6 +58,15 @@ import {
   LetterActions,
   LetterSource,
 } from "@/components/superthread/blocks/letter";
+import {
+  DayLine,
+  DayLineAllDay,
+  DayLineDate,
+  DayLineHead,
+  DayLineNote,
+  DayLineSteps,
+  DayLineStrip,
+} from "@/components/superthread/blocks/day-line";
 import { Notice, NoticeTitle, NoticeDescription, NoticeActions } from "@/components/superthread/blocks/notice";
 import {
   SendBar,
@@ -77,6 +86,7 @@ import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { Input } from "@/components/superthread/ui/input";
 import { cn } from "@/components/superthread/lib/utils";
 import { Button } from "@/components/superthread/ui/button";
+import { Onward } from "@/components/superthread/ui/onward";
 import {
   CollectionToolbar,
   ToolbarGroup,
@@ -443,6 +453,42 @@ function Sink({ mode }: { mode: Mode }) {
             <SendBarButton variant="outline">retry</SendBarButton>
           </SendBarActions>
         </SendBar>
+      </Part>
+      <Part name="day-line">
+        <DayLine>
+          <DayLineHead>
+            <DayLineDate href="#day">tue 3 nov</DayLineDate>
+            <DayLineNote>personal calendar isn&rsquo;t answering</DayLineNote>
+            <DayLineAllDay>anna out of office</DayLineAllDay>
+            <DayLineSteps>
+              <Onward href="#tomorrow">wed 4 nov</Onward>
+            </DayLineSteps>
+          </DayLineHead>
+          <DayLineStrip
+            aria-label="tuesday's meetings"
+            asOf="as of 08:10"
+            day="2026-11-03"
+            events={[
+              {
+                id: "standup",
+                title: "team standup",
+                start: "2026-11-03T09:30:00Z",
+                end: "2026-11-03T10:00:00Z",
+                href: "#standup",
+              },
+              {
+                id: "renewal",
+                title: "renewal call",
+                start: "2026-11-03T11:00:00Z",
+                end: "2026-11-03T11:45:00Z",
+                brief: true,
+                selected: true,
+              },
+            ]}
+            now="2026-11-03T08:42:00Z"
+            timeZone="UTC"
+          />
+        </DayLine>
       </Part>
       <Part name="notice">
         <Notice variant="quiet">a newer version is waiting.</Notice>

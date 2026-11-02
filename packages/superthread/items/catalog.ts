@@ -725,6 +725,17 @@ export const catalog: CatalogItem[] = [
     serves: ["orbit", "artifacts"],
   },
   {
+    name: "day-line",
+    type: "registry:block",
+    title: "day line",
+    description:
+      "a day at true scale: the date, names over blocks, ticks and a now mark, with every state a calendar has",
+    files: [block("day-line")],
+    tier: "block",
+    upstream: null,
+    serves: ["constellation", "trisys", "orbit"],
+  },
+  {
     name: "notice",
     type: "registry:block",
     title: "notice",

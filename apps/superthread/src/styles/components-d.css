@@ -52,6 +52,12 @@
     min-width: 0;
   }
 
+  /* day line: the no-events strips stacked */
+  .st-day-line-stack {
+    display: grid;
+    gap: 24px;
+  }
+
   /* card: the footer's facts in the instrument step */
   .st-pass-note {
     color: var(--muted-foreground);
