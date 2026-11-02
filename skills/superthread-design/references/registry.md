@@ -87,7 +87,8 @@ Nested dependencies resolve through the same mapping, so every item comes from t
 
 - Every installed file names its item and version: `// @mk/<item> <version>` after the imports in TS and TSX, `/* @mk/<item> <version> */` on line 1 in CSS.
 - A fleet ship takes a release with `mk apps sync <app> --pr`, or `--superthread <version>` for a release the template sits out.
-- `bunx --bun shadcn@latest add @mk/<item> --diff` shows how the installed file differs from the registry; `--overwrite` takes the registry's version.
+- `bunx --bun shadcn@latest add @mk/<item> --overwrite --yes` takes the registry's version.
+- To prove an app's items match the registry, copy the app, run `bunx --bun shadcn@latest add <items> --overwrite --yes` in the copy, then `diff -r` the copy against the app. `add --diff` is a preview, not that proof: it prints at most five of the files an add resolves, dependencies first, and exits 0 whether or not a file differs, so a change past the fifth file never shows.
 - Installed files stay as the registry writes them. A fix goes into `packages/superthread/items/` in the mauricekleine.com repo, and any change to a served item after its version is published ships as the next version: a patch for a fix, a minor for a new item or variant.
 - A ship never restyles an item from outside: no `[data-slot]` rule and no look class at a call site. Margins, widths and grid placement stay composition.
 

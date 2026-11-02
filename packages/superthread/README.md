@@ -146,7 +146,7 @@ When the master world moves, run `vendor` against it, then regenerate. The tests
 
 1. add `@mk/tokens @mk/button` and build: the files, the `@import` lines, the stamps, `data-mk` in the prerendered page and the v2 tokens in the CSS
 2. `search @mk` lists every item
-3. the same add again changes no file, and `add --diff` reports nothing, then a real change
+3. the same add again changes no file, by a byte comparison of the whole app, and `add --diff` on the one-file `button` reports nothing, then a real change. `--diff` alone proves nothing for a bigger item: it prints at most five of the files an add resolves, dependencies first, and exits 0 whether or not a file differs. The proof that an app matches the registry is a real `add <items> --overwrite --yes` in a copy, then `diff -r` against the app
 4. add every item and build a page that renders each brand item in light and dark
 5. `apply nova` and `init --reinstall --preset nova` leave every installed file unchanged
 6. init on a fresh app, in the recorded form
