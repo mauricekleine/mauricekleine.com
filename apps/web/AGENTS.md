@@ -15,7 +15,7 @@ bun run test
 bun run deploy
 ```
 
-Deploys run by hand from the M5 in the Superthread account: `bun install && bun run build`, then `bun run deploy`. `apps/web/cloudflare.config.ts` configures the Worker; the Vite plugin loads it through `experimental.newConfig` and writes cf's build output to `apps/web/.cloudflare/output/v0/`, which `cf deploy --prebuilt` uploads. The Worker keeps the name `mauricekleine-com`, its four custom domains, and its existing compatibility date. `nodejs_compat` is required by TanStack Start's Node stream and async hooks imports.
+Workers Builds deploys the Worker in the Superthread account after every merge to `main`: `bun install --frozen-lockfile && bun run build`, then `bun run deploy`. `apps/web/cloudflare.config.ts` configures the Worker; the Vite plugin loads it through `experimental.newConfig` and writes cf's build output to `apps/web/.cloudflare/output/v0/`, which `cf deploy --prebuilt` uploads. The Worker keeps the name `mauricekleine-com`, its four custom domains, and its existing compatibility date. `nodejs_compat` is required by TanStack Start's Node stream and async hooks imports.
 
 ## Pages and assets
 
