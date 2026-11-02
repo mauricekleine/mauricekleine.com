@@ -248,6 +248,25 @@ describe("list rows", () => {
       expect(dots(meta(<span>orbit</span>))).toEqual([]);
     });
 
+    test("lead the piece after them, in a slot the row clips, so a wrap leaves none hanging", () => {
+      const line = meta(
+        <>
+          <span>orbit</span>
+          <span>queued</span>
+        </>,
+      );
+      const [first, second] = line.querySelectorAll('[data-slot="list-row-meta-piece"]');
+      expect(first!.querySelector('[data-slot="list-row-meta-dot"]')).toBeNull();
+      expect(second!.firstElementChild).toBe(dots(line)[0]!);
+      expect(line.classList.contains("overflow-x-clip")).toBe(true);
+    });
+
+    test("hold the clip past a focus ring, with padding its margin pulls back", () => {
+      const { classList } = meta(<span>orbit</span>);
+      expect(classList.contains("px-1")).toBe(true);
+      expect(classList.contains("-mx-1")).toBe(true);
+    });
+
     test("read through fragments and skip an empty piece, so a row can map its pieces", () => {
       const line = meta(
         <>
