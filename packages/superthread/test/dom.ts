@@ -89,10 +89,15 @@ expect.extend({
 });
 
 /**
- * The diff behind these matchers ignores the hook and reads every property by every path, so on a value that reaches
- * the DOM it grows until the machine stops it: 1.7 GB for one rendered button. They refuse that value up front. Bun's
- * aliases, such as toBeCalledWith, are matchers of their own, so the list names them too. The ReturnedWith matchers
- * print through the hook, so the list leaves them out.
+ * The diff behind these matchers, as of Bun 1.4.4, ignores the hook and reads every property by every path, so on a
+ * value that reaches the DOM it grows until the machine stops it: 1.7 GB for one rendered button. They refuse that value
+ * up front. Bun's aliases, such as toBeCalledWith, are matchers of their own, so the list names them too. The
+ * ReturnedWith matchers print through the hook, so the list leaves them out.
+ *
+ * The refusal lasts until Bun's diff prints a node through the hook. To check a newer Bun, empty this list and run
+ * `CI=true bun test test/dom.test.tsx` under a memory cap, so a failing snapshot prints instead of writing; the run
+ * still leaves a header-only `test/__snapshots__/dom.test.tsx.snap`, which goes with it. Once its "every matcher Bun
+ * ships" tests pass, delete the list, its loop, reachesDom, the objectContaining samples and the refusal tests.
  */
 const diffMatchers = [
   "lastCalledWith",
