@@ -31,7 +31,7 @@ function Page() {
         <p className="st-pass-prose">
           the ladder runs hero, headline, section, long, and the title prints at the first step that holds all of it in
           the box. hero needs a full panel&rsquo;s 784 px, so anything narrower starts at headline and a phone never
-          prints hero.
+          prints hero. clear&rsquo;s claim runs the same way one step up: display at a full panel, hero below it.
         </p>
         <ModePair className="st-cb-stack">
           <FitTitleByWords />

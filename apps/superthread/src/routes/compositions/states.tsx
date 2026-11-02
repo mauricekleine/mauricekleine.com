@@ -177,8 +177,8 @@ function Page() {
           }
         />
         <p className="st-ca-copy">
-          the sentence prints as large as its rows hold it, from display down, and a smaller step only when the words
-          need one. its lines fill from the first. on a phone the panel ends at the door.
+          the sentence prints as large as its rows hold it: display at a full panel, hero below it, and a smaller step
+          only when the words need one. its lines fill from the first. on a phone the panel ends at the door.
         </p>
         <ModePair
           light={

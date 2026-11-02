@@ -293,8 +293,9 @@ describe("clear", () => {
     const title = one(clear(), "h1");
     expect(title.el.textContent).toBe("nothing needs you until 16:30.");
     expect(title.el.getAttribute("data-mk")).toBe("fit-title");
-    expect(title.el.getAttribute("data-step")).toBe("display");
-    expect(title.classes).toEqual(expect.arrayContaining(["type-display", "text-first", "text-wrap"]));
+    // A server can't measure, so it prints hero, the first step that holds at every width; the browser fits up to display.
+    expect(title.el.getAttribute("data-step")).toBe("hero");
+    expect(title.classes).toEqual(expect.arrayContaining(["type-hero", "text-first", "text-wrap"]));
     expect(title.classes).not.toContain("text-balance");
     expect(one(clear(<h2 />), "h2").el.getAttribute("data-slot")).toBe("fit-title");
   });

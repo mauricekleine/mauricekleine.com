@@ -31,8 +31,8 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 | `section`    | 30 / 34     | Unbounded 300, -0.03em                 | a page head's title in a panel, a section head on the stock |
 | `page`       | 34 / 40     | Erode 600 (phone 28 / 34)              | a reading sheet's heading   |
 | `headline`   | 40 / 44     | Unbounded 300, -0.03em                 | `fit-title`'s step for a title too long for hero, and its first step under a full panel's 784 px measure |
-| `hero`       | 64 / 68     | Unbounded 300 (phone 52 / 56)          | a page head's title on the stock, or at `size="page"`, and `fit-title`'s first step at a full panel's measure |
-| `display`    | 76 / 80     | Unbounded 300                          | the overview wordmark       |
+| `hero`       | 64 / 68     | Unbounded 300 (phone 52 / 56)          | a page head's title on the stock, or at `size="page"`, `fit-title`'s first step at a full panel's measure, and clear's claim below one |
+| `display`    | 76 / 80     | Unbounded 300                          | the overview wordmark, and clear's claim at a full panel's measure |
 
 The reading page sets Erode at 19 px on 32 px with a 27.5em measure (about 66 characters) on a 672 px sheet.
 

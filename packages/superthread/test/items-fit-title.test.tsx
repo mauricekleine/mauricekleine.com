@@ -165,6 +165,26 @@ describe("the ladder", () => {
     expect(one(full.body, '[data-width="784"]').el.getAttribute("data-step")).toBe("hero");
   });
 
+  test("display needs a full panel's measure too, so a ladder from display starts at hero below it", async () => {
+    const CLAIM = ["display", "hero", "headline", "section", "long"] as const;
+    box = { width: 783, height: 600 };
+    const narrow = await mount(
+      <FitTitle data-width="783" steps={CLAIM}>
+        all clear.
+      </FitTitle>,
+    );
+    expect(one(narrow.body, '[data-width="783"]').el.getAttribute("data-step")).toBe("hero");
+    box = { width: 784, height: 600 };
+    const full = await mount(
+      <FitTitle data-width="784" steps={CLAIM}>
+        all clear.
+      </FitTitle>,
+    );
+    expect(one(full.body, '[data-width="784"]').el.getAttribute("data-step")).toBe("display");
+    const printed = one(server(<FitTitle steps={CLAIM}>all clear.</FitTitle>), '[data-slot="fit-title"]');
+    expect(printed.el.getAttribute("data-step")).toBe("hero");
+  });
+
   test("a ladder of one step keeps it at any width", async () => {
     box = { width: 300, height: 600 };
     const { step } = await mount(<FitTitle steps={["display"]}>all clear.</FitTitle>);

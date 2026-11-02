@@ -132,9 +132,9 @@ function ClearState({ className, children, ...props }: React.ComponentProps<"sec
   );
 }
 
-// The claim fits its rows by measurement, as large as it holds from display down, and a smaller step only when the
-// sentence needs one, so it never runs into the reason. Its lines fill from the first, so the sentence reads in one piece.
-// It's the page's h1 until render says otherwise.
+// The claim fits its rows by measurement, as large as it holds: display at a full panel, hero below it, which prints 52/56
+// on a phone, and a smaller step only when the sentence needs one, so it never runs into the reason. Its lines fill from
+// the first, so the sentence reads in one piece. It's the page's h1 until render says otherwise.
 const CLAIM: readonly FitTitleStep[] = ["display", "hero", "headline", "section", "long"];
 
 function ClearStateTitle({ className, ...props }: Omit<React.ComponentProps<typeof FitTitle>, "steps">) {

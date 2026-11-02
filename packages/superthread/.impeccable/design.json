@@ -2918,7 +2918,7 @@
       },
       "hero": {
         "displayName": "hero",
-        "purpose": "a page head's title on the stock, or at size=\"page\", and fit-title's first step at a full panel's measure"
+        "purpose": "a page head's title on the stock, or at size=\"page\", fit-title's first step at a full panel's measure, and clear's claim below one"
       },
       "hero-phone": {
         "displayName": "hero on a phone",
@@ -2926,7 +2926,7 @@
       },
       "display": {
         "displayName": "display",
-        "purpose": "the overview's wordmark line"
+        "purpose": "the overview's wordmark line, and clear's claim at a full panel's measure"
       },
       "wordmark": {
         "displayName": "wordmark",

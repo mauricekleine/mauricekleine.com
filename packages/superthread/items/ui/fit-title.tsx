@@ -15,10 +15,11 @@ export type FitTitleStep = keyof typeof STEPS;
 // A long title loses less at a smaller step than it does to a cut, so the ladder runs down to long at every width.
 const LADDER: readonly FitTitleStep[] = ["hero", "headline", "section", "long"];
 
-// A full working panel's measure: 880 px less its two 48 px sides. A ladder's top step needs it when that step is hero,
-// so a narrower box starts one step down at headline, where type-hero's phone step never prints.
+// A full working panel's measure: 880 px less its two 48 px sides. A ladder's top step needs it when that step is hero or
+// display, so a narrower box starts one step down: a title at headline, where type-hero's phone step never prints, and a
+// ladder that starts at display at hero.
 const FULL_MEASURE = 784;
-const FULL_ONLY: readonly FitTitleStep[] = ["hero"];
+const FULL_ONLY: readonly FitTitleStep[] = ["display", "hero"];
 
 // The steps a box this wide may print. A ladder of one step keeps it at any width.
 function sized(steps: readonly FitTitleStep[], width: number) {
@@ -91,7 +92,7 @@ function measure(box: HTMLElement, title: string, steps: readonly FitTitleStep[]
 
 type FitTitleProps = Omit<useRender.ComponentProps<"h1">, "children"> & {
   children: string;
-  /** The steps it may print, largest first. A top step of hero prints only at a full panel's measure. */
+  /** The steps it may print, largest first. A top step of hero or display prints only at a full panel's measure. */
   steps?: readonly FitTitleStep[];
   /** The most lines a title may take. Without it the title fills the height its box holds. */
   lines?: number;
