@@ -6,6 +6,7 @@ import {
   AppShellGround,
   AppShellNav,
   AppShellNavItem,
+  AppShellPageFoot,
   AppShellPanel,
   AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
@@ -151,6 +152,47 @@ describe("app shell", () => {
 
     test("a link in it prints as the quiet link", () => {
       expect(one(nav(null), FOOT).classes).toContain("[&>a]:link-quiet");
+    });
+
+    test("its line runs to the column's edge, so a line that fits the column isn't cut", () => {
+      const { classes } = one(nav(null), FOOT);
+      expect(classes).toEqual(expect.arrayContaining(["truncate", "pl-2.5"]));
+      expect(classes).not.toContain("px-2.5");
+    });
+  });
+
+  describe("the page's foot", () => {
+    const FOOT = '[data-slot="app-shell-page-foot"]';
+    const needsYou = <a href="/settings">google needs signing in</a>;
+    const foot = (children?: React.ReactNode) => server(<AppShellPageFoot>{children}</AppShellPageFoot>);
+
+    test("prints only at 900 px and below, where the nav's foot yields, and only with something to say", () => {
+      const { el, classes } = one(foot(needsYou), FOOT);
+      expect(el.getAttribute("data-mk")).toBe("app-shell");
+      expect(classes).toEqual(expect.arrayContaining(["hidden", "[@media(max-width:900px)]:not-empty:flex"]));
+    });
+
+    test("prints in the dark scope, since the ground stays dark on a light page, and holds a link's hit area", () => {
+      expect(one(foot(needsYou), FOOT).classes).toEqual(expect.arrayContaining(["dark", "min-h-11"]));
+    });
+
+    test("prints what the nav's foot prints, the same way", () => {
+      const host = server(
+        <SidebarProvider>
+          <AppShellNav ship="orbit" foot={needsYou}>
+            <AppShellNavItem render={<a href="/board" />}>board</AppShellNavItem>
+          </AppShellNav>
+          <AppShellPageFoot>{needsYou}</AppShellPageFoot>
+        </SidebarProvider>,
+      );
+      const page = one(host, FOOT);
+      const nav = one(host, '[data-slot="app-shell-nav-foot"]');
+      expect(page.el.textContent).toBe("google needs signing in");
+      expect(page.el.textContent).toBe(nav.el.textContent);
+      for (const cls of ["type-instrument", "text-muted-foreground", "[&>a]:link-quiet"]) {
+        expect(page.classes).toContain(cls);
+        expect(nav.classes).toContain(cls);
+      }
     });
   });
 

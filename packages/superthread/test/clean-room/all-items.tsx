@@ -73,6 +73,15 @@ import {
   InputGroupTextarea,
 } from "@/components/superthread/ui/input-group";
 import { Label } from "@/components/superthread/ui/label";
+import { FitTitle } from "@/components/superthread/ui/fit-title";
+import {
+  InlineAnswer,
+  InlineAnswers,
+  InlineAnswersAsk,
+  InlineAnswersLine,
+  InlineAnswersList,
+  InlineAnswersTrigger,
+} from "@/components/superthread/ui/inline-answers";
 import { Door, Onward } from "@/components/superthread/ui/onward";
 import { Paper } from "@/components/superthread/ui/paper";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
@@ -759,6 +768,25 @@ function Sink({ mode }: { mode: Mode }) {
           <p>reply to sam about chapter 7</p>
           <Button>read the draft</Button>
         </Paper>
+      </Part>
+      <Part name="fit-title">
+        <div className="h-44 max-w-sm">
+          <FitTitle render={<h3 />} href="#all">
+            reply to sam about the chapter 7 notes and say when the next draft goes up
+          </FitTitle>
+        </div>
+      </Part>
+      <Part name="inline-answers">
+        <InlineAnswers className="type-lede">
+          <InlineAnswersLine>the next draft waits on your answer.</InlineAnswersLine>
+          <InlineAnswersTrigger />
+          <InlineAnswersList>
+            <InlineAnswer>already done</InlineAnswer>
+            <InlineAnswersAsk question="wrong day">
+              <InlineAnswer>tomorrow</InlineAnswer>
+            </InlineAnswersAsk>
+          </InlineAnswersList>
+        </InlineAnswers>
       </Part>
       <Part name="onward">
         <div className="flex flex-col items-start gap-2">

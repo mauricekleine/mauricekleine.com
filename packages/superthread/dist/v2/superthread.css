@@ -209,12 +209,18 @@
   --text-title: 22px;
   --text-title--line-height: 28px;
   --text-title--letter-spacing: -0.02em;
+  --text-long: 26px;
+  --text-long--line-height: 29px;
+  --text-long--letter-spacing: -0.03em;
   --text-section: 30px;
   --text-section--line-height: 34px;
   --text-section--letter-spacing: -0.03em;
   --text-page: 34px;
   --text-page--line-height: 40px;
   --text-page--letter-spacing: -0.01em;
+  --text-headline: 40px;
+  --text-headline--line-height: 44px;
+  --text-headline--letter-spacing: -0.03em;
   --text-hero: 64px;
   --text-hero--line-height: 68px;
   --text-hero--letter-spacing: -0.04em;
@@ -470,12 +476,18 @@
   --text-title: var(--text-title);
   --text-title--line-height: var(--text-title--line-height);
   --text-title--letter-spacing: var(--text-title--letter-spacing);
+  --text-long: var(--text-long);
+  --text-long--line-height: var(--text-long--line-height);
+  --text-long--letter-spacing: var(--text-long--letter-spacing);
   --text-section: var(--text-section);
   --text-section--line-height: var(--text-section--line-height);
   --text-section--letter-spacing: var(--text-section--letter-spacing);
   --text-page: var(--text-page);
   --text-page--line-height: var(--text-page--line-height);
   --text-page--letter-spacing: var(--text-page--letter-spacing);
+  --text-headline: var(--text-headline);
+  --text-headline--line-height: var(--text-headline--line-height);
+  --text-headline--letter-spacing: var(--text-headline--letter-spacing);
   --text-hero: var(--text-hero);
   --text-hero--line-height: var(--text-hero--line-height);
   --text-hero--letter-spacing: var(--text-hero--letter-spacing);
@@ -586,6 +598,15 @@
   text-transform: none;
 }
 
+@utility type-long {
+  font-family: var(--font-display);
+  font-size: var(--text-long);
+  line-height: var(--text-long--line-height);
+  letter-spacing: var(--text-long--letter-spacing);
+  font-weight: 300;
+  text-transform: none;
+}
+
 @utility type-section {
   font-family: var(--font-display);
   font-size: var(--text-section);
@@ -607,6 +628,15 @@
     font-size: 28px;
     line-height: 34px;
   }
+}
+
+@utility type-headline {
+  font-family: var(--font-display);
+  font-size: var(--text-headline);
+  line-height: var(--text-headline--line-height);
+  letter-spacing: var(--text-headline--letter-spacing);
+  font-weight: 300;
+  text-transform: none;
 }
 
 @utility type-hero {

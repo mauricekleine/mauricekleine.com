@@ -13,6 +13,10 @@ import {
   PageHeaderTitle,
 } from "@/components/superthread/blocks/page-header";
 import {
+  ClearState,
+  ClearStateDoor,
+  ClearStateReason,
+  ClearStateTitle,
   EmptyState,
   EmptyStateActions,
   EmptyStateMedia,
@@ -143,8 +147,16 @@ describe("states", () => {
   let loading: HTMLElement;
   let failed: HTMLElement;
   let empty: HTMLElement;
+  let clear: HTMLElement;
   beforeAll(() => {
     loading = server(<LoadingState rows={5} label="loading runs" />);
+    clear = server(
+      <ClearState>
+        <ClearStateTitle>nothing needs you until 16:30.</ClearStateTitle>
+        <ClearStateReason>the draft is done.</ClearStateReason>
+        <ClearStateDoor href="/open">the rest is in open</ClearStateDoor>
+      </ClearState>,
+    );
     failed = server(
       <FailedState title="the runs did not load" onRetry={() => {}}>
         the server took too long.
@@ -188,7 +200,7 @@ describe("states", () => {
   });
 
   test("names no detail of its own and no forbidden class", () => {
-    const rendered = [loading, failed, empty].flatMap(elements);
+    const rendered = [loading, failed, empty, clear].flatMap(elements);
     expect(detailsUsed(rendered, "states")).toEqual([]);
     expect(forbidden(rendered)).toEqual([]);
   });

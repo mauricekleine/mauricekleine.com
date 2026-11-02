@@ -8,6 +8,7 @@ import {
   AppShellGround,
   AppShellNav,
   AppShellNavItem,
+  AppShellPageFoot,
   AppShellPanel,
   AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
@@ -33,6 +34,10 @@ import {
   PageHeaderTitle,
 } from "@/components/superthread/blocks/page-header";
 import {
+  ClearState,
+  ClearStateDoor,
+  ClearStateReason,
+  ClearStateTitle,
   EmptyState,
   EmptyStateActions,
   EmptyStateText,
@@ -60,6 +65,16 @@ import {
   LetterActions,
   LetterSource,
 } from "@/components/superthread/blocks/letter";
+import {
+  JobSheet,
+  JobSheetActions,
+  JobSheetChanged,
+  JobSheetCue,
+  JobSheetPrimary,
+  JobSheetTitle,
+  JobSheetToggle,
+  JobSheetWhy,
+} from "@/components/superthread/blocks/job-sheet";
 import {
   DayLine,
   DayLineAllDay,
@@ -176,6 +191,13 @@ function Sink({ mode }: { mode: Mode }) {
             <Button variant="outline">new task</Button>
           </EmptyStateActions>
         </EmptyState>
+        <ClearState aria-labelledby="clear">
+          <ClearStateTitle id="clear" render={<h3 />}>
+            nothing needs you until 16:30.
+          </ClearStateTitle>
+          <ClearStateReason>the draft and the deck check are done.</ClearStateReason>
+          <ClearStateDoor href="#open">the rest is in open</ClearStateDoor>
+        </ClearState>
       </Part>
 
       {/* blocks: shell */}
@@ -204,6 +226,9 @@ function Sink({ mode }: { mode: Mode }) {
                 <a href="#today">today</a>
               </AppShellPanelFoot>
             </AppShellPanel>
+            <AppShellPageFoot>
+              <a href="#settings">settings</a>
+            </AppShellPageFoot>
           </AppShellGround>
         </AppShell>
       </Part>
@@ -503,6 +528,25 @@ function Sink({ mode }: { mode: Mode }) {
             <LetterSource href="#letter">sam's mail, mon 2 nov</LetterSource>
           </LetterTools>
         </Letter>
+      </Part>
+      <Part name="job-sheet">
+        <JobSheet aria-labelledby={`job-title-${mode}`}>
+          <JobSheetCue>48 min until standup</JobSheetCue>
+          <JobSheetTitle id={`job-title-${mode}`} render={<h3 />} href="#job-sheet">
+            reply to sam about chapter 7
+          </JobSheetTitle>
+          <JobSheetWhy>the next draft waits on your answer.</JobSheetWhy>
+          <JobSheetChanged>sam sent the notes an hour ago</JobSheetChanged>
+          <JobSheetActions>
+            <JobSheetPrimary reserve="open the draft" render={<a href="#job-sheet" />} nativeButton={false}>
+              read the draft
+            </JobSheetPrimary>
+            <Button size="lg" variant="ghost">
+              not now
+            </Button>
+            <JobSheetToggle>only what can't slip</JobSheetToggle>
+          </JobSheetActions>
+        </JobSheet>
       </Part>
       <Part name="send-bar">
         <SendBar aria-label="where it goes">

@@ -47,17 +47,12 @@ function Head() {
   );
 }
 
-export function DayLineExample() {
+// The same tuesday at any clock: the morning by default, and the afternoon a clear page reads from.
+export function DayLineExample({ now = "08:42" }: { now?: string }) {
   return (
     <DayLine>
       <Head />
-      <DayLineStrip
-        aria-label="tuesday's meetings"
-        day={day}
-        events={tuesday}
-        now={clock("08:42")}
-        timeZone={timeZone}
-      />
+      <DayLineStrip aria-label="tuesday's meetings" day={day} events={tuesday} now={clock(now)} timeZone={timeZone} />
     </DayLine>
   );
 }

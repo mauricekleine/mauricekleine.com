@@ -58,12 +58,29 @@ function AppShellNav({
       {footed && (
         <div
           data-slot="app-shell-nav-foot"
-          className="h-[37px] shrink-0 truncate border-t border-sidebar-border px-2.5 pt-3 pb-1 type-instrument text-muted-foreground empty:border-t-transparent [@media(max-width:900px)]:hidden [&>a]:link-quiet"
+          className="h-[37px] shrink-0 truncate border-t border-sidebar-border pt-3 pb-1 pl-2.5 type-instrument text-muted-foreground empty:border-t-transparent [@media(max-width:900px)]:hidden [&>a]:link-quiet"
         >
           {foot}
         </div>
       )}
     </div>
+  );
+}
+
+// The nav's foot line where the nav has no foot: under the panel, 900 px and below. Pass it what the nav's foot holds, so a
+// phone reads the same words, and pass it nothing and it takes no room. It's the last thing in the ground, so it opens the
+// dark scope the nav prints in, and its height holds a link's hit area.
+function AppShellPageFoot({ className, ...props }: ComponentProps<"p">) {
+  return (
+    <p
+      data-mk="app-shell"
+      data-slot="app-shell-page-foot"
+      className={cn(
+        "dark mt-2 hidden min-h-11 items-center px-1 type-instrument text-muted-foreground [@media(max-width:900px)]:not-empty:flex [&>a]:link-quiet",
+        className,
+      )}
+      {...props}
+    />
   );
 }
 
@@ -179,4 +196,4 @@ function AppShellPanelFoot({ className, render, ...props }: useRender.ComponentP
   });
 }
 
-export { AppShell, AppShellGround, AppShellNav, AppShellNavItem, AppShellPanel, AppShellPanelFoot };
+export { AppShell, AppShellGround, AppShellNav, AppShellNavItem, AppShellPageFoot, AppShellPanel, AppShellPanelFoot };
