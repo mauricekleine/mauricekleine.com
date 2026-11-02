@@ -3,7 +3,7 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { Window as FrameWindow } from "happy-dom";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { act, type ReactNode } from "react";
+import { act, type ReactNode, type Ref } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { Button } from "@/components/superthread/ui/button";
@@ -694,6 +694,47 @@ describe("the layers rendered", () => {
       "or-412 picked up": [],
     });
     expect(nullsRing(document.body)).toEqual([]);
+  });
+
+  test("the app's ref takes a toast's root, and a callback ref's cleanup runs on detach in place of a call with null", async () => {
+    const manager = toastItem.createToastManager();
+    const object: { current: HTMLDivElement | null } = { current: null };
+    const plain: string[] = [];
+    const cleaned: string[] = [];
+    const refs: Record<string, Ref<HTMLDivElement>> = {
+      object,
+      plain: (el) => void plain.push(el?.getAttribute("data-slot") ?? "null"),
+      cleaned: (el) => {
+        cleaned.push(el?.getAttribute("data-slot") ?? "null");
+        return () => void cleaned.push("cleanup");
+      },
+    };
+    function Stack() {
+      const { toasts } = toastItem.useToastManager();
+      return toasts.map((item) => (
+        <toastItem.Toast key={item.id} toast={item} ref={refs[item.title as string]}>
+          <toastItem.ToastTitle />
+        </toastItem.Toast>
+      ));
+    }
+    await client(
+      <toastItem.ToastProvider toastManager={manager}>
+        <toastItem.ToastViewport data-testid="refs" className="relative">
+          <Stack />
+        </toastItem.ToastViewport>
+      </toastItem.ToastProvider>,
+    );
+    await act(async () => {
+      for (const title of Object.keys(refs)) manager.add({ title, timeout: 0 });
+    });
+    const titled = [...document.body.querySelectorAll('[data-testid="refs"] [data-slot="toast"]')].find(
+      (toast) => toast.textContent === "object",
+    );
+    expect(titled !== undefined && object.current === titled).toBe(true);
+    await mounted.pop()!();
+    expect(object.current).toBeNull();
+    expect(plain).toEqual(["toast", "null"]);
+    expect(cleaned).toEqual(["toast", "cleanup"]);
   });
 
   test("on a phone the stack drops from the top of the window, where a swipe up dismisses a toast", async () => {

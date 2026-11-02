@@ -763,6 +763,29 @@ describe("search palette", () => {
     }
   });
 
+  test("the app's ref takes the root, and a callback ref's cleanup runs on detach in place of a call with null", async () => {
+    const object: { current: HTMLDivElement | null } = { current: null };
+    const plain: string[] = [];
+    const cleaned: string[] = [];
+    const view = await client(
+      <>
+        <Palette data-testid="object" ref={object} />
+        <Palette ref={(el) => void plain.push(el?.getAttribute("data-slot") ?? "null")} />
+        <Palette
+          ref={(el) => {
+            cleaned.push(el?.getAttribute("data-slot") ?? "null");
+            return () => void cleaned.push("cleanup");
+          }}
+        />
+      </>,
+    );
+    expect(object.current === one(view.body, '[data-testid="object"]').el).toBe(true);
+    await view.done();
+    expect(object.current).toBeNull();
+    expect(plain).toEqual(["search-palette", "null"]);
+    expect(cleaned).toEqual(["search-palette", "cleanup"]);
+  });
+
   test("a keydown with no key leaves it closed and throws nothing, held modifier or not", async () => {
     const view = await client(<Palette />);
     const uncaught: unknown[] = [];
