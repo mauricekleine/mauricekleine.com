@@ -369,6 +369,19 @@ function Sink({ mode }: { mode: Mode }) {
       </Part>
 
       <Part name="table">
+        <Table fold>
+          <TableBody>
+            <TableRow>
+              <TableCell fold="lead" kind="id">
+                or-11
+              </TableCell>
+              <TableCell fold="title" scope="row" flag>
+                the last run
+              </TableCell>
+              <TableCell fold="meta">every day at 07:00</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
         <Table>
           <TableCaption>the last four runs</TableCaption>
           <TableHeader>

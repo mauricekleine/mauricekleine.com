@@ -572,6 +572,144 @@ describe("table", () => {
       expect(classes(row).filter((t) => t.endsWith("bg-accent"))).toEqual([]);
     }
   });
+
+  describe("the fold", () => {
+    const foldedTable = (
+      <Table fold>
+        <TableHeader>
+          <TableRow>
+            <TableHead>next</TableHead>
+            <TableHead>report</TableHead>
+            <TableHead kind="number">pages</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow receding>
+            <TableCell fold="lead" kind="id">
+              mon
+            </TableCell>
+            <TableCell fold="title" scope="row" flag>
+              the reading layout
+            </TableCell>
+            <TableCell fold="aside" kind="number">
+              12
+            </TableCell>
+            <TableCell>an unplaced line</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+    const list = (el: Element | null | undefined) => (el?.getAttribute("class") ?? "").split(/\s+/).filter(Boolean);
+    const CONTAINER = '[data-slot="table-container"]';
+
+    test("the box reaches the panel's edges and measures itself, with no sideways scroll", () => {
+      const box = list(server(foldedTable).querySelector(CONTAINER));
+      expect(box).toEqual(expect.arrayContaining(["@container/fold", "-mx-(--spacing-panel-inset)"]));
+      expect(box).not.toContain("overflow-x-auto");
+      expect(box).not.toContain("hit-area-scroller");
+    });
+
+    test("a table carries its roles out loud, since a display change strips them in some browsers", () => {
+      const host = server(foldedTable);
+      const roles = (selector: string) => [...host.querySelectorAll(selector)].map((el) => el.getAttribute("role"));
+      expect(roles("table")).toEqual(["table"]);
+      expect(roles("thead, tbody")).toEqual(["rowgroup", "rowgroup"]);
+      expect(roles("tr")).toEqual(["row", "row"]);
+      expect(roles("thead th")).toEqual(["columnheader", "columnheader", "columnheader"]);
+      expect(roles("tbody tr > *")).toEqual(["cell", "rowheader", "cell", "cell"]);
+    });
+
+    test("a table that doesn't fold keeps its scroller and its native semantics", () => {
+      const host = server(
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>run</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>a cell</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>,
+      );
+      expect(host.querySelector("[role]")).toBeNull();
+      expect(list(host.querySelector(CONTAINER))).toEqual(
+        expect.arrayContaining(["overflow-x-auto", "hit-area-scroller"]),
+      );
+      expect(host.querySelector("[data-fold]")).toBeNull();
+      expect(list(host.querySelector("td")).filter((cls) => cls.includes("/fold"))).toEqual([]);
+    });
+
+    test("above the fold the first and last cells keep the panel's inset over the row edge's padding", () => {
+      const row = server(foldedTable).querySelector("tbody tr")!;
+      expect(list(row.firstElementChild)).toContain("first:pl-(--spacing-panel-inset)!");
+      expect(list(row.lastElementChild)).toContain("last:pr-(--spacing-panel-inset)");
+    });
+
+    test("the row, not its first cell, anchors the row edge and what covers the row", () => {
+      const row = server(foldedTable).querySelector("tbody tr")!;
+      expect(list(row)).toContain("relative");
+      expect(list(row.firstElementChild)).toContain("first:static");
+    });
+
+    test("folded, a row is a grid and each cell lands where it says", () => {
+      const row = server(foldedTable).querySelector("tbody tr")!;
+      expect(list(row)).toEqual(expect.arrayContaining(["@max-[776px]/fold:grid", "@max-[776px]/fold:min-h-16"]));
+      expect(list(row)).toContain(
+        "@max-[776px]/fold:has-data-[fold=lead]:grid-cols-[var(--fold-lead,72px)_minmax(0,1fr)_auto]",
+      );
+      const cells = [...row.children];
+      expect(cells.map((cell) => cell.getAttribute("data-fold"))).toEqual(["lead", "title", "aside", null]);
+      expect(list(cells[0])).toContain("@max-[776px]/fold:[grid-area:lead]");
+      expect(list(cells[1])).toContain("@max-[776px]/fold:[grid-area:title]");
+      expect(list(cells[2])).toEqual(
+        expect.arrayContaining(["@max-[776px]/fold:[grid-area:aside]", "@max-[776px]/fold:text-right"]),
+      );
+      expect(list(cells[3])).toContain("@max-[776px]/fold:col-span-full");
+    });
+
+    test("folded, words wrap rather than clip, and the rule moves to the row", () => {
+      const host = server(foldedTable);
+      const cell = list(host.querySelector("tbody td"));
+      expect(cell).toEqual(
+        expect.arrayContaining([
+          "@max-[776px]/fold:whitespace-normal",
+          "@max-[776px]/fold:overflow-visible",
+          "@max-[776px]/fold:border-0",
+          "@max-[776px]/fold:h-auto",
+        ]),
+      );
+      expect(list(host.querySelector("tbody tr"))).toEqual(
+        expect.arrayContaining(["@max-[776px]/fold:border-b", "@max-[776px]/fold:border-border"]),
+      );
+    });
+
+    test("a plain head leaves the screen and stays with a screen reader", () => {
+      expect(list(server(foldedTable).querySelector("thead th"))).toContain("@max-[776px]/fold:sr-only");
+    });
+
+    test("flag lifts a fact to foreground, and a receding row takes it back", () => {
+      const cell = list(server(foldedTable).querySelector("tbody th"));
+      expect(cell).toEqual(expect.arrayContaining(["text-foreground", "in-data-[receding]:text-muted-foreground"]));
+    });
+
+    test("scope makes a cell its row's head, printed as any other cell", () => {
+      const cell = server(foldedTable).querySelector("tbody th")!;
+      expect(cell.getAttribute("scope")).toBe("row");
+      expect(cell.getAttribute("data-slot")).toBe("table-cell");
+      expect(list(cell)).toEqual(expect.arrayContaining(["text-left", "font-normal"]));
+    });
+
+    test("a control in a cell stays above the link that covers the row, and the cover itself stays out of it", () => {
+      const cell = list(server(foldedTable).querySelector("tbody td"));
+      const raised = cell.find((cls) => cls.endsWith(":z-1"));
+      expect(raised).toContain("a,button,[role=checkbox]");
+      expect(raised).toContain("[data-slot=table-title]");
+      expect(raised).toContain("[data-slot=table-detail-trigger]");
+    });
+  });
 });
 
 describe("skeleton", () => {

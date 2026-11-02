@@ -77,6 +77,52 @@ const tasks: readonly { id: string; task: string; ship: ShipId; state: State }[]
   { id: "t-2033", task: "move the rail to the bar", ship: "constellation", state: "queued" },
 ];
 
+const reports: readonly { due: string; report: string; period: string; pages: number; owner: string }[] = [
+  { due: "mon", report: "the reading layout", period: "every monday at 09:00", pages: 12, owner: "quanta" },
+  { due: "wed", report: "fonts on every ship", period: "every wednesday at 14:00", pages: 7, owner: "trisys" },
+  {
+    due: "fri",
+    report: "a long name that runs past its own column",
+    period: "when a draft lands",
+    pages: 31,
+    owner: "artifacts",
+  },
+];
+
+// The full-bleed form: every cell says where it lands when the row folds, and the row's name is its own head.
+export function TableFold() {
+  return (
+    <Table fold>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[116px]">next</TableHead>
+          <TableHead>report</TableHead>
+          <TableHead className="w-[200px]">schedule</TableHead>
+          <TableHead kind="number" className="w-[140px]">
+            pages
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {reports.map((row) => (
+          <TableRow key={row.report}>
+            <TableCell fold="lead" kind="id">
+              {row.due}
+            </TableCell>
+            <TableCell fold="title" scope="row" flag>
+              {row.report}
+            </TableCell>
+            <TableCell fold="meta">{row.period}</TableCell>
+            <TableCell fold="aside" kind="number">
+              {row.pages}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
+
 export function TableBoard() {
   return (
     <Table rows="board">

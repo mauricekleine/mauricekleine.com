@@ -119,7 +119,16 @@ import {
   ItemCardMeta,
   ItemCardActions,
 } from "@/components/superthread/blocks/item-cards";
-import { DataTable, SortableHead, TableEmpty, TableTitle } from "@/components/superthread/blocks/data-table";
+import {
+  DataTable,
+  SortableHead,
+  TableDetail,
+  TableDetailRow,
+  TableDetailTrigger,
+  TableEmpty,
+  TableSubRow,
+  TableTitle,
+} from "@/components/superthread/blocks/data-table";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { Icon } from "@/components/superthread/ui/glyphs";
 import { Badge } from "@/components/superthread/ui/badge";
@@ -365,6 +374,32 @@ function Sink({ mode }: { mode: Mode }) {
             <TableEmpty columns={3} title="no other runs">
               a new run lands here.
             </TableEmpty>
+          </TableBody>
+        </DataTable>
+        <DataTable label="what ran" fold>
+          <TableHeader>
+            <TableRow>
+              <TableHead>time</TableHead>
+              <TableHead>run</TableHead>
+              <TableHead kind="number">took</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableDetail defaultOpen>
+              <TableRow>
+                <TableCell fold="lead" kind="id">
+                  09:14
+                </TableCell>
+                <TableCell fold="title" scope="row">
+                  <TableDetailTrigger>checked the registry</TableDetailTrigger>
+                </TableCell>
+                <TableCell fold="aside" kind="number" flag>
+                  2m
+                </TableCell>
+              </TableRow>
+              <TableDetailRow columns={3}>12 items, none new.</TableDetailRow>
+            </TableDetail>
+            <TableSubRow columns={3}>read the catalog</TableSubRow>
           </TableBody>
         </DataTable>
       </Part>

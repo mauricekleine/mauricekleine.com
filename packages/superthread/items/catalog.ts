@@ -228,7 +228,7 @@ export const catalog: CatalogItem[] = [
     name: "textarea",
     type: "registry:ui",
     title: "textarea",
-    description: "a multi-line text field with the one focus edge",
+    description: "a multi-line text field with the one focus edge, and a code form for json and keys",
     files: [ui("textarea")],
     tier: "brand",
     upstream: "textarea",
@@ -268,7 +268,8 @@ export const catalog: CatalogItem[] = [
     name: "table",
     type: "registry:ui",
     title: "table",
-    description: "a table with mono ids and tabular numbers, and an edge beside the row under the pointer",
+    description:
+      "a table with mono ids and tabular numbers, an edge beside the row under the pointer, and a full-bleed form that folds at its own width",
     files: [ui("table")],
     tier: "brand",
     upstream: "table",
@@ -617,7 +618,8 @@ export const catalog: CatalogItem[] = [
     name: "app-shell",
     type: "registry:block",
     title: "app shell",
-    description: "a ship's frame: the fleet rail, the ship's own nav and the working panel on the deep ground",
+    description:
+      "a ship's frame: the fleet rail, the ship's own nav with a quiet second tier and the working panel on the deep ground",
     files: [block("app-shell")],
     tier: "block",
     upstream: null,
@@ -678,7 +680,8 @@ export const catalog: CatalogItem[] = [
     name: "data-table",
     type: "registry:block",
     title: "data table",
-    description: "a table its heads sort, with chosen rows and a row for when it is empty",
+    description:
+      "a table its heads sort, with chosen rows, a row that opens a detail, sub-entries and a row for when it is empty",
     files: [block("data-table")],
     tier: "block",
     upstream: null,

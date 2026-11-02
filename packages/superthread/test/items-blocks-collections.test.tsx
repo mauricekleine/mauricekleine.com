@@ -12,7 +12,11 @@ import {
 import {
   DataTable,
   SortableHead,
+  TableDetail,
+  TableDetailRow,
+  TableDetailTrigger,
   TableEmpty,
+  TableSubRow,
   TableTitle,
   type SortDirection,
 } from "@/components/superthread/blocks/data-table";
@@ -928,9 +932,9 @@ describe("data table", () => {
       expect(title({ href: "/runs/12" }).classes).toEqual(
         expect.arrayContaining([
           "[&:is(a)]:hover:underline",
-          "[@media(max-width:600px)]:[&:is(a)]:relative",
-          "[@media(max-width:600px)]:[&:is(a)]:inline-block",
-          "[@media(max-width:600px)]:[&:is(a)]:hit-area",
+          "not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:relative",
+          "not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:inline-block",
+          "not-in-data-[fold]:[@media(max-width:600px)]:[&:is(a)]:hit-area",
           ...CONTROL_RING,
         ]),
       );
@@ -1054,6 +1058,247 @@ describe("data table", () => {
     expect(one(host, '[role="status"]').el.getAttribute("aria-live")).toBe("polite");
     expect(one(host, '[data-slot="empty-state-text"]').el.textContent).toBe("no runschange the filter to see more.");
     expect(one(host, '[data-slot="empty-state"]').el.getAttribute("data-mk")).toBe("states");
+  });
+
+  describe("the fold", () => {
+    test("a title link covers its row, and its ring prints inside the row, since a cell clips what leaves it", () => {
+      const { classes } = one(server(<TableTitle href="/runs/12">a row</TableTitle>), '[data-slot="table-title"]');
+      expect(classes).toEqual(
+        expect.arrayContaining([
+          "in-data-[fold]:[&:is(a)]:after:absolute",
+          "in-data-[fold]:[&:is(a)]:after:inset-0",
+          "in-data-[fold]:[tr:hover_&:is(a)]:underline",
+          "in-data-[fold]:[&:is(a)]:focus-visible:outline-none",
+          "in-data-[fold]:[&:is(a)]:focus-visible:after:outline-2",
+          "in-data-[fold]:[&:is(a)]:focus-visible:after:-outline-offset-2",
+        ]),
+      );
+    });
+
+    test("a sortable head stays on screen, so the sort stays in reach", () => {
+      const host = server(
+        <DataTable label="runs" fold>
+          <TableHeader>
+            <TableRow>
+              <TableHead>next</TableHead>
+              <SortableHead onSort={() => {}}>title</SortableHead>
+            </TableRow>
+          </TableHeader>
+        </DataTable>,
+      );
+      expect(one(host, '[data-slot="table-head"]:not([data-slot="sortable-head"])').classes).toContain(
+        "@max-[776px]/fold:sr-only",
+      );
+      const sorted = one(host, '[data-slot="sortable-head"]').classes;
+      expect(sorted).toContain("@max-[776px]/fold:not-sr-only");
+      expect(sorted).not.toContain("@max-[776px]/fold:sr-only");
+      expect(host.querySelector("table")?.getAttribute("role")).toBe("table");
+      expect(host.querySelector("table")?.getAttribute("aria-label")).toBe("runs");
+    });
+  });
+
+  describe("a row that opens a detail", () => {
+    const rows = (detail: Parameters<typeof TableDetail>[0]["open"], onOpenChange?: (open: boolean) => void) => (
+      <DataTable label="runs" fold>
+        <TableBody>
+          <TableDetail open={detail} onOpenChange={onOpenChange}>
+            <TableRow>
+              <TableCell fold="lead">09:14</TableCell>
+              <TableCell fold="title">
+                <TableDetailTrigger>sent the digest</TableDetailTrigger>
+              </TableCell>
+            </TableRow>
+            <TableDetailRow columns={2}>
+              <input aria-label="a note" />
+            </TableDetailRow>
+          </TableDetail>
+        </TableBody>
+      </DataTable>
+    );
+    const TRIGGER = '[data-slot="table-detail-trigger"]';
+    const DETAIL = '[data-slot="table-detail"]';
+
+    test("the trigger names the row it opens, and the rows stay direct children of the body", () => {
+      const host = server(rows(undefined));
+      const trigger = one(host, TRIGGER);
+      const detail = one(host, DETAIL);
+      expect(trigger.el.tagName).toBe("BUTTON");
+      expect(trigger.el.getAttribute("type")).toBe("button");
+      expect(trigger.el.getAttribute("aria-expanded")).toBe("false");
+      expect(trigger.el.getAttribute("aria-controls")).toBe(detail.el.id);
+      expect([...host.querySelectorAll("tbody > tr")].length).toBe(2);
+    });
+
+    test("opens and closes on its own, and what the reader typed survives closing", async () => {
+      const { body, done } = await client(rows(undefined));
+      const trigger = body.querySelector<HTMLButtonElement>(TRIGGER)!;
+      const detail = body.querySelector<HTMLElement>(DETAIL)!;
+      const typed = detail.querySelector("input")!;
+      expect(detail.hidden).toBe(true);
+      await act(async () => trigger.click());
+      expect(trigger.getAttribute("aria-expanded")).toBe("true");
+      expect(detail.hidden).toBe(false);
+      typed.value = "keep this";
+      await act(async () => trigger.click());
+      expect(detail.hidden).toBe(true);
+      expect(body.querySelector<HTMLElement>(DETAIL)?.querySelector("input")).toBe(typed);
+      expect(typed.value).toBe("keep this");
+      await done();
+    });
+
+    test("under an app's state the prop rules, and a click only reports", async () => {
+      const seen: boolean[] = [];
+      const { body, done } = await client(rows(false, (open) => seen.push(open)));
+      const trigger = body.querySelector<HTMLButtonElement>(TRIGGER)!;
+      await act(async () => trigger.click());
+      expect(seen).toEqual([true]);
+      expect(body.querySelector<HTMLElement>(DETAIL)?.hidden).toBe(true);
+      await done();
+    });
+
+    test("a caller's click still runs on the trigger", async () => {
+      const clicks: string[] = [];
+      const { body, done } = await client(
+        <table>
+          <tbody>
+            <TableDetail>
+              <TableRow>
+                <TableCell>
+                  <TableDetailTrigger onClick={() => clicks.push("clicked")}>a row</TableDetailTrigger>
+                </TableCell>
+              </TableRow>
+            </TableDetail>
+          </tbody>
+        </table>,
+      );
+      await act(async () => body.querySelector<HTMLButtonElement>(TRIGGER)!.click());
+      expect(clicks).toEqual(["clicked"]);
+      await done();
+    });
+
+    test("a part outside TableDetail says where it belongs", () => {
+      expect(() => server(<TableDetailTrigger>a row</TableDetailTrigger>)).toThrow("inside TableDetail");
+    });
+
+    test("the detail lines up with the title, under a lead cell as short as the detail", () => {
+      const host = server(rows(true));
+      const cells = host.querySelectorAll(`${DETAIL} > td`);
+      expect(cells.length).toBe(2);
+      expect(cells[0]?.getAttribute("data-fold")).toBe("lead");
+      expect(cells[0]?.textContent).toBe("");
+      expect(cells[0]?.className.split(/\s+/)).toContain("h-auto");
+      expect(cells[0]?.className.split(/\s+/)).not.toContain("h-[calc(var(--row)+1px)]");
+      expect(cells[1]?.getAttribute("data-fold")).toBe("title");
+    });
+
+    test("lead={false} gives the whole row to the detail, for a table with no lead column", () => {
+      const host = server(
+        <table>
+          <tbody>
+            <TableDetail open>
+              <TableDetailRow columns={3} lead={false}>
+                words
+              </TableDetailRow>
+            </TableDetail>
+          </tbody>
+        </table>,
+      );
+      const cells = host.querySelectorAll(`${DETAIL} > td`);
+      expect(cells.length).toBe(1);
+      expect(cells[0]?.getAttribute("colspan")).toBe("3");
+      expect(server(rows(true)).querySelectorAll(`${DETAIL} > td`)[1]?.getAttribute("colspan")).toBe("1");
+    });
+
+    test("a row loses its rule to the detail or sub-entry under it", () => {
+      const row = one(server(rows(true)), '[data-slot="table-row"]:not([data-slot="table-detail"])');
+      expect(row.classes).toEqual(
+        expect.arrayContaining([
+          "[&:has(+[data-slot=table-detail]:not([hidden]),+[data-slot=table-sub])>*]:border-b-transparent",
+        ]),
+      );
+    });
+
+    test("the ring prints inside the row the trigger covers, and the chevron turns over while open", () => {
+      const host = server(rows(true));
+      expect(one(host, TRIGGER).classes).toEqual(
+        expect.arrayContaining([
+          "after:absolute",
+          "after:inset-0",
+          "focus-visible:after:outline-2",
+          "focus-visible:after:-outline-offset-2",
+          "focus-visible:after:outline-(--ring)",
+        ]),
+      );
+      expect(one(host, `${TRIGGER} svg`).classes).toContain("group-aria-expanded/detail:rotate-180");
+    });
+
+    test("a plain table's row anchors the trigger's cover, not the first cell the row edge lifts", () => {
+      const row = one(
+        server(
+          <DataTable label="runs">
+            <TableBody>
+              <TableDetail>
+                <TableRow>
+                  <TableCell>
+                    <TableDetailTrigger>a row</TableDetailTrigger>
+                  </TableCell>
+                </TableRow>
+              </TableDetail>
+            </TableBody>
+          </DataTable>,
+        ),
+        '[data-slot="table-row"]',
+      );
+      expect(row.classes).toEqual(
+        expect.arrayContaining([
+          "has-data-[slot=table-detail-trigger]:relative",
+          "has-data-[slot=table-detail-trigger]:[&>:first-child]:static",
+          "has-data-[slot=table-detail-trigger]:[&>:last-child]:pr-7",
+        ]),
+      );
+    });
+
+    test("an open trigger fills no row, while another expanded control in a row still does", () => {
+      const { classes } = one(server(rows(true)), '[data-slot="table-row"]');
+      expect(classes).toContain("has-[[aria-expanded=true]:not([data-slot=table-detail-trigger])]:bg-control-hover");
+      expect(classes).not.toContain("has-aria-expanded:bg-control-hover");
+    });
+  });
+
+  describe("a sub-entry", () => {
+    const sub = (lead?: boolean) =>
+      server(
+        <table>
+          <tbody>
+            <TableSubRow columns={3} lead={lead}>
+              plate 1 of 3
+            </TableSubRow>
+          </tbody>
+        </table>,
+      );
+    const ROW = '[data-slot="table-sub"]';
+
+    test("hangs under the title, a line at the instrument step in a 36 px row", () => {
+      const cells = sub().querySelectorAll(`${ROW} > td`);
+      expect(cells.length).toBe(2);
+      expect(cells[0]?.className.split(/\s+/)).toContain("h-auto");
+      expect(cells[1]?.getAttribute("colspan")).toBe("2");
+      expect(cells[1]?.className.split(/\s+/)).toEqual(expect.arrayContaining(["h-9", "type-instrument"]));
+    });
+
+    test("its connector turns in to the words in the rule's ink", () => {
+      const line = one(sub(), '[data-slot="table-sub-line"]');
+      expect(line.el.textContent).toBe("plate 1 of 3");
+      expect(line.classes).toEqual(
+        expect.arrayContaining(["before:border-b", "before:border-l", "before:border-rule", "before:-left-5"]),
+      );
+    });
+
+    test("lead={false} spans every column", () => {
+      const cells = sub(false).querySelectorAll(`${ROW} > td`);
+      expect(cells.length).toBe(1);
+      expect(cells[0]?.getAttribute("colspan")).toBe("3");
+    });
   });
 
   test("sort controls have an inside ring and the block claims no detail or forbidden class", () => {
