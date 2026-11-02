@@ -10,6 +10,7 @@ import {
   AppShellNavItem,
   AppShellPanel,
 } from "@/components/superthread/blocks/app-shell";
+import { JumpLine, JumpLineLink } from "@/components/superthread/blocks/jump-line";
 import {
   Section,
   SectionAction,
@@ -87,6 +88,13 @@ import {
 } from "@/components/superthread/blocks/collection-toolbar";
 import {
   ListRows,
+  PlainRow,
+  PlainRowActions,
+  PlainRowKind,
+  PlainRows,
+  PlainRowTick,
+  PlainRowTitle,
+  PlainRowWhen,
   ListRow,
   ListRowLead,
   ListRowTitle,
@@ -189,6 +197,18 @@ function Sink({ mode }: { mode: Mode }) {
           </SectionHeader>
           <p>runs appear here.</p>
         </Section>
+        <Section>
+          <SectionHeader quiet="subtitle">
+            <SectionTitle>next week</SectionTitle>
+          </SectionHeader>
+          <p>runs appear here.</p>
+        </Section>
+        <Section>
+          <SectionHeader quiet="instrument">
+            <SectionTitle>then</SectionTitle>
+          </SectionHeader>
+          <p>runs appear here.</p>
+        </Section>
       </Part>
       <Part name="search-palette">
         <SearchPalette>
@@ -249,6 +269,43 @@ function Sink({ mode }: { mode: Mode }) {
             <ListRowTitle>plain task</ListRowTitle>
           </ListRow>
         </ListRows>
+        <PlainRows aria-label="next" clamp>
+          <PlainRow>
+            <PlainRowTick>
+              <Checkbox aria-label="mark done: check the registry" />
+            </PlainRowTick>
+            <PlainRowTitle render={<a href="#task" />}>check the registry</PlainRowTitle>
+            <PlainRowKind>mail</PlainRowKind>
+            <PlainRowWhen>thu 5 nov</PlainRowWhen>
+          </PlainRow>
+          <PlainRow closed>
+            <PlainRowTitle>a closed task</PlainRowTitle>
+          </PlainRow>
+        </PlainRows>
+        <PlainRows aria-label="routines" variant="nested">
+          <PlainRow>
+            <PlainRowTitle href="#routine">a suggestion</PlainRowTitle>
+            <PlainRowActions>
+              <Button variant="ghost" size="sm">
+                keep
+              </Button>
+            </PlainRowActions>
+          </PlainRow>
+        </PlainRows>
+        <PlainRows aria-label="sources" variant="ruled">
+          <PlainRow>
+            <PlainRowTitle href="#source">a source</PlainRowTitle>
+            <PlainRowWhen>2h ago</PlainRowWhen>
+          </PlainRow>
+        </PlainRows>
+      </Part>
+      <Part name="jump-line">
+        <JumpLine>
+          <JumpLineLink href="#today" count={2}>
+            today
+          </JumpLineLink>
+          <JumpLineLink render={<a href="#later" />}>later</JumpLineLink>
+        </JumpLine>
       </Part>
       <Part name="item-cards">
         <ItemCards aria-label="drafts">

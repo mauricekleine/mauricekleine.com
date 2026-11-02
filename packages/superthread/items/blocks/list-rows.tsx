@@ -128,4 +128,186 @@ function ListRowActions({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-export { ListRows, ListRow, ListRowLead, ListRowTitle, ListRowAside, ListRowMeta, ListRowActions };
+type PlainRowsVariant = "plain" | "nested" | "ruled";
+
+// Each form sets the row's height. A ruled list bleeds to the panel's edges, so --bleed repeats the panel's inset.
+const plainRowsVariants: Record<PlainRowsVariant, string> = {
+  plain: "[--row:var(--spacing-row-plain)]",
+  nested: "[--row:var(--spacing-row-nested)]",
+  ruled:
+    "[--row:var(--spacing-row-table)] in-data-[slot=app-shell-panel]:[--bleed:3rem] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:[--bleed:1rem]",
+};
+
+// A list that reads as words: no rules and no padding, the row a line of its own. Plain is 40 px, nested is 36 px for a
+// list under a quiet head, ruled is 48 px with a rule under each row. Every form is 56 px on a phone. clamp lets a title
+// take two lines on a phone, for a list whose titles lose their meaning when they cut.
+function PlainRows({
+  className,
+  variant = "plain",
+  clamp,
+  render,
+  ...props
+}: useRender.ComponentProps<"ul"> & { variant?: PlainRowsVariant; clamp?: boolean }) {
+  return useRender({
+    defaultTagName: "ul",
+    render,
+    state: { slot: "plain-rows", mk: "list-rows", variant, clamp },
+    props: mergeProps<"ul">(
+      {
+        className: cn(
+          "group/plain-rows -mx-(--bleed) min-w-0 list-none [--bleed:0px]",
+          plainRowsVariants[variant],
+          "[@media(max-width:600px)]:[--row:var(--spacing-row-board)]",
+          className,
+        ),
+      },
+      props,
+    ),
+  });
+}
+
+// The row is the link's box: the title stretches its link across it, and a tick or actions sit above that. Wide, the
+// row is one line with its columns in a row, so an absent column takes no space. A phone stacks the title over
+// `kind · when` and keeps the right edge clear for a tick. A closed row stays in the list, muted and struck through.
+function PlainRow({ className, closed, ...props }: React.ComponentProps<"li"> & { closed?: boolean }) {
+  return (
+    <li
+      data-mk="list-rows"
+      data-slot="plain-row"
+      data-closed={closed || undefined}
+      className={cn(
+        "group/plain-row relative flex h-(--row) min-w-0 items-center gap-x-4 px-(--bleed) group-data-[variant=ruled]/plain-rows:border-b group-data-[variant=ruled]/plain-rows:border-border [@media(max-width:600px)]:grid [@media(max-width:600px)]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:content-center [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:has-[[data-slot=plain-row-actions]]:h-auto [@media(max-width:600px)]:has-[[data-slot=plain-row-actions]]:py-1.5 [@media(max-width:600px)]:has-[[data-slot=plain-row-tick]]:pr-[calc(var(--bleed)+2.75rem)] [@media(max-width:600px)]:group-data-[clamp]/plain-rows:h-auto [@media(max-width:600px)]:group-data-[clamp]/plain-rows:min-h-11 [@media(max-width:600px)]:group-data-[clamp]/plain-rows:py-1.5",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+// The tick hangs in the gutter, so every title keeps the list's left edge, and on a phone it sits at the right edge.
+// Wide, a row can be 36 px, so its checkbox takes the pointer inside the row and hit areas never overlap.
+function PlainRowTick({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="plain-row-tick"
+      className={cn(
+        "absolute inset-y-0 right-[calc(100%-var(--bleed))] z-1 grid w-9 place-items-center [@media(max-width:600px)]:right-(--bleed) [@media(max-width:600px)]:w-11 [@media(max-width:600px)]:justify-items-end [@media(min-width:601px)]:[&_[data-slot=checkbox]]:after:h-(--row) [@media(min-width:601px)]:[&_[data-slot=checkbox]]:after:w-9",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+// The title takes one line and cuts at its end, and the words stay in a tooltip. Linked, its link stretches over the
+// row, carries the name, and takes the ring: outside the row, or inside a ruled row that reaches the panel's edges. The
+// words underline while the link is under the pointer. Without an href or render it stays plain text.
+function PlainRowTitle({ className, children, href, render, ...props }: useRender.ComponentProps<"a">) {
+  const linked = href !== undefined || render !== undefined;
+  const words = typeof children === "string" ? children : undefined;
+  const link = useRender({
+    enabled: linked,
+    defaultTagName: "a",
+    render,
+    state: { slot: "plain-row-link" },
+    props: mergeProps<"a">(
+      {
+        href,
+        title: words,
+        className:
+          "peer/plain-row-link absolute inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) group-data-[variant=ruled]/plain-rows:focus-visible:-outline-offset-2",
+        children: <span className="sr-only">{children}</span>,
+      },
+      props,
+    ),
+  });
+  return (
+    <span
+      data-slot="plain-row-title"
+      title={linked ? undefined : words}
+      className={cn(
+        "min-w-0 flex-1 truncate text-ui font-normal text-foreground group-data-[closed]/plain-row:text-muted-foreground [@media(max-width:600px)]:col-span-full [@media(max-width:600px)]:group-data-[clamp]/plain-rows:line-clamp-2 [@media(max-width:600px)]:group-data-[clamp]/plain-rows:whitespace-normal",
+        className,
+      )}
+    >
+      {link}
+      <span
+        aria-hidden={linked || undefined}
+        className="decoration-1 underline-offset-4 peer-hover/plain-row-link:underline group-data-[closed]/plain-row:line-through group-data-[closed]/plain-row:peer-hover/plain-row-link:line-through"
+      >
+        {children}
+      </span>
+    </span>
+  );
+}
+
+// What kind of thing the row holds, in an 80 px column that cuts. On a phone it leads the second line, and it prints
+// the dot itself when a filled when follows, so a row writes only the two words.
+function PlainRowKind({ className, children, ...props }: React.ComponentProps<"span">) {
+  return (
+    <span
+      data-slot="plain-row-kind"
+      className={cn(
+        "w-20 shrink-0 truncate text-instrument leading-(--text-ui--line-height) text-muted-foreground [@media(max-width:600px)]:w-auto",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+      <span
+        aria-hidden="true"
+        data-slot="plain-row-dot"
+        className="mx-1 hidden [@media(max-width:600px)]:[[data-slot=plain-row-kind]:has(+[data-slot=plain-row-when]:not(:empty))_&]:inline"
+      >
+        ·
+      </span>
+    </span>
+  );
+}
+
+// When, right-aligned in mono in a 128 px column, which a longer word widens toward the title. Left empty it holds the
+// column, so a list's times keep their edge. A phone drops the column, so the line prints in the interface face.
+function PlainRowWhen({ className, ...props }: React.ComponentProps<"span">) {
+  return (
+    <span
+      data-slot="plain-row-when"
+      className={cn(
+        "min-w-32 shrink-0 text-right font-mono text-instrument leading-(--text-ui--line-height) whitespace-nowrap text-muted-foreground [@media(max-width:600px)]:min-w-0 [@media(max-width:600px)]:truncate [@media(max-width:600px)]:text-left [@media(max-width:600px)]:font-sans [@media(max-width:600px)]:empty:hidden",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+// Actions sit at the row's end, above its link, and a trailing ghost button's word ends on the column's edge. On a phone
+// they take their own line, and a leading ghost button's word starts on the title's edge instead.
+function PlainRowActions({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="plain-row-actions"
+      className={cn(
+        "relative z-1 flex shrink-0 items-center gap-1 [@media(max-width:600px)]:col-span-full [@media(max-width:600px)]:mt-1 [@media(max-width:600px)]:gap-2 [@media(max-width:600px)]:[&>[data-variant=ghost]:first-child]:-ml-[13px] [@media(min-width:601px)]:[&>[data-variant=ghost]:last-child]:-mr-[13px]",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export {
+  ListRows,
+  ListRow,
+  ListRowLead,
+  ListRowTitle,
+  ListRowAside,
+  ListRowMeta,
+  ListRowActions,
+  PlainRows,
+  PlainRow,
+  PlainRowTick,
+  PlainRowTitle,
+  PlainRowKind,
+  PlainRowWhen,
+  PlainRowActions,
+};

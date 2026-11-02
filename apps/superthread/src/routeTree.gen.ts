@@ -61,6 +61,7 @@ import { Route as CompositionsDataTableRouteImport } from './routes/compositions
 import { Route as CompositionsFactsRouteImport } from './routes/compositions/facts'
 import { Route as CompositionsFormSectionRouteImport } from './routes/compositions/form-section'
 import { Route as CompositionsItemCardsRouteImport } from './routes/compositions/item-cards'
+import { Route as CompositionsJumpLineRouteImport } from './routes/compositions/jump-line'
 import { Route as CompositionsLetterRouteImport } from './routes/compositions/letter'
 import { Route as CompositionsListRowsRouteImport } from './routes/compositions/list-rows'
 import { Route as CompositionsNoticeRouteImport } from './routes/compositions/notice'
@@ -341,6 +342,11 @@ const CompositionsItemCardsRoute = CompositionsItemCardsRouteImport.update({
   path: '/compositions/item-cards',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompositionsJumpLineRoute = CompositionsJumpLineRouteImport.update({
+  id: '/compositions/jump-line',
+  path: '/compositions/jump-line',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompositionsLetterRoute = CompositionsLetterRouteImport.update({
   id: '/compositions/letter',
   path: '/compositions/letter',
@@ -487,6 +493,7 @@ export interface FileRoutesByFullPath {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/jump-line': typeof CompositionsJumpLineRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
@@ -559,6 +566,7 @@ export interface FileRoutesByTo {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/jump-line': typeof CompositionsJumpLineRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
@@ -632,6 +640,7 @@ export interface FileRoutesById {
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
+  '/compositions/jump-line': typeof CompositionsJumpLineRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
@@ -706,6 +715,7 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/jump-line'
     | '/compositions/letter'
     | '/compositions/list-rows'
     | '/compositions/notice'
@@ -778,6 +788,7 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/jump-line'
     | '/compositions/letter'
     | '/compositions/list-rows'
     | '/compositions/notice'
@@ -850,6 +861,7 @@ export interface FileRouteTypes {
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
+    | '/compositions/jump-line'
     | '/compositions/letter'
     | '/compositions/list-rows'
     | '/compositions/notice'
@@ -923,6 +935,7 @@ export interface RootRouteChildren {
   CompositionsFactsRoute: typeof CompositionsFactsRoute
   CompositionsFormSectionRoute: typeof CompositionsFormSectionRoute
   CompositionsItemCardsRoute: typeof CompositionsItemCardsRoute
+  CompositionsJumpLineRoute: typeof CompositionsJumpLineRoute
   CompositionsLetterRoute: typeof CompositionsLetterRoute
   CompositionsListRowsRoute: typeof CompositionsListRowsRoute
   CompositionsNoticeRoute: typeof CompositionsNoticeRoute
@@ -1309,6 +1322,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompositionsItemCardsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compositions/jump-line': {
+      id: '/compositions/jump-line'
+      path: '/compositions/jump-line'
+      fullPath: '/compositions/jump-line'
+      preLoaderRoute: typeof CompositionsJumpLineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compositions/letter': {
       id: '/compositions/letter'
       path: '/compositions/letter'
@@ -1491,6 +1511,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompositionsFactsRoute: CompositionsFactsRoute,
   CompositionsFormSectionRoute: CompositionsFormSectionRoute,
   CompositionsItemCardsRoute: CompositionsItemCardsRoute,
+  CompositionsJumpLineRoute: CompositionsJumpLineRoute,
   CompositionsLetterRoute: CompositionsLetterRoute,
   CompositionsListRowsRoute: CompositionsListRowsRoute,
   CompositionsNoticeRoute: CompositionsNoticeRoute,

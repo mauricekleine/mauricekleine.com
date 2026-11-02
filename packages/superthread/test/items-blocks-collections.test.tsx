@@ -29,7 +29,16 @@ import {
   ListRowMeta,
   ListRows,
   ListRowTitle,
+  PlainRow,
+  PlainRowActions,
+  PlainRowKind,
+  PlainRows,
+  PlainRowTick,
+  PlainRowTitle,
+  PlainRowWhen,
 } from "@/components/superthread/blocks/list-rows";
+import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
+import { JumpLine, JumpLineLink } from "@/components/superthread/blocks/jump-line";
 import { Button } from "@/components/superthread/ui/button";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { StatusGlyph } from "@/components/superthread/ui/glyphs";
@@ -348,6 +357,376 @@ describe("list rows", () => {
   test("claims no detail or forbidden class", () => {
     const rendered = elements(list());
     expect(detailsUsed(rendered, "list-rows")).toEqual([]);
+    expect(forbidden(rendered)).toEqual([]);
+  });
+});
+
+describe("plain rows", () => {
+  const PHONE = "[@media(max-width:600px)]:";
+  const list = (props: Partial<React.ComponentProps<typeof PlainRows>> = {}) =>
+    server(
+      <PlainRows aria-label="next" {...props}>
+        <PlainRow>
+          <PlainRowTitle href="/tasks/12">write the plan</PlainRowTitle>
+          <PlainRowKind>mail</PlainRowKind>
+          <PlainRowWhen>thu 5 nov</PlainRowWhen>
+        </PlainRow>
+      </PlainRows>,
+    );
+
+  test("is a real named list, and a row prints no rule or padding of its own", () => {
+    const host = list();
+    expect(one(host, "ul").el.getAttribute("aria-label")).toBe("next");
+    expect(host.querySelectorAll("ul > li")).toHaveLength(1);
+    expect(one(host, "li").el.getAttribute("data-mk")).toBe("list-rows");
+    expect(one(host, "ul").classes.filter((c) => /^border/.test(c))).toEqual([]);
+    expect(one(host, "li").classes.filter((c) => /^(border|p[xy]?-\d)/.test(c))).toEqual([]);
+  });
+
+  test("the whole row is one link, named once by the title", () => {
+    const host = list();
+    expect(host.querySelectorAll("a")).toHaveLength(1);
+    const link = one(host, "a");
+    expect(link.el.getAttribute("href")).toBe("/tasks/12");
+    expect(link.el.textContent).toBe("write the plan");
+    expect(link.classes).toEqual(expect.arrayContaining(["absolute", "inset-0", ...CONTROL_RING]));
+    expect(one(host, "li").classes).toContain("relative");
+    const words = one(host, '[data-slot="plain-row-title"] > [aria-hidden="true"]').el;
+    expect(words.textContent).toBe("write the plan");
+    expect(words.closest("a")).toBeNull();
+  });
+
+  test("takes the app's router link", () => {
+    const link = one(
+      server(
+        <PlainRows>
+          <PlainRow>
+            <PlainRowTitle render={<a href="/tasks/12" data-router="" />}>write the plan</PlainRowTitle>
+          </PlainRow>
+        </PlainRows>,
+      ),
+      "a",
+    );
+    expect(link.el.hasAttribute("data-router")).toBe(true);
+    expect(link.el.getAttribute("data-slot")).toBe("plain-row-link");
+  });
+
+  test("a title with no link stays words a screen reader reads", () => {
+    const host = server(
+      <PlainRows>
+        <PlainRow>
+          <PlainRowTitle>write the plan</PlainRowTitle>
+        </PlainRow>
+      </PlainRows>,
+    );
+    expect(host.querySelector("a")).toBeNull();
+    expect(host.querySelector('[aria-hidden="true"]')).toBeNull();
+    expect(one(host, '[data-slot="plain-row-title"]').el.textContent).toBe("write the plan");
+  });
+
+  test("a title holds one line at weight 400 and keeps its words in a tooltip", () => {
+    const host = list();
+    expect(one(host, '[data-slot="plain-row-title"]').classes).toEqual(
+      expect.arrayContaining(["truncate", "min-w-0", "font-normal", "text-ui", "text-foreground"]),
+    );
+    expect(one(host, "a").el.getAttribute("title")).toBe("write the plan");
+    const plain = server(
+      <PlainRowTitle>
+        <em>write</em>
+      </PlainRowTitle>,
+    );
+    expect(one(plain, '[data-slot="plain-row-title"]').el.hasAttribute("title")).toBe(false);
+  });
+
+  test("the columns are 80 and 128 px, and when holds its figures in mono", () => {
+    const host = list();
+    expect(one(host, '[data-slot="plain-row-kind"]').classes).toEqual(
+      expect.arrayContaining(["w-20", "truncate", "text-instrument", "text-muted-foreground"]),
+    );
+    expect(one(host, '[data-slot="plain-row-when"]').classes).toEqual(
+      expect.arrayContaining(["min-w-32", "text-right", "font-mono", "text-muted-foreground"]),
+    );
+  });
+
+  test("a row leaves out a column it doesn't print", () => {
+    const row = one(
+      server(
+        <PlainRows>
+          <PlainRow>
+            <PlainRowTitle href="/a">a</PlainRowTitle>
+            <PlainRowWhen>thu</PlainRowWhen>
+          </PlainRow>
+        </PlainRows>,
+      ),
+      "li",
+    );
+    expect(row.classes).toContain("flex");
+    expect(row.el.querySelector('[data-slot="plain-row-kind"]')).toBeNull();
+  });
+
+  test.each([
+    [undefined, "[--row:var(--spacing-row-plain)]"],
+    ["nested", "[--row:var(--spacing-row-nested)]"],
+    ["ruled", "[--row:var(--spacing-row-table)]"],
+  ] as const)("%s sets its own row height, and every form is 56 px on a phone", (variant, height) => {
+    const host = list({ variant });
+    expect(one(host, "ul").classes).toEqual(
+      expect.arrayContaining([height, `${PHONE}[--row:var(--spacing-row-board)]`]),
+    );
+    expect(one(host, "li").classes).toContain("h-(--row)");
+  });
+
+  test("a ruled list rules each row and reaches the panel's edges at both widths", () => {
+    const host = list({ variant: "ruled" });
+    const panel = one(server(<AppShellPanel />), '[data-slot="app-shell-panel"]').classes;
+    expect(panel).toEqual(expect.arrayContaining(["px-12", `${PHONE}px-4`]));
+    expect(one(host, "ul").classes).toEqual(
+      expect.arrayContaining([
+        "-mx-(--bleed)",
+        "in-data-[slot=app-shell-panel]:[--bleed:3rem]",
+        `${PHONE}in-data-[slot=app-shell-panel]:[--bleed:1rem]`,
+      ]),
+    );
+    expect(one(host, "li").classes).toEqual(
+      expect.arrayContaining([
+        "px-(--bleed)",
+        "group-data-[variant=ruled]/plain-rows:border-b",
+        "group-data-[variant=ruled]/plain-rows:border-border",
+      ]),
+    );
+  });
+
+  test("a ruled link rings inside the row, since the row reaches the panel's edges", () => {
+    expect(one(list({ variant: "ruled" }), "a").classes).toContain(
+      "group-data-[variant=ruled]/plain-rows:focus-visible:-outline-offset-2",
+    );
+  });
+
+  test("a phone stacks the title over kind and when, in sans", () => {
+    const host = list();
+    expect(one(host, "li").classes).toEqual(
+      expect.arrayContaining([`${PHONE}grid`, `${PHONE}grid-cols-[auto_minmax(0,1fr)]`, `${PHONE}content-center`]),
+    );
+    expect(one(host, '[data-slot="plain-row-title"]').classes).toContain(`${PHONE}col-span-full`);
+    expect(one(host, '[data-slot="plain-row-when"]').classes).toEqual(
+      expect.arrayContaining([`${PHONE}font-sans`, `${PHONE}text-left`, `${PHONE}min-w-0`]),
+    );
+  });
+
+  test("the dot between kind and when is decoration, and a row with no filled when prints none", () => {
+    const dot = one(list(), '[data-slot="plain-row-dot"]');
+    expect(dot.el.getAttribute("aria-hidden")).toBe("true");
+    expect(dot.el.textContent).toBe("·");
+    expect(dot.classes).toEqual(
+      expect.arrayContaining([
+        "hidden",
+        `${PHONE}[[data-slot=plain-row-kind]:has(+[data-slot=plain-row-when]:not(:empty))_&]:inline`,
+      ]),
+    );
+    expect(one(list(), '[data-slot="plain-row-when"]').classes).toContain(`${PHONE}empty:hidden`);
+  });
+
+  test("a list clamps its titles to two lines only when it asks, only on a phone", () => {
+    const clamped = list({ clamp: true });
+    expect(one(clamped, "ul").el.hasAttribute("data-clamp")).toBe(true);
+    expect(one(list(), "ul").el.hasAttribute("data-clamp")).toBe(false);
+    expect(one(clamped, '[data-slot="plain-row-title"]').classes).toEqual(
+      expect.arrayContaining([
+        "truncate",
+        `${PHONE}group-data-[clamp]/plain-rows:line-clamp-2`,
+        `${PHONE}group-data-[clamp]/plain-rows:whitespace-normal`,
+      ]),
+    );
+    expect(one(clamped, "li").classes).toEqual(
+      expect.arrayContaining([
+        `${PHONE}group-data-[clamp]/plain-rows:h-auto`,
+        `${PHONE}group-data-[clamp]/plain-rows:min-h-11`,
+      ]),
+    );
+  });
+
+  test("a closed row stays in the list, muted and struck through under the pointer too", () => {
+    const host = server(
+      <PlainRows>
+        <PlainRow closed>
+          <PlainRowTitle href="/a">written up</PlainRowTitle>
+        </PlainRow>
+      </PlainRows>,
+    );
+    expect(one(host, "li").el.hasAttribute("data-closed")).toBe(true);
+    expect(one(host, '[data-slot="plain-row-title"]').classes).toContain(
+      "group-data-[closed]/plain-row:text-muted-foreground",
+    );
+    expect(one(host, '[aria-hidden="true"]').classes).toEqual(
+      expect.arrayContaining([
+        "peer-hover/plain-row-link:underline",
+        "group-data-[closed]/plain-row:line-through",
+        "group-data-[closed]/plain-row:peer-hover/plain-row-link:line-through",
+      ]),
+    );
+  });
+
+  describe("a tick", () => {
+    const ticked = (props: Partial<React.ComponentProps<typeof PlainRows>> = {}) =>
+      server(
+        <PlainRows {...props}>
+          <PlainRow>
+            <PlainRowTick>
+              <Checkbox aria-label="mark done: write the plan" />
+            </PlainRowTick>
+            <PlainRowTitle href="/a">write the plan</PlainRowTitle>
+          </PlainRow>
+        </PlainRows>,
+      );
+
+    test("sits above the row's link, outside it", () => {
+      const host = ticked();
+      expect(one(host, '[data-slot="plain-row-tick"]').classes).toEqual(expect.arrayContaining(["absolute", "z-1"]));
+      expect(one(host, '[data-slot="checkbox"]').el.closest("a")).toBeNull();
+    });
+
+    test("hangs in the gutter wide, clear of a ruled row's bleed, and takes the right edge on a phone", () => {
+      const host = ticked();
+      expect(one(host, '[data-slot="plain-row-tick"]').classes).toEqual(
+        expect.arrayContaining(["right-[calc(100%-var(--bleed))]", "w-9", `${PHONE}right-(--bleed)`, `${PHONE}w-11`]),
+      );
+      expect(one(host, "li").classes).toContain(
+        `${PHONE}has-[[data-slot=plain-row-tick]]:pr-[calc(var(--bleed)+2.75rem)]`,
+      );
+    });
+
+    test("holds the checkbox's pointer inside the row wide, where a row can be 36 px", () => {
+      const WIDE = "[@media(min-width:601px)]:";
+      expect(one(ticked(), '[data-slot="plain-row-tick"]').classes).toEqual(
+        expect.arrayContaining([
+          `${WIDE}[&_[data-slot=checkbox]]:after:h-(--row)`,
+          `${WIDE}[&_[data-slot=checkbox]]:after:w-9`,
+        ]),
+      );
+    });
+  });
+
+  test("actions sit above the row's link and fire apart from it", async () => {
+    let accepts = 0;
+    const { body, done } = await client(
+      <PlainRows>
+        <PlainRow>
+          <PlainRowTitle href="/a">a suggestion</PlainRowTitle>
+          <PlainRowActions>
+            <Button size="sm" variant="ghost" onClick={() => accepts++}>
+              keep
+            </Button>
+          </PlainRowActions>
+        </PlainRow>
+      </PlainRows>,
+    );
+    try {
+      const actions = one(body, '[data-slot="plain-row-actions"]');
+      expect(actions.classes).toEqual(
+        expect.arrayContaining([
+          "relative",
+          "z-1",
+          `${PHONE}col-span-full`,
+          `${PHONE}[&>[data-variant=ghost]:first-child]:-ml-[13px]`,
+          "[@media(min-width:601px)]:[&>[data-variant=ghost]:last-child]:-mr-[13px]",
+        ]),
+      );
+      expect(actions.el.closest("a")).toBeNull();
+      await act(async () => button(body, "keep").click());
+      expect(accepts).toBe(1);
+    } finally {
+      await done();
+    }
+  });
+
+  test("claims no detail or forbidden class", () => {
+    const rendered = elements(list({ variant: "ruled", clamp: true }));
+    expect(detailsUsed(rendered, "list-rows")).toEqual([]);
+    expect(forbidden(rendered)).toEqual([]);
+  });
+});
+
+describe("jump line", () => {
+  const PHONE = "[@media(max-width:600px)]:";
+  const line = () =>
+    server(
+      <JumpLine>
+        <JumpLineLink href="#today" count={10}>
+          today
+        </JumpLineLink>
+        <JumpLineLink href="#later">later</JumpLineLink>
+      </JumpLine>,
+    );
+
+  test("is a named nav of real list items, each a link to a section", () => {
+    const host = line();
+    expect(one(host, "nav").el.getAttribute("aria-label")).toBe("on this page");
+    expect(one(host, "nav").el.getAttribute("data-mk")).toBe("jump-line");
+    expect(host.querySelectorAll("nav ul > li > a")).toHaveLength(2);
+    expect(one(host, "a").el.getAttribute("href")).toBe("#today");
+    expect(one(host, "a").classes).toEqual(expect.arrayContaining(CONTROL_RING));
+  });
+
+  test("an app can name the line for its page", () => {
+    const host = server(<JumpLine aria-label="chapters" />);
+    expect(one(host, "nav").el.getAttribute("aria-label")).toBe("chapters");
+  });
+
+  test("a link reads its name and its count, and the count prints muted in mono", () => {
+    const host = line();
+    expect(one(host, "a").el.textContent).toBe("today 10");
+    expect(one(host, '[data-slot="jump-line-count"]').classes).toEqual(
+      expect.arrayContaining(["font-mono", "text-muted-foreground"]),
+    );
+    expect(one(host, "li:last-child a").el.textContent).toBe("later");
+    expect(host.querySelectorAll('[data-slot="jump-line-count"]')).toHaveLength(1);
+  });
+
+  test("prints a count of 0", () => {
+    const host = server(
+      <JumpLineLink href="#a" count={0}>
+        today
+      </JumpLineLink>,
+    );
+    expect(one(host, '[data-slot="jump-line-count"]').el.textContent).toBe("0");
+  });
+
+  test("the name underlines on hover, and the count stays out of it", () => {
+    const host = line();
+    const name = one(host, "a > span").classes;
+    expect(name).toContain("group-hover/jump-line-link:underline");
+    expect(one(host, '[data-slot="jump-line-count"]').classes).not.toContain("group-hover/jump-line-link:underline");
+  });
+
+  test("the dot is the item's own decoration, outside the link, so a left out item takes its dot along", () => {
+    const host = line();
+    const dots = [...host.querySelectorAll('[data-slot="jump-line-dot"]')];
+    expect(dots).toHaveLength(2);
+    for (const dot of dots) {
+      expect(dot.getAttribute("aria-hidden")).toBe("true");
+      expect(dot.closest("a")).toBeNull();
+      expect(dot.parentElement?.tagName).toBe("LI");
+    }
+    expect(one(host, '[data-slot="jump-line-dot"]').classes).toEqual(
+      expect.arrayContaining(["group-last/jump-line-item:hidden", `${PHONE}hidden`]),
+    );
+  });
+
+  test("each link holds 44 px on a phone, where the line wraps with no dots", () => {
+    const host = line();
+    expect(one(host, "a").classes).toEqual(expect.arrayContaining([`${PHONE}min-h-11`, `${PHONE}min-w-11`]));
+    expect(one(host, "ul").classes).toEqual(expect.arrayContaining(["flex-wrap", `${PHONE}gap-x-4`]));
+  });
+
+  test("takes the app's router link", () => {
+    const link = one(server(<JumpLineLink render={<a href="#a" data-router="" />}>a</JumpLineLink>), "a");
+    expect(link.el.hasAttribute("data-router")).toBe(true);
+    expect(link.el.getAttribute("data-slot")).toBe("jump-line-link");
+  });
+
+  test("claims no detail or forbidden class", () => {
+    const rendered = elements(line());
+    expect(detailsUsed(rendered, "jump-line")).toEqual([]);
     expect(forbidden(rendered)).toEqual([]);
   });
 });
