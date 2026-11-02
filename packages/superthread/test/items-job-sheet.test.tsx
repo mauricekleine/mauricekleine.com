@@ -201,6 +201,13 @@ describe("the parts", () => {
     expect(one(primary.el, ":not([aria-hidden]).row-start-1").el.textContent).toBe("read the draft");
   });
 
+  test("the primary's words sit in the middle of the reserve's lines, so a short word stays centred and a long one keeps to two lines", () => {
+    // The word and the reserve share one grid cell. Stretched to a reserve on two lines, `done` sat on the first; stretched
+    // to one on three, the clamp let a third line print past the button's fill.
+    const primary = one(sheet(), '[data-slot="job-sheet-primary"]').el;
+    expect(one(primary, ":scope > span").classes).toContain("items-center");
+  });
+
   test("a primary with no reserve prints its word alone", () => {
     const host = server(<JobSheetPrimary>read the draft</JobSheetPrimary>);
     expect(host.querySelector('[aria-hidden="true"]')).toBeNull();

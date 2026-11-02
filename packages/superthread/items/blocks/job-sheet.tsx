@@ -99,7 +99,9 @@ function JobSheetActions({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 // The one primary, which names the step. reserve takes the longest word it can print: it sits unseen and unread in the
-// same cell, so the button holds its width when its word changes. It's a link when it leads somewhere: pass render and
+// same cell, so the button holds its width when its word changes. The words sit in the middle of that cell, so a short
+// word stays centred beside a reserve that takes more lines, and words that need three lines keep to two.
+// It's a link when it leads somewhere: pass render and
 // nativeButton={false}. It fills with plum on paper; a sheet with nothing pressing passes variant="outline". On a phone
 // the row is narrow, so its words take two lines inside the button's 48 px rather than lose the end of the step, and it
 // gives the row's width to a toggle beside it down to 84 px, which holds a short step on two lines. On a sheet under
@@ -120,7 +122,7 @@ function JobSheetPrimary({
       )}
       {...props}
     >
-      <span className="grid min-w-0 grid-cols-[minmax(0,auto)] justify-items-center text-center">
+      <span className="grid min-w-0 grid-cols-[minmax(0,auto)] items-center justify-items-center text-center">
         {reserve != null && (
           <span
             aria-hidden="true"
