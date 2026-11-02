@@ -106,12 +106,14 @@ function ReaderLine({ className, render = <h2 />, ...props }: useRender.Componen
 }
 
 // A page's one paper. In a working panel it hangs 24 px into both margins, so its words keep the left edge of the page
-// around it, and on a phone it runs the panel's whole width.
+// around it, and on a phone it runs the panel's whole width. There, on a light page, it is white on a white panel, where
+// the lift alone can't show its top and left: it draws a 1 px edge in border inside its box, as an outline, so nothing
+// moves. On a dark page the white is its edge.
 function ReaderPaper({ className, ...props }: React.ComponentProps<typeof Paper>) {
   return (
     <Paper
       className={cn(
-        "[@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mx-(--spacing-panel-inset) [@media(min-width:601px)]:in-data-[slot=app-shell-panel]:-mx-6",
+        "in-data-[slot=app-shell-panel]:not-dark:outline in-data-[slot=app-shell-panel]:not-dark:-outline-offset-1 in-data-[slot=app-shell-panel]:not-dark:outline-border [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mx-(--spacing-panel-inset) [@media(min-width:601px)]:in-data-[slot=app-shell-panel]:-mx-6",
         className,
       )}
       {...props}

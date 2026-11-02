@@ -3202,7 +3202,7 @@
       },
       {
         "name": "The One Paper Rule",
-        "body": "A page prints one paper, and it stays white in every theme: it never reverses on a dark page. On a dark panel the white is its edge, so it prints flat. On a light panel, white on white, it lifts by the slip rake and the contact edge. A `send-bar` on a phone runs to the panel's edges and has no room to lift, so on a light page it rules its top edge. A `job-sheet` hangs into the panel's margins, where the lift alone leaves its top and left unseen, so on a light page it draws its 1 px edge in `border`, inside its box.",
+        "body": "A page prints one paper, and it stays white in every theme: it never reverses on a dark page. On a dark panel the white is its edge, so it prints flat. On a light panel, white on white, it lifts by the slip rake and the contact edge. A `send-bar` on a phone runs to the panel's edges and has no room to lift, so on a light page it rules its top edge. A paper that hangs into the panel's margins, as a `job-sheet` does and a `ReaderPaper` does in a panel, shows no top or left edge by its lift alone, so on a light page it draws its 1 px edge in `border`, inside its box.",
         "section": "components"
       },
       {

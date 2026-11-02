@@ -644,7 +644,7 @@ Pass items: base-nova's card, label and separator on the tokens, square and rule
 
 The one white block on a page, for the thing the page is there for. It is a `.light` island on the card fill, so everything on it reads the light roles. On a dark page the one plum fill can print here, the focus ring takes the deep value and a title prints in key. Its padding is 24 px, and 16 px at 600 px and below, level with the working panel's. A list or menu opened from it portals to `<body>` and takes the document's mode; pass `portalProps` with the paper as its container to hold it light.
 
-**The One Paper Rule.** A page prints one paper, and it stays white in every theme: it never reverses on a dark page. On a dark panel the white is its edge, so it prints flat. On a light panel, white on white, it lifts by the slip rake and the contact edge. A `send-bar` on a phone runs to the panel's edges and has no room to lift, so on a light page it rules its top edge. A `job-sheet` hangs into the panel's margins, where the lift alone leaves its top and left unseen, so on a light page it draws its 1 px edge in `border`, inside its box.
+**The One Paper Rule.** A page prints one paper, and it stays white in every theme: it never reverses on a dark page. On a dark panel the white is its edge, so it prints flat. On a light panel, white on white, it lifts by the slip rake and the contact edge. A `send-bar` on a phone runs to the panel's edges and has no room to lift, so on a light page it rules its top edge. A paper that hangs into the panel's margins, as a `job-sheet` does and a `ReaderPaper` does in a panel, shows no top or left edge by its lift alone, so on a light page it draws its 1 px edge in `border`, inside its box.
 
 ### Fit title
 
@@ -793,7 +793,7 @@ A fault has one home: the foot right under the strip, whichever calendar failed 
 
 ### Reading
 
-`reader` is a page of reading. Its lead line at the page step says what the page comes to, and `ReaderNext` holds the one next step on the page's one paper. `ReaderPaper` is that paper. In a panel it hangs 24 px into both margins, so its words keep the left edge of the page around it, and on a phone it runs the panel's whole width. `ReaderNext` keeps its right edge on the reading column, 40 px from the rail.
+`reader` is a page of reading. Its lead line at the page step says what the page comes to, and `ReaderNext` holds the one next step on the page's one paper. `ReaderPaper` is that paper. In a panel it hangs 24 px into both margins, so its words keep the left edge of the page around it, and on a phone it runs the panel's whole width. There, on a light page, it draws its 1 px edge, as the One Paper Rule says. `ReaderNext` keeps its right edge on the reading column, 40 px from the rail.
 
 The reader answers to its own width. With a rail and 640 px to spare, the lead and the 248 px rail share the top row 40 px apart, and the rest runs the whole width under them. Below that it's one column in source order. So an app writes the lead, the wide row, the body, the rail and the foot, a keyboard meets them in the order a phone prints them, and `ReaderFoot`, the panel's foot, stays last in the panel.
 
