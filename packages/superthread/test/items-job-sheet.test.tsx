@@ -1,6 +1,7 @@
 // The job sheet. happy-dom lays nothing out, so these read what a browser keys on: the rows the grid holds, the areas the
 // parts claim, and the classes each element carries. Those rows are checked against the type steps in tokens/scale.ts, so
-// a slot and the step it holds can't drift apart. The registry shape and the catalog live in the generic suites.
+// a slot and the step it holds can't drift apart. Clear stands where the job stood, so its rows are read here too. The
+// registry shape and the catalog live in the generic suites.
 import { describe, expect, test } from "bun:test";
 import {
   JobSheet,
@@ -12,7 +13,9 @@ import {
   JobSheetToggle,
   JobSheetWhy,
 } from "@/components/superthread/blocks/job-sheet";
+import { ClearState, ClearStateDoor, ClearStateReason, ClearStateTitle } from "@/components/superthread/blocks/states";
 import { Button } from "@/components/superthread/ui/button";
+import { InlineAnswers, InlineAnswersLine } from "@/components/superthread/ui/inline-answers";
 import { steps } from "../tokens/scale.ts";
 import { claim, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
 
@@ -41,9 +44,9 @@ function sheet(more?: { changed?: string; why?: boolean }) {
 
 const grid = (host: ParentNode) => one(host, '[data-slot="job-sheet"]');
 
-// The rows the grid holds in a band, read from its class: one with no variants, or one under the variant named.
-function rows(host: ParentNode, band: (variants: string[]) => boolean) {
-  const found = grid(host).classes.filter((cls) => {
+// The rows a grid holds in a band, read from its class: one with no variants, or one under the variant named.
+function rows(host: ParentNode, band: (variants: string[]) => boolean, slot = "job-sheet") {
+  const found = one(host, `[data-slot="${slot}"]`).classes.filter((cls) => {
     const { variants, utility } = parts(cls);
     return utility.startsWith("grid-rows-[") && band(variants);
   });
@@ -56,7 +59,7 @@ function rows(host: ParentNode, band: (variants: string[]) => boolean) {
 }
 
 const FULL = (variants: string[]) => variants.length === 0;
-const COMPACT = (variants: string[]) => variants.some((variant) => variant.includes("/job-sheet"));
+const COMPACT = (variants: string[]) => variants.some((variant) => variant.includes("@max-[783px]/"));
 const NARROW = (variants: string[]) => variants.length === 1 && variants[0] === PHONE.slice(0, -1);
 
 describe("the paper", () => {
@@ -95,6 +98,19 @@ describe("the held slots", () => {
     expect(rows(host, FULL).why).toBe(lede.line);
     expect(rows(host, COMPACT).why).toBe(lede.line * 2);
     expect(rows(host, NARROW).why).toBe(lede.phone!.line * 2);
+  });
+
+  test("inline answers leave the clip off, so a target past the held row isn't cut", () => {
+    const host = server(
+      <JobSheetWhy>
+        <InlineAnswers>
+          <InlineAnswersLine>the next draft waits on your answer.</InlineAnswersLine>
+        </InlineAnswers>
+      </JobSheetWhy>,
+    );
+    const why = one(host, '[data-slot="job-sheet-why"]');
+    expect(why.classes).toContain("has-data-[slot=inline-answers]:overflow-visible");
+    expect(why.el.querySelector("[data-slot=inline-answers]")).not.toBeNull();
   });
 
   test("the what-changed slot and the actions hold their own height in every band", () => {
@@ -195,5 +211,86 @@ describe("the parts", () => {
     const rendered = elements(sheet());
     expect(forbidden(rendered)).toEqual([]);
     expect(detailsUsed(rendered, "job-sheet")).toEqual(claim("job-sheet"));
+  });
+});
+
+describe("clear", () => {
+  const PANEL = "@min-[784px]/clear-state:";
+  const clear = (title?: React.ReactElement) =>
+    server(
+      <ClearState aria-labelledby="clear">
+        <ClearStateTitle id="clear" render={title}>
+          nothing needs you until 16:30.
+        </ClearStateTitle>
+        <ClearStateReason>the draft and the deck check are done.</ClearStateReason>
+        <ClearStateDoor href="/open">the rest is in open</ClearStateDoor>
+      </ClearState>,
+    );
+  const ROWS = "clear-state-rows";
+
+  test("is the sheet's box with no sheet: no paper, no fill", () => {
+    const host = clear();
+    expect(host.querySelector('[data-slot="paper"]')).toBeNull();
+    const section = one(host, '[data-slot="clear-state"]');
+    expect(section.el.tagName).toBe("SECTION");
+    expect(section.el.getAttribute("data-mk")).toBe("states");
+    expect(section.el.getAttribute("aria-labelledby")).toBe("clear");
+    expect(section.classes.filter((cls) => parts(cls).utility.startsWith("bg-"))).toEqual([]);
+    expect(section.classes).toEqual(
+      expect.arrayContaining(["-mx-6", "mt-5", "px-6", "py-7", `${PHONE}-mx-4`, `${PHONE}mt-4`, `${PHONE}p-4`]),
+    );
+    expect(one(sheet(), '[data-slot="paper"]').classes).toEqual(
+      expect.arrayContaining(["-mx-6", "mt-5", "p-6", "py-7", `${PHONE}-mx-4`, `${PHONE}mt-4`, `${PHONE}p-4`]),
+    );
+  });
+
+  test("holds the job sheet's rows in every band, so the reason and the door land on the why and the primary", () => {
+    for (const band of [FULL, COMPACT, NARROW]) expect(rows(clear(), band, ROWS)).toEqual(rows(sheet(), band));
+  });
+
+  test("the title takes the cue's row and the title's, the reason the why's, and the door the actions'", () => {
+    const host = clear();
+    expect(one(host, `[data-slot="${ROWS}"]`).classes).toContain(
+      "[grid-template-areas:'title'_'title'_'reason'_'.'_'door']",
+    );
+    expect(one(host, '[data-slot="clear-state-title"]').classes).toContain("[grid-area:title]");
+    expect(one(host, '[data-slot="clear-state-reason"]').classes).toContain("[grid-area:reason]");
+    expect(one(host, '[data-slot="door"]').classes).toEqual(
+      expect.arrayContaining(["[grid-area:door]", "self-center"]),
+    );
+  });
+
+  test("the title's rows hold two lines of display at a full panel and three of hero below it", () => {
+    const span = ({ cue, title }: { cue: number; title: number }, gap: number) => cue + gap + title;
+    const host = clear();
+    expect(Math.floor(span(rows(host, FULL, ROWS), 12) / step("display").line)).toBe(2);
+    expect(Math.floor(span(rows(host, COMPACT, ROWS), 12) / step("hero").line)).toBe(3);
+    expect(Math.floor(span(rows(host, NARROW, ROWS), 8) / step("hero").phone!.line)).toBe(3);
+  });
+
+  test("a full panel keeps its height when the job goes, and narrower ends at the door", () => {
+    const held = one(clear(), `[data-slot="${ROWS}"]`).classes.filter((cls) => parts(cls).utility.startsWith("min-h-"));
+    expect(held).toEqual([`${PANEL}min-h-[549px]`]);
+  });
+
+  test("the title is the page's h1 until render says otherwise, at display in the first ink, hero below a full panel", () => {
+    const title = one(clear(), "h1");
+    expect(title.el.textContent).toBe("nothing needs you until 16:30.");
+    expect(title.classes).toEqual(expect.arrayContaining(["type-hero", `${PANEL}type-display`, "text-first"]));
+    expect(one(clear(<h2 />), "h2").el.getAttribute("data-slot")).toBe("clear-state-title");
+  });
+
+  test("the reason reads like the why, and the door is the onward door", () => {
+    const host = clear();
+    expect(one(host, '[data-slot="clear-state-reason"]').classes).toEqual(
+      expect.arrayContaining(["type-lede", "[@media(max-width:420px)]:type-read"]),
+    );
+    const door = one(host, '[data-slot="door"]');
+    expect(door.el.getAttribute("href")).toBe("/open");
+    expect(door.el.getAttribute("data-mk")).toBe("onward");
+  });
+
+  test("keeps the system's rules", () => {
+    expect(forbidden(elements(clear()))).toEqual([]);
   });
 });

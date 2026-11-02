@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GroundFrame, Serves } from "@/examples/compositions-a";
-import { JobSheetExample, JobSheetStates, JobSheetTitles } from "@/examples/job-sheet";
+import { JobSheetAnswers, JobSheetExample, JobSheetStates, JobSheetTitles } from "@/examples/job-sheet";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -11,6 +11,7 @@ export const Route = createFileRoute("/compositions/job-sheet")({
     sections: [
       { id: "example", title: "example" },
       { id: "states", title: "through the day" },
+      { id: "wrong", title: "when it's wrong" },
       { id: "titles", title: "long titles" },
       { id: "phone", title: "on a phone" },
       { id: "parts", title: "parts" },
@@ -65,6 +66,26 @@ function Page() {
           dark={
             <GroundFrame mode="dark" title="job sheet states, dark" width={1100} height={1180}>
               <JobSheetStates />
+            </GroundFrame>
+          }
+        />
+      </Section>
+      <Section id="wrong" title="when it's wrong">
+        <p className="st-cb-copy">
+          the why&rsquo;s slot holds <code>InlineAnswers</code>, so <code>wrong?</code> swaps the line for plain answers
+          and the actions stay where they were. <code>wrong day</code> asks which day in the same slot. when
+          there&rsquo;s nothing left to do, the sheet gives way to <a href="/compositions/states#clear">clear</a>.
+        </p>
+        <ModePair
+          className="st-cb-stack"
+          light={
+            <GroundFrame mode="light" title="job sheet answers, light" width={1100} height={1180}>
+              <JobSheetAnswers />
+            </GroundFrame>
+          }
+          dark={
+            <GroundFrame mode="dark" title="job sheet answers, dark" width={1100} height={1180}>
+              <JobSheetAnswers />
             </GroundFrame>
           }
         />
@@ -130,7 +151,10 @@ function Page() {
           <dt>
             <code>JobSheetWhy</code>
           </dt>
-          <dd>why this job, in one short sentence: one line at a full panel, two below it.</dd>
+          <dd>
+            why this job, in one short sentence: one line at a full panel, two below it. it holds{" "}
+            <code>InlineAnswers</code> when the job can be wrong.
+          </dd>
           <dt>
             <code>JobSheetChanged</code>
           </dt>

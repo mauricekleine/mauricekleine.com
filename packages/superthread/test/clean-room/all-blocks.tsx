@@ -8,6 +8,7 @@ import {
   AppShellGround,
   AppShellNav,
   AppShellNavItem,
+  AppShellPageFoot,
   AppShellPanel,
   AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
@@ -32,6 +33,10 @@ import {
   PageHeaderTitle,
 } from "@/components/superthread/blocks/page-header";
 import {
+  ClearState,
+  ClearStateDoor,
+  ClearStateReason,
+  ClearStateTitle,
   EmptyState,
   EmptyStateActions,
   EmptyStateText,
@@ -180,6 +185,13 @@ function Sink({ mode }: { mode: Mode }) {
             <Button variant="outline">new task</Button>
           </EmptyStateActions>
         </EmptyState>
+        <ClearState aria-labelledby="clear">
+          <ClearStateTitle id="clear" render={<h3 />}>
+            nothing needs you until 16:30.
+          </ClearStateTitle>
+          <ClearStateReason>the draft and the deck check are done.</ClearStateReason>
+          <ClearStateDoor href="#open">the rest is in open</ClearStateDoor>
+        </ClearState>
       </Part>
 
       {/* blocks: shell */}
@@ -208,6 +220,9 @@ function Sink({ mode }: { mode: Mode }) {
                 <a href="#today">today</a>
               </AppShellPanelFoot>
             </AppShellPanel>
+            <AppShellPageFoot>
+              <a href="#settings">settings</a>
+            </AppShellPageFoot>
           </AppShellGround>
         </AppShell>
       </Part>

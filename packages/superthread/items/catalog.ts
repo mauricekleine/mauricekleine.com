@@ -510,6 +510,16 @@ export const catalog: CatalogItem[] = [
     upstream: null,
   },
   {
+    name: "inline-answers",
+    type: "registry:ui",
+    title: "inline answers",
+    description:
+      "a suggestion that takes correction in its own slot: a wrong? control swaps the line for plain answers there",
+    files: [ui("inline-answers")],
+    tier: "brand",
+    upstream: null,
+  },
+  {
     name: "onward",
     type: "registry:ui",
     title: "onward",
@@ -617,7 +627,8 @@ export const catalog: CatalogItem[] = [
     name: "states",
     type: "registry:block",
     title: "states",
-    description: "what a collection shows while it loads, when it fails and when it is empty",
+    description:
+      "what a collection shows while it loads, when it fails and when it is empty, and a page when it's clear",
     files: [block("states")],
     tier: "block",
     upstream: null,

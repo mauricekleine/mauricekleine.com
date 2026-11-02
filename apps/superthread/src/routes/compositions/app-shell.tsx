@@ -6,6 +6,7 @@ import {
   AppShellGround,
   AppShellNav,
   AppShellNavItem,
+  AppShellPageFoot,
   AppShellPanel,
   AppShellPanelFoot,
 } from "@/components/superthread/blocks/app-shell";
@@ -101,9 +102,11 @@ function Workspace({ printed = false }: { printed?: boolean }) {
   );
 }
 
-// Both feet at once: the nav's slot with the quiet add above it, and the row that closes the panel.
+// Both feet at once: the nav's slot with the quiet add above it, and the row that closes the panel. The nav's line and the
+// page's are one value, so a phone reads the same words.
 function FootedWorkspace() {
   const [added, setAdded] = useState<string[]>([]);
+  const needsYou = <a href="#feet">google needs signing in</a>;
   return (
     <AppShell
       current="orbit"
@@ -111,7 +114,7 @@ function FootedWorkspace() {
       hrefs={hrefs}
       skipLink={false}
       sidebar={
-        <AppShellNav ship="orbit" foot={<a href="#feet">settings</a>}>
+        <AppShellNav ship="orbit" foot={needsYou}>
           <AppShellNavItem render={<button type="button" />} isActive number={1}>
             now
           </AppShellNavItem>
@@ -140,6 +143,7 @@ function FootedWorkspace() {
             <a href="#feet">last week</a>
           </AppShellPanelFoot>
         </AppShellPanel>
+        <AppShellPageFoot>{needsYou}</AppShellPageFoot>
       </AppShellGround>
     </AppShell>
   );
@@ -197,8 +201,8 @@ function Page() {
         <p className="st-ca-copy">
           pass <code>foot</code> to the nav, even as <code>null</code>, and its column runs to full height with a slot
           at the bottom. the slot holds its place while it&rsquo;s empty, so a line that comes and goes moves nothing.
-          at 900 px and below it steps aside with the ship&rsquo;s name. <code>AppShellPanelFoot</code> closes the panel
-          with a row under a rule that reaches both edges of the sheet.
+          it prints one line, only when something needs the reader. <code>AppShellPanelFoot</code> closes the panel with
+          a row under a rule that reaches both edges of the sheet.
         </p>
         <ModePair
           className="st-ca-wide-pair"
@@ -213,7 +217,11 @@ function Page() {
             </ViewportFrame>
           }
         />
-        <p className="st-ca-copy">on a phone the slot is gone and each link in the row is a 44 px box.</p>
+        <p className="st-ca-copy">
+          at 900 px and below the slot steps aside with the ship&rsquo;s name, and <code>AppShellPageFoot</code> prints
+          the same words under the panel. print both or neither. each link in the panel&rsquo;s row is a 44 px box on a
+          phone.
+        </p>
         <ModePair
           light={
             <ViewportFrame mode="light" title="orbit with both feet on a phone, light" height={420}>
@@ -276,6 +284,13 @@ function Page() {
           <dd>
             the panel&rsquo;s last row. a span prints as the muted lead word, and links read as chrome. render a named
             nav for a row of links.
+          </dd>
+          <dt>
+            <code>AppShellPageFoot</code>
+          </dt>
+          <dd>
+            the nav&rsquo;s foot line, 900 px and below, last in the ground. pass it what <code>foot</code> holds.
+            empty, it takes no room.
           </dd>
         </dl>
       </Section>

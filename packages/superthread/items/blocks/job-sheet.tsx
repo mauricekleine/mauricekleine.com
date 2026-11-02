@@ -49,13 +49,14 @@ function JobSheetTitle({ className, ...props }: React.ComponentProps<typeof FitT
 
 // Why this job, in one short sentence. It prints whole on one line at a full panel and on two below it, where a phone of
 // 420 px or less takes the reading step. Its height is held, so what replaces the words in the slot stays in the slot, and
-// a ring on a control inside it keeps its 4 px.
+// a ring on a control inside it keeps its 4 px. Inline answers leave the clip off: a target reaches past a held row on a
+// phone, and a clip would cut it.
 function JobSheetWhy({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="job-sheet-why"
       className={cn(
-        "min-w-0 overflow-clip type-lede text-foreground [grid-area:why] [overflow-clip-margin:4px] [overflow-wrap:anywhere] [@media(max-width:420px)]:type-read",
+        "min-w-0 overflow-clip type-lede text-foreground [grid-area:why] [overflow-clip-margin:4px] [overflow-wrap:anywhere] has-data-[slot=inline-answers]:overflow-visible [@media(max-width:420px)]:type-read",
         className,
       )}
       {...props}

@@ -59,6 +59,17 @@
     gap: 24px;
   }
 
+  /* inline answers: the slots a parent would hold, two lines of the lede */
+  .st-answers {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .st-answers-slot {
+    height: 66px;
+    max-width: 560px;
+  }
+
   /* fit title: the held boxes, each with a hairline at its right edge so its width shows */
   .st-fit-stack {
     display: grid;

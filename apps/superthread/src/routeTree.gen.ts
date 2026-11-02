@@ -31,6 +31,7 @@ import { Route as ComponentsFitTitleRouteImport } from './routes/components/fit-
 import { Route as ComponentsFleetRailRouteImport } from './routes/components/fleet-rail'
 import { Route as ComponentsGlyphsRouteImport } from './routes/components/glyphs'
 import { Route as ComponentsHotkeyRouteImport } from './routes/components/hotkey'
+import { Route as ComponentsInlineAnswersRouteImport } from './routes/components/inline-answers'
 import { Route as ComponentsInputRouteImport } from './routes/components/input'
 import { Route as ComponentsInputGroupRouteImport } from './routes/components/input-group'
 import { Route as ComponentsKbdRouteImport } from './routes/components/kbd'
@@ -194,6 +195,11 @@ const ComponentsGlyphsRoute = ComponentsGlyphsRouteImport.update({
 const ComponentsHotkeyRoute = ComponentsHotkeyRouteImport.update({
   id: '/components/hotkey',
   path: '/components/hotkey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComponentsInlineAnswersRoute = ComponentsInlineAnswersRouteImport.update({
+  id: '/components/inline-answers',
+  path: '/components/inline-answers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsInputRoute = ComponentsInputRouteImport.update({
@@ -493,6 +499,7 @@ export interface FileRoutesByFullPath {
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
   '/components/hotkey': typeof ComponentsHotkeyRoute
+  '/components/inline-answers': typeof ComponentsInlineAnswersRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
@@ -571,6 +578,7 @@ export interface FileRoutesByTo {
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
   '/components/hotkey': typeof ComponentsHotkeyRoute
+  '/components/inline-answers': typeof ComponentsInlineAnswersRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
@@ -650,6 +658,7 @@ export interface FileRoutesById {
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
   '/components/hotkey': typeof ComponentsHotkeyRoute
+  '/components/inline-answers': typeof ComponentsInlineAnswersRoute
   '/components/input': typeof ComponentsInputRoute
   '/components/input-group': typeof ComponentsInputGroupRoute
   '/components/kbd': typeof ComponentsKbdRoute
@@ -730,6 +739,7 @@ export interface FileRouteTypes {
     | '/components/fleet-rail'
     | '/components/glyphs'
     | '/components/hotkey'
+    | '/components/inline-answers'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
@@ -808,6 +818,7 @@ export interface FileRouteTypes {
     | '/components/fleet-rail'
     | '/components/glyphs'
     | '/components/hotkey'
+    | '/components/inline-answers'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
@@ -886,6 +897,7 @@ export interface FileRouteTypes {
     | '/components/fleet-rail'
     | '/components/glyphs'
     | '/components/hotkey'
+    | '/components/inline-answers'
     | '/components/input'
     | '/components/input-group'
     | '/components/kbd'
@@ -965,6 +977,7 @@ export interface RootRouteChildren {
   ComponentsFleetRailRoute: typeof ComponentsFleetRailRoute
   ComponentsGlyphsRoute: typeof ComponentsGlyphsRoute
   ComponentsHotkeyRoute: typeof ComponentsHotkeyRoute
+  ComponentsInlineAnswersRoute: typeof ComponentsInlineAnswersRoute
   ComponentsInputRoute: typeof ComponentsInputRoute
   ComponentsInputGroupRoute: typeof ComponentsInputGroupRoute
   ComponentsKbdRoute: typeof ComponentsKbdRoute
@@ -1175,6 +1188,13 @@ declare module '@tanstack/react-router' {
       path: '/components/hotkey'
       fullPath: '/components/hotkey'
       preLoaderRoute: typeof ComponentsHotkeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/components/inline-answers': {
+      id: '/components/inline-answers'
+      path: '/components/inline-answers'
+      fullPath: '/components/inline-answers'
+      preLoaderRoute: typeof ComponentsInlineAnswersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/components/input': {
@@ -1581,6 +1601,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsFleetRailRoute: ComponentsFleetRailRoute,
   ComponentsGlyphsRoute: ComponentsGlyphsRoute,
   ComponentsHotkeyRoute: ComponentsHotkeyRoute,
+  ComponentsInlineAnswersRoute: ComponentsInlineAnswersRoute,
   ComponentsInputRoute: ComponentsInputRoute,
   ComponentsInputGroupRoute: ComponentsInputGroupRoute,
   ComponentsKbdRoute: ComponentsKbdRoute,

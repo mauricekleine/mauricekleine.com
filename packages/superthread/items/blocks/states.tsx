@@ -1,10 +1,14 @@
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@/components/superthread/lib/utils";
 import { Button } from "@/components/superthread/ui/button";
 import { StatusGlyph } from "@/components/superthread/ui/glyphs";
+import { Door } from "@/components/superthread/ui/onward";
 import { Skeleton } from "@/components/superthread/ui/skeleton";
 
 // The three places a collection holds when it has no rows to show: still loading, failed, or empty. Each stands where
-// the rows would, at the rows' left edge, and says what happened in the collection's own words.
+// the rows would, at the rows' left edge, and says what happened in the collection's own words. A page with one job has a
+// fourth: clear, which stands where the job would.
 
 // Loading: rows at the table's height, each a still bar through the 18.75 percent screen, read out once as loading.
 const WIDTHS = ["w-3/4", "w-1/2", "w-2/3", "w-2/5"] as const;
@@ -104,4 +108,76 @@ function EmptyStateActions({ className, ...props }: React.ComponentProps<"div">)
   return <div data-slot="empty-state-actions" className={cn("flex flex-wrap gap-2", className)} {...props} />;
 }
 
-export { EmptyState, EmptyStateActions, EmptyStateMedia, EmptyStateText, FailedState, LoadingState };
+// Clear: nothing is waiting, in one sentence on the panel, with no sheet. It takes the job sheet's box and held rows in
+// each width band, so the sentence starts where the cue does, and the reason and the door land where the why and the
+// primary do. A full panel holds the height of the work that's gone, a job sheet over three rows, a door and a foot, so its
+// edge stays put when the last thing clears. Narrower, the panel ends at the door, as the work's ran past the screen.
+function ClearState({ className, children, ...props }: React.ComponentProps<"section">) {
+  return (
+    <section
+      data-slot="clear-state"
+      data-mk="states"
+      className={cn(
+        "@container/clear-state -mx-6 mt-5 px-6 py-7 [@media(max-width:600px)]:-mx-4 [@media(max-width:600px)]:mt-4 [@media(max-width:600px)]:p-4",
+        className,
+      )}
+      {...props}
+    >
+      <div
+        data-slot="clear-state-rows"
+        className="grid grid-cols-[minmax(0,1fr)] grid-rows-[24px_136px_33px_20px_48px] gap-y-3 [grid-template-areas:'title'_'title'_'reason'_'.'_'door'] @min-[784px]/clear-state:min-h-[549px] [@media(max-width:600px)]:grid-rows-[24px_176px_62px_20px_48px] [@media(max-width:600px)]:gap-y-2 [@media(min-width:601px)]:@max-[783px]/clear-state:grid-rows-[24px_176px_66px_20px_48px]"
+      >
+        {children}
+      </div>
+    </section>
+  );
+}
+
+// The claim, at the display step on a full panel and the hero step below it. It's the page's h1 until render says otherwise.
+function ClearStateTitle({ className, render, ...props }: useRender.ComponentProps<"h1">) {
+  return useRender({
+    render: render ?? <h1 />,
+    state: { slot: "clear-state-title" },
+    props: mergeProps<"h1">(
+      {
+        className: cn(
+          "min-w-0 type-hero text-balance text-first [grid-area:title] [overflow-wrap:anywhere] @min-[784px]/clear-state:type-display",
+          className,
+        ),
+      },
+      props,
+    ),
+  });
+}
+
+// What makes it true, in one sentence, in the why's slot.
+function ClearStateReason({ className, ...props }: React.ComponentProps<"p">) {
+  return (
+    <p
+      data-slot="clear-state-reason"
+      className={cn(
+        "min-w-0 type-lede text-foreground [grid-area:reason] [overflow-wrap:anywhere] [@media(max-width:420px)]:type-read",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+// The way to everything that didn't count, in the primary's slot.
+function ClearStateDoor({ className, ...props }: React.ComponentProps<typeof Door>) {
+  return <Door className={cn("self-center [grid-area:door]", className)} {...props} />;
+}
+
+export {
+  ClearState,
+  ClearStateDoor,
+  ClearStateReason,
+  ClearStateTitle,
+  EmptyState,
+  EmptyStateActions,
+  EmptyStateMedia,
+  EmptyStateText,
+  FailedState,
+  LoadingState,
+};

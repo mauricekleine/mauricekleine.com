@@ -10,9 +10,11 @@ import {
   JobSheetToggle,
   JobSheetWhy,
 } from "@/components/superthread/blocks/job-sheet";
+import { ClearState, ClearStateDoor, ClearStateReason, ClearStateTitle } from "@/components/superthread/blocks/states";
 import { Button } from "@/components/superthread/ui/button";
 import { DayLineExample } from "@/examples/day-line";
 import { LONG_TITLE, MEDIAN_TITLE, SHORT_TITLE } from "@/examples/fit-title";
+import { WrongLine } from "@/examples/inline-answers";
 
 // The panel a ship prints it on, under the day line, so the sheet's y shows.
 function OnPanel({ children }: { children: React.ReactNode }) {
@@ -34,7 +36,7 @@ function SlipToggle() {
 }
 
 // The job: the gap before the next fixed point, what to do, why, and the step that starts it.
-export function JobSheetJob({ title = SHORT_TITLE }: { title?: string }) {
+export function JobSheetJob({ title = SHORT_TITLE, open, asked }: { title?: string; open?: boolean; asked?: boolean }) {
   const id = useId();
   return (
     <JobSheet aria-labelledby={id}>
@@ -42,7 +44,9 @@ export function JobSheetJob({ title = SHORT_TITLE }: { title?: string }) {
       <JobSheetTitle id={id} render={<h2 />} href="#example">
         {title}
       </JobSheetTitle>
-      <JobSheetWhy>sam&rsquo;s notes came in this morning, and the next draft waits on your answer.</JobSheetWhy>
+      <JobSheetWhy>
+        <WrongLine key={title} open={open} asked={asked} />
+      </JobSheetWhy>
       <JobSheetChanged />
       <JobSheetActions>
         <JobSheetPrimary reserve="open the draft" render={<a href="#example" />} nativeButton={false}>
@@ -104,6 +108,37 @@ export function JobSheetExample() {
   return (
     <OnPanel>
       <JobSheetJob />
+    </OnPanel>
+  );
+}
+
+// The answers open in the why's slot, and the question after them, with the job's other slots where they were.
+export function JobSheetAnswers() {
+  return (
+    <div className="st-job-sheet-stack">
+      <OnPanel>
+        <JobSheetJob open />
+      </OnPanel>
+      <OnPanel>
+        <JobSheetJob open asked />
+      </OnPanel>
+    </div>
+  );
+}
+
+// Nothing is left, so the sheet goes. The sentence takes its box, and the reason and the door land on the why and the
+// primary.
+export function ClearStateExample() {
+  const id = useId();
+  return (
+    <OnPanel>
+      <ClearState aria-labelledby={id}>
+        <ClearStateTitle id={id} render={<h2 />}>
+          nothing needs you until 16:30.
+        </ClearStateTitle>
+        <ClearStateReason>the draft, the deck check and the renewal brief are done.</ClearStateReason>
+        <ClearStateDoor href="#clear">the rest is in open</ClearStateDoor>
+      </ClearState>
     </OnPanel>
   );
 }
