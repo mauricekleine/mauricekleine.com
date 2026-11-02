@@ -407,6 +407,13 @@ function square(art: Art): string {
   return artPath(art.map((row, y) => [...row].map((c, x) => c !== "#" && !NOTCH.has(`${x},${y}`))));
 }
 
+// The 8 px state square: filled, or only its 1 px edge.
+function stateSquare(filled: boolean): string {
+  const edge = (cell: number) => cell === 0 || cell === 7;
+  const cells = Array.from({ length: 8 }, (_, y) => Array.from({ length: 8 }, (_, x) => filled || edge(x) || edge(y)));
+  return artPath(cells);
+}
+
 function glyphsTsx(
   glyphs: { ICONS: Record<string, Art>; GLYPHS: Record<string, Art> },
   master: Master,
@@ -433,7 +440,7 @@ function glyphsTsx(
   if (!failed) throw new Error("tokens/master.json has no failed status state");
   const fieldError = [failed.role, square(errorArt)] as const;
   return `${header}
-import type { AriaAttributes } from "react"
+import type { AriaAttributes, ReactNode } from "react"
 
 import { cn } from "@/components/superthread/lib/utils"
 
@@ -510,6 +517,38 @@ export function FieldErrorGlyph({ className, ...aria }: Aria) {
     >
       <path d={FIELD_ERROR} />
     </svg>
+  )
+}
+
+// A state as a word beside an 8 px square in the word's ink: filled and in foreground while it's on, empty and muted
+// while it's off. The word carries the meaning, so the square stays decorative. The word is the ship's own, and it names
+// the state when given none.
+const STATE = {
+  on: ${JSON.stringify(stateSquare(true))},
+  off: ${JSON.stringify(stateSquare(false))},
+} as const
+
+export function StateWord({ on = false, children, className }: { on?: boolean; children?: ReactNode; className?: string }) {
+  const state = on ? "on" : "off"
+  return (
+    <span
+      data-slot="state-word"
+      data-state={state}
+      className={cn("inline-flex items-center gap-2", on ? "text-foreground" : "text-muted-foreground", className)}
+    >
+      <svg
+        viewBox="0 0 8 8"
+        width={8}
+        height={8}
+        shapeRendering="crispEdges"
+        fill="currentColor"
+        className="shrink-0"
+        aria-hidden
+      >
+        <path d={STATE[state]} />
+      </svg>
+      {children ?? state}
+    </span>
   )
 }
 `;

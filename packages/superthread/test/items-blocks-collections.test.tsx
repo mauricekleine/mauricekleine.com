@@ -12,7 +12,11 @@ import {
 import {
   DataTable,
   SortableHead,
+  TableDetail,
+  TableDetailRow,
+  TableDetailTrigger,
   TableEmpty,
+  TableSubRow,
   TableTitle,
   type SortDirection,
 } from "@/components/superthread/blocks/data-table";
@@ -49,8 +53,20 @@ import { JumpLine, JumpLineLink } from "@/components/superthread/blocks/jump-lin
 import { Button } from "@/components/superthread/ui/button";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { StatusGlyph } from "@/components/superthread/ui/glyphs";
+import { SourceMark } from "@/components/superthread/ui/source-mark";
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/superthread/ui/table";
-import { client, CONTROL_RING, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
+import {
+  client,
+  CONTROL_RING,
+  detailsUsed,
+  elements,
+  forbidden,
+  one,
+  parts,
+  reached,
+  server,
+  takes,
+} from "./rendered.tsx";
 
 const views = [
   { value: "rows", label: "rows" },
@@ -1392,6 +1408,170 @@ describe("item cards", () => {
     expect(one(host, "li").el.hasAttribute("data-variant")).toBe(false);
     expect(one(host, "li").classes).toEqual(["min-w-0"]);
   });
+
+  describe("tiles", () => {
+    const PHONE = "[@media(max-width:600px)]:";
+    const tiles = (last?: boolean) =>
+      server(
+        <ItemCards tiles last={last} aria-label="sources">
+          <ItemCard paper>
+            <ItemCardMedia>
+              <SourceMark d="M5 5h6v6h-6z" />
+            </ItemCardMedia>
+            <ItemCardTitle href="/sources/mail" level={3}>
+              mail
+            </ItemCardTitle>
+            <ItemCardLede>work mail and the shared inbox</ItemCardLede>
+            <ItemCardMeta>needs signing in</ItemCardMeta>
+            <ItemCardActions>
+              <Button size="sm">sign in</Button>
+            </ItemCardActions>
+          </ItemCard>
+          <ItemCard>
+            <ItemCardTitle href="/sources/calendar">calendar</ItemCardTitle>
+            <ItemCardLede>the day&rsquo;s fixed points</ItemCardLede>
+          </ItemCard>
+          <ItemCard>
+            <ItemCardTitle>files</ItemCardTitle>
+          </ItemCard>
+        </ItemCards>,
+      );
+    const tile = (host: HTMLElement, index: number) => {
+      const el = host.querySelectorAll("ul > li")[index]!;
+      return { el, classes: el.className.split(/\s+/) };
+    };
+
+    test("a named list of ruled cells that reaches the panel's edges under a foreground rule", () => {
+      const host = tiles();
+      const list = one(host, "ul");
+      expect(list.el.getAttribute("aria-label")).toBe("sources");
+      expect(list.classes).toEqual(
+        expect.arrayContaining([
+          "border-t-foreground",
+          "border-b-border",
+          "in-data-[slot=app-shell-panel]:-mx-(--spacing-panel-inset)",
+        ]),
+      );
+      expect(list.classes).not.toContain("gap-2");
+      expect(list.classes).not.toContain("has-[>[data-variant]]:grid-cols-1");
+      expect(host.querySelectorAll("ul > li")).toHaveLength(3);
+      expect(tile(host, 1).classes).toEqual(expect.arrayContaining(["border-l", "border-border"]));
+      expect(host.querySelector('[data-slot="card"]')).toBeNull();
+      const rendered = elements(host);
+      expect(detailsUsed(rendered, "item-cards")).toEqual([]);
+      expect(forbidden(rendered.filter(({ el }) => el.getAttribute("data-slot")?.startsWith("item-card")))).toEqual([]);
+    });
+
+    test("a mark above a heading that links the whole tile, with no arrow and its ring inside", () => {
+      const host = tiles();
+      expect(one(host, '[data-slot="item-card-media"]').classes).toEqual(
+        expect.arrayContaining(["size-24", `${PHONE}size-20`]),
+      );
+      const heading = one(host, '[data-slot="item-card-title"]');
+      expect(heading.el.getAttribute("role")).toBe("heading");
+      expect(heading.el.getAttribute("aria-level")).toBe("3");
+      expect(heading.classes).toContain("type-subtitle");
+      const link = one(host, '[data-slot="item-card-link"]');
+      expect(link.classes).toEqual(expect.arrayContaining(["absolute", "inset-0", ...insideRing]));
+      expect(host.querySelector('[data-slot="item-card-arrow"]')).toBeNull();
+    });
+
+    test("what it holds prints muted at the instrument step, and its state in foreground", () => {
+      const host = tiles();
+      expect(one(host, '[data-slot="item-card-lede"]').classes).toEqual(
+        expect.arrayContaining(["type-instrument", "text-muted-foreground"]),
+      );
+      const state = one(host, '[data-slot="item-card-meta"]');
+      expect(state.classes).toEqual(expect.arrayContaining(["type-instrument", "text-foreground"]));
+      expect(state.el.textContent).toBe("needs signing in");
+    });
+
+    test("a when takes its own line, above the state", () => {
+      const when = one(
+        server(
+          <ItemCards tiles>
+            <ItemCard>
+              <ItemCardTitle>mail</ItemCardTitle>
+              <ItemCardWhen>since friday</ItemCardWhen>
+            </ItemCard>
+          </ItemCards>,
+        ),
+        '[data-slot="item-card-when"]',
+      );
+      expect(when.classes).toEqual(expect.arrayContaining(["[grid-area:when]", "text-muted-foreground"]));
+    });
+
+    test("its action sits above the link, and stretches to a 44 px target on a phone", () => {
+      expect(one(tiles(), '[data-slot="item-card-actions"]').classes).toEqual(
+        expect.arrayContaining(["relative", "z-10", `${PHONE}[&>*]:h-11`, `${PHONE}[&>*]:w-full`]),
+      );
+    });
+
+    test("paper prints the tile on paper, still a list item of the list, and keeps its fill under the pointer", () => {
+      const host = tiles();
+      const paper = tile(host, 0);
+      expect(paper.el.tagName).toBe("LI");
+      expect(paper.el.getAttribute("data-slot")).toBe("item-card");
+      expect(paper.classes).toEqual(expect.arrayContaining(["light", "bg-card", "texture-contact", "z-1"]));
+      expect(paper.classes).not.toContain("has-[[data-slot=item-card-link]]:hover:bg-faint");
+      expect(tile(host, 1).classes).toContain("has-[[data-slot=item-card-link]]:hover:bg-faint");
+      expect(tile(host, 1).classes).not.toContain("light");
+    });
+
+    test("paper means nothing outside tiles, and a tile's list overrides a variant", () => {
+      const small = one(
+        server(
+          <ItemCards>
+            <ItemCard paper>
+              <ItemCardTitle>plain card</ItemCardTitle>
+            </ItemCard>
+          </ItemCards>,
+        ),
+        "li",
+      );
+      expect(small.classes).toEqual(["min-w-0"]);
+      const list = one(
+        server(
+          <ItemCards tiles>
+            <ItemCard variant="decided">
+              <ItemCardTitle>mail</ItemCardTitle>
+            </ItemCard>
+          </ItemCards>,
+        ),
+        "li",
+      );
+      expect(list.el.getAttribute("data-variant")).toBe("tile");
+    });
+
+    test("a tile whose title links drives its mark's second frame, on paper too, and an unlinked tile leaves it be", () => {
+      const host = tiles();
+      expect(tile(host, 0).classes).toContain("group/source-mark");
+      expect(tile(host, 1).classes).toContain("group/source-mark");
+      expect(tile(host, 2).classes).not.toContain("group/source-mark");
+      const routed = one(
+        server(
+          <ItemCards tiles>
+            <ItemCard>
+              <ItemCardTitle render={<a href="/sources/files" />}>files</ItemCardTitle>
+            </ItemCard>
+          </ItemCards>,
+        ),
+        "li",
+      );
+      expect(routed.classes).toContain("group/source-mark");
+    });
+
+    test("last runs the grid to the panel's foot at every width and drops the closing rule", () => {
+      expect(one(tiles(), "ul").classes).not.toContain("border-b-0");
+      expect(one(tiles(true), "ul").classes).toEqual(
+        expect.arrayContaining([
+          "border-b-0",
+          "in-data-[slot=app-shell-panel]:-mb-7",
+          `${PHONE}in-data-[slot=app-shell-panel]:-mb-4`,
+        ]),
+      );
+    });
+  });
 });
 
 describe("data table", () => {
@@ -1409,9 +1589,9 @@ describe("data table", () => {
       expect(title({ href: "/runs/12" }).classes).toEqual(
         expect.arrayContaining([
           "[&:is(a)]:hover:underline",
-          "[@media(max-width:600px)]:[&:is(a)]:relative",
-          "[@media(max-width:600px)]:[&:is(a)]:inline-block",
-          "[@media(max-width:600px)]:[&:is(a)]:hit-area",
+          "not-in-[table[data-fold]]:[@media(max-width:600px)]:[&:is(a)]:relative",
+          "not-in-[table[data-fold]]:[@media(max-width:600px)]:[&:is(a)]:inline-block",
+          "not-in-[table[data-fold]]:[@media(max-width:600px)]:[&:is(a)]:hit-area",
           ...CONTROL_RING,
         ]),
       );
@@ -1537,6 +1717,374 @@ describe("data table", () => {
     expect(one(host, '[data-slot="empty-state"]').el.getAttribute("data-mk")).toBe("states");
   });
 
+  describe("the fold", () => {
+    test("a title link covers its row, and its ring prints inside the row, since a cell clips what leaves it", () => {
+      const { classes } = one(server(<TableTitle href="/runs/12">a row</TableTitle>), '[data-slot="table-title"]');
+      expect(classes).toEqual(
+        expect.arrayContaining([
+          "in-[table[data-fold]]:[&:is(a)]:after:absolute",
+          "in-[table[data-fold]]:[&:is(a)]:after:inset-0",
+          "[@media(hover:hover)]:in-[table[data-fold]]:[tr:hover_&:is(a)]:underline",
+          "in-[table[data-fold]]:[&:is(a)]:focus-visible:outline-0",
+          "in-[table[data-fold]]:[&:is(a)]:focus-visible:after:outline-2",
+          "in-[table[data-fold]]:[&:is(a)]:focus-visible:after:-outline-offset-2",
+        ]),
+      );
+    });
+
+    test("only a folding table makes a title its row's cover, so a plain table's detail keeps the plain link", () => {
+      const tables = (fold: boolean) =>
+        server(
+          <DataTable label="runs" fold={fold}>
+            <TableBody>
+              <TableDetail open>
+                <TableRow>
+                  <TableCell fold="title">
+                    <TableDetailTrigger>sent the digest</TableDetailTrigger>
+                  </TableCell>
+                </TableRow>
+                <TableDetailRow columns={2}>
+                  <TableTitle href="/runs/12">the run</TableTitle>
+                </TableDetailRow>
+              </TableDetail>
+            </TableBody>
+          </DataTable>,
+        ).querySelector('[data-slot="table-title"]')!;
+      const plain = tables(false);
+      expect(takes(plain, "font-normal")).toBe(false);
+      expect(takes(plain, "absolute")).toBe(false);
+      expect(takes(plain, "hit-area")).toBe(true);
+      const folded = tables(true);
+      expect(takes(folded, "font-normal")).toBe(true);
+      expect(takes(folded, "absolute")).toBe(true);
+      expect(takes(folded, "hit-area")).toBe(false);
+    });
+
+    test("a sortable head stays on screen, so the sort stays in reach", () => {
+      const host = server(
+        <DataTable label="runs" fold>
+          <TableHeader>
+            <TableRow>
+              <TableHead>next</TableHead>
+              <SortableHead onSort={() => {}}>title</SortableHead>
+            </TableRow>
+          </TableHeader>
+        </DataTable>,
+      );
+      expect(one(host, '[data-slot="table-head"]:not([data-slot="sortable-head"])').classes).toContain(
+        "@max-[776px]/fold:sr-only",
+      );
+      const sorted = one(host, '[data-slot="sortable-head"]').classes;
+      expect(sorted).toContain("@max-[776px]/fold:not-sr-only");
+      expect(sorted).not.toContain("@max-[776px]/fold:sr-only");
+      expect(host.querySelector("table")?.getAttribute("role")).toBe("table");
+      expect(host.querySelector("table")?.getAttribute("aria-label")).toBe("runs");
+    });
+  });
+
+  describe("a row that opens a detail", () => {
+    const rows = (detail: Parameters<typeof TableDetail>[0]["open"], onOpenChange?: (open: boolean) => void) => (
+      <DataTable label="runs" fold>
+        <TableBody>
+          <TableDetail open={detail} onOpenChange={onOpenChange}>
+            <TableRow>
+              <TableCell fold="lead">09:14</TableCell>
+              <TableCell fold="title">
+                <TableDetailTrigger>sent the digest</TableDetailTrigger>
+              </TableCell>
+            </TableRow>
+            <TableDetailRow columns={2}>
+              <input aria-label="a note" />
+            </TableDetailRow>
+          </TableDetail>
+        </TableBody>
+      </DataTable>
+    );
+    const TRIGGER = '[data-slot="table-detail-trigger"]';
+    const DETAIL = '[data-slot="table-detail"]';
+
+    test("the trigger names the row it opens, and the rows stay direct children of the body", () => {
+      const host = server(rows(undefined));
+      const trigger = one(host, TRIGGER);
+      const detail = one(host, DETAIL);
+      expect(trigger.el.tagName).toBe("BUTTON");
+      expect(trigger.el.getAttribute("type")).toBe("button");
+      expect(trigger.el.getAttribute("aria-expanded")).toBe("false");
+      expect(trigger.el.getAttribute("aria-controls")).toBe(detail.el.id);
+      expect([...host.querySelectorAll("tbody > tr")].length).toBe(2);
+    });
+
+    test("opens and closes on its own, and what the reader typed survives closing", async () => {
+      const { body, done } = await client(rows(undefined));
+      const trigger = body.querySelector<HTMLButtonElement>(TRIGGER)!;
+      const detail = body.querySelector<HTMLElement>(DETAIL)!;
+      const typed = detail.querySelector("input")!;
+      expect(detail.hidden).toBe(true);
+      await act(async () => trigger.click());
+      expect(trigger.getAttribute("aria-expanded")).toBe("true");
+      expect(detail.hidden).toBe(false);
+      typed.value = "keep this";
+      await act(async () => trigger.click());
+      expect(detail.hidden).toBe(true);
+      expect(body.querySelector<HTMLElement>(DETAIL)?.querySelector("input")).toBe(typed);
+      expect(typed.value).toBe("keep this");
+      await done();
+    });
+
+    test("under an app's state the prop rules, and a click only reports", async () => {
+      const seen: boolean[] = [];
+      const { body, done } = await client(rows(false, (open) => seen.push(open)));
+      const trigger = body.querySelector<HTMLButtonElement>(TRIGGER)!;
+      await act(async () => trigger.click());
+      expect(seen).toEqual([true]);
+      expect(body.querySelector<HTMLElement>(DETAIL)?.hidden).toBe(true);
+      await done();
+    });
+
+    test("a caller's click still runs on the trigger", async () => {
+      const clicks: string[] = [];
+      const { body, done } = await client(
+        <table>
+          <tbody>
+            <TableDetail>
+              <TableRow>
+                <TableCell>
+                  <TableDetailTrigger onClick={() => clicks.push("clicked")}>a row</TableDetailTrigger>
+                </TableCell>
+              </TableRow>
+            </TableDetail>
+          </tbody>
+        </table>,
+      );
+      await act(async () => body.querySelector<HTMLButtonElement>(TRIGGER)!.click());
+      expect(clicks).toEqual(["clicked"]);
+      await done();
+    });
+
+    test("a part outside TableDetail says where it belongs", () => {
+      expect(() => server(<TableDetailTrigger>a row</TableDetailTrigger>)).toThrow("inside TableDetail");
+    });
+
+    test("the detail lines up with the title, under a lead cell as short as the detail", () => {
+      const host = server(rows(true));
+      const cells = host.querySelectorAll(`${DETAIL} > td`);
+      expect(cells.length).toBe(2);
+      expect(cells[0]?.getAttribute("data-fold")).toBe("lead");
+      expect(cells[0]?.textContent).toBe("");
+      expect(cells[0]?.className.split(/\s+/)).toContain("h-auto");
+      expect(cells[0]?.className.split(/\s+/)).not.toContain("h-[calc(var(--row)+1px)]");
+      expect(cells[1]?.getAttribute("data-fold")).toBe("title");
+    });
+
+    test("lead={false} gives the whole row to the detail, for a table with no lead column", () => {
+      const host = server(
+        <table>
+          <tbody>
+            <TableDetail open>
+              <TableDetailRow columns={3} lead={false}>
+                words
+              </TableDetailRow>
+            </TableDetail>
+          </tbody>
+        </table>,
+      );
+      const cells = host.querySelectorAll(`${DETAIL} > td`);
+      expect(cells.length).toBe(1);
+      expect(cells[0]?.getAttribute("colspan")).toBe("3");
+      expect(server(rows(true)).querySelectorAll(`${DETAIL} > td`)[1]?.getAttribute("colspan")).toBe("1");
+    });
+
+    test("a row loses its rule to the detail or sub-entry under it, and to a sub-entry under its closed detail", () => {
+      const row = one(server(rows(true)), '[data-slot="table-row"]:not([data-slot="table-detail"])');
+      const under =
+        ":has(+[data-slot=table-detail]:not([hidden]),+[data-slot=table-sub],+[data-slot=table-detail][hidden]+[data-slot=table-sub])";
+      expect(row.classes).toEqual(
+        expect.arrayContaining([`[&${under}]:border-b-transparent`, `[&${under}>*]:border-b-transparent`]),
+      );
+    });
+
+    test("the ring prints inside the row the trigger covers, and the chevron turns over while open", () => {
+      const host = server(rows(true));
+      expect(one(host, TRIGGER).classes).toEqual(
+        expect.arrayContaining([
+          "after:absolute",
+          "after:inset-0",
+          "focus-visible:after:outline-2",
+          "focus-visible:after:-outline-offset-2",
+          "focus-visible:after:outline-(--ring)",
+          "[@media(hover:hover)]:[tr:hover_&]:underline",
+        ]),
+      );
+      expect(one(host, TRIGGER).classes).not.toContain("[tr:hover_&]:underline");
+      expect(one(host, `${TRIGGER} svg`).classes).toContain("group-aria-expanded/detail:rotate-180");
+    });
+
+    test("a plain table's row anchors the trigger's cover, not the first cell the row edge lifts", () => {
+      const row = one(
+        server(
+          <DataTable label="runs">
+            <TableBody>
+              <TableDetail>
+                <TableRow>
+                  <TableCell>
+                    <TableDetailTrigger>a row</TableDetailTrigger>
+                  </TableCell>
+                </TableRow>
+              </TableDetail>
+            </TableBody>
+          </DataTable>,
+        ),
+        '[data-slot="table-row"]',
+      );
+      expect(row.classes).toEqual(
+        expect.arrayContaining([
+          "has-data-[slot=table-detail-trigger]:relative",
+          "has-data-[slot=table-detail-trigger]:[&>:first-child]:static",
+        ]),
+      );
+    });
+
+    test("every control in a plain table's covered row stays its own target, and an uncovered row lifts none", () => {
+      const host = server(
+        <DataTable label="runs">
+          <TableBody>
+            <TableDetail>
+              <TableRow>
+                <TableCell>
+                  <Checkbox aria-label="chosen" />
+                </TableCell>
+                <TableCell>
+                  <Button size="sm">run now</Button>
+                </TableCell>
+                <TableCell>
+                  <TableTitle href="/runs/12">last run</TableTitle>
+                </TableCell>
+                <TableCell>
+                  <TableDetailTrigger>sent the digest</TableDetailTrigger>
+                </TableCell>
+              </TableRow>
+            </TableDetail>
+            <TableRow>
+              <TableCell>
+                <Checkbox aria-label="also chosen" />
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </DataTable>,
+      );
+      const [covered, plain] = [...host.querySelectorAll("tbody tr")];
+      const lifted = (row: Element) => reached(row, "z-1").filter((el) => reached(row, "relative").includes(el));
+      for (const control of ['[role="checkbox"]', 'button:not([data-slot="table-detail-trigger"])', "a"])
+        expect({ control, lifted: lifted(covered!).includes(covered!.querySelector(control)!) }).toEqual({
+          control,
+          lifted: true,
+        });
+      expect(lifted(covered!).includes(covered!.querySelector(TRIGGER)!)).toBe(false);
+      expect(lifted(plain!).length).toBe(0);
+    });
+
+    test("a plain table that holds a trigger keeps every row's last cell clear of its chevron, head included", () => {
+      const table = (trigger: boolean) =>
+        server(
+          <DataTable label="runs">
+            <TableHeader>
+              <TableRow>
+                <TableHead>run</TableHead>
+                <TableHead kind="number">pages</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableDetail>
+                <TableRow>
+                  <TableCell>{trigger ? <TableDetailTrigger>the digest</TableDetailTrigger> : "the digest"}</TableCell>
+                  <TableCell kind="number">12</TableCell>
+                </TableRow>
+              </TableDetail>
+              <TableRow>
+                <TableCell>the brief</TableCell>
+                <TableCell kind="number">4</TableCell>
+              </TableRow>
+            </TableBody>
+          </DataTable>,
+        ).querySelector("table")!;
+      // Cells are named by their words, so a failure prints them rather than a whole DOM node.
+      const cleared = (host: Element) => reached(host, "pr-7").map((cell) => cell.textContent);
+      expect(cleared(table(true))).toEqual(["pages", "12", "4"]);
+      expect(cleared(table(false))).toEqual([]);
+      const held = table(true);
+      for (const row of held.querySelectorAll("tr")) expect(row.className).not.toContain("pr-7");
+    });
+
+    test("an open trigger fills no row, while another expanded control in a row still does", () => {
+      const { classes } = one(server(rows(true)), '[data-slot="table-row"]');
+      expect(classes).toContain("has-[[aria-expanded=true]:not([data-slot=table-detail-trigger])]:bg-control-hover");
+      expect(classes).not.toContain("has-aria-expanded:bg-control-hover");
+    });
+  });
+
+  describe("a sub-entry", () => {
+    const sub = (lead?: boolean) =>
+      server(
+        <table>
+          <tbody>
+            <TableSubRow columns={3} lead={lead}>
+              plate 1 of 3
+            </TableSubRow>
+          </tbody>
+        </table>,
+      );
+    const ROW = '[data-slot="table-sub"]';
+
+    test("hangs under the title, a line at the instrument step in a 36 px row", () => {
+      const cells = sub().querySelectorAll(`${ROW} > td`);
+      expect(cells.length).toBe(2);
+      expect(cells[0]?.className.split(/\s+/)).toContain("h-auto");
+      expect(cells[1]?.getAttribute("colspan")).toBe("2");
+      expect(cells[1]?.className.split(/\s+/)).toEqual(expect.arrayContaining(["h-9", "type-instrument"]));
+    });
+
+    test("its connector turns in to the words in the rule's ink, from under the lead column", () => {
+      const line = one(sub(), '[data-slot="table-sub-line"]');
+      expect(line.el.textContent).toBe("plate 1 of 3");
+      expect(line.classes).toEqual(
+        expect.arrayContaining(["before:border-b", "before:border-l", "before:border-rule", "before:-left-5"]),
+      );
+      expect(line.classes).not.toContain("pl-5");
+    });
+
+    test("lead={false} spans every column, and its connector starts at the title's edge with the words stepped in", () => {
+      const host = sub(false);
+      const cells = host.querySelectorAll(`${ROW} > td`);
+      expect(cells.length).toBe(1);
+      expect(cells[0]?.getAttribute("colspan")).toBe("3");
+      const line = one(host, '[data-slot="table-sub-line"]').classes;
+      expect(line).toEqual(expect.arrayContaining(["pl-5", "before:left-0", "before:w-3"]));
+      expect(line).not.toContain("before:-left-5");
+    });
+
+    test("a row under another prints no row edge of its own, and its words break anywhere", () => {
+      const host = server(
+        <table>
+          <tbody>
+            <TableDetail open>
+              <TableDetailRow columns={3}>a long id</TableDetailRow>
+            </TableDetail>
+            <TableSubRow columns={3}>a long id</TableSubRow>
+            <TableSubRow columns={3} lead={false}>
+              a long id
+            </TableSubRow>
+          </tbody>
+        </table>,
+      );
+      for (const row of host.querySelectorAll("tr")) {
+        expect(row.className.split(/\s+/)).toContain("[&>:first-child]:before:hidden");
+        expect(row.lastElementChild!.className.split(/\s+/)).toEqual(
+          expect.arrayContaining(["whitespace-normal", "[overflow-wrap:anywhere]"]),
+        );
+      }
+    });
+  });
+
   test("sort controls have an inside ring and the block claims no detail or forbidden class", () => {
     const host = server(
       <DataTable label="runs">
@@ -1547,6 +2095,20 @@ describe("data table", () => {
         </TableHeader>
         <TableBody>
           <TableEmpty columns={1} />
+          <TableRow>
+            <TableCell>
+              <TableTitle href="/runs/12">a run</TableTitle>
+            </TableCell>
+          </TableRow>
+          <TableDetail open>
+            <TableRow>
+              <TableCell>
+                <TableDetailTrigger>a run</TableDetailTrigger>
+              </TableCell>
+            </TableRow>
+            <TableDetailRow columns={1}>what it did</TableDetailRow>
+          </TableDetail>
+          <TableSubRow columns={1}>a step</TableSubRow>
         </TableBody>
       </DataTable>,
     );

@@ -1,4 +1,8 @@
 import { useId, useState } from "react";
+import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
+import { NativeSelect, NativeSelectOption } from "@/components/superthread/ui/native-select";
+import { Textarea } from "@/components/superthread/ui/textarea";
+import { GroundFrame } from "@/examples/compositions-a";
 import {
   Field,
   FieldContent,
@@ -173,5 +177,40 @@ export function FieldStates() {
         </State>
       ))}
     </div>
+  );
+}
+
+// A run's settings on a phone's ground, where every control that takes text sets 16 px.
+function RunSettings() {
+  const id = useId();
+  return (
+    <AppShellPanel>
+      <FieldGroup>
+        <Field>
+          <FieldLabel htmlFor={`${id}-name`}>run name</FieldLabel>
+          <Input id={`${id}-name`} defaultValue="run-024" aria-describedby={`${id}-name-help`} />
+          <FieldDescription id={`${id}-name-help`}>shown on the board</FieldDescription>
+        </Field>
+        <Field>
+          <FieldLabel htmlFor={`${id}-when`}>starts</FieldLabel>
+          <NativeSelect id={`${id}-when`} defaultValue="mail" className="w-full">
+            <NativeSelectOption value="mail">when mail arrives</NativeSelectOption>
+            <NativeSelectOption value="morning">every day at 07:00</NativeSelectOption>
+          </NativeSelect>
+        </Field>
+        <Field>
+          <FieldLabel htmlFor={`${id}-notes`}>notes for the agent</FieldLabel>
+          <Textarea id={`${id}-notes`} defaultValue="keep the summary under 120 characters." />
+        </Field>
+      </FieldGroup>
+    </AppShellPanel>
+  );
+}
+
+export function FieldsOnPhone({ mode }: { mode: "light" | "dark" }) {
+  return (
+    <GroundFrame mode={mode} title={`run settings on a phone, ${mode}`} height={400}>
+      <RunSettings />
+    </GroundFrame>
   );
 }

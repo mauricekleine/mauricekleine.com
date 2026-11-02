@@ -8,6 +8,7 @@ import {
   AppShellGround,
   AppShellNav,
   AppShellNavItem,
+  AppShellNavTier,
   AppShellPageFoot,
   AppShellPanel,
   AppShellPanelFoot,
@@ -77,8 +78,10 @@ import {
 } from "@/components/superthread/blocks/job-sheet";
 import {
   DayLine,
+  DayLineAction,
   DayLineAllDay,
   DayLineDate,
+  DayLineFoot,
   DayLineHead,
   DayLineNote,
   DayLineSteps,
@@ -131,6 +134,7 @@ import { Input } from "@/components/superthread/ui/input";
 import { cn } from "@/components/superthread/lib/utils";
 import { Button } from "@/components/superthread/ui/button";
 import { Onward } from "@/components/superthread/ui/onward";
+import { SourceMark } from "@/components/superthread/ui/source-mark";
 import {
   CollectionToolbar,
   ToolbarGroup,
@@ -167,7 +171,16 @@ import {
   ItemCardMeta,
   ItemCardActions,
 } from "@/components/superthread/blocks/item-cards";
-import { DataTable, SortableHead, TableEmpty, TableTitle } from "@/components/superthread/blocks/data-table";
+import {
+  DataTable,
+  SortableHead,
+  TableDetail,
+  TableDetailRow,
+  TableDetailTrigger,
+  TableEmpty,
+  TableSubRow,
+  TableTitle,
+} from "@/components/superthread/blocks/data-table";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { Icon } from "@/components/superthread/ui/glyphs";
 import { Badge } from "@/components/superthread/ui/badge";
@@ -234,13 +247,16 @@ function Sink({ mode }: { mode: Mode }) {
           markBase="/marks"
           hrefs={{ home: "#home", orbit: "#orbit" }}
           sidebar={
-            <AppShellNav ship="orbit" foot={<a href="#settings">settings</a>}>
+            <AppShellNav ship="orbit" foot={<a href="#settings">settings</a>} overflow="logs">
               <AppShellNavItem isActive number="01" count={12} render={<a href="#board" />}>
                 board
               </AppShellNavItem>
               <AppShellNavItem number="02" render={<a href="#runs" />}>
                 runs
               </AppShellNavItem>
+              <AppShellNavTier>
+                <AppShellNavItem render={<a href="#logs" />}>logs</AppShellNavItem>
+              </AppShellNavTier>
               <QuickAddNav label="add a task" placeholder="add a task" hotkey={null} onAdd={async () => {}} />
             </AppShellNav>
           }
@@ -442,6 +458,26 @@ function Sink({ mode }: { mode: Mode }) {
             <ItemCardWhen>mon 2 nov</ItemCardWhen>
           </ItemCard>
         </ItemCards>
+        <ItemCards tiles aria-label="sources">
+          <ItemCard paper>
+            <ItemCardMedia>
+              <SourceMark d="M5 5h6v6h-6z" hover="M6 6h4v4h-4z" />
+            </ItemCardMedia>
+            <ItemCardTitle href="#draft">mail</ItemCardTitle>
+            <ItemCardLede>work mail and the shared inbox</ItemCardLede>
+            <ItemCardMeta>needs signing in</ItemCardMeta>
+            <ItemCardActions>
+              <Button size="sm">sign in</Button>
+            </ItemCardActions>
+          </ItemCard>
+          <ItemCard>
+            <ItemCardMedia>
+              <SourceMark d="M5 5h6v6h-6z" />
+            </ItemCardMedia>
+            <ItemCardTitle href="#draft">calendar</ItemCardTitle>
+            <ItemCardLede>the day's fixed points</ItemCardLede>
+          </ItemCard>
+        </ItemCards>
       </Part>
       <Part name="data-table">
         <DataTable label="runs" rows="board">
@@ -472,6 +508,32 @@ function Sink({ mode }: { mode: Mode }) {
             <TableEmpty columns={3} title="no other runs">
               a new run lands here.
             </TableEmpty>
+          </TableBody>
+        </DataTable>
+        <DataTable label="what ran" fold>
+          <TableHeader>
+            <TableRow>
+              <TableHead>time</TableHead>
+              <TableHead>run</TableHead>
+              <TableHead kind="number">took</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableDetail defaultOpen>
+              <TableRow>
+                <TableCell fold="lead" kind="id">
+                  09:14
+                </TableCell>
+                <TableCell fold="title" scope="row">
+                  <TableDetailTrigger>checked the registry</TableDetailTrigger>
+                </TableCell>
+                <TableCell fold="aside" kind="number" flag>
+                  2m
+                </TableCell>
+              </TableRow>
+              <TableDetailRow columns={3}>12 items, none new.</TableDetailRow>
+            </TableDetail>
+            <TableSubRow columns={3}>read the catalog</TableSubRow>
           </TableBody>
         </DataTable>
       </Part>
@@ -606,7 +668,7 @@ function Sink({ mode }: { mode: Mode }) {
         <DayLine>
           <DayLineHead>
             <DayLineDate href="#day">tue 3 nov</DayLineDate>
-            <DayLineNote>personal calendar isn&rsquo;t answering</DayLineNote>
+            <DayLineNote>times in utc</DayLineNote>
             <DayLineAllDay>anna out of office</DayLineAllDay>
             <DayLineSteps>
               <Onward href="#tomorrow">wed 4 nov</Onward>
@@ -614,7 +676,6 @@ function Sink({ mode }: { mode: Mode }) {
           </DayLineHead>
           <DayLineStrip
             aria-label="tuesday's meetings"
-            asOf="as of 08:10"
             day="2026-11-03"
             events={[
               {
@@ -636,6 +697,9 @@ function Sink({ mode }: { mode: Mode }) {
             now="2026-11-03T08:42:00Z"
             timeZone="UTC"
           />
+          <DayLineFoot action={<DayLineAction>try again</DayLineAction>}>
+            personal calendar isn&rsquo;t answering · as of 08:10
+          </DayLineFoot>
         </DayLine>
       </Part>
       <Part name="month-grid">

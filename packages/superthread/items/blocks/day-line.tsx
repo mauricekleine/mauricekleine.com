@@ -9,6 +9,7 @@ import {
   type TimeOptions,
 } from "@/components/superthread/lib/time-words";
 import { cn } from "@/components/superthread/lib/utils";
+import { Button } from "@/components/superthread/ui/button";
 import { Icon } from "@/components/superthread/ui/glyphs";
 import { Skeleton } from "@/components/superthread/ui/skeleton";
 
@@ -239,14 +240,16 @@ function blockWords({ event, past, started, group, startsAt, endsAt }: Placed, o
 // A block is the one solid thing on the strip. Its ink lives in --ink, so a form and a state set one value each and a
 // link's hover raises it. The seam on a block that touches the one before is a clear edge, so it shows any surface.
 const BLOCK =
-  "@container/block relative block size-full min-w-0.5 overflow-hidden border-0 border-transparent bg-(--ink) bg-clip-padding text-background transition-[background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) [--ink:var(--muted-foreground)] data-[ink=past]:[--ink:var(--disabled)] data-[ink=selected]:[--ink:var(--first)] data-[seam=left]:border-l data-[seam=top]:border-t data-[form=outline]:border data-[form=outline]:border-(--ink) data-[form=outline]:bg-transparent data-[form=outline]:text-foreground data-[form=dotted]:border data-[form=dotted]:border-dotted data-[form=dotted]:border-(--ink) data-[form=dotted]:bg-transparent data-[form=dotted]:text-(--ink) [&:is(a)]:data-[ink=rest]:hover:[--ink:var(--foreground)] [&:is(a)]:data-[ink=past]:hover:[--ink:var(--muted-foreground)] focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:600px)]:pointer-events-none";
+  "group/block @container/block relative block size-full min-w-0.5 overflow-hidden border-0 border-transparent bg-(--ink) bg-clip-padding text-background transition-[background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) [--ink:var(--muted-foreground)] data-[ink=past]:[--ink:var(--disabled)] data-[ink=selected]:[--ink:var(--first)] data-[seam=left]:border-l data-[seam=top]:border-t data-[form=outline]:border data-[form=outline]:border-(--ink) data-[form=outline]:bg-transparent data-[form=outline]:text-foreground data-[form=dotted]:border data-[form=dotted]:border-dotted data-[form=dotted]:border-(--ink) data-[form=dotted]:bg-transparent data-[form=dotted]:text-(--ink) [&:is(a)]:data-[ink=rest]:hover:[--ink:var(--foreground)] [&:is(a)]:data-[ink=past]:hover:[--ink:var(--muted-foreground)] focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:600px)]:pointer-events-none";
 
-// A brief prints only on a block still to come with the track to itself. The block's own width picks the word or the
-// glyph, and a phone always takes the glyph.
+// A brief prints on a block still to come or underway, with the track to itself: a meeting that has started is when its
+// brief is read. The block's own width picks the word or the glyph, and a phone always takes the glyph. Either sits on
+// the block's own face above the now mark, so the mark passes behind it and never through it. An outline or a dotted
+// block has no face of its own, so there the brief takes the fill of the surface it sits on.
 function DayLineBlock({ item, options }: { item: Placed; options: TimeOptions }) {
-  const { event, past, started, lanes, seam } = item;
+  const { event, past, lanes, seam } = item;
   const linked = event.render !== undefined || event.href !== undefined;
-  const marked = event.brief && !past && !started && lanes === 1;
+  const marked = event.brief && !past && lanes === 1;
   return useRender({
     defaultTagName: "span",
     render: event.render ?? (event.href !== undefined ? <a /> : undefined),
@@ -264,11 +267,16 @@ function DayLineBlock({ item, options }: { item: Placed; options: TimeOptions })
       className: BLOCK,
       children: marked ? (
         <span aria-hidden="true" className="flex h-full items-center justify-center type-instrument">
-          <span className="hidden [@media(min-width:601px)]:@min-[36px]/block:inline">brief</span>
-          <Icon
-            name="brief"
-            className="hidden @min-[14px]/block:block [@media(min-width:601px)]:@min-[36px]/block:hidden"
-          />
+          <span
+            data-slot="day-line-brief"
+            className="relative z-1 flex items-center bg-(--ink) px-1 transition-[background-color] duration-(--duration-instant) ease-(--ease-brand) group-data-[form=dotted]/block:bg-(--surface,var(--background)) group-data-[form=outline]/block:bg-(--surface,var(--background))"
+          >
+            <span className="hidden [@media(min-width:601px)]:@min-[36px]/block:inline">brief</span>
+            <Icon
+              name="brief"
+              className="hidden @min-[14px]/block:block [@media(min-width:601px)]:@min-[36px]/block:hidden"
+            />
+          </span>
         </span>
       ) : undefined,
     },
@@ -338,8 +346,11 @@ function Names({ names }: { names: Name[] }) {
  * The strip: names, track, ticks and the now mark. `day` is a plain date, like `2026-11-03`, and `timeZone` the zone it
  * reads in. Give it an `aria-label` that names the day. Without `now`, nothing reads as gone by and no mark prints, and
  * the mark prints only on its own day: a day gone by reads as spent, and a day to come as unspent.
- * `children` print in the names' place when the day holds no timed event: `nothing fixed today`, or why it can't say.
- * `loading` holds the shape until the first read. `asOf` says when a stale read was last good.
+ * `children` print in the names' place when the day holds no timed event, such as `nothing fixed today`. A read that
+ * failed leaves them out and says why in DayLineFoot, so a failed read never reads as an empty day. A read that may be
+ * behind prints its blocks dotted, and DayLineFoot says why and when it was last good. `loading` holds the shape until
+ * the first read. `asOf` prints when a stale read was last good beside the now time, on the side away from it, for a
+ * strip with no DayLineFoot under it; a day line with a foot says it there, so the time prints once.
  */
 function DayLineStrip({
   asOf,
@@ -392,7 +403,7 @@ function DayLineStrip({
       </div>
       <div
         data-slot="day-line-track"
-        className="relative mt-1 h-[29px] border-b border-rule @max-[560px]/day-line:h-[25px]"
+        className="relative isolate mt-1 h-[29px] border-b border-rule @max-[560px]/day-line:h-[25px]"
       >
         <ol className="absolute inset-0 list-none">
           {placed.map((item) => (
@@ -422,13 +433,13 @@ function DayLineStrip({
           {nowAt !== null && (
             <span
               data-slot="day-line-now-mark"
-              className="pointer-events-none absolute top-0 -bottom-[5px] -ml-px w-0.5 bg-first outline-1 outline-background"
+              className="pointer-events-none absolute top-0 -bottom-[5px] -ml-px w-0.5 bg-first outline-1 outline-(--surface,var(--background))"
               style={{ left: "clamp(1px, var(--now), calc(100% - 1px))" }}
             />
           )}
         </div>
       </div>
-      <div data-slot="day-line-foot" className="relative h-5 type-instrument leading-[15px]">
+      <div data-slot="day-line-clock" className="relative h-5 type-instrument leading-[15px]">
         {nowAt !== null && now !== null && now !== undefined && (
           <p
             data-slot="day-line-now"
@@ -459,8 +470,7 @@ function DayLineStrip({
 
 // The date, a calendar note, the ways to the next day and the all-day line. The date and the note share a baseline on a
 // wide screen. The all-day line hangs below the date, in the gap before the strip, so it never moves the strip, and on a
-// phone the note joins it there. The note is why the day can't be trusted, so it keeps its whole width there and the
-// all-day words truncate first.
+// phone the note joins it there. The note keeps its whole width there and the all-day words truncate first.
 function DayLineHead({ className, ...props }: React.ComponentProps<"header">) {
   return (
     <header
@@ -496,7 +506,8 @@ function DayLineDate({ className, href, render, ...props }: useRender.ComponentP
   });
 }
 
-// A calendar's own note, such as `outlook isn't answering`. On a phone it drops under the date, out of the date's target.
+// A calendar's own note, such as `times in new york`. A fault goes in DayLineFoot. On a phone the note drops under the
+// date, out of the date's target.
 function DayLineNote({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
@@ -537,9 +548,60 @@ function DayLineSteps({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// The head and the strip, 16 px apart.
-function DayLine({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-mk="day-line" data-slot="day-line" className={cn("grid min-w-0 gap-4", className)} {...props} />;
+// The one home for why the day can't be trusted and when it was last good, with the one way to fix it: `outlook isn't
+// answering · as of 08:10` and `try again`, whichever calendar failed and whether or not the strip has blocks. Render
+// it always: it holds its 24 px while it's empty, so a fault comes and goes without moving a thing, and a screen reader
+// hears its words arrive. The words truncate first, so the action keeps its whole word.
+function DayLineFoot({
+  action,
+  children,
+  className,
+  ...props
+}: React.ComponentProps<"div"> & {
+  /** The one action, a DayLineAction: `try again`. */
+  action?: ReactNode;
+}) {
+  return (
+    <div
+      data-mk="day-line"
+      data-slot="day-line-foot"
+      className={cn("flex h-6 min-w-0 items-center justify-end gap-2 type-instrument text-muted-foreground", className)}
+      {...props}
+    >
+      <p role="status" className="min-w-0 truncate">
+        {children}
+      </p>
+      {action}
+    </div>
+  );
 }
 
-export { DayLine, DayLineAllDay, DayLineDate, DayLineHead, DayLineNote, DayLineSteps, DayLineStrip };
+// The foot's one action: a foreground word that underlines on hover, as a link in chrome does, beside the muted words.
+// On a phone it takes 44 px through its hit area.
+function DayLineAction(props: Omit<React.ComponentProps<typeof Button>, "variant" | "size">) {
+  return <Button data-slot="day-line-action" variant="link" size="xs" {...props} />;
+}
+
+// The head and the strip, 16 px apart, and the foot right under the strip.
+function DayLine({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-mk="day-line"
+      data-slot="day-line"
+      className={cn("grid min-w-0 gap-4 [&>[data-slot=day-line-strip]+[data-slot=day-line-foot]]:-mt-4", className)}
+      {...props}
+    />
+  );
+}
+
+export {
+  DayLine,
+  DayLineAction,
+  DayLineAllDay,
+  DayLineDate,
+  DayLineFoot,
+  DayLineHead,
+  DayLineNote,
+  DayLineSteps,
+  DayLineStrip,
+};

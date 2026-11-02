@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ToastLive, ToastPrinted } from "@/examples/toast";
+import { ToastLive, ToastOnPhone, ToastPrinted } from "@/examples/toast";
 import { Caption } from "@/site/Caption";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -11,6 +11,7 @@ export const Route = createFileRoute("/components/toast")({
     sections: [
       { id: "modes", title: "in both modes" },
       { id: "try", title: "try it" },
+      { id: "phone", title: "on a phone" },
       { id: "parts", title: "parts" },
     ],
   },
@@ -29,9 +30,9 @@ function Page() {
 
       <Section id="modes" title="in both modes">
         <p className="st-c-copy">
-          three toasts, the newest in front. the two behind peek 12 px above it, and hovering the stack spreads them 12
-          px apart. the stack moves by whole pixels and never scales, so the screen on its contact edge keeps its 1 px
-          cells.
+          three toasts, the newest in front. the two behind peek 12 px past it, toward the middle of the window, and
+          hovering the stack spreads them 12 px apart. the stack moves by whole pixels and never scales, so the screen
+          on its contact edge keeps its 1 px cells.
         </p>
         <p className="st-c-copy">
           each type prints its status glyph in its own ink: success the tick, info the i, warning the pause, error the
@@ -45,10 +46,21 @@ function Page() {
 
       <Section id="try" title="try it">
         <p className="st-c-copy">
-          these go to a real toaster in the corner of the window, in the page&rsquo;s mode. each one leaves after 5
-          seconds; hover or focus the stack to hold it. loading waits on a promise, then turns into a success.
+          these go to a real toaster at the bottom right of the window, or at its top on a phone, in the page&rsquo;s
+          mode. each one leaves after 5 seconds; hover or focus the stack to hold it. loading waits on a promise, then
+          turns into a success.
         </p>
         <ToastLive />
+      </Section>
+
+      <Section id="phone" title="on a phone">
+        <p className="st-c-copy">
+          at 600 px and below the stack drops from the top of the window, 12 px inside its edges and in line with the
+          panel. the foot of a phone&rsquo;s page holds the thumb and the page&rsquo;s last action, as this send bar
+          does, and the frame scrolls with the page, so nothing sticks at the top for a toast to cover. a swipe up or
+          right dismisses it. both frames use a 390 px viewport.
+        </p>
+        <ModePair light={<ToastOnPhone mode="light" />} dark={<ToastOnPhone mode="dark" />} />
       </Section>
 
       <Section id="parts" title="parts">
@@ -80,7 +92,8 @@ function Page() {
             <code>Toaster</code>
           </dt>
           <dd>
-            the stack in the window&rsquo;s corner. pass <code>toastManager</code> to give it a manager of its own.
+            the stack at the bottom right of the window, or at its top on a phone. pass <code>toastManager</code> to
+            give it a manager of its own.
           </dd>
           <dt>
             <code>Toast</code>

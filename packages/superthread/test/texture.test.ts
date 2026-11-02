@@ -461,14 +461,19 @@ test("state selectors go through @variant, so the site's demo variants reach the
   child(child(utility("texture-rowedge"), "& tbody tr"), "@variant hover");
 });
 
-test("the row edge is half on hover and solid when selected", () => {
-  const rows = child(utility("texture-rowedge"), "& tbody tr");
+test("the row edge is half on hover and solid when selected, on a first cell that may be the row's head", () => {
+  const edge = utility("texture-rowedge");
+  expect(value(child(edge, "& :where(td:first-child, tbody th:first-child)"), "position")).toBe("relative");
+  const rows = child(edge, "& tbody tr");
   const hover = child(
     child(rows, "@variant hover"),
-    '&:not([aria-selected="true"], [data-state="selected"]) > td:first-child::before',
+    '&:not([aria-selected="true"], [data-state="selected"]) > :is(td, th):first-child::before',
   );
   expect(value(hover, "mask")).toBe("var(--texture-b50) 0 0 / 4px 4px");
-  const selected = child(rows, '&:is([aria-selected="true"], [data-state="selected"]) > td:first-child::before');
+  const selected = child(
+    rows,
+    '&:is([aria-selected="true"], [data-state="selected"]) > :is(td, th):first-child::before',
+  );
   expect(value(selected, "mask")).toBeUndefined();
   for (const strip of [hover, selected]) expect(value(strip, "width")).toBe("4px");
 });

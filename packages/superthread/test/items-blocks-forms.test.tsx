@@ -329,20 +329,48 @@ describe("the quiet add in a nav", () => {
     </SidebarProvider>
   );
 
-  // happy-dom has the attribute and no popover behaviour, so this stands in for the browser's half: it opens the form and
-  // fires the toggle event, and like a browser it fires nothing when the form is already open. The real popover, its
-  // anchor and Escape are proved in a browser.
+  // happy-dom has the attribute and no popover behaviour, so this stands in for the browser's half: it opens and closes
+  // the form and fires the toggle event, and like a browser it fires nothing when the form is already open. Its close
+  // does what Chrome's does: focus inside the form goes back to the element that held it when the form opened, and to
+  // the body when nothing did or that element has left the page. An Escape that no handler cancelled closes the open
+  // form, as the browser's light dismiss does. The real popover and its anchor are proved in a browser.
   const open: Element[] = [];
   const withPopover = () => {
-    const proto = HTMLElement.prototype as unknown as { togglePopover?: (force?: boolean) => boolean };
+    const proto = HTMLElement.prototype as unknown as {
+      togglePopover?: (force?: boolean) => boolean;
+      hidePopover?: () => void;
+    };
+    const before = new Map<Element, Element | null>();
     proto.togglePopover = function (this: HTMLElement, force?: boolean) {
       if (force !== false && open.includes(this)) return true;
       open.push(this);
+      before.set(this, document.activeElement);
       this.dispatchEvent(Object.assign(new Event("toggle"), { newState: force === false ? "closed" : "open" }));
       return true;
     };
+    // Defined out of enumeration: an enumerable stub on the prototype makes the `open` comparisons fail under happy-dom.
+    Object.defineProperty(proto, "hidePopover", {
+      configurable: true,
+      value(this: HTMLElement) {
+        if (!open.includes(this)) return;
+        open.splice(open.indexOf(this), 1);
+        const back = before.get(this);
+        before.delete(this);
+        if (this.contains(document.activeElement)) {
+          if (back instanceof HTMLElement && back !== document.body && back.isConnected) back.focus();
+          else (document.activeElement as HTMLElement).blur();
+        }
+        this.dispatchEvent(Object.assign(new Event("toggle"), { newState: "closed" }));
+      },
+    });
+    const dismiss = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !event.defaultPrevented) (open.at(-1) as HTMLElement | undefined)?.hidePopover();
+    };
+    document.addEventListener("keydown", dismiss);
     return () => {
+      document.removeEventListener("keydown", dismiss);
       delete proto.togglePopover;
+      delete proto.hidePopover;
       open.length = 0;
     };
   };
@@ -436,6 +464,40 @@ describe("the quiet add in a nav", () => {
       await press("n", trigger);
       expect(document.activeElement).toBe(one(view.body, '[data-slot="quick-add-nav-field"] input').el);
     } finally {
+      await view.done();
+      restore();
+    }
+  });
+
+  test("n then Escape closes the field and hands focus back where it was, or to the trigger, never the body", async () => {
+    const restore = withPopover();
+    const view = await client(nav());
+    const row = document.createElement("button");
+    try {
+      const trigger = one(view.body, "button[popovertarget]").el;
+      const input = one(view.body, '[data-slot="quick-add-nav-field"] input').el;
+      // a control that held focus gets it back
+      document.body.append(row);
+      row.focus();
+      await press("n", row);
+      expect(document.activeElement).toBe(input);
+      await press("Escape", input);
+      expect(open).toEqual([]);
+      expect(document.activeElement).toBe(row);
+      // with nothing focused, the trigger takes it
+      row.blur();
+      await press("n");
+      await press("Escape", input);
+      expect(open).toEqual([]);
+      expect(document.activeElement).toBe(trigger);
+      // and so it does when the control that held focus has left the page
+      row.focus();
+      await press("n", row);
+      row.remove();
+      await press("Escape", input);
+      expect(document.activeElement).toBe(trigger);
+    } finally {
+      row.remove();
       await view.done();
       restore();
     }

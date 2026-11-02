@@ -239,6 +239,31 @@ describe("textarea", () => {
     expect(claim("textarea")).toEqual(["texture-disabled"]);
     expect(forbidden(rendered)).toEqual([]);
   });
+
+  describe("the code form", () => {
+    const code = (props: ComponentProps<typeof Textarea> = {}) =>
+      one(server(<Textarea kind="code" {...props} />), "textarea");
+
+    test("sets json and keys in mono at the instrument step, and breaks a long key anywhere", () => {
+      const { classes } = code();
+      expect(classes).toEqual(expect.arrayContaining(["font-mono", "text-instrument", "[overflow-wrap:anywhere]"]));
+      expect(classes).not.toContain("text-ui");
+      expect(one(states[0]!, "textarea").classes).not.toContain("font-mono");
+      expect(code({ "aria-invalid": true }).classes).toEqual(
+        expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", "aria-invalid:border-error"]),
+      );
+    });
+
+    test("a phone keeps its hands off the text, so a key stays what was typed", () => {
+      const { el } = code();
+      expect(el.getAttribute("spellcheck")).toBe("false");
+      expect(el.getAttribute("autocapitalize")).toBe("off");
+      expect(el.getAttribute("autocomplete")).toBe("off");
+      expect(el.getAttribute("autocorrect")).toBe("off");
+      expect(one(states[0]!, "textarea").el.getAttribute("spellcheck")).toBeNull();
+      expect(code({ autoComplete: "new-password" }).el.getAttribute("autocomplete")).toBe("new-password");
+    });
+  });
 });
 
 describe("select", () => {

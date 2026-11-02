@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "source-line",
+  "title": "source line",
+  "description": "a wrapping row of cited sources at the instrument step, and what closes the line at its far side",
+  "dependencies": [
+    "@base-ui/react@^1.8.0"
+  ],
+  "registryDependencies": [
+    "@mk/utils"
+  ],
+  "files": [
+    {
+      "path": "items/ui/source-line.tsx",
+      "content": "import { useId } from \"react\";\nimport { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cn } from \"@/components/superthread/lib/utils\";\n// @mk/source-line 2.10.0\n\nconst FOCUS = \"focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)\";\n\n// A wrapping row of cited sources at the instrument step: the label, the sources in the order they're cited, and with\n// end what closes the line, in mono at its far side: `written 07:00`. The list's box gives way, so all of them wrap as one\n// row. On a phone every line is 44 px, so no target's reach lands on another's, and end joins the words in the interface's\n// face.\nfunction SourceLine({\n  className,\n  children,\n  end,\n  label = \"sources\",\n  ...props\n}: React.ComponentProps<\"div\"> & { end?: React.ReactNode; label?: React.ReactNode }) {\n  const labelId = useId();\n  return (\n    <div\n      data-mk=\"source-line\"\n      data-slot=\"source-line\"\n      className={cn(\n        \"flex min-w-0 flex-wrap items-baseline gap-x-4 gap-y-1 type-instrument text-muted-foreground [@media(max-width:600px)]:items-center [@media(max-width:600px)]:gap-y-0\",\n        className,\n      )}\n      {...props}\n    >\n      <span id={labelId}>{label}</span>\n      <ul role=\"list\" aria-labelledby={labelId} className=\"contents\">\n        {children}\n      </ul>\n      {end != null && (\n        <span\n          data-slot=\"source-line-end\"\n          className=\"ml-auto min-w-0 font-mono [@media(max-width:600px)]:ml-0 [@media(max-width:600px)]:font-sans\"\n        >\n          {end}\n        </span>\n      )}\n    </div>\n  );\n}\n\n// One source. With an href or a router link through render it's a link in foreground, underlined at rest as running text\n// is, because a citation has to read as something you can open. Without either it's a plain name in the line's ink. On a\n// phone a link is its own 44 px box.\nfunction SourceLineItem({ className, href, render, children, ...props }: useRender.ComponentProps<\"a\">) {\n  const source = useRender({\n    defaultTagName: \"span\",\n    render: render ?? (href !== undefined ? <a /> : undefined),\n    state: { slot: \"source-line-item\" },\n    props: mergeProps<\"a\">(\n      {\n        href,\n        className: cn(\n          \"[overflow-wrap:anywhere] decoration-1 underline-offset-4 [&:is(a)]:text-foreground [&:is(a)]:underline [&:is(a)]:hover:text-first [@media(max-width:600px)]:[&:is(a)]:inline-flex [@media(max-width:600px)]:[&:is(a)]:min-h-11 [@media(max-width:600px)]:[&:is(a)]:min-w-11 [@media(max-width:600px)]:[&:is(a)]:items-center\",\n          FOCUS,\n          className,\n        ),\n        children,\n      },\n      props,\n    ),\n  });\n  return <li className=\"min-w-0\">{source}</li>;\n}\n\nexport { SourceLine, SourceLineItem };\n",
+      "type": "registry:ui",
+      "target": "@components/superthread/ui/source-line.tsx"
+    }
+  ],
+  "meta": {
+    "version": "2.10.0",
+    "sha256": "7cbd8688c25ebcf69b7e232149a1ff7cbbb212e7ff87476bfdda70decd5ef399",
+    "tier": "brand",
+    "upstream": null
+  },
+  "type": "registry:ui"
+}

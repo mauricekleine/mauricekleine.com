@@ -3,7 +3,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
+import { AppShell, AppShellPanel } from "@/components/superthread/blocks/app-shell";
 import { ListRow, ListRowAside, ListRowMeta, ListRows, ListRowTitle } from "@/components/superthread/blocks/list-rows";
 import { Section, SectionAction, SectionHeader, SectionTitle } from "@/components/superthread/blocks/section-header";
 import { child, parse, type Rule, value } from "./css.ts";
@@ -19,6 +19,29 @@ const fragment = (html: string) => {
 
 test("a tap prints no grey flash of its own, so a control's press is the only feedback", () => {
   expect(child(base, "body").decls).toContainEqual(["-webkit-tap-highlight-color", "transparent"]);
+});
+
+describe("a ship's window", () => {
+  const padded = setting("scroll-padding-block");
+
+  test("scrolls what focus brings into view 16 px clear of its top and bottom, so a ring never meets the edge", () => {
+    expect(padded.map((rule) => value(rule, "scroll-padding-block"))).toEqual(["16px"]);
+  });
+
+  // happy-dom caches an element's :has() answer, so the test reads the rule's key and finds it in the markup.
+  test("is a page that holds the fleet rail; a page with no rail scrolls as the browser does", () => {
+    const key = /^html:has\((.+)\)$/.exec(padded[0]?.sel ?? "")?.[1];
+    expect(key).toBeDefined();
+    const ship = server(
+      <AppShell current="orbit">
+        <AppShellPanel>
+          <p>today</p>
+        </AppShellPanel>
+      </AppShell>,
+    );
+    expect(ship.querySelector(key!)).not.toBeNull();
+    expect(fragment("<main><p>today</p></main>").querySelector(key!)).toBeNull();
+  });
 });
 
 describe("the focus ring", () => {
@@ -62,6 +85,32 @@ describe("the focus ring", () => {
     '<main tabindex="-1"></main>',
     "<div></div>",
   ])("leaves %s to its own edge, or has nothing to ring", (html) => expect(reaches(html)).toBe(false));
+
+  // the cascade's answer on focus: every ring rule that reaches the element, later rules over earlier ones
+  const focused = (el: Element) =>
+    Object.fromEntries(
+      base.rules
+        .filter((rule) => rule.sel.endsWith(":focus-visible") && el.matches(rule.sel.replace(/:focus-visible$/, "")))
+        .flatMap((rule) => rule.decls),
+    );
+
+  test("rings a link in running text flush to its sides, so the word space keeps the ring off the words beside it", () => {
+    const link = one(fragment('<p>mail needs a sign-in. <a href="/sources">see sources</a></p>'), "a").el;
+    expect(focused(link)).toEqual({
+      outline: "2px solid var(--ring)",
+      "outline-offset": "0",
+      // 2 px above and below the words, as every ring sits; the margin gives the padding back, so the line never moves
+      "padding-block": "2px",
+      "margin-block": "-2px",
+    });
+  });
+
+  test.each([
+    ["a link on its own", '<nav><a href="/runs">all runs</a></nav>'],
+    ["an item's link in a sentence", '<p>open <a data-slot="button" href="/runs">all runs</a></p>'],
+  ])("keeps %s 2 px out", (_, html) => {
+    expect(focused(one(fragment(html), "a").el)).toEqual({ outline: "2px solid var(--ring)", "outline-offset": "2px" });
+  });
 });
 
 describe("the faces", () => {

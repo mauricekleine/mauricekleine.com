@@ -510,3 +510,42 @@ describe("sonner", () => {
     skin(body, "sonner");
   });
 });
+
+describe("sonner's place", () => {
+  const happyDOM = (window as unknown as { happyDOM: { setViewport(size: { width: number }): void } }).happyDOM;
+  // The stack sonner prints for one toaster, at the window's width: where it sits, and its phone offsets.
+  async function stackAt(width: number, props: ComponentProps<typeof Toaster> = {}) {
+    const was = window.innerWidth;
+    await act(async () => happyDOM.setViewport({ width }));
+    const id = `place-${width}`;
+    const { body, done } = await client(<Toaster id={id} duration={Infinity} {...props} />);
+    try {
+      await act(async () => {
+        toast.success("draft saved", { toasterId: id });
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+      const list = one(body, `[data-sonner-toaster]`).el as HTMLElement;
+      const offset = (side: string) => list.style.getPropertyValue(`--mobile-offset-${side}`);
+      return {
+        at: `${list.getAttribute("data-y-position")}-${list.getAttribute("data-x-position")}`,
+        phone: ["top", "right", "bottom", "left"].map(offset),
+      };
+    } finally {
+      await act(async () => {
+        toast.dismiss();
+      });
+      await done();
+      await act(async () => happyDOM.setViewport({ width: was }));
+    }
+  }
+
+  test("on a phone the stack drops from the top, 12 px inside the window; wider, it keeps the bottom right", async () => {
+    const inside = ["calc(12px + env(safe-area-inset-top, 0px))", "12px", "12px", "12px"];
+    expect(await stackAt(390)).toEqual({ at: "top-center", phone: inside });
+    expect(await stackAt(600)).toEqual({ at: "top-center", phone: inside });
+    expect(await stackAt(1024)).toEqual({ at: "bottom-right", phone: inside });
+    // position places the stack above 600 px only: a phone keeps the top.
+    expect((await stackAt(1024, { position: "top-left" })).at).toBe("top-left");
+    expect((await stackAt(390, { position: "bottom-left" })).at).toBe("top-center");
+  });
+});

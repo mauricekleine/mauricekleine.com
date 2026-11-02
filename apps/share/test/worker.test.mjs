@@ -154,7 +154,10 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   // the button prints as the outline off paper, for a stored dark mode and for a system one
   for (const scope of [".dark", "html:not(.light)"])
     assert.ok(darkPage.includes(`${scope} button { border-color: currentColor; background: transparent;`), scope);
-  assert.ok(darkPage.includes("@media (max-width: 600px) { input, button { height: 44px; } }"));
+  // on a phone the field and the button are 44 px, and the PIN sets 16 px, so iOS Safari never zooms in on focus
+  assert.ok(
+    darkPage.includes("@media (max-width: 600px) { input, button { height: 44px; } input { font-size: 16px; } }"),
+  );
   // a focused field keeps one frame: its edge thickens inside the box, the caret follows, and the title is first ink
   assert.ok(darkPage.includes("input:focus-visible { outline-offset: -2px; }"));
   assert.match(darkPage, /input \{[^}]*caret-color: var\(--ring\)/);

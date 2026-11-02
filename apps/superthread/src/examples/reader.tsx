@@ -84,13 +84,7 @@ export function ReaderBrief() {
         </ReaderLead>
         <ReaderWide>
           <DayLine>
-            <DayLineStrip
-              aria-label="the day as written at 07:00"
-              asOf="as of 07:00"
-              day={day}
-              events={tuesday}
-              timeZone={timeZone}
-            />
+            <DayLineStrip aria-label="the day as written at 07:00" day={day} events={tuesday} timeZone={timeZone} />
           </DayLine>
         </ReaderWide>
         <ReaderBody>

@@ -50,6 +50,7 @@ import { Route as ComponentsSkeletonRouteImport } from './routes/components/skel
 import { Route as ComponentsSliderRouteImport } from './routes/components/slider'
 import { Route as ComponentsSonnerRouteImport } from './routes/components/sonner'
 import { Route as ComponentsSourceLineRouteImport } from './routes/components/source-line'
+import { Route as ComponentsSourceMarkRouteImport } from './routes/components/source-mark'
 import { Route as ComponentsSwitchRouteImport } from './routes/components/switch'
 import { Route as ComponentsTableRouteImport } from './routes/components/table'
 import { Route as ComponentsTabsRouteImport } from './routes/components/tabs'
@@ -294,6 +295,11 @@ const ComponentsSonnerRoute = ComponentsSonnerRouteImport.update({
 const ComponentsSourceLineRoute = ComponentsSourceLineRouteImport.update({
   id: '/components/source-line',
   path: '/components/source-line',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComponentsSourceMarkRoute = ComponentsSourceMarkRouteImport.update({
+  id: '/components/source-mark',
+  path: '/components/source-mark',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsSwitchRoute = ComponentsSwitchRouteImport.update({
@@ -542,6 +548,7 @@ export interface FileRoutesByFullPath {
   '/components/slider': typeof ComponentsSliderRoute
   '/components/sonner': typeof ComponentsSonnerRoute
   '/components/source-line': typeof ComponentsSourceLineRoute
+  '/components/source-mark': typeof ComponentsSourceMarkRoute
   '/components/switch': typeof ComponentsSwitchRoute
   '/components/table': typeof ComponentsTableRoute
   '/components/tabs': typeof ComponentsTabsRoute
@@ -625,6 +632,7 @@ export interface FileRoutesByTo {
   '/components/slider': typeof ComponentsSliderRoute
   '/components/sonner': typeof ComponentsSonnerRoute
   '/components/source-line': typeof ComponentsSourceLineRoute
+  '/components/source-mark': typeof ComponentsSourceMarkRoute
   '/components/switch': typeof ComponentsSwitchRoute
   '/components/table': typeof ComponentsTableRoute
   '/components/tabs': typeof ComponentsTabsRoute
@@ -709,6 +717,7 @@ export interface FileRoutesById {
   '/components/slider': typeof ComponentsSliderRoute
   '/components/sonner': typeof ComponentsSonnerRoute
   '/components/source-line': typeof ComponentsSourceLineRoute
+  '/components/source-mark': typeof ComponentsSourceMarkRoute
   '/components/switch': typeof ComponentsSwitchRoute
   '/components/table': typeof ComponentsTableRoute
   '/components/tabs': typeof ComponentsTabsRoute
@@ -794,6 +803,7 @@ export interface FileRouteTypes {
     | '/components/slider'
     | '/components/sonner'
     | '/components/source-line'
+    | '/components/source-mark'
     | '/components/switch'
     | '/components/table'
     | '/components/tabs'
@@ -877,6 +887,7 @@ export interface FileRouteTypes {
     | '/components/slider'
     | '/components/sonner'
     | '/components/source-line'
+    | '/components/source-mark'
     | '/components/switch'
     | '/components/table'
     | '/components/tabs'
@@ -960,6 +971,7 @@ export interface FileRouteTypes {
     | '/components/slider'
     | '/components/sonner'
     | '/components/source-line'
+    | '/components/source-mark'
     | '/components/switch'
     | '/components/table'
     | '/components/tabs'
@@ -1044,6 +1056,7 @@ export interface RootRouteChildren {
   ComponentsSliderRoute: typeof ComponentsSliderRoute
   ComponentsSonnerRoute: typeof ComponentsSonnerRoute
   ComponentsSourceLineRoute: typeof ComponentsSourceLineRoute
+  ComponentsSourceMarkRoute: typeof ComponentsSourceMarkRoute
   ComponentsSwitchRoute: typeof ComponentsSwitchRoute
   ComponentsTableRoute: typeof ComponentsTableRoute
   ComponentsTabsRoute: typeof ComponentsTabsRoute
@@ -1375,6 +1388,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsSourceLineRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/components/source-mark': {
+      id: '/components/source-mark'
+      path: '/components/source-mark'
+      fullPath: '/components/source-mark'
+      preLoaderRoute: typeof ComponentsSourceMarkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/components/switch': {
       id: '/components/switch'
       path: '/components/switch'
@@ -1700,6 +1720,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsSliderRoute: ComponentsSliderRoute,
   ComponentsSonnerRoute: ComponentsSonnerRoute,
   ComponentsSourceLineRoute: ComponentsSourceLineRoute,
+  ComponentsSourceMarkRoute: ComponentsSourceMarkRoute,
   ComponentsSwitchRoute: ComponentsSwitchRoute,
   ComponentsTableRoute: ComponentsTableRoute,
   ComponentsTabsRoute: ComponentsTabsRoute,

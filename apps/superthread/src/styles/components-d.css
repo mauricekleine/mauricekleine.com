@@ -271,6 +271,24 @@
   .st-glyphs-name svg {
     flex: none;
   }
+  .st-marks-sheet {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    list-style: none;
+  }
+  .st-marks-cell {
+    display: grid;
+    gap: 8px;
+    justify-items: start;
+  }
+  .st-state-words {
+    display: grid;
+    gap: 8px;
+    font-size: var(--text-instrument);
+    line-height: var(--text-instrument--line-height);
+    list-style: none;
+  }
   .st-glyphs-note {
     margin-top: -6px;
     color: var(--muted-foreground);

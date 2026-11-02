@@ -73,6 +73,14 @@ describe("a failed expect on the DOM", () => {
     ["a node in a map", () => expect<unknown>({ a: new Map([["b", new Text("c")]]) }).toEqual({})],
     ["a node keying a map", () => expect<unknown>(new Map([[new Text("a"), 1]])).toEqual(new Map())],
     ["a node in a set", () => expect<unknown>(new Set([new Text("a")])).toStrictEqual(new Set())],
+    [
+      "a node in objectContaining",
+      () => expect<unknown>({ a: 1 }).toEqual(expect.objectContaining({ b: new Text("c") })),
+    ],
+    [
+      "a node in not.objectContaining",
+      () => expect<unknown>({ a: 1 }).toEqual({ a: 2, b: expect.not.objectContaining({ c: new Text("d") }) }),
+    ],
     ["the window", () => expect<unknown>(window).toStrictEqual({})],
     [
       "a node in a mock's calls",
@@ -95,6 +103,18 @@ describe("a failed expect on the DOM", () => {
   ])("refuses to diff %s", (_, assertion) => {
     expect(failure(assertion)).toContain("can't print a DOM node");
   });
+
+  test("lets a mock called with a node answer what it returned", () => {
+    const handler = mock<(node: Node) => number>(() => 1);
+    handler(document.createElement("p"));
+    expect(handler).toHaveReturnedWith(1);
+    expect(handler).toHaveLastReturnedWith(1);
+    expect(handler).toHaveNthReturnedWith(1, 1);
+    // Bun's types leave its aliases out.
+    const aliases = expect(handler) as unknown as Record<"lastReturnedWith" | "nthReturnedWith", Matcher>;
+    aliases.lastReturnedWith(1);
+    aliases.nthReturnedWith(1, 1);
+  });
 });
 
 describe("every matcher Bun ships", () => {
@@ -109,10 +129,16 @@ describe("every matcher Bun ships", () => {
     new Map([["a", node]]),
     new Map([[node, 1]]),
     new Set([node]),
+    expect.objectContaining({ a: node }),
+    expect.not.objectContaining({ a: node }),
   ];
 
   // Detached nodes again. The names come from Bun, so one it adds later lands here too.
   test.each(names)("%s fails on a node without walking it", (name) => {
+    const prints = (received: unknown, expected: unknown[]) => {
+      const matchers = expect<unknown>(received) as unknown as Record<string, Matcher>;
+      expect(said(() => matchers[name]?.(...expected)).length).toBeLessThan(2000);
+    };
     const node = document.createElement("p");
     const called = mock();
     called(node);
@@ -120,8 +146,15 @@ describe("every matcher Bun ships", () => {
     returned();
     for (const received of [...holding(node), called, returned]) {
       for (const expected of [[{ a: 1 }], ["a", { b: 1 }], [1, "save"], ...holding(node).map((value) => [value])]) {
-        const matchers = expect<unknown>(received) as unknown as Record<string, Matcher>;
-        expect(said(() => matchers[name]?.(...expected)).length).toBeLessThan(2000);
+        prints(received, expected);
+      }
+    }
+    // Plain values reach the node only through what they expect, so no snapshot gets written.
+    const plain = mock();
+    plain({ a: 1 });
+    for (const received of [{ a: 1 }, plain]) {
+      for (const value of holding(node)) {
+        prints(received, [value]);
       }
     }
   });
@@ -134,9 +167,17 @@ describe("a failed expect on plain data", () => {
     expect(printed).toContain('"a": 2');
   });
 
-  test("still resolves a promise and honours not", async () => {
+  test("still resolves a promise, honours not and matches a sample", async () => {
     await expect(Promise.resolve({ a: 1 })).resolves.toEqual({ a: 1 });
     expect({ a: 1 }).not.toEqual({ a: 2 });
     expect(() => expect({ a: 1 }).not.toEqual({ a: 1 })).toThrow();
+    expect({ a: 1, b: 2 }).toEqual(expect.objectContaining({ b: 2 }));
+    expect({ a: 1 }).toEqual(expect.not.objectContaining({ b: 2 }));
+    expect(() => expect({ a: 1 }).toEqual(expect.objectContaining({ b: 2 }))).toThrow();
+  });
+
+  test("compares a set of a million entries", () => {
+    const entries = new Set(Array.from({ length: 1_000_000 }, (_, at) => at));
+    expect(entries).toEqual(new Set(entries));
   });
 });

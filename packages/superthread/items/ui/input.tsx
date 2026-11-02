@@ -4,7 +4,8 @@ import { cn } from "@/components/superthread/lib/utils";
 
 // A field whose box is its own text control. Focus thickens the 1 px edge to 2 px inside the box, in --fx: the
 // ring's ink, or the error ink when the field is invalid (the caret follows). Nothing outside the box draws, so the
-// text never moves. Disabled: never focused, a flat fill and the edge screened back.
+// text never moves. Disabled: never focused, a flat fill and the edge screened back. At 600 px and below its text sets
+// at 16 px, as every field's does, so iOS Safari never zooms the page in on focus.
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <InputPrimitive
@@ -12,7 +13,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       data-slot="input"
       data-mk="input"
       className={cn(
-        "h-10 w-full min-w-0 border border-input bg-background px-3 text-ui text-foreground [@media(max-width:600px)]:h-11 caret-(--fx) [--fx:var(--ring)] placeholder:text-muted-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-ui file:font-medium file:text-foreground focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled texture-disabled",
+        "h-10 w-full min-w-0 border border-input bg-background px-3 text-ui text-foreground [@media(max-width:600px)]:h-11 [@media(max-width:600px)]:text-[16px] caret-(--fx) [--fx:var(--ring)] placeholder:text-muted-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-ui file:font-medium file:text-foreground focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled texture-disabled",
         className,
       )}
       {...props}

@@ -6,14 +6,17 @@ import type { ComponentProps } from "react";
 import { renderToString } from "react-dom/server";
 import {
   DayLine,
+  DayLineAction,
   DayLineAllDay,
   DayLineDate,
   type DayLineEvent,
+  DayLineFoot,
   DayLineHead,
   DayLineNote,
   DayLineSteps,
   DayLineStrip,
 } from "@/components/superthread/blocks/day-line";
+import { Button } from "@/components/superthread/ui/button";
 import { Icon } from "@/components/superthread/ui/glyphs";
 import { CONTROL_RING, detailsUsed, elements, forbidden, one, server } from "./rendered.tsx";
 
@@ -177,10 +180,30 @@ describe("a block's states", () => {
     expect(ahead?.hasAttribute("data-past")).toBe(false);
   });
 
-  test("a meeting underway loses its word, so the mark never crosses one", () => {
+  test("a meeting underway keeps its brief, since that's when it's read", () => {
     const host = strip([renewal], { now: clock("11:12") });
     expect(ink(host, "renewal call")).toBe("rest");
-    expect(word(host, "renewal call")).toBe("");
+    expect(word(host, "renewal call")).toBe("brief");
+  });
+
+  test("a brief sits over the mark on the block's own face, so the mark passes behind it and never through it", () => {
+    const host = strip([renewal, meeting("hold", "13:00", "13:45", { brief: true, tentative: true })], {
+      now: clock("11:12"),
+    });
+    const brief = one(block(host, "renewal call"), '[data-slot="day-line-brief"]');
+    expect(brief.classes).toEqual(expect.arrayContaining(["relative", "z-1", "bg-(--ink)"]));
+    // an outline or a dotted block has no fill, so its brief takes the fill of the surface the strip sits on, the
+    // panel's card or else the stock, as the mark's own edge does
+    const hold = block(host, "hold");
+    expect(hold.classList).toContain("group/block");
+    expect(one(hold, '[data-slot="day-line-brief"]').classes).toEqual(
+      expect.arrayContaining([
+        "group-data-[form=outline]/block:bg-(--surface,var(--background))",
+        "group-data-[form=dotted]/block:bg-(--surface,var(--background))",
+      ]),
+    );
+    // the track keeps that stacking to itself
+    expect(one(host, '[data-slot="day-line-track"]').classes).toContain("isolate");
   });
 
   test("a meeting that ends this minute is over, and one that starts this minute is underway", () => {
@@ -275,8 +298,8 @@ describe("a block's states", () => {
 
   test("a brief carries the word and the drawn glyph, and the block's width and the viewport pick one", () => {
     const host = strip([renewal]);
-    const mark = block(host, "renewal call").firstElementChild!;
-    expect(mark.getAttribute("aria-hidden")).toBe("true");
+    const mark = one(block(host, "renewal call"), '[data-slot="day-line-brief"]').el;
+    expect(mark.closest('[aria-hidden="true"]')).not.toBeNull();
     const [word, glyph] = mark.children;
     expect(word?.textContent).toBe("brief");
     expect(word?.getAttribute("class")).toContain("[@media(min-width:601px)]:@min-[36px]/block:inline");
@@ -493,7 +516,11 @@ describe("the strip", () => {
   test("on a timeline solid means an event: past the blocks, nothing on the track carries a fill but the rule's ticks and the mark", () => {
     const host = strip([standup, renewal], { now: clock("11:12") });
     const track = one(host, '[data-slot="day-line-track"]').el;
-    const filled = elements(track).filter(({ classes }) => classes.some((cls) => /^bg-(?!clip|transparent)/.test(cls)));
+    // a brief inside a block stands on the block's own face, so it's part of the event
+    const outsideBlocks = elements(track).filter(
+      ({ el }) => !el.parentElement?.closest('[data-slot="day-line-block"]'),
+    );
+    const filled = outsideBlocks.filter(({ classes }) => classes.some((cls) => /^bg-(?!clip|transparent)/.test(cls)));
     expect(filled.map(({ el }) => el.getAttribute("data-slot")).sort()).toEqual([
       "day-line-block",
       "day-line-block",
@@ -504,10 +531,10 @@ describe("the strip", () => {
     expect(one(track, '[data-slot="day-line-tick"]').classes).toContain("w-px");
   });
 
-  test("the mark takes an edge in the page's stock, so it holds against a block it crosses", () => {
+  test("the mark takes an edge in the surface it sits on, so it holds against a block it crosses", () => {
     const host = strip([standup], { now: clock("09:40") });
     expect(one(host, '[data-slot="day-line-now-mark"]').classes).toEqual(
-      expect.arrayContaining(["outline-1", "outline-background"]),
+      expect.arrayContaining(["outline-1", "outline-(--surface,var(--background))"]),
     );
   });
 
@@ -588,6 +615,66 @@ describe("the strip", () => {
   });
 });
 
+describe("the foot", () => {
+  const faulted = (
+    <DayLineFoot action={<DayLineAction>try again</DayLineAction>}>
+      outlook isn&rsquo;t answering · as of 08:10
+    </DayLineFoot>
+  );
+
+  test("holds the same box with a fault or without, so one coming or going moves nothing", () => {
+    const empty = one(server(<DayLineFoot />), '[data-slot="day-line-foot"]');
+    const full = one(server(faulted), '[data-slot="day-line-foot"]');
+    expect(empty.classes).toEqual(full.classes);
+    expect(full.classes).toEqual(expect.arrayContaining(["h-6", "min-w-0"]));
+    // the live region is there before the words, so a screen reader hears them arrive
+    expect(empty.el.querySelector('[role="status"]')).not.toBeNull();
+  });
+
+  test("its words are a status and truncate first, and its one action stands beside them, whole", () => {
+    const foot = server(faulted);
+    const words = one(foot, '[role="status"]');
+    expect(words.el.textContent).toBe("outlook isn’t answering · as of 08:10");
+    expect(words.classes).toEqual(expect.arrayContaining(["min-w-0", "truncate"]));
+    const action = one(foot, '[data-slot="day-line-action"]');
+    expect(words.el.contains(action.el)).toBe(false);
+    expect(action.el.tagName).toBe("BUTTON");
+    expect(action.el.getAttribute("type")).toBe("button");
+    expect(action.classes).toContain("shrink-0");
+  });
+
+  test("the action is a quiet word, foreground beside the muted words, with a 44 px phone target", () => {
+    const action = one(server(faulted), '[data-slot="day-line-action"]');
+    const link = one(server(<Button variant="link" size="xs" />), "button");
+    expect(action.classes).toEqual(link.classes);
+    expect(action.classes).toEqual(expect.arrayContaining(["text-foreground", "hover:underline", `${PHONE}hit-area`]));
+    expect(one(server(faulted), '[data-slot="day-line-foot"]').classes).toContain("text-muted-foreground");
+  });
+
+  test("inside the day line it sits right under the strip, and nowhere else does it pull up", () => {
+    const host = server(
+      <DayLine>
+        <DayLineHead>
+          <DayLineDate>tue 3 nov</DayLineDate>
+        </DayLineHead>
+        <DayLineStrip day={DAY} events={[standup]} timeZone={ZONE} />
+        {faulted}
+      </DayLine>,
+    );
+    const line = one(host, '[data-slot="day-line"]');
+    const hug = "[&>[data-slot=day-line-strip]+[data-slot=day-line-foot]]:-mt-4";
+    expect(line.classes).toEqual(expect.arrayContaining(["gap-4", hug]));
+    expect(one(host, '[data-slot="day-line-strip"] + [data-slot="day-line-foot"]').el).toBeDefined();
+    expect(one(host, '[data-slot="day-line-foot"]').classes.some((cls) => cls.includes("-mt-"))).toBe(false);
+  });
+
+  test("holds the rules every skin keeps, with no texture detail of its own", () => {
+    const host = server(faulted);
+    expect(forbidden(elements(host))).toEqual([]);
+    expect(detailsUsed(elements(host), "day-line")).toEqual([]);
+  });
+});
+
 describe("the head", () => {
   const head = () =>
     server(
@@ -596,7 +683,7 @@ describe("the head", () => {
           <DayLineDate href="/day" aria-expanded={true}>
             tue 3 nov
           </DayLineDate>
-          <DayLineNote>outlook isn&rsquo;t answering</DayLineNote>
+          <DayLineNote>times in new york</DayLineNote>
           <DayLineAllDay>anna out of office</DayLineAllDay>
           <DayLineSteps>
             <a href="/tomorrow">tomorrow</a>

@@ -741,10 +741,14 @@
     scrollbar-color: var(--muted-foreground) transparent;
   }
 
-  /* a ship's window keeps the deep ground past the page's edges; a page with no rail stays on stock */
+  /* a ship's window keeps the deep ground past the page's edges; a page with no rail stays on stock. it scrolls an
+     element that focus or a link brings into view 16 px clear of its top and bottom, so a ring never meets the edge.
+     no nav's height adds to that: above 900 px the frame sticks beside the panel, and at 900 px and below it scrolls
+     with the page, so it never covers the panel */
   html:has([data-mk="fleet-rail"]) {
     background-color: var(--ground);
     scrollbar-color: var(--sidebar-border) var(--ground);
+    scroll-padding-block: 16px;
   }
 
   body {
@@ -790,6 +794,15 @@
     ):where(:not(input, select, textarea, [contenteditable], [data-slot="select-trigger"])):focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
+  }
+
+  /* a link in running text has a word space on each side, narrower than a ring at 2 px out, so its ring sits flush to
+     the link's sides and the space keeps it off the words beside it. its padding keeps the ring 2 px above and below
+     the words, and the margin cancels it, so the line never moves */
+  p a:not([data-slot]):focus-visible {
+    outline-offset: 0;
+    padding-block: 2px;
+    margin-block: -2px;
   }
 
   /* figures and code that hold a column set in mono; a time in running text or a row's line reads with its words */
@@ -933,17 +946,17 @@
 /* row edge, on the table: every row's first cell takes 16 px of left padding, and the row under the pointer prints
    a 4 px strip of foreground at 50 percent at its left edge, inside that padding, so the strip sits inside the
    table's box (a scrolling wrapper cannot clip it) and 12 px clear of the cell's content. a selected row
-   (aria-selected, or shadcn's data-state) prints the strip solid. */
+   (aria-selected, or shadcn's data-state) prints the strip solid. a body row's first cell may be its row head. */
 @utility texture-rowedge {
   & :is(th, td):first-child {
     padding-left: 16px;
   }
-  & :where(td:first-child) {
+  & :where(td:first-child, tbody th:first-child) {
     position: relative;
   }
   & tbody tr {
     @variant hover {
-      &:not([aria-selected="true"], [data-state="selected"]) > td:first-child::before {
+      &:not([aria-selected="true"], [data-state="selected"]) > :is(td, th):first-child::before {
         content: "";
         position: absolute;
         left: 0;
@@ -955,7 +968,7 @@
         mask: var(--texture-b50) 0 0 / 4px 4px;
       }
     }
-    &:is([aria-selected="true"], [data-state="selected"]) > td:first-child::before {
+    &:is([aria-selected="true"], [data-state="selected"]) > :is(td, th):first-child::before {
       content: "";
       position: absolute;
       left: 0;

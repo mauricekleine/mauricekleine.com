@@ -57,8 +57,15 @@ Interface icons are pixel icons too, from `@mk/glyphs`, drawn as whole-pixel squ
 - `Icon` (12-cell grid): arrow, left, copy, check, chevron, search, close, trash, plus, more, brief.
 - `StatusGlyph` (14-cell grid): tick, i, pause, cross and dash, one per status.
 - `FieldErrorGlyph`: bang, which leads a field's error message.
+- `StateWord`: an on or off fact as a word beside an 8 px square in the word's ink, filled and in foreground while it's on, empty and muted while it's off. The word is the ship's own; given none, it reads `on` or `off`.
 
 An icon is decorative until it gets an `aria-label`. A surface uses these icons and adds none of its own: a missing icon is drawn the same way, whole pixels on the 12-cell grid, and lands in the glyph source so every app gets it.
+
+## third-party marks
+
+A mark that belongs to someone else prints in one ink, never in its owner's colours and never a spot. A ship prints a real mark only where it names one, and every other source takes a pixel or letter drawing on the same 16 cells.
+
+`@mk/source-mark` is the frame: `SourceMark` knocks a drawing out of a notched 16-cell tile in the first ink, at 96 px, or 80 px on a phone. `d` and `hover` are the drawing's two frames, as path data in whole cells that never overlap and stay inside the tile. The second frame cuts in while the pointer or the focus is on the mark or in a linked tile, and `held` keeps it up. The frame lives in the registry and the drawings stay in the ship, so the public registry holds no one else's mark.
 
 ## adding a ship or redrawing a mark
 

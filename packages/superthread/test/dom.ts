@@ -31,6 +31,21 @@ for (const window of [globalThis, GlobalWindow.prototype]) {
   Object.defineProperty(window, inspect, { value: () => "[window]" });
 }
 
+/**
+ * An objectContaining matcher holds its sample apart from its properties, and the diff prints it, so the guard keeps each
+ * sample beside its matcher. Bun's other asymmetric matchers print as a name.
+ */
+const samples = new WeakMap<object, unknown>();
+type Factories = { objectContaining: (this: unknown, sample: unknown) => object };
+for (const factories of [expect, Object.getPrototypeOf(expect.not)] as Factories[]) {
+  const { objectContaining } = factories;
+  factories.objectContaining = function (sample) {
+    const matcher = objectContaining.call(this, sample);
+    samples.set(matcher, sample);
+    return matcher;
+  };
+}
+
 function reachesDom(values: unknown[]): boolean {
   const seen = new Set<unknown>();
   for (const value of values) {
@@ -51,7 +66,12 @@ function reachesDom(values: unknown[]): boolean {
         values.push(key, entry);
       }
     } else if (value instanceof Set) {
-      values.push(...value);
+      // One at a time: a spread of 700k entries or more overflows the stack.
+      for (const entry of value) {
+        values.push(entry);
+      }
+    } else if (samples.has(value)) {
+      values.push(samples.get(value));
     }
   }
   return false;
@@ -69,24 +89,25 @@ expect.extend({
 });
 
 /**
- * The diff behind these matchers ignores the hook and reads every property by every path, so on a value that reaches
- * the DOM it grows until the machine stops it: 1.7 GB for one rendered button. They refuse that value up front. Bun's
- * aliases, such as toBeCalledWith, are matchers of their own, so the list names them too.
+ * The diff behind these matchers, as of Bun 1.4.4, ignores the hook and reads every property by every path, so on a
+ * value that reaches the DOM it grows until the machine stops it: 1.7 GB for one rendered button. They refuse that value
+ * up front. Bun's aliases, such as toBeCalledWith, are matchers of their own, so the list names them too. The
+ * ReturnedWith matchers print through the hook, so the list leaves them out.
+ *
+ * The refusal lasts until Bun's diff prints a node through the hook. To check a newer Bun, empty this list and run
+ * `CI=true bun test test/dom.test.tsx` under a memory cap, so a failing snapshot prints instead of writing; the run
+ * still leaves a header-only `test/__snapshots__/dom.test.tsx.snap`, which goes with it. Once its "every matcher Bun
+ * ships" tests pass, delete the list, its loop, reachesDom, the objectContaining samples and the refusal tests.
  */
 const diffMatchers = [
   "lastCalledWith",
-  "lastReturnedWith",
   "nthCalledWith",
-  "nthReturnedWith",
   "toBeCalledWith",
   "toEqual",
   "toHaveBeenCalledWith",
   "toHaveBeenLastCalledWith",
   "toHaveBeenNthCalledWith",
-  "toHaveLastReturnedWith",
-  "toHaveNthReturnedWith",
   "toHaveProperty",
-  "toHaveReturnedWith",
   "toMatchInlineSnapshot",
   "toMatchObject",
   "toMatchSnapshot",

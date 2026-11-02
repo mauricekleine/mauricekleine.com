@@ -6,8 +6,8 @@ import { cn } from "@/components/superthread/lib/utils";
 // light roles: on a dark page a default button fills with plum and the ring takes the deep value. Its own root still
 // reads the page's mode, and texture-contact keys on that. On a light page, white on white, it lifts by the slip rake
 // with its screened contact edge. On a dark page the white is its edge, so it prints flat, which is why no shadow-slip
-// sits beside the utility. It stays positioned and never clips, or the contact edge goes. Render a section when the block
-// names itself.
+// sits beside the utility. It stays positioned and never clips, or the contact edge goes. --surface names its white for a
+// part that knocks a line out. Render a section when the block names itself.
 function Paper({ className, render = <div />, ...props }: useRender.ComponentProps<"div">) {
   return useRender({
     render,
@@ -15,7 +15,7 @@ function Paper({ className, render = <div />, ...props }: useRender.ComponentPro
     props: mergeProps<"div">(
       {
         className: cn(
-          "light relative min-w-0 bg-card p-6 text-card-foreground texture-contact [--contact-lift:var(--elevation-slip-rake)] [@media(max-width:600px)]:p-4",
+          "light relative min-w-0 bg-card p-6 text-card-foreground texture-contact [--contact-lift:var(--elevation-slip-rake)] [--surface:var(--card)] [@media(max-width:600px)]:p-4",
           className,
         ),
       },

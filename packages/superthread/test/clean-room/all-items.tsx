@@ -63,7 +63,7 @@ import {
   DialogTrigger,
 } from "@/components/superthread/ui/dialog";
 import { FleetRail } from "@/components/superthread/ui/fleet-rail";
-import { Icon, type IconName, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
+import { Icon, type IconName, StateWord, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
 import { Input } from "@/components/superthread/ui/input";
 import {
   InputGroup,
@@ -86,6 +86,7 @@ import {
 import { Door, Onward } from "@/components/superthread/ui/onward";
 import { SourceLine, SourceLineItem } from "@/components/superthread/ui/source-line";
 import { Paper } from "@/components/superthread/ui/paper";
+import { SourceMark } from "@/components/superthread/ui/source-mark";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import {
   Select,
@@ -242,6 +243,10 @@ function Sink({ mode }: { mode: Mode }) {
             <StatusGlyph key={state} state={state} aria-label={state} />
           ))}
         </div>
+        <div className="flex flex-wrap items-center gap-4">
+          <StateWord on>every day at 07:00</StateWord>
+          <StateWord />
+        </div>
       </Part>
 
       <Part name="button">
@@ -321,6 +326,7 @@ function Sink({ mode }: { mode: Mode }) {
         <div className="grid max-w-md gap-3">
           <Textarea placeholder="what changed" />
           <Textarea defaultValue="too short" aria-invalid />
+          <Textarea kind="code" aria-label="a settings file" defaultValue="{}" />
         </div>
       </Part>
 
@@ -379,6 +385,19 @@ function Sink({ mode }: { mode: Mode }) {
       </Part>
 
       <Part name="table">
+        <Table fold>
+          <TableBody>
+            <TableRow>
+              <TableCell fold="lead" kind="id">
+                or-11
+              </TableCell>
+              <TableCell fold="title" scope="row" flag>
+                the last run
+              </TableCell>
+              <TableCell fold="meta">every day at 07:00</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
         <Table>
           <TableCaption>the last four runs</TableCaption>
           <TableHeader>
@@ -804,6 +823,9 @@ function Sink({ mode }: { mode: Mode }) {
           <SourceLineItem href="#all">22 sep call recap</SourceLineItem>
           <SourceLineItem>a call nobody recorded</SourceLineItem>
         </SourceLine>
+      </Part>
+      <Part name="source-mark">
+        <SourceMark d="M5 5h6v6h-6z" hover="M6 6h4v4h-4z" aria-label="a square mark" />
       </Part>
       <Part name="resizable">
         <div className="h-48 max-w-lg border border-border">

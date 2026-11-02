@@ -1,12 +1,14 @@
-import { Children, createContext, useContext, type ReactNode } from "react";
+import { Children, createContext, isValidElement, useContext, type ReactNode } from "react";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@/components/superthread/lib/utils";
 import { Card, CardTitle } from "@/components/superthread/ui/card";
 import { Icon } from "@/components/superthread/ui/glyphs";
+import { Paper } from "@/components/superthread/ui/paper";
 
-// A card the width of its list, for a queue someone works down, and its decided form, one line in a ruled list.
-type ItemCardVariant = "full" | "decided";
+// A card the width of its list, for a queue someone works down, its decided form, one line in a ruled list, and a tile,
+// a ruled cell in a grid of things a person holds. The list makes a tile, so a list never mixes tiles with the others.
+type ItemCardVariant = "full" | "decided" | "tile";
 
 const VariantContext = createContext<ItemCardVariant | undefined>(undefined);
 
@@ -16,7 +18,33 @@ const VariantContext = createContext<ItemCardVariant | undefined>(undefined);
 // form never widens the others. last says nothing follows the list in the panel, wrappers included, so on a phone it
 // also runs down to the panel's foot and drops its closing rule; a page has to say so, because a selector can't see past
 // a wrapper or a tab's hidden panel.
-function ItemCards({ className, last, ...props }: React.ComponentProps<"ul"> & { last?: boolean }) {
+//
+// tiles makes the list a full-bleed grid of ruled cells under one rule in foreground: four columns from 832 px, three
+// from 624 px, two below, all of it from the list's own width, and it closes the panel's foot under last.
+function ItemCards({
+  className,
+  last,
+  tiles,
+  ...props
+}: React.ComponentProps<"ul"> & { last?: boolean; tiles?: boolean }) {
+  if (tiles) {
+    return (
+      <VariantContext.Provider value="tile">
+        <ul
+          data-mk="item-cards"
+          data-slot="item-cards"
+          data-tiles=""
+          className={cn(
+            "@container/tiles grid min-w-0 list-none grid-cols-[repeat(auto-fill,minmax(min(50%,max(25%,208px)),1fr))] overflow-clip border-y border-t-foreground border-b-border in-data-[slot=app-shell-panel]:-mx-(--spacing-panel-inset)",
+            last &&
+              "border-b-0 in-data-[slot=app-shell-panel]:-mb-7 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:-mb-4",
+            className,
+          )}
+          {...props}
+        />
+      </VariantContext.Provider>
+    );
+  }
   return (
     <ul
       data-mk="item-cards"
@@ -36,17 +64,50 @@ const cardVariants: Record<ItemCardVariant, string> = {
   full: "group/item-card relative grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 border border-border px-6 pt-5 pb-3.5 transition-[border-color] duration-(--duration-quick) ease-(--ease-brand) not-first:mt-3 [grid-template-areas:'title_when'_'lede_lede'_'meta_go'] has-[[data-slot=item-card-link]]:hover:border-input [@media(max-width:600px)]:p-4 [@media(max-width:600px)]:[grid-template-areas:'title_title'_'when_when'_'lede_lede'_'meta_go'] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-x-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:border-t-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:not-first:mt-0",
   decided:
     "group/item-card relative grid h-12 min-w-0 grid-cols-[minmax(0,1fr)_152px_88px] items-center gap-x-4 border-b border-border px-3 type-ui text-foreground [grid-template-areas:'title_meta_when'] in-[[data-slot=app-shell-panel]_[data-slot=item-cards]:not(:has(>[data-variant=full]))]:px-(--spacing-panel-inset) [@media(max-width:600px)]:h-14 [@media(max-width:600px)]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:content-center [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:[grid-template-areas:'title_title'_'meta_when'] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:px-(--spacing-panel-inset)",
+  tile: "group/item-card relative -ml-px grid min-h-63 min-w-0 grid-cols-[minmax(0,1fr)_auto] content-start border-l border-border pt-7 pr-3 pb-6 pl-(--spacing-panel-inset) transition-[background-color] duration-(--duration-quick) ease-(--ease-brand) [grid-template-areas:'media_media'_'title_title'_'lede_lede'_'when_when'_'meta_meta'_'go_go'] before:absolute before:right-0 before:-bottom-px before:-left-px before:z-10 before:h-px before:bg-border last:-mr-px last:border-r @min-[880px]/tiles:[grid-template-areas:'media_media'_'title_title'_'lede_lede'_'when_when'_'meta_go'] [@media(max-width:600px)]:min-h-56 [@media(max-width:600px)]:pt-6 [@media(max-width:600px)]:pr-3 [@media(max-width:600px)]:pb-5 [@media(max-width:600px)]:pl-(--spacing-panel-inset)",
 };
 
 // The list keeps its semantics and the small card keeps its own surface, which also bounds the title's link. A full or
 // decided card prints on the page's own fill, so the list item is the card and the parts place themselves on its grid. A
 // linked one lifts its edge or underlines its title under the pointer.
+//
+// A tile's minimum height holds a three-line tile, so a row keeps its cells level and a state word leaves the rows where
+// they are. Its row rule is a pseudo-element above every cell, because the next row's hover fill would cover a border. A
+// linked tile takes the faint fill under the pointer, and paper asks for the one tile that prints on paper, which keeps
+// its fill and sits above its neighbours, so their fill never covers its contact edge. A tile whose title links drives
+// its mark's second frame too, from anywhere in the tile. The last tile's right edge closes a short row, and the list
+// clips it off a full one.
 function ItemCard({
   className,
   variant,
+  paper,
   children,
   ...props
-}: React.ComponentProps<"li"> & { variant?: ItemCardVariant }) {
+}: React.ComponentProps<"li"> & { variant?: Exclude<ItemCardVariant, "tile">; paper?: boolean }) {
+  if (useContext(VariantContext) === "tile") {
+    const linked = linkedTitle(children) && "group/source-mark";
+    if (paper) {
+      return (
+        <Paper
+          render={<li data-slot="item-card" data-variant="tile" data-paper="" {...props} />}
+          className={cn(cardVariants.tile, linked, "z-1", className)}
+        >
+          {children}
+        </Paper>
+      );
+    }
+    return (
+      <li
+        data-mk="item-cards"
+        data-slot="item-card"
+        data-variant="tile"
+        className={cn(cardVariants.tile, linked, "has-[[data-slot=item-card-link]]:hover:bg-faint", className)}
+        {...props}
+      >
+        {children}
+      </li>
+    );
+  }
   return (
     <VariantContext.Provider value={variant}>
       <li
@@ -68,13 +129,27 @@ function ItemCard({
   );
 }
 
-// A thumbnail runs to both edges above the words, with one rule separating image and text.
+// Whether a tile's own title links, by href or by the app's router link.
+function linkedTitle(children: ReactNode) {
+  return Children.toArray(children).some(
+    (child) =>
+      isValidElement<{ href?: string; render?: unknown }>(child) &&
+      child.type === ItemCardTitle &&
+      (child.props.href !== undefined || child.props.render !== undefined),
+  );
+}
+
+// A thumbnail runs to both edges above the words, with one rule separating image and text. A tile's media is its mark,
+// 96 px and 80 px on a phone, which keeps a mark's 16 cells on whole pixels.
 function ItemCardMedia({ className, ...props }: React.ComponentProps<"div">) {
+  const variant = useContext(VariantContext);
   return (
     <div
       data-slot="item-card-media"
       className={cn(
-        "-mt-(--card-spacing) aspect-[16/10] min-w-0 overflow-hidden border-b border-border [&>img]:size-full [&>img]:object-cover",
+        variant === "tile"
+          ? "size-24 [grid-area:media] [&>img]:size-full [@media(max-width:600px)]:size-20"
+          : "-mt-(--card-spacing) aspect-[16/10] min-w-0 overflow-hidden border-b border-border [&>img]:size-full [&>img]:object-cover",
         className,
       )}
       {...props}
@@ -99,10 +174,11 @@ function ItemCardId({ className, ...props }: React.ComponentProps<"div">) {
 const titleVariants: Record<ItemCardVariant, string> = {
   full: "min-w-0 self-baseline pr-2 type-title text-first text-pretty [grid-area:title] [overflow-wrap:anywhere]",
   decided: "min-w-0 truncate [grid-area:title]",
+  tile: "mt-4 min-w-0 type-subtitle text-foreground [grid-area:title] [overflow-wrap:anywhere] [@media(max-width:600px)]:mt-3",
 };
 
-// A small card's ring sits inside the link, as a decided row's does, because that row reaches the panel's edges. The
-// row's own padding keeps the ring off its words.
+// A small card's ring sits inside the link, as a decided row's and a tile's do, because those reach the panel's edges.
+// The row's own padding keeps the ring off its words.
 const linkInside =
   "absolute inset-0 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)";
 
@@ -112,8 +188,9 @@ const linkOutside =
   "absolute -inset-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:inset-0 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:focus-visible:-outline-offset-2";
 
 // A linked title gives the whole card one real link. Its visible words are printed once; the link's copy is
-// screen-reader text so an action remains a separate control above it. A full card's title is a heading, level 2 unless
-// it says otherwise, and its arrow ends the card's foot. A decided row's title stays on its line and ellipsizes.
+// screen-reader text so an action remains a separate control above it. A full card's title and a tile's are headings,
+// level 2 unless they say otherwise, and a full card's arrow ends its foot. A decided row's title stays on its line and
+// ellipsizes.
 function ItemCardTitle({
   className,
   children,
@@ -138,7 +215,7 @@ function ItemCardTitle({
     ),
   });
   if (variant) {
-    const heading = variant === "full" ? { role: "heading", "aria-level": level } : undefined;
+    const heading = variant === "decided" ? undefined : { role: "heading", "aria-level": level };
     return (
       <>
         <div data-slot="item-card-title" className={cn(titleVariants[variant], className)} {...heading}>
@@ -172,6 +249,7 @@ const whenVariants: Record<ItemCardVariant, string> = {
   full: "self-baseline [grid-area:when] [@media(max-width:600px)]:mt-1",
   decided:
     "justify-self-end text-right [grid-area:when] [@media(max-width:600px)]:justify-self-start [@media(max-width:600px)]:text-left",
+  tile: "truncate [grid-area:when]",
 };
 
 // When it's for, in mono so times hold their column. clock marks a time the reader has to meet, which prints in
@@ -192,14 +270,19 @@ function ItemCardWhen({ className, clock, ...props }: React.ComponentProps<"p"> 
   );
 }
 
-// Why this card is here, in reading type. A decided row drops it, like everything but its title, word and date.
+// Why this card is here, in reading type, or what a tile holds, at the instrument step. A decided row drops it, like
+// everything but its title, word and date.
 function ItemCardLede({ className, ...props }: React.ComponentProps<"p">) {
   const variant = useContext(VariantContext);
-  if (variant !== "full") return null;
+  if (variant !== "full" && variant !== "tile") return null;
   return (
     <p
       data-slot="item-card-lede"
-      className={cn("mt-1 min-w-0 type-read text-pretty [grid-area:lede] [overflow-wrap:anywhere]", className)}
+      className={cn(
+        "mt-1 min-w-0 text-pretty [grid-area:lede] [overflow-wrap:anywhere]",
+        variant === "full" ? "type-read" : "type-instrument text-muted-foreground",
+        className,
+      )}
       {...props}
     />
   );
@@ -241,8 +324,20 @@ function fullMeta(children: ReactNode) {
 
 // The bottom line pairs context with a time. Times carry their own mono face, without changing the context's face. A
 // decided row's meta is the one word it was decided with, which a phone joins to the date with a dot, when there is one.
+// A tile's meta is its state, which prints in foreground under what the tile holds.
 function ItemCardMeta({ className, children, ...props }: React.ComponentProps<"div">) {
   const variant = useContext(VariantContext);
+  if (variant === "tile") {
+    return (
+      <div
+        data-slot="item-card-meta"
+        className={cn("min-w-0 type-instrument text-foreground [grid-area:meta] [overflow-wrap:anywhere]", className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
   if (variant === "full") {
     return (
       <div
@@ -291,8 +386,14 @@ function ItemCardMeta({ className, children, ...props }: React.ComponentProps<"d
   );
 }
 
+const actionsVariants: Record<Exclude<ItemCardVariant, "decided">, string> = {
+  full: "relative z-10 mt-1.5 flex items-center gap-2 justify-self-end [grid-area:go] group-has-[[data-slot=item-card-link]]/item-card:mr-7",
+  tile: "relative z-10 mt-2 flex items-center gap-2 justify-self-start [grid-area:go] [&>*]:px-2.5 @min-[880px]/tiles:-my-1.5 [@media(max-width:600px)]:justify-self-stretch [@media(max-width:600px)]:[&>*]:h-11 [@media(max-width:600px)]:[&>*]:w-full",
+};
+
 // A corner menu sits above the stretched link, so opening it never opens the card. A full card's actions sit in its foot,
-// beside the arrow when there is one, and a decided row drops them.
+// beside the arrow when there is one, and a decided row drops them. A tile's action prints level with its state where a
+// four-column cell has the room, on its own line where it doesn't, and stretches to a 44 px target on a phone.
 function ItemCardActions({ className, ...props }: React.ComponentProps<"div">) {
   const variant = useContext(VariantContext);
   if (variant === "decided") return null;
@@ -300,8 +401,8 @@ function ItemCardActions({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="item-card-actions"
       className={cn(
-        variant === "full"
-          ? "relative z-10 mt-1.5 flex items-center gap-2 justify-self-end [grid-area:go] group-has-[[data-slot=item-card-link]]/item-card:mr-7"
+        variant
+          ? actionsVariants[variant]
           : "absolute top-3 right-3 z-10 flex max-w-[calc(100%-24px)] flex-wrap items-center justify-end gap-2",
         className,
       )}

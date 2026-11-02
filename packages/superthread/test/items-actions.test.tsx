@@ -8,9 +8,12 @@ import { renderToString } from "react-dom/server";
 import { catalog } from "@/components/superthread/catalog";
 import { Badge } from "@/components/superthread/ui/badge";
 import { Button } from "@/components/superthread/ui/button";
-import { Icon, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
+import { Checkbox } from "@/components/superthread/ui/checkbox";
+import { Icon, StateWord, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
+import { Input } from "@/components/superthread/ui/input";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import { Skeleton } from "@/components/superthread/ui/skeleton";
+import { Switch } from "@/components/superthread/ui/switch";
 import {
   Table,
   TableBody,
@@ -22,7 +25,7 @@ import {
   TableRow,
 } from "@/components/superthread/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/superthread/ui/tabs";
-import { client, server } from "./rendered.tsx";
+import { client, one, reached, server } from "./rendered.tsx";
 
 const root = join(import.meta.dir, "..");
 const details: { key: string }[] = JSON.parse(readFileSync(join(root, "tokens/details.json"), "utf8")).DETAILS;
@@ -387,6 +390,35 @@ describe("button", () => {
   });
 });
 
+describe("state word", () => {
+  const word = (node: React.ReactNode) => one(server(node), '[data-slot="state-word"]');
+  // Each run of the path is a row of whole cells, so the widths add up to the cells it inks.
+  const inked = (el: Element) =>
+    [...(el.querySelector("path")?.getAttribute("d") ?? "").matchAll(/h(\d+)v1/g)].reduce((sum, m) => sum + +m[1]!, 0);
+
+  test("on prints in foreground beside a filled 8 px square, off in muted beside its edge alone", () => {
+    const on = word(<StateWord on />);
+    expect(on.classes).toContain("text-foreground");
+    expect(inked(on.el)).toBe(64);
+    const off = word(<StateWord />);
+    expect(off.classes).toContain("text-muted-foreground");
+    expect(inked(off.el)).toBe(28);
+    for (const { el } of [on, off]) {
+      const square = el.querySelector("svg")!;
+      expect([square.getAttribute("width"), square.getAttribute("height")]).toEqual(["8", "8"]);
+      expect(square.getAttribute("fill")).toBe("currentColor");
+    }
+  });
+
+  test("the word is the ship's own, names the state when given none, and the square stays out of it", () => {
+    expect(word(<StateWord on />).el.textContent).toBe("on");
+    expect(word(<StateWord />).el.textContent).toBe("off");
+    const paused = word(<StateWord>paused</StateWord>);
+    expect(paused.el.textContent).toBe("paused");
+    expect(paused.el.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+  });
+});
+
 describe("badge", () => {
   test.each(STATES)("%s renders its glyph square and its word", (state) => {
     const glyph = pathOf(renderToString(<StatusGlyph state={state} />));
@@ -571,6 +603,194 @@ describe("table", () => {
       expect(classes(row)).toContain("data-[state=selected]:bg-control-hover");
       expect(classes(row).filter((t) => t.endsWith("bg-accent"))).toEqual([]);
     }
+  });
+
+  describe("the fold", () => {
+    const foldedTable = (
+      <Table fold>
+        <TableHeader>
+          <TableRow>
+            <TableHead>next</TableHead>
+            <TableHead>report</TableHead>
+            <TableHead kind="number">pages</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow receding>
+            <TableCell fold="lead" kind="id">
+              mon
+            </TableCell>
+            <TableCell fold="title" scope="row" flag>
+              the reading layout
+            </TableCell>
+            <TableCell fold="aside" kind="number">
+              12
+            </TableCell>
+            <TableCell>an unplaced line</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+    const list = (el: Element | null | undefined) => (el?.getAttribute("class") ?? "").split(/\s+/).filter(Boolean);
+    const CONTAINER = '[data-slot="table-container"]';
+
+    test("the box reaches the panel's edges and measures itself, where a plain table's keeps its scroller", () => {
+      const box = list(server(foldedTable).querySelector(CONTAINER));
+      expect(box).toEqual(expect.arrayContaining(["@container/fold", "-mx-(--spacing-panel-inset)"]));
+      expect(box).not.toContain("overflow-x-auto");
+      expect(box).not.toContain("hit-area-scroller");
+      const plain = list(server(<Table />).querySelector(CONTAINER));
+      expect(plain).toEqual(expect.arrayContaining(["overflow-x-auto", "hit-area-scroller"]));
+      expect(plain).not.toContain("@container/fold");
+    });
+
+    test("a folding table sets its own roles, which a display change strips in some browsers; a plain one needs none", () => {
+      const host = server(foldedTable);
+      const roles = (selector: string) => [...host.querySelectorAll(selector)].map((el) => el.getAttribute("role"));
+      expect(roles("table")).toEqual(["table"]);
+      expect(roles("thead, tbody")).toEqual(["rowgroup", "rowgroup"]);
+      expect(roles("tr")).toEqual(["row", "row"]);
+      expect(roles("thead th")).toEqual(["columnheader", "columnheader", "columnheader"]);
+      expect(roles("tbody tr > *")).toEqual(["cell", "rowheader", "cell", "cell"]);
+      const plain = server(
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>a cell</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>,
+      );
+      expect(plain.querySelector("[role]")).toBeNull();
+      expect(plain.querySelector("[data-fold]")).toBeNull();
+    });
+
+    test("above the fold the first and last cells keep the panel's inset over the row edge's padding", () => {
+      const row = server(foldedTable).querySelector("tbody tr")!;
+      expect(list(row.firstElementChild)).toContain("first:pl-(--spacing-panel-inset)!");
+      expect(list(row.lastElementChild)).toContain("last:pr-(--spacing-panel-inset)");
+    });
+
+    test("above the fold every cell after the first starts 4 px in, level with its head, so a ring fits the clip", () => {
+      const host = server(foldedTable);
+      for (const cell of host.querySelectorAll("tr > *"))
+        expect(list(cell)).toEqual(
+          expect.arrayContaining(["@min-[776px]/fold:not-first:pl-1", "@min-[776px]/fold:not-last:pr-3"]),
+        );
+      expect(list(host.querySelector("tbody td"))).toEqual(
+        expect.arrayContaining(["overflow-hidden", "text-ellipsis", "first:pl-(--spacing-panel-inset)!"]),
+      );
+    });
+
+    test("a caption closes the table in both forms", () => {
+      const host = server(
+        <Table fold>
+          <TableCaption>runs this week</TableCaption>
+          <TableBody>
+            <TableRow>
+              <TableCell>a run</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>,
+      );
+      expect(list(host.querySelector("table"))).toEqual(
+        expect.arrayContaining(["caption-bottom", "@max-[776px]/fold:flex", "@max-[776px]/fold:flex-col"]),
+      );
+      expect(list(host.querySelector("table"))).not.toContain("@max-[776px]/fold:block");
+      expect(list(host.querySelector("caption"))).toContain("@max-[776px]/fold:order-last");
+    });
+
+    test("the row, not its first cell, anchors the row edge and what covers the row", () => {
+      const row = server(foldedTable).querySelector("tbody tr")!;
+      expect(list(row)).toContain("relative");
+      expect(list(row.firstElementChild)).toContain("first:static");
+    });
+
+    test("folded, a row is a grid and each cell lands where it says", () => {
+      const row = server(foldedTable).querySelector("tbody tr")!;
+      expect(list(row)).toEqual(expect.arrayContaining(["@max-[776px]/fold:grid", "@max-[776px]/fold:min-h-16"]));
+      expect(list(row)).toContain(
+        "@max-[776px]/fold:has-data-[fold=lead]:grid-cols-[var(--fold-lead,72px)_minmax(0,1fr)_auto]",
+      );
+      const cells = [...row.children];
+      expect(cells.map((cell) => cell.getAttribute("data-fold"))).toEqual(["lead", "title", "aside", null]);
+      expect(list(cells[0])).toContain("@max-[776px]/fold:[grid-area:lead]");
+      expect(list(cells[1])).toContain("@max-[776px]/fold:[grid-area:title]");
+      expect(list(cells[2])).toEqual(
+        expect.arrayContaining(["@max-[776px]/fold:[grid-area:aside]", "@max-[776px]/fold:text-right"]),
+      );
+      expect(list(cells[3])).toContain("@max-[776px]/fold:col-span-full");
+    });
+
+    test("folded, words wrap rather than clip, a long word breaks anywhere, and the rule moves to the row", () => {
+      const host = server(foldedTable);
+      for (const cell of host.querySelectorAll("tbody tr > *"))
+        expect(list(cell)).toEqual(
+          expect.arrayContaining([
+            "@max-[776px]/fold:whitespace-normal",
+            "@max-[776px]/fold:[overflow-wrap:anywhere]",
+            "@max-[776px]/fold:overflow-visible",
+            "@max-[776px]/fold:border-0",
+            "@max-[776px]/fold:h-auto",
+          ]),
+        );
+      expect(list(host.querySelector("tbody tr"))).toEqual(
+        expect.arrayContaining(["@max-[776px]/fold:border-b", "@max-[776px]/fold:border-border"]),
+      );
+    });
+
+    test("a plain head leaves the screen and stays with a screen reader", () => {
+      expect(list(server(foldedTable).querySelector("thead th"))).toContain("@max-[776px]/fold:sr-only");
+    });
+
+    test("flag lifts a fact to foreground, and a receding row takes it back", () => {
+      const cell = list(server(foldedTable).querySelector("tbody th"));
+      expect(cell).toEqual(expect.arrayContaining(["text-foreground", "in-data-[receding]:text-muted-foreground"]));
+    });
+
+    test("scope makes a cell its row's head, printed as any other cell", () => {
+      const cell = server(foldedTable).querySelector("tbody th")!;
+      expect(cell.getAttribute("scope")).toBe("row");
+      expect(cell.getAttribute("data-slot")).toBe("table-cell");
+      expect(list(cell)).toEqual(expect.arrayContaining(["text-left", "font-normal"]));
+    });
+
+    test("every control in a row stays above the link that covers the row, and the cover itself stays under", () => {
+      const row = server(
+        <Table fold>
+          <TableBody>
+            <TableRow>
+              <TableCell fold="lead">
+                <Switch aria-label="on" />
+              </TableCell>
+              <TableCell fold="title">
+                <a data-slot="table-title" href="/routines/digest">
+                  the digest
+                </a>
+              </TableCell>
+              <TableCell fold="aside">
+                <Checkbox aria-label="chosen" />
+                <Button size="sm">run now</Button>
+              </TableCell>
+              <TableCell fold="meta">
+                <Input aria-label="from" />
+                <a href="/runs/12">last run</a>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>,
+      ).querySelector("tbody tr")!;
+      const lifted = reached(row, "z-1").filter((el) => reached(row, "relative").includes(el));
+      for (const control of [
+        '[role="switch"]',
+        '[role="checkbox"]',
+        "button",
+        "input[aria-label]",
+        'a[href="/runs/12"]',
+      ])
+        expect({ control, lifted: lifted.includes(row.querySelector(control)!) }).toEqual({ control, lifted: true });
+      expect(lifted.includes(row.querySelector('[data-slot="table-title"]')!)).toBe(false);
+    });
   });
 });
 

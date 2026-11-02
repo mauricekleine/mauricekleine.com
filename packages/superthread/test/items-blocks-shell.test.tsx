@@ -6,6 +6,7 @@ import {
   AppShellGround,
   AppShellNav,
   AppShellNavItem,
+  AppShellNavTier,
   AppShellPageFoot,
   AppShellPanel,
   AppShellPanelFoot,
@@ -58,6 +59,11 @@ describe("app shell", () => {
     const panel = one(host, '[data-slot="app-shell-panel"]');
     expect(panel.classes).toContain("[--ring:var(--primary)]");
     expect(panel.classes).toContain("[--selected:var(--foreground)]");
+  });
+
+  test("the panel names its card fill as the surface, so a part that knocks a line out prints no box of the stock", () => {
+    const panel = one(frame(), '[data-slot="app-shell-panel"]');
+    expect(panel.classes).toEqual(expect.arrayContaining(["bg-card", "[--surface:var(--card)]"]));
   });
 
   test("the panel renders as the app's own element, keeping its slot and its look", () => {
@@ -192,6 +198,142 @@ describe("app shell", () => {
       for (const cls of ["type-instrument", "text-muted-foreground", "[&>a]:link-quiet"]) {
         expect(page.classes).toContain(cls);
         expect(nav.classes).toContain(cls);
+      }
+    });
+  });
+
+  describe("the nav's second tier", () => {
+    const TIER = '[data-slot="app-shell-nav-tier"]';
+    const MORE = '[data-slot="app-shell-nav-more"]';
+    const nav = (overflow?: string, current?: string) =>
+      server(
+        <SidebarProvider>
+          <AppShellNav ship="orbit" overflow={overflow}>
+            <AppShellNavItem render={<a href="/now" />}>now</AppShellNavItem>
+            <AppShellNavTier>
+              <AppShellNavItem isActive={current === "runs"} render={<a href="/runs" />}>
+                runs
+              </AppShellNavItem>
+              <AppShellNavItem render={<a href="/logs" />}>logs</AppShellNavItem>
+            </AppShellNavTier>
+          </AppShellNav>
+        </SidebarProvider>,
+      );
+
+    test("hangs a nested list off the nav's list, one list to a screen reader, with no more until overflow asks", () => {
+      const host = nav();
+      const tier = one(host, TIER);
+      expect(tier.el.tagName).toBe("LI");
+      expect(tier.el.parentElement?.getAttribute("data-slot")).toBe("sidebar-menu");
+      expect(tier.el.querySelector(":scope > ul")?.querySelectorAll("a").length).toBe(2);
+      expect(host.querySelector(MORE)).toBeNull();
+      expect(host.querySelector("[popover]")).toBeNull();
+      expect(host.querySelector("button")).toBeNull();
+    });
+
+    test("a rule opens it, with 9 px on each side, and yields below 900 px with its items in the row", () => {
+      const tier = one(nav(), TIER);
+      expect(tier.classes).toEqual(
+        expect.arrayContaining(["border-t", "border-sidebar-border", "mt-[5px]", "pt-[9px]"]),
+      );
+      expect(tier.classes).toContain("[@media(max-width:900px)]:contents");
+      expect(classesOf(tier.el.querySelector("ul")!)).toContain("[@media(max-width:900px)]:contents");
+    });
+
+    test("its words print muted, and the current one takes the selected role back", () => {
+      const host = nav(undefined, "runs");
+      const [runs, logs] = [...host.querySelectorAll(`${TIER} a`)];
+      for (const link of [runs!, logs!]) {
+        expect(classesOf(link)).toEqual(
+          expect.arrayContaining([
+            "in-data-[slot=app-shell-nav-tier]:text-muted-foreground",
+            "in-data-[slot=app-shell-nav-tier]:hover:text-sidebar-foreground",
+          ]),
+        );
+      }
+      expect(runs!.getAttribute("aria-current")).toBe("page");
+      expect(classesOf(runs!)).toContain("data-active:text-selected");
+      expect(logs!.getAttribute("aria-current")).toBeNull();
+    });
+
+    test("with overflow, a more at 600 px and below opens the tier's own list through a real popover, and the closed list leaves no empty item", () => {
+      const host = nav("runs and logs");
+      const list = one(host, `${TIER} > ul`);
+      expect(list.el.getAttribute("popover")).toBe("auto");
+      expect(list.classes).toContain("[@media(max-width:600px)]:not-open:hidden");
+      expect(one(host, TIER).classes).toContain("[@media(max-width:600px)]:has-[>ul:not(:popover-open)]:hidden");
+      expect(one(nav(), TIER).classes.join(" ")).not.toContain("has-[>ul");
+      expect(one(host, MORE).classes).toEqual(expect.arrayContaining(["hidden", "[@media(max-width:600px)]:block"]));
+      const trigger = one(host, `${MORE} button`);
+      expect(trigger.el.getAttribute("type")).toBe("button");
+      expect(trigger.el.getAttribute("popovertarget")).toBe(list.el.id);
+      expect(trigger.el.getAttribute("aria-label")).toBe("runs and logs");
+      expect(trigger.classes).toEqual(expect.arrayContaining(["w-11", "[@media(max-width:900px)]:hit-area"]));
+    });
+
+    test("the popover hangs from its own more, so two navs on one page keep their anchors apart", () => {
+      const host = server(
+        <SidebarProvider>
+          <AppShellNav ship="orbit" overflow="more of orbit">
+            <AppShellNavTier>
+              <AppShellNavItem render={<a href="/a" />}>a</AppShellNavItem>
+            </AppShellNavTier>
+          </AppShellNav>
+          <AppShellNav ship="quanta" overflow="more of quanta">
+            <AppShellNavTier>
+              <AppShellNavItem render={<a href="/b" />}>b</AppShellNavItem>
+            </AppShellNavTier>
+          </AppShellNav>
+        </SidebarProvider>,
+      );
+      const lists = [...host.querySelectorAll('[data-slot="sidebar-menu"]')] as HTMLElement[];
+      const names = lists.map((list) => list.style.getPropertyValue("--nav-more"));
+      expect(names[0]).toMatch(/^--more-\w+$/);
+      expect(names[1]).toMatch(/^--more-\w+$/);
+      expect(names[0]).not.toBe(names[1]);
+      const targets = [...host.querySelectorAll("[popovertarget]")].map((el) => el.getAttribute("popovertarget"));
+      expect(new Set(targets).size).toBe(2);
+    });
+
+    test("more prints selected only while the current page sits behind it", () => {
+      const trigger = one(nav("runs and logs", "runs"), `${MORE} button`);
+      expect(trigger.classes).toEqual(
+        expect.arrayContaining([
+          "group-has-[[data-slot=app-shell-nav-tier]_[aria-current=page]]/nav:border-selected",
+          "group-has-[[data-slot=app-shell-nav-tier]_[aria-current=page]]/nav:text-selected",
+        ]),
+      );
+    });
+
+    test("choosing a link closes the popover, since a client-side route keeps the page", async () => {
+      const proto = HTMLElement.prototype as unknown as { hidePopover?: () => void };
+      const closed: Element[] = [];
+      proto.hidePopover = function (this: HTMLElement) {
+        closed.push(this);
+      };
+      const { body, done } = await client(
+        <SidebarProvider>
+          <AppShellNav ship="orbit" overflow="runs and logs">
+            <AppShellNavTier>
+              <AppShellNavItem render={<button type="button" />}>runs</AppShellNavItem>
+            </AppShellNavTier>
+          </AppShellNav>
+        </SidebarProvider>,
+      );
+      try {
+        const list = body.querySelector(`${TIER} > ul`)!;
+        await act(async () => {
+          list.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+        expect(closed.length).toBe(0);
+        await act(async () => {
+          list.querySelector("button")!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+        expect(closed.length).toBe(1);
+        expect(closed[0]).toBe(list);
+      } finally {
+        await done();
+        delete proto.hidePopover;
       }
     });
   });

@@ -10,9 +10,9 @@ type NativeSelectProps = Omit<React.ComponentProps<"select">, "size"> & {
 
 const selectVariants = {
   default:
-    "h-10 w-full min-w-0 appearance-none border border-input bg-background px-3 pr-8 text-ui text-foreground select-none [@media(max-width:600px)]:h-11 [@media(max-width:600px)]:data-[size=sm]:h-11 [--fx:var(--ring)] focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled data-[size=sm]:h-8",
+    "h-10 w-full min-w-0 appearance-none border border-input bg-background px-3 pr-8 text-ui text-foreground select-none [@media(max-width:600px)]:h-11 [@media(max-width:600px)]:text-[16px] [@media(max-width:600px)]:data-[size=sm]:h-11 [--fx:var(--ring)] focus:border-(--fx) focus:outline-2 focus:-outline-offset-2 focus:outline-(--fx) aria-invalid:border-error aria-invalid:[--fx:var(--error)] disabled:cursor-not-allowed disabled:bg-faint disabled:text-disabled data-[size=sm]:h-8",
   quiet:
-    "h-11 w-full min-w-0 cursor-pointer appearance-none bg-transparent pr-6 pl-2 text-right [text-align-last:right] text-ui text-muted-foreground select-none hover:text-foreground focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring) disabled:cursor-not-allowed disabled:text-disabled",
+    "h-11 w-full min-w-0 cursor-pointer appearance-none bg-transparent pr-6 pl-2 text-right [text-align-last:right] text-ui text-muted-foreground select-none [@media(max-width:600px)]:text-[16px] hover:text-foreground focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring) disabled:cursor-not-allowed disabled:text-disabled",
 };
 
 // The native box owns the same inside focus edge as the select trigger, without a texture. The quiet form is a muted

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import {
   DayLine,
+  DayLineAction,
   DayLineAllDay,
   DayLineDate,
   type DayLineEvent,
+  DayLineFoot,
   DayLineHead,
   DayLineNote,
   DayLineSteps,
@@ -119,13 +121,14 @@ export function DayLineThroughTheDay() {
   );
 }
 
-// One of each: an unconfirmed time, two that overlap, a read that may be behind, and the block whose brief is open.
+// One of each: an unconfirmed time, two that overlap, a read that may be behind, and the block whose brief is open. The
+// read that may be behind says why in the foot, with when it was last good.
 export function DayLineKinds() {
   return (
     <DayLine>
       <DayLineHead>
         <DayLineDate href="#kinds">tue 3 nov</DayLineDate>
-        <DayLineNote>personal calendar isn&rsquo;t answering</DayLineNote>
+        <DayLineNote>times in amsterdam</DayLineNote>
         <DayLineAllDay>anna out of office</DayLineAllDay>
         <DayLineSteps>
           <Onward href="#kinds">wed 4 nov</Onward>
@@ -133,7 +136,6 @@ export function DayLineKinds() {
       </DayLineHead>
       <DayLineStrip
         aria-label="a day of every kind"
-        asOf="as of 08:10"
         day={day}
         events={[
           { id: "anna", title: "anna out of office", start: day, end: day },
@@ -146,6 +148,9 @@ export function DayLineKinds() {
         now={clock("08:42")}
         timeZone={timeZone}
       />
+      <DayLineFoot action={<DayLineAction>try again</DayLineAction>}>
+        personal calendar isn&rsquo;t answering · as of 08:10
+      </DayLineFoot>
     </DayLine>
   );
 }
@@ -204,14 +209,38 @@ export function DayLineNothingFixed() {
   );
 }
 
+// The same day while one calendar has stopped answering: its meetings may have moved, so they print dotted, and the foot
+// says why with the one way to fix it.
+export function DayLineFault() {
+  return (
+    <DayLine>
+      <DayLineHead>
+        <DayLineDate href="#faults">tue 3 nov</DayLineDate>
+        <DayLineSteps>
+          <Onward href="#faults">wed 4 nov</Onward>
+        </DayLineSteps>
+      </DayLineHead>
+      <DayLineStrip
+        aria-label="tuesday's meetings, from a read that may be behind"
+        day={day}
+        events={tuesday.map((event) => ({ ...event, href: "#faults", stale: true }))}
+        now={clock("08:42")}
+        timeZone={timeZone}
+      />
+      <DayLineFoot action={<DayLineAction>try again</DayLineAction>}>
+        work calendar isn&rsquo;t answering · as of 08:10
+      </DayLineFoot>
+    </DayLine>
+  );
+}
+
+// No calendar has answered yet, so the band stays empty rather than say the day is clear.
 export function DayLineFailedRead() {
   return (
-    <DayLineStrip aria-label="today" day={day} events={[]} now={clock("08:42")} timeZone={timeZone}>
-      calendar isn&rsquo;t answering
-      <Button size="xs" variant="ghost">
-        try again
-      </Button>
-    </DayLineStrip>
+    <DayLine>
+      <DayLineStrip aria-label="today" day={day} events={[]} now={clock("08:42")} timeZone={timeZone} />
+      <DayLineFoot action={<DayLineAction>try again</DayLineAction>}>calendar isn&rsquo;t answering</DayLineFoot>
+    </DayLine>
   );
 }
 

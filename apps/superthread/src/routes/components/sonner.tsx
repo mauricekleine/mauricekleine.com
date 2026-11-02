@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SonnerExample, SonnerKinds, SonnerOpen, SonnerStates } from "@/examples/sonner";
+import { SonnerExample, SonnerKinds, SonnerOnPhone, SonnerOpen, SonnerStates } from "@/examples/sonner";
 import { Caption } from "@/site/Caption";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -13,6 +13,7 @@ export const Route = createFileRoute("/components/sonner")({
       { id: "open", title: "open" },
       { id: "kinds", title: "kinds" },
       { id: "states", title: "states" },
+      { id: "phone", title: "on a phone" },
     ],
   },
   component: Page,
@@ -56,6 +57,15 @@ function Page() {
         <ModePair className="st-gl-pair">
           <SonnerStates />
         </ModePair>
+      </Section>
+      <Section id="phone" title="on a phone">
+        <p className="st-gl-copy">
+          <code>position</code> places the stack above 600 px, at the bottom right by default. on a phone it takes the
+          toast&rsquo;s place whatever <code>position</code> says: it drops from the top of the window, 12 px inside its
+          edges, clear of the send bar at the page&rsquo;s foot. a swipe up or right dismisses it. both frames use a 390
+          px viewport.
+        </p>
+        <ModePair light={<SonnerOnPhone mode="light" />} dark={<SonnerOnPhone mode="dark" />} />
       </Section>
     </>
   );

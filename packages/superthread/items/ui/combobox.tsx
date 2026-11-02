@@ -265,7 +265,7 @@ function ComboboxChipsInput({ className, ...props }: ComboboxPrimitive.Input.Pro
     <ComboboxPrimitive.Input
       data-slot="combobox-chip-input"
       className={cn(
-        "min-w-16 flex-1 self-stretch border-0 bg-transparent text-ui outline-0 caret-(--fx) placeholder:text-muted-foreground disabled:cursor-not-allowed",
+        "min-w-16 flex-1 self-stretch border-0 bg-transparent text-ui [@media(max-width:600px)]:text-[16px] outline-0 caret-(--fx) placeholder:text-muted-foreground disabled:cursor-not-allowed",
         className,
       )}
       {...props}

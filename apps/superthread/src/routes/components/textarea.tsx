@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { TextareaExample, TextareaStates } from "@/examples/textarea";
+import { TextareaCode, TextareaExample, TextareaStates } from "@/examples/textarea";
 import { Caption } from "@/site/Caption";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/components/textarea")({
   staticData: {
     sections: [
       { id: "example", title: "example" },
+      { id: "code", title: "code" },
       { id: "states", title: "states" },
     ],
   },
@@ -33,6 +34,17 @@ function Page() {
         </p>
         <ModePair className="st-a-stack">
           <TextareaExample />
+        </ModePair>
+      </Section>
+
+      <Section id="code" title="code">
+        <p className="st-a-copy">
+          set <code>kind=&quot;code&quot;</code> for json and keys: mono at the instrument step, five lines tall. a long
+          line wraps anywhere, so nothing scrolls sideways, and spellcheck and autocorrect stay off, so a key stays what
+          you pasted.
+        </p>
+        <ModePair className="st-a-stack">
+          <TextareaCode />
         </ModePair>
       </Section>
 
