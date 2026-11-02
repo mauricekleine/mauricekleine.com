@@ -40,11 +40,9 @@ import {
   ListRowWhen,
   PlainRow,
   PlainRowActions,
-  PlainRowKind,
   PlainRows,
   PlainRowTick,
   PlainRowTitle,
-  PlainRowWhen,
 } from "@/components/superthread/blocks/list-rows";
 import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
 import { JumpLine, JumpLineLink } from "@/components/superthread/blocks/jump-line";
@@ -460,13 +458,14 @@ describe("list rows", () => {
 
 describe("plain rows", () => {
   const PHONE = "[@media(max-width:600px)]:";
+  const IN_ROW = "in-data-[slot=plain-row]:";
   const list = (props: Partial<React.ComponentProps<typeof PlainRows>> = {}) =>
     server(
       <PlainRows aria-label="next" {...props}>
         <PlainRow>
           <PlainRowTitle href="/tasks/12">write the plan</PlainRowTitle>
-          <PlainRowKind>mail</PlainRowKind>
-          <PlainRowWhen>thu 5 nov</PlainRowWhen>
+          <ListRowKind>mail</ListRowKind>
+          <ListRowWhen>thu 5 nov</ListRowWhen>
         </PlainRow>
       </PlainRows>,
     );
@@ -551,11 +550,11 @@ describe("plain rows", () => {
 
   test("the columns are 80 and 128 px, and when holds its figures in mono", () => {
     const host = list();
-    expect(one(host, '[data-slot="plain-row-kind"]').classes).toEqual(
-      expect.arrayContaining(["w-20", "truncate", "text-instrument", "text-muted-foreground"]),
+    expect(one(host, '[data-slot="list-row-kind"]').classes).toEqual(
+      expect.arrayContaining([`${IN_ROW}w-20`, "truncate", "type-instrument", "text-muted-foreground"]),
     );
-    expect(one(host, '[data-slot="plain-row-when"]').classes).toEqual(
-      expect.arrayContaining(["min-w-32", "text-right", "font-mono", "text-muted-foreground"]),
+    expect(one(host, '[data-slot="list-row-when"]').classes).toEqual(
+      expect.arrayContaining([`${IN_ROW}min-w-32`, "text-right", `${IN_ROW}font-mono`, "text-muted-foreground"]),
     );
   });
 
@@ -565,14 +564,14 @@ describe("plain rows", () => {
         <PlainRows>
           <PlainRow>
             <PlainRowTitle href="/a">a</PlainRowTitle>
-            <PlainRowWhen>thu</PlainRowWhen>
+            <ListRowWhen>thu</ListRowWhen>
           </PlainRow>
         </PlainRows>,
       ),
       "li",
     );
     expect(row.classes).toContain("flex");
-    expect(row.el.querySelector('[data-slot="plain-row-kind"]')).toBeNull();
+    expect(row.el.querySelector('[data-slot="list-row-kind"]')).toBeNull();
   });
 
   test.each([
@@ -609,45 +608,79 @@ describe("plain rows", () => {
     );
   });
 
-  test("a phone stacks the title over kind and when, in sans", () => {
-    const host = list();
-    expect(one(host, "li").classes).toEqual(
+  test("a phone stacks the title over kind and when, in sans, and its grid names every part's area", () => {
+    const host = server(
+      <PlainRows>
+        <PlainRow>
+          <PlainRowTitle href="/a">a</PlainRowTitle>
+          <ListRowKind>mail</ListRowKind>
+          <ListRowWhen>
+            <time dateTime="2026-11-05">thu 5 nov</time>
+          </ListRowWhen>
+          <PlainRowActions />
+        </PlainRow>
+      </PlainRows>,
+    );
+    const { classes } = one(host, "li");
+    expect(classes).toEqual(
       expect.arrayContaining([`${PHONE}grid`, `${PHONE}grid-cols-[auto_minmax(0,1fr)]`, `${PHONE}content-center`]),
     );
-    expect(one(host, '[data-slot="plain-row-title"]').classes).toContain(`${PHONE}col-span-full`);
-    expect(one(host, '[data-slot="plain-row-when"]').classes).toEqual(
-      expect.arrayContaining([`${PHONE}font-sans`, `${PHONE}text-left`, `${PHONE}min-w-0`]),
+    const template = classes.find((c) => c.startsWith(`${PHONE}[grid-template-areas:`))!;
+    for (const [slot, area] of [
+      ["plain-row-title", "title"],
+      ["list-row-kind", "kind"],
+      ["list-row-when", "when"],
+      ["plain-row-actions", "actions"],
+    ] as const) {
+      expect(template).toContain(area);
+      expect(one(host, `[data-slot="${slot}"]`).classes).toContain(`[grid-area:${area}]`);
+    }
+    expect(one(host, '[data-slot="list-row-when"]').classes).toEqual(
+      expect.arrayContaining([
+        `${PHONE}${IN_ROW}font-sans`,
+        `${PHONE}${IN_ROW}[&>time]:font-sans`,
+        `${PHONE}${IN_ROW}text-left`,
+        `${PHONE}${IN_ROW}min-w-0`,
+      ]),
     );
   });
 
-  test("the dot between kind and when is decoration, and a row with no filled when prints none", () => {
-    const dot = one(list(), '[data-slot="plain-row-dot"]');
-    expect(dot.el.getAttribute("aria-hidden")).toBe("true");
-    expect(dot.el.textContent).toBe("·");
-    expect(dot.classes).toEqual(
-      expect.arrayContaining([
-        "hidden",
-        `${PHONE}[[data-slot=plain-row-kind]:has(+[data-slot=plain-row-when]:not(:empty))_&]:inline`,
-      ]),
-    );
-    expect(one(list(), '[data-slot="plain-row-when"]').classes).toContain(`${PHONE}empty:hidden`);
+  test("the dot between kind and when is decoration, and an empty when takes it along", () => {
+    const { classes } = one(list(), '[data-slot="list-row-when"]');
+    expect(classes).toContain(`${PHONE}${IN_ROW}[[data-slot=list-row-kind]:not(:empty)+&]:before:content-['·'_/_'']`);
+    expect(classes).toContain(`${PHONE}${IN_ROW}empty:hidden`);
   });
 
   test.each([
     ["an empty string", ""],
     ["nothing", undefined],
     ["null", null],
-  ])("a kind of %s prints no dot before a filled when", (_, kind) => {
+  ])("a kind of %s leaves its part empty, which is what holds the dot back", (_, kind) => {
     const host = server(
       <PlainRows>
         <PlainRow>
           <PlainRowTitle href="/a">a</PlainRowTitle>
-          <PlainRowKind>{kind}</PlainRowKind>
-          <PlainRowWhen>10:30</PlainRowWhen>
+          <ListRowKind>{kind}</ListRowKind>
+          <ListRowWhen>10:30</ListRowWhen>
         </PlainRow>
       </PlainRows>,
     );
-    expect(host.querySelector('[data-slot="plain-row-dot"]')).toBeNull();
+    expect(one(host, '[data-slot="list-row-kind"]').el.childNodes).toHaveLength(0);
+  });
+
+  test("a kind that leads somewhere keeps its own link, above the row's", () => {
+    const host = server(
+      <PlainRows>
+        <PlainRow>
+          <PlainRowTitle href="/tasks/12">write the plan</PlainRowTitle>
+          <ListRowKind href="/briefs/12">brief</ListRowKind>
+        </PlainRow>
+      </PlainRows>,
+    );
+    const kind = one(host, 'a[data-slot="list-row-kind"]');
+    expect(kind.classes).toEqual(expect.arrayContaining(["[&:is(a)]:relative", "[&:is(a)]:z-1"]));
+    expect(kind.el.closest('[data-slot="plain-row-link"]')).toBeNull();
+    expect(host.querySelectorAll("a")).toHaveLength(2);
   });
 
   test("a list clamps its titles to two lines only when it asks, only on a phone", () => {
@@ -753,7 +786,6 @@ describe("plain rows", () => {
         expect.arrayContaining([
           "relative",
           "z-1",
-          `${PHONE}col-span-full`,
           `${PHONE}justify-self-start`,
           `${PHONE}[&>[data-variant=ghost]:first-child]:-ml-[13px]`,
           "[@media(min-width:601px)]:[&>[data-variant=ghost]:last-child]:-mr-[13px]",

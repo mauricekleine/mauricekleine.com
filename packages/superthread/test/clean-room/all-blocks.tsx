@@ -101,11 +101,9 @@ import {
   ListRows,
   PlainRow,
   PlainRowActions,
-  PlainRowKind,
   PlainRows,
   PlainRowTick,
   PlainRowTitle,
-  PlainRowWhen,
   ListRow,
   ListRowLead,
   ListRowTitle,
@@ -315,8 +313,8 @@ function Sink({ mode }: { mode: Mode }) {
               <Checkbox aria-label="mark done: check the registry" />
             </PlainRowTick>
             <PlainRowTitle render={<a href="#task" />}>check the registry</PlainRowTitle>
-            <PlainRowKind>mail</PlainRowKind>
-            <PlainRowWhen>thu 5 nov</PlainRowWhen>
+            <ListRowKind>mail</ListRowKind>
+            <ListRowWhen>thu 5 nov</ListRowWhen>
           </PlainRow>
           <PlainRow closed>
             <PlainRowTitle>a closed task</PlainRowTitle>
@@ -335,7 +333,7 @@ function Sink({ mode }: { mode: Mode }) {
         <PlainRows aria-label="sources" variant="ruled">
           <PlainRow>
             <PlainRowTitle href="#source">a source</PlainRowTitle>
-            <PlainRowWhen>2h ago</PlainRowWhen>
+            <ListRowWhen>2h ago</ListRowWhen>
           </PlainRow>
         </PlainRows>
       </Part>

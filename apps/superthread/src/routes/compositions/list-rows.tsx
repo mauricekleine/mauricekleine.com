@@ -17,8 +17,6 @@ import {
   PlainRow,
   PlainRowTick,
   PlainRowTitle,
-  PlainRowKind,
-  PlainRowWhen,
   PlainRowActions,
 } from "@/components/superthread/blocks/list-rows";
 import {
@@ -266,8 +264,8 @@ function PlainExample({ clamp }: { clamp?: boolean }) {
           {chapters.map((row) => (
             <PlainRow key={row.title}>
               <PlainRowTitle href="#plain">{row.title}</PlainRowTitle>
-              <PlainRowKind>{row.kind}</PlainRowKind>
-              <PlainRowWhen>{row.when}</PlainRowWhen>
+              <ListRowKind>{row.kind}</ListRowKind>
+              <ListRowWhen>{row.when}</ListRowWhen>
             </PlainRow>
           ))}
         </PlainRows>
@@ -282,8 +280,8 @@ function PlainExample({ clamp }: { clamp?: boolean }) {
               <Checkbox aria-label="mark done: draw the bands" checked={ticked} onCheckedChange={setTicked} />
             </PlainRowTick>
             <PlainRowTitle href="#plain">draw the bands</PlainRowTitle>
-            <PlainRowKind>task</PlainRowKind>
-            <PlainRowWhen>wed 4 nov</PlainRowWhen>
+            <ListRowKind>task</ListRowKind>
+            <ListRowWhen>wed 4 nov</ListRowWhen>
           </PlainRow>
           {chapters.slice(2).map((row) => (
             <PlainRow key={row.title}>
@@ -291,8 +289,8 @@ function PlainExample({ clamp }: { clamp?: boolean }) {
                 <Checkbox aria-label={`mark done: ${row.title}`} />
               </PlainRowTick>
               <PlainRowTitle href="#plain">{row.title}</PlainRowTitle>
-              <PlainRowKind>{row.kind}</PlainRowKind>
-              <PlainRowWhen />
+              <ListRowKind>{row.kind}</ListRowKind>
+              <ListRowWhen />
             </PlainRow>
           ))}
           <PlainRow>
@@ -315,11 +313,11 @@ function PlainExample({ clamp }: { clamp?: boolean }) {
         <PlainRows aria-label="sources" variant="ruled">
           <PlainRow>
             <PlainRowTitle href="#plain">chapter drafts</PlainRowTitle>
-            <PlainRowWhen>2h ago</PlainRowWhen>
+            <ListRowWhen>2h ago</ListRowWhen>
           </PlainRow>
           <PlainRow>
             <PlainRowTitle href="#plain">figure library</PlainRowTitle>
-            <PlainRowWhen>since friday</PlainRowWhen>
+            <ListRowWhen>since friday</ListRowWhen>
           </PlainRow>
         </PlainRows>
       </BlockSection>
@@ -341,7 +339,7 @@ function PlainTitleStates() {
               <PlainRowTitle href="#plain" data-demo={state.demo} tabIndex={-1}>
                 read the chapter notes
               </PlainRowTitle>
-              <PlainRowKind>mail</PlainRowKind>
+              <ListRowKind>mail</ListRowKind>
             </PlainRow>
           </PlainRows>
         </State>
@@ -350,7 +348,7 @@ function PlainTitleStates() {
         <PlainRows aria-label="closed row">
           <PlainRow closed>
             <PlainRowTitle href="#plain">read the chapter notes</PlainRowTitle>
-            <PlainRowKind>mail</PlainRowKind>
+            <ListRowKind>mail</ListRowKind>
           </PlainRow>
         </PlainRows>
       </State>
@@ -494,8 +492,9 @@ function Page() {
       <Section id="plain" title="plain rows">
         <p className="st-cb-copy">
           a plain row has no rules and no padding, so a list reads as words. the whole row is the link, its title holds
-          one line at weight 400 and cuts at its end, and kind and when take 80 and 128 px columns. a row leaves out a
-          column it doesn&rsquo;t print, and an empty <code>PlainRowWhen</code> holds its place.
+          one line at weight 400 and cuts at its end, and <code>ListRowKind</code> and <code>ListRowWhen</code> take 80
+          and 128 px columns. a row leaves out a column it doesn&rsquo;t print, and an empty <code>ListRowWhen</code>{" "}
+          holds its place.
         </p>
         <p className="st-cb-copy">
           three forms set the height: plain is 40 px, nested is 36 px for a list under a quiet head, and ruled is 48 px
@@ -568,9 +567,12 @@ function Page() {
             <code>render</code>, and stays plain text without one.
           </dd>
           <dt>
-            <code>PlainRowKind</code>, <code>PlainRowWhen</code>
+            <code>ListRowKind</code>, <code>ListRowWhen</code>
           </dt>
-          <dd>the columns, which fold under the title on a phone with a dot between them.</dd>
+          <dd>
+            the columns, the same parts a day row takes. they fold under the title on a phone with a dot between them. a
+            control takes <code>PlainRowActions</code>, which sits above the row&rsquo;s link.
+          </dd>
           <dt>
             <code>PlainRowTick</code>
           </dt>

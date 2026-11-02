@@ -7,7 +7,7 @@ import {
   SectionHeader,
   SectionTitle,
 } from "@/components/superthread/blocks/section-header";
-import { PlainRow, PlainRowKind, PlainRows, PlainRowTitle } from "@/components/superthread/blocks/list-rows";
+import { ListRowKind, PlainRow, PlainRows, PlainRowTitle } from "@/components/superthread/blocks/list-rows";
 import { Button } from "@/components/superthread/ui/button";
 import { Serves } from "@/examples/compositions-a";
 import { State } from "@/examples/input";
@@ -82,13 +82,13 @@ function QuietExample() {
                 <PlainRowTitle href="#quiet" tabIndex={-1}>
                   run-024
                 </PlainRowTitle>
-                <PlainRowKind>orbit</PlainRowKind>
+                <ListRowKind>orbit</ListRowKind>
               </PlainRow>
               <PlainRow>
                 <PlainRowTitle href="#quiet" tabIndex={-1}>
                   run-023
                 </PlainRowTitle>
-                <PlainRowKind>quanta</PlainRowKind>
+                <ListRowKind>quanta</ListRowKind>
               </PlainRow>
             </PlainRows>
           </BlockSection>

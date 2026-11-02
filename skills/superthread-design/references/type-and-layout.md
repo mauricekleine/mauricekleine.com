@@ -34,7 +34,7 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 
 The reading page sets Erode at 19 px on 32 px with a 27.5em measure (about 66 characters) on a 672 px sheet.
 
-The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or an `li` reads with its words; `ListRowAside` prints in mono, so a time there holds its column, and `PlainRowWhen` holds its column in mono until a phone folds it under the title.
+The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or an `li` reads with its words; `ListRowAside` prints in mono, so a time there holds its column, and `ListRowWhen` holds a plain row's column in mono until a phone folds it under the title.
 
 Links print in foreground, 4 px above their underline. A link in running text keeps a 1 px underline at rest, and inside `AppShellPanel` the base layer prints any anchor no item owns that way. A chrome link with no box, such as a row title or a door, underlines on hover. A nav item has a box, so it hovers with its fill. `link-quiet` is the one second form: a muted word that turns foreground on hover.
 

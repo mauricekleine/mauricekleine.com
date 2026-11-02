@@ -102,8 +102,10 @@ function ListRowTime({ className, ...props }: React.ComponentProps<"time">) {
   );
 }
 
-// What a day row is, as a muted word, or as a link in foreground once it leads somewhere: `brief`. The link underlines
-// on hover and takes the hit area on a phone.
+// What a row is, as a muted word, or as a link in foreground once it leads somewhere: `brief`. The link underlines on
+// hover, sits above a plain row's link and takes the hit area on a phone. A day row's columns are its own. A plain row's
+// aren't, so there the part holds an 80 px column that cuts, on the title's line height, and a phone folds it under the
+// title.
 function ListRowKind({ className, href, render, ...props }: useRender.ComponentProps<"a">) {
   return useRender({
     defaultTagName: "span",
@@ -113,7 +115,8 @@ function ListRowKind({ className, href, render, ...props }: useRender.ComponentP
       {
         href,
         className: cn(
-          "min-w-0 truncate type-instrument text-muted-foreground [grid-area:kind] decoration-1 underline-offset-4 [&:is(a)]:type-ui [&:is(a)]:text-foreground [&:is(a)]:hover:underline [@media(max-width:600px)]:text-right [@media(max-width:600px)]:[&:is(a)]:relative [@media(max-width:600px)]:[&:is(a)]:overflow-visible [@media(max-width:600px)]:[&:is(a)]:hit-area focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          "min-w-0 truncate type-instrument text-muted-foreground [grid-area:kind] decoration-1 underline-offset-4 [&:is(a)]:relative [&:is(a)]:z-1 [&:is(a)]:type-ui [&:is(a)]:text-foreground [&:is(a)]:hover:underline [@media(max-width:600px)]:text-right [@media(max-width:600px)]:[&:is(a)]:overflow-visible [@media(max-width:600px)]:[&:is(a)]:hit-area focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          "in-data-[slot=plain-row]:w-20 in-data-[slot=plain-row]:shrink-0 in-data-[slot=plain-row]:leading-(--text-ui--line-height) [@media(max-width:600px)]:in-data-[slot=plain-row]:w-auto",
           className,
         ),
       },
@@ -122,14 +125,21 @@ function ListRowKind({ className, href, render, ...props }: useRender.ComponentP
   });
 }
 
-// What ends a day row, at its right edge: a time, or one small control. The column keeps its width on a phone, so a
-// small button there drops its inline padding and fills it, and every row's end lines up.
+// What ends a row, at its right edge. In a day row that's a time or one small control, and the column keeps its width on
+// a phone, so a small button there drops its inline padding and fills it, and every row's end lines up. In a plain row
+// it's words in mono, in a 128 px column that a longer word widens toward the title. Left empty it holds the column, so
+// a list's times keep their edge. A phone drops the column and sets the line in the interface face, and the dot between
+// a kind with words and this part is decoration, so a screen reader skips it. A control in a plain row takes
+// PlainRowActions, which sits above the row's link.
 function ListRowWhen({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="list-row-when"
       className={cn(
         "min-w-0 justify-self-end text-right type-instrument whitespace-nowrap text-muted-foreground [grid-area:when] [&>time]:font-mono [&>time]:tabular-nums [@media(max-width:600px)]:[&>[data-slot=button]]:w-12 [@media(max-width:600px)]:[&>[data-slot=button]]:px-0",
+        "in-data-[slot=plain-row]:min-w-32 in-data-[slot=plain-row]:shrink-0 in-data-[slot=plain-row]:font-mono in-data-[slot=plain-row]:leading-(--text-ui--line-height)",
+        "[@media(max-width:600px)]:in-data-[slot=plain-row]:min-w-0 [@media(max-width:600px)]:in-data-[slot=plain-row]:justify-self-stretch [@media(max-width:600px)]:in-data-[slot=plain-row]:truncate [@media(max-width:600px)]:in-data-[slot=plain-row]:text-left [@media(max-width:600px)]:in-data-[slot=plain-row]:font-sans [@media(max-width:600px)]:in-data-[slot=plain-row]:empty:hidden [@media(max-width:600px)]:in-data-[slot=plain-row]:[&>time]:font-sans",
+        "[@media(max-width:600px)]:in-data-[slot=plain-row]:[[data-slot=list-row-kind]:not(:empty)+&]:before:mx-1 [@media(max-width:600px)]:in-data-[slot=plain-row]:[[data-slot=list-row-kind]:not(:empty)+&]:before:content-['·'_/_'']",
         className,
       )}
       {...props}
@@ -264,7 +274,7 @@ function PlainRow({ className, closed, ...props }: React.ComponentProps<"li"> & 
       data-slot="plain-row"
       data-closed={closed || undefined}
       className={cn(
-        "group/plain-row relative flex h-(--row) min-w-0 items-center gap-x-4 px-(--bleed) group-data-[variant=ruled]/plain-rows:border-b group-data-[variant=ruled]/plain-rows:border-border [@media(max-width:600px)]:grid [@media(max-width:600px)]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:content-center [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:has-[[data-slot=plain-row-actions]]:h-auto [@media(max-width:600px)]:has-[[data-slot=plain-row-actions]]:py-1.5 [@media(max-width:600px)]:has-[[data-slot=plain-row-tick]]:pr-[calc(var(--bleed)+2.75rem)] [@media(max-width:600px)]:group-data-[clamp]/plain-rows:h-auto [@media(max-width:600px)]:group-data-[clamp]/plain-rows:min-h-(--row) [@media(max-width:600px)]:group-data-[clamp]/plain-rows:py-1.5",
+        "group/plain-row relative flex h-(--row) min-w-0 items-center gap-x-4 px-(--bleed) group-data-[variant=ruled]/plain-rows:border-b group-data-[variant=ruled]/plain-rows:border-border [@media(max-width:600px)]:grid [@media(max-width:600px)]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:content-center [@media(max-width:600px)]:[grid-template-areas:'title_title'_'kind_when'_'actions_actions'] [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:has-[[data-slot=plain-row-actions]]:h-auto [@media(max-width:600px)]:has-[[data-slot=plain-row-actions]]:py-1.5 [@media(max-width:600px)]:has-[[data-slot=plain-row-tick]]:pr-[calc(var(--bleed)+2.75rem)] [@media(max-width:600px)]:group-data-[clamp]/plain-rows:h-auto [@media(max-width:600px)]:group-data-[clamp]/plain-rows:min-h-(--row) [@media(max-width:600px)]:group-data-[clamp]/plain-rows:py-1.5",
         className,
       )}
       {...props}
@@ -316,7 +326,7 @@ function PlainRowTitle({ className, children, href, render, ...props }: useRende
     <span
       data-slot="plain-row-title"
       className={cn(
-        "min-w-0 flex-1 truncate text-ui font-normal text-foreground group-data-[closed]/plain-row:text-muted-foreground [@media(max-width:600px)]:col-span-full [@media(max-width:600px)]:group-data-[clamp]/plain-rows:line-clamp-2 [@media(max-width:600px)]:group-data-[clamp]/plain-rows:whitespace-normal",
+        "min-w-0 flex-1 truncate text-ui font-normal text-foreground [grid-area:title] group-data-[closed]/plain-row:text-muted-foreground [@media(max-width:600px)]:group-data-[clamp]/plain-rows:line-clamp-2 [@media(max-width:600px)]:group-data-[clamp]/plain-rows:whitespace-normal",
         className,
       )}
     >
@@ -330,48 +340,6 @@ function PlainRowTitle({ className, children, href, render, ...props }: useRende
   );
 }
 
-// What kind of thing the row holds, in an 80 px column that cuts. On a phone it leads the second line, and when it has
-// words and a filled when follows it prints the dot itself, so a row writes only the two words.
-function PlainRowKind({ className, children, ...props }: React.ComponentProps<"span">) {
-  const filled = Children.toArray(children).some((child) => child !== "");
-  return (
-    <span
-      data-slot="plain-row-kind"
-      className={cn(
-        "w-20 shrink-0 truncate text-instrument leading-(--text-ui--line-height) text-muted-foreground [@media(max-width:600px)]:w-auto",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-      {filled && (
-        <span
-          aria-hidden="true"
-          data-slot="plain-row-dot"
-          className="mx-1 hidden [@media(max-width:600px)]:[[data-slot=plain-row-kind]:has(+[data-slot=plain-row-when]:not(:empty))_&]:inline"
-        >
-          ·
-        </span>
-      )}
-    </span>
-  );
-}
-
-// When, right-aligned in mono in a 128 px column, which a longer word widens toward the title. Left empty it holds the
-// column, so a list's times keep their edge. A phone drops the column, so the line prints in the interface face.
-function PlainRowWhen({ className, ...props }: React.ComponentProps<"span">) {
-  return (
-    <span
-      data-slot="plain-row-when"
-      className={cn(
-        "min-w-32 shrink-0 text-right font-mono text-instrument leading-(--text-ui--line-height) whitespace-nowrap text-muted-foreground [@media(max-width:600px)]:min-w-0 [@media(max-width:600px)]:truncate [@media(max-width:600px)]:text-left [@media(max-width:600px)]:font-sans [@media(max-width:600px)]:empty:hidden",
-        className,
-      )}
-      {...props}
-    />
-  );
-}
-
 // Actions sit at the row's end, above its link, and a trailing ghost button's word ends on the column's edge. On a phone
 // they take their own line and hug their buttons, so the rest of that line stays the link, and a leading ghost button's
 // word starts on the title's edge instead.
@@ -380,7 +348,7 @@ function PlainRowActions({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="plain-row-actions"
       className={cn(
-        "relative z-1 flex shrink-0 items-center gap-1 [@media(max-width:600px)]:col-span-full [@media(max-width:600px)]:mt-1 [@media(max-width:600px)]:justify-self-start [@media(max-width:600px)]:gap-2 [@media(max-width:600px)]:[&>[data-variant=ghost]:first-child]:-ml-[13px] [@media(min-width:601px)]:[&>[data-variant=ghost]:last-child]:-mr-[13px]",
+        "relative z-1 flex shrink-0 items-center gap-1 [grid-area:actions] [@media(max-width:600px)]:mt-1 [@media(max-width:600px)]:justify-self-start [@media(max-width:600px)]:gap-2 [@media(max-width:600px)]:[&>[data-variant=ghost]:first-child]:-ml-[13px] [@media(min-width:601px)]:[&>[data-variant=ghost]:last-child]:-mr-[13px]",
         className,
       )}
       {...props}
@@ -403,7 +371,5 @@ export {
   PlainRow,
   PlainRowTick,
   PlainRowTitle,
-  PlainRowKind,
-  PlainRowWhen,
   PlainRowActions,
 };
