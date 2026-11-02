@@ -168,6 +168,17 @@ describe("the parts", () => {
     expect(arrived.classes).toContain("[&>span]:truncate");
   });
 
+  test("on a phone, open answers take what changed's room, and the line stays heard but out of sight and reach", () => {
+    // Two rows of 44 px targets run past the phone's 62 px why into the changed slot, so the line steps aside while
+    // they're open. Opacity, not visibility, so the live region still speaks.
+    const OPEN = `${PHONE}group-has-[[data-slot=inline-answers][data-open]]/job-sheet:`;
+    expect(grid(sheet()).classes).toContain("group/job-sheet");
+    const line = one(sheet({ changed: "sam sent the numbers" }), '[role="status"]');
+    expect(line.classes).toEqual(expect.arrayContaining([`${OPEN}opacity-0`, `${OPEN}pointer-events-none`]));
+    expect(line.classes.filter((cls) => parts(cls).utility === "invisible")).toEqual([]);
+    expect(2 * 44 - (44 - step("lede").phone!.line) / 2).toBeGreaterThan(rows(sheet(), NARROW).why + 8);
+  });
+
   test("the primary is the large fill, and reserve holds its width unseen and unread", () => {
     const host = sheet();
     const primary = one(host, '[data-slot="job-sheet-primary"]');

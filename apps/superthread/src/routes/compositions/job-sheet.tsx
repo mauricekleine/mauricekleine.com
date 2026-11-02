@@ -73,8 +73,9 @@ function Page() {
       <Section id="wrong" title="when it's wrong">
         <p className="st-cb-copy">
           the why&rsquo;s slot holds <code>InlineAnswers</code>, so <code>wrong?</code> swaps the line for plain answers
-          and the actions stay where they were. <code>wrong day</code> asks which day in the same slot. when
-          there&rsquo;s nothing left to do, the sheet gives way to <a href="/compositions/states#clear">clear</a>.
+          and the actions stay where they were. <code>wrong day</code> asks which day in the same slot. on a phone the
+          answers take the quiet line&rsquo;s room while they&rsquo;re open. when there&rsquo;s nothing left to do, the
+          sheet gives way to <a href="/compositions/states#clear">clear</a>.
         </p>
         <ModePair
           className="st-cb-stack"

@@ -21,7 +21,7 @@ function JobSheet({ className, children, ...props }: React.ComponentProps<"secti
       <div
         data-mk="job-sheet"
         data-slot="job-sheet"
-        className="grid grid-cols-[minmax(0,1fr)] grid-rows-[24px_136px_33px_20px_48px] gap-y-3 [grid-template-areas:'cue'_'title'_'why'_'changed'_'actions'] [@media(max-width:600px)]:grid-rows-[24px_176px_62px_20px_48px] [@media(max-width:600px)]:gap-y-2 [@media(min-width:601px)]:@max-[784px]/job-sheet:grid-rows-[24px_176px_66px_20px_48px]"
+        className="group/job-sheet grid grid-cols-[minmax(0,1fr)] grid-rows-[24px_136px_33px_20px_48px] gap-y-3 [grid-template-areas:'cue'_'title'_'why'_'changed'_'actions'] [@media(max-width:600px)]:grid-rows-[24px_176px_62px_20px_48px] [@media(max-width:600px)]:gap-y-2 [@media(min-width:601px)]:@max-[784px]/job-sheet:grid-rows-[24px_176px_66px_20px_48px]"
       >
         {children}
       </div>
@@ -66,9 +66,20 @@ function JobSheetWhy({ className, ...props }: React.ComponentProps<"div">) {
 
 // One quiet line for what moved since the job was picked, in a slot of its own. Render it from the start, empty until the
 // words arrive, so a screen reader hears them; a read that never answers leaves the slot as it was. A line too long for
-// the width truncates, because the slot never grows.
+// the width truncates, because the slot never grows. On a phone, open answers in the why take two rows of 44 px targets,
+// which reach into this slot, so the line steps out of sight and out of the pointer's way until they close; a screen
+// reader still hears it. A third row would reach the actions, so a phone's answers keep to two.
 function JobSheetChanged({ className, ...props }: Omit<React.ComponentProps<"div">, "role">) {
-  return <Notice variant="quiet" className={cn("[grid-area:changed] [&>span]:truncate", className)} {...props} />;
+  return (
+    <Notice
+      variant="quiet"
+      className={cn(
+        "[grid-area:changed] [&>span]:truncate [@media(max-width:600px)]:group-has-[[data-slot=inline-answers][data-open]]/job-sheet:pointer-events-none [@media(max-width:600px)]:group-has-[[data-slot=inline-answers][data-open]]/job-sheet:opacity-0",
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
 // The row of actions, at the sheet's foot. A phone gives the first action what the others leave.
