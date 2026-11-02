@@ -547,7 +547,7 @@ A current item in a nav is neutral, wherever it is drawn: the word, a 1 px edge 
 
 ## Components
 
-Every `@mk` item is a branded skin on base-nova, shadcn's Base UI style: shadcn's API, exports and `data-slot` attributes stay, and the craft lives in the classes. Each brand item's root carries `data-mk="<item>"`. Install with `bunx --bun shadcn@latest add @mk/<item>`; `shadcn init` with the registry's `init` item sets an app up with the style, the tokens, `utils` and the button. Brand items carry the system's rules; pass items (`card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile`) are base-nova on the tokens. Each brand item carries at most one texture detail:
+Every `@mk` item is a branded skin on base-nova, shadcn's Base UI style: shadcn's API, exports and `data-slot` attributes stay, and the craft lives in the classes. Each brand item's root carries `data-mk="<item>"`. Install with `bunx --bun shadcn@latest add @mk/<item>`; `shadcn init` with the registry's `init` item sets an app up with the style, the tokens, `utils` and the button. Brand items carry the system's rules; pass items (`card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile`) are base-nova on the tokens, plus the few rules upstream leaves out, such as the turn of collapsible's chevron. Each brand item carries at most one texture detail:
 
 | detail    | utility            | item                                                                             | what prints                                                                                 |
 | --------- | ------------------ | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
@@ -705,6 +705,10 @@ The native select is a flat 40 px field box, or 32 px at the small size, and 44 
 ### Accordion
 
 Rows run between full-width 1 px rules. The 48 px trigger keeps its focus ring inside and turns one pixel chevron on the quick duration. The panel's measured height travels on the same duration and brand ease; its muted UI copy keeps 16 px below it, with links in foreground that keep their underline at rest.
+
+### Collapsible
+
+A pass item: base-nova's single disclosure, whose trigger the caller supplies, usually an outline button. A chevron at the trigger's end, marked `data-icon="inline-end"`, turns to point up while the panel is open, on the quick duration and brand ease, as the accordion's does. A glyph before the words stays put.
 
 ### Breadcrumb
 

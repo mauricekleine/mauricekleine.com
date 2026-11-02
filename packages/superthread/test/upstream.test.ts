@@ -12,6 +12,7 @@ import {
   SEEDS,
   manifestDrift,
   passFiles,
+  styleComponent,
   transform,
   UPSTREAM,
 } from "../scripts/upstream.ts";
@@ -209,6 +210,42 @@ describe("the transforms", () => {
     expect(fails(probe.replace("  ...props\n", "  ...rest\n"))).toThrow(/no longer end in \.\.\.props/);
     expect(fails(probe.replace("<ProbePortal>", "<Probe.Portal>"))).toThrow(/renders <ProbePortal> 0 times/);
     expect(fails(probe.replace("{...props} />", "{...props} portalProps={p} />"))).toThrow(/already names portalProps/);
+  });
+
+  test("a pass item's unstyled part takes its classes ahead of the caller's, and a part whose shape moved upstream fails", () => {
+    const rule = { component: "ProbeTrigger", element: "Probe.Trigger", classes: "px-2 py-1" };
+    const probe = [
+      'import { Probe } from "@base-ui/react/probe"',
+      "",
+      "function ProbeTrigger({ ...props }: Probe.Trigger.Props) {",
+      "  return (",
+      '    <Probe.Trigger data-slot="probe-trigger" {...props} />',
+      "  )",
+      "}",
+      "",
+    ].join("\n");
+    const styled = styleComponent(probe, "probe", rule);
+    expect(styled).toBe(
+      [
+        'import { Probe } from "@base-ui/react/probe"',
+        'import { cn } from "@/components/superthread/lib/utils"',
+        "",
+        "function ProbeTrigger({ className, ...props }: Probe.Trigger.Props) {",
+        "  return (",
+        '    <Probe.Trigger data-slot="probe-trigger" className={(state) => cn("px-2 py-1", typeof className === "function" ? className(state) : className)} {...props} />',
+        "  )",
+        "}",
+        "",
+      ].join("\n"),
+    );
+    // a file that already imports cn keeps its one import
+    const withCn = probe.replace("\n\n", '\nimport { cn } from "@/components/superthread/lib/utils"\n\n');
+    expect(styleComponent(withCn, "probe", rule)).toBe(styled);
+    const fails = (src: string) => () => styleComponent(src, "probe", rule);
+    expect(fails(probe.replace("ProbeTrigger", "ProbeButton"))).toThrow(/no longer has one function ProbeTrigger/);
+    expect(fails(probe.replace("{ ...props }", "{ render, ...props }"))).toThrow(/with \.\.\.props alone/);
+    expect(fails(probe.replace(" {...props}", ' className="px-3" {...props}'))).toThrow(/styles it now/);
+    expect(fails(probe.replace("<Probe.Trigger", "<Probe.Root"))).toThrow(/on <Probe\.Trigger> 0 times/);
   });
 
   test("an unmapped icon or an unknown icon prop fails instead of dropping silently", () => {

@@ -21,7 +21,7 @@ function Page() {
     <>
       <PageHead
         title="collapsible"
-        lede="one disclosure with a trigger and a panel. this pass-through item keeps the upstream behavior and lets the caller choose the trigger and layout."
+        lede="one disclosure with a trigger and a panel. this pass-through item keeps the upstream behavior, turns a chevron at the trigger's end while open, and lets the caller choose the trigger and layout."
       >
         <InstallLine items={["collapsible"]} />
       </PageHead>
@@ -36,7 +36,8 @@ function Page() {
       </Section>
       <Section id="open" title="open">
         <p className="st-gl-copy">
-          start with the panel expanded. the same trigger closes it again; the content remains in the normal page flow.
+          start with the panel expanded. the chevron at the trigger's end points up while it is open, and the same
+          trigger closes it again; the content remains in the normal page flow.
         </p>
         <ModePair className="st-gl-pair">
           <CollapsibleExample open />

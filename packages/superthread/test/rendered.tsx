@@ -82,18 +82,25 @@ export async function client(node: ReactNode): Promise<{ body: HTMLElement; done
 }
 
 /**
- * The elements a class on host gives a utility through a descendant variant (`[&_selector]:utility`), behind any
- * `has-data-[...]` variants stacked before it. happy-dom paints nothing, so this is where such a rule meets the markup.
+ * The elements a class on host gives a utility through a descendant variant (`[&_selector]:utility`, or
+ * `[&[state]_selector]:utility`, which holds only while host is in that state), behind any `has-data-[...]` variants
+ * stacked before it. happy-dom paints nothing, so this is where such a rule meets the markup.
  */
 export function reached(host: Element, utility: string): Element[] {
   const found = new Set<Element>();
-  for (const cls of classesOf(host)) {
-    const { variants, utility: own } = parts(cls);
-    const descendant = variants.at(-1);
-    if (own !== utility || !descendant?.startsWith("[&_")) continue;
-    const gates = variants.slice(0, -1).map((gate) => /^has-data-\[(.+)\]$/.exec(gate)?.[1]);
-    if (gates.some((gate) => gate === undefined || !host.querySelector(`[data-${gate}]`))) continue;
-    for (const el of host.querySelectorAll(descendant.slice(3, -1).replaceAll("_", " "))) found.add(el);
+  host.setAttribute("data-reached-host", "");
+  try {
+    for (const cls of classesOf(host)) {
+      const { variants, utility: own } = parts(cls);
+      const descendant = variants.at(-1);
+      if (own !== utility || !descendant?.startsWith("[&")) continue;
+      const gates = variants.slice(0, -1).map((gate) => /^has-data-\[(.+)\]$/.exec(gate)?.[1]);
+      if (gates.some((gate) => gate === undefined || !host.querySelector(`[data-${gate}]`))) continue;
+      const selector = descendant.slice(1, -1).replaceAll("_", " ").replaceAll("&", "[data-reached-host]");
+      for (const el of host.querySelectorAll(selector)) found.add(el);
+    }
+  } finally {
+    host.removeAttribute("data-reached-host");
   }
   return [...found];
 }

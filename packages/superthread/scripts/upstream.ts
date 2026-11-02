@@ -10,7 +10,7 @@
 // `Icon` from our glyphs by the table below; `"use client"` goes; upstream's style hooks become our utilities; served
 // labels (an sr-only element's text, aria labels, titles, alt text, placeholders) go lowercase. `print` also strips
 // the focus classes the stage 0 gate rules off every seeded control (build ruling 2). `regen` also applies each pass
-// item's class table and portal rule, and fails on a style hook no rule maps. Anything a rule does not cover fails,
+// item's class table, portal rule and style rule, and fails on a style hook no rule maps. Anything a rule does not cover fails,
 // so a new upstream import, icon, prop or class is a decision, never a silent drop.
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -131,6 +131,28 @@ export type PortalRule = { component: string; portal: string; props: string };
 export const PASS_PORTALS: Record<string, PortalRule> = {
   sheet: { component: "SheetContent", portal: "SheetPortal", props: "SheetPrimitive.Portal.Props" },
   tooltip: { component: "TooltipContent", portal: "TooltipPrimitive.Portal", props: "TooltipPrimitive.Portal.Props" },
+};
+
+/**
+ * A pass item's component that upstream leaves unstyled: the component, the one Base UI part it renders, its classes.
+ */
+export type StyleRule = { component: string; element: string; classes: string };
+
+/**
+ * Per pass item, a component upstream renders with no class of its own, and the classes it takes, merged ahead of the
+ * caller's. Each rule must find its component with `...props` as its only parameter and exactly one element spreading
+ * them, so an upstream reshape fails `regen`, and a component upstream starts styling fails until the rule moves to
+ * the class table.
+ */
+export const PASS_STYLES: Record<string, StyleRule> = {
+  // a chevron at the trigger's end turns to point up while the panel is open, at the quick duration, which reduced
+  // motion makes zero; the accordion's chevron turns the same way
+  collapsible: {
+    component: "CollapsibleTrigger",
+    element: "CollapsiblePrimitive.Trigger",
+    classes:
+      "[&_[data-icon=inline-end]]:transition-[rotate] [&_[data-icon=inline-end]]:duration-(--duration-quick) [&_[data-icon=inline-end]]:ease-(--ease-brand) [&[data-panel-open]_[data-icon=inline-end]]:rotate-180",
+  },
 };
 
 /** JSX attributes whose string value is served as words. */
@@ -368,6 +390,42 @@ export function forwardPortalProps(src: string, where: string, rule: PortalRule)
   return src.slice(0, start) + body + src.slice(end);
 }
 
+/**
+ * A pass item's unstyled component takes classes: it destructures `className` beside its `...props`, its one element
+ * takes them ahead of the spread, merged with the caller's through `cn`, and the file imports `cn`. The element is a
+ * Base UI part, whose `className` may be a function of its state, so the merge runs in one: a caller's function still
+ * reads the state, and a string or nothing merges as before. Anything the rule does not find fails.
+ */
+export function styleComponent(src: string, where: string, rule: StyleRule): string {
+  const fail = (why: string): never => {
+    throw new Error(`${where}: classes for ${rule.component}: ${why}`);
+  };
+  const head = `function ${rule.component}({ ...props }: `;
+  const start = src.indexOf(head);
+  if (start < 0 || src.indexOf(head, start + 1) >= 0)
+    fail(`upstream no longer has one ${head.trim()} with ...props alone`);
+  const next = src.indexOf("\nfunction ", start + head.length);
+  const end = next < 0 ? src.length : next;
+  let body = src.slice(start, end);
+  if (/\bclassName\b/.test(body)) fail("upstream styles it now; move its classes to the class table");
+  const element = new RegExp(`(<${rule.element.replaceAll(".", "\\.")}\\s[^<>]*?)\\{\\.\\.\\.props\\}`, "g");
+  const count = body.match(element)?.length ?? 0;
+  if (count !== 1) fail(`it spreads ...props on <${rule.element}> ${count} times, not once`);
+  body = body
+    .replace(head, `function ${rule.component}({ className, ...props }: `)
+    .replace(
+      element,
+      (_, open: string) =>
+        `${open}className={(state) => cn(${JSON.stringify(rule.classes)}, typeof className === "function" ? className(state) : className)} {...props}`,
+    );
+  src = src.slice(0, start) + body + src.slice(end);
+  if (/^import \{[^}\n]*\bcn\b[^}\n]*\} from/m.test(src)) return src;
+  const imports = [...src.matchAll(/^import [^\n]* from (["'])[^"'\n]+\1;?\n/gm)];
+  const last = imports.at(-1) ?? fail("the file has no import to put cn after");
+  const at = last.index + last[0].length;
+  return `${src.slice(0, at)}import { cn } from "${UTILS}"\n${src.slice(at)}`;
+}
+
 /** Served labels go lowercase: string values of the label attributes, and the text of an sr-only element. */
 function lowercaseLabels(src: string): string {
   const attribute = new RegExp(`(\\s(?:${LABEL_ATTRIBUTES.join("|")})=)(["'])([^"'\\n]*)\\2`, "g");
@@ -404,6 +462,8 @@ export function transform(content: string, where: string, opts: { seed?: boolean
   src = mapClasses(src, where, opts.pass);
   const portal = opts.pass ? PASS_PORTALS[opts.pass] : undefined;
   if (portal) src = forwardPortalProps(src, where, portal);
+  const style = opts.pass ? PASS_STYLES[opts.pass] : undefined;
+  if (style) src = styleComponent(src, where, style);
   src = lowercaseLabels(src);
   if (opts.seed) src = stripFocusClasses(src);
 
