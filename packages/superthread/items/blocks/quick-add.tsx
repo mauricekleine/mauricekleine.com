@@ -180,7 +180,7 @@ function QuickAddNav({
         popoverTarget={fieldId}
         aria-label={triggerLabel}
         disabled={disabled}
-        className="text-muted-foreground [anchor-name:var(--quick-add-anchor)] hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:900px)]:h-8 [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:hit-area [@media(max-width:600px)]:h-8 [@media(max-width:600px)]:w-11 [@media(max-width:600px)]:justify-center [@media(max-width:600px)]:px-0"
+        className="text-muted-foreground [anchor-name:var(--quick-add-anchor)] hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:900px)]:h-8 [@media(max-width:900px)]:hit-area [@media(min-width:601px)_and_(max-width:900px)]:w-auto [@media(max-width:600px)]:w-11 [@media(max-width:600px)]:justify-center [@media(max-width:600px)]:px-0"
       >
         <Icon name="plus" />
         <span className="[@media(max-width:600px)]:hidden">{triggerLabel}</span>
@@ -219,7 +219,7 @@ function QuickAddNav({
             [inputProps["aria-describedby"], error ? errorId : undefined].filter(Boolean).join(" ") || undefined
           }
           className={cn(
-            "h-[34px] min-w-0 flex-1 px-2.5 [@media(max-width:900px)]:h-10 [@media(max-width:900px)]:px-3 [@media(max-width:600px)]:h-11",
+            "min-w-0 flex-1 [@media(min-width:901px)]:h-[34px] [@media(min-width:901px)]:px-2.5",
             inputProps.className,
           )}
         />

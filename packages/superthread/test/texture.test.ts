@@ -429,6 +429,9 @@ test("a scroller that holds hit areas contains each one, and a target anywhere e
   const sheet = parse(readFileSync(join(root, "tokens/utilities.css"), "utf8"));
   expect(value(child(sheet, "@utility hit-area"), "contain")).toBe("var(--hit-contain, none)");
   expect(value(child(sheet, "@utility hit-area-scroller"), "--hit-contain")).toBe("layout");
+  // containment costs the box its baseline, and a box with none rides 3 px high in a table cell
+  expect(value(child(sheet, "@utility hit-area"), "vertical-align")).toBe("var(--hit-align, baseline)");
+  expect(value(child(sheet, "@utility hit-area-scroller"), "--hit-align")).toBe("top");
 });
 
 test("texture-disabled screens the edge on ::before, a field box only for a disabled text control, and a bare input or textarea masks its own border (ruling 3)", () => {

@@ -7,6 +7,7 @@ import { FilterChip } from "@/components/superthread/blocks/collection-toolbar";
 import { SortableHead } from "@/components/superthread/blocks/data-table";
 import { ListRow, ListRows, ListRowTitle } from "@/components/superthread/blocks/list-rows";
 import { PageHeaderBack } from "@/components/superthread/blocks/page-header";
+import { QuickAddNav } from "@/components/superthread/blocks/quick-add";
 import { SearchPalette, SearchPaletteTrigger } from "@/components/superthread/blocks/search-palette";
 import { SectionAction } from "@/components/superthread/blocks/section-header";
 import { Badge } from "@/components/superthread/ui/badge";
@@ -312,6 +313,16 @@ describe("neighbours keep their own hit areas", () => {
       `${PHONE}has-[>[role=radio]]:gap-[26px]`,
     );
   });
+});
+
+test("the quiet add's trigger takes the glyph's 44 px box and its field stays 44 px tall", () => {
+  const add = (
+    <SidebarProvider>
+      <QuickAddNav label="add a task" placeholder="add a task" onAdd={() => {}} />
+    </SidebarProvider>
+  );
+  reaches(add, '[data-slot="quick-add-nav"] button[popovertarget]', `${PHONE}w-11`, `${BAR}hit-area`);
+  reaches(add, '[data-slot="quick-add-nav-field"] input', `${PHONE}h-11`);
 });
 
 test("a badge link keeps its overflow open and takes the hit area", () => {
