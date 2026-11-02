@@ -1,5 +1,6 @@
 import type { ToastManagerAddOptions } from "@base-ui/react/toast";
 import { afterEach, describe, expect, test } from "bun:test";
+import { Window as FrameWindow } from "happy-dom";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { act, type ReactNode } from "react";
@@ -693,6 +694,123 @@ describe("the layers rendered", () => {
       "or-412 picked up": [],
     });
     expect(nullsRing(document.body)).toEqual([]);
+  });
+
+  test("on a phone the stack drops from the top of the window, where a swipe up dismisses a toast", async () => {
+    // A finger's swipe on a toast: down, two moves of half the distance each, then up anywhere on the page.
+    const swipe = async (el: Element, dy: number) => {
+      const at = (type: string, y: number, movementY = 0) =>
+        new PointerEvent(type, {
+          bubbles: true,
+          button: 0,
+          pointerId: 1,
+          pointerType: "touch",
+          clientX: 100,
+          clientY: y,
+          movementY,
+        });
+      await act(async () => el.dispatchEvent(at("pointerdown", 300)));
+      await act(async () => el.dispatchEvent(at("pointermove", 300 + dy / 2, dy / 2)));
+      await act(async () => el.dispatchEvent(at("pointermove", 300 + dy, dy / 2)));
+      await act(async () => document.dispatchEvent(at("pointerup", 300 + dy)));
+    };
+    // Whether the toast titled so is still up: a dismissed toast leaves, or holds its ending style while it goes.
+    const up = (title: string) =>
+      [...document.body.querySelectorAll('[data-mk="toast"]:not([data-ending-style])')].some(
+        (el) => el.querySelector('[data-slot="toast-title"]')?.textContent === title,
+      );
+    const PHONE = "[@media(max-width:600px)]:";
+
+    const width = window.innerWidth;
+    await act(async () => viewport.setViewport({ width: 390 }));
+    try {
+      const manager = toastItem.createToastManager();
+      await client(<toastItem.Toaster toastManager={manager} timeout={0} />);
+      await act(async () => {
+        manager.add({ title: "draft saved", type: "success" });
+      });
+
+      // The viewport takes the window's top edge, 12 px in, and the toast hangs from the viewport's top.
+      const view = classesOf(document.body.querySelector('[data-slot="toast-viewport"]')!);
+      for (const cls of ["inset-x-3", "top-[calc(12px+env(safe-area-inset-top,0px))]", "bottom-auto"])
+        expect(view).toContain(`${PHONE}${cls}`);
+      const toast = document.body.querySelector('[data-mk="toast"]')!;
+      for (const cls of ["top-0", "bottom-auto"]) expect(classesOf(toast)).toContain(`${PHONE}${cls}`);
+
+      // A swipe down would pull it into the page, so it springs back; a swipe up takes it off the top.
+      await swipe(toast, 120);
+      expect(up("draft saved")).toBe(true);
+      await swipe(toast, -120);
+      expect(up("draft saved")).toBe(false);
+    } finally {
+      await act(async () => viewport.setViewport({ width }));
+    }
+
+    // A wider window keeps the stack at the bottom, where a swipe down dismisses it.
+    const manager = toastItem.createToastManager();
+    await client(<toastItem.Toaster toastManager={manager} timeout={0} />);
+    await act(async () => {
+      manager.add({ title: "or-412 picked up", type: "info" });
+    });
+    const wide = [...document.body.querySelectorAll('[data-mk="toast"]')].find(
+      (el) => el.querySelector('[data-slot="toast-title"]')?.textContent === "or-412 picked up",
+    )!;
+    await swipe(wide, -120);
+    expect(up("or-412 picked up")).toBe(true);
+    await swipe(wide, 120);
+    expect(up("or-412 picked up")).toBe(false);
+  });
+
+  test("a toast portaled into a phone's frame swipes as the frame's css places it, whatever the window's width", async () => {
+    // A phone's frame: a window of its own, 390 px wide, beside a window wider than a phone.
+    const inner = new FrameWindow({ width: 390, height: 844 }) as unknown as Window & typeof globalThis;
+    const host = document.createElement("div");
+    document.body.append(host);
+    const reactRoot = createRoot(host);
+    try {
+      expect(window.matchMedia("(max-width: 600px)").matches).toBe(false);
+      expect(inner.matchMedia("(max-width: 600px)").matches).toBe(true);
+      const manager = toastItem.createToastManager();
+      await act(async () =>
+        reactRoot.render(
+          <toastItem.Toaster
+            toastManager={manager}
+            timeout={0}
+            portalProps={{ container: inner.document.body as unknown as HTMLElement }}
+          />,
+        ),
+      );
+      await act(async () => {
+        manager.add({ title: "sent to sam", type: "success" });
+      });
+      const toast = inner.document.querySelector('[data-mk="toast"]')!;
+      const at = (type: string, y: number, movementY = 0) =>
+        new inner.PointerEvent(type, {
+          bubbles: true,
+          button: 0,
+          pointerId: 1,
+          pointerType: "touch",
+          clientX: 100,
+          clientY: y,
+          movementY,
+        });
+      const swipe = async (dy: number) => {
+        await act(async () => toast.dispatchEvent(at("pointerdown", 300)));
+        await act(async () => toast.dispatchEvent(at("pointermove", 300 + dy / 2, dy / 2)));
+        await act(async () => toast.dispatchEvent(at("pointermove", 300 + dy, dy / 2)));
+        await act(async () => inner.document.dispatchEvent(at("pointerup", 300 + dy)));
+      };
+      const up = () => toast.isConnected && !toast.hasAttribute("data-ending-style");
+      // The frame's css hangs the toast from its top, so a swipe down pulls it into the page and it springs back.
+      await swipe(120);
+      expect(up()).toBe(true);
+      await swipe(-120);
+      expect(up()).toBe(false);
+    } finally {
+      await act(async () => reactRoot.unmount());
+      host.remove();
+      await (inner as unknown as FrameWindow).happyDOM.close();
+    }
   });
 
   test("the toast viewport names its region in lowercase, and an aria-label passed in names it instead", async () => {

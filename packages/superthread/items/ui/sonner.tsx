@@ -1,17 +1,57 @@
+import { type RefObject, useCallback, useRef, useSyncExternalStore } from "react";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 import { cn } from "@/components/superthread/lib/utils";
 import { buttonVariants } from "@/components/superthread/ui/button";
 import { Icon, StatusGlyph } from "@/components/superthread/ui/glyphs";
 
-// Sonner drops arbitrary data attributes, so the wrapper marks the item. Toasts keep sonner's toast() API and
-// placement, but print unstyled on our leaf lift. Important utilities override sonner's unlayered structural CSS,
-// including its ::after hit area, which otherwise covers the contact edge. Expanded stacks never scale a toast.
-function Toaster({ className, toastOptions, icons, expand = true, ...props }: ToasterProps) {
+// Whether the window the toaster prints in is a phone's: 600 px wide or less, where sonner's own css takes the phone
+// offsets. It asks the wrapper's own window, so a toaster portaled into a frame takes the frame's width.
+const PHONE = "(max-width: 600px)";
+function usePhone(near: RefObject<HTMLElement | null>) {
+  const query = useCallback(() => (near.current?.ownerDocument.defaultView ?? window).matchMedia(PHONE), [near]);
+  const subscribe = useCallback(
+    (change: () => void) => {
+      const media = query();
+      media.addEventListener("change", change);
+      return () => media.removeEventListener("change", change);
+    },
+    [query],
+  );
+  return useSyncExternalStore(
+    subscribe,
+    () => query().matches,
+    () => false,
+  );
+}
+
+// On a phone the stack drops from the top, 12 px inside the window's edges and in line with the panel: the foot of a
+// phone's page holds the thumb and the page's last action, such as a send, and the frame scrolls with the page, so
+// nothing sticks at the top for a toast to cover.
+const PHONE_OFFSET = { top: "calc(12px + env(safe-area-inset-top, 0px))", right: 12, bottom: 12, left: 12 };
+
+// Sonner drops arbitrary data attributes, so the wrapper marks the item. Toasts keep sonner's toast() API, but print
+// unstyled on our leaf lift. Important utilities override sonner's unlayered structural CSS, including its ::after hit
+// area, which otherwise covers the contact edge. Expanded stacks never scale a toast. position places the stack above
+// 600 px, at the bottom right by default; on a phone it takes the top, where a swipe up or right dismisses a toast.
+function Toaster({
+  className,
+  toastOptions,
+  icons,
+  expand = true,
+  position = "bottom-right",
+  swipeDirections,
+  ...props
+}: ToasterProps) {
+  const wrapper = useRef<HTMLDivElement>(null);
+  const phone = usePhone(wrapper);
   return (
-    <div data-slot="sonner" data-mk="sonner">
+    <div ref={wrapper} data-slot="sonner" data-mk="sonner">
       <Sonner
         theme="system"
         expand={expand}
+        position={phone ? "top-center" : position}
+        mobileOffset={PHONE_OFFSET}
+        swipeDirections={swipeDirections ?? (phone ? ["top", "right"] : undefined)}
         gap={12}
         containerAriaLabel="notifications"
         customAriaLabel="notifications"

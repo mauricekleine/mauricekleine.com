@@ -2,7 +2,9 @@ import { useEffect, useId, useRef } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/superthread/ui/sonner";
 import { Button, buttonVariants } from "@/components/superthread/ui/button";
+import { GroundFrame } from "@/examples/compositions-a";
 import { State, States, type Mode } from "@/examples/input";
+import { SentReview } from "@/examples/toast";
 
 type Kind = "plain" | "success" | "info" | "warning" | "error" | "loading";
 const messages = {
@@ -128,6 +130,37 @@ export function SonnerExample({ mode }: { mode: Mode }) {
         />
       </div>
     </div>
+  );
+}
+// The toast that follows the send, from the item's own toaster in its own place. It notifies once the toaster inside
+// the frame has subscribed, since the toaster's effect runs first. Inert: the stack never pauses.
+function SentSonner({ mode }: { mode: Mode }) {
+  const id = useId();
+  useEffect(() => {
+    const toastId = toast.success("sent to sam", {
+      toasterId: id,
+      description: "the reply to chapter 7 notes is on its way.",
+      duration: Infinity,
+    });
+    return () => {
+      toast.dismiss(toastId);
+    };
+  }, [id]);
+  return (
+    <div inert>
+      <Toaster id={id} theme={mode} />
+    </div>
+  );
+}
+
+// A 390 px viewport, so the toaster takes its phone place as it does on a phone: the toast drops from the top of the
+// window and the send bar keeps the foot.
+export function SonnerOnPhone({ mode }: { mode: Mode }) {
+  return (
+    <GroundFrame mode={mode} title={`sonner on a phone, ${mode}`} height={520}>
+      <SentReview />
+      <SentSonner mode={mode} />
+    </GroundFrame>
   );
 }
 export function SonnerOpen({ mode }: { mode: Mode }) {

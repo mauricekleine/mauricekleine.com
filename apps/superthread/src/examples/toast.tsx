@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react";
 import type { Toast as ToastPrimitive } from "@base-ui/react/toast";
+import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
+import { Letter, LetterBody, LetterHead, LetterKind, LetterSubject } from "@/components/superthread/blocks/letter";
+import {
+  SendBar,
+  SendBarActions,
+  SendBarAddress,
+  SendBarButton,
+  SendBarTitle,
+  SendBarTo,
+} from "@/components/superthread/blocks/send-bar";
 import { Button } from "@/components/superthread/ui/button";
+import { GroundFrame } from "@/examples/compositions-a";
 import {
   ToastAction,
   ToastList,
@@ -65,11 +76,78 @@ export function ToastPrinted() {
   return (
     <div className="st-c-toasts" inert>
       <ToastProvider toastManager={manager}>
-        <ToastViewport className="relative inset-auto z-auto mx-0 h-[calc(var(--toast-frontmost-height,0px)+24px)] w-full max-w-[420px] sm:inset-auto">
+        <ToastViewport className="relative inset-auto z-auto h-[calc(var(--toast-frontmost-height,0px)+24px)] w-full max-w-[420px] [@media(max-width:600px)]:inset-auto [@media(max-width:600px)]:w-full [@media(max-width:600px)]:max-w-[420px]">
           <ToastList actions={printedActions} />
         </ToastViewport>
       </ToastProvider>
     </div>
+  );
+}
+
+// A review on a phone just after its send: the letter, and the send bar at its foot holding the page's last action,
+// now a receipt.
+export function SentReview() {
+  return (
+    <AppShellPanel>
+      <Letter aria-label="the reply, as it went out" last>
+        <LetterHead>
+          <LetterSubject>re: chapter 7 notes</LetterSubject>
+          <LetterKind>reply · mail</LetterKind>
+        </LetterHead>
+        <LetterBody>
+          <p>hi sam,</p>
+          <p>
+            thanks for the notes. the three figures stay, and the bands move to the end of the chapter so the reader
+            meets the result first.
+          </p>
+          <p>maurice</p>
+        </LetterBody>
+        <SendBar aria-label="where it went">
+          <SendBarTo>
+            <SendBarTitle>sam okafor</SendBarTitle>
+            <SendBarAddress>sam@quanta.example</SendBarAddress>
+          </SendBarTo>
+          <SendBarActions>
+            <SendBarButton disabled>sent to sam</SendBarButton>
+          </SendBarActions>
+        </SendBar>
+      </Letter>
+    </AppShellPanel>
+  );
+}
+
+// The toast that follows the send, in the item's own viewport and place. It adds its toast once the provider inside
+// the frame has subscribed, since the provider's effect runs first. Inert: the stack never expands or pauses.
+function SentToast() {
+  const [manager] = useState(() => createToastManager());
+  useEffect(() => {
+    const id = manager.add({
+      title: "sent to sam",
+      description: "the reply to chapter 7 notes is on its way.",
+      type: "success",
+      timeout: 0,
+    });
+    return () => manager.close(id);
+  }, [manager]);
+  return (
+    <div inert>
+      <ToastProvider toastManager={manager}>
+        <ToastViewport>
+          <ToastList />
+        </ToastViewport>
+      </ToastProvider>
+    </div>
+  );
+}
+
+// A 390 px viewport, so the item's phone place applies as it does on a phone: the toast drops from the top of the
+// window and the send bar keeps the foot.
+export function ToastOnPhone({ mode }: { mode: "light" | "dark" }) {
+  return (
+    <GroundFrame mode={mode} title={`toast on a phone, ${mode}`} height={520}>
+      <SentReview />
+      <SentToast />
+    </GroundFrame>
   );
 }
 
@@ -131,8 +209,8 @@ const kinds = [
   },
 ] as const;
 
-// The item's Toaster, once on the page, and a button per type. Its stack sits in the window's corner, in the
-// page's mode.
+// The item's Toaster, once on the page, and a button per type. Its stack sits at the bottom right of the window, or at
+// its top on a phone, in the page's mode.
 export function ToastLive() {
   return (
     <>

@@ -619,7 +619,7 @@ A square sheet on the popover fill with a 1 px edge, at most 440 px wide, padded
 
 ### Toast
 
-Base UI toasts on the popover fill, on the leaf lift with the contact edge. Each kind prints its 14 px status glyph in its own ink: tick for success, i for info and loading, pause for warning, cross for error. The title sets at 14 px Supreme 500 over a 13 px muted description; an action row sits 14 px under the text with 8 px between its buttons, and `ToastList` takes an `actions` slot for more than one. Behind the front toast, each toast peeks 12 px higher per place, moved by whole pixels and never scaled, so every contact screen keeps its 1 px cells. The viewport names itself "notifications".
+Base UI toasts on the popover fill, on the leaf lift with the contact edge. Each kind prints its 14 px status glyph in its own ink: tick for success, i for info and loading, pause for warning, cross for error. The title sets at 14 px Supreme 500 over a 13 px muted description; an action row sits 14 px under the text with 8 px between its buttons, and `ToastList` takes an `actions` slot for more than one. Behind the front toast, each toast peeks 12 px further from the stack's edge per place, moved by whole pixels and never scaled, so every contact screen keeps its 1 px cells. The viewport names itself "notifications". The stack sits at the bottom right of the window, where a swipe down or right dismisses a toast. On a phone it drops from the top, 12 px inside the window's edges and in line with the panel, and a swipe up or right dismisses a toast: the foot of a phone's page holds the thumb and the page's last action, such as a `send-bar`, and the frame scrolls with the page, so nothing sticks at the top for a toast to cover.
 
 ### Sheet and tooltip
 
@@ -733,7 +733,7 @@ Focus opens on cancel, so a stray Enter keeps what the sheet asks about. The act
 
 ### Sonner
 
-Sonner's toast API prints unstyled on the toast's popover fill, 1 px edge and leaf lift with the contact edge, padded 16 px. Every kind uses its 14 px status glyph, including a static i for loading. Titles use UI medium over muted instrument descriptions; actions and cancels take the small default and outline button looks with flat edges. The close button is a 24 px square that reaches 44 px through a hit area on a phone. The stack expands by default so toasts never scale. A wrapper carries data-slot and data-mk because sonner drops arbitrary attributes; the viewport label is "notifications".
+Sonner's toast API prints unstyled on the toast's popover fill, 1 px edge and leaf lift with the contact edge, padded 16 px. Every kind uses its 14 px status glyph, including a static i for loading. Titles use UI medium over muted instrument descriptions; actions and cancels take the small default and outline button looks with flat edges. The close button is a 24 px square that reaches 44 px through a hit area on a phone. The stack expands by default so toasts never scale. `position` places it above 600 px, at the bottom right by default. On a phone it takes the toast's place whatever `position` says: it drops from the top, 12 px inside the window's edges, and a swipe up or right dismisses a toast. A wrapper carries data-slot and data-mk because sonner drops arbitrary attributes; the viewport label is "notifications".
 
 ### Compositions
 

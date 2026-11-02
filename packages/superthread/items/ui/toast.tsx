@@ -1,11 +1,32 @@
 import { Toast as ToastPrimitive } from "@base-ui/react/toast";
-import type { ReactNode } from "react";
+import { type ReactNode, type RefObject, useCallback, useRef, useSyncExternalStore } from "react";
 import { cn } from "@/components/superthread/lib/utils";
 
 import { Button } from "@/components/superthread/ui/button";
 import { Icon, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
 
 const toast = ToastPrimitive.createToastManager();
+
+// Whether the window the toast prints in is a phone's: 600 px wide or less, where the stack drops from the top and a
+// swipe up dismisses a toast. It asks the toast's own window, as the css that places it does, so a toast portaled into
+// a frame takes the frame's width.
+const PHONE = "(max-width: 600px)";
+function usePhone(near: RefObject<HTMLElement | null>) {
+  const query = useCallback(() => (near.current?.ownerDocument.defaultView ?? window).matchMedia(PHONE), [near]);
+  const subscribe = useCallback(
+    (change: () => void) => {
+      const media = query();
+      media.addEventListener("change", change);
+      return () => media.removeEventListener("change", change);
+    },
+    [query],
+  );
+  return useSyncExternalStore(
+    subscribe,
+    () => query().matches,
+    () => false,
+  );
+}
 
 function ToastProvider({ ...props }: ToastPrimitive.Provider.Props) {
   return <ToastPrimitive.Provider {...props} />;
@@ -15,14 +36,18 @@ function ToastPortal({ ...props }: ToastPrimitive.Portal.Props) {
   return <ToastPrimitive.Portal data-slot="toast-portal" {...props} />;
 }
 
-// The region's name is lowercase, as every label here is; pass aria-label to name it otherwise.
+// The stack sits at the bottom right of the window. On a phone it drops from the top, 12 px inside the window's edges
+// and in line with the panel: the foot of a phone's page holds the thumb and the page's last action, such as a send,
+// and the frame scrolls with the page, so nothing sticks at the top for a toast to cover. The region's name is
+// lowercase, as every label here is; pass aria-label to name it otherwise.
 function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
   return (
     <ToastPrimitive.Viewport
       data-slot="toast-viewport"
       aria-label="notifications"
       className={cn(
-        "pointer-events-none fixed inset-x-4 bottom-4 z-50 mx-auto w-auto max-w-[420px] sm:right-4 sm:left-auto sm:mx-0 sm:w-full",
+        "pointer-events-none fixed right-4 bottom-4 z-50 w-full max-w-[420px]",
+        "[@media(max-width:600px)]:inset-x-3 [@media(max-width:600px)]:top-[calc(12px+env(safe-area-inset-top,0px))] [@media(max-width:600px)]:bottom-auto [@media(max-width:600px)]:w-auto [@media(max-width:600px)]:max-w-none",
         className,
       )}
       {...props}
@@ -31,22 +56,36 @@ function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
 }
 
 // The stack moves its toasts by whole pixels and never scales them, so each contact screen keeps its 1 px cells: a
-// toast behind the front one peeks 12 px higher per place, and the expanded stack sets them 12 px apart. Base UI's
-// heights are whole pixels, so every settled offset is too.
-function Toast({ className, ...props }: ToastPrimitive.Root.Props) {
+// toast behind the front one peeks 12 px further in per place, and the expanded stack sets them 12 px apart. Base UI's
+// heights are whole pixels, so every settled offset is too. --grow is the way the stack grows from its edge: up from
+// the bottom, or down from the top on a phone, where a toast enters from above and a swipe up or right dismisses it.
+function Toast({ className, swipeDirection, ref, ...props }: ToastPrimitive.Root.Props) {
+  const root = useRef<HTMLDivElement | null>(null);
+  const phone = usePhone(root);
+  const attach = useCallback(
+    (el: HTMLDivElement | null) => {
+      root.current = el;
+      if (typeof ref === "function") ref(el);
+      else if (ref) ref.current = el;
+    },
+    [ref],
+  );
   return (
     <ToastPrimitive.Root
+      ref={attach}
       data-slot="toast"
       data-mk="toast"
+      swipeDirection={swipeDirection ?? (phone ? ["up", "right"] : ["down", "right"])}
       className={cn(
         "group/toast pointer-events-auto absolute right-0 bottom-0 z-[calc(1000-var(--toast-index))] w-full border bg-popover text-popover-foreground shadow-leaf texture-contact [--contact-lift:var(--elevation-leaf-rake)] will-change-transform select-none",
-        "[--gap:12px] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc(var(--toast-offset-y)*-1+calc(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y))] [--peek:12px]",
-        "h-(--height) [transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))))] transition-[transform,opacity,height] duration-(--duration-travel) ease-(--ease-brand)",
-        // The hover bridge to the toast below sits on ::before: the contact screen owns ::after.
-        "before:absolute before:top-full before:left-0 before:h-[calc(var(--gap)+1px)] before:w-full before:content-['']",
+        "[--grow:-1] [@media(max-width:600px)]:top-0 [@media(max-width:600px)]:bottom-auto [@media(max-width:600px)]:[--grow:1]",
+        "[--gap:12px] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc((var(--toast-offset-y)+var(--toast-index)*var(--gap))*var(--grow)+var(--toast-swipe-movement-y))] [--peek:12px]",
+        "h-(--height) [transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)+var(--toast-index)*var(--peek)*var(--grow)))] transition-[transform,opacity,height] duration-(--duration-travel) ease-(--ease-brand)",
+        // The hover bridge across the gap to the toast in front sits on ::before: the contact screen owns ::after.
+        "before:absolute before:top-full before:left-0 before:h-[calc(var(--gap)+1px)] before:w-full before:content-[''] [@media(max-width:600px)]:before:top-auto [@media(max-width:600px)]:before:bottom-full",
         "data-expanded:h-(--toast-height) data-expanded:[transform:translateX(var(--toast-swipe-movement-x))_translateY(var(--offset-y))]",
-        "data-limited:opacity-0 data-starting-style:[transform:translateY(150%)]",
-        "[&[data-ending-style]:not([data-limited]):not([data-swipe-direction])]:[transform:translateY(150%)]",
+        "data-limited:opacity-0 data-starting-style:[transform:translateY(calc(var(--grow)*-150%))]",
+        "[&[data-ending-style]:not([data-limited]):not([data-swipe-direction])]:[transform:translateY(calc(var(--grow)*-150%))]",
         "data-ending-style:data-[swipe-direction=down]:[transform:translateY(calc(var(--toast-swipe-movement-y)+150%))]",
         "data-ending-style:data-[swipe-direction=left]:[transform:translateX(calc(var(--toast-swipe-movement-x)-150%))_translateY(var(--offset-y))]",
         "data-ending-style:data-[swipe-direction=right]:[transform:translateX(calc(var(--toast-swipe-movement-x)+150%))_translateY(var(--offset-y))]",
