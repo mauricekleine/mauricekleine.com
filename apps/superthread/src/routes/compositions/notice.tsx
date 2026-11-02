@@ -15,6 +15,7 @@ export const Route = createFileRoute("/compositions/notice")({
     sections: [
       { id: "example", title: "example" },
       { id: "states", title: "states" },
+      { id: "quiet", title: "the quiet line" },
       { id: "phone", title: "phone" },
       { id: "parts", title: "parts" },
     ],
@@ -45,6 +46,25 @@ function ActionNotice() {
     </Notice>
   );
 }
+
+const newerLine = "a newer version is waiting. it won't replace this one.";
+
+// The line is there from the first paint and reserves its words, so they arrive without moving the button under it,
+// even where they wrap.
+function QuietLine() {
+  const [newer, setNewer] = useState(true);
+  return (
+    <div className="st-ca-stack">
+      <Notice variant="quiet" reserve={newerLine}>
+        {newer && newerLine}
+      </Notice>
+      <Button variant="outline" size="sm" onClick={() => setNewer(!newer)}>
+        {newer ? "clear the line" : "print the line"}
+      </Button>
+    </div>
+  );
+}
+
 const notices: { state?: StatusState; title: string; description: string }[] = [
   { title: "sample data only", description: "these runs reset when you reload the page." },
   { state: "done", title: "done: draft saved", description: "the latest changes are ready for review." },
@@ -94,6 +114,17 @@ function Page() {
           </div>
         </ModePair>
       </Section>
+      <Section id="quiet" title="the quiet line">
+        <p className="st-ca-copy">
+          one muted line: no box, no glyph and no state, for a fact that asks for nothing, such as a newer version
+          waiting. it takes its line while it&rsquo;s empty, and it wraps on a phone rather than clip, so it takes the
+          longest words it can print as <code>reserve</code> and holds their height, and the button below stays put.
+          it&rsquo;s always a status, so a screen reader hears it without being interrupted.
+        </p>
+        <ModePair className="st-ca-wide-pair">
+          <QuietLine />
+        </ModePair>
+      </Section>
       <Section id="phone" title="phone">
         <p className="st-ca-copy">
           at 600 px the action row moves below the description. both frames use a 390 px viewport.
@@ -121,7 +152,9 @@ function Page() {
             <code>Notice</code>
           </dt>
           <dd>
-            sets the glyph and announcement role from <code>state</code>.
+            sets the glyph and announcement role from <code>state</code>, or prints one line with{" "}
+            <code>variant=&quot;quiet&quot;</code>. the quiet line takes its words as children, with none of the parts
+            below, and <code>reserve</code> takes the longest words it can print.
           </dd>
           <dt>
             <code>NoticeTitle</code>

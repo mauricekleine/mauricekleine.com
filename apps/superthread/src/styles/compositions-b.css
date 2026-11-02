@@ -12,6 +12,9 @@
   .st-cb-copy + * {
     margin-top: 24px;
   }
+  .st-modepair + .st-cb-copy {
+    margin-top: 32px;
+  }
   .st-modepair.st-cb-stack {
     grid-template-columns: minmax(0, 1fr);
   }

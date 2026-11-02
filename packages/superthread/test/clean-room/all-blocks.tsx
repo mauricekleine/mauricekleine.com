@@ -48,7 +48,31 @@ import {
 } from "@/components/superthread/blocks/form-section";
 import { QuickAdd } from "@/components/superthread/blocks/quick-add";
 import { Facts, Fact, FactLabel, FactValue } from "@/components/superthread/blocks/facts";
+import {
+  Letter,
+  LetterHead,
+  LetterSubject,
+  LetterKind,
+  LetterBody,
+  LetterTools,
+  LetterActions,
+  LetterSource,
+} from "@/components/superthread/blocks/letter";
 import { Notice, NoticeTitle, NoticeDescription, NoticeActions } from "@/components/superthread/blocks/notice";
+import {
+  SendBar,
+  SendBarTo,
+  SendBarTitle,
+  SendBarAddress,
+  SendBarFacts,
+  SendBarLabel,
+  SendBarFact,
+  SendBarFile,
+  SendBarActions,
+  SendBarButton,
+  SendBarLink,
+  SendBarNote,
+} from "@/components/superthread/blocks/send-bar";
 import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { Input } from "@/components/superthread/ui/input";
 import { cn } from "@/components/superthread/lib/utils";
@@ -76,6 +100,8 @@ import {
   ItemCardMedia,
   ItemCardId,
   ItemCardTitle,
+  ItemCardWhen,
+  ItemCardLede,
   ItemCardMeta,
   ItemCardActions,
 } from "@/components/superthread/blocks/item-cards";
@@ -246,6 +272,29 @@ function Sink({ mode }: { mode: Mode }) {
             <ItemCardTitle>plain draft</ItemCardTitle>
           </ItemCard>
         </ItemCards>
+        <ItemCards aria-label="drafts to review">
+          <ItemCard variant="full">
+            <ItemCardTitle href="#draft">reply to sam</ItemCardTitle>
+            <ItemCardWhen clock>before 11:00</ItemCardWhen>
+            <ItemCardLede>first in today's brief.</ItemCardLede>
+            <ItemCardMeta>
+              <span>to sam</span>
+              <span>re: chapter 7</span>
+            </ItemCardMeta>
+            <ItemCardActions>
+              <Button variant="outline" size="sm">
+                reject
+              </Button>
+            </ItemCardActions>
+          </ItemCard>
+        </ItemCards>
+        <ItemCards aria-label="decided drafts" last>
+          <ItemCard variant="decided">
+            <ItemCardTitle href="#draft">reply to sam</ItemCardTitle>
+            <ItemCardMeta>sent</ItemCardMeta>
+            <ItemCardWhen>mon 2 nov</ItemCardWhen>
+          </ItemCard>
+        </ItemCards>
       </Part>
       <Part name="data-table">
         <DataTable label="runs" rows="board">
@@ -334,7 +383,54 @@ function Sink({ mode }: { mode: Mode }) {
           </Fact>
         </Facts>
       </Part>
+      <Part name="letter">
+        <Letter aria-label="the draft, as it goes out" last>
+          <LetterHead>
+            <LetterSubject>re: chapter 7 notes</LetterSubject>
+            <LetterKind>reply · mail</LetterKind>
+          </LetterHead>
+          <LetterBody>
+            <p>hi sam,</p>
+            <p>the next draft goes up on thursday.</p>
+          </LetterBody>
+          <LetterTools>
+            <LetterActions>
+              <Button variant="ghost">edit</Button>
+              <Button variant="outline">reject</Button>
+            </LetterActions>
+            <LetterSource href="#letter">sam's mail, mon 2 nov</LetterSource>
+          </LetterTools>
+        </Letter>
+      </Part>
+      <Part name="send-bar">
+        <SendBar aria-label="where it goes">
+          <SendBarTo>
+            <SendBarTitle>goes to 3 people</SendBarTitle>
+            <SendBarFacts>
+              <SendBarLabel>to</SendBarLabel>
+              <SendBarFact address="sam@quanta.example">sam okafor</SendBarFact>
+              <SendBarLabel>attaches</SendBarLabel>
+              <SendBarFile>notes.pdf</SendBarFile>
+            </SendBarFacts>
+          </SendBarTo>
+          <SendBarActions>
+            <SendBarButton>send to 3 people</SendBarButton>
+            <SendBarNote>you can't undo a send.</SendBarNote>
+          </SendBarActions>
+        </SendBar>
+        <SendBar aria-label="where it went">
+          <SendBarTo>
+            <SendBarTitle>this may have gone out</SendBarTitle>
+            <SendBarAddress>sam@quanta.example</SendBarAddress>
+          </SendBarTo>
+          <SendBarActions>
+            <SendBarLink href="#sent">open sent items</SendBarLink>
+            <SendBarButton variant="outline">retry</SendBarButton>
+          </SendBarActions>
+        </SendBar>
+      </Part>
       <Part name="notice">
+        <Notice variant="quiet">a newer version is waiting.</Notice>
         <Notice>
           <NoticeTitle>draft kept here</NoticeTitle>
           <NoticeDescription>choose when to save it.</NoticeDescription>

@@ -64,6 +64,7 @@ import {
   InputGroupTextarea,
 } from "@/components/superthread/ui/input-group";
 import { Label } from "@/components/superthread/ui/label";
+import { Paper } from "@/components/superthread/ui/paper";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import {
   Select,
@@ -234,6 +235,9 @@ function Sink({ mode }: { mode: Mode }) {
               size {size}
             </Button>
           ))}
+          <Button variant="key" ignoreEnter>
+            send
+          </Button>
           <Button size="icon" aria-label="add">
             <Icon name="plus" />
           </Button>
@@ -727,6 +731,12 @@ function Sink({ mode }: { mode: Mode }) {
           {untilWords("2026-11-01T11:00:00Z", "standup", "2026-11-01T10:12:00Z")},{" "}
           {scheduleWords({ every: "day", at: "07:00" })}
         </p>
+      </Part>
+      <Part name="paper">
+        <Paper render={<section aria-label="the next job" />}>
+          <p>reply to sam about chapter 7</p>
+          <Button>read the draft</Button>
+        </Paper>
       </Part>
       <Part name="resizable">
         <div className="h-48 max-w-lg border border-border">

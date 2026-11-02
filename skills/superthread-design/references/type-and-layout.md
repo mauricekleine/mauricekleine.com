@@ -69,12 +69,12 @@ One light from the upper left: shadows fall right and down at 3:2 and grow with 
 
 | lift     | shadow              | where                                       |
 | -------- | ------------------- | ------------------------------------------- |
-| `slip`   | 6px 4px 6px -2px    | the lowest lift; no item uses it yet        |
+| `slip`   | 6px 4px 6px -2px    | the lowest lift, for paper on a light page  |
 | `leaf`   | 12px 8px 14px -4px  | select list, toast, a floating sidebar     |
 | `sheet`  | 27px 18px 26px -6px | dialog, the board panel, the reading sheet  |
 | `lifted` | 39px 26px 36px -8px | the highest lift; no item uses it yet       |
 
-The utilities are `shadow-slip`, `shadow-leaf`, `shadow-sheet` and `shadow-lifted`. In light, a raised layer on stock prints its contact edge as a 50 percent screen 3 px right of the layer and 2 px below it. An app's own raised layer gets it the way the items do: `texture-contact` with `[--contact-lift:var(--elevation-<lift>-rake)]`, beside its `shadow-<lift>`. In dark the contact stays soft and the raised surface draws a 1 px lighter edge, because the dark ground is too near black for a shadow to show. The board and the reading sheet on the deep ground keep the soft shadow alone.
+The utilities are `shadow-slip`, `shadow-leaf`, `shadow-sheet` and `shadow-lifted`. In light, a raised layer on stock prints its contact edge as a 50 percent screen 3 px right of the layer and 2 px below it. An app's own raised layer gets it the way the items do: `texture-contact` with `[--contact-lift:var(--elevation-<lift>-rake)]`, beside its `shadow-<lift>`. In dark the contact stays soft and the raised surface draws a 1 px lighter edge, because the dark ground is too near black for a shadow to show. Paper sets no `shadow-slip` beside the utility, so on a dark page it prints flat. The board and the reading sheet on the deep ground keep the soft shadow alone.
 
 ## motion
 

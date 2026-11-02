@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Button } from "@/components/superthread/ui/button";
 import { Icon } from "@/components/superthread/ui/glyphs";
 
@@ -129,5 +129,25 @@ export function ButtonSizes() {
         ))}
       </div>
     </>
+  );
+}
+
+// Each button counts its clicks, so a reader can focus one, press enter, press space and watch which one moved.
+export function ButtonEnter() {
+  const [plain, setPlain] = useState(0);
+  const [guarded, setGuarded] = useState(0);
+  return (
+    <div className="st-b-row st-b-specimens">
+      <Specimen note={`enter or space: ${plain}`}>
+        <Button variant="outline" onClick={() => setPlain(plain + 1)}>
+          save
+        </Button>
+      </Specimen>
+      <Specimen note={`space only: ${guarded}`}>
+        <Button variant="key" ignoreEnter onClick={() => setGuarded(guarded + 1)}>
+          send
+        </Button>
+      </Specimen>
+    </div>
   );
 }

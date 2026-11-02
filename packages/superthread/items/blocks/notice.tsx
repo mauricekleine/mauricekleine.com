@@ -2,12 +2,44 @@ import { cn } from "@/components/superthread/lib/utils";
 import { Icon, StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
 
 // A flat notice in the page's own fill. Only the small glyph takes status ink; failures interrupt, other updates wait.
+// The quiet form is one muted line: no box, no glyph and no state, for a fact that never asks for anything, such as a
+// newer version waiting. It takes its line while it's empty, so the words arrive without moving a target and a screen
+// reader hears them. A line too long for a phone wraps, so nothing is clipped, and reserve takes the longest words it can
+// print: they sit unseen and unread in the same cell, so a wrapped line holds its height while it's empty.
 function Notice({
   className,
   state,
+  variant,
+  reserve,
   children,
   ...props
-}: Omit<React.ComponentProps<"div">, "role"> & { state?: StatusState }) {
+}: Omit<React.ComponentProps<"div">, "role"> &
+  (
+    | { state?: StatusState; variant?: undefined; reserve?: undefined }
+    | { state?: undefined; variant: "quiet"; reserve?: React.ReactNode }
+  )) {
+  if (variant === "quiet") {
+    return (
+      <div
+        {...props}
+        data-mk="notice"
+        data-slot="notice"
+        data-variant="quiet"
+        role="status"
+        className={cn(
+          "grid min-h-lh min-w-0 grid-cols-[minmax(0,1fr)] type-instrument text-muted-foreground [overflow-wrap:anywhere]",
+          className,
+        )}
+      >
+        {reserve != null && (
+          <span aria-hidden="true" className="invisible col-start-1 row-start-1">
+            {reserve}
+          </span>
+        )}
+        <span className="col-start-1 row-start-1">{children}</span>
+      </div>
+    );
+  }
   return (
     <div
       {...props}

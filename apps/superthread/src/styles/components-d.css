@@ -25,6 +25,22 @@
     white-space: nowrap;
   }
 
+  /* paper: the lines of a job, the panel it sits in, and a letter's foot. the block itself comes from the item */
+  .st-paper {
+    display: grid;
+    gap: 8px;
+  }
+  .st-paper-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .st-paper-panel {
+    display: grid;
+    gap: 24px;
+  }
+
   /* card: the footer's facts in the instrument step */
   .st-pass-note {
     color: var(--muted-foreground);

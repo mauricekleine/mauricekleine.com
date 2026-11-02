@@ -16,7 +16,7 @@ import { Button } from "@/components/superthread/ui/button";
 import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import { Input } from "@/components/superthread/ui/input";
 import { type StatusState } from "@/components/superthread/ui/glyphs";
-import { client, detailsUsed, elements, forbidden, one, server } from "./rendered.tsx";
+import { client, detailsUsed, elements, forbidden, one, parts, server } from "./rendered.tsx";
 
 // Exercise the actual text control and native form boundary, shared by Enter and the submit button.
 async function type(input: HTMLInputElement, value: string) {
@@ -400,6 +400,62 @@ describe("notice", () => {
       expect(one(rendered, "button").el.textContent).toBe("try again");
     },
   );
+
+  test("the quiet line prints one muted line: no box, no glyph, and a status that never interrupts", () => {
+    const rendered = server(<Notice variant="quiet">a newer version is waiting.</Notice>);
+    const line = one(rendered, '[data-mk="notice"]');
+    expect(line.el.getAttribute("role")).toBe("status");
+    expect(line.el.textContent).toBe("a newer version is waiting.");
+    expect(line.classes).toEqual(expect.arrayContaining(["type-instrument", "text-muted-foreground"]));
+    expect(line.classes.filter((cls) => /^(border|p-|bg-)/.test(parts(cls).utility))).toEqual([]);
+    expect(rendered.querySelector('[data-slot="notice-glyph"]')).toBeNull();
+    expect(rendered.querySelector("svg")).toBeNull();
+    expect(forbidden(elements(rendered))).toEqual([]);
+  });
+
+  test("an empty quiet line keeps its height and its live region, so the words move nothing", () => {
+    const rendered = server(<Notice variant="quiet" />);
+    const line = one(rendered, '[role="status"]');
+    expect(line.el.textContent).toBe("");
+    expect(line.classes).toContain("min-h-lh");
+  });
+
+  test("an empty quiet line holds the height of the words it reserves, unread and in the live words' cell", () => {
+    const words = "a newer version is waiting.";
+    const rendered = server(<Notice variant="quiet" reserve={words} />);
+    const line = one(rendered, '[role="status"]');
+    const [held, live] = [...line.el.children];
+    expect(held?.textContent).toBe(words);
+    expect(held?.getAttribute("aria-hidden")).toBe("true");
+    expect(held?.classList.contains("invisible")).toBe(true);
+    expect(live?.textContent).toBe("");
+    expect(live?.hasAttribute("aria-hidden")).toBe(false);
+    // two rows would print the reserve above the words, at twice the height
+    for (const cell of [held, live]) {
+      expect(cell?.classList.contains("col-start-1")).toBe(true);
+      expect(cell?.classList.contains("row-start-1")).toBe(true);
+    }
+    expect(line.classes).toContain("grid");
+  });
+
+  test("a quiet line prints its words once when it reserves them", () => {
+    const words = "a newer version is waiting.";
+    const rendered = server(
+      <Notice variant="quiet" reserve={words}>
+        {words}
+      </Notice>,
+    );
+    const seen = [...one(rendered, '[role="status"]').el.children].filter(
+      (cell) => !cell.classList.contains("invisible"),
+    );
+    expect(seen.map((cell) => cell.textContent)).toEqual([words]);
+  });
+
+  test("a long quiet line wraps rather than clipping on a phone", () => {
+    const { classes } = one(server(<Notice variant="quiet">words</Notice>), '[role="status"]');
+    expect(classes).toContain("[overflow-wrap:anywhere]");
+    expect(classes.filter((cls) => /^(truncate|whitespace-nowrap)$/.test(parts(cls).utility))).toEqual([]);
+  });
 
   test("notice actions keep the app's handlers", async () => {
     let retried = false;
