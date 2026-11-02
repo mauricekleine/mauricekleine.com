@@ -4,6 +4,7 @@ import {
   beforeWords,
   clockWords,
   dateWords,
+  monthWords,
   type Schedule,
   scheduleWords,
   sinceWords,
@@ -62,6 +63,7 @@ export function ClockWordsExample() {
         ["clock, a plain date", clockWords("2026-11-02", reader)],
         ["date, a moment", dateWords("2026-11-03T08:30:00Z", reader)],
         ["date, a plain date", dateWords("2026-11-02", reader)],
+        ["month, a moment", monthWords("2026-11-03T08:30:00Z", reader)],
       ]}
     />
   );

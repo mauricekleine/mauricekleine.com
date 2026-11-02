@@ -49,6 +49,8 @@ function weekNumber(monday: number) {
   return Math.floor((thursday - newYear) / 7) + 1;
 }
 
+const named = (month: string) => monthWords(`${month}-01`);
+
 function monthBeside(month: string, by: number) {
   const [year = 0, index = 1] = month.split("-").map(Number);
   return new Date(Date.UTC(year, index - 1 + by, 1)).toISOString().slice(0, 7);
@@ -119,10 +121,11 @@ function linkFrom(rows: Cell[][], key: string, arrow: string) {
 }
 
 const INK = "text-disabled data-[ink=off]:text-muted-foreground data-[ink=on]:text-foreground";
+// shadcn's tailwind.css narrows data-selected: to data-selected="true", and useRender sets it empty.
 const MARK =
-  "data-today:shadow-[inset_0_0_0_1px_var(--foreground)] data-selected:shadow-[inset_0_-2px_0_var(--foreground)] data-today:data-selected:shadow-[inset_0_0_0_1px_var(--foreground),inset_0_-2px_0_var(--foreground)]";
+  "data-today:shadow-[inset_0_0_0_1px_var(--foreground)] data-[selected]:shadow-[inset_0_-2px_0_var(--foreground)] data-today:data-[selected]:shadow-[inset_0_0_0_1px_var(--foreground),inset_0_-2px_0_var(--foreground)]";
 const CELL = cn(
-  "relative grid h-[34px] place-items-center pb-[5px] font-mono text-instrument leading-none transition-[background-color] duration-(--duration-instant) ease-(--ease-brand) [&:is(a,button)]:hover:bg-control-hover [&:is(a,button)]:active:bg-control-press focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:600px)]:h-11",
+  "relative grid h-[34px] w-full place-items-center pb-[5px] font-mono text-instrument leading-none transition-[background-color] duration-(--duration-instant) ease-(--ease-brand) [&:is(a,button)]:hover:bg-control-hover [&:is(a,button)]:active:bg-control-press focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:600px)]:h-11",
   INK,
   MARK,
 );
@@ -162,6 +165,9 @@ function MonthGridCell({ cell, stop, loading }: { cell: Cell; stop: boolean; loa
   });
 }
 
+// 32 px of head beside a reader's 28 px date line, so in a rail it lifts 2 px and the two read level.
+const MONTH_HEAD =
+  "flex h-8 items-center justify-between gap-2 in-data-[slot=reader-rail]:-mt-0.5 [@media(max-width:600px)]:h-11";
 const HEAD = "h-7 p-0 text-center type-instrument font-normal text-muted-foreground";
 const WEEK_COLUMN = "border-r border-border";
 // With the week column eight cells share a phone's panel, so the grid hangs 9 px into each side to give every one 44 px.
@@ -203,7 +209,7 @@ function MonthGrid({
   const backStep = useRef<HTMLButtonElement>(null);
   const onStep = useRef<HTMLButtonElement>(null);
   // Where the keys were when they ran off the edge, so the walk carries on from that date in the month that opens.
-  const turning = useRef<{ from: string; back: boolean } | null>(null);
+  const turning = useRef<{ to: string; from: string; back: boolean } | null>(null);
   const [focused, setFocused] = useState<string>();
 
   const rows = monthRows(month, days, weeks, today);
@@ -225,15 +231,14 @@ function MonthGrid({
 
   useEffect(() => {
     const turn = turning.current;
-    if (turn === null) return;
+    if (turn?.to !== month) return;
     turning.current = null;
     const next = turn.back
       ? links.filter((cell) => cell.date < turn.from).at(-1)
       : links.find((cell) => cell.date > turn.from);
     if (next) focusCell(next.key);
     else (turn.back ? backStep : onStep).current?.focus();
-    // Only a new month lands the keys: its links are this render's.
-  }, [month]);
+  });
 
   function step(target: string) {
     turning.current = null;
@@ -253,24 +258,22 @@ function MonthGrid({
 
   function turn(key: string, back: boolean) {
     if (!onMonthChange) return;
-    turning.current = { from: links.find((cell) => cell.key === key)?.date ?? `${month}-01`, back };
-    onMonthChange(back ? earlier : later);
+    const to = back ? earlier : later;
+    turning.current = { to, from: links.find((cell) => cell.key === key)?.date ?? `${month}-01`, back };
+    onMonthChange(to);
   }
 
   return (
     <section data-mk="month-grid" data-slot="month-grid" className={cn("min-w-0", className)} {...props}>
-      <div
-        data-slot="month-grid-head"
-        className="flex h-8 items-center justify-between gap-2 [@media(max-width:600px)]:h-11"
-      >
+      <div data-slot="month-grid-head" className={MONTH_HEAD}>
         <p id={nameId} aria-live="polite" className="min-w-0 type-ui font-medium text-foreground">
-          {monthWords(`${month}-01`)}
+          {named(month)}
         </p>
         {onMonthChange && (
           <div className="flex shrink-0">
             <Button
               ref={backStep}
-              aria-label={`show ${monthWords(`${earlier}-01`)}`}
+              aria-label={`show ${named(earlier)}`}
               className={STEP}
               data-slot="month-grid-step"
               disabled={!canGoBack}
@@ -283,7 +286,7 @@ function MonthGrid({
             </Button>
             <Button
               ref={onStep}
-              aria-label={`show ${monthWords(`${later}-01`)}`}
+              aria-label={`show ${named(later)}`}
               className={STEP}
               data-slot="month-grid-step"
               disabled={!canGoOn}

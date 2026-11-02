@@ -1,6 +1,7 @@
-import { useId } from "react";
+import { useId, useState } from "react";
 import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
 import { DayLine, type DayLineEvent, DayLineStrip } from "@/components/superthread/blocks/day-line";
+import { MonthGrid } from "@/components/superthread/blocks/month-grid";
 import {
   Reader,
   ReaderBlock,
@@ -27,8 +28,9 @@ import {
   ReaderWide,
 } from "@/components/superthread/blocks/reader";
 import { Button } from "@/components/superthread/ui/button";
-import { Door, Onward } from "@/components/superthread/ui/onward";
+import { Onward } from "@/components/superthread/ui/onward";
 import { Paper } from "@/components/superthread/ui/paper";
+import { SourceLine, SourceLineItem } from "@/components/superthread/ui/source-line";
 
 // A fixed day, clock and zone, so the page prints the same strip whenever it's built and wherever it's read.
 const day = "2026-11-03";
@@ -45,15 +47,24 @@ const tuesday = [
   meeting("kickoff", "project kickoff", "16:30", "17:30", { href: "#a-meeting-brief", brief: true }),
 ];
 
-// What the margin holds for a page of briefs. Anything that moves around the writing fits here, in the rail's 248 px.
+// A brief every weekday this month so far, and the one before it.
+const briefs = ["2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-11-02", day];
+
+// What the margin holds for a page of briefs: the month, in the rail's 248 px.
 function Rail() {
+  const [month, setMonth] = useState("2026-11");
   return (
     <ReaderRail>
-      <ReaderBlock>
-        <ReaderBlockTitle>earlier briefs</ReaderBlockTitle>
-        <Door href="#example">monday 2 november</Door>
-        <Door href="#example">friday 30 october</Door>
-      </ReaderBlock>
+      <MonthGrid
+        aria-label="briefs by month"
+        days={briefs.map((date) => ({ date, label: "read the brief", selected: date === day, href: "#example" }))}
+        max="2026-11"
+        min="2026-10"
+        month={month}
+        onMonthChange={setMonth}
+        today={day}
+        weeks={[{ date: "2026-10-26", label: "read the weekly brief", href: "#example" }]}
+      />
     </ReaderRail>
   );
 }
@@ -176,6 +187,10 @@ export function ReaderMeeting() {
           <ReaderBlockTitle>what they owe you</ReaderBlockTitle>
           <ReaderGap>not in the record</ReaderGap>
         </ReaderBlock>
+        <SourceLine className="col-span-full" end="written 07:00">
+          <SourceLineItem href="#a-meeting-brief">22 sep call recap</SourceLineItem>
+          <SourceLineItem href="#a-meeting-brief">sam&rsquo;s mail, mon 2 nov</SourceLineItem>
+        </SourceLine>
       </ReaderBlocks>
       <ReaderFoot>
         <Onward back href="#a-meeting-brief">

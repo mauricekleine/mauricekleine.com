@@ -68,6 +68,7 @@ import {
   DayLineSteps,
   DayLineStrip,
 } from "@/components/superthread/blocks/day-line";
+import { MonthGrid } from "@/components/superthread/blocks/month-grid";
 import {
   Reader,
   ReaderLead,
@@ -536,6 +537,21 @@ function Sink({ mode }: { mode: Mode }) {
             timeZone="UTC"
           />
         </DayLine>
+      </Part>
+      <Part name="month-grid">
+        <MonthGrid
+          aria-label="briefs by month"
+          days={[
+            { date: "2026-11-02", label: "read the brief", selected: true, href: "#monday" },
+            { date: "2026-11-03", label: "read the brief", href: "#tuesday" },
+          ]}
+          max="2026-11"
+          min="2026-10"
+          month="2026-11"
+          onMonthChange={() => {}}
+          today="2026-11-03"
+          weeks={[{ date: "2026-11-02", label: "read the weekly brief", href: "#week" }]}
+        />
       </Part>
       <Part name="reader">
         <AppShellPanel>

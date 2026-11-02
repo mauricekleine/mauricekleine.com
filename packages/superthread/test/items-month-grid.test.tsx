@@ -5,6 +5,7 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { act, type ComponentProps, useState } from "react";
 import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
 import { MonthGrid, type MonthGridEntry } from "@/components/superthread/blocks/month-grid";
+import { Reader, ReaderHead, ReaderRail } from "@/components/superthread/blocks/reader";
 import { client, CONTROL_RING, elements, forbidden, one, server } from "./rendered.tsx";
 
 const PHONE = "[@media(max-width:600px)]:";
@@ -51,6 +52,18 @@ describe("six weeks from a monday", () => {
     expect(name.el.textContent).toBe("november 2026");
     expect(one(host, slot("month-grid")).el.getAttribute("aria-label")).toBe("briefs by month");
     expect(one(host, "table").el.getAttribute("aria-labelledby")).toBe(name.el.id);
+  });
+
+  test("in a reader's rail the month's name sits level with the date line beside it", () => {
+    const host = server(
+      <Reader>
+        <ReaderHead>tue 3 nov</ReaderHead>
+        <ReaderRail>
+          <MonthGrid month="2026-11" />
+        </ReaderRail>
+      </Reader>,
+    );
+    expect(one(host, slot("month-grid-head")).classes).toContain("in-data-[slot=reader-rail]:-mt-0.5");
   });
 
   test("the columns start on monday and say their whole name to a screen reader", () => {
@@ -145,14 +158,14 @@ describe("what a day prints", () => {
     const open = one(host, '[aria-current="true"]');
     expect(open.el.textContent).toBe("2");
     expect(open.el.hasAttribute("data-selected")).toBe(true);
-    expect(open.classes).toContain("data-selected:shadow-[inset_0_-2px_0_var(--foreground)]");
+    expect(open.classes).toContain("data-[selected]:shadow-[inset_0_-2px_0_var(--foreground)]");
   });
 
   test("a day that is open and today prints both marks, and the words carry what aria-current can't", () => {
     const host = month({ days: [{ ...link("2026-11-03"), label: "read the brief", selected: true }] });
     const day = one(host, '[aria-current="date"]');
     expect(day.classes).toContain(
-      "data-today:data-selected:shadow-[inset_0_0_0_1px_var(--foreground),inset_0_-2px_0_var(--foreground)]",
+      "data-today:data-[selected]:shadow-[inset_0_0_0_1px_var(--foreground),inset_0_-2px_0_var(--foreground)]",
     );
     expect(day.el.getAttribute("aria-label")).toBe("read the brief: tue 3 nov, selected");
   });

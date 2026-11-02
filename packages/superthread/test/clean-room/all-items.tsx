@@ -13,6 +13,7 @@ import {
   beforeWords,
   clockWords,
   dateWords,
+  monthWords,
   scheduleWords,
   sinceWords,
   untilWords,
@@ -74,6 +75,7 @@ import {
 } from "@/components/superthread/ui/input-group";
 import { Label } from "@/components/superthread/ui/label";
 import { Door, Onward } from "@/components/superthread/ui/onward";
+import { SourceLine, SourceLineItem } from "@/components/superthread/ui/source-line";
 import { Paper } from "@/components/superthread/ui/paper";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import {
@@ -741,7 +743,7 @@ function Sink({ mode }: { mode: Mode }) {
         <p className="text-sm">
           {sinceWords("2026-10-30", "2026-11-01")}, {beforeWords("2026-11-01T10:00:00Z", { timeZone: "UTC" })},{" "}
           {clockWords("2026-11-01T10:00:00Z", { timeZone: "UTC" })}, {dateWords("2026-11-01")},{" "}
-          {untilWords("2026-11-01T11:00:00Z", "standup", "2026-11-01T10:12:00Z")},{" "}
+          {monthWords("2026-11-01")}, {untilWords("2026-11-01T11:00:00Z", "standup", "2026-11-01T10:12:00Z")},{" "}
           {scheduleWords({ every: "day", at: "07:00" })}
         </p>
       </Part>
@@ -765,6 +767,12 @@ function Sink({ mode }: { mode: Mode }) {
           </Onward>
           <Door href="#all">see what you finished</Door>
         </div>
+      </Part>
+      <Part name="source-line">
+        <SourceLine end="written 07:00">
+          <SourceLineItem href="#all">22 sep call recap</SourceLineItem>
+          <SourceLineItem>a call nobody recorded</SourceLineItem>
+        </SourceLine>
       </Part>
       <Part name="resizable">
         <div className="h-48 max-w-lg border border-border">

@@ -41,18 +41,19 @@ function Page() {
       <Section id="example" title="example">
         <p className="st-ca-copy">
           the line says what the day comes to, and the paper under it holds the one next step. the rail opens 248 px of
-          margin beside them when the reader has 640 px of its own, and the day line and the writing run the whole width
-          under both. in a panel the paper hangs 24 px into the margin, so its words keep the line&rsquo;s left edge.
+          margin beside them when the reader has 640 px of its own, here for a <code>month-grid</code>, and the day line
+          and the writing run the whole width under both. in a panel the paper hangs 24 px into the margin, so its words
+          keep the line&rsquo;s left edge.
         </p>
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <GroundFrame mode="light" title="a brief, light" width={960} height={914}>
+            <GroundFrame mode="light" title="a brief, light" width={960} height={966}>
               <ReaderBrief />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a brief, dark" width={960} height={914}>
+            <GroundFrame mode="dark" title="a brief, dark" width={960} height={966}>
               <ReaderBrief />
             </GroundFrame>
           }
@@ -77,12 +78,12 @@ function Page() {
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <GroundFrame mode="light" title="a meeting brief, light" width={960} height={666}>
+            <GroundFrame mode="light" title="a meeting brief, light" width={960} height={706}>
               <ReaderMeeting />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a meeting brief, dark" width={960} height={666}>
+            <GroundFrame mode="dark" title="a meeting brief, dark" width={960} height={706}>
               <ReaderMeeting />
             </GroundFrame>
           }
@@ -127,24 +128,24 @@ function Page() {
         </p>
         <ModePair
           light={
-            <GroundFrame mode="light" title="a brief on a phone, light" height={992}>
+            <GroundFrame mode="light" title="a brief on a phone, light" height={1220}>
               <ReaderBrief />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a brief on a phone, dark" height={992}>
+            <GroundFrame mode="dark" title="a brief on a phone, dark" height={1220}>
               <ReaderBrief />
             </GroundFrame>
           }
         />
         <ModePair
           light={
-            <GroundFrame mode="light" title="a meeting brief on a phone, light" height={892}>
+            <GroundFrame mode="light" title="a meeting brief on a phone, light" height={976}>
               <ReaderMeeting />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a meeting brief on a phone, dark" height={892}>
+            <GroundFrame mode="dark" title="a meeting brief on a phone, dark" height={976}>
               <ReaderMeeting />
             </GroundFrame>
           }

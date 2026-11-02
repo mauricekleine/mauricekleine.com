@@ -47,6 +47,7 @@ import { Route as ComponentsSidebarRouteImport } from './routes/components/sideb
 import { Route as ComponentsSkeletonRouteImport } from './routes/components/skeleton'
 import { Route as ComponentsSliderRouteImport } from './routes/components/slider'
 import { Route as ComponentsSonnerRouteImport } from './routes/components/sonner'
+import { Route as ComponentsSourceLineRouteImport } from './routes/components/source-line'
 import { Route as ComponentsSwitchRouteImport } from './routes/components/switch'
 import { Route as ComponentsTableRouteImport } from './routes/components/table'
 import { Route as ComponentsTabsRouteImport } from './routes/components/tabs'
@@ -67,6 +68,7 @@ import { Route as CompositionsFormSectionRouteImport } from './routes/compositio
 import { Route as CompositionsItemCardsRouteImport } from './routes/compositions/item-cards'
 import { Route as CompositionsLetterRouteImport } from './routes/compositions/letter'
 import { Route as CompositionsListRowsRouteImport } from './routes/compositions/list-rows'
+import { Route as CompositionsMonthGridRouteImport } from './routes/compositions/month-grid'
 import { Route as CompositionsNoticeRouteImport } from './routes/compositions/notice'
 import { Route as CompositionsPageHeaderRouteImport } from './routes/compositions/page-header'
 import { Route as CompositionsQuickAddRouteImport } from './routes/compositions/quick-add'
@@ -275,6 +277,11 @@ const ComponentsSonnerRoute = ComponentsSonnerRouteImport.update({
   path: '/components/sonner',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComponentsSourceLineRoute = ComponentsSourceLineRouteImport.update({
+  id: '/components/source-line',
+  path: '/components/source-line',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComponentsSwitchRoute = ComponentsSwitchRouteImport.update({
   id: '/components/switch',
   path: '/components/switch',
@@ -374,6 +381,11 @@ const CompositionsLetterRoute = CompositionsLetterRouteImport.update({
 const CompositionsListRowsRoute = CompositionsListRowsRouteImport.update({
   id: '/compositions/list-rows',
   path: '/compositions/list-rows',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompositionsMonthGridRoute = CompositionsMonthGridRouteImport.update({
+  id: '/compositions/month-grid',
+  path: '/compositions/month-grid',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompositionsNoticeRoute = CompositionsNoticeRouteImport.update({
@@ -503,6 +515,7 @@ export interface FileRoutesByFullPath {
   '/components/skeleton': typeof ComponentsSkeletonRoute
   '/components/slider': typeof ComponentsSliderRoute
   '/components/sonner': typeof ComponentsSonnerRoute
+  '/components/source-line': typeof ComponentsSourceLineRoute
   '/components/switch': typeof ComponentsSwitchRoute
   '/components/table': typeof ComponentsTableRoute
   '/components/tabs': typeof ComponentsTabsRoute
@@ -523,6 +536,7 @@ export interface FileRoutesByFullPath {
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
+  '/compositions/month-grid': typeof CompositionsMonthGridRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
@@ -580,6 +594,7 @@ export interface FileRoutesByTo {
   '/components/skeleton': typeof ComponentsSkeletonRoute
   '/components/slider': typeof ComponentsSliderRoute
   '/components/sonner': typeof ComponentsSonnerRoute
+  '/components/source-line': typeof ComponentsSourceLineRoute
   '/components/switch': typeof ComponentsSwitchRoute
   '/components/table': typeof ComponentsTableRoute
   '/components/tabs': typeof ComponentsTabsRoute
@@ -600,6 +615,7 @@ export interface FileRoutesByTo {
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
+  '/compositions/month-grid': typeof CompositionsMonthGridRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
@@ -658,6 +674,7 @@ export interface FileRoutesById {
   '/components/skeleton': typeof ComponentsSkeletonRoute
   '/components/slider': typeof ComponentsSliderRoute
   '/components/sonner': typeof ComponentsSonnerRoute
+  '/components/source-line': typeof ComponentsSourceLineRoute
   '/components/switch': typeof ComponentsSwitchRoute
   '/components/table': typeof ComponentsTableRoute
   '/components/tabs': typeof ComponentsTabsRoute
@@ -678,6 +695,7 @@ export interface FileRoutesById {
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
   '/compositions/letter': typeof CompositionsLetterRoute
   '/compositions/list-rows': typeof CompositionsListRowsRoute
+  '/compositions/month-grid': typeof CompositionsMonthGridRoute
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
@@ -737,6 +755,7 @@ export interface FileRouteTypes {
     | '/components/skeleton'
     | '/components/slider'
     | '/components/sonner'
+    | '/components/source-line'
     | '/components/switch'
     | '/components/table'
     | '/components/tabs'
@@ -757,6 +776,7 @@ export interface FileRouteTypes {
     | '/compositions/item-cards'
     | '/compositions/letter'
     | '/compositions/list-rows'
+    | '/compositions/month-grid'
     | '/compositions/notice'
     | '/compositions/page-header'
     | '/compositions/quick-add'
@@ -814,6 +834,7 @@ export interface FileRouteTypes {
     | '/components/skeleton'
     | '/components/slider'
     | '/components/sonner'
+    | '/components/source-line'
     | '/components/switch'
     | '/components/table'
     | '/components/tabs'
@@ -834,6 +855,7 @@ export interface FileRouteTypes {
     | '/compositions/item-cards'
     | '/compositions/letter'
     | '/compositions/list-rows'
+    | '/compositions/month-grid'
     | '/compositions/notice'
     | '/compositions/page-header'
     | '/compositions/quick-add'
@@ -891,6 +913,7 @@ export interface FileRouteTypes {
     | '/components/skeleton'
     | '/components/slider'
     | '/components/sonner'
+    | '/components/source-line'
     | '/components/switch'
     | '/components/table'
     | '/components/tabs'
@@ -911,6 +934,7 @@ export interface FileRouteTypes {
     | '/compositions/item-cards'
     | '/compositions/letter'
     | '/compositions/list-rows'
+    | '/compositions/month-grid'
     | '/compositions/notice'
     | '/compositions/page-header'
     | '/compositions/quick-add'
@@ -969,6 +993,7 @@ export interface RootRouteChildren {
   ComponentsSkeletonRoute: typeof ComponentsSkeletonRoute
   ComponentsSliderRoute: typeof ComponentsSliderRoute
   ComponentsSonnerRoute: typeof ComponentsSonnerRoute
+  ComponentsSourceLineRoute: typeof ComponentsSourceLineRoute
   ComponentsSwitchRoute: typeof ComponentsSwitchRoute
   ComponentsTableRoute: typeof ComponentsTableRoute
   ComponentsTabsRoute: typeof ComponentsTabsRoute
@@ -989,6 +1014,7 @@ export interface RootRouteChildren {
   CompositionsItemCardsRoute: typeof CompositionsItemCardsRoute
   CompositionsLetterRoute: typeof CompositionsLetterRoute
   CompositionsListRowsRoute: typeof CompositionsListRowsRoute
+  CompositionsMonthGridRoute: typeof CompositionsMonthGridRoute
   CompositionsNoticeRoute: typeof CompositionsNoticeRoute
   CompositionsPageHeaderRoute: typeof CompositionsPageHeaderRoute
   CompositionsQuickAddRoute: typeof CompositionsQuickAddRoute
@@ -1276,6 +1302,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsSonnerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/components/source-line': {
+      id: '/components/source-line'
+      path: '/components/source-line'
+      fullPath: '/components/source-line'
+      preLoaderRoute: typeof ComponentsSourceLineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/components/switch': {
       id: '/components/switch'
       path: '/components/switch'
@@ -1414,6 +1447,13 @@ declare module '@tanstack/react-router' {
       path: '/compositions/list-rows'
       fullPath: '/compositions/list-rows'
       preLoaderRoute: typeof CompositionsListRowsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compositions/month-grid': {
+      id: '/compositions/month-grid'
+      path: '/compositions/month-grid'
+      fullPath: '/compositions/month-grid'
+      preLoaderRoute: typeof CompositionsMonthGridRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compositions/notice': {
@@ -1577,6 +1617,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsSkeletonRoute: ComponentsSkeletonRoute,
   ComponentsSliderRoute: ComponentsSliderRoute,
   ComponentsSonnerRoute: ComponentsSonnerRoute,
+  ComponentsSourceLineRoute: ComponentsSourceLineRoute,
   ComponentsSwitchRoute: ComponentsSwitchRoute,
   ComponentsTableRoute: ComponentsTableRoute,
   ComponentsTabsRoute: ComponentsTabsRoute,
@@ -1597,6 +1638,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompositionsItemCardsRoute: CompositionsItemCardsRoute,
   CompositionsLetterRoute: CompositionsLetterRoute,
   CompositionsListRowsRoute: CompositionsListRowsRoute,
+  CompositionsMonthGridRoute: CompositionsMonthGridRoute,
   CompositionsNoticeRoute: CompositionsNoticeRoute,
   CompositionsPageHeaderRoute: CompositionsPageHeaderRoute,
   CompositionsQuickAddRoute: CompositionsQuickAddRoute,
