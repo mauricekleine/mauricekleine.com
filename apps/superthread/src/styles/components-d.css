@@ -18,6 +18,7 @@
     margin-top: 28px;
   }
   .st-pass-prose code,
+  .st-cb-copy code,
   .st-glyphs-name code {
     color: var(--foreground);
     font-family: var(--font-mono);
@@ -49,7 +50,7 @@
   }
   .st-doors {
     display: grid;
-    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   /* day line: the no-events strips stacked */

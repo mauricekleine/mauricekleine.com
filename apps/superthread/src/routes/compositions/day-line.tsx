@@ -119,21 +119,21 @@ function Page() {
       </Section>
       <Section id="phone" title="on a phone">
         <p className="st-cb-copy">
-          on a narrow strip only the next name prints, on one line beside its time. late in the day it ends at its
-          block&rsquo;s right edge. blocks are not targets on a phone, so they print the brief glyph, and the date takes
-          44 px.
+          on a narrow strip one name prints, on one line beside its time: the selected meeting&rsquo;s, or else the next
+          one&rsquo;s. past the middle of the day it ends at its block&rsquo;s right edge. blocks are not targets on a
+          phone, so they print the brief glyph, and the date takes 44 px.
         </p>
         <ModePair
           className="st-cb-stack"
           light={
-            <GroundFrame mode="light" title="day line phone, light" height={260}>
+            <GroundFrame mode="light" title="day line phone, light" height={184}>
               <AppShellPanel>
                 <DayLineKinds />
               </AppShellPanel>
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="day line phone, dark" height={260}>
+            <GroundFrame mode="dark" title="day line phone, dark" height={184}>
               <AppShellPanel>
                 <DayLineKinds />
               </AppShellPanel>

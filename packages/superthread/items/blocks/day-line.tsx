@@ -265,8 +265,8 @@ function DayLineName({ name }: { name: Name }) {
 }
 
 // Each name sits past a spacer as wide as its block's left edge. The spacer gives way first, so a name near the end of
-// the day slides back rather than leaving the strip. On a narrow strip only the next name prints, in one line, and past
-// the middle of the day it ends at its block's right edge.
+// the day slides back rather than leaving the strip. On a narrow strip one name prints, in one line: the selected
+// meeting's, or else the next one's. Past the middle of the day it ends at its block's right edge.
 function Names({ names }: { names: Name[] }) {
   const { crowded, fitted } = fitNames(names);
   return (
