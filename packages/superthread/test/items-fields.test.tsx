@@ -249,6 +249,9 @@ describe("textarea", () => {
       expect(classes).toEqual(expect.arrayContaining(["font-mono", "text-instrument", "[overflow-wrap:anywhere]"]));
       expect(classes).not.toContain("text-ui");
       expect(one(states[0]!, "textarea").classes).not.toContain("font-mono");
+      expect(code({ "aria-invalid": true }).classes).toEqual(
+        expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", "aria-invalid:border-error"]),
+      );
     });
 
     test("a phone keeps its hands off the text, so a key stays what was typed", () => {
@@ -258,15 +261,7 @@ describe("textarea", () => {
       expect(el.getAttribute("autocomplete")).toBe("off");
       expect(el.getAttribute("autocorrect")).toBe("off");
       expect(one(states[0]!, "textarea").el.getAttribute("spellcheck")).toBeNull();
-    });
-
-    test("a caller's own attribute wins", () => {
       expect(code({ autoComplete: "new-password" }).el.getAttribute("autocomplete")).toBe("new-password");
-    });
-
-    test("keeps the focus edge and the error ink of the plain box", () => {
-      const { classes } = code({ "aria-invalid": true });
-      expect(classes).toEqual(expect.arrayContaining([...SELF_EDGE, "caret-(--fx)", "aria-invalid:border-error"]));
     });
   });
 });
