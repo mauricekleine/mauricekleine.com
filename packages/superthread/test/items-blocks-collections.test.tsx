@@ -540,6 +540,23 @@ describe("plain rows", () => {
     expect(one(list(), '[data-slot="plain-row-when"]').classes).toContain(`${PHONE}empty:hidden`);
   });
 
+  test.each([
+    ["an empty string", ""],
+    ["nothing", undefined],
+    ["null", null],
+  ])("a kind of %s prints no dot before a filled when", (_, kind) => {
+    const host = server(
+      <PlainRows>
+        <PlainRow>
+          <PlainRowTitle href="/a">a</PlainRowTitle>
+          <PlainRowKind>{kind}</PlainRowKind>
+          <PlainRowWhen>10:30</PlainRowWhen>
+        </PlainRow>
+      </PlainRows>,
+    );
+    expect(host.querySelector('[data-slot="plain-row-dot"]')).toBeNull();
+  });
+
   test("a list clamps its titles to two lines only when it asks, only on a phone", () => {
     const clamped = list({ clamp: true });
     expect(one(clamped, "ul").el.hasAttribute("data-clamp")).toBe(true);
@@ -551,10 +568,13 @@ describe("plain rows", () => {
         `${PHONE}group-data-[clamp]/plain-rows:whitespace-normal`,
       ]),
     );
-    expect(one(clamped, "li").classes).toEqual(
+  });
+
+  test("a clamped row grows past the phone's 56 px, and a short title never falls below it", () => {
+    expect(one(list({ clamp: true }), "li").classes).toEqual(
       expect.arrayContaining([
         `${PHONE}group-data-[clamp]/plain-rows:h-auto`,
-        `${PHONE}group-data-[clamp]/plain-rows:min-h-11`,
+        `${PHONE}group-data-[clamp]/plain-rows:min-h-(--row)`,
       ]),
     );
   });
@@ -641,6 +661,7 @@ describe("plain rows", () => {
           "relative",
           "z-1",
           `${PHONE}col-span-full`,
+          `${PHONE}justify-self-start`,
           `${PHONE}[&>[data-variant=ghost]:first-child]:-ml-[13px]`,
           "[@media(min-width:601px)]:[&>[data-variant=ghost]:last-child]:-mr-[13px]",
         ]),
@@ -707,7 +728,7 @@ describe("jump line", () => {
 
   test("the name underlines on hover, and the count stays out of it", () => {
     const host = line();
-    const name = one(host, "a > span").classes;
+    const name = one(host, "a > span > span").classes;
     expect(name).toContain("group-hover/jump-line-link:underline");
     expect(one(host, '[data-slot="jump-line-count"]').classes).not.toContain("group-hover/jump-line-link:underline");
   });
@@ -730,6 +751,15 @@ describe("jump line", () => {
     const host = line();
     expect(one(host, "a").classes).toEqual(expect.arrayContaining([`${PHONE}min-h-11`, `${PHONE}min-w-11`]));
     expect(one(host, "ul").classes).toEqual(expect.arrayContaining(["flex-wrap", `${PHONE}gap-x-4`]));
+  });
+
+  test("a name wider than the line wraps inside it, with its figure after its last word", () => {
+    const host = line();
+    expect(one(host, "li").classes).toEqual(expect.arrayContaining(["min-w-0", "max-w-full"]));
+    expect(one(host, "a").classes).not.toContain("whitespace-nowrap");
+    const words = one(host, "a > span").el;
+    expect(words.textContent).toBe("today 10");
+    expect(words.querySelector('[data-slot="jump-line-count"]')).not.toBeNull();
   });
 
   test("takes the app's router link", () => {

@@ -140,7 +140,7 @@ const plainRowsVariants: Record<PlainRowsVariant, string> = {
 
 // A list that reads as words: no rules and no padding, the row a line of its own. Plain is 40 px, nested is 36 px for a
 // list under a quiet head, ruled is 48 px with a rule under each row. Every form is 56 px on a phone. clamp lets a title
-// take two lines on a phone, for a list whose titles lose their meaning when they cut.
+// take two lines on a phone, and its row grows to hold them, for a list whose titles lose their meaning when they cut.
 function PlainRows({
   className,
   variant = "plain",
@@ -176,7 +176,7 @@ function PlainRow({ className, closed, ...props }: React.ComponentProps<"li"> & 
       data-slot="plain-row"
       data-closed={closed || undefined}
       className={cn(
-        "group/plain-row relative flex h-(--row) min-w-0 items-center gap-x-4 px-(--bleed) group-data-[variant=ruled]/plain-rows:border-b group-data-[variant=ruled]/plain-rows:border-border [@media(max-width:600px)]:grid [@media(max-width:600px)]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:content-center [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:has-[[data-slot=plain-row-actions]]:h-auto [@media(max-width:600px)]:has-[[data-slot=plain-row-actions]]:py-1.5 [@media(max-width:600px)]:has-[[data-slot=plain-row-tick]]:pr-[calc(var(--bleed)+2.75rem)] [@media(max-width:600px)]:group-data-[clamp]/plain-rows:h-auto [@media(max-width:600px)]:group-data-[clamp]/plain-rows:min-h-11 [@media(max-width:600px)]:group-data-[clamp]/plain-rows:py-1.5",
+        "group/plain-row relative flex h-(--row) min-w-0 items-center gap-x-4 px-(--bleed) group-data-[variant=ruled]/plain-rows:border-b group-data-[variant=ruled]/plain-rows:border-border [@media(max-width:600px)]:grid [@media(max-width:600px)]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:content-center [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:has-[[data-slot=plain-row-actions]]:h-auto [@media(max-width:600px)]:has-[[data-slot=plain-row-actions]]:py-1.5 [@media(max-width:600px)]:has-[[data-slot=plain-row-tick]]:pr-[calc(var(--bleed)+2.75rem)] [@media(max-width:600px)]:group-data-[clamp]/plain-rows:h-auto [@media(max-width:600px)]:group-data-[clamp]/plain-rows:min-h-(--row) [@media(max-width:600px)]:group-data-[clamp]/plain-rows:py-1.5",
         className,
       )}
       {...props}
@@ -242,9 +242,10 @@ function PlainRowTitle({ className, children, href, render, ...props }: useRende
   );
 }
 
-// What kind of thing the row holds, in an 80 px column that cuts. On a phone it leads the second line, and it prints
-// the dot itself when a filled when follows, so a row writes only the two words.
+// What kind of thing the row holds, in an 80 px column that cuts. On a phone it leads the second line, and when it has
+// words and a filled when follows it prints the dot itself, so a row writes only the two words.
 function PlainRowKind({ className, children, ...props }: React.ComponentProps<"span">) {
+  const filled = Children.toArray(children).some((child) => child !== "");
   return (
     <span
       data-slot="plain-row-kind"
@@ -255,13 +256,15 @@ function PlainRowKind({ className, children, ...props }: React.ComponentProps<"s
       {...props}
     >
       {children}
-      <span
-        aria-hidden="true"
-        data-slot="plain-row-dot"
-        className="mx-1 hidden [@media(max-width:600px)]:[[data-slot=plain-row-kind]:has(+[data-slot=plain-row-when]:not(:empty))_&]:inline"
-      >
-        ·
-      </span>
+      {filled && (
+        <span
+          aria-hidden="true"
+          data-slot="plain-row-dot"
+          className="mx-1 hidden [@media(max-width:600px)]:[[data-slot=plain-row-kind]:has(+[data-slot=plain-row-when]:not(:empty))_&]:inline"
+        >
+          ·
+        </span>
+      )}
     </span>
   );
 }
@@ -282,13 +285,14 @@ function PlainRowWhen({ className, ...props }: React.ComponentProps<"span">) {
 }
 
 // Actions sit at the row's end, above its link, and a trailing ghost button's word ends on the column's edge. On a phone
-// they take their own line, and a leading ghost button's word starts on the title's edge instead.
+// they take their own line and hug their buttons, so the rest of that line stays the link, and a leading ghost button's
+// word starts on the title's edge instead.
 function PlainRowActions({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="plain-row-actions"
       className={cn(
-        "relative z-1 flex shrink-0 items-center gap-1 [@media(max-width:600px)]:col-span-full [@media(max-width:600px)]:mt-1 [@media(max-width:600px)]:gap-2 [@media(max-width:600px)]:[&>[data-variant=ghost]:first-child]:-ml-[13px] [@media(min-width:601px)]:[&>[data-variant=ghost]:last-child]:-mr-[13px]",
+        "relative z-1 flex shrink-0 items-center gap-1 [@media(max-width:600px)]:col-span-full [@media(max-width:600px)]:mt-1 [@media(max-width:600px)]:justify-self-start [@media(max-width:600px)]:gap-2 [@media(max-width:600px)]:[&>[data-variant=ghost]:first-child]:-ml-[13px] [@media(min-width:601px)]:[&>[data-variant=ghost]:last-child]:-mr-[13px]",
         className,
       )}
       {...props}

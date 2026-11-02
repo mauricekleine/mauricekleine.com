@@ -61,7 +61,7 @@ const week = [
   ["today", 3],
   ["this week", 5],
   ["next week", 2],
-  ["this month", 4],
+  ["the worked number, and how each of its bands was drawn", 4],
   ["later", 7],
   ["someday", 12],
   ["done", 31],
@@ -137,16 +137,17 @@ function Page() {
       <Section id="phone" title="on a phone">
         <p className="st-ca-copy">
           at 600 px and below, the line drops its dots and each link holds a 44 px row, so the wrapped lines stay easy
-          to hit. both frames use a 390 px viewport.
+          to hit. a name wider than the line wraps, with its figure after its last word. both frames use a 390 px
+          viewport.
         </p>
         <ModePair
           light={
-            <GroundFrame mode="light" title="jump line phone, light" height={180}>
+            <GroundFrame mode="light" title="jump line phone, light" height={216}>
               <PhoneLine />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="jump line phone, dark" height={180}>
+            <GroundFrame mode="dark" title="jump line phone, dark" height={216}>
               <PhoneLine />
             </GroundFrame>
           }

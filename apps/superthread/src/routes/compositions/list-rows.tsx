@@ -348,12 +348,12 @@ function Page() {
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <GroundFrame mode="light" title="plain rows, light" width={960} height={620}>
+            <GroundFrame mode="light" title="plain rows, light" width={960} height={656}>
               <PlainExample />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="plain rows, dark" width={960} height={620}>
+            <GroundFrame mode="dark" title="plain rows, dark" width={960} height={656}>
               <PlainExample />
             </GroundFrame>
           }
@@ -377,12 +377,12 @@ function Page() {
         </p>
         <ModePair
           light={
-            <GroundFrame mode="light" title="plain rows phone, light" height={730}>
+            <GroundFrame mode="light" title="plain rows phone, light" height={740}>
               <PlainExample clamp />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="plain rows phone, dark" height={730}>
+            <GroundFrame mode="dark" title="plain rows phone, dark" height={740}>
               <PlainExample clamp />
             </GroundFrame>
           }
