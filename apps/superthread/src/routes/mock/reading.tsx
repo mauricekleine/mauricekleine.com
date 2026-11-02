@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
+import { ReaderEnd } from "@/components/superthread/blocks/reader";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import { chapter, contents, quantaNav } from "@/mock/data";
 import { PlateField, ShipMark } from "@/mock/parts";
@@ -73,6 +74,8 @@ function Page() {
                 in key and the house ink.
               </figcaption>
             </figure>
+
+            <ReaderEnd>that&rsquo;s the chapter.</ReaderEnd>
 
             <footer className="mock-notes">
               <h2 id="notes" className="sr-only">

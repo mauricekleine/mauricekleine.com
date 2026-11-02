@@ -192,7 +192,12 @@ describe("reader", () => {
       expect(date?.textContent).toBe("tuesday 3 november");
       expect(written?.textContent).toBe("written 07:00");
       expect(written?.className).toContain("font-mono");
-      expect(written?.className).toContain("shrink-0");
+    });
+
+    test("a head too long for one line wraps, so neither end leaves the column", () => {
+      const { el, classes } = one(brief(), slot("reader-head"));
+      expect(classes).toContain("flex-wrap");
+      for (const end of el.children) expect(end.className).toContain("min-w-0");
     });
 
     test("the head holds no empty end when nothing says when it was written", () => {
@@ -401,7 +406,7 @@ describe("a meeting brief's parts", () => {
 
     test("names, notes and sightings share columns across the rows", () => {
       const { el, classes } = who();
-      expect(classes).toContain("grid-cols-[fit-content(50%)_minmax(0,1fr)_auto]");
+      expect(classes).toContain("grid-cols-[fit-content(40%)_minmax(0,1fr)_fit-content(50%)]");
       for (const person of el.querySelectorAll("li")) {
         expect(person.className).toContain("grid-cols-subgrid");
         expect(person.className).toContain("col-span-full");

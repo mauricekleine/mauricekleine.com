@@ -3218,6 +3218,11 @@
         "section": "components"
       },
       {
+        "name": "The Closing Line Rule",
+        "body": "A reading page ends on one closing line in Erode italic at the lede step, in muted ink: `that's all for today.` It tells the reader the page is finished.",
+        "section": "components"
+      },
+      {
         "name": "The No Guilt Rule",
         "body": "No word says someone is behind: overdue, late and missed print nowhere.",
         "section": "components"

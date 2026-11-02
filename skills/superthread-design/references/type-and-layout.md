@@ -25,7 +25,7 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking and we
 | `summary`    | 15 / 24     | Supreme 400                            | the text under a form title and a page head's meta line |
 | `subtitle`   | 18 / 24     | Supreme 500                            | dialog titles               |
 | `read`       | 19 / 32     | Erode 400 (phone 18 / 30)              | the reading page            |
-| `lede`       | 21 / 33     | Erode 400 (phone 19 / 31)              | ledes                       |
+| `lede`       | 21 / 33     | Erode 400 (phone 19 / 31)              | ledes, and in italic a reading page's closing line |
 | `title`      | 22 / 28     | Unbounded 300, -0.02em                 | card, board and form titles, a section head in a panel |
 | `section`    | 30 / 34     | Unbounded 300, -0.03em                 | a page head's title in a panel, a section head on the stock |
 | `page`       | 34 / 40     | Erode 600 (phone 28 / 34)              | a reading sheet's heading   |

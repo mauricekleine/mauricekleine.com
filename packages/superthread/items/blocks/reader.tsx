@@ -80,13 +80,13 @@ function ReaderHead({
     <p
       data-slot="reader-head"
       className={cn(
-        "flex min-w-0 items-baseline justify-between gap-4 text-instrument leading-7 text-muted-foreground",
+        "flex min-w-0 flex-wrap items-baseline justify-between gap-x-4 text-instrument leading-7 text-muted-foreground",
         className,
       )}
       {...props}
     >
       <span className="min-w-0">{children}</span>
-      {written != null && <span className="shrink-0 font-mono">{written}</span>}
+      {written != null && <span className="min-w-0 font-mono">{written}</span>}
     </p>
   );
 }
@@ -294,13 +294,17 @@ function ReaderBlock({
   );
 }
 
+// In the rail it takes the head's 28 px line, so the two sit level.
 function ReaderBlockTitle({ className, render = <h3 />, ...props }: useRender.ComponentProps<"h3">) {
   const titleId = useTitle();
   return useRender({
     render,
     state: { slot: "reader-block-title" },
     props: mergeProps<"h3">(
-      { id: titleId, className: cn("min-w-0 type-instrument text-muted-foreground", className) },
+      {
+        id: titleId,
+        className: cn("min-w-0 type-instrument text-muted-foreground in-data-[slot=reader-rail]:leading-7", className),
+      },
       props,
     ),
   });
@@ -308,13 +312,13 @@ function ReaderBlockTitle({ className, render = <h3 />, ...props }: useRender.Co
 
 const QUIET = "min-w-0 text-instrument leading-(--text-ui--line-height) text-muted-foreground";
 
-// Who's in the room. Names, notes and sightings share their columns across rows: the names as wide as the longest, to
-// half the block, the notes the room left, the sightings as wide as they need.
+// Who's in the room. Names, notes and sightings share their columns across rows. Names take what they need up to 40
+// percent of the block, sightings up to half, which holds a sighting on one line at any phone width, and notes the rest.
 function ReaderWho({ className, ...props }: React.ComponentProps<"ul">) {
   return (
     <ul
       data-slot="reader-who"
-      className={cn("mt-1 grid min-w-0 grid-cols-[fit-content(50%)_minmax(0,1fr)_auto] gap-x-3", className)}
+      className={cn("mt-1 grid min-w-0 grid-cols-[fit-content(40%)_minmax(0,1fr)_fit-content(50%)] gap-x-3", className)}
       {...props}
     />
   );

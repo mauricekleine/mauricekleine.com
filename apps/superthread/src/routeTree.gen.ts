@@ -70,6 +70,7 @@ import { Route as CompositionsListRowsRouteImport } from './routes/compositions/
 import { Route as CompositionsNoticeRouteImport } from './routes/compositions/notice'
 import { Route as CompositionsPageHeaderRouteImport } from './routes/compositions/page-header'
 import { Route as CompositionsQuickAddRouteImport } from './routes/compositions/quick-add'
+import { Route as CompositionsReaderRouteImport } from './routes/compositions/reader'
 import { Route as CompositionsSearchPaletteRouteImport } from './routes/compositions/search-palette'
 import { Route as CompositionsSectionHeaderRouteImport } from './routes/compositions/section-header'
 import { Route as CompositionsSendBarRouteImport } from './routes/compositions/send-bar'
@@ -390,6 +391,11 @@ const CompositionsQuickAddRoute = CompositionsQuickAddRouteImport.update({
   path: '/compositions/quick-add',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompositionsReaderRoute = CompositionsReaderRouteImport.update({
+  id: '/compositions/reader',
+  path: '/compositions/reader',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompositionsSearchPaletteRoute =
   CompositionsSearchPaletteRouteImport.update({
     id: '/compositions/search-palette',
@@ -520,6 +526,7 @@ export interface FileRoutesByFullPath {
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
+  '/compositions/reader': typeof CompositionsReaderRoute
   '/compositions/search-palette': typeof CompositionsSearchPaletteRoute
   '/compositions/section-header': typeof CompositionsSectionHeaderRoute
   '/compositions/send-bar': typeof CompositionsSendBarRoute
@@ -596,6 +603,7 @@ export interface FileRoutesByTo {
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
+  '/compositions/reader': typeof CompositionsReaderRoute
   '/compositions/search-palette': typeof CompositionsSearchPaletteRoute
   '/compositions/section-header': typeof CompositionsSectionHeaderRoute
   '/compositions/send-bar': typeof CompositionsSendBarRoute
@@ -673,6 +681,7 @@ export interface FileRoutesById {
   '/compositions/notice': typeof CompositionsNoticeRoute
   '/compositions/page-header': typeof CompositionsPageHeaderRoute
   '/compositions/quick-add': typeof CompositionsQuickAddRoute
+  '/compositions/reader': typeof CompositionsReaderRoute
   '/compositions/search-palette': typeof CompositionsSearchPaletteRoute
   '/compositions/section-header': typeof CompositionsSectionHeaderRoute
   '/compositions/send-bar': typeof CompositionsSendBarRoute
@@ -751,6 +760,7 @@ export interface FileRouteTypes {
     | '/compositions/notice'
     | '/compositions/page-header'
     | '/compositions/quick-add'
+    | '/compositions/reader'
     | '/compositions/search-palette'
     | '/compositions/section-header'
     | '/compositions/send-bar'
@@ -827,6 +837,7 @@ export interface FileRouteTypes {
     | '/compositions/notice'
     | '/compositions/page-header'
     | '/compositions/quick-add'
+    | '/compositions/reader'
     | '/compositions/search-palette'
     | '/compositions/section-header'
     | '/compositions/send-bar'
@@ -903,6 +914,7 @@ export interface FileRouteTypes {
     | '/compositions/notice'
     | '/compositions/page-header'
     | '/compositions/quick-add'
+    | '/compositions/reader'
     | '/compositions/search-palette'
     | '/compositions/section-header'
     | '/compositions/send-bar'
@@ -980,6 +992,7 @@ export interface RootRouteChildren {
   CompositionsNoticeRoute: typeof CompositionsNoticeRoute
   CompositionsPageHeaderRoute: typeof CompositionsPageHeaderRoute
   CompositionsQuickAddRoute: typeof CompositionsQuickAddRoute
+  CompositionsReaderRoute: typeof CompositionsReaderRoute
   CompositionsSearchPaletteRoute: typeof CompositionsSearchPaletteRoute
   CompositionsSectionHeaderRoute: typeof CompositionsSectionHeaderRoute
   CompositionsSendBarRoute: typeof CompositionsSendBarRoute
@@ -1424,6 +1437,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompositionsQuickAddRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compositions/reader': {
+      id: '/compositions/reader'
+      path: '/compositions/reader'
+      fullPath: '/compositions/reader'
+      preLoaderRoute: typeof CompositionsReaderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compositions/search-palette': {
       id: '/compositions/search-palette'
       path: '/compositions/search-palette'
@@ -1580,6 +1600,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompositionsNoticeRoute: CompositionsNoticeRoute,
   CompositionsPageHeaderRoute: CompositionsPageHeaderRoute,
   CompositionsQuickAddRoute: CompositionsQuickAddRoute,
+  CompositionsReaderRoute: CompositionsReaderRoute,
   CompositionsSearchPaletteRoute: CompositionsSearchPaletteRoute,
   CompositionsSectionHeaderRoute: CompositionsSectionHeaderRoute,
   CompositionsSendBarRoute: CompositionsSendBarRoute,
