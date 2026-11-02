@@ -218,12 +218,11 @@ function ListRowActions({ className, variant, ...props }: React.ComponentProps<"
 
 type PlainRowsVariant = "plain" | "nested" | "ruled";
 
-// Each form sets the row's height. A ruled list bleeds to the panel's edges, so --bleed repeats the panel's inset.
+// Each form sets the row's height. A ruled list bleeds to the panel's edges, so --bleed reads the panel's inset.
 const plainRowsVariants: Record<PlainRowsVariant, string> = {
   plain: "[--row:var(--spacing-row-plain)]",
   nested: "[--row:var(--spacing-row-nested)]",
-  ruled:
-    "[--row:var(--spacing-row-table)] in-data-[slot=app-shell-panel]:[--bleed:3rem] [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:[--bleed:1rem]",
+  ruled: "[--row:var(--spacing-row-table)] in-data-[slot=app-shell-panel]:[--bleed:var(--spacing-panel-inset)]",
 };
 
 // A list that reads as words: no rules and no padding, the row a line of its own. Plain is 40 px, nested is 36 px for a

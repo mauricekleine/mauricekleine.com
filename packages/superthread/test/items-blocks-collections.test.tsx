@@ -590,13 +590,9 @@ describe("plain rows", () => {
   test("a ruled list rules each row and reaches the panel's edges at both widths", () => {
     const host = list({ variant: "ruled" });
     const panel = one(server(<AppShellPanel />), '[data-slot="app-shell-panel"]').classes;
-    expect(panel).toEqual(expect.arrayContaining(["px-12", `${PHONE}px-4`]));
+    expect(panel).toContain("px-(--spacing-panel-inset)");
     expect(one(host, "ul").classes).toEqual(
-      expect.arrayContaining([
-        "-mx-(--bleed)",
-        "in-data-[slot=app-shell-panel]:[--bleed:3rem]",
-        `${PHONE}in-data-[slot=app-shell-panel]:[--bleed:1rem]`,
-      ]),
+      expect.arrayContaining(["-mx-(--bleed)", "in-data-[slot=app-shell-panel]:[--bleed:var(--spacing-panel-inset)]"]),
     );
     expect(one(host, "li").classes).toEqual(
       expect.arrayContaining([
