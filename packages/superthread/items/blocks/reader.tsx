@@ -53,8 +53,8 @@ function ReaderLead({ className, ...props }: React.ComponentProps<"div">) {
   return <div data-slot="reader-lead" className={cn("col-start-1 row-start-1 min-w-0", className)} {...props} />;
 }
 
-// The margin rail beside the lead. It holds what moves around the writing, such as a month or the page's contents, and
-// sets its width with the reader. Below the fold it takes its place in the source.
+// The margin rail beside the lead. It holds what moves around the writing, such as a month or the page's contents, and a
+// reader without one keeps its whole width. Below the fold the rail takes its place in the source.
 function ReaderRail({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div

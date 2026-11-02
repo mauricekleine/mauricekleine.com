@@ -47,12 +47,12 @@ function Page() {
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <GroundFrame mode="light" title="a brief, light" width={960} height={858}>
+            <GroundFrame mode="light" title="a brief, light" width={960} height={914}>
               <ReaderBrief />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a brief, dark" width={960} height={858}>
+            <GroundFrame mode="dark" title="a brief, dark" width={960} height={914}>
               <ReaderBrief />
             </GroundFrame>
           }
@@ -77,12 +77,12 @@ function Page() {
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <GroundFrame mode="light" title="a meeting brief, light" width={960} height={610}>
+            <GroundFrame mode="light" title="a meeting brief, light" width={960} height={666}>
               <ReaderMeeting />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a meeting brief, dark" width={960} height={610}>
+            <GroundFrame mode="dark" title="a meeting brief, dark" width={960} height={666}>
               <ReaderMeeting />
             </GroundFrame>
           }
@@ -96,12 +96,12 @@ function Page() {
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <GroundFrame mode="light" title="after the meeting, light" width={960} height={498}>
+            <GroundFrame mode="light" title="after the meeting, light" width={960} height={554}>
               <ReaderMeetingAfter />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="after the meeting, dark" width={960} height={498}>
+            <GroundFrame mode="dark" title="after the meeting, dark" width={960} height={554}>
               <ReaderMeetingAfter />
             </GroundFrame>
           }
@@ -127,24 +127,24 @@ function Page() {
         </p>
         <ModePair
           light={
-            <GroundFrame mode="light" title="a brief on a phone, light" height={968}>
+            <GroundFrame mode="light" title="a brief on a phone, light" height={992}>
               <ReaderBrief />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a brief on a phone, dark" height={968}>
+            <GroundFrame mode="dark" title="a brief on a phone, dark" height={992}>
               <ReaderBrief />
             </GroundFrame>
           }
         />
         <ModePair
           light={
-            <GroundFrame mode="light" title="a meeting brief on a phone, light" height={868}>
+            <GroundFrame mode="light" title="a meeting brief on a phone, light" height={892}>
               <ReaderMeeting />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a meeting brief on a phone, dark" height={868}>
+            <GroundFrame mode="dark" title="a meeting brief on a phone, dark" height={892}>
               <ReaderMeeting />
             </GroundFrame>
           }
