@@ -25,10 +25,13 @@ import {
   ListRow,
   ListRowActions,
   ListRowAside,
+  ListRowKind,
   ListRowLead,
   ListRowMeta,
   ListRows,
+  ListRowTime,
   ListRowTitle,
+  ListRowWhen,
 } from "@/components/superthread/blocks/list-rows";
 import { Button } from "@/components/superthread/ui/button";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
@@ -349,6 +352,118 @@ describe("list rows", () => {
     const rendered = elements(list());
     expect(detailsUsed(rendered, "list-rows")).toEqual([]);
     expect(forbidden(rendered)).toEqual([]);
+  });
+});
+
+describe("a day's rows", () => {
+  const PHONE = "[@media(max-width:600px)]:";
+  const day = () =>
+    server(
+      <ListRows aria-label="today">
+        <ListRow variant="day">
+          <ListRowTime dateTime="2026-11-03T11:00:00+01:00">11:00</ListRowTime>
+          <ListRowTitle>renewal call</ListRowTitle>
+          <ListRowKind href="/briefs/12" aria-label="brief for renewal call">
+            brief
+          </ListRowKind>
+          <ListRowWhen>
+            <Button size="sm" variant="outline">
+              join
+            </Button>
+          </ListRowWhen>
+        </ListRow>
+        <ListRow variant="day">
+          <ListRowTime dateTime="2026-11-03T14:00:00+01:00">14:00</ListRowTime>
+          <ListRowTitle href="/events/14">1:1 with sam</ListRowTitle>
+          <ListRowKind>tentative</ListRowKind>
+          <ListRowWhen>
+            <time dateTime="PT30M">30 min</time>
+          </ListRowWhen>
+        </ListRow>
+      </ListRows>,
+    );
+  const row = (host: ParentNode) => one(host, '[data-slot="list-row"]');
+
+  test("each row is one 44 px line with no rule of its own, and the list drops its first rule", () => {
+    const host = day();
+    expect(one(host, "ul").classes).toContain("has-[>[data-variant=day]]:border-t-0");
+    expect(row(host).el.getAttribute("data-variant")).toBe("day");
+    expect(row(host).classes).toEqual(expect.arrayContaining(["h-11", "items-center"]));
+    for (const cls of ["border-b", "px-4", "py-3", "min-h-(--spacing-row-board)"])
+      expect(row(host).classes).not.toContain(cls);
+  });
+
+  test("holds its columns across rows: the mock's widths on a wide screen and on a phone", () => {
+    const { classes } = row(day());
+    expect(classes).toEqual(
+      expect.arrayContaining([
+        "grid-cols-[48px_minmax(0,1fr)_80px_128px]",
+        "gap-x-4",
+        `${PHONE}grid-cols-[44px_minmax(0,1fr)_auto_48px]`,
+        `${PHONE}gap-x-2`,
+      ]),
+    );
+  });
+
+  test("a row that isn't a day row keeps its rule, its padding and no variant", () => {
+    const host = server(
+      <ListRows>
+        <ListRow>
+          <ListRowTitle>plain</ListRowTitle>
+        </ListRow>
+      </ListRows>,
+    );
+    expect(row(host).el.hasAttribute("data-variant")).toBe(false);
+    expect(row(host).classes).toEqual(expect.arrayContaining(["border-b", "px-4", "py-3"]));
+  });
+
+  test("the time is a real time in the mono face, set past the base layer's inherit", () => {
+    const time = one(day(), 'time[data-slot="list-row-time"]');
+    expect(time.el.getAttribute("datetime")).toBe("2026-11-03T11:00:00+01:00");
+    expect(time.classes).toEqual(expect.arrayContaining(["font-mono", "type-instrument", "text-muted-foreground"]));
+  });
+
+  test("the title holds one line in the regular weight, and a linked one fills the row on a phone", () => {
+    const host = day();
+    const title = one(host, '[data-slot="list-row-title"]');
+    expect(title.classes).toEqual(
+      expect.arrayContaining([
+        "group-data-[variant=day]/list-row:truncate",
+        "group-data-[variant=day]/list-row:font-normal",
+      ]),
+    );
+    expect(one(host, 'a[data-slot="list-row-title"]').classes).toContain(
+      `${PHONE}group-data-[variant=day]/list-row:[&:is(a)]:leading-11`,
+    );
+  });
+
+  test("a kind is a muted word, or a foreground link with a phone hit area once it leads somewhere", () => {
+    const host = day();
+    const word = one(host, 'span[data-slot="list-row-kind"]');
+    expect(word.el.textContent).toBe("tentative");
+    expect(word.classes).toContain("text-muted-foreground");
+    const link = one(host, 'a[data-slot="list-row-kind"]');
+    expect(link.el.getAttribute("href")).toBe("/briefs/12");
+    expect(link.el.getAttribute("aria-label")).toBe("brief for renewal call");
+    expect(link.classes).toEqual(
+      expect.arrayContaining(["[&:is(a)]:text-foreground", "[&:is(a)]:hover:underline", `${PHONE}[&:is(a)]:hit-area`]),
+    );
+    expect(link.classes).toEqual(expect.arrayContaining(CONTROL_RING));
+    expect(link.classes).not.toContain("underline");
+  });
+
+  test("the row ends in a time or one small control, at the column's right edge", () => {
+    const host = day();
+    const [control, time] = host.querySelectorAll('[data-slot="list-row-when"]');
+    expect(control?.querySelector("button")?.textContent).toBe("join");
+    expect(time?.querySelector("time")?.textContent).toBe("30 min");
+    expect(one(host, '[data-slot="list-row-when"]').classes).toEqual(
+      expect.arrayContaining(["justify-self-end", "[&>time]:font-mono", `${PHONE}[&>[data-slot=button]]:w-12`]),
+    );
+  });
+
+  test("holds the rules every skin keeps", () => {
+    expect(forbidden(elements(day()))).toEqual([]);
   });
 });
 

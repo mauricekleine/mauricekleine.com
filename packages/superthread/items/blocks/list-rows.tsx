@@ -9,22 +9,35 @@ function ListRows({ className, ...props }: React.ComponentProps<"ul">) {
     <ul
       data-mk="list-rows"
       data-slot="list-rows"
-      className={cn("min-w-0 list-none border-t border-border", className)}
+      className={cn("min-w-0 list-none border-t border-border has-[>[data-variant=day]]:border-t-0", className)}
       {...props}
     />
   );
 }
 
+// A day row reads across one 44 px line with no rule, so a day's plain list looks like nothing to work through: a time,
+// the title, its kind and what ends the row. The columns hold across rows, and a row with no kind leaves its column open.
+const DAY_ROW =
+  "group/list-row grid h-11 min-w-0 grid-cols-[48px_minmax(0,1fr)_80px_128px] items-center gap-x-4 type-ui [grid-template-areas:'time_title_kind_when'] [@media(max-width:600px)]:grid-cols-[44px_minmax(0,1fr)_auto_48px] [@media(max-width:600px)]:gap-x-2";
+
 // The optional lead, title and time share a line. On phones the time moves below the title, before the meta line. A
 // closed row stays in the list with its title muted and struck through.
-function ListRow({ className, closed, ...props }: React.ComponentProps<"li"> & { closed?: boolean }) {
+function ListRow({
+  className,
+  closed,
+  variant,
+  ...props
+}: React.ComponentProps<"li"> & { closed?: boolean; variant?: "day" }) {
   return (
     <li
       data-mk="list-rows"
       data-slot="list-row"
       data-closed={closed || undefined}
+      data-variant={variant}
       className={cn(
-        "group/list-row grid min-h-(--spacing-row-board) min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 border-b border-border px-4 py-3 [grid-template-areas:'title_aside'_'meta_meta'_'actions_actions'] has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)_auto] has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title_aside'_'lead_meta_meta'_'._actions_actions'] [@media(max-width:600px)]:grid-cols-[minmax(0,1fr)] [@media(max-width:600px)]:[grid-template-areas:'title'_'aside'_'meta'_'actions'] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title'_'lead_aside'_'lead_meta'_'._actions']",
+        variant === "day"
+          ? DAY_ROW
+          : "group/list-row grid min-h-(--spacing-row-board) min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 border-b border-border px-4 py-3 [grid-template-areas:'title_aside'_'meta_meta'_'actions_actions'] has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)_auto] has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title_aside'_'lead_meta_meta'_'._actions_actions'] [@media(max-width:600px)]:grid-cols-[minmax(0,1fr)] [@media(max-width:600px)]:[grid-template-areas:'title'_'aside'_'meta'_'actions'] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:grid-cols-[auto_minmax(0,1fr)] [@media(max-width:600px)]:has-[[data-slot=list-row-lead]]:[grid-template-areas:'lead_title'_'lead_aside'_'lead_meta'_'._actions']",
         className,
       )}
       {...props}
@@ -45,7 +58,8 @@ function ListRowLead({ className, ...props }: React.ComponentProps<"div">) {
 
 // The title is plain text until it gets an href or the app's router link through render. Either way it prints in
 // foreground, and a linked title underlines on hover and takes the hit area on a phone. A closed row's title keeps its
-// strike under the pointer.
+// strike under the pointer. In a day row it holds one line in the regular weight, and a link fills the row's 44 px on a
+// phone through its line height, because truncating clips a hit area.
 function ListRowTitle({ className, href, render, ...props }: useRender.ComponentProps<"a">) {
   return useRender({
     defaultTagName: "span",
@@ -55,13 +69,62 @@ function ListRowTitle({ className, href, render, ...props }: useRender.Component
       {
         href,
         className: cn(
-          "min-w-0 text-ui font-medium text-foreground [grid-area:title] [overflow-wrap:anywhere] decoration-1 underline-offset-4 [&:is(a)]:hover:underline [@media(max-width:600px)]:[&:is(a)]:relative [@media(max-width:600px)]:[&:is(a)]:hit-area group-data-[closed]/list-row:text-muted-foreground group-data-[closed]/list-row:line-through group-data-[closed]/list-row:hover:line-through focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          "min-w-0 text-ui font-medium text-foreground [grid-area:title] [overflow-wrap:anywhere] decoration-1 underline-offset-4 [&:is(a)]:hover:underline [@media(max-width:600px)]:[&:is(a)]:relative [@media(max-width:600px)]:[&:is(a)]:hit-area group-data-[closed]/list-row:text-muted-foreground group-data-[closed]/list-row:line-through group-data-[closed]/list-row:hover:line-through group-data-[variant=day]/list-row:truncate group-data-[variant=day]/list-row:font-normal [@media(max-width:600px)]:group-data-[variant=day]/list-row:[&:is(a)]:leading-11 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
           className,
         ),
       },
       props,
     ),
   });
+}
+
+// A day row's time, in its own column.
+function ListRowTime({ className, ...props }: React.ComponentProps<"time">) {
+  return (
+    <time
+      data-slot="list-row-time"
+      className={cn(
+        "min-w-0 font-mono type-instrument whitespace-nowrap text-muted-foreground tabular-nums [grid-area:time]",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+// What a day row is, as a muted word, or as a link in foreground once it leads somewhere: `brief`. The link underlines
+// on hover and takes the hit area on a phone.
+function ListRowKind({ className, href, render, ...props }: useRender.ComponentProps<"a">) {
+  return useRender({
+    defaultTagName: "span",
+    render: render ?? (href !== undefined ? <a /> : undefined),
+    state: { slot: "list-row-kind" },
+    props: mergeProps<"a">(
+      {
+        href,
+        className: cn(
+          "min-w-0 truncate type-instrument text-muted-foreground [grid-area:kind] decoration-1 underline-offset-4 [&:is(a)]:type-ui [&:is(a)]:text-foreground [&:is(a)]:hover:underline [@media(max-width:600px)]:justify-self-end [@media(max-width:600px)]:[&:is(a)]:relative [@media(max-width:600px)]:[&:is(a)]:overflow-visible [@media(max-width:600px)]:[&:is(a)]:hit-area focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          className,
+        ),
+      },
+      props,
+    ),
+  });
+}
+
+// What ends a day row, at its right edge: a time, or one small control. The column keeps its width on a phone, so a
+// small button there drops its inline padding and fills it, and every row's end lines up.
+function ListRowWhen({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="list-row-when"
+      className={cn(
+        "min-w-0 justify-self-end text-right type-instrument whitespace-nowrap text-muted-foreground [grid-area:when] [&>time]:font-mono [&>time]:tabular-nums [@media(max-width:600px)]:[&>[data-slot=button]]:w-12 [@media(max-width:600px)]:[&>[data-slot=button]]:px-0",
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
 // A time, a count or a small status badge sits at the end on wide rows. On a phone it wraps below the title, flush with
@@ -128,4 +191,15 @@ function ListRowActions({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-export { ListRows, ListRow, ListRowLead, ListRowTitle, ListRowAside, ListRowMeta, ListRowActions };
+export {
+  ListRows,
+  ListRow,
+  ListRowLead,
+  ListRowTitle,
+  ListRowTime,
+  ListRowKind,
+  ListRowWhen,
+  ListRowAside,
+  ListRowMeta,
+  ListRowActions,
+};

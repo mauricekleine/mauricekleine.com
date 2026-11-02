@@ -9,6 +9,9 @@ import {
   ListRowAside,
   ListRowMeta,
   ListRowActions,
+  ListRowKind,
+  ListRowTime,
+  ListRowWhen,
 } from "@/components/superthread/blocks/list-rows";
 import { Checkbox } from "@/components/superthread/ui/checkbox";
 import { Badge } from "@/components/superthread/ui/badge";
@@ -30,6 +33,7 @@ export const Route = createFileRoute("/compositions/list-rows")({
       { id: "example", title: "example" },
       { id: "states", title: "title states" },
       { id: "phone", title: "on a phone" },
+      { id: "day", title: "a day's rows" },
     ],
   },
   component: Page,
@@ -79,6 +83,43 @@ function RowsExample() {
           <span>chapter 05</span>
           <time dateTime="2026-10-25T08:12:00Z">08:12</time>
         </ListRowMeta>
+      </ListRow>
+    </ListRows>
+  );
+}
+
+// One day's meetings, read across: a time, the title, what it is and what ends the row.
+function DayRowsExample() {
+  return (
+    <ListRows aria-label="tuesday's meetings">
+      <ListRow variant="day">
+        <ListRowTime dateTime="2026-11-03T09:30:00+01:00">09:30</ListRowTime>
+        <ListRowTitle>team standup</ListRowTitle>
+        <ListRowWhen>
+          <Button size="sm" variant="outline" aria-label="join team standup">
+            join
+          </Button>
+        </ListRowWhen>
+      </ListRow>
+      <ListRow variant="day">
+        <ListRowTime dateTime="2026-11-03T11:00:00+01:00">11:00</ListRowTime>
+        <ListRowTitle>renewal call</ListRowTitle>
+        <ListRowKind href="#day" aria-label="brief for renewal call">
+          brief
+        </ListRowKind>
+        <ListRowWhen>
+          <Button size="sm" variant="outline" aria-label="join renewal call">
+            join
+          </Button>
+        </ListRowWhen>
+      </ListRow>
+      <ListRow variant="day">
+        <ListRowTime dateTime="2026-11-03T14:00:00+01:00">14:00</ListRowTime>
+        <ListRowTitle>a meeting whose title runs on past the end of its one line, as long titles do</ListRowTitle>
+        <ListRowKind>tentative</ListRowKind>
+        <ListRowWhen>
+          <time dateTime="PT45M">45 min</time>
+        </ListRowWhen>
       </ListRow>
     </ListRows>
   );
@@ -201,6 +242,34 @@ function Page() {
           dark={
             <PhoneFrame mode="dark">
               <RowsExample />
+            </PhoneFrame>
+          }
+        />
+      </Section>
+      <Section id="day" title="a day's rows">
+        <p className="st-cb-copy">
+          <code>variant=&quot;day&quot;</code> sets a row on one 44 px line with no rule: <code>ListRowTime</code>, the
+          title, <code>ListRowKind</code> and <code>ListRowWhen</code>. the columns hold across rows, so a row with no
+          kind leaves its column open. a kind is a muted word until it gets an href, and then it prints as a link. what
+          ends the row is a time or one small control. a long title truncates.
+        </p>
+        <ModePair className="st-cb-stack">
+          <DayRowsExample />
+        </ModePair>
+        <p className="st-cb-copy">
+          on a phone the time column is 44 px and the end column 48 px. each row stays 44 px, and a small button fills
+          its column.
+        </p>
+        <ModePair
+          className="st-cb-stack"
+          light={
+            <PhoneFrame mode="light">
+              <DayRowsExample />
+            </PhoneFrame>
+          }
+          dark={
+            <PhoneFrame mode="dark">
+              <DayRowsExample />
             </PhoneFrame>
           }
         />

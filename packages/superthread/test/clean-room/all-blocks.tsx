@@ -93,6 +93,9 @@ import {
   ListRowAside,
   ListRowMeta,
   ListRowActions,
+  ListRowKind,
+  ListRowTime,
+  ListRowWhen,
 } from "@/components/superthread/blocks/list-rows";
 import {
   ItemCards,
@@ -247,6 +250,18 @@ function Sink({ mode }: { mode: Mode }) {
           </ListRow>
           <ListRow>
             <ListRowTitle>plain task</ListRowTitle>
+          </ListRow>
+        </ListRows>
+        <ListRows aria-label="today">
+          <ListRow variant="day">
+            <ListRowTime dateTime="2026-11-03T11:00:00Z">11:00</ListRowTime>
+            <ListRowTitle>renewal call</ListRowTitle>
+            <ListRowKind href="#brief">brief</ListRowKind>
+            <ListRowWhen>
+              <Button variant="outline" size="sm">
+                join
+              </Button>
+            </ListRowWhen>
           </ListRow>
         </ListRows>
       </Part>
