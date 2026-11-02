@@ -50,6 +50,10 @@ const NAME_FLOOR = 12;
 const percent = (value: number) => Math.round(value * 100) / 100;
 const dayNumber = (date: string) => Date.parse(`${date}T00:00:00Z`) / DAY_MS;
 
+// Where a moment falls on the timeline. The wall clock places a block on the strip, but it runs back in the hour a clock
+// repeats, so only this says which of two moments came first.
+const instant = (moment: Moment) => new Date(moment).getTime();
+
 // Wall-clock minutes from the start of the day, past 1440 or below 0 for a moment on another day.
 function minutesInto(day: string, at: Moment, options: TimeOptions) {
   const [hours = 0, minutes = 0] = clockWords(at, options).split(":").map(Number);
@@ -60,6 +64,8 @@ type Placed = {
   event: DayLineEvent;
   start: number;
   end: number;
+  startsAt: number;
+  endsAt: number;
   lane: number;
   lanes: number;
   group: Placed[];
@@ -94,9 +100,11 @@ function sortIntoLanes(group: Placed[]) {
 }
 
 function layOut(day: string, events: DayLineEvent[], now: Moment | null | undefined, options: TimeOptions) {
-  // Now on this day's clock: past 1440 once the day has gone by and below 0 while it's still to come, so a whole day
-  // reads as spent or unspent, and a meeting that runs past midnight stays underway. The mark prints only on its own day.
-  const clock = now === null || now === undefined || isCalendarDate(now) ? null : minutesInto(day, now, options);
+  // What has gone by reads from the moment itself, so a whole day reads as spent or unspent, a meeting that runs past
+  // midnight stays underway and the repeated hour stays in order. The mark prints only on its own day, by the clock.
+  const moment = now === null || now === undefined || isCalendarDate(now) ? null : now;
+  const current = moment === null ? null : instant(moment);
+  const clock = moment === null ? null : minutesInto(day, moment, options);
   const at = clock !== null && clock >= 0 && clock < MINUTES_IN_DAY ? clock : null;
 
   const placed = events
@@ -107,16 +115,20 @@ function layOut(day: string, events: DayLineEvent[], now: Moment | null | undefi
       if (from >= MINUTES_IN_DAY || (until <= 0 && from !== 0)) return [];
       const start = Math.max(from, 0);
       const end = Math.max(start, Math.min(until, MINUTES_IN_DAY));
+      const startsAt = instant(event.start);
+      const endsAt = instant(event.end);
       return [
         {
           event,
           start,
           end,
+          startsAt,
+          endsAt,
           lane: 0,
           lanes: 1,
           group: [],
-          past: clock !== null && until <= clock,
-          started: clock !== null && from <= clock && clock < until,
+          past: current !== null && endsAt <= current,
+          started: current !== null && startsAt <= current && current < endsAt,
         },
       ];
     })
@@ -145,10 +157,11 @@ function layOut(day: string, events: DayLineEvent[], now: Moment | null | undefi
   const to = Math.max(SCALE_END, Math.ceil(Math.max(...placed.map((item) => item.end)) / 60) * 60);
   const position = (minutes: number) => percent(((minutes - from) / (to - from)) * 100);
 
+  const upcoming = placed.filter((item) => current === null || item.startsAt > current);
   const nextItem =
     placed.find((item) => item.event.selected) ??
     placed.find((item) => item.started) ??
-    placed.find((item) => clock === null || item.start > clock);
+    upcoming.sort((a, b) => a.startsAt - b.startsAt)[0];
 
   const names = placed.flatMap((item): Name[] => {
     if (item.group[0] !== item) return [];
@@ -207,9 +220,9 @@ function fitNames(names: Name[]) {
   return { crowded, fitted };
 }
 
-function blockWords({ event, past, started, group, start, end }: Placed, options: TimeOptions) {
+function blockWords({ event, past, started, group, startsAt, endsAt }: Placed, options: TimeOptions) {
   const until = clockWords(event.end, options);
-  const overlaps = group.filter((other) => other.event !== event && other.start < end && start < other.end);
+  const overlaps = group.filter((other) => other.event !== event && other.startsAt < endsAt && startsAt < other.endsAt);
   return [
     event.title,
     started ? `happening now, until ${until}` : `${clockWords(event.start, options)} to ${until}`,

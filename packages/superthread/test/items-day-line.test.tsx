@@ -342,6 +342,51 @@ describe("overlaps", () => {
   });
 });
 
+// New York's clock runs from 01:00 to 02:00 twice on this day: first at -04:00, then at -05:00.
+describe("the hour a clock repeats", () => {
+  const first = (time: string) => `2026-11-01T${time}:00-04:00`;
+  const second = (time: string) => `2026-11-01T${time}:00-05:00`;
+  const during = (title: string, start: string, end: string, more?: Partial<DayLineEvent>): DayLineEvent => ({
+    id: title,
+    title,
+    start,
+    end,
+    ...more,
+  });
+  const repeated = (events: DayLineEvent[], now?: string) =>
+    strip(events, { day: "2026-11-01", timeZone: "America/New_York", now });
+
+  test("a meeting on the second pass is still to come, though its clock reads earlier than now", () => {
+    const later = during("later", second("01:05"), second("01:15"), { brief: true });
+    const host = repeated([later], first("01:20"));
+    expect(label(host, "later")).toBe("later, 01:05 to 01:15, brief ready");
+    expect(block(host, "later").getAttribute("data-ink")).toBe("rest");
+    expect(block(host, "later").textContent).toContain("brief");
+    expect(nextName(host)).toContain("later");
+  });
+
+  test("a meeting on the first pass is over, though now's clock reads inside it", () => {
+    const host = repeated([during("gone", first("01:05"), first("01:15"))], second("01:10"));
+    expect(label(host, "gone")).toBe("gone, 01:05 to 01:15, over");
+    expect(block(host, "gone").getAttribute("data-ink")).toBe("past");
+  });
+
+  test("the next meeting is the sooner moment, not the earlier clock", () => {
+    const events = [
+      during("second pass", second("01:10"), second("01:20")),
+      during("first pass", first("01:30"), first("01:40")),
+    ];
+    expect(nextName(repeated(events, first("01:00")))).toContain("first pass");
+  });
+
+  test("two meetings that share a clock an hour apart don't say they overlap", () => {
+    const events = [during("one", first("01:05"), first("01:15")), during("two", second("01:05"), second("01:15"))];
+    const host = repeated(events);
+    expect(label(host, "one")).toBe("one, 01:05 to 01:15");
+    expect(label(host, "two")).toBe("two, 01:05 to 01:15");
+  });
+});
+
 describe("the names", () => {
   test("are for the eye: a screen reader takes the blocks, and a name's link stays out of the tab order", () => {
     const host = strip([{ ...standup, href: "/meetings/1" }, renewal]);
