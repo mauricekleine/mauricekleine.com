@@ -13,6 +13,7 @@ import {
 } from "@/components/superthread/blocks/app-shell";
 import { Facts, Fact, FactLabel, FactValue } from "@/components/superthread/blocks/facts";
 import { QuickAddNav } from "@/components/superthread/blocks/quick-add";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/superthread/ui/tabs";
 import { Serves, ViewportFrame } from "@/examples/compositions-a";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -146,6 +147,58 @@ function FootedWorkspace() {
           </AppShellPanelFoot>
         </AppShellPanel>
         <AppShellPageFoot>{needsYou}</AppShellPageFoot>
+      </AppShellGround>
+    </AppShell>
+  );
+}
+
+// A phone's page taller than its window, with tabbed sections down it, so keyboard focus scrolls the page as it moves.
+function LongWorkspace() {
+  const days = [
+    { title: "today", runs: ["run-024 type-check", "run-025 unit tests", "run-026 screenshots"] },
+    { title: "this week", runs: ["run-018 select listbox", "run-019 toast place", "run-021 field type"] },
+  ];
+  return (
+    <AppShell
+      current="orbit"
+      markBase="/marks"
+      hrefs={hrefs}
+      skipLink={false}
+      sidebar={
+        <AppShellNav ship="orbit">
+          <AppShellNavItem render={<button type="button" />} isActive number={1}>
+            runs
+          </AppShellNavItem>
+          <AppShellNavItem render={<button type="button" />} number={2}>
+            agents
+          </AppShellNavItem>
+        </AppShellNav>
+      }
+    >
+      <AppShellGround render={<div />}>
+        <AppShellPanel>
+          <h1 className="type-section text-first">runs</h1>
+          {days.map((day) => (
+            <section key={day.title} aria-label={day.title} className="mt-8">
+              <Tabs defaultValue="queued">
+                <TabsList>
+                  <TabsTrigger value="queued">queued</TabsTrigger>
+                  <TabsTrigger value="done">done</TabsTrigger>
+                </TabsList>
+                <TabsContent value="queued">
+                  <ul className="st-ca-panel-copy">
+                    {day.runs.map((run) => (
+                      <li key={run}>{run}</li>
+                    ))}
+                  </ul>
+                </TabsContent>
+                <TabsContent value="done">
+                  <p className="st-ca-panel-copy">nothing finished {day.title}.</p>
+                </TabsContent>
+              </Tabs>
+            </section>
+          ))}
+        </AppShellPanel>
       </AppShellGround>
     </AppShell>
   );
@@ -338,6 +391,23 @@ function Page() {
           dark={
             <ViewportFrame mode="dark" title="orbit phone, dark" height={540}>
               <Workspace />
+            </ViewportFrame>
+          }
+        />
+        <p className="st-ca-copy">
+          a ship&rsquo;s window scrolls what focus brings into view 16 px clear of its top and bottom, so a ring never
+          meets the edge. the frame never covers the panel, so no nav&rsquo;s height adds to it. click into a frame and
+          press tab: each tab that scrolls in stops short of the edge with its ring whole.
+        </p>
+        <ModePair
+          light={
+            <ViewportFrame mode="light" title="orbit phone with tabs, light" height={320}>
+              <LongWorkspace />
+            </ViewportFrame>
+          }
+          dark={
+            <ViewportFrame mode="dark" title="orbit phone with tabs, dark" height={320}>
+              <LongWorkspace />
             </ViewportFrame>
           }
         />

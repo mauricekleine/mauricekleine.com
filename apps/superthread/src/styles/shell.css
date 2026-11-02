@@ -3,13 +3,12 @@
    (1279, 1099, 900 and 600). In the components layer, so an item's own utilities still win inside a block. */
 
 @layer components {
-  html {
-    scroll-padding-top: 77px;
-  }
-  /* a rail specimen on a docs page is no ship: the window stays on stock */
+  /* a rail specimen on a docs page is no ship: the window stays on stock, and its scroll padding clears the sticky
+     masthead. a mock page and a frame keep a ship's own */
   html:has(.st-body) {
     background-color: var(--background);
     scrollbar-color: var(--muted-foreground) transparent;
+    scroll-padding-block: 77px 0;
   }
 
   .st-skip {
@@ -700,7 +699,7 @@
 
   /* the nav leaves the page for the masthead's menu; the masthead becomes the top bar with the search below it */
   @media (max-width: 900px) {
-    html {
+    html:has(.st-body) {
       scroll-padding-top: 0;
     }
     .st-mast {

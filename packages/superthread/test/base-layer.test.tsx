@@ -3,7 +3,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
+import { AppShell, AppShellPanel } from "@/components/superthread/blocks/app-shell";
 import { ListRow, ListRowAside, ListRowMeta, ListRows, ListRowTitle } from "@/components/superthread/blocks/list-rows";
 import { Section, SectionAction, SectionHeader, SectionTitle } from "@/components/superthread/blocks/section-header";
 import { child, parse, type Rule, value } from "./css.ts";
@@ -19,6 +19,29 @@ const fragment = (html: string) => {
 
 test("a tap prints no grey flash of its own, so a control's press is the only feedback", () => {
   expect(child(base, "body").decls).toContainEqual(["-webkit-tap-highlight-color", "transparent"]);
+});
+
+describe("a ship's window", () => {
+  const padded = setting("scroll-padding-block");
+
+  test("scrolls what focus brings into view 16 px clear of its top and bottom, so a ring never meets the edge", () => {
+    expect(padded.map((rule) => value(rule, "scroll-padding-block"))).toEqual(["16px"]);
+  });
+
+  // happy-dom caches an element's :has() answer, so the test reads the rule's key and finds it in the markup.
+  test("is a page that holds the fleet rail; a page with no rail scrolls as the browser does", () => {
+    const key = /^html:has\((.+)\)$/.exec(padded[0]?.sel ?? "")?.[1];
+    expect(key).toBeDefined();
+    const ship = server(
+      <AppShell current="orbit">
+        <AppShellPanel>
+          <p>today</p>
+        </AppShellPanel>
+      </AppShell>,
+    );
+    expect(ship.querySelector(key!)).not.toBeNull();
+    expect(fragment("<main><p>today</p></main>").querySelector(key!)).toBeNull();
+  });
 });
 
 describe("the focus ring", () => {

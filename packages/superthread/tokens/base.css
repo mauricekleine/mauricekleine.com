@@ -4,10 +4,14 @@
     scrollbar-color: var(--muted-foreground) transparent;
   }
 
-  /* a ship's window keeps the deep ground past the page's edges; a page with no rail stays on stock */
+  /* a ship's window keeps the deep ground past the page's edges; a page with no rail stays on stock. it scrolls an
+     element that focus or a link brings into view 16 px clear of its top and bottom, so a ring never meets the edge.
+     no nav's height adds to that: above 900 px the frame sticks beside the panel, and at 900 px and below it scrolls
+     with the page, so it never covers the panel */
   html:has([data-mk="fleet-rail"]) {
     background-color: var(--ground);
     scrollbar-color: var(--sidebar-border) var(--ground);
+    scroll-padding-block: 16px;
   }
 
   body {
