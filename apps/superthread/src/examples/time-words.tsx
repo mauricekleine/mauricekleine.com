@@ -58,10 +58,10 @@ export function ClockWordsExample() {
   return (
     <Readout
       rows={[
-        ["clock 2026-11-03T08:30:00Z", clockWords("2026-11-03T08:30:00Z", reader)],
-        ["clock 2026-11-02", clockWords("2026-11-02", reader)],
-        ["date 2026-11-03T08:30:00Z", dateWords("2026-11-03T08:30:00Z", reader)],
-        ["date 2026-11-02", dateWords("2026-11-02", reader)],
+        ["clock, a moment", clockWords("2026-11-03T08:30:00Z", reader)],
+        ["clock, a plain date", clockWords("2026-11-02", reader)],
+        ["date, a moment", dateWords("2026-11-03T08:30:00Z", reader)],
+        ["date, a plain date", dateWords("2026-11-02", reader)],
       ]}
     />
   );
