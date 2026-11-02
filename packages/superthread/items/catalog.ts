@@ -746,6 +746,17 @@ export const catalog: CatalogItem[] = [
     serves: ["constellation", "trisys", "orbit"],
   },
   {
+    name: "reader",
+    type: "registry:block",
+    title: "reader",
+    description:
+      "a page of reading: a lead line, the next action on paper, a margin rail, a closing line and a foot, with a meeting brief's who, owed and raised blocks",
+    files: [block("reader")],
+    tier: "block",
+    upstream: null,
+    serves: ["orbit", "quanta", "trisys"],
+  },
+  {
     name: "notice",
     type: "registry:block",
     title: "notice",
