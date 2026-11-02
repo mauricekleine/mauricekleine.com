@@ -7,10 +7,17 @@ import { Paper } from "@/components/superthread/ui/paper";
 // The foot of a review: who the writing goes to, every address and file, and the one way out. It prints on paper as a
 // key block, so the ring takes the first ink. The ring sits on a child of the paper, because the .light island resets
 // --ring on its own element. The bar sizes itself against its own width, so it fits a panel, a letter or a page; the
-// facts fold before the columns stack, and on a phone paper's own padding takes over.
+// facts fold before the columns stack, and on a phone paper's own padding takes over. A phone's panel gives a light page's
+// bar no room for paper's lift, since the letter runs to the panel's edges, so the bar states its top edge in a rule.
 function SendBar({ className, children, ...props }: React.ComponentProps<"section">) {
   return (
-    <Paper render={<section {...props} />} className={cn("@container/send-bar py-5", className)}>
+    <Paper
+      render={<section {...props} />}
+      className={cn(
+        "@container/send-bar py-5 [@media(max-width:600px)]:in-data-[slot=app-shell-panel]:not-dark:border-t",
+        className,
+      )}
+    >
       <div
         data-mk="send-bar"
         data-slot="send-bar"

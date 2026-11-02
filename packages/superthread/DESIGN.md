@@ -635,7 +635,7 @@ Pass items: base-nova's card, label and separator on the tokens, square and rule
 
 The one white block on a page, for the thing the page is there for. It is a `.light` island on the card fill, so everything on it reads the light roles. On a dark page the one plum fill can print here, the focus ring takes the deep value and a title prints in key. Its padding is 24 px, and 16 px at 600 px and below, level with the working panel's. A list or menu opened from it portals to `<body>` and takes the document's mode; pass `portalProps` with the paper as its container to hold it light.
 
-**The One Paper Rule.** A page prints one paper, and it stays white in every theme: it never reverses on a dark page. On a dark panel the white is its edge, so it prints flat. On a light panel, white on white, it lifts by the slip rake and the contact edge.
+**The One Paper Rule.** A page prints one paper, and it stays white in every theme: it never reverses on a dark page. On a dark panel the white is its edge, so it prints flat. On a light panel, white on white, it lifts by the slip rake and the contact edge. A `send-bar` on a phone runs to the panel's edges and has no room to lift, so on a light page it rules its top edge.
 
 ### Fit title
 
