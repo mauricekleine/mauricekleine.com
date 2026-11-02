@@ -415,9 +415,10 @@ describe("the quiet add in a nav", () => {
     try {
       const elsewhere = one(view.body, '[data-testid="elsewhere"]').el as HTMLInputElement;
       await press("n", elsewhere);
-      expect(open).toEqual([]);
+      expect(open).toHaveLength(0);
       await press("n");
-      expect(open).toEqual([one(view.body, '[data-slot="quick-add-nav-field"]').el]);
+      // happy-dom hands a query a proxy of a form, so the opened form is matched by its slot, not by identity.
+      expect(open.map((el) => el.getAttribute("data-slot"))).toEqual(["quick-add-nav-field"]);
       expect(document.activeElement).toBe(one(view.body, '[data-slot="quick-add-nav-field"] input').el);
     } finally {
       await view.done();

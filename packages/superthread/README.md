@@ -136,6 +136,8 @@ Run them from the repo root as `bun run --cwd packages/superthread <script>`.
 
 At the root, `bun run test` runs this package's tests with those of the web, share and superthread apps.
 
+The tests run in happy-dom, which `test/dom.ts` registers before any test file loads. A failed `expect` prints a DOM node as its markup, cut at 500 characters, and `toEqual`, `toMatchObject`, `toHaveBeenCalledWith` and the other diffing matchers refuse a value that reaches the DOM, since their diff walks the whole document: compare a node's text or attributes, or use `toBe`.
+
 After editing an input, regenerate in this order: `texture`, `build`, then `upstream regen`. When `texture/plates.json` changes, also rewrite the pixel hashes from this directory: `python3 -I scripts/texture/build.py plates --out "$TMPDIR/plates" --write-hashes texture/plates.sha256`. Builds copy committed outputs and never run Python; `check`, `texture` and the tests run `python3 -I` with the standard library only.
 
 When the master world moves, run `vendor` against it, then regenerate. The tests fail on any world key the role map does not name, any detail no item claims, and any world contrast check the contrast test has not ported.
