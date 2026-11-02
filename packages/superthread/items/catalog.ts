@@ -509,6 +509,15 @@ export const catalog: CatalogItem[] = [
     upstream: null,
   },
   {
+    name: "source-line",
+    type: "registry:ui",
+    title: "source line",
+    description: "a wrapping row of cited sources at the instrument step, and what closes the line at its far side",
+    files: [ui("source-line")],
+    tier: "brand",
+    upstream: null,
+  },
+  {
     name: "collapsible",
     type: "registry:ui",
     title: "collapsible",
@@ -744,6 +753,17 @@ export const catalog: CatalogItem[] = [
     tier: "block",
     upstream: null,
     serves: ["constellation", "trisys", "orbit"],
+  },
+  {
+    name: "month-grid",
+    type: "registry:block",
+    title: "month grid",
+    description:
+      "a month as six weeks: a dot on days with content, today's edge, the open day's bar, mono figures and arrow keys that step it",
+    files: [block("month-grid")],
+    tier: "block",
+    upstream: null,
+    serves: ["orbit", "artifacts"],
   },
   {
     name: "reader",
