@@ -116,6 +116,7 @@ describe("a block's whole meaning in its aria label", () => {
     ["over", standup, "12:00", "team standup, 09:30 to 10:00, over"],
     ["a brief", { ...renewal }, undefined, "renewal call, 11:00 to 11:45, brief ready"],
     ["an open brief", { ...renewal, selected: true }, undefined, "renewal call, 11:00 to 11:45, brief open"],
+    ["selected, with no brief", { ...standup, selected: true }, undefined, "team standup, 09:30 to 10:00, selected"],
     ["happening now", renewal, "11:12", "renewal call, happening now, until 11:45, brief ready"],
     ["stale", { ...standup, stale: true }, undefined, "team standup, 09:30 to 10:00, may be behind"],
     [
@@ -188,13 +189,36 @@ describe("a block's states", () => {
     expect(label(host, "next")).toContain("happening now");
   });
 
-  test("now only reads on its own day: with none, or on another day, nothing is spent and no mark prints", () => {
-    for (const now of [undefined, null, "2026-11-04T12:00:00+01:00", "2026-11-02T12:00:00+01:00"]) {
+  test("with no clock, or on a day still to come, nothing is spent and no mark prints", () => {
+    for (const now of [undefined, null, "2026-11-02T12:00:00+01:00"]) {
       const host = strip([standup], { now });
       expect(ink(host, "team standup")).toBe("rest");
       expect(host.querySelector('[data-slot="day-line-now-mark"]')).toBeNull();
       expect(host.querySelector('[data-slot="day-line-now"]')).toBeNull();
     }
+  });
+
+  test("a day gone by reads as spent all through, with no mark and no next name", () => {
+    const host = strip([standup, renewal], { now: "2026-11-04T12:00:00+01:00" });
+    expect(ink(host, "team standup")).toBe("past");
+    expect(ink(host, "renewal call")).toBe("past");
+    expect(label(host, "renewal call")).toBe("renewal call, 11:00 to 11:45, over, brief ready");
+    expect(word(host, "renewal call")).toBe("");
+    expect(names(host).every((name) => name.hasAttribute("data-past"))).toBe(true);
+    expect(host.querySelector("[data-next]")).toBeNull();
+    expect(host.querySelector('[data-slot="day-line-now-mark"]')).toBeNull();
+  });
+
+  test("a meeting that runs past midnight stays underway on the day it started", () => {
+    const night = {
+      id: "night",
+      title: "night shift",
+      start: "2026-11-03T22:00:00+01:00",
+      end: "2026-11-04T01:00:00+01:00",
+    };
+    const host = strip([night], { now: "2026-11-04T00:30:00+01:00" });
+    expect(ink(host, "night shift")).toBe("rest");
+    expect(label(host, "night shift")).toBe("night shift, happening now, until 01:00");
   });
 
   test("two blocks that touch take a seam on the later one, and a gap takes none", () => {
@@ -218,6 +242,22 @@ describe("a block's states", () => {
   test("a tentative meeting says so in its name's time line", () => {
     const host = strip([meeting("hold", "11:15", "12:00", { tentative: true })]);
     expect(names(host)[0]?.children[1]?.textContent).toBe("11:15 · tentative");
+  });
+
+  test("a crowded strip drops a tentative meeting's clock and keeps the word, on the title's line", () => {
+    const titles = ["team standup", "design review", "renewal call", "1:1 with sam", "quarter planning"];
+    const host = strip(
+      titles.map((title, index) => meeting(title, `09:${index}0`, `09:${index}5`, { tentative: index === 2 })),
+    );
+    const [plain, tentative] = [names(host)[0]!, names(host)[2]!];
+    const clockIn = (name: Element) => name.children[1]!.firstElementChild!;
+    const dropsWhenCrowded = `@min-[561px]/day-line:group-data-crowded/names:hidden`;
+    expect(clockIn(plain).getAttribute("class")).toContain(dropsWhenCrowded);
+    expect(clockIn(tentative).getAttribute("class")).toContain(dropsWhenCrowded);
+    expect(clockIn(tentative).textContent).toBe("09:20 · ");
+    expect(tentative.children[1]!.textContent).toBe("09:20 · tentative");
+    expect(tentative.children[1]!.getAttribute("class")).not.toContain("hidden");
+    expect(tentative.getAttribute("class")).toContain("@min-[561px]/day-line:group-data-crowded/names:flex");
   });
 
   test("the selected block is the current one, and outranks spent", () => {
@@ -321,11 +361,41 @@ describe("the names", () => {
     expect(name?.children[1]?.getAttribute("class")).toContain("font-mono");
   });
 
-  test("each stops at the next, and the last has the strip", () => {
-    const host = strip([standup, renewal]);
-    const [first, last] = names(host).map((el) => el.parentElement!);
-    expect(first?.style.getPropertyValue("--room")).toBe("calc(15% - 8px)");
-    expect(last?.style.getPropertyValue("--room")).toBe("100%");
+  const rooms = (host: ParentNode) => names(host).map((el) => el.parentElement!.style.getPropertyValue("--room"));
+
+  test("each stops at the next, and the last has what's left of the strip", () => {
+    expect(rooms(strip([standup, renewal]))).toEqual(["calc(15% - 8px)", "70%"]);
+  });
+
+  test("a name alone in its row has the whole strip, so it can slide back as far as it needs", () => {
+    expect(rooms(strip([meeting("wrap", "17:00", "17:30")]))).toEqual(["100%"]);
+  });
+
+  test("a long late name stops short of the name before it in its row, so a crowded strip loses neither", () => {
+    const host = strip([
+      meeting("standup", "16:00", "16:20"),
+      meeting("review", "16:30", "16:50"),
+      meeting("quarterly planning with the whole team", "17:00", "17:45"),
+    ]);
+    expect(host.querySelector("[data-crowded]")).not.toBeNull();
+    // standup keeps the 7.31% its own words need, and the late name truncates in the rest.
+    expect(rooms(host)).toEqual(["calc(7.31% - 8px)", "100%", "12.69%"]);
+  });
+
+  test("a long name keeps its floor against a late name, and no name slides forward to make room", () => {
+    const host = strip([
+      meeting("the whole company all hands and questions", "14:00", "14:20"),
+      meeting("review", "14:30", "14:50"),
+      meeting("quarterly planning with the whole team", "17:00", "17:45"),
+    ]);
+    // 60% plus the floor of 12% stops the late name at 72%, short of the 68.46% it would slide to on its own.
+    expect(rooms(host)).toEqual(["calc(12% - 8px)", "100%", "28%"]);
+    const packed = strip([
+      meeting("the first long name in this row", "16:00", "16:20"),
+      meeting("review", "16:30", "16:50"),
+      meeting("the last long name in this row", "17:00", "17:45"),
+    ]);
+    expect(rooms(packed)).toEqual(["calc(10% - 8px)", "100%", "10%"]);
   });
 
   test.each([
@@ -362,7 +432,7 @@ describe("the names", () => {
     expect(host.querySelector("[data-crowded]")).not.toBeNull();
     const rows = names(host).map((el) => el.parentElement!.hasAttribute("data-low"));
     expect(rows).toEqual([false, true, false, true, false]);
-    expect(names(host)[0]?.children[1]?.getAttribute("class")).toContain(
+    expect(names(host)[0]?.children[1]?.firstElementChild?.getAttribute("class")).toContain(
       "@min-[561px]/day-line:group-data-crowded/names:hidden",
     );
   });
@@ -387,6 +457,13 @@ describe("the strip", () => {
     ]);
     expect(one(track, '[data-slot="day-line-now-mark"]').classes).toContain("w-0.5");
     expect(one(track, '[data-slot="day-line-tick"]').classes).toContain("w-px");
+  });
+
+  test("the mark takes an edge in the page's stock, so it holds against a block it crosses", () => {
+    const host = strip([standup], { now: clock("09:40") });
+    expect(one(host, '[data-slot="day-line-now-mark"]').classes).toEqual(
+      expect.arrayContaining(["outline-1", "outline-background"]),
+    );
   });
 
   test("prints now under its mark, naming it for a screen reader", () => {
@@ -489,16 +566,36 @@ describe("the head", () => {
     expect(date.el.getAttribute("href")).toBe("/day");
     expect(date.el.getAttribute("aria-expanded")).toBe("true");
     expect(date.classes).toEqual(
-      expect.arrayContaining([
-        "type-subtitle",
-        "relative",
-        "aria-expanded:underline",
-        "[&:is(a)]:hover:underline",
-        `${PHONE}[&:is(a)]:hit-area`,
-        ...CONTROL_RING,
-      ]),
+      expect.arrayContaining(["type-subtitle", "relative", "aria-expanded:underline", ...CONTROL_RING]),
     );
     expect(date.classes).not.toContain("underline");
+  });
+
+  // A class gated on :is() reaches an element only when the element matches, so these ask what a browser asks.
+  const reaches = ({ el, classes }: { el: Element; classes: string[] }, utility: string) => {
+    const gated = classes.find((cls) => cls.endsWith(utility));
+    const selector = gated && /\[&(:is\([^)]*\))\]/.exec(gated)?.[1];
+    return gated !== undefined && (selector === undefined || el.matches(selector));
+  };
+
+  test.each([
+    ["a link", <DayLineDate href="/day">tue 3 nov</DayLineDate>],
+    [
+      "a button that opens the day in place",
+      <DayLineDate render={<button type="button" />} aria-expanded={false}>
+        tue 3 nov
+      </DayLineDate>,
+    ],
+  ])("the date as %s takes the 44 px phone target and the hover underline", (_, date) => {
+    const found = one(server(date), '[data-slot="day-line-date"]');
+    expect(reaches(found, ":hit-area")).toBe(true);
+    expect(reaches(found, ":hover:underline")).toBe(true);
+  });
+
+  test("plain words take neither", () => {
+    const found = one(server(<DayLineDate>tue 3 nov</DayLineDate>), '[data-slot="day-line-date"]');
+    expect(reaches(found, ":hit-area")).toBe(false);
+    expect(reaches(found, ":hover:underline")).toBe(false);
   });
 
   test("the date can stay plain words, or title the page", () => {
@@ -525,6 +622,11 @@ describe("the head", () => {
     expect(one(host, '[data-slot="day-line-note"]').classes).toEqual(
       expect.arrayContaining([`${PHONE}pointer-events-none`, `${PHONE}h-[15px]`, "truncate"]),
     );
+  });
+
+  test("on a phone the all-day words give way first, so the note keeps its whole width", () => {
+    const allDayFirst = `${PHONE}has-data-[slot=day-line-all-day]:grid-cols-[minmax(0,1fr)_auto_auto]`;
+    expect(one(head(), '[data-slot="day-line-head"]').classes).toContain(allDayFirst);
   });
 
   test("holds the rules every skin keeps, with no texture detail of its own", () => {

@@ -44,6 +44,8 @@ const DAY_MS = 86_400_000;
 const TITLE_CHAR = 0.83;
 const TIME_CHAR = 1;
 const NAME_GAP = 1.5;
+// What a name keeps against a long name sliding back behind it: about 14 characters.
+const NAME_FLOOR = 12;
 
 const percent = (value: number) => Math.round(value * 100) / 100;
 const dayNumber = (date: string) => Date.parse(`${date}T00:00:00Z`) / DAY_MS;
@@ -70,6 +72,7 @@ type Name = {
   id: string;
   title: string;
   time: string;
+  tentative: boolean;
   at: number;
   right: number;
   event?: DayLineEvent;
@@ -91,8 +94,10 @@ function sortIntoLanes(group: Placed[]) {
 }
 
 function layOut(day: string, events: DayLineEvent[], now: Moment | null | undefined, options: TimeOptions) {
-  const onThisDay = now !== null && now !== undefined && !isCalendarDate(now) && calendarDate(now, options) === day;
-  const at = onThisDay ? minutesInto(day, now, options) : null;
+  // Now on this day's clock: past 1440 once the day has gone by and below 0 while it's still to come, so a whole day
+  // reads as spent or unspent, and a meeting that runs past midnight stays underway. The mark prints only on its own day.
+  const clock = now === null || now === undefined || isCalendarDate(now) ? null : minutesInto(day, now, options);
+  const at = clock !== null && clock >= 0 && clock < MINUTES_IN_DAY ? clock : null;
 
   const placed = events
     .flatMap((event): Placed[] => {
@@ -110,8 +115,8 @@ function layOut(day: string, events: DayLineEvent[], now: Moment | null | undefi
           lane: 0,
           lanes: 1,
           group: [],
-          past: at !== null && until <= at,
-          started: at !== null && from <= at && at < until,
+          past: clock !== null && until <= clock,
+          started: clock !== null && from <= clock && clock < until,
         },
       ];
     })
@@ -143,17 +148,17 @@ function layOut(day: string, events: DayLineEvent[], now: Moment | null | undefi
   const nextItem =
     placed.find((item) => item.event.selected) ??
     placed.find((item) => item.started) ??
-    placed.find((item) => at === null || item.start > at);
+    placed.find((item) => clock === null || item.start > clock);
 
   const names = placed.flatMap((item): Name[] => {
     if (item.group[0] !== item) return [];
     const single = item.lanes === 1;
-    const clock = item.group.map((member) => clockWords(member.event.start, options)).join(", ");
     return [
       {
         id: item.event.id,
         title: item.group.map((member) => member.event.title).join(", "),
-        time: single && item.event.tentative ? `${clock} · tentative` : clock,
+        time: item.group.map((member) => clockWords(member.event.start, options)).join(", "),
+        tentative: single && item.event.tentative === true,
         at: position(item.start),
         right: position(Math.max(...item.group.map((member) => member.end))),
         event: single ? item.event : undefined,
@@ -166,19 +171,37 @@ function layOut(day: string, events: DayLineEvent[], now: Moment | null | undefi
   return { at, from, to, placed, names, position };
 }
 
-const nameWidth = ({ title, time }: Name) => Math.max(title.length * TITLE_CHAR, time.length * TIME_CHAR);
+const TENTATIVE = " · tentative";
+const nameWidth = ({ title, time, tentative }: Name) =>
+  Math.max(title.length * TITLE_CHAR, (time.length + (tentative ? TENTATIVE.length : 0)) * TIME_CHAR);
 const namePosition = (name: Name) => Math.min(name.at, 100 - nameWidth(name));
 
 // Two names that wouldn't fit side by side move the band to two staggered rows, and each name truncates at the next one
-// in its row.
+// in its row. Only the last name in a row can slide, since the rest stop at the next. It stops short of the name before
+// it, which keeps its words up to the floor, and truncates in what's left, so a crowded strip never loses a name to it.
+// A name alone in its row has the whole strip to slide in.
 function fitNames(names: Name[]) {
   const crowded = names.some((name, index) => {
     const next = names[index + 1];
     return next !== undefined && namePosition(name) + nameWidth(name) + NAME_GAP > namePosition(next);
   });
+  const step = crowded ? 2 : 1;
+  const startOf = (index: number) => {
+    const name = names[index]!;
+    const before = names[index - step];
+    if (names[index + step] !== undefined || before === undefined) return name.at;
+    const clear = before.at + Math.min(nameWidth(before) + NAME_GAP, NAME_FLOOR);
+    return Math.min(name.at, Math.max(namePosition(name), clear));
+  };
   const fitted = names.map((name, index) => {
-    const next = names[index + (crowded ? 2 : 1)];
-    const room = next ? `calc(${percent(namePosition(next) - name.at)}% - 8px)` : "100%";
+    const next = names[index + step] && startOf(index + step);
+    const alone = next === undefined && names[index - step] === undefined;
+    const room =
+      next !== undefined
+        ? `calc(${percent(next - name.at)}% - 8px)`
+        : alone
+          ? "100%"
+          : `${percent(100 - startOf(index))}%`;
     return { name, room, low: crowded && index % 2 === 1 };
   });
   return { crowded, fitted };
@@ -193,7 +216,7 @@ function blockWords({ event, past, started, group, start, end }: Placed, options
     event.tentative && "tentative",
     overlaps.length > 0 && `overlaps ${overlaps.map((other) => other.event.title).join(", ")}`,
     past && "over",
-    event.brief && (event.selected ? "brief open" : "brief ready"),
+    event.selected ? (event.brief ? "brief open" : "selected") : event.brief && "brief ready",
     event.note ?? (event.stale && "may be behind"),
   ]
     .filter(Boolean)
@@ -240,8 +263,10 @@ function DayLineBlock({ item, options }: { item: Placed; options: TimeOptions })
 }
 
 // A name's link is a second way to the same place for the pointer, so it stays out of the tab order, under aria-hidden.
+// On a crowded strip the clock goes and tentative stays, on the title's line, because a bare outline can't say it alone.
+// The two share that line's room, so neither loses all of it.
 function DayLineName({ name }: { name: Name }) {
-  const { event, title, time, past } = name;
+  const { event, title, time, tentative, past } = name;
   const linked = event?.render !== undefined || event?.href !== undefined;
   return useRender({
     defaultTagName: "span",
@@ -251,12 +276,16 @@ function DayLineName({ name }: { name: Name }) {
       href: event?.href,
       tabIndex: linked ? -1 : undefined,
       className:
-        "pointer-events-auto grid max-w-(--room) min-w-0 whitespace-nowrap text-foreground data-past:text-muted-foreground @max-[560px]/day-line:flex @max-[560px]/day-line:max-w-full @max-[560px]/day-line:gap-2 [@media(max-width:600px)]:pointer-events-none",
+        "pointer-events-auto grid max-w-(--room) min-w-0 overflow-hidden whitespace-nowrap text-foreground data-past:text-muted-foreground @max-[560px]/day-line:flex @max-[560px]/day-line:max-w-full @max-[560px]/day-line:gap-2 @min-[561px]/day-line:group-data-crowded/names:flex [@media(max-width:600px)]:pointer-events-none",
       children: (
         <>
           <span className="min-w-0 truncate decoration-1 underline-offset-4 [a:hover>&]:underline">{title}</span>
-          <span className="shrink-0 font-mono text-muted-foreground @min-[561px]/day-line:group-data-crowded/names:hidden">
-            {time}
+          <span className="shrink-0 font-mono text-muted-foreground @min-[561px]/day-line:group-data-crowded/names:shrink @min-[561px]/day-line:group-data-crowded/names:truncate">
+            <span className="@min-[561px]/day-line:group-data-crowded/names:hidden">
+              {time}
+              {tentative && " · "}
+            </span>
+            {tentative && <span className="@min-[561px]/day-line:group-data-crowded/names:ml-2">tentative</span>}
           </span>
         </>
       ),
@@ -294,7 +323,8 @@ function Names({ names }: { names: Name[] }) {
 
 /**
  * The strip: names, track, ticks and the now mark. `day` is a plain date, like `2026-11-03`, and `timeZone` the zone it
- * reads in. Give it an `aria-label` that names the day. Without `now`, nothing reads as gone by and no mark prints.
+ * reads in. Give it an `aria-label` that names the day. Without `now`, nothing reads as gone by and no mark prints, and
+ * the mark prints only on its own day: a day gone by reads as spent, and a day to come as unspent.
  * `children` print in the names' place when the day holds no timed event: `nothing fixed today`, or why it can't say.
  * `loading` holds the shape until the first read. `asOf` says when a stale read was last good.
  */
@@ -379,7 +409,7 @@ function DayLineStrip({
           {nowAt !== null && (
             <span
               data-slot="day-line-now-mark"
-              className="pointer-events-none absolute top-0 -bottom-[5px] -ml-px w-0.5 bg-first"
+              className="pointer-events-none absolute top-0 -bottom-[5px] -ml-px w-0.5 bg-first outline-1 outline-background"
               style={{ left: "clamp(1px, var(--now), calc(100% - 1px))" }}
             />
           )}
@@ -416,14 +446,15 @@ function DayLineStrip({
 
 // The date, a calendar note, the ways to the next day and the all-day line. The date and the note share a baseline on a
 // wide screen. The all-day line hangs below the date, in the gap before the strip, so it never moves the strip, and on a
-// phone the note joins it there.
+// phone the note joins it there. The note is why the day can't be trusted, so it keeps its whole width there and the
+// all-day words truncate first.
 function DayLineHead({ className, ...props }: React.ComponentProps<"header">) {
   return (
     <header
       data-mk="day-line"
       data-slot="day-line-head"
       className={cn(
-        "grid h-6 min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] grid-rows-[24px_0] items-baseline gap-x-4 [grid-template-areas:'date_note_steps'_'all_all_all'] [@media(max-width:600px)]:grid-cols-[fit-content(60%)_minmax(0,1fr)_auto] [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:[grid-template-areas:'date_date_steps'_'all_note_note']",
+        "grid h-6 min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] grid-rows-[24px_0] items-baseline gap-x-4 [grid-template-areas:'date_note_steps'_'all_all_all'] [@media(max-width:600px)]:grid-cols-[0_minmax(0,1fr)_auto] [@media(max-width:600px)]:gap-x-0 [@media(max-width:600px)]:[grid-template-areas:'date_date_steps'_'all_note_note'] [@media(max-width:600px)]:has-data-[slot=day-line-all-day]:grid-cols-[minmax(0,1fr)_auto_auto]",
         className,
       )}
       {...props}
@@ -431,9 +462,9 @@ function DayLineHead({ className, ...props }: React.ComponentProps<"header">) {
   );
 }
 
-// Plain words, or a link once it opens something, which takes its 44 px through a hit area on a phone: on a phone the
-// date is the way into the day. aria-expanded holds the underline while what it opened stays open. Render an h1 when the
-// date is the page's title.
+// Plain words, a link once it leads somewhere, or a button once it opens the day in place. Either way on a phone it takes
+// its 44 px through a hit area, because there the date is the way into the day. aria-expanded holds the underline while
+// what it opened stays open. Render an h1 when the date is the page's title.
 function DayLineDate({ className, href, render, ...props }: useRender.ComponentProps<"a">) {
   return useRender({
     defaultTagName: "span",
@@ -443,7 +474,7 @@ function DayLineDate({ className, href, render, ...props }: useRender.ComponentP
       {
         href,
         className: cn(
-          "relative justify-self-start type-subtitle whitespace-nowrap text-foreground [grid-area:date] decoration-1 underline-offset-4 aria-expanded:underline [&:is(a)]:hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:600px)]:[&:is(a)]:hit-area",
+          "relative justify-self-start type-subtitle whitespace-nowrap text-foreground [grid-area:date] decoration-1 underline-offset-4 aria-expanded:underline [&:is(a,button)]:hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) [@media(max-width:600px)]:[&:is(a,button)]:hit-area",
           className,
         ),
       },
