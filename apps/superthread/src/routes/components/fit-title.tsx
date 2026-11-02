@@ -39,8 +39,7 @@ function Page() {
       </Section>
       <Section id="widths" title="at any width">
         <p className="st-pass-prose">
-          the same words at three widths. the title fits again when its box changes size and when a face arrives, before
-          the browser paints.
+          the same words at three widths. the title fits again when its box changes size and when a face arrives.
         </p>
         <ModePair className="st-cb-stack">
           <FitTitleByWidth />

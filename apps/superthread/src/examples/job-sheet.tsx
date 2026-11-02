@@ -57,14 +57,14 @@ export function JobSheetJob({ title = SHORT_TITLE }: { title?: string }) {
   );
 }
 
-// Twenty minutes before a meeting: the cue is a fact, and the quiet line says what moved since the sheet was picked.
+// Near a meeting the job is getting ready, and the quiet line says what moved since the sheet was picked.
 export function JobSheetMeeting() {
   const id = useId();
   return (
     <JobSheet aria-labelledby={id}>
-      <JobSheetCue>11:00 to 11:45 · teams</JobSheetCue>
+      <JobSheetCue>20 min until the renewal call</JobSheetCue>
       <JobSheetTitle id={id} render={<h2 />}>
-        renewal call
+        read the brief for the renewal call
       </JobSheetTitle>
       <JobSheetWhy>the brief is ready, and sam leads.</JobSheetWhy>
       <JobSheetChanged>sam sent the new numbers an hour ago</JobSheetChanged>
@@ -73,19 +73,22 @@ export function JobSheetMeeting() {
           read the brief
         </JobSheetPrimary>
         <Button size="lg" variant="ghost">
-          join
+          not now
         </Button>
       </JobSheetActions>
     </JobSheet>
   );
 }
 
-// In the meeting the sheet presses nothing, so its primary prints as an outline, and every slot stays where it was.
+// In the meeting the cue is a fact and the sheet presses nothing, so its primary prints as an outline, and every slot
+// stays where it was with the why gone.
 export function JobSheetInMeeting() {
   const id = useId();
   return (
     <JobSheet aria-labelledby={id}>
-      <JobSheetCue>until 11:45</JobSheetCue>
+      <JobSheetCue>
+        <time>11:00</time> to <time>11:45</time> · teams
+      </JobSheetCue>
       <JobSheetTitle id={id} render={<h2 />}>
         renewal call
       </JobSheetTitle>

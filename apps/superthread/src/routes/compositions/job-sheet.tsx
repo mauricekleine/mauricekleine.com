@@ -51,8 +51,8 @@ function Page() {
       </Section>
       <Section id="states" title="through the day">
         <p className="st-cb-copy">
-          before a meeting the cue turns into a fact and the quiet line says what moved. the line is a late read, so its
-          slot holds whether it answers or not. in the meeting the primary prints as an outline, and the sheet keeps its
+          near a meeting the quiet line says what moved. the line is a late read, so its slot holds whether it answers
+          or not. in the meeting the cue turns into a fact, the primary prints as an outline, and the sheet keeps its
           height with the why gone.
         </p>
         <ModePair
