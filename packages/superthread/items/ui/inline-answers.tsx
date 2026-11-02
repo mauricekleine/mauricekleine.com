@@ -90,6 +90,8 @@ function InlineAnswersLine({ ...props }: React.ComponentProps<"span">) {
 }
 
 // `wrong?` beside the line, a muted word underlined at rest. Open, it leads the answers at their step, and it closes them.
+// It can land under the pointer when an answer closes the row, so the second click of a double click counts for nothing
+// here too.
 function InlineAnswersTrigger({ children = "wrong?", className, onClick, ...props }: React.ComponentProps<"button">) {
   const { open, toggle, trigger, triggerId, listId } = useAnswers();
   return (
@@ -102,6 +104,7 @@ function InlineAnswersTrigger({ children = "wrong?", className, onClick, ...prop
         className,
       )}
       onClick={(event) => {
+        if (event.detail > 1) return;
         onClick?.(event);
         if (!event.defaultPrevented) toggle();
       }}
@@ -156,8 +159,9 @@ function InlineAnswer({ className, onClick, ...props }: React.ComponentProps<"bu
 }
 
 // An answer that asks one more question there: its word stays as the lead-in that closes the question, and the question's
-// own answers follow its arrow, whole, on the row or the row below. They're InlineAnswer, and choosing one closes
-// everything.
+// own answers follow its arrow, whole, on the row or the row below. A group wider than the row wraps inside itself at the
+// row's pitch, with the arrow leading its first row, so it never runs past the slot. They're InlineAnswer, and choosing
+// one closes everything.
 function InlineAnswersAsk({
   question,
   defaultOpen = false,
@@ -197,7 +201,7 @@ function InlineAnswersAsk({
         role="group"
         aria-labelledby={askId}
         hidden={!asking}
-        className="inline-flex items-center gap-x-6 [@media(max-width:600px)]:gap-x-4"
+        className="inline-flex max-w-full flex-wrap items-center gap-x-6 [@media(max-width:600px)]:gap-x-4"
       >
         <Icon name="arrow" className="shrink-0 text-muted-foreground" />
         {children}

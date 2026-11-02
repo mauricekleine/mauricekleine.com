@@ -9,6 +9,7 @@ import { FitTitle } from "@/components/superthread/ui/fit-title";
 import { client, CONTROL_RING, elements, forbidden, one, server } from "./rendered.tsx";
 
 const FACES: Record<string, { size: number; line: number }> = {
+  "type-display": { size: 76, line: 80 },
   "type-hero": { size: 64, line: 68 },
   "type-headline": { size: 40, line: 44 },
   "type-section": { size: 30, line: 34 },
@@ -164,6 +165,12 @@ describe("the ladder", () => {
     expect(one(full.body, '[data-width="784"]').el.getAttribute("data-step")).toBe("hero");
   });
 
+  test("a ladder of one step keeps it at any width", async () => {
+    box = { width: 300, height: 600 };
+    const { step } = await mount(<FitTitle steps={["display"]}>all clear.</FitTitle>);
+    expect(step()).toBe("display");
+  });
+
   test("steps holds it to a shorter ladder", async () => {
     const { step } = await mount(<FitTitle steps={["section", "long"]}>renewal call</FitTitle>);
     expect(step()).toBe("section");
@@ -285,7 +292,7 @@ describe("the title", () => {
   test("every step it can print is a utility the system emits, kept beside the title's ink", async () => {
     const css = readFileSync(join(import.meta.dir, "../dist/v2/superthread.css"), "utf8");
     box = { width: 784, height: 600 };
-    for (const step of ["hero", "headline", "section", "long"] as const) {
+    for (const step of ["display", "hero", "headline", "section", "long"] as const) {
       const { body } = await mount(
         <FitTitle data-only={step} steps={[step]}>
           renewal call

@@ -58,8 +58,9 @@ function rows(host: ParentNode, band: (variants: string[]) => boolean, slot = "j
   return { cue: cue!, title: title!, why: why!, changed: changed!, actions: actions! };
 }
 
+// Tailwind compiles @max-[784px] to `width < 784px`, so the compact band ends where the full band's 784 px starts.
 const FULL = (variants: string[]) => variants.length === 0;
-const COMPACT = (variants: string[]) => variants.some((variant) => variant.includes("@max-[783px]/"));
+const COMPACT = (variants: string[]) => variants.some((variant) => variant.includes("@max-[784px]/"));
 const NARROW = (variants: string[]) => variants.length === 1 && variants[0] === PHONE.slice(0, -1);
 
 describe("the paper", () => {
@@ -157,14 +158,14 @@ describe("the parts", () => {
     );
   });
 
-  test("what changed is a live region from the start, so a late read is heard and moves nothing", () => {
+  test("what changed is a live region from the start, so words that arrive after the sheet prints are heard and move nothing", () => {
     const host = sheet();
     const line = one(host, '[role="status"]');
     expect(line.el.textContent).toBe("");
     expect(line.classes).toContain("min-h-lh");
-    const late = one(sheet({ changed: "sam sent the numbers" }), '[role="status"]');
-    expect(late.el.textContent).toBe("sam sent the numbers");
-    expect(late.classes).toContain("[&>span]:truncate");
+    const arrived = one(sheet({ changed: "sam sent the numbers" }), '[role="status"]');
+    expect(arrived.el.textContent).toBe("sam sent the numbers");
+    expect(arrived.classes).toContain("[&>span]:truncate");
   });
 
   test("the primary is the large fill, and reserve holds its width unseen and unread", () => {
@@ -215,7 +216,6 @@ describe("the parts", () => {
 });
 
 describe("clear", () => {
-  const PANEL = "@min-[784px]/clear-state:";
   const clear = (title?: React.ReactElement) =>
     server(
       <ClearState aria-labelledby="clear">
@@ -253,7 +253,7 @@ describe("clear", () => {
     expect(one(host, `[data-slot="${ROWS}"]`).classes).toContain(
       "[grid-template-areas:'title'_'title'_'reason'_'.'_'door']",
     );
-    expect(one(host, '[data-slot="clear-state-title"]').classes).toContain("[grid-area:title]");
+    expect(one(host, '[data-slot="fit-title"]').classes).toContain("[grid-area:title]");
     expect(one(host, '[data-slot="clear-state-reason"]').classes).toContain("[grid-area:reason]");
     expect(one(host, '[data-slot="door"]').classes).toEqual(
       expect.arrayContaining(["[grid-area:door]", "self-center"]),
@@ -268,16 +268,35 @@ describe("clear", () => {
     expect(Math.floor(span(rows(host, NARROW, ROWS), 8) / step("hero").phone!.line)).toBe(3);
   });
 
-  test("a full panel keeps its height when the job goes, and narrower ends at the door", () => {
-    const held = one(clear(), `[data-slot="${ROWS}"]`).classes.filter((cls) => parts(cls).utility.startsWith("min-h-"));
-    expect(held).toEqual([`${PANEL}min-h-[549px]`]);
+  test("keeps the height of the work that's gone above a phone, so the panel's edge stays put when the job clears", () => {
+    // The work under the sheet: a then head, three rows, a door and the panel's foot.
+    const below = { full: 240, compact: 240 };
+    const held = (band: (variants: string[]) => boolean) => {
+      const found = one(clear(), `[data-slot="${ROWS}"]`).classes.filter((cls) => {
+        const { variants, utility } = parts(cls);
+        return utility.startsWith("min-h-[") && band(variants);
+      });
+      expect(found).toHaveLength(1);
+      return parseInt(parts(found[0]!).utility.slice("min-h-[".length));
+    };
+    const work = (band: (variants: string[]) => boolean, gap: number) =>
+      Object.values(rows(sheet(), band)).reduce((sum, row) => sum + row, 0) + 4 * gap;
+    expect(held(FULL)).toBe(work(FULL, 12) + below.full);
+    expect(held(COMPACT)).toBe(work(COMPACT, 12) + below.compact);
+    const phone = one(clear(), `[data-slot="${ROWS}"]`).classes.filter(
+      (cls) => NARROW(parts(cls).variants) && parts(cls).utility.startsWith("min-h-"),
+    );
+    expect(phone).toEqual([`${PHONE}min-h-0`]);
   });
 
-  test("the title is the page's h1 until render says otherwise, at display in the first ink, hero below a full panel", () => {
+  test("the title fits through fit-title from display down, and its lines fill from the first", () => {
     const title = one(clear(), "h1");
     expect(title.el.textContent).toBe("nothing needs you until 16:30.");
-    expect(title.classes).toEqual(expect.arrayContaining(["type-hero", `${PANEL}type-display`, "text-first"]));
-    expect(one(clear(<h2 />), "h2").el.getAttribute("data-slot")).toBe("clear-state-title");
+    expect(title.el.getAttribute("data-mk")).toBe("fit-title");
+    expect(title.el.getAttribute("data-step")).toBe("display");
+    expect(title.classes).toEqual(expect.arrayContaining(["type-display", "text-first", "text-wrap"]));
+    expect(title.classes).not.toContain("text-balance");
+    expect(one(clear(<h2 />), "h2").el.getAttribute("data-slot")).toBe("fit-title");
   });
 
   test("the reason reads like the why, and the door is the onward door", () => {

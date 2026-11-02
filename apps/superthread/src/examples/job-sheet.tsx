@@ -16,11 +16,11 @@ import { DayLineExample } from "@/examples/day-line";
 import { LONG_TITLE, MEDIAN_TITLE, SHORT_TITLE } from "@/examples/fit-title";
 import { WrongLine } from "@/examples/inline-answers";
 
-// The panel a ship prints it on, under the day line, so the sheet's y shows.
-function OnPanel({ children }: { children: React.ReactNode }) {
+// The panel a ship prints it on, under the day line at the page's clock, so the sheet's y shows.
+export function OnPanel({ now, children }: { now?: string; children: React.ReactNode }) {
   return (
     <AppShellPanel>
-      <DayLineExample />
+      <DayLineExample now={now} />
       {children}
     </AppShellPanel>
   );
@@ -127,29 +127,30 @@ export function JobSheetAnswers() {
 }
 
 // Nothing is left, so the sheet goes. The sentence takes its box, and the reason and the door land on the why and the
-// primary.
+// primary. It's the afternoon: the morning's meetings have gone by, and the kickoff at 16:30 is the next fixed point.
 export function ClearStateExample() {
   const id = useId();
   return (
-    <OnPanel>
+    <OnPanel now="15:10">
       <ClearState aria-labelledby={id}>
         <ClearStateTitle id={id} render={<h2 />}>
           nothing needs you until 16:30.
         </ClearStateTitle>
-        <ClearStateReason>the draft, the deck check and the renewal brief are done.</ClearStateReason>
+        <ClearStateReason>the draft, the deck check and the kickoff brief are done.</ClearStateReason>
         <ClearStateDoor href="#clear">the rest is in open</ClearStateDoor>
       </ClearState>
     </OnPanel>
   );
 }
 
+// Each at its own clock: 20 minutes before the renewal call, then a few minutes into it.
 export function JobSheetStates() {
   return (
     <div className="st-job-sheet-stack">
-      <OnPanel>
+      <OnPanel now="10:40">
         <JobSheetMeeting />
       </OnPanel>
-      <OnPanel>
+      <OnPanel now="11:12">
         <JobSheetInMeeting />
       </OnPanel>
     </div>

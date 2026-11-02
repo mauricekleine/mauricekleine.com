@@ -1,7 +1,6 @@
-import { mergeProps } from "@base-ui/react/merge-props";
-import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@/components/superthread/lib/utils";
 import { Button } from "@/components/superthread/ui/button";
+import { FitTitle, type FitTitleStep } from "@/components/superthread/ui/fit-title";
 import { StatusGlyph } from "@/components/superthread/ui/glyphs";
 import { Door } from "@/components/superthread/ui/onward";
 import { Skeleton } from "@/components/superthread/ui/skeleton";
@@ -110,8 +109,8 @@ function EmptyStateActions({ className, ...props }: React.ComponentProps<"div">)
 
 // Clear: nothing is waiting, in one sentence on the panel, with no sheet. It takes the job sheet's box and held rows in
 // each width band, so the sentence starts where the cue does, and the reason and the door land where the why and the
-// primary do. A full panel holds the height of the work that's gone, a job sheet over three rows, a door and a foot, so its
-// edge stays put when the last thing clears. Narrower, the panel ends at the door, as the work's ran past the screen.
+// primary do. Above a phone it holds the height of the work that's gone, a job sheet over a then head, three rows, a door
+// and the panel's foot, so the panel's edge stays put when the last thing clears. A phone's panel ends at the door.
 function ClearState({ className, children, ...props }: React.ComponentProps<"section">) {
   return (
     <section
@@ -125,7 +124,7 @@ function ClearState({ className, children, ...props }: React.ComponentProps<"sec
     >
       <div
         data-slot="clear-state-rows"
-        className="grid grid-cols-[minmax(0,1fr)] grid-rows-[24px_136px_33px_20px_48px] gap-y-3 [grid-template-areas:'title'_'title'_'reason'_'.'_'door'] @min-[784px]/clear-state:min-h-[549px] [@media(max-width:600px)]:grid-rows-[24px_176px_62px_20px_48px] [@media(max-width:600px)]:gap-y-2 [@media(min-width:601px)]:@max-[783px]/clear-state:grid-rows-[24px_176px_66px_20px_48px]"
+        className="grid min-h-[549px] grid-cols-[minmax(0,1fr)] grid-rows-[24px_136px_33px_20px_48px] gap-y-3 [grid-template-areas:'title'_'title'_'reason'_'.'_'door'] [@media(max-width:600px)]:min-h-0 [@media(max-width:600px)]:grid-rows-[24px_176px_62px_20px_48px] [@media(max-width:600px)]:gap-y-2 [@media(min-width:601px)]:@max-[784px]/clear-state:min-h-[622px] [@media(min-width:601px)]:@max-[784px]/clear-state:grid-rows-[24px_176px_66px_20px_48px]"
       >
         {children}
       </div>
@@ -133,21 +132,13 @@ function ClearState({ className, children, ...props }: React.ComponentProps<"sec
   );
 }
 
-// The claim, at the display step on a full panel and the hero step below it. It's the page's h1 until render says otherwise.
-function ClearStateTitle({ className, render, ...props }: useRender.ComponentProps<"h1">) {
-  return useRender({
-    render: render ?? <h1 />,
-    state: { slot: "clear-state-title" },
-    props: mergeProps<"h1">(
-      {
-        className: cn(
-          "min-w-0 type-hero text-balance text-first [grid-area:title] [overflow-wrap:anywhere] @min-[784px]/clear-state:type-display",
-          className,
-        ),
-      },
-      props,
-    ),
-  });
+// The claim fits its rows by measurement, as large as it holds from display down, and a smaller step only when the
+// sentence needs one, so it never runs into the reason. Its lines fill from the first, so the sentence reads in one piece.
+// It's the page's h1 until render says otherwise.
+const CLAIM: readonly FitTitleStep[] = ["display", "hero", "headline", "section", "long"];
+
+function ClearStateTitle({ className, ...props }: Omit<React.ComponentProps<typeof FitTitle>, "steps">) {
+  return <FitTitle steps={CLAIM} className={cn("text-wrap [grid-area:title]", className)} {...props} />;
 }
 
 // What makes it true, in one sentence, in the why's slot.

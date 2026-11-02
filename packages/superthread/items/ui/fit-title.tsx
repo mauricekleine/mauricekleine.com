@@ -3,6 +3,7 @@ import { useRender } from "@base-ui/react/use-render";
 import { cn } from "@/components/superthread/lib/utils";
 
 const STEPS = {
+  display: "type-display",
   hero: "type-hero",
   headline: "type-headline",
   section: "type-section",
@@ -14,9 +15,16 @@ export type FitTitleStep = keyof typeof STEPS;
 // A long title loses less at a smaller step than it does to a cut, so the ladder runs down to long at every width.
 const LADDER: readonly FitTitleStep[] = ["hero", "headline", "section", "long"];
 
-// A full working panel's measure: 880 px less its two 48 px sides. Hero needs it, so a phone's title starts at headline,
-// and type-hero's phone step never prints here.
-const HERO_MEASURE = 784;
+// A full working panel's measure: 880 px less its two 48 px sides. A ladder's top step needs it when that step is hero,
+// so a narrower box starts one step down at headline, where type-hero's phone step never prints.
+const FULL_MEASURE = 784;
+const FULL_ONLY: readonly FitTitleStep[] = ["hero"];
+
+// The steps a box this wide may print. A ladder of one step keeps it at any width.
+function sized(steps: readonly FitTitleStep[], width: number) {
+  const [top, ...rest] = steps;
+  return top !== undefined && FULL_ONLY.includes(top) && width < FULL_MEASURE && rest.length > 0 ? rest : steps;
+}
 
 const CUT_END = /[\s,;:.!?…–-]+$/u;
 const withCut = (words: string) => `${words.replace(CUT_END, "")}…`;
@@ -46,8 +54,7 @@ type Fit = { step: FitTitleStep; cut?: string };
 // the last word that fits with its ellipsis, or inside a first word too long to fit at all.
 function measure(box: HTMLElement, title: string, steps: readonly FitTitleStep[], lines: number | undefined) {
   if (box.clientWidth === 0) return null;
-  const sized = steps.filter((step) => step !== "hero" || box.clientWidth >= HERO_MEASURE);
-  const ladder = sized.length > 0 ? sized : steps;
+  const ladder = sized(steps, box.clientWidth);
   const last = ladder.at(-1)!;
   const ruler = box.ownerDocument.createElement("span");
   ruler.style.cssText = "position:absolute;top:0;left:0;display:block;width:100%;visibility:hidden";
@@ -84,7 +91,7 @@ function measure(box: HTMLElement, title: string, steps: readonly FitTitleStep[]
 
 type FitTitleProps = Omit<useRender.ComponentProps<"h1">, "children"> & {
   children: string;
-  /** The steps it may print, largest first. Hero prints only at a full panel's measure. */
+  /** The steps it may print, largest first. A top step of hero prints only at a full panel's measure. */
   steps?: readonly FitTitleStep[];
   /** The most lines a title may take. Without it the title fills the height its box holds. */
   lines?: number;
@@ -135,7 +142,7 @@ function FitTitle({
     };
   }, [children, ladder, lines]);
 
-  const step = fit?.step ?? steps.find((candidate) => candidate !== "hero") ?? steps[0]!;
+  const step = fit?.step ?? sized(steps, 0)[0]!;
   const words = fit?.cut ? (
     <>
       <span aria-hidden="true">{fit.cut}</span>

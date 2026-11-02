@@ -160,8 +160,8 @@ function Page() {
         <p className="st-ca-copy">
           clear is a claim, so it prints only after a complete read. it takes a <code>JobSheet</code>&rsquo;s box with
           no paper: the sentence starts where the cue does, and the reason and the door land where the why and the
-          primary do. a full panel holds the height of the work that&rsquo;s gone, so its edge doesn&rsquo;t jump when
-          the last thing clears.
+          primary do. above a phone the panel holds the height of the work that&rsquo;s gone, so its edge doesn&rsquo;t
+          jump when the last thing clears.
         </p>
         <ModePair
           className="st-cb-stack"
@@ -176,7 +176,10 @@ function Page() {
             </GroundFrame>
           }
         />
-        <p className="st-ca-copy">on a phone the sentence takes the hero step, and the panel ends at the door.</p>
+        <p className="st-ca-copy">
+          the sentence prints as large as its rows hold it, from display down, and a smaller step only when the words
+          need one. its lines fill from the first. on a phone the panel ends at the door.
+        </p>
         <ModePair
           light={
             <GroundFrame mode="light" title="clear on a phone, light" height={660}>

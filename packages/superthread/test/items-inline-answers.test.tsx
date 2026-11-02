@@ -173,6 +173,16 @@ describe("an answer", () => {
     expect(heard).not.toHaveBeenCalled();
     expect(isOpen(host)).toBe(true);
   });
+
+  test("the trigger that lands under the pointer when an answer closes the row ignores the double click's second press", async () => {
+    const heard = mock((_word: string) => {});
+    const host = await live(<Answers defaultOpen onAnswer={(word) => heard(word)} />);
+    await press(answer(host, "not mine"));
+    await pressAgain(element(host, TRIGGER));
+    expect(heard).toHaveBeenCalledTimes(1);
+    expect(isOpen(host)).toBe(false);
+    expect(focused(host)).toBe(true);
+  });
 });
 
 describe("escape", () => {
@@ -305,5 +315,11 @@ describe("the look", () => {
 
   test("the group's box steps aside, so its answers are the row's own items and wrap with it", () => {
     expect(one(open(), LIST).classes).toContain("contents");
+  });
+
+  test("a question's answers wrap inside their own group, behind its arrow, so they never run past the slot", () => {
+    const asked = one(open(), ASKED);
+    expect(asked.classes).toEqual(expect.arrayContaining(["inline-flex", "flex-wrap", "max-w-full"]));
+    expect(asked.el.firstElementChild?.tagName.toLowerCase()).toBe("svg");
   });
 });

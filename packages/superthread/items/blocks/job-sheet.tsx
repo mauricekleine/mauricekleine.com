@@ -6,9 +6,9 @@ import { Paper } from "@/components/superthread/ui/paper";
 import { Toggle } from "@/components/superthread/ui/toggle";
 
 // The one job, on the page's paper. Its rows are held by the grid and not by what's in them, so a state that drops a part
-// or a read that answers late moves nothing. Paper reaches past the panel by its own padding, so the words share the
-// panel's left edge; it answers to its own width, so a full panel and everything narrower hold one height each, and a
-// phone a third. The space above it is held too, so the sheet keeps one y through the day.
+// or a read that answers after the sheet prints moves nothing. Paper reaches past the panel by its own padding, so the
+// words share the panel's left edge; it answers to its own width, so a full panel and everything narrower hold one height
+// each, and a phone a third. The space above it is held too, so the sheet keeps one y through the day.
 function JobSheet({ className, children, ...props }: React.ComponentProps<"section">) {
   return (
     <Paper
@@ -21,7 +21,7 @@ function JobSheet({ className, children, ...props }: React.ComponentProps<"secti
       <div
         data-mk="job-sheet"
         data-slot="job-sheet"
-        className="grid grid-cols-[minmax(0,1fr)] grid-rows-[24px_136px_33px_20px_48px] gap-y-3 [grid-template-areas:'cue'_'title'_'why'_'changed'_'actions'] [@media(max-width:600px)]:grid-rows-[24px_176px_62px_20px_48px] [@media(max-width:600px)]:gap-y-2 [@media(min-width:601px)]:@max-[783px]/job-sheet:grid-rows-[24px_176px_66px_20px_48px]"
+        className="grid grid-cols-[minmax(0,1fr)] grid-rows-[24px_136px_33px_20px_48px] gap-y-3 [grid-template-areas:'cue'_'title'_'why'_'changed'_'actions'] [@media(max-width:600px)]:grid-rows-[24px_176px_62px_20px_48px] [@media(max-width:600px)]:gap-y-2 [@media(min-width:601px)]:@max-[784px]/job-sheet:grid-rows-[24px_176px_66px_20px_48px]"
       >
         {children}
       </div>

@@ -52,19 +52,19 @@ function Page() {
       </Section>
       <Section id="states" title="through the day">
         <p className="st-cb-copy">
-          near a meeting the quiet line says what moved. the line is a late read, so its slot holds whether it answers
+          near a meeting the quiet line says what moved. the line is a slow read, so its slot holds whether it answers
           or not. in the meeting the cue turns into a fact, the primary prints as an outline, and the sheet keeps its
           height with the why gone.
         </p>
         <ModePair
           className="st-cb-stack"
           light={
-            <GroundFrame mode="light" title="job sheet states, light" width={1100} height={1180}>
+            <GroundFrame mode="light" title="job sheet states, light" width={1100} height={1290}>
               <JobSheetStates />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="job sheet states, dark" width={1100} height={1180}>
+            <GroundFrame mode="dark" title="job sheet states, dark" width={1100} height={1290}>
               <JobSheetStates />
             </GroundFrame>
           }
@@ -79,12 +79,12 @@ function Page() {
         <ModePair
           className="st-cb-stack"
           light={
-            <GroundFrame mode="light" title="job sheet answers, light" width={1100} height={1180}>
+            <GroundFrame mode="light" title="job sheet answers, light" width={1100} height={1290}>
               <JobSheetAnswers />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="job sheet answers, dark" width={1100} height={1180}>
+            <GroundFrame mode="dark" title="job sheet answers, dark" width={1100} height={1290}>
               <JobSheetAnswers />
             </GroundFrame>
           }
@@ -98,12 +98,12 @@ function Page() {
         <ModePair
           className="st-cb-stack"
           light={
-            <GroundFrame mode="light" title="job sheet long titles, light" width={1100} height={1180}>
+            <GroundFrame mode="light" title="job sheet long titles, light" width={1100} height={1290}>
               <JobSheetTitles />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="job sheet long titles, dark" width={1100} height={1180}>
+            <GroundFrame mode="dark" title="job sheet long titles, dark" width={1100} height={1290}>
               <JobSheetTitles />
             </GroundFrame>
           }
