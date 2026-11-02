@@ -3263,6 +3263,11 @@
         "section": "components"
       },
       {
+        "name": "The Page Key Rule",
+        "body": "A bare key answers only on the page: away from text, and outside a modal, a menu or a list that jumps by letter. Every one goes through `isPageKey` from `@mk/hotkey`, so a letter never lands in a field by surprise.",
+        "section": "components"
+      },
+      {
         "name": "The Complete Read Rule",
         "body": "Clear prints only after a complete read. A failed or loading read isn't zero, and a stale read prints when it was last read.",
         "section": "components"
