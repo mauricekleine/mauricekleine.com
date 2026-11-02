@@ -2896,6 +2896,10 @@
         "displayName": "title",
         "purpose": "card, board and form titles, and a section head in a panel"
       },
+      "long": {
+        "displayName": "long",
+        "purpose": "fit-title's last step, for a title too long for section"
+      },
       "section": {
         "displayName": "section",
         "purpose": "a page head's title in a panel, and a section head on the stock"
@@ -2908,9 +2912,13 @@
         "displayName": "page on a phone",
         "purpose": "type-page at 600 px and below: a reading sheet's heading"
       },
+      "headline": {
+        "displayName": "headline",
+        "purpose": "fit-title's step for a title too long for hero, and its first step under a full panel's 784 px measure"
+      },
       "hero": {
         "displayName": "hero",
-        "purpose": "a page head's title on the stock, or at size=\"page\""
+        "purpose": "a page head's title on the stock, or at size=\"page\", and fit-title's first step at a full panel's measure"
       },
       "hero-phone": {
         "displayName": "hero on a phone",

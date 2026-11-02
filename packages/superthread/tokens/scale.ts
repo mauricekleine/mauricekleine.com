@@ -16,7 +16,8 @@ export type TypeStep = {
   from: string;
 };
 
-// P2's step names, plus summary, subtitle, lede and title, which the master prints too.
+// P2's step names, plus summary, subtitle, lede and title, which the master prints too, and long and headline, which
+// only the fleet prints.
 export const steps: TypeStep[] = [
   {
     name: "meta",
@@ -60,6 +61,15 @@ export const steps: TypeStep[] = [
     from: "M/src/reach.css .tk h3",
   },
   {
+    name: "long",
+    size: 26,
+    line: 29,
+    tracking: "-0.03em",
+    family: "display",
+    weight: 300,
+    from: "the fleet's step: a title too long for section, the foot of fit-title's ladder",
+  },
+  {
     name: "section",
     size: 30,
     line: 34,
@@ -77,6 +87,15 @@ export const steps: TypeStep[] = [
     weight: 600,
     phone: { size: 28, line: 34, from: "M/src/reach.css .sheet h3 in @media (max-width:900px)" },
     from: "M/src/reach.css .sheet h3",
+  },
+  {
+    name: "headline",
+    size: 40,
+    line: 44,
+    tracking: "-0.03em",
+    family: "display",
+    weight: 300,
+    from: "the fleet's step: a title too long for hero, and the top of fit-title's ladder under a full panel",
   },
   {
     name: "hero",

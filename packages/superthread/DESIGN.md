@@ -253,6 +253,12 @@ typography:
     fontWeight: 300
     lineHeight: 28px
     letterSpacing: -0.02em
+  long:
+    fontFamily: "Unbounded, ui-sans-serif, sans-serif"
+    fontSize: 26px
+    fontWeight: 300
+    lineHeight: 29px
+    letterSpacing: -0.03em
   section:
     fontFamily: "Unbounded, ui-sans-serif, sans-serif"
     fontSize: 30px
@@ -271,6 +277,12 @@ typography:
     fontWeight: 600
     lineHeight: 34px
     letterSpacing: -0.01em
+  headline:
+    fontFamily: "Unbounded, ui-sans-serif, sans-serif"
+    fontSize: 40px
+    fontWeight: 300
+    lineHeight: 44px
+    letterSpacing: -0.03em
   hero:
     fontFamily: "Unbounded, ui-sans-serif, sans-serif"
     fontSize: 64px
@@ -443,9 +455,11 @@ Each step is a `type-<step>` utility that sets face, size, line, tracking, weigh
 - **Read** (Erode 400, 19/32 px; phone 18/30): the reading page, on a 27.5em measure (about 66 characters).
 - **Lede** (Erode 400, 21/33 px; phone 19/31): the sentence under a page title, on a panel and on the stock alike, on the reading measure.
 - **Title** (Unbounded 300, 22/28 px, -0.02em): card, board and form titles, and a section head in a panel.
+- **Long** (Unbounded 300, 26/29 px, -0.03em): `fit-title`'s last step, for a title too long for section.
 - **Section** (Unbounded 300, 30/34 px, -0.03em): a page head's title in a panel, and a section head on the stock.
 - **Page** (Erode 600, 34/40 px, -0.01em; phone 28/34): a reading sheet's heading.
-- **Hero** (Unbounded 300, 64/68 px, -0.04em; phone 52/56): a page head's title on the stock, or at `size="page"`.
+- **Headline** (Unbounded 300, 40/44 px, -0.03em): `fit-title`'s step for a title too long for hero, and its first step under a full panel's 784 px measure.
+- **Hero** (Unbounded 300, 64/68 px, -0.04em; phone 52/56): a page head's title on the stock, or at `size="page"`, and `fit-title`'s first step at a full panel's measure.
 - **Display** (Unbounded 300, 76/80 px, -0.04em): the overview's wordmark line.
 
 The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or an `li` reads with its words, so a time in a sentence or a row's meta line holds no column; `ListRowAside` prints in mono, so a time there still does.

@@ -975,6 +975,14 @@ export const tokens = {
         "weight": 300,
         "from": "M/src/reach.css .tk h3"
       },
+      "long": {
+        "size": 26,
+        "line": 29,
+        "tracking": "-0.03em",
+        "family": "display",
+        "weight": 300,
+        "from": "the fleet's step: a title too long for section, the foot of fit-title's ladder"
+      },
       "section": {
         "size": 30,
         "line": 34,
@@ -995,6 +1003,14 @@ export const tokens = {
           "from": "M/src/reach.css .sheet h3 in @media (max-width:900px)"
         },
         "from": "M/src/reach.css .sheet h3"
+      },
+      "headline": {
+        "size": 40,
+        "line": 44,
+        "tracking": "-0.03em",
+        "family": "display",
+        "weight": 300,
+        "from": "the fleet's step: a title too long for hero, and the top of fit-title's ladder under a full panel"
       },
       "hero": {
         "size": 64,
