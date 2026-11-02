@@ -234,7 +234,8 @@ function AppShellGround({ className, render, ...props }: useRender.ComponentProp
 // The working panel takes the sheet lift on the deep ground, with the board's measure and phone padding. One width
 // everywhere: no ship widens it, so main content holds its place between pages. It is a size container, so what prints
 // inside it answers to the panel's width. It is paper again, so the selected role returns to the page's foreground and
-// the ring to the house ink. The base layer prints a plain anchor in it as a foreground link and wraps its text anywhere.
+// the ring to the house ink, and --surface names its fill for a part that knocks a line out, such as the day line's now
+// mark. The base layer prints a plain anchor in it as a foreground link and wraps its text anywhere.
 // A div by default; render it as the app's own main or section when the layout asks.
 function AppShellPanel({ className, render, ...props }: useRender.ComponentProps<"div">) {
   return useRender({
@@ -243,7 +244,7 @@ function AppShellPanel({ className, render, ...props }: useRender.ComponentProps
     props: mergeProps<"div">(
       {
         className: cn(
-          "@container/panel w-full min-w-0 max-w-[880px] bg-card px-(--spacing-panel-inset) pt-10 pb-7 text-card-foreground shadow-sheet [--ring:var(--primary)] [--selected:var(--foreground)] [@media(max-width:600px)]:pt-7 [@media(max-width:600px)]:pb-4",
+          "@container/panel w-full min-w-0 max-w-[880px] bg-card px-(--spacing-panel-inset) pt-10 pb-7 text-card-foreground shadow-sheet [--ring:var(--primary)] [--selected:var(--foreground)] [--surface:var(--card)] [@media(max-width:600px)]:pt-7 [@media(max-width:600px)]:pb-4",
           className,
         ),
       },

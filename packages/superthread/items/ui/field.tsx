@@ -161,7 +161,7 @@ function FieldSeparator({
       <Separator className="absolute inset-x-0 top-1/2 h-px bg-border" />
       {children && (
         <span
-          className="relative mx-auto block w-fit bg-background px-2 type-instrument text-muted-foreground"
+          className="relative mx-auto block w-fit bg-(--surface,var(--background)) px-2 type-instrument text-muted-foreground"
           data-slot="field-separator-content"
         >
           {children}

@@ -504,10 +504,10 @@ describe("the strip", () => {
     expect(one(track, '[data-slot="day-line-tick"]').classes).toContain("w-px");
   });
 
-  test("the mark takes an edge in the page's stock, so it holds against a block it crosses", () => {
+  test("the mark takes an edge in the surface it sits on, so it holds against a block it crosses", () => {
     const host = strip([standup], { now: clock("09:40") });
     expect(one(host, '[data-slot="day-line-now-mark"]').classes).toEqual(
-      expect.arrayContaining(["outline-1", "outline-background"]),
+      expect.arrayContaining(["outline-1", "outline-(--surface,var(--background))"]),
     );
   });
 

@@ -154,11 +154,11 @@ describe("field", () => {
     expect(custom.querySelectorAll("svg")).toHaveLength(1);
     expect(one(custom, "a").el.getAttribute("href")).toBe("#email");
   });
-  test("the separator prints its instrument label on stock over a 1 px rule", () => {
+  test("the separator prints its instrument label over a 1 px rule, on the fill of the surface it sits on", () => {
     const host = server(<FieldSeparator>or</FieldSeparator>);
     expect(one(host, '[data-slot="separator"]').classes).toEqual(expect.arrayContaining(["h-px", "bg-border"]));
     expect(one(host, '[data-slot="field-separator-content"]').classes).toEqual(
-      expect.arrayContaining(["bg-background", "type-instrument", "text-muted-foreground"]),
+      expect.arrayContaining(["bg-(--surface,var(--background))", "type-instrument", "text-muted-foreground"]),
     );
   });
   test("no texture or forbidden class across states and choice cards", () => {

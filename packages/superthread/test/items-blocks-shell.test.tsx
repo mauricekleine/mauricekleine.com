@@ -61,6 +61,11 @@ describe("app shell", () => {
     expect(panel.classes).toContain("[--selected:var(--foreground)]");
   });
 
+  test("the panel names its card fill as the surface, so a part that knocks a line out prints no box of the stock", () => {
+    const panel = one(frame(), '[data-slot="app-shell-panel"]');
+    expect(panel.classes).toEqual(expect.arrayContaining(["bg-card", "[--surface:var(--card)]"]));
+  });
+
   test("the panel renders as the app's own element, keeping its slot and its look", () => {
     const panel = one(
       server(<AppShellPanel render={<main id="main" />}>working panel</AppShellPanel>),

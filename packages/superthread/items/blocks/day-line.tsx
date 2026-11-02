@@ -422,7 +422,7 @@ function DayLineStrip({
           {nowAt !== null && (
             <span
               data-slot="day-line-now-mark"
-              className="pointer-events-none absolute top-0 -bottom-[5px] -ml-px w-0.5 bg-first outline-1 outline-background"
+              className="pointer-events-none absolute top-0 -bottom-[5px] -ml-px w-0.5 bg-first outline-1 outline-(--surface,var(--background))"
               style={{ left: "clamp(1px, var(--now), calc(100% - 1px))" }}
             />
           )}

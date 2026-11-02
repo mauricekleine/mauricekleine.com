@@ -38,6 +38,10 @@ describe("paper", () => {
     expect(paperOn("dark").root.classes).toEqual(expect.arrayContaining(["bg-card", "text-card-foreground"]));
   });
 
+  test("names its white as the surface, so a part that knocks a line out on it prints no box of the panel's fill", () => {
+    expect(paperOn("dark").root.classes).toContain("[--surface:var(--card)]");
+  });
+
   test("on a dark page, what sits on it reads light while its root reads the page", () => {
     const { root, button } = paperOn("dark");
     expect(readsDark(button.el)).toBe(false);
