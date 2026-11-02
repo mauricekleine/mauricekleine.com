@@ -6,14 +6,17 @@ import type { ComponentProps } from "react";
 import { renderToString } from "react-dom/server";
 import {
   DayLine,
+  DayLineAction,
   DayLineAllDay,
   DayLineDate,
   type DayLineEvent,
+  DayLineFoot,
   DayLineHead,
   DayLineNote,
   DayLineSteps,
   DayLineStrip,
 } from "@/components/superthread/blocks/day-line";
+import { Button } from "@/components/superthread/ui/button";
 import { Icon } from "@/components/superthread/ui/glyphs";
 import { CONTROL_RING, detailsUsed, elements, forbidden, one, server } from "./rendered.tsx";
 
@@ -549,14 +552,6 @@ describe("the strip", () => {
     expect(one(host, '[data-slot="day-line-now"] time').el.textContent).toBe("11:12");
   });
 
-  test("a stale read says when, on the side away from now", () => {
-    const morning = one(strip([standup], { asOf: "as of 08:10", now: clock("09:00") }), '[data-slot="day-line-as-of"]');
-    expect(morning.el.textContent).toBe("as of 08:10");
-    expect((morning.el as HTMLElement).style.right).toBe("0px");
-    const evening = one(strip([standup], { asOf: "as of 08:10", now: clock("16:00") }), '[data-slot="day-line-as-of"]');
-    expect((evening.el as HTMLElement).style.left).toBe("0px");
-  });
-
   test("a day with no timed event prints its children in the names' place, to every reader", () => {
     const host = strip([], { children: "nothing fixed today", now: clock("11:12") });
     const message = one(host, '[data-slot="day-line-message"]');
@@ -612,6 +607,66 @@ describe("the strip", () => {
   });
 });
 
+describe("the foot", () => {
+  const faulted = (
+    <DayLineFoot action={<DayLineAction>try again</DayLineAction>}>
+      outlook isn&rsquo;t answering · as of 08:10
+    </DayLineFoot>
+  );
+
+  test("holds the same box with a fault or without, so one coming or going moves nothing", () => {
+    const empty = one(server(<DayLineFoot />), '[data-slot="day-line-foot"]');
+    const full = one(server(faulted), '[data-slot="day-line-foot"]');
+    expect(empty.classes).toEqual(full.classes);
+    expect(full.classes).toEqual(expect.arrayContaining(["h-6", "min-w-0"]));
+    // the live region is there before the words, so a screen reader hears them arrive
+    expect(empty.el.querySelector('[role="status"]')).not.toBeNull();
+  });
+
+  test("its words are a status and truncate first, and its one action stands beside them, whole", () => {
+    const foot = server(faulted);
+    const words = one(foot, '[role="status"]');
+    expect(words.el.textContent).toBe("outlook isn’t answering · as of 08:10");
+    expect(words.classes).toEqual(expect.arrayContaining(["min-w-0", "truncate"]));
+    const action = one(foot, '[data-slot="day-line-action"]');
+    expect(words.el.contains(action.el)).toBe(false);
+    expect(action.el.tagName).toBe("BUTTON");
+    expect(action.el.getAttribute("type")).toBe("button");
+    expect(action.classes).toContain("shrink-0");
+  });
+
+  test("the action is a quiet word, foreground beside the muted words, with a 44 px phone target", () => {
+    const action = one(server(faulted), '[data-slot="day-line-action"]');
+    const link = one(server(<Button variant="link" size="xs" />), "button");
+    expect(action.classes).toEqual(link.classes);
+    expect(action.classes).toEqual(expect.arrayContaining(["text-foreground", "hover:underline", `${PHONE}hit-area`]));
+    expect(one(server(faulted), '[data-slot="day-line-foot"]').classes).toContain("text-muted-foreground");
+  });
+
+  test("inside the day line it sits right under the strip, and nowhere else does it pull up", () => {
+    const host = server(
+      <DayLine>
+        <DayLineHead>
+          <DayLineDate>tue 3 nov</DayLineDate>
+        </DayLineHead>
+        <DayLineStrip day={DAY} events={[standup]} timeZone={ZONE} />
+        {faulted}
+      </DayLine>,
+    );
+    const line = one(host, '[data-slot="day-line"]');
+    const hug = "[&>[data-slot=day-line-strip]+[data-slot=day-line-foot]]:-mt-4";
+    expect(line.classes).toEqual(expect.arrayContaining(["gap-4", hug]));
+    expect(one(host, '[data-slot="day-line-strip"] + [data-slot="day-line-foot"]').el).toBeDefined();
+    expect(one(host, '[data-slot="day-line-foot"]').classes.some((cls) => cls.includes("-mt-"))).toBe(false);
+  });
+
+  test("holds the rules every skin keeps, with no texture detail of its own", () => {
+    const host = server(faulted);
+    expect(forbidden(elements(host))).toEqual([]);
+    expect(detailsUsed(elements(host), "day-line")).toEqual([]);
+  });
+});
+
 describe("the head", () => {
   const head = () =>
     server(
@@ -620,7 +675,7 @@ describe("the head", () => {
           <DayLineDate href="/day" aria-expanded={true}>
             tue 3 nov
           </DayLineDate>
-          <DayLineNote>outlook isn&rsquo;t answering</DayLineNote>
+          <DayLineNote>times in new york</DayLineNote>
           <DayLineAllDay>anna out of office</DayLineAllDay>
           <DayLineSteps>
             <a href="/tomorrow">tomorrow</a>

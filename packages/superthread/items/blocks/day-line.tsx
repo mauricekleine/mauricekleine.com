@@ -9,6 +9,7 @@ import {
   type TimeOptions,
 } from "@/components/superthread/lib/time-words";
 import { cn } from "@/components/superthread/lib/utils";
+import { Button } from "@/components/superthread/ui/button";
 import { Icon } from "@/components/superthread/ui/glyphs";
 import { Skeleton } from "@/components/superthread/ui/skeleton";
 
@@ -345,11 +346,12 @@ function Names({ names }: { names: Name[] }) {
  * The strip: names, track, ticks and the now mark. `day` is a plain date, like `2026-11-03`, and `timeZone` the zone it
  * reads in. Give it an `aria-label` that names the day. Without `now`, nothing reads as gone by and no mark prints, and
  * the mark prints only on its own day: a day gone by reads as spent, and a day to come as unspent.
- * `children` print in the names' place when the day holds no timed event: `nothing fixed today`, or why it can't say.
- * `loading` holds the shape until the first read. `asOf` says when a stale read was last good.
+ * `children` print in the names' place when the day holds no timed event, such as `nothing fixed today`. A read that
+ * failed leaves them out and says why in DayLineFoot, so a failed read never reads as an empty day. A read that may be
+ * behind prints its blocks dotted, and DayLineFoot says why and when it was last good. `loading` holds the shape until
+ * the first read.
  */
 function DayLineStrip({
-  asOf,
   children,
   className,
   day,
@@ -365,7 +367,6 @@ function DayLineStrip({
   now?: Moment | null;
   timeZone?: string;
   loading?: boolean;
-  asOf?: ReactNode;
 }) {
   const options = { timeZone };
   const { at, from, to, placed, names, position } = layOut(day, events, now, options);
@@ -435,7 +436,7 @@ function DayLineStrip({
           )}
         </div>
       </div>
-      <div data-slot="day-line-foot" className="relative h-5 type-instrument leading-[15px]">
+      <div data-slot="day-line-clock" className="relative h-5 type-instrument leading-[15px]">
         {nowAt !== null && now !== null && now !== undefined && (
           <p
             data-slot="day-line-now"
@@ -446,19 +447,6 @@ function DayLineStrip({
             <time dateTime={new Date(now).toISOString()}>{clockWords(now, options)}</time>
           </p>
         )}
-        {asOf !== undefined && (
-          <p
-            data-slot="day-line-as-of"
-            className="absolute top-[5px] truncate text-muted-foreground"
-            style={
-              nowAt !== null && nowAt > 50
-                ? { left: 0, maxWidth: "calc(var(--now) - 32px)" }
-                : { right: 0, maxWidth: nowAt === null ? "100%" : "calc(100% - var(--now) - 32px)" }
-            }
-          >
-            {asOf}
-          </p>
-        )}
       </div>
     </section>
   );
@@ -466,8 +454,7 @@ function DayLineStrip({
 
 // The date, a calendar note, the ways to the next day and the all-day line. The date and the note share a baseline on a
 // wide screen. The all-day line hangs below the date, in the gap before the strip, so it never moves the strip, and on a
-// phone the note joins it there. The note is why the day can't be trusted, so it keeps its whole width there and the
-// all-day words truncate first.
+// phone the note joins it there. The note keeps its whole width there and the all-day words truncate first.
 function DayLineHead({ className, ...props }: React.ComponentProps<"header">) {
   return (
     <header
@@ -503,7 +490,8 @@ function DayLineDate({ className, href, render, ...props }: useRender.ComponentP
   });
 }
 
-// A calendar's own note, such as `outlook isn't answering`. On a phone it drops under the date, out of the date's target.
+// A calendar's own note, such as `times in new york`. A fault goes in DayLineFoot. On a phone the note drops under the
+// date, out of the date's target.
 function DayLineNote({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
@@ -544,9 +532,60 @@ function DayLineSteps({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-// The head and the strip, 16 px apart.
-function DayLine({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-mk="day-line" data-slot="day-line" className={cn("grid min-w-0 gap-4", className)} {...props} />;
+// The one home for why the day can't be trusted and when it was last good, with the one way to fix it: `outlook isn't
+// answering · as of 08:10` and `try again`, whichever calendar failed and whether or not the strip has blocks. Render
+// it always: it holds its 24 px while it's empty, so a fault comes and goes without moving a thing, and a screen reader
+// hears its words arrive. The words truncate first, so the action keeps its whole word.
+function DayLineFoot({
+  action,
+  children,
+  className,
+  ...props
+}: React.ComponentProps<"div"> & {
+  /** The one action, a DayLineAction: `try again`. */
+  action?: ReactNode;
+}) {
+  return (
+    <div
+      data-mk="day-line"
+      data-slot="day-line-foot"
+      className={cn("flex h-6 min-w-0 items-center justify-end gap-2 type-instrument text-muted-foreground", className)}
+      {...props}
+    >
+      <p role="status" className="min-w-0 truncate">
+        {children}
+      </p>
+      {action}
+    </div>
+  );
 }
 
-export { DayLine, DayLineAllDay, DayLineDate, DayLineHead, DayLineNote, DayLineSteps, DayLineStrip };
+// The foot's one action: a foreground word that underlines on hover, as a link in chrome does, beside the muted words.
+// On a phone it takes 44 px through its hit area.
+function DayLineAction(props: Omit<React.ComponentProps<typeof Button>, "variant" | "size">) {
+  return <Button data-slot="day-line-action" variant="link" size="xs" {...props} />;
+}
+
+// The head and the strip, 16 px apart, and the foot right under the strip.
+function DayLine({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-mk="day-line"
+      data-slot="day-line"
+      className={cn("grid min-w-0 gap-4 [&>[data-slot=day-line-strip]+[data-slot=day-line-foot]]:-mt-4", className)}
+      {...props}
+    />
+  );
+}
+
+export {
+  DayLine,
+  DayLineAction,
+  DayLineAllDay,
+  DayLineDate,
+  DayLineFoot,
+  DayLineHead,
+  DayLineNote,
+  DayLineSteps,
+  DayLineStrip,
+};

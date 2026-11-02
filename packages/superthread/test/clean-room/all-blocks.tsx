@@ -78,8 +78,10 @@ import {
 } from "@/components/superthread/blocks/job-sheet";
 import {
   DayLine,
+  DayLineAction,
   DayLineAllDay,
   DayLineDate,
+  DayLineFoot,
   DayLineHead,
   DayLineNote,
   DayLineSteps,
@@ -666,7 +668,7 @@ function Sink({ mode }: { mode: Mode }) {
         <DayLine>
           <DayLineHead>
             <DayLineDate href="#day">tue 3 nov</DayLineDate>
-            <DayLineNote>personal calendar isn&rsquo;t answering</DayLineNote>
+            <DayLineNote>times in utc</DayLineNote>
             <DayLineAllDay>anna out of office</DayLineAllDay>
             <DayLineSteps>
               <Onward href="#tomorrow">wed 4 nov</Onward>
@@ -674,7 +676,6 @@ function Sink({ mode }: { mode: Mode }) {
           </DayLineHead>
           <DayLineStrip
             aria-label="tuesday's meetings"
-            asOf="as of 08:10"
             day="2026-11-03"
             events={[
               {
@@ -696,6 +697,9 @@ function Sink({ mode }: { mode: Mode }) {
             now="2026-11-03T08:42:00Z"
             timeZone="UTC"
           />
+          <DayLineFoot action={<DayLineAction>try again</DayLineAction>}>
+            personal calendar isn&rsquo;t answering · as of 08:10
+          </DayLineFoot>
         </DayLine>
       </Part>
       <Part name="month-grid">

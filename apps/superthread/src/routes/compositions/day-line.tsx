@@ -5,6 +5,7 @@ import {
   DayLineEvening,
   DayLineExample,
   DayLineFailedRead,
+  DayLineFault,
   DayLineHeavy,
   DayLineKinds,
   DayLineLoading,
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/compositions/day-line")({
       { id: "heavy", title: "a heavy day" },
       { id: "scale", title: "the scale" },
       { id: "no-events", title: "no events" },
+      { id: "faults", title: "when a read fails" },
       { id: "phone", title: "on a phone" },
       { id: "parts", title: "parts" },
     ],
@@ -75,10 +77,10 @@ function Page() {
       </Section>
       <Section id="kinds" title="kinds of event">
         <p className="st-cb-copy">
-          an outline is tentative, and its name says so. a dotted edge is a read that may be behind, and{" "}
-          <code>asOf</code> says when it was last good. two meetings that overlap stack at half height, earlier on top,
-          and share one name. the first ink marks the selected block. a plain date is an all-day event, which goes in
-          the head and never on the strip.
+          an outline is tentative, and its name says so. a dotted edge is a read that may be behind, and the foot says
+          why and when it was last good. two meetings that overlap stack at half height, earlier on top, and share one
+          name. the first ink marks the selected block. a plain date is an all-day event, which goes in the head and
+          never on the strip.
         </p>
         <ModePair className="st-cb-stack">
           <DayLineKinds />
@@ -106,16 +108,27 @@ function Page() {
       </Section>
       <Section id="no-events" title="no events">
         <p className="st-cb-copy">
-          a day with no timed event prints its children where the names go: what the day holds, or why it can&rsquo;t
-          say. a failed read never reads as an empty day. until the first read <code>loading</code> holds the
-          strip&rsquo;s height with bars in the names&rsquo; band, and nothing solid on the track. a refresh keeps the
-          blocks it has.
+          a day with no timed event prints its children where the names go: what the day holds. until the first read{" "}
+          <code>loading</code> holds the strip&rsquo;s height with bars in the names&rsquo; band, and nothing solid on
+          the track. a refresh keeps the blocks it has.
         </p>
         <ModePair className="st-cb-stack">
           <div className="st-day-line-stack">
             <DayLineNothingFixed />
-            <DayLineFailedRead />
             <DayLineLoading />
+          </div>
+        </ModePair>
+      </Section>
+      <Section id="faults" title="when a read fails">
+        <p className="st-cb-copy">
+          a fault has one home: the foot under the strip, with why the day can&rsquo;t be trusted, when it was last good
+          and one quiet action. it holds its 24 px while it&rsquo;s empty, so a fault from any calendar comes and goes
+          and nothing moves. with nothing drawn, the band stays empty, so a failed read never reads as an empty day.
+        </p>
+        <ModePair className="st-cb-stack">
+          <div className="st-day-line-stack">
+            <DayLineFault />
+            <DayLineFailedRead />
           </div>
         </ModePair>
       </Section>
@@ -148,7 +161,7 @@ function Page() {
           <dt>
             <code>DayLine</code>
           </dt>
-          <dd>the head and the strip, 16 px apart.</dd>
+          <dd>the head and the strip, 16 px apart, and the foot right under the strip.</dd>
           <dt>
             <code>DayLineHead</code>
           </dt>
@@ -181,8 +194,20 @@ function Page() {
           </dt>
           <dd>
             names, track, ticks and now, from <code>day</code>, <code>events</code>, <code>now</code>,{" "}
-            <code>timeZone</code>, <code>loading</code> and <code>asOf</code>. its children print when the day holds no
-            timed event.
+            <code>timeZone</code> and <code>loading</code>. its children print when the day holds no timed event.
+          </dd>
+          <dt>
+            <code>DayLineFoot</code>
+          </dt>
+          <dd>
+            the line under the strip for a fault&rsquo;s words and when the read was last good, with its one{" "}
+            <code>action</code>. it holds its height while it&rsquo;s empty.
+          </dd>
+          <dt>
+            <code>DayLineAction</code>
+          </dt>
+          <dd>
+            the foot&rsquo;s one action, such as <code>try again</code>.
           </dd>
         </dl>
       </Section>
