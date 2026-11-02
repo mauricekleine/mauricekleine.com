@@ -21,8 +21,9 @@ function ListRows({ className, ...props }: React.ComponentProps<"ul">) {
 
 // A day row reads across one 44 px line with no rule, so a day's plain list looks like nothing to work through: a time,
 // the title, its kind and what ends the row. The columns hold across rows, and a row with no kind leaves its column open.
+// On a phone the kind's column gives way first: the title is the row's point, so it keeps half the row.
 const DAY_ROW =
-  "group/list-row grid h-11 min-w-0 grid-cols-[48px_minmax(0,1fr)_80px_128px] items-center gap-x-4 type-ui [grid-template-areas:'time_title_kind_when'] [@media(max-width:600px)]:grid-cols-[44px_minmax(0,1fr)_auto_48px] [@media(max-width:600px)]:gap-x-2";
+  "group/list-row grid h-11 min-w-0 grid-cols-[48px_minmax(0,1fr)_80px_128px] items-center gap-x-4 type-ui [grid-template-areas:'time_title_kind_when'] [@media(max-width:600px)]:grid-cols-[44px_minmax(50%,1fr)_minmax(0,auto)_48px] [@media(max-width:600px)]:gap-x-2";
 
 // The optional lead, title and time share a line. On phones the time moves below the title, before the meta line. A
 // closed row stays in the list with its title muted and struck through. A receding row is still live and fading, so its
@@ -111,7 +112,7 @@ function ListRowKind({ className, href, render, ...props }: useRender.ComponentP
       {
         href,
         className: cn(
-          "min-w-0 truncate type-instrument text-muted-foreground [grid-area:kind] decoration-1 underline-offset-4 [&:is(a)]:type-ui [&:is(a)]:text-foreground [&:is(a)]:hover:underline [@media(max-width:600px)]:justify-self-end [@media(max-width:600px)]:[&:is(a)]:relative [@media(max-width:600px)]:[&:is(a)]:overflow-visible [@media(max-width:600px)]:[&:is(a)]:hit-area focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
+          "min-w-0 truncate type-instrument text-muted-foreground [grid-area:kind] decoration-1 underline-offset-4 [&:is(a)]:type-ui [&:is(a)]:text-foreground [&:is(a)]:hover:underline [@media(max-width:600px)]:text-right [@media(max-width:600px)]:[&:is(a)]:relative [@media(max-width:600px)]:[&:is(a)]:overflow-visible [@media(max-width:600px)]:[&:is(a)]:hit-area focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)",
           className,
         ),
       },

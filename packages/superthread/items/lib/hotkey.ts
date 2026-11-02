@@ -32,7 +32,8 @@ function typesText(target: Element) {
 export function isPageKey(event: KeyboardEvent, key: string) {
   if (event.defaultPrevented || event.repeat || event.isComposing) return false;
   if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return false;
-  if (event.key.toLowerCase() !== key.toLowerCase()) return false;
+  // A browser's autofill sends a keydown with no key.
+  if (event.key?.toLowerCase() !== key.toLowerCase()) return false;
   const target = event.target;
   return !(target instanceof Element && (typesText(target) || target.closest(KEEPS_ITS_KEYS)));
 }

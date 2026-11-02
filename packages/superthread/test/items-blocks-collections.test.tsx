@@ -477,10 +477,16 @@ describe("a day's rows", () => {
       expect.arrayContaining([
         "grid-cols-[48px_minmax(0,1fr)_80px_128px]",
         "gap-x-4",
-        `${PHONE}grid-cols-[44px_minmax(0,1fr)_auto_48px]`,
+        `${PHONE}grid-cols-[44px_minmax(50%,1fr)_minmax(0,auto)_48px]`,
         `${PHONE}gap-x-2`,
       ]),
     );
+  });
+
+  test("on a phone a kind stays in its column, so it truncates there rather than running over the title", () => {
+    const kind = one(day(), '[data-slot="list-row-kind"]');
+    expect(kind.classes).toEqual(expect.arrayContaining(["truncate", `${PHONE}text-right`]));
+    expect(kind.classes).not.toContain(`${PHONE}justify-self-end`);
   });
 
   test("a row that isn't a day row keeps its rule, its padding and no variant", () => {

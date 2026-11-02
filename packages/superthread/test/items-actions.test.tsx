@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "@/components/superthread/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/superthread/ui/tabs";
-import { client } from "./rendered.tsx";
+import { client, server } from "./rendered.tsx";
 
 const root = join(import.meta.dir, "..");
 const details: { key: string }[] = JSON.parse(readFileSync(join(root, "tokens/details.json"), "utf8")).DETAILS;
@@ -411,10 +411,21 @@ describe("badge", () => {
     expect(classes(renderToString(<Badge variant="running" />))).toContain("pl-[7px]");
   });
 
-  test("a long badge stays inside its parent and wraps, and only a table cell's no-wrap holds it to a line", () => {
+  // overflow-wrap: anywhere counts in min-content, so a badge in a wrapper that can shrink stacks by the letter. happy-dom
+  // has no layout, so the value stands in for that measurement: the browser's half is in the release's proof.
+  test("a long badge stays inside its parent and wraps, and a short one holds its word in a shrinkable wrapper", () => {
     const badge = classes(renderToString(<Badge variant="outline">a label long enough to pass a phone's edge</Badge>));
-    expect(badge).toEqual(expect.arrayContaining(["max-w-full", "[overflow-wrap:anywhere]"]));
+    expect(badge).toEqual(expect.arrayContaining(["max-w-full", "[overflow-wrap:break-word]"]));
+    expect(badge).not.toContain("[overflow-wrap:anywhere]");
     expect(badge).not.toContain("whitespace-nowrap");
+  });
+
+  test("a word wider than its parent breaks, in a box that can shrink past it", () => {
+    for (const element of [<Badge>averyveryverylongword</Badge>, <Badge variant="done">averyveryverylongword</Badge>]) {
+      const word = [...server(element).querySelectorAll('[data-slot="badge"] > span')].at(-1);
+      expect(word?.textContent).toBe("averyveryverylongword");
+      expect(word?.getAttribute("class")).toBe("min-w-0");
+    }
   });
 
   test("sets in Supreme in a mono aside too", () => {

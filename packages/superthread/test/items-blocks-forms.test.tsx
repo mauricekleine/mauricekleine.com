@@ -330,11 +330,13 @@ describe("the quiet add in a nav", () => {
   );
 
   // happy-dom has the attribute and no popover behaviour, so this stands in for the browser's half: it opens the form and
-  // fires the toggle event. The real popover, its anchor and Escape are proved in a browser.
+  // fires the toggle event, and like a browser it fires nothing when the form is already open. The real popover, its
+  // anchor and Escape are proved in a browser.
   const open: Element[] = [];
   const withPopover = () => {
     const proto = HTMLElement.prototype as unknown as { togglePopover?: (force?: boolean) => boolean };
     proto.togglePopover = function (this: HTMLElement, force?: boolean) {
+      if (force !== false && open.includes(this)) return true;
       open.push(this);
       this.dispatchEvent(Object.assign(new Event("toggle"), { newState: force === false ? "closed" : "open" }));
       return true;
@@ -416,6 +418,21 @@ describe("the quiet add in a nav", () => {
       expect(open).toEqual([]);
       await press("n");
       expect(open).toEqual([one(view.body, '[data-slot="quick-add-nav-field"]').el]);
+      expect(document.activeElement).toBe(one(view.body, '[data-slot="quick-add-nav-field"] input').el);
+    } finally {
+      await view.done();
+      restore();
+    }
+  });
+
+  test("n takes focus back to a field that's already open", async () => {
+    const restore = withPopover();
+    const view = await client(nav());
+    try {
+      await press("n");
+      const trigger = one(view.body, "button[popovertarget]").el as HTMLElement;
+      trigger.focus();
+      await press("n", trigger);
       expect(document.activeElement).toBe(one(view.body, '[data-slot="quick-add-nav-field"] input').el);
     } finally {
       await view.done();

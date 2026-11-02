@@ -21,6 +21,10 @@ function press(html: string, init: KeyboardEventInit = {}) {
 }
 
 describe("isPageKey", () => {
+  test("a keydown with no key, as a browser's autofill sends, answers nothing and throws nothing", () => {
+    expect(isPageKey(new Event("keydown") as KeyboardEvent, "n")).toBe(false);
+  });
+
   test("answers the key on the page, on a button and on an input that takes no text", () => {
     for (const html of [
       "<main data-target></main>",

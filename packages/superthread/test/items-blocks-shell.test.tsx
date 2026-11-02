@@ -480,6 +480,25 @@ describe("search palette", () => {
     }
   });
 
+  test("a keydown with no key leaves it closed and throws nothing, held modifier or not", async () => {
+    const view = await client(<Palette />);
+    const uncaught: unknown[] = [];
+    const onError = (event: ErrorEvent) => uncaught.push(event.error);
+    window.addEventListener("error", onError);
+    try {
+      for (const modifiers of [{}, { metaKey: true }]) {
+        await act(async () => {
+          document.dispatchEvent(Object.assign(new Event("keydown", { bubbles: true }), modifiers));
+        });
+      }
+      expect(uncaught).toEqual([]);
+      expect(isOpen(view.body)).toBe(false);
+    } finally {
+      window.removeEventListener("error", onError);
+      await view.done();
+    }
+  });
+
   test("controlled state remains owned by the app", async () => {
     const calls: boolean[] = [];
     const view = await client(<Palette open={false} onOpenChange={(open) => calls.push(open)} />);

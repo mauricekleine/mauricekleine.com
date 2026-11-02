@@ -121,7 +121,7 @@ function QuickAdd({
   );
 }
 
-type QuickAddNavProps = Omit<React.ComponentProps<"form">, "onSubmit" | "children" | "popover"> &
+type QuickAddNavProps = Omit<React.ComponentProps<"form">, "onSubmit" | "children" | "popover" | "ref"> &
   AddProps & {
     triggerLabel?: string;
     hotkey?: string | null;
@@ -163,10 +163,11 @@ function QuickAddNav({
       if (!isPageKey(event, hotkey)) return;
       event.preventDefault();
       form.current?.togglePopover(true);
+      input.current?.focus();
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [hotkey, disabled]);
+  }, [hotkey, disabled, input]);
 
   return (
     <SidebarMenuItem

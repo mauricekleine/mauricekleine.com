@@ -46,7 +46,7 @@ function SearchPalette({
         (event.metaKey || event.ctrlKey) &&
         !event.altKey &&
         !event.shiftKey &&
-        event.key.toLowerCase() === hotkey.toLowerCase()
+        event.key?.toLowerCase() === hotkey.toLowerCase()
       ) {
         event.preventDefault();
         setOpen(!open);
