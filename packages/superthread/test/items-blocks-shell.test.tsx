@@ -172,6 +172,10 @@ describe("app shell", () => {
       expect(classes).toEqual(expect.arrayContaining(["hidden", "[@media(max-width:900px)]:not-empty:flex"]));
     });
 
+    test("prints in the dark scope, since the ground stays dark on a light page, and holds a link's hit area", () => {
+      expect(one(foot(needsYou), FOOT).classes).toEqual(expect.arrayContaining(["dark", "min-h-11"]));
+    });
+
     test("prints what the nav's foot prints, the same way", () => {
       const host = server(
         <SidebarProvider>

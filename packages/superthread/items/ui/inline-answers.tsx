@@ -55,7 +55,7 @@ function InlineAnswers({
 
   const close = () => {
     change(false);
-    trigger.current?.focus();
+    trigger.current?.focus({ preventScroll: true });
   };
 
   return (
@@ -135,8 +135,9 @@ function InlineAnswersList({ className, children, ...props }: React.ComponentPro
   );
 }
 
-// One plain answer. Choosing it closes the answers and hands focus back to the trigger, unless onClick prevents default.
-// The answers can land under the pointer, so the second click of a double click counts for nothing.
+// One plain answer. Choosing it closes the answers and hands focus back to the trigger, with no scroll, since a click moves
+// nothing, unless onClick prevents default. The answers can land under the pointer, so the second click of a double click
+// counts for nothing.
 function InlineAnswer({ className, onClick, ...props }: React.ComponentProps<"button">) {
   const { close } = useAnswers();
   return (

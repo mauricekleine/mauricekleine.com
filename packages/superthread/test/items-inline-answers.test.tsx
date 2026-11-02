@@ -152,6 +152,14 @@ describe("an answer", () => {
     expect(focused(host)).toBe(true);
   });
 
+  test("handing focus back scrolls nothing, since a click moves nothing", async () => {
+    const host = await live(<Answers defaultOpen />);
+    const focus = mock((_options?: FocusOptions) => {});
+    element(host, TRIGGER).focus = focus;
+    await press(answer(host, "not mine"));
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+  });
+
   test("one that prevents default keeps the answers open", async () => {
     const host = await live(<Answers defaultOpen onAnswer={(_, event) => event.preventDefault()} />);
     await press(answer(host, "not mine"));

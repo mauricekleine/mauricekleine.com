@@ -2,7 +2,7 @@
 // media variant and happy-dom measures nothing, so each row reads the variant the rendered element carries.
 import { describe, expect, test } from "bun:test";
 import type { ReactNode } from "react";
-import { AppShellNav, AppShellNavItem, AppShellPageFoot } from "@/components/superthread/blocks/app-shell";
+import { AppShellNav, AppShellNavItem } from "@/components/superthread/blocks/app-shell";
 import { FilterChip } from "@/components/superthread/blocks/collection-toolbar";
 import { SortableHead } from "@/components/superthread/blocks/data-table";
 import { ListRow, ListRows, ListRowTitle } from "@/components/superthread/blocks/list-rows";
@@ -184,18 +184,6 @@ test("a sortable head takes the hit area", () => {
 });
 
 describe("the frame keeps a 44 px pitch", () => {
-  test("the page's foot gives its link a 44 px box", () => {
-    reaches(
-      <AppShellPageFoot>
-        <a href="/settings">google needs signing in</a>
-      </AppShellPageFoot>,
-      '[data-slot="app-shell-page-foot"]',
-      "[&>a]:flex",
-      "[&>a]:min-h-11",
-      "[&>a]:items-center",
-    );
-  });
-
   test("a nav item reaches 44 px at 900 px and under, with its wrapped rows on the same pitch", () => {
     const host = server(
       <SidebarProvider>
