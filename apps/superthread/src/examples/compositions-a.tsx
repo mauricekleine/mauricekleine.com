@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { AppShellGround } from "@/components/superthread/blocks/app-shell";
 import { catalog } from "@/components/superthread/catalog";
 
 export function Serves({ name }: { name: string }) {
@@ -68,5 +69,17 @@ export function ViewportFrame({
       />
       {body && createPortal(children, body)}
     </div>
+  );
+}
+
+// A viewport with the deep ground in it, so a working panel prints as it does in a ship: its lift falls on the ground and
+// the viewport cuts it only where a real one would.
+export function GroundFrame({ children, ...frame }: ComponentProps<typeof ViewportFrame>) {
+  return (
+    <ViewportFrame {...frame}>
+      <AppShellGround render={<div />} className="min-h-dvh bg-ground">
+        {children}
+      </AppShellGround>
+    </ViewportFrame>
   );
 }

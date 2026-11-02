@@ -17,7 +17,7 @@ import { Button } from "@/components/superthread/ui/button";
 import { Icon } from "@/components/superthread/ui/glyphs";
 import { Badge } from "@/components/superthread/ui/badge";
 import { catalog } from "@/components/superthread/catalog";
-import { ViewportFrame } from "@/examples/compositions-a";
+import { GroundFrame } from "@/examples/compositions-a";
 import { State } from "@/examples/input";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -99,9 +99,9 @@ function CardsExample() {
   );
 }
 
-function FullCards() {
+function FullCards({ last }: { last?: boolean }) {
   return (
-    <ItemCards aria-label="drafts to review">
+    <ItemCards aria-label="drafts to review" last={last}>
       <ItemCard variant="full">
         <ItemCardTitle href="#full">reply to sam about chapter 7</ItemCardTitle>
         <ItemCardWhen clock>before 11:00</ItemCardWhen>
@@ -184,7 +184,7 @@ function DecidedStates() {
           </ItemCard>
         </ItemCards>
       </State>
-      <State name="focus" note="the ring stays inside, so the panel's edge can't clip it">
+      <State name="focus" note="the ring stays inside the row and clear of its words">
         <ItemCards aria-label="a focused row">
           <ItemCard variant="decided">
             <ItemCardTitle href="#decided" data-demo="focus-visible">
@@ -210,9 +210,9 @@ const decided = [
   },
 ];
 
-function DecidedCards() {
+function DecidedCards({ last }: { last?: boolean }) {
   return (
-    <ItemCards aria-label="decided drafts">
+    <ItemCards aria-label="decided drafts" last={last}>
       {decided.map((card) => (
         <ItemCard key={card.title} variant="decided">
           <ItemCardTitle href="#decided">{card.title}</ItemCardTitle>
@@ -354,72 +354,78 @@ function Page() {
         <p className="st-cb-copy">
           <code>variant=&quot;decided&quot;</code> collapses a card to one line: the title, the word it was decided
           with, and the date. the same parts print, so a card moves from one form to the other by its variant alone. a
-          long title ellipsizes, and the lede and actions don&rsquo;t print.
+          long title ellipsizes, and the lede and actions don&rsquo;t print. at 600 px and below the line can&rsquo;t
+          hold all three, so it folds to two in a 56 px row: the title, then the word and the date.
         </p>
         <ModePair className="st-cb-stack">
           <DecidedCards />
         </ModePair>
-        <p className="st-cb-copy">a row answers the pointer on its title. its ring stays inside its rules.</p>
+        <p className="st-cb-copy">
+          a row answers the pointer on its title. its ring stays inside its rules, and the row&rsquo;s padding keeps it
+          off the words.
+        </p>
         <ModePair className="st-cb-stack">
           <DecidedStates />
         </ModePair>
       </Section>
       <Section id="panel" title="in the panel">
         <p className="st-cb-copy">
-          inside the working panel a decided list reaches the panel&rsquo;s edges, so its rules do. these frames use an
+          inside the working panel a list of decided rows reaches the panel&rsquo;s edges, so its rules do. a list that
+          mixes the two forms keeps its measure, so a card changing form never widens the others. these frames use an
           880 px viewport.
         </p>
         <ModePair
           className="st-cb-stack"
           light={
-            <ViewportFrame mode="light" title="decided cards in the panel, light" width={880} height={320}>
+            <GroundFrame mode="light" title="decided cards in the panel, light" width={880} height={320}>
               <AppShellPanel>
                 <DecidedCards />
               </AppShellPanel>
-            </ViewportFrame>
+            </GroundFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="decided cards in the panel, dark" width={880} height={320}>
+            <GroundFrame mode="dark" title="decided cards in the panel, dark" width={880} height={320}>
               <AppShellPanel>
                 <DecidedCards />
               </AppShellPanel>
-            </ViewportFrame>
+            </GroundFrame>
           }
         />
         <p className="st-cb-copy">
-          on a phone a full list reaches them too: its cards give up their boxes for ruled rows, and the last block runs
-          down to the panel&rsquo;s foot. these frames use a 390 px viewport.
+          on a phone a full list reaches them too: its cards give up their boxes for ruled rows. <code>last</code> says
+          nothing follows the list in the panel, so it runs down to the panel&rsquo;s foot and drops its closing rule.
+          these frames use a 390 px viewport.
         </p>
         <ModePair
           light={
-            <ViewportFrame mode="light" title="full cards phone, light" height={640}>
+            <GroundFrame mode="light" title="full cards phone, light" height={640}>
               <AppShellPanel>
-                <FullCards />
+                <FullCards last />
               </AppShellPanel>
-            </ViewportFrame>
+            </GroundFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="full cards phone, dark" height={640}>
+            <GroundFrame mode="dark" title="full cards phone, dark" height={640}>
               <AppShellPanel>
-                <FullCards />
+                <FullCards last />
               </AppShellPanel>
-            </ViewportFrame>
+            </GroundFrame>
           }
         />
         <ModePair
           light={
-            <ViewportFrame mode="light" title="decided cards phone, light" height={300}>
+            <GroundFrame mode="light" title="decided cards phone, light" height={300}>
               <AppShellPanel>
-                <DecidedCards />
+                <DecidedCards last />
               </AppShellPanel>
-            </ViewportFrame>
+            </GroundFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="decided cards phone, dark" height={300}>
+            <GroundFrame mode="dark" title="decided cards phone, dark" height={300}>
               <AppShellPanel>
-                <DecidedCards />
+                <DecidedCards last />
               </AppShellPanel>
-            </ViewportFrame>
+            </GroundFrame>
           }
         />
       </Section>
@@ -430,7 +436,7 @@ function Page() {
           </dt>
           <dd>
             the list. <code>ItemCard</code> is one card, and its <code>variant</code> sets the form every part prints
-            in.
+            in. set <code>last</code> when nothing follows the list in the working panel.
           </dd>
           <dt>
             <code>ItemCardTitle</code>
@@ -453,8 +459,8 @@ function Page() {
             <code>ItemCardMeta</code>
           </dt>
           <dd>
-            a small card&rsquo;s bottom line. on a full card it takes pieces and prints the dot between them, with the
-            first in foreground. on a decided card it&rsquo;s the one word.
+            a small card&rsquo;s bottom line. on a full card it takes pieces, one to an element or a run of text, and
+            prints the dot between them, with the first in foreground. on a decided card it&rsquo;s the one word.
           </dd>
           <dt>
             <code>ItemCardActions</code>

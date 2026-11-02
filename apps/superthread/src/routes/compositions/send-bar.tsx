@@ -16,7 +16,7 @@ import {
   SendBarTitle,
   SendBarTo,
 } from "@/components/superthread/blocks/send-bar";
-import { Serves, ViewportFrame } from "@/examples/compositions-a";
+import { GroundFrame, Serves } from "@/examples/compositions-a";
 import { State } from "@/examples/input";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -156,7 +156,7 @@ const states = [
 function InAPanel() {
   return (
     <AppShellPanel>
-      <Letter aria-label="the draft, and where it goes">
+      <Letter aria-label="the draft, and where it goes" last>
         <LetterHead>
           <LetterSubject>re: chapter 7 notes</LetterSubject>
           <LetterKind>reply · mail</LetterKind>
@@ -216,14 +216,14 @@ function Page() {
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <ViewportFrame mode="light" title="send bar in the panel, light" width={880} height={400}>
+            <GroundFrame mode="light" title="send bar in the panel, light" width={880} height={480}>
               <InAPanel />
-            </ViewportFrame>
+            </GroundFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="send bar in the panel, dark" width={880} height={400}>
+            <GroundFrame mode="dark" title="send bar in the panel, dark" width={880} height={480}>
               <InAPanel />
-            </ViewportFrame>
+            </GroundFrame>
           }
         />
       </Section>
@@ -238,19 +238,19 @@ function Page() {
       </Section>
       <Section id="phone" title="on a phone">
         <p className="st-ca-copy">
-          as the letter&rsquo;s foot inside the working panel, the bar runs to the screen&rsquo;s edges and down to the
-          panel&rsquo;s foot. both frames use a 390 px viewport.
+          as the foot of a letter marked <code>last</code>, the bar runs to the panel&rsquo;s edges and down to its
+          foot. both frames use a 390 px viewport.
         </p>
         <ModePair
           light={
-            <ViewportFrame mode="light" title="send bar phone, light" height={540}>
+            <GroundFrame mode="light" title="send bar phone, light" height={470}>
               <InAPanel />
-            </ViewportFrame>
+            </GroundFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="send bar phone, dark" height={540}>
+            <GroundFrame mode="dark" title="send bar phone, dark" height={470}>
               <InAPanel />
-            </ViewportFrame>
+            </GroundFrame>
           }
         />
       </Section>
@@ -283,7 +283,8 @@ function Page() {
           </dt>
           <dd>
             the send, in key, or a second action with <code>variant=&quot;outline&quot;</code>. enter never fires it,
-            and a label naming the reach tells a screen reader what a short word sends.
+            even from a field in the same form, and a label naming the reach tells a screen reader what a short word
+            sends.
           </dd>
           <dt>
             <code>SendBarLink</code>

@@ -19,7 +19,7 @@ import {
   SendBarTo,
 } from "@/components/superthread/blocks/send-bar";
 import { Button } from "@/components/superthread/ui/button";
-import { Serves, ViewportFrame } from "@/examples/compositions-a";
+import { GroundFrame, Serves } from "@/examples/compositions-a";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
 import { PageHead } from "@/site/PageHead";
@@ -50,9 +50,9 @@ function Tools() {
   );
 }
 
-function ShortLetter() {
+function ShortLetter({ last }: { last?: boolean }) {
   return (
-    <Letter aria-label="the draft, as it goes out">
+    <Letter aria-label="the draft, as it goes out" last={last}>
       <LetterHead>
         <LetterSubject>re: chapter 7 notes</LetterSubject>
         <LetterKind>reply · mail</LetterKind>
@@ -167,23 +167,23 @@ function Page() {
       <Section id="phone" title="on a phone">
         <p className="st-ca-copy">
           inside the working panel at 600 px and below, the letter gives up its side edges and takes the panel&rsquo;s
-          whole width. as the panel&rsquo;s last block it runs down to the panel&rsquo;s foot. both frames use a 390 px
-          viewport.
+          whole width. <code>last</code> says nothing follows it in the panel, so it runs down to the panel&rsquo;s foot
+          too. both frames use a 390 px viewport.
         </p>
         <ModePair
           light={
-            <ViewportFrame mode="light" title="letter phone, light" height={560}>
+            <GroundFrame mode="light" title="letter phone, light" height={430}>
               <AppShellPanel>
-                <ShortLetter />
+                <ShortLetter last />
               </AppShellPanel>
-            </ViewportFrame>
+            </GroundFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="letter phone, dark" height={560}>
+            <GroundFrame mode="dark" title="letter phone, dark" height={430}>
               <AppShellPanel>
-                <ShortLetter />
+                <ShortLetter last />
               </AppShellPanel>
-            </ViewportFrame>
+            </GroundFrame>
           }
         />
       </Section>
@@ -193,7 +193,8 @@ function Page() {
             <code>Letter</code>
           </dt>
           <dd>
-            the ruled box, an <code>article</code>. name it with <code>aria-label</code>.
+            the ruled box, an <code>article</code>. name it with <code>aria-label</code>. set <code>last</code> when
+            nothing follows it in the working panel.
           </dd>
           <dt>
             <code>LetterHead</code>

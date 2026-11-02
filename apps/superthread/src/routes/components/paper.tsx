@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ViewportFrame } from "@/examples/compositions-a";
+import { GroundFrame } from "@/examples/compositions-a";
 import { PaperExample, PaperInPanel } from "@/examples/paper";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -54,14 +54,14 @@ function Page() {
         </p>
         <ModePair
           light={
-            <ViewportFrame mode="light" title="paper phone, light" height={380}>
+            <GroundFrame mode="light" title="paper phone, light" height={380}>
               <PaperInPanel />
-            </ViewportFrame>
+            </GroundFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="paper phone, dark" height={380}>
+            <GroundFrame mode="dark" title="paper phone, dark" height={380}>
               <PaperInPanel />
-            </ViewportFrame>
+            </GroundFrame>
           }
         />
       </Section>
