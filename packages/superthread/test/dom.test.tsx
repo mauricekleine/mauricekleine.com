@@ -103,6 +103,18 @@ describe("a failed expect on the DOM", () => {
   ])("refuses to diff %s", (_, assertion) => {
     expect(failure(assertion)).toContain("can't print a DOM node");
   });
+
+  test("lets a mock called with a node answer what it returned", () => {
+    const handler = mock<(node: Node) => number>(() => 1);
+    handler(document.createElement("p"));
+    expect(handler).toHaveReturnedWith(1);
+    expect(handler).toHaveLastReturnedWith(1);
+    expect(handler).toHaveNthReturnedWith(1, 1);
+    // Bun's types leave its aliases out.
+    const aliases = expect(handler) as unknown as Record<"lastReturnedWith" | "nthReturnedWith", Matcher>;
+    aliases.lastReturnedWith(1);
+    aliases.nthReturnedWith(1, 1);
+  });
 });
 
 describe("every matcher Bun ships", () => {

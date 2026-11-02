@@ -91,22 +91,18 @@ expect.extend({
 /**
  * The diff behind these matchers ignores the hook and reads every property by every path, so on a value that reaches
  * the DOM it grows until the machine stops it: 1.7 GB for one rendered button. They refuse that value up front. Bun's
- * aliases, such as toBeCalledWith, are matchers of their own, so the list names them too.
+ * aliases, such as toBeCalledWith, are matchers of their own, so the list names them too. The ReturnedWith matchers
+ * print through the hook, so the list leaves them out.
  */
 const diffMatchers = [
   "lastCalledWith",
-  "lastReturnedWith",
   "nthCalledWith",
-  "nthReturnedWith",
   "toBeCalledWith",
   "toEqual",
   "toHaveBeenCalledWith",
   "toHaveBeenLastCalledWith",
   "toHaveBeenNthCalledWith",
-  "toHaveLastReturnedWith",
-  "toHaveNthReturnedWith",
   "toHaveProperty",
-  "toHaveReturnedWith",
   "toMatchInlineSnapshot",
   "toMatchObject",
   "toMatchSnapshot",
