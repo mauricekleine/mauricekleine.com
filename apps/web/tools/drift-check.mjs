@@ -12,7 +12,9 @@ const { shortLinks } = await import("../src/links.ts");
 const PERSON_ID = "https://www.mauricekleine.com/#maurice";
 const README = "https://raw.githubusercontent.com/mauricekleine/mauricekleine/main/README.md";
 const UA = "Mozilla/5.0 (compatible; mauricekleine-drift/1.0; +https://www.mauricekleine.com)";
-const quests = Object.values(sideQuests);
+// hackadam.nl's domain holder looks after it, so this check leaves that host alone
+const unchecked = new Set(["hackadam"]);
+const quests = Object.values(sideQuests).filter((quest) => !unchecked.has(quest.name));
 const ownedHosts = new Set(["www.mauricekleine.com", ...quests.map((quest) => new URL(quest.url).host)]);
 const bare = (host) => host.replace(/^www\./, "");
 
