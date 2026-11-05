@@ -1,11 +1,13 @@
 ---
 name: superthread-design
-description: Superthread, the design system for Maurice's fleet (orbit, quanta, trisys, constellation, artifacts, soliton, mauricekleine.com and every new surface), served as the @mk shadcn registry. Use when designing, building, restyling or critiquing UI for a fleet surface; installing or updating @mk items in an app; drawing a mark or icon for a ship; choosing colours, fonts, texture or motion for anything Maurice-branded; or bootstrapping a new surface. Pairs with impeccable (method) and mk-copywriting (words); this skill owns the brand facts. Not for fluncle or nonobench (own brands) or client work.
+description: Superthread, the design system for Maurice's fleet (quanta, trisys, constellation, artifacts, soliton, mauricekleine.com and every new surface), served as the @mk shadcn registry. Use when designing, building, restyling or critiquing UI for a fleet surface; installing or updating @mk items in an app; drawing a mark or icon for a ship; choosing colours, fonts, texture or motion for anything Maurice-branded; or bootstrapping a new surface. Pairs with impeccable (method) and mk-copywriting (words); this skill owns the brand facts. Not for fluncle or nonobench (own brands) or client work.
 ---
 
 # superthread-design
 
 Superthread is the design system Maurice's fleet shares. v2 is `@mk`, a shadcn registry of Base UI items on one set of tokens, served with its reference site at https://superthread.mauricekleine.com. The site renders every item from its source, in light and dark, beside the foundations and three mock app pages. When this skill and the site disagree, the site is right and this skill needs a fix.
+
+App-template apps use this system and take releases through `mk apps sync`. Orbit owns its design language and runtime. Its fleet mark and navigation link remain in the shared fleet.
 
 The sources, in the mauricekleine.com repo:
 
