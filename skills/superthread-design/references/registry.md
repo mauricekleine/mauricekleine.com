@@ -61,7 +61,7 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 ## the fleet rail
 
 ```tsx
-<FleetRail current="orbit" hrefs={{ orbit: "/" }} sidebar={<ShipNav />}>
+<FleetRail current="quanta" hrefs={{ quanta: "/" }} sidebar={<ShipNav />}>
   <main>...</main>
 </FleetRail>
 ```
