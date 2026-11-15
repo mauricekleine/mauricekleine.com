@@ -300,7 +300,40 @@ test("POST /subscribe happy path verifies turnstile, upserts the contact and ema
   }
 });
 
-test("GET /subscribe/confirm accepts a valid token and confirms the contact", async () => {
+const confirmPost = (token) =>
+  new Request(`${origin}/subscribe/confirm`, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ t: token }).toString(),
+  });
+
+test("GET /subscribe/confirm shows a form carrying the token and changes nothing", async () => {
+  const token = await makeTestToken(
+    subscribeSecrets.SUBSCRIBE_SECRET,
+    "confirmed@example.com",
+    Math.floor(Date.now() / 1000) + 60,
+  );
+  const stub = stubFetch((url) => {
+    throw new Error(`a GET must not reach the provider: ${url}`);
+  });
+  try {
+    const res = await worker.fetch(
+      new Request(`${origin}/subscribe/confirm?t=${encodeURIComponent(token)}`),
+      subscribeSecrets,
+    );
+    assert.equal(res.status, 200);
+    const body = await res.text();
+    assert.match(body, /<form method="post" action="\/subscribe\/confirm">/);
+    assert.ok(body.includes(`<input type="hidden" name="t" value="${token}" />`));
+    assert.match(body, /<button type="submit"[^>]*>send me new essays<\/button>/);
+    assert.doesNotMatch(body, /you're in/);
+    assert.equal(stub.calls.length, 0);
+  } finally {
+    stub.restore();
+  }
+});
+
+test("POST /subscribe/confirm accepts a valid token and confirms the contact", async () => {
   const token = await makeTestToken(
     subscribeSecrets.SUBSCRIBE_SECRET,
     "confirmed@example.com",
@@ -310,10 +343,7 @@ test("GET /subscribe/confirm accepts a valid token and confirms the contact", as
     () => new Response(JSON.stringify({ ok: true }), { headers: { "content-type": "application/json" } }),
   );
   try {
-    const res = await worker.fetch(
-      new Request(`${origin}/subscribe/confirm?t=${encodeURIComponent(token)}`),
-      subscribeSecrets,
-    );
+    const res = await worker.fetch(confirmPost(token), subscribeSecrets);
     assert.equal(res.status, 200);
     const body = await res.text();
     assert.match(body, /you're in/);
@@ -330,7 +360,7 @@ test("GET /subscribe/confirm accepts a valid token and confirms the contact", as
   }
 });
 
-test("GET /subscribe/confirm rejects a tampered token", async () => {
+test("GET and POST /subscribe/confirm reject a tampered token", async () => {
   const token = await makeTestToken(
     subscribeSecrets.SUBSCRIBE_SECRET,
     "tampered@example.com",
@@ -342,6 +372,8 @@ test("GET /subscribe/confirm rejects a tampered token", async () => {
     throw new Error("resend must not be called for a tampered token");
   });
   try {
+    const posted = await worker.fetch(confirmPost(tampered), subscribeSecrets);
+    assert.equal(posted.status, 410);
     const res = await worker.fetch(
       new Request(`${origin}/subscribe/confirm?t=${encodeURIComponent(tampered)}`),
       subscribeSecrets,
@@ -357,7 +389,7 @@ test("GET /subscribe/confirm rejects a tampered token", async () => {
   }
 });
 
-test("GET /subscribe/confirm rejects an expired token", async () => {
+test("GET and POST /subscribe/confirm reject an expired token", async () => {
   const token = await makeTestToken(
     subscribeSecrets.SUBSCRIBE_SECRET,
     "expired@example.com",
@@ -367,6 +399,8 @@ test("GET /subscribe/confirm rejects an expired token", async () => {
     throw new Error("resend must not be called for an expired token");
   });
   try {
+    const posted = await worker.fetch(confirmPost(token), subscribeSecrets);
+    assert.equal(posted.status, 410);
     const res = await worker.fetch(
       new Request(`${origin}/subscribe/confirm?t=${encodeURIComponent(token)}`),
       subscribeSecrets,

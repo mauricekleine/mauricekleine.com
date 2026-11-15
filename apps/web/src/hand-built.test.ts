@@ -4,6 +4,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { flat, parse, value } from "../../../packages/superthread/test/css.ts";
 import { holdsHandBuiltRules } from "../../../packages/superthread/test/hand-built.ts";
+import { buttonVariants } from "../../../packages/superthread/items/ui/button.tsx";
+import { BUTTON_CLASS } from "./server-behavior.ts";
 
 const site = join(import.meta.dir, "styles/site.css");
 
@@ -33,4 +35,8 @@ describe("every target on a phone reaches 44 px", () => {
       ),
     ).toBe("44px");
   });
+});
+
+test("the no-js pages' button prints as @mk/button's default", () => {
+  expect(BUTTON_CLASS).toBe(buttonVariants());
 });
