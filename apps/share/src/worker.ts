@@ -358,7 +358,11 @@ export class ShareStore extends DurableObject<Env> {
             // Other files may have finished, or DELETE/the alarm may have revoked
             // this upload while it streamed. Never restore an old upload record.
             const upload = await this.ctx.storage.get<Upload>(result.uploadKey);
-            if (!upload || upload.expires <= Date.now()) throw new Invalid(404, "not found");
+            if (!upload || upload.expires <= Date.now()) {
+              // The alarm may already have reclaimed this upload; drop the late object too.
+              await this.env.BUCKET.delete(result.key);
+              throw new Invalid(404, "not found");
+            }
             upload.received.push(result.path);
             await this.ctx.storage.put(result.uploadKey, upload);
           }
@@ -476,17 +480,17 @@ export class ShareStore extends DurableObject<Env> {
     const path = parts.slice(1).join("/") || "index.html";
     if (active.mode === "pin") {
       const prefix = `session.${id}.${active.version}.`;
-      const cookie =
-        request.headers
-          .get("Cookie")
-          ?.split(";")
-          .map((s) => s.trim())
-          .find((s) => s.startsWith(`__Secure-artifact-${id}=`))
-          ?.split("=")
-          .slice(1)
-          .join("=") || "";
+      // A browser can send several cookies with this name (another path or
+      // domain); any one of them that verifies unlocks the link.
+      const cookies = (request.headers.get("Cookie") ?? "")
+        .split(";")
+        .map((s) => s.trim())
+        .filter((s) => s.startsWith(`__Secure-artifact-${id}=`))
+        .map((s) => s.slice(`__Secure-artifact-${id}=`.length));
       if (form) return this.unlock(request, form, active);
-      if (!(await verify(this.env.COOKIE_KEY, cookie, prefix))) {
+      let unlocked = false;
+      for (const cookie of cookies) if ((unlocked = await verify(this.env.COOKIE_KEY, cookie, prefix))) break;
+      if (!unlocked) {
         if (!["GET", "HEAD"].includes(request.method)) return reply();
         const challenge = await signed(
           this.env.COOKIE_KEY,

@@ -1,6 +1,6 @@
 import { afterAll, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import { mkdtemp, readdir, readFile, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import { catalog } from "../items/catalog.ts";
@@ -17,11 +17,13 @@ const json = async (path: string) => JSON.parse(await readFile(path, "utf8"));
 
 async function tree(dir: string): Promise<Record<string, string>> {
   const out: Record<string, string> = {};
-  for (const entry of await readdir(dir, { recursive: true, withFileTypes: true }))
-    if (entry.isFile()) {
-      const path = join(entry.parentPath, entry.name);
-      out[relative(dir, path)] = sha256(await readFile(path));
-    }
+  for (const entry of await readdir(dir, { recursive: true, withFileTypes: true })) {
+    if (entry.isDirectory()) continue;
+    const path = join(entry.parentPath, entry.name);
+    // A symlink or other special entry would drop out of the comparison unseen.
+    if (!entry.isFile()) throw new Error(`${path} is not a regular file`);
+    out[relative(dir, path)] = sha256(await readFile(path));
+  }
   return out;
 }
 
@@ -98,6 +100,14 @@ test.skipIf(!(await exists(join(versionsDir, version, "r/registry.json"))))(
     expect(await tree(snapshot)).toEqual(await tree(join(versionsDir, version, "r")));
   },
 );
+
+test("a snapshot comparison refuses a symlinked file instead of skipping it", async () => {
+  const dir = join(scratch, "linked");
+  await mkdir(dir);
+  await writeFile(join(scratch, "elsewhere.json"), "{}");
+  await symlink(join(scratch, "elsewhere.json"), join(dir, "button.json"));
+  await expect(tree(dir)).rejects.toThrow("is not a regular file");
+});
 
 test("every SHA256SUMS matches the files beside it", async () => {
   for (const dir of [snapshot, ...committed.map((v) => join(versionsDir, v, "r"))]) {
