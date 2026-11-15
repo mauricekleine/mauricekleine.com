@@ -1,4 +1,4 @@
-// Serves the Buttons page at http://localhost:3001/buttons, rebuilt on every page load.
+// Serves the Buttons page at http://127.0.0.1:3001/buttons, rebuilt on every page load.
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import { extname } from "node:path";
@@ -32,6 +32,6 @@ createServer(async (request, response) => {
   } catch (error) {
     console.error(error);
     response.writeHead(500, { "content-type": "text/plain" });
-    response.end(String(error));
+    response.end("internal error");
   }
-}).listen(port, () => console.log(`buttons: http://localhost:${port}/buttons`));
+}).listen(port, "127.0.0.1", () => console.log(`buttons: http://127.0.0.1:${port}/buttons`));

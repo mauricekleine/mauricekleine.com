@@ -50,7 +50,21 @@ jobs:
       - name: published snapshots are immutable
         if: github.event_name == 'pull_request'
         run: |
-          changed="$(git diff --diff-filter=MDR --name-only origin/main...HEAD -- packages/superthread/versions)"
+          base="$(git merge-base origin/main HEAD)"
+          # Any change to a file that main already has, including a file turned into a symlink,
+          # and any file added inside a version directory that main already has.
+          # Remove this step once publication itself refuses to overwrite a released version.
+          # Paths are read NUL-delimited so Git never quotes a name.
+          changed=""
+          while IFS= read -r -d '' file; do
+            changed="$changed${changed:+$'\n'}$file"
+          done < <(git diff -z --diff-filter=DMRT --name-only "$base" HEAD -- packages/superthread/versions)
+          while IFS= read -r -d '' file; do
+            version="${file#packages/superthread/versions/}"
+            if git cat-file -e "$base:packages/superthread/versions/${version%%/*}" 2>/dev/null; then
+              changed="$changed${changed:+$'\n'}$file"
+            fi
+          done < <(git diff -z --diff-filter=A --name-only "$base" HEAD -- packages/superthread/versions)
           if [ -n "$changed" ]; then
             echo "a published snapshot changed; ship a new version instead:"
             echo "$changed"

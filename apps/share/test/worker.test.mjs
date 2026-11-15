@@ -727,3 +727,44 @@ test("a share stored before expiry existed gets an alarm on startup and on the d
     "the alarm wakes for the earliest expiry",
   );
 });
+test("a PIN link unlocks when a second cookie of the same name sits before or after the valid one", async () => {
+  const identity = "DuplicateCookie1";
+  await commit(identity, await stage(identity, "pin", "behind the pin"));
+  const response = await unlock(identity, await challenge(identity), "482913");
+  assert.equal(response.status, 303);
+  const valid = response.headers.get("Set-Cookie").split(";")[0];
+  const stale = `__Secure-artifact-${identity}=not-a-session`;
+  for (const cookie of [`${stale}; ${valid}`, `${valid}; ${stale}`])
+    assert.equal(await (await get(`/${identity}/`, { Cookie: cookie })).text(), "behind the pin", cookie);
+  assert.match(await (await get(`/${identity}/`, { Cookie: `${stale}; ${stale}x` })).text(), /shared with you/);
+});
+test("a file PUT that finishes after its upload was revoked and reclaimed leaves nothing in R2", async () => {
+  const identity = "ReclaimedPut1234";
+  const { upload } = await (
+    await admin(
+      `/${identity}/uploads`,
+      "POST",
+      JSON.stringify({ mode: "public", fingerprint, files: [{ path: "index.html", size: 4 }] }),
+    )
+  ).json();
+  let sender;
+  const pending = worker.dispatchFetch(`${origin}/_admin/shares/${identity}/uploads/${upload}/files/index.html`, {
+    method: "PUT",
+    headers: auth,
+    duplex: "half",
+    body: new ReadableStream({
+      start(controller) {
+        sender = controller;
+        controller.enqueue(new TextEncoder().encode("ab"));
+      },
+    }),
+  });
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  assert.equal((await admin(`/${identity}`, "DELETE")).status, 204);
+  await get("/_test/alarm?run");
+  sender.enqueue(new TextEncoder().encode("cd"));
+  sender.close();
+  assert.equal((await pending).status, 404);
+  const bucket = await worker.getR2Bucket("BUCKET");
+  assert.equal((await bucket.list({ prefix: `${identity}/` })).objects.length, 0);
+});

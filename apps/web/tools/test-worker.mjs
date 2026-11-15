@@ -186,6 +186,34 @@ test("POST /subscribe rejects an invalid email", async () => {
   assert.match(data.error, /valid email/);
 });
 
+test("POST /subscribe rejects an email that is not a single plain address", async () => {
+  const stub = stubFetch((url) => {
+    throw new Error(`no provider call expected: ${url}`);
+  });
+  try {
+    for (const email of [
+      ["a@example.com", "b@example.com"],
+      "a@example.com,b@example.com",
+      "Name <a@example.com>",
+      '"a"@example.com',
+      "a@example.com;b@example.com",
+    ]) {
+      const res = await worker.fetch(
+        new Request(origin + "/subscribe", {
+          method: "POST",
+          headers: { accept: "application/json", "content-type": "application/json" },
+          body: JSON.stringify({ email, "cf-turnstile-response": "token" }),
+        }),
+        subscribeSecrets,
+      );
+      assert.equal(res.status, 400, JSON.stringify(email));
+    }
+    assert.equal(stub.calls.length, 0);
+  } finally {
+    stub.restore();
+  }
+});
+
 test("POST /subscribe surfaces a failed turnstile check", async () => {
   const stub = stubFetch((url) => {
     assert.match(url, /^https:\/\/challenges\.cloudflare\.com\/turnstile\/v0\/siteverify/);

@@ -23,6 +23,8 @@ from pathlib import Path
 from essay_content import CONTENT, PUBLIC, SITE, read_content, write_content
 from optimize_images import COVER_SIZES, cover_variants
 
+IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
+
 def fetch(url, binary=False):
     req = urllib.request.Request(url, headers={"user-agent": "mauricekleine.com essay importer"})
     with urllib.request.urlopen(req, timeout=60) as r:
@@ -188,6 +190,8 @@ def main():
         counter += 1
         url = info["original_img_url"]
         source_ext = os.path.splitext(url.split("?")[0])[1].lower() or ".jpg"
+        if source_ext not in IMAGE_SUFFIXES:
+            raise SystemExit(f"error: {url} is not a .jpg, .jpeg, .png, .webp or .gif image")
         output_ext = ".jpg" if cover and ffmpeg else ".webp" if not cover and ffmpeg else source_ext
         name = f"{counter:02d}{output_ext}"
         path = image_dir / name

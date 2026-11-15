@@ -18,7 +18,7 @@ The plates are clean illustrations. The browser prints them: one WebGL2 canvas p
 
 From the repo root, `bun run buttons` runs `tools/build.mjs`, then type-checks. The build writes `apps/web/public/buttons.html` with the CSS and JS inline, and copies every plate and font to `apps/web/public/buttons/a/` with a content hash in its name. Both outputs are gitignored. Root `bun run build` and `bun run dev` run it before the web app.
 
-`bun run --cwd apps/buttons dev` serves http://localhost:3001/buttons and rebuilds it, unminified, on every page load.
+`bun run --cwd apps/buttons dev` serves http://127.0.0.1:3001/buttons and rebuilds it, unminified, on every page load.
 
 The web Worker serves the page (`apps/web/src/server-behavior.ts`). mk.wtf serves `/buttons` and `/buttons/a/*` from static assets, and `_headers` caches the hashed files for a year. www.mk.wtf and other spellings of the path get a 301, and mauricekleine.com sends `/buttons` to mk.wtf with a 302.
 

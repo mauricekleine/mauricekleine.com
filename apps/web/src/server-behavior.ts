@@ -363,7 +363,7 @@ async function verifySubscribeToken(
 }
 
 function isValidEmail(email: unknown): email is string {
-  return typeof email === "string" && email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  return typeof email === "string" && email.length <= 254 && /^[^\s@,<>";]+@[^\s@,<>";]+\.[^\s@,<>";]+$/.test(email);
 }
 
 function wantsJson(request: Request): boolean {
@@ -375,14 +375,15 @@ async function parseSubscribeBody(request: Request): Promise<{ email: string; tu
   if (contentType.includes("application/json")) {
     const body = await request.json().catch(() => ({}));
     return {
-      email: (body.email || "").toString().trim(),
+      email: typeof body.email === "string" ? body.email.trim() : "",
       turnstileToken: (body["cf-turnstile-response"] || body.turnstileToken || "").toString(),
     };
   }
   const form = await request.formData().catch(() => null);
   if (!form) return { email: "", turnstileToken: "" };
+  const email = form.get("email");
   return {
-    email: (form.get("email") || "").toString().trim(),
+    email: typeof email === "string" ? email.trim() : "",
     turnstileToken: (form.get("cf-turnstile-response") || "").toString(),
   };
 }
