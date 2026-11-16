@@ -18,8 +18,18 @@ type SubscribePage = {
   description: string;
   heading: string;
   message: string;
+  // a POST form with one hidden field and the page's one button
+  action?: { href: string; field: { name: string; value: string }; label: string };
   back: { href: string; label: string };
 };
+
+// @mk/button's default variant at its default size, as buttonVariants() prints it; www's hand-built pages
+// have no React, and src/hand-built.test.ts holds this copy to the item
+export const BUTTON_CLASS =
+  "group/button relative inline-flex shrink-0 items-center justify-center border border-transparent font-sans font-medium whitespace-nowrap transition-[color,background-color,border-color] duration-(--duration-instant) ease-(--ease-brand) select-none disabled:pointer-events-none disabled:bg-faint disabled:text-disabled aria-invalid:border-error texture-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0 [@media(max-width:600px)]:hit-area off-paper border-primary bg-primary text-primary-foreground hover:border-primary-hover hover:bg-primary-hover active:border-primary-press active:bg-primary-press active:shadow-[inset_0_0_0_1px_var(--key)] aria-expanded:border-primary-hover aria-expanded:bg-primary-hover h-10 gap-2.5 px-4.5 text-ui";
+
+const escapeAttribute = (value: string) =>
+  value.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
 // the worker: static assets, plus
 // 1. markdown content negotiation: Accept: text/markdown on /, /about, /essays and /essays/*
@@ -465,7 +475,14 @@ async function sendConfirmationEmail(env: WorkerEnv, email: string, token: strin
 }
 
 // small, self-contained page in the site's visual system, for the no-js path
-function subscribePage({ title, description, heading, message, back }: SubscribePage): string {
+function subscribePage({ title, description, heading, message, action, back }: SubscribePage): string {
+  const form = action
+    ? `
+        <form method="post" action="${action.href}">
+          <input type="hidden" name="${action.field.name}" value="${escapeAttribute(action.field.value)}" />
+          <button type="submit" class="${BUTTON_CLASS}">${action.label}</button>
+        </form>`
+    : "";
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -499,7 +516,7 @@ function subscribePage({ title, description, heading, message, back }: Subscribe
           <h1 class="type-hero text-first">${heading}</h1>
           <p class="mk-lede type-lede">${message}</p>
         </header>
-        <section class="mk-section" aria-label="where to go next">
+        <section class="mk-section" aria-label="where to go next">${form}
           <p class="more-link"><a href="${back.href}">${back.label}</a></p>
         </section>
       </div>
@@ -579,6 +596,7 @@ async function handleSubscribe(request: Request, env: WorkerEnv, url: URL): Prom
   );
 }
 
+// the emailed link only shows a button: mail scanners and link previews follow GETs, so only the POST confirms
 async function handleSubscribeConfirm(request: Request, env: WorkerEnv, url: URL): Promise<Response> {
   const missing = (["RESEND_API_KEY", "RESEND_SEGMENT_ID", "SUBSCRIBE_SECRET"] as const).filter((k) => !env[k]);
   if (missing.length) {
@@ -586,7 +604,10 @@ async function handleSubscribeConfirm(request: Request, env: WorkerEnv, url: URL
     return new Response("confirmation is misconfigured right now. try again later.", { status: 500 });
   }
 
-  const verified = await verifySubscribeToken(env.SUBSCRIBE_SECRET!, url.searchParams.get("t"));
+  const field =
+    request.method === "POST" ? (await request.formData().catch(() => null))?.get("t") : url.searchParams.get("t");
+  const token = typeof field === "string" ? field : null;
+  const verified = await verifySubscribeToken(env.SUBSCRIBE_SECRET!, token);
   if (!verified || verified.expired) {
     return new Response(
       subscribePage({
@@ -597,6 +618,20 @@ async function handleSubscribeConfirm(request: Request, env: WorkerEnv, url: URL
         back: { href: "/essays", label: "← back to essays" },
       }),
       { status: 410, headers: { "content-type": "text/html; charset=utf-8" } },
+    );
+  }
+
+  if (request.method !== "POST") {
+    return new Response(
+      subscribePage({
+        title: "confirm your subscription",
+        description: "confirm your subscription to new essays from maurice kleine",
+        heading: "one more click",
+        message: "confirm and the next essay lands in your inbox.",
+        action: { href: "/subscribe/confirm", field: { name: "t", value: token! }, label: "send me new essays" },
+        back: { href: "/essays", label: "← back to essays" },
+      }),
+      { headers: { "content-type": "text/html; charset=utf-8" } },
     );
   }
 
@@ -659,7 +694,7 @@ export async function handleSiteRequest(
   if (url.pathname === "/subscribe" && request.method === "POST") {
     return handleSubscribe(request, env, url);
   }
-  if (url.pathname === "/subscribe/confirm" && request.method === "GET") {
+  if (url.pathname === "/subscribe/confirm" && (request.method === "GET" || request.method === "POST")) {
     return handleSubscribeConfirm(request, env, url);
   }
 
