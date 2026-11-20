@@ -42,7 +42,7 @@ Openers and figures print two binary masks per mode. CSS inks the first and plum
 
 ## weave
 
-Use [@mk/weave](registry.md#weave) for a hero or a band. Put words on the flat solid or on the stock. A weave prints in the mode of its own scope, so set it beside a `.dark` block, never inside one: on a light page its solid is key and its screen thins into the paper. Keep decorative texture inside the field, with ordered cells and clean type. In dark the thread and knot bloom with screened plum.
+Use [@mk/weave](registry.md#weave) for a hero or a band. Put words on the flat solid or on the stock. A weave prints in the mode of the scope it sits in, so inside a `.dark` block it prints the dark inks. To carry a dark block into a light page, set the weave beside the block, in the page's scope, where its solid is key and its screen thins into the paper. Keep decorative texture inside the field, with ordered cells and clean type. In dark the thread and knot bloom with screened plum.
 
 | spec key | meaning |
 | -------- | ------- |
@@ -65,4 +65,4 @@ A screen never prints behind words, numbers, data or code: text, table cells, th
 - noise or random dither
 - a soft or blurred glow; the weave's bloom prints in screened cells
 - misregistration on text
-- motion outside the one live weave
+- motion of its own outside the one live weave; the progress ramp moves only with its fill

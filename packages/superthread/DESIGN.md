@@ -427,7 +427,7 @@ Crop marks are 10 px corner ticks, 16 px outside a contained field. A weave that
 
 A weave runs right beside a solid or down beneath it. On a phone a stacked band runs down. Set one spec line with the direction, a mirrored fray (line, bow, waves or arch), and the ramp. `held` keeps its density for findings and facts, `steady` falls evenly for plans and principles, `bet` breaks abruptly for hypotheses and proposals, and `fade` runs softly into the stock for notes and appendix heads. Fray wobble and thread width are in cells. One flat-core plum thread follows the fray, or the density break for `bet`. A hero can tie one knot to the thread.
 
-The fixed light runs down the middle of the weave or follows the knot. It starts past a short hold and shades only the screen. In light the solid is key and the light thins the key screen on paper. In dark the solid is the deep ground, foreground prints up to 55 percent where the light falls, and the thread and knot bloom in the same square plum cells. Plum uses the matrix shifted by two cells on both axes. Words sit on the solid or the stock. A weave prints in the mode of its own scope, so it sits beside a `.dark` block, never inside one: on a light page its solid is key and its screen thins into the paper.
+The fixed light runs down the middle of the weave or follows the knot. It starts past a short hold and shades only the screen. In light the solid is key and the light thins the key screen on paper. In dark the solid is the deep ground, foreground prints up to 55 percent where the light falls, and the thread and knot bloom in the same square plum cells. Plum uses the matrix shifted by two cells on both axes. Words sit on the solid or the stock. A weave prints in the mode of the scope it sits in, so inside a `.dark` block it prints the dark inks. A weave that carries a dark block into a light page sits beside the block, in the page's scope, where its solid is key and its screen thins into the paper.
 
 **The One House Ink Rule.** One plum fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. The focus signal is the ring, a field's focus edge and its caret, and it doesn't count against the fill. A ship never sets a control colour, and no status or spot ink fills a control.
 
@@ -876,7 +876,7 @@ Three durations on one ease. `--duration-instant` (120 ms) times hover and press
 - **Don't** use a stock shadow (`shadow-md`, `shadow-lg`) or a backdrop blur.
 - **Don't** print a screen behind words, numbers, data or code, or give a component a second texture detail.
 - **Don't** grey a component out with dots: a disabled control screens its edge and nothing else.
-- **Don't** move a screen other than the one live weave, or add noise, a soft glow or misregistered type.
+- **Don't** set a screen moving on its own, or add noise, a soft glow or misregistered type: the one live weave is the only screen that moves by itself, and the progress ramp moves only with its fill.
 - **Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink, or the outline off paper, with the trash glyph and the word.
 - **Don't** print a spot or a status ink as a large flat field.
 - **Don't** fade or screen the cut edge of a scrolling table.
