@@ -1,26 +1,28 @@
 {
-  "about": "the site's plates, built by scripts/texture/build.py plates through the vendored fields.py. a size, path or rope width given as a name is read from tokens/details.json plate_inputs; a number is this spec's own. composite plates print the master's indexed image per mode (the overlap keeps its true overprint colour); masks plates print a first and a spot plate per mode, inked by css. master maps each output file to the master plates it must equal, by pixels (same form) or by planes (index & 1 and index >> 1 of a composite against the master's two masks)",
+  "about": "the site's plates, built by scripts/texture/build.py plates through the vendored fields.py. a size, path or rope width given as a name is read from tokens/details.json plate_inputs; a number is this spec's own. composite plates print one indexed image per mode; masks print a first and a spot plate per mode, inked by css. master maps each output file to the master plates it must equal, by pixels or by ink planes",
   "plates": {
     "opener": {
       "job": "the overview's opener band",
-      "function": "fields.opener_png",
-      "form": "composite",
+      "function": "fields.opener_plates",
+      "form": "masks",
       "w": "build_sketch.W",
       "h": "build_sketch.H",
       "path": "fields.SKETCH_PATH",
       "width": 58,
-      "width_from": "build_sketch.py build(): opener_png(opener, W, H, mode, HOUSE, SKETCH_PATH, 58)",
+      "width_from": "build_sketch.py build(): opener_plates(opener, W, H, mode, SKETCH_PATH, 58)",
       "modes": ["light", "dark"],
-      "compare": "pixels",
+      "compare": "planes",
       "master": {
-        "opener-light": ["sketch-opener.png"],
-        "opener-dark": ["sketch-opener-dark.png"]
+        "opener-light-first": ["sketch-opener-first.png"],
+        "opener-light-spot": ["sketch-opener-spot.png"],
+        "opener-dark-first": ["sketch-opener-dark-first.png"],
+        "opener-dark-spot": ["sketch-opener-dark-spot.png"]
       }
     },
     "opener-phone": {
       "job": "the overview's opener band at 600 px and below",
-      "function": "fields.opener_png",
-      "form": "composite",
+      "function": "fields.opener_plates",
+      "form": "masks",
       "w": "fields.PHONE_W",
       "h": "fields.PHONE_H",
       "path": "fields.PHONE_PATH",
@@ -28,14 +30,16 @@
       "modes": ["light", "dark"],
       "compare": "planes",
       "master": {
-        "opener-phone-light": ["reach-opener-light-phone-first.png", "reach-opener-light-phone-spot.png"],
-        "opener-phone-dark": ["reach-opener-dark-phone-first.png", "reach-opener-dark-phone-spot.png"]
+        "opener-phone-light-first": ["reach-opener-light-phone-first.png"],
+        "opener-phone-light-spot": ["reach-opener-light-phone-spot.png"],
+        "opener-phone-dark-first": ["reach-opener-dark-phone-first.png"],
+        "opener-phone-dark-spot": ["reach-opener-dark-phone-spot.png"]
       }
     },
     "band": {
       "job": "an inner page head's slim band (lead decision 9); new, so its hash is recorded, not compared",
-      "function": "fields.opener_png",
-      "form": "composite",
+      "function": "fields.opener_plates",
+      "form": "masks",
       "w": "build_sketch.W",
       "h": 160,
       "h_from": "up from the first 120, so the page title's knock in the lower left covers less of the rope",
@@ -46,8 +50,8 @@
     },
     "band-phone": {
       "job": "an inner page head's slim band at 600 px and below; new, so its hash is recorded, not compared",
-      "function": "fields.opener_png",
-      "form": "composite",
+      "function": "fields.opener_plates",
+      "form": "masks",
       "w": "fields.PHONE_W",
       "h": 136,
       "h_from": "up from the first 120, for the same knock at 600 px and below",

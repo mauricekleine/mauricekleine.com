@@ -56,10 +56,7 @@ function Page() {
   const [played, setPlayed] = useState(false);
   return (
     <>
-      <PageHead
-        title="motion"
-        lede="three durations and one ease. changes start fast and ease into place, and nothing moves on its own."
-      />
+      <PageHead title="motion" lede="three durations and one ease. interface changes start fast and ease into place." />
 
       <Section id="durations" title="durations">
         <Copy>press play to send each bar across its track at its own duration, all on the brand ease.</Copy>
@@ -100,7 +97,8 @@ function Page() {
       <Section id="reduced" title="reduced motion">
         <Copy>
           with reduced motion on, every duration is zero, so a change happens at once. turn it on in your system
-          settings and press play again to see the bars jump. screens and textures never move in either case.
+          settings and press play again to see the bars jump. these fields stay still. the weave page shows the live
+          hero rule.
         </Copy>
       </Section>
     </>

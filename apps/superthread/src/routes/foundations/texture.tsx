@@ -23,7 +23,7 @@ export const Route = createFileRoute("/foundations/texture")({
   staticData: {
     sections: [
       { id: "rule", title: "the rule" },
-      { id: "places", title: "five places" },
+      { id: "places", title: "field specimens" },
       { id: "screens", title: "screens" },
       { id: "details", title: "component details" },
     ],
@@ -112,7 +112,7 @@ const levels = [
 function Screens() {
   return (
     <>
-      <Legend>line screens</Legend>
+      <Legend>chart hatches</Legend>
       <LineScreens />
       <Legend>levels</Legend>
       <ul className="st-f-levels">
@@ -225,23 +225,19 @@ const detailNote: Record<DetailKey, string> = {
 function Page() {
   return (
     <>
-      <PageHead
-        title="texture"
-        lede="one-bit screens in five places, and one small detail in a few components. most of the page stays flat."
-      />
+      <PageHead title="texture" lede="one bayer screen for every field. component details keep their 1 px tiles." />
 
       <Section id="rule" title="the rule">
         <Copy>
-          a screen prints a single ink at whole pixels, so it stays crisp at 1x and 2x and re-inks with the mode. it
-          sits at an edge, a track, a shadow or a state, never behind words, numbers, data or code. a component gets one
-          textured detail at most, and nothing screened ever moves.
+          fields print on 2 css px cells in every mode. they sit beside words, numbers, data and code. a component takes
+          at most one small screened detail.
         </Copy>
       </Section>
 
-      <Section id="places" title="five places">
+      <Section id="places" title="field specimens">
         <Copy>
-          these are the only five places where a screen fills an area. where it covers a field, crop marks sit 16 px
-          outside the field's corners, the way a printer marks a plate.
+          crop marks sit 16 px outside a contained field. the <a href="/components/weave">weave</a> shows when a hero
+          can move and when the marks come off.
         </Copy>
         <ol className="st-f-places">
           {places.map(({ name, note }) => (
@@ -261,8 +257,8 @@ function Page() {
       <Section id="screens" title="screens">
         <Copy>
           a chart series prints in its ship's spot with 1 px lines knocked out at the ship's own angle, so two series
-          part by angle as well as colour. every other screen is an ordered dither at one of two levels: the half for an
-          in-between state, and a light {tokens.texture.levels.b19} percent for loading.
+          part by angle as well as colour. the detail tiles print the half for an in-between state, and a light
+          {tokens.texture.levels.b19} percent for loading.
         </Copy>
         <ModePair>
           <Screens />

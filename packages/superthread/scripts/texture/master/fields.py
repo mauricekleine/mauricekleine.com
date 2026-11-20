@@ -10,7 +10,7 @@ from ink import overprint
 from opener import render, render_rope, fringe_field
 from palette import KEY, PAPER
 from png import write_indexed, write_mask, data_url
-from screen import dither, FIGURE_KEY, FIGURE_SPOT
+from screen import screen_field
 
 BUILD = pathlib.Path(__file__).resolve().parent.parent / "build"
 BUILD.mkdir(exist_ok=True)
@@ -50,8 +50,8 @@ def opener_plates(name, w, h, mode, path=REACH_PATH, width=64):
 
 def figure_plates(name, w, h, mode):
     """The reading figure as two masks, 'first' and 'spot': two-slit fringes, the fringes counted as ink (key in light,
-    paper-white in dark), on the figure's own finer screen pair. The stock is whatever sheet it prints on."""
-    rows = render(w, h, fringe_field(w, h), mode, (FIGURE_KEY, FIGURE_SPOT), ground=(0.0, 0.0))
+    paper-white in dark), on the Bayer screen. The stock is whatever sheet it prints on."""
+    rows = render(w, h, fringe_field(w, h), mode, ground=(0.0, 0.0))
     first = [[v & 1 for v in r] for r in rows]
     spot = [[(v >> 1) & 1 for v in r] for r in rows]
     return {"first": save(f"{name}-first", write_mask(first)), "spot": save(f"{name}-spot", write_mask(spot))}
@@ -60,5 +60,5 @@ def figure_plates(name, w, h, mode):
 def wedge(name, w, h, mode, lo=0.035, hi=0.22):
     """An empty or loading place: a light wedge of the first ink in ordered dither, rising left to right."""
     stock, ink = (PAPER, KEY) if mode == "light" else (KEY, PAPER)
-    rows = dither(w, h, lambda x, y: lo + (hi - lo) * (x / max(1, w - 1)))
+    rows = screen_field(w, h, lambda x, y: lo + (hi - lo) * (x / max(1, w - 1)))
     return save(name, write_indexed(rows, [stock, ink]))

@@ -21,7 +21,7 @@ Chosen direction: the master, Maurice's own remix of the direction round (scratc
 
 THESIS: superthread is a printed proof sheet for the fleet: two inks on white stock, exact and spacious, with texture only where you look. It refuses the stock shadcn docs shell (rounded cards, grey sidebar, gradient accents) and neon dev-tool dark.
 
-OWN-WORLD: key ink #16181d and its wedge of tints on white; one house ink, plum (#aa337a, #c074a1 in dark); square corners; 1 px rules that run to both window edges; Unbounded display, Supreme interface, Erode reading, Fragment Mono labels; halftone and dither in five places only (opener, figures, marks, state fields, empty and loading), framed by corner crop marks; statuses as dusty inks with a glyph square; 1-bit ship marks with a dithered spot; a raked shadow under sheets raised on the deep ground.
+OWN-WORLD: key ink #16181d and its wedge of tints on white; one house ink, plum (#aa337a, #c074a1 in dark); square corners; 1 px rules that run to both window edges; Unbounded display, Supreme interface, Erode reading, Fragment Mono labels; square ordered Bayer cells for fields and the occasional component detail; corner printer ticks on contained plates; statuses as dusty inks with a glyph square; 1-bit ship marks with a dithered spot; a raked shadow under sheets raised on the deep ground.
 
 STORY: the visitor understands what superthread is, sees it hold on docs, a board and a reading page, and installs it.
 

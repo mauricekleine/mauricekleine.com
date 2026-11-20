@@ -36,7 +36,7 @@ The thesis is flat where you read, screened where you look. Each rule below foll
 - **Four faces, one job each.** Unbounded for display, Supreme for the interface, Erode for reading, Fragment Mono for ids, times, figures that hold a column, code and caps legends. Chrome is lowercase. Detail: [type and layout](references/type-and-layout.md).
 - **Square and ruled.** Radius 0, 1 px edges, and horizontal rules that reach both edges of the window.
 - **Focus.** A control takes a 2 px plum ring at a 2 px offset, flush to the sides of a link in running text so it clears the words beside it. A field's box draws a 2 px edge inside itself. Every focusable element shows one of the two.
-- **Screens.** 1-bit texture prints in five places and as at most one small detail per component, always beside words, numbers, data and code. Everything else stays flat, with no grain, noise or glow, and no screen moves. Detail: [texture](references/texture.md).
+- **Screens.** Print fields beside content on 2 px square cells in 4 × 4 Bayer. Component details keep 1 px tiles. Use `@mk/weave` for the solid, ramp and thread in a hero or band. One hero weave can move and prints still under reduced motion and in print. Detail: [texture](references/texture.md).
 - **Motion.** Three durations (120, 180 and 240 ms) share one ease, `--ease-brand`. Reduced motion makes every duration zero.
 - **Two surfaces.** Docs and public pages print on stock. A ship surface prints on the deep ground: the fleet rail and the ship's nav flat on it, the working panel raised on it.
 - **One paper.** `@mk/paper` is the one white block on a page, for the thing the page is there for. It stays white in every theme: flat on a dark panel, on the slip rake and contact edge on a light one. A paper that hangs into the panel's margins, as `job-sheet` and `ReaderPaper` do, also draws a 1 px edge in `border` on a light page.
@@ -96,7 +96,7 @@ v1 is frozen. A surface that imports `packages/superthread/dist/superthread.css`
 
 - [colour](references/colour.md): the wedge, every role, the house ink's states, the statuses, the ship spots, the deep ground and the code patch. Read it before choosing or checking any colour.
 - [type and layout](references/type-and-layout.md): faces, type steps, space, rows, breakpoints, focus, elevation and motion.
-- [texture](references/texture.md): the five places, the six component details, levels, line screens, crop marks and plates.
+- [texture](references/texture.md): screened fields, component details, crop marks, plates and the weave spec.
 - [marks](references/marks.md): how a mark is drawn, its files and URLs, the home mark, icons, and adding a ship.
 - [registry](references/registry.md): items and tiers, install, the CSS entry, pinning, plain CSS, fonts and origins, and updating.
 - [interaction craft](references/interaction-craft.md): overlays, gestures, hover feedback and continuous updates.

@@ -2,13 +2,13 @@
 
 A greyscale 'photograph' is computed first (a two-ply cord lying across the
 stock for the opener; a two-slit fringe pattern for the reading figure);
-duotone curves split it into two plates, each screened at its own angle.
+duotone curves split it into two Bayer plates. The spot is shifted by two cells on both axes.
 Light mode prints key (shadows) and spot (midtones) on paper; the cord's
 crests and the ground stay paper. Dark mode prints paper-white (highlights)
 and spot (midtones) on key stock, so the cord is lit the same way on both.
 """
 import math
-from screen import halftone, OPENER_KEY, OPENER_SPOT
+from screen import SPOT_PHASE, screen_field
 
 
 def catmull(points):
@@ -102,9 +102,8 @@ def render_rope(w, h, path, mode, width=64):
     """Rows of palette indexes for the opener: 0 stock, 1 first ink (key, or paper-white in dark), 2 spot, 3 both."""
     fld = rope_field(w, h, path, width)
     curve = rope_light if mode == "light" else rope_dark
-    C = [[curve(*fld(x, y)) for x in range(w)] for y in range(h)]
-    K = halftone(w, h, lambda x, y: C[y][x][0], OPENER_KEY)
-    S = halftone(w, h, lambda x, y: C[y][x][1], OPENER_SPOT)
+    K = screen_field(w, h, lambda x, y: curve(*fld(x, y))[0])
+    S = screen_field(w, h, lambda x, y: curve(*fld(x, y))[1], SPOT_PHASE)
     return [[K[y][x] + 2 * S[y][x] for x in range(w)] for y in range(h)]
 
 
@@ -161,9 +160,9 @@ def split(grey, w, h, mode, ground=(0.03, 0.16)):
     return kt, st
 
 
-def render(w, h, grey, mode="light", lats=(OPENER_KEY, OPENER_SPOT), ground=(0.03, 0.16)):
+def render(w, h, grey, mode="light", ground=(0.03, 0.16)):
     """Rows of palette indexes: 0 stock, 1 first ink (key, or paper-white in dark), 2 spot, 3 both."""
     kt, st = split(grey, w, h, mode, ground)
-    K = halftone(w, h, kt, lats[0])
-    S = halftone(w, h, st, lats[1])
+    K = screen_field(w, h, kt)
+    S = screen_field(w, h, st, SPOT_PHASE)
     return [[K[y][x] + 2 * S[y][x] for x in range(w)] for y in range(h)]

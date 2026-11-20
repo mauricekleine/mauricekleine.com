@@ -92,17 +92,15 @@ print(json.dumps(missing))`,
   }
 });
 
-test("the vendored screen.py lattices and bayer matrix are master.json's", () => {
+test("the vendored screen.py grain, phase and Bayer matrix are master.json's", () => {
   const screen = python(
     `import screen
-print(json.dumps({k: getattr(screen, k) for k in ("OPENER_KEY", "OPENER_SPOT", "FIGURE_KEY", "FIGURE_SPOT", "BAYER4")}))`,
+print(json.dumps({k: getattr(screen, k) for k in ("GRAIN", "SPOT_PHASE", "BAYER4")}))`,
   );
-  const { halftone, dither } = json("tokens/master.json").texture;
+  const { dither } = json("tokens/master.json").texture;
   expect(screen).toEqual({
-    OPENER_KEY: halftone.opener.key.vector,
-    OPENER_SPOT: halftone.opener.spot.vector,
-    FIGURE_KEY: halftone.figure.key.vector,
-    FIGURE_SPOT: halftone.figure.spot.vector,
+    GRAIN: dither.grain_px,
+    SPOT_PHASE: dither.spot_phase_cells,
     BAYER4: dither.bayer4,
   });
 });
