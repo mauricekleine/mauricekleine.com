@@ -260,7 +260,8 @@ export function mountWeave(element: HTMLElement) {
   element.append(canvas);
 
   const phone = win.matchMedia("(max-width: 600px)");
-  const reduced = win.matchMedia("(prefers-reduced-motion: reduce)");
+  const motion = win.matchMedia("(prefers-reduced-motion: reduce)");
+  let reduced = motion.matches;
   const print = win.matchMedia("print");
   let printing = print.matches;
   let visible = false;
@@ -280,11 +281,16 @@ export function mountWeave(element: HTMLElement) {
   }
 
   function canAnimate() {
-    return field?.spec.live && field.spec.knot !== undefined && visible && !doc.hidden && !reduced.matches && !printing;
+    return field?.spec.live && field.spec.knot !== undefined && visible && !doc.hidden && !reduced && !printing;
   }
 
   function tick(now: number) {
     animation = undefined;
+    // A callback already queued by the browser can run after the still frame has painted.
+    if (!canAnimate()) {
+      lastFrame = undefined;
+      return;
+    }
     if (lastFrame === undefined || now - lastFrame >= 40) {
       if (lastFrame !== undefined) elapsed += (now - lastFrame) / 1000;
       lastFrame = now;
@@ -340,7 +346,7 @@ export function mountWeave(element: HTMLElement) {
     }
     canvas.style.width = `${width * cell}px`;
     canvas.style.height = `${height * cell}px`;
-    draw(reduced.matches || printing ? undefined : elapsed || undefined);
+    draw(reduced || printing ? undefined : elapsed || undefined);
     updateAnimation();
   }
 
@@ -377,7 +383,12 @@ export function mountWeave(element: HTMLElement) {
   win.addEventListener("afterprint", afterPrint);
   doc.addEventListener("visibilitychange", updateAnimation);
   phone.addEventListener("change", repaint);
-  reduced.addEventListener("change", repaint);
+  // Keep the last notification. Reading .matches in the animation loop can consume a pending change in Chromium.
+  const motionChanged = (event: MediaQueryListEvent) => {
+    reduced = event.matches;
+    repaint();
+  };
+  motion.addEventListener("change", motionChanged);
   watchResolution();
 
   return () => {
@@ -390,7 +401,7 @@ export function mountWeave(element: HTMLElement) {
     win.removeEventListener("afterprint", afterPrint);
     doc.removeEventListener("visibilitychange", updateAnimation);
     phone.removeEventListener("change", repaint);
-    reduced.removeEventListener("change", repaint);
+    motion.removeEventListener("change", motionChanged);
     if (animation !== undefined) win.cancelAnimationFrame(animation);
     canvas.remove();
   };
