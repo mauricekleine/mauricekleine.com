@@ -55,7 +55,7 @@ Use [@mk/weave](registry.md#weave) for a hero or a band. Put words on the flat s
 
 One light shades the screen beyond a short hold past the fray. In light it thins key ink on paper. In dark it lights the foreground screen up to 55 percent while the solid prints in the deep ground. The plum plate uses the matrix shifted two cells along both axes.
 
-Put at most one knot on a page, in the hero. Only a hero or a video can print a live weave. It pauses offscreen and in a hidden tab, and prints a still frame under reduced motion and in print. The www sky follows the same motion rule. App surfaces keep their fields still. Use the same spec for a page, a still plate or each frame of a video.
+Put at most one knot on a page, in the hero. Only a hero or a video can print a live weave. It pauses offscreen and in a hidden tab, and prints a still frame under reduced motion and in print. The www sky follows the same motion rule and takes the live weave's place on www. App surfaces keep their fields still. Use the same spec for a page, a still plate or each frame of a video.
 
 ## what a screen never does
 
@@ -65,4 +65,4 @@ A screen never prints behind words, numbers, data or code: text, table cells, th
 - noise or random dither
 - a soft or blurred glow; the weave's bloom prints in screened cells
 - misregistration on text
-- motion of its own outside the one live weave; the progress ramp moves only with its fill
+- motion of its own outside the page's one live field, a hero's weave or the www sky in its place; the progress ramp moves only with its fill
