@@ -38,8 +38,8 @@ function Page() {
 
       <Section id="edge" title="the edge">
         <p className="st-b-copy">
-          the progress edge is one of the five places superthread prints a screen. a finished bar has no edge left, so
-          it prints solid.
+          the progress edge is one of the places superthread prints a screen. a finished bar has no edge left, so it
+          prints solid.
         </p>
         <ModePair className="st-b-stack">
           <ProgressEdges />

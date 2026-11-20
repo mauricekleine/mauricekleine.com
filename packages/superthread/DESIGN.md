@@ -410,7 +410,7 @@ Every spot stays at least 10 from plum (oklab delta E x 100), and its dithered r
 
 ### Screens
 
-A screen is a 1-bit pattern that stands in for a tint. Every screened field uses the 4 × 4 Bayer matrix on square cells at a 2 CSS px grain at every width. Live fields round the cell to a whole device pixel. Plates print at their native CSS size with nearest-neighbour sampling. Component details keep their 1 px tiles. Coverage comes in steps of 6.25 percent. A tile at 50 percent (`--texture-b50`) fills eight cells and a tile at 18.75 percent (`--texture-b19`) fills three. Half coverage is the in-between state and solid is the settled one.
+A screen is a 1-bit pattern that stands in for a tint. Every screened field uses the 4 × 4 Bayer matrix on square cells at a 2 CSS px grain at every width. Live fields round the cell to a whole device pixel. Plates print at their native CSS size with nearest-neighbour sampling. Component details and chart line screens keep their 1 px tiles. Coverage comes in steps of 6.25 percent. A tile at 50 percent (`--texture-b50`) fills eight cells and a tile at 18.75 percent (`--texture-b19`) fills three. Half coverage is the in-between state and solid is the settled one.
 
 | place             | what prints                                                | where it ships                                 |
 | ----------------- | ---------------------------------------------------------- | ---------------------------------------------- |
@@ -421,13 +421,13 @@ A screen is a 1-bit pattern that stands in for a tint. Every screened field uses
 | empty and loading | a light wedge of the first ink                             | empty plates; `Skeleton` for loading rows      |
 | weave             | a solid breaking into a screen beside a hero or a band     | `@mk/weave`                                    |
 
-A chart series uses its ship's spot and hatch angle as two identifiers. The 1 px lines are knocked out to the stock every 4 px and repeat in the legend. The six component details are under Components.
+A chart series prints in its ship's spot as a line screen at the ship's angle, so it reads by colour first and by angle without colour: 1 px lines knocked out to the stock every 4 px, repeated in the legend. The six component details are under Components.
 
 Crop marks are 10 px corner ticks, 16 px outside a contained field. A weave that meets the window edge drops its marks. `scripts/texture/build.py plates` builds the opener and figure as a pair of binary masks per mode. CSS prints the first ink and plum into the masks. The same builder prints the empty wedge as an indexed image per mode. `texture/plates.sha256` holds the pixel hashes.
 
 A weave runs right beside a solid or down beneath it. On a phone a stacked band runs down. Set one spec line with the direction, a mirrored fray (line, bow, waves or arch), and the ramp. `held` keeps its density for findings and facts, `steady` falls evenly for plans and principles, `bet` breaks abruptly for hypotheses and proposals, and `fade` runs softly into the stock for notes and appendix heads. Fray wobble and thread width are in cells. One flat-core plum thread follows the fray, or the density break for `bet`. A hero can tie one knot to the thread.
 
-The fixed light runs down the middle of the weave or follows the knot. It starts past a short hold and shades only the screen. In light the solid is key and the light thins the key screen on paper. In dark the solid is the deep ground, foreground prints up to 55 percent where the light falls, and the thread and knot bloom in the same square plum cells. Plum uses the matrix shifted by two cells on both axes. Words sit on the solid or the stock.
+The fixed light runs down the middle of the weave or follows the knot. It starts past a short hold and shades only the screen. In light the solid is key and the light thins the key screen on paper. In dark the solid is the deep ground, foreground prints up to 55 percent where the light falls, and the thread and knot bloom in the same square plum cells. Plum uses the matrix shifted by two cells on both axes. Words sit on the solid or the stock. A weave prints in the mode of the scope it sits in, so inside a `.dark` block it prints the dark inks. A weave that carries a dark block into a light page sits beside the block, in the page's scope, where its solid is key and its screen thins into the paper.
 
 **The One House Ink Rule.** One plum fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. The focus signal is the ring, a field's focus edge and its caret, and it doesn't count against the fill. A ship never sets a control colour, and no status or spot ink fills a control.
 
@@ -848,7 +848,7 @@ A meeting brief's blocks are the reader's parts, under the meeting's `ReaderPape
 
 ### Motion
 
-Three durations on one ease. `--duration-instant` (120 ms) times hover and press colour on buttons, badges and tabs, and the select list's entry; `--duration-quick` (180 ms) times the rail's cell and tab, the sidebar's items and the dialog's fade; `--duration-travel` (240 ms) times anything that crosses the page: the progress width, the toast stack and the sidebar's collapse. Every brand transition uses `--ease-brand`, `cubic-bezier(0.22, 1, 0.36, 1)`: changes start fast and ease into place. Transitions name their properties (`transition-[color,background-color,border-color]`), so a focus ring snaps on instead of fading. Motion answers an action or an event. One live weave per page may move in a hero or video. It pauses offscreen or when the tab hides and prints a still frame in reduced motion and print. The www sky follows the same rule, and app screens print still. Under `prefers-reduced-motion: reduce` the three durations become 0 and every transition and animation 0.01 ms: states still change, at once.
+Three durations on one ease. `--duration-instant` (120 ms) times hover and press colour on buttons, badges and tabs, and the select list's entry; `--duration-quick` (180 ms) times the rail's cell and tab, the sidebar's items and the dialog's fade; `--duration-travel` (240 ms) times anything that crosses the page: the progress width, the toast stack and the sidebar's collapse. Every brand transition uses `--ease-brand`, `cubic-bezier(0.22, 1, 0.36, 1)`: changes start fast and ease into place. Transitions name their properties (`transition-[color,background-color,border-color]`), so a focus ring snaps on instead of fading. Motion answers an action or an event. One live weave per page may move in a hero or video. It pauses offscreen or when the tab hides and prints a still frame in reduced motion and print. The www sky follows the same rule and takes the live weave's place on www, and app screens print still. Under `prefers-reduced-motion: reduce` the three durations become 0 and every transition and animation 0.01 ms: states still change, at once.
 
 ## Do's and Don'ts
 
@@ -865,7 +865,6 @@ Three durations on one ease. `--duration-instant` (120 ms) times hover and press
 - **Do** draw a missing icon on the pixel grid and add it to the glyph source.
 - **Do** keep chrome and every served label lowercase, with no em dashes.
 - **Do** reserve the space a state will need, so a click or a refresh moves nothing.
-
 - **Do** print texture as ordered cells. Keep type aligned and other surfaces flat. The weave's plum bloom is screened.
 
 ### Don't:
@@ -877,6 +876,7 @@ Three durations on one ease. `--duration-instant` (120 ms) times hover and press
 - **Don't** use a stock shadow (`shadow-md`, `shadow-lg`) or a backdrop blur.
 - **Don't** print a screen behind words, numbers, data or code, or give a component a second texture detail.
 - **Don't** grey a component out with dots: a disabled control screens its edge and nothing else.
+- **Don't** set a screen moving on its own, or add noise, a soft glow or misregistered type: the page's one live field, a hero's weave or the www sky in its place, is the only screen that moves by itself, and the progress ramp moves only with its fill.
 - **Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink, or the outline off paper, with the trash glyph and the word.
 - **Don't** print a spot or a status ink as a large flat field.
 - **Don't** fade or screen the cut edge of a scrolling table.
