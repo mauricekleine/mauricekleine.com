@@ -49,6 +49,13 @@
   const FRAME = 1000 / 24;
   const TILE = 512; // the nebula's noise tiles at this size, so it can drift forever
 
+  // The screen is painted once per cell, then enlarged by whole device pixels.
+  const screenCanvas = document.createElement("canvas");
+  const screenCtx = screenCanvas.getContext("2d");
+  const GRAIN = 2;
+  let cell = GRAIN;
+  let deviceCell = GRAIN;
+  let printing = false;
   let W = 0;
   let H = 0;
   let stars = [];
@@ -122,13 +129,13 @@
   }
 
   function makeStars() {
-    const count = Math.min(220, Math.round((W * H) / 900));
+    const count = Math.min(220, Math.round((W * H * cell * cell) / 900));
     stars = Array.from({ length: count }, () => {
       const depth = 0.3 + Math.random() * 0.7; // far..near
       return {
         x: Math.random() * W,
         y: Math.random() * H,
-        size: Math.random() < 0.06 ? 2 : Math.random() < 0.22 ? 1 : 0,
+        size: Math.random() < 0.06 ? 1 : 0,
         depth,
         alpha: 0.35 + Math.random() * 0.65,
         phase: Math.random() * Math.PI * 2,
@@ -171,9 +178,9 @@
       return;
     }
     const dist = 130 + 90 * p;
-    const x = meteor.fromX + Math.cos(meteor.angle) * dist * p;
-    const y = meteor.fromY - Math.sin(meteor.angle) * dist * p;
-    const tail = 70 * (1 - p * 0.4);
+    const x = meteor.fromX + Math.cos(meteor.angle) * dist * p / cell;
+    const y = meteor.fromY - Math.sin(meteor.angle) * dist * p / cell;
+    const tail = (70 / cell) * (1 - p * 0.4);
     for (let i = 0; i < tail; i++) {
       const tx = Math.round(x - Math.cos(meteor.angle) * i);
       const ty = Math.round(y + Math.sin(meteor.angle) * i);
@@ -280,7 +287,7 @@
 
   // --- frame -----------------------------------------------------------------
   function drawFrame(t) {
-    const animate = !reduced.matches;
+    const animate = !reduced.matches && !printing;
     image.data.fill(0);
 
     if (animate) {
@@ -297,22 +304,24 @@
       else boost = Math.pow(1 - (pt % BEAT) / BEAT, 3) * Math.min(1, (total - pt) / (BEAT * 2));
     }
 
-    const shift = animate ? Math.floor(t * 0.0022) : 0;
+    const shift = animate ? Math.floor(t * 0.0022 / cell) : 0;
     const lift = 1 + boost * 0.9;
     for (let y = 0; y < H; y++) {
       for (let x = 0; x < W; x++) {
-        const value = field[((y & (TILE - 1)) * TILE + ((x + shift) & (TILE - 1))) | 0] * lift;
+        const sx = Math.floor((x + shift) * cell) & (TILE - 1);
+        const sy = Math.floor(y * cell) & (TILE - 1);
+        const value = field[sy * TILE + sx] * lift;
         if (value > screen(x, y)) dot(x, y, plum);
       }
     }
 
     for (const s of stars) {
       const twinkle = animate ? 0.72 + 0.28 * Math.sin(s.phase + (t / 1000) * s.speed) : 0.85;
-      const driftY = animate ? (t * s.drift * s.depth) % (H + 4) : 0;
-      const x = Math.round(s.x + pointer.x * 10 * s.depth);
+      const driftY = animate ? (t * s.drift * s.depth / cell) % (H + 4) : 0;
+      const x = Math.round(s.x + pointer.x * 10 * s.depth / cell);
       let y = s.y - driftY;
       if (y < -2) y += H + 4;
-      y = Math.round(y + pointer.y * 6 * s.depth);
+      y = Math.round(y + pointer.y * 6 * s.depth / cell);
       if (s.size === 0 && Math.min(1, s.alpha * twinkle) < screen(x, y)) continue;
       drawStar(x, y, s.size + (boost > 0.35 ? 1 : 0), first);
     }
@@ -323,7 +332,9 @@
       if (!flyby && nextTrafficAt > 0 && t > nextTrafficAt) spawnTraffic(t);
       if (flyby) drawTraffic(t);
     }
-    ctx.putImageData(image, 0, 0);
+    screenCtx.putImageData(image, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(screenCanvas, 0, 0, W * deviceCell, H * deviceCell);
   }
 
   function loop(t) {
@@ -339,7 +350,7 @@
       drawFrame(0);
       return;
     }
-    if (!visible || document.hidden) return;
+    if (!visible || document.hidden || printing) return;
     const now = performance.now();
     if (nextMeteorAt === 0) nextMeteorAt = now + 4000 + Math.random() * 8000;
     // first pass is always a starlink train, fairly soon. worth the wait
@@ -353,19 +364,33 @@
     rafId = null;
   }
 
-  // the band crops the sky to whole pixels, so a screen never lands on a fraction
   function resize() {
-    W = Math.max(1, Math.round(canvas.clientWidth));
-    H = Math.max(1, Math.round(canvas.clientHeight));
-    canvas.width = W;
-    canvas.height = H;
+    const { width, height } = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio;
+    deviceCell = Math.max(1, Math.round(GRAIN * dpr));
+    cell = deviceCell / dpr;
+    canvas.width = Math.max(1, Math.round(width * dpr));
+    canvas.height = Math.max(1, Math.round(height * dpr));
+    ctx.imageSmoothingEnabled = false;
+    W = screenCanvas.width = Math.ceil(canvas.width / deviceCell);
+    H = screenCanvas.height = Math.ceil(canvas.height / deviceCell);
     image = ctx.createImageData(W, H);
     readInks();
     makeStars();
     drawFrame(reduced.matches ? 0 : performance.now());
   }
 
+  new ResizeObserver(resize).observe(canvas);
   window.addEventListener("resize", resize);
+  window.addEventListener("beforeprint", () => {
+    printing = true;
+    stop();
+    drawFrame(0);
+  });
+  window.addEventListener("afterprint", () => {
+    printing = false;
+    start();
+  });
   canvas.addEventListener("pointermove", (e) => {
     const box = canvas.getBoundingClientRect();
     pointer.tx = (e.clientX - box.left) / box.width - 0.5;
@@ -393,7 +418,7 @@
   canvas.addEventListener("click", (e) => {
     if (reduced.matches) return;
     const box = canvas.getBoundingClientRect();
-    spawnMeteorAt(e.clientX - box.left, e.clientY - box.top, performance.now());
+    spawnMeteorAt((e.clientX - box.left) / cell, (e.clientY - box.top) / cell, performance.now());
     if (!wished) {
       wished = true;
       console.log("%cwish logged. results not guaranteed.", CONSOLE_PLUM);

@@ -298,7 +298,6 @@ def outputs(name, plate):
 def render(spec, work):
     """Run every plate through the vendored fields.py into work/; yield (stem, plate, mode, plane, params, raw path)."""
     import fields
-    import palette
 
     fields.BUILD = work   # fields.save() writes here, never into the package
     inputs = plate_inputs()
@@ -307,11 +306,10 @@ def render(spec, work):
         w, h = resolve(plate["w"], inputs), resolve(plate["h"], inputs)
         for mode in plate["modes"]:
             base = f"{name}-{mode}"
-            if fn == "fields.opener_png":
-                spot = palette.HOUSE[palette.HOUSE_DEFAULT][mode]
+            if fn == "fields.opener_plates":
                 path, width = resolve(plate["path"], inputs), resolve(plate["width"], inputs)
-                fields.opener_png(base, w, h, mode, spot, path, width)
-                params = {"w": w, "h": h, "mode": mode, "spot": spot, "path": [list(p) for p in path], "width": width}
+                fields.opener_plates(base, w, h, mode, path, width)
+                params = {"w": w, "h": h, "mode": mode, "path": [list(p) for p in path], "width": width}
             elif fn == "fields.figure_plates":
                 fields.figure_plates(base, w, h, mode)
                 params = {"w": w, "h": h, "mode": mode}

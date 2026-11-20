@@ -3,39 +3,63 @@
 // css), its size in css pixels, and its url per mode
 export const plates = {
   "opener": {
-    "form": "composite",
+    "form": "masks",
     "w": 696,
     "h": 196,
     "url": {
-      "light": "/texture/opener-light.35426931.png",
-      "dark": "/texture/opener-dark.7938b603.png"
+      "light": {
+        "first": "/texture/opener-light-first.38a01b13.png",
+        "spot": "/texture/opener-light-spot.d3f5f784.png"
+      },
+      "dark": {
+        "first": "/texture/opener-dark-first.aaeef4cc.png",
+        "spot": "/texture/opener-dark-spot.7918284c.png"
+      }
     }
   },
   "opener-phone": {
-    "form": "composite",
+    "form": "masks",
     "w": 342,
     "h": 200,
     "url": {
-      "light": "/texture/opener-phone-light.399d4323.png",
-      "dark": "/texture/opener-phone-dark.10fa6fe8.png"
+      "light": {
+        "first": "/texture/opener-phone-light-first.3c2d2a49.png",
+        "spot": "/texture/opener-phone-light-spot.abb3f5ff.png"
+      },
+      "dark": {
+        "first": "/texture/opener-phone-dark-first.0835ec31.png",
+        "spot": "/texture/opener-phone-dark-spot.4f7aa10c.png"
+      }
     }
   },
   "band": {
-    "form": "composite",
+    "form": "masks",
     "w": 696,
     "h": 160,
     "url": {
-      "light": "/texture/band-light.9bd28dd3.png",
-      "dark": "/texture/band-dark.73cda9f0.png"
+      "light": {
+        "first": "/texture/band-light-first.01f2ba50.png",
+        "spot": "/texture/band-light-spot.9c3b5ac1.png"
+      },
+      "dark": {
+        "first": "/texture/band-dark-first.075ebd19.png",
+        "spot": "/texture/band-dark-spot.1dce70a9.png"
+      }
     }
   },
   "band-phone": {
-    "form": "composite",
+    "form": "masks",
     "w": 342,
     "h": 136,
     "url": {
-      "light": "/texture/band-phone-light.3e916a01.png",
-      "dark": "/texture/band-phone-dark.7d3a9ed3.png"
+      "light": {
+        "first": "/texture/band-phone-light-first.cff55538.png",
+        "spot": "/texture/band-phone-light-spot.8598b693.png"
+      },
+      "dark": {
+        "first": "/texture/band-phone-dark-first.3ed44a32.png",
+        "spot": "/texture/band-phone-dark-spot.888beeae.png"
+      }
     }
   },
   "figure": {
@@ -44,12 +68,12 @@ export const plates = {
     "h": 150,
     "url": {
       "light": {
-        "first": "/texture/figure-light-first.5b41026f.png",
-        "spot": "/texture/figure-light-spot.34acae61.png"
+        "first": "/texture/figure-light-first.97a2999d.png",
+        "spot": "/texture/figure-light-spot.1c82ac41.png"
       },
       "dark": {
-        "first": "/texture/figure-dark-first.30cadd3c.png",
-        "spot": "/texture/figure-dark-spot.34acae61.png"
+        "first": "/texture/figure-dark-first.9c0dafb3.png",
+        "spot": "/texture/figure-dark-spot.1c82ac41.png"
       }
     }
   },
@@ -59,12 +83,12 @@ export const plates = {
     "h": 150,
     "url": {
       "light": {
-        "first": "/texture/figure-phone-light-first.ec8a0823.png",
-        "spot": "/texture/figure-phone-light-spot.b804c372.png"
+        "first": "/texture/figure-phone-light-first.3c7c67c1.png",
+        "spot": "/texture/figure-phone-light-spot.d531224d.png"
       },
       "dark": {
-        "first": "/texture/figure-phone-dark-first.a7d1059f.png",
-        "spot": "/texture/figure-phone-dark-spot.b804c372.png"
+        "first": "/texture/figure-phone-dark-first.8b7e4825.png",
+        "spot": "/texture/figure-phone-dark-spot.d531224d.png"
       }
     }
   },
@@ -73,8 +97,8 @@ export const plates = {
     "w": 608,
     "h": 120,
     "url": {
-      "light": "/texture/empty-light.0725758a.png",
-      "dark": "/texture/empty-dark.d54d8709.png"
+      "light": "/texture/empty-light.43924891.png",
+      "dark": "/texture/empty-dark.d9c3ce21.png"
     }
   },
   "empty-phone": {
@@ -82,8 +106,8 @@ export const plates = {
     "w": 326,
     "h": 120,
     "url": {
-      "light": "/texture/empty-phone-light.1adcdca1.png",
-      "dark": "/texture/empty-phone-dark.fb613cb3.png"
+      "light": "/texture/empty-phone-light.dccb2335.png",
+      "dark": "/texture/empty-phone-dark.0de882d4.png"
     }
   },
   "empty-column": {
@@ -91,8 +115,8 @@ export const plates = {
     "w": 112,
     "h": 120,
     "url": {
-      "light": "/texture/empty-column-light.9f9a3553.png",
-      "dark": "/texture/empty-column-dark.67b633a9.png"
+      "light": "/texture/empty-column-light.6e2a52ee.png",
+      "dark": "/texture/empty-column-dark.0840041c.png"
     }
   }
 } as const;

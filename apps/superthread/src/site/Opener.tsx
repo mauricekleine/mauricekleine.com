@@ -3,7 +3,7 @@ import { CropMarks } from "./CropMarks";
 import { Plate } from "./Plate";
 
 // The overview's head: the opener plate inside its crop marks, with the wordmark knocked out of its lower left, then
-// the lede and whatever follows it. The plate is the master's composite for the active mode, so one file loads; at
+// the lede and whatever follows it. CSS inks the active mode's two masks; at
 // 600 px and below the phone plate takes over. A narrower column crops the plate and never scales it, and the
 // wordmark steps down with the band's own width (overview.css), so it never runs past the band. Like PageHead, it is
 // the page's "top" in the aside.

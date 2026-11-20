@@ -22,7 +22,7 @@ import { dirname, join, resolve } from "node:path";
 
 // the world the stage 0 gate recorded: a mismatch stops the vendor and goes to the lead
 const GATE: Record<string, string> = {
-  "tokens.json": "a2421898a9e1cd60536c6309268e5da7bc526215fd22b8d7378d2f0c2f784e1d",
+  "tokens.json": "698a670879c28a8ae21fe52e930dbdd5f1b1d296025663532c937e82c5e2df23",
   "src/details.py": "3e2835cc18040c1e9c497c9d80450c611669cc9c46dbd54f484e99e51a1ebe9a",
   "src/reach.css": "89a5ec2efa731714d697118c0ee27690889cfeae3b55fff862e6448b7c196812",
   "src/check.py": "347a5b8ec0cc14068aea052aff7753b68030ce17cfd93c4ccdb2a124d5c6596a",

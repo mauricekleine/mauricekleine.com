@@ -109,3 +109,18 @@
     animation-duration: 0.01ms !important;
   }
 }
+
+/* The host sets the measure. The canvas fills it in whole cells and clips at the last partial cell. */
+[data-weave] {
+  position: relative;
+  overflow: hidden;
+  background: var(--background);
+  print-color-adjust: exact;
+}
+
+[data-weave] > canvas {
+  position: absolute;
+  inset: 0 auto auto 0;
+  display: block;
+  image-rendering: pixelated;
+}

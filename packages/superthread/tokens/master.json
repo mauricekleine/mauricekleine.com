@@ -1172,61 +1172,13 @@
     "never": [
       "behind words, numbers, data or code: text, table cells, the board's rows, a control's label",
       "a component grey with dots",
-      "grain or noise",
-      "glow",
-      "misregistration on text",
-      "animation"
+      "random grain on a finished surface",
+      "blurred glow",
+      "misregistration on text"
     ],
-    "crop marks": "10 px corner ticks 16 px outside every screened field (openers, figures, the empty wedge): the frame's signature wherever a screen sits",
-    "halftone": {
-      "dot": "round, grows from the cell centre, whole pixels, no anti-aliasing",
-      "opener": {
-        "key": {
-          "vector": [
-            5,
-            5
-          ],
-          "pitch_px": 7.071,
-          "angle_deg": 45.0,
-          "pixels_per_cell": 50
-        },
-        "spot": {
-          "vector": [
-            2,
-            7
-          ],
-          "pitch_px": 7.28,
-          "angle_deg": 74.05,
-          "pixels_per_cell": 53
-        }
-      },
-      "figure": {
-        "key": {
-          "vector": [
-            4,
-            4
-          ],
-          "pitch_px": 5.657,
-          "angle_deg": 45.0,
-          "pixels_per_cell": 32
-        },
-        "spot": {
-          "vector": [
-            5,
-            1
-          ],
-          "pitch_px": 5.099,
-          "angle_deg": 11.31,
-          "pixels_per_cell": 26
-        }
-      },
-      "screen pitch": "openers 7.071 px (key) and 7.28 px (house); figures 5.657 and 5.099 px",
-      "screen angles": {
-        "key": 45.0,
-        "house or spot": 74.05,
-        "figure spot": 11.31
-      },
-      "plates": "each ink is a 1-bit plate shipped as a mask, so the house-ink switch re-inks the opener without new images",
+    "crop marks": "10 px corner ticks 16 px outside a contained field (openers, figures, the empty wedge, weaves); a weave at the window edge omits them",
+    "plates": {
+      "screen": "two 1-bit Bayer masks, with the spot shifted on both axes, inked by CSS",
       "dark cap": "paper-white never prints solid: 78 percent at most in the openers, 72 in the figures"
     },
     "line screen": {
@@ -1271,8 +1223,10 @@
           5
         ]
       ],
+      "grain_px": 2,
+      "spot_phase_cells": 2,
       "use": [
-        "marks: one region at 50 percent, a 1 px checker of spot",
+        "marks: one region at 50 percent, a checker of spot",
         "progress: a 24 px bayer ramp from 100 to 0 percent at the fill's leading edge",
         "empty and loading: a key ramp from 3.5 to 22 percent, which bayer 4 x 4 prints as three steps (6.25, 12.5 and 18.75 percent), drawn at the width it shows",
         "the components: six details at 50 and 18.75 percent, listed under texture.component details"

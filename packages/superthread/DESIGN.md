@@ -331,9 +331,9 @@ spacing:
 
 **Creative North Star: "the two-ink proof"**
 
-Superthread prints every fleet surface the way a two-ink proof prints: key ink on white stock, one plum fill per viewport, and 1-bit screens only where the eye is meant to rest. The master world's own thesis states the rule the rest follows: flat where you read, screened where you look. Words, numbers, data and code always sit on flat ink. Screens print in five places and as at most one small detail per component, beside the content and never behind it.
+Superthread prints every fleet surface the way a two-ink proof prints: key ink on white stock, one plum fill per viewport, and 1-bit screens only where the eye is meant to rest. The master world's own thesis states the rule the rest follows: flat where you read, screened where you look. Words, numbers, data and code always sit on flat ink. Screened fields sit beside content. A component takes at most one small detail.
 
-The register is quiet and exact. Square corners, 1 px edges and horizontal rules that reach both window edges carry the structure, so a page needs no rounded cards on grey, no gradient accent and no glow. Dark mode is the same proof printed white on key: every neutral in both modes is a tint of the two inks, mixed in linear light, and most sit on one eleven-step wedge. There are two surfaces. Docs and public pages print on the stock. A ship's working surface prints on the deep ground, with the fleet rail and the ship's nav flat on the ground and the working panel raised on it by a soft rake from the upper left.
+The register is quiet and exact. Square corners, 1 px edges and horizontal rules that reach both window edges carry the structure, and the panels and accents stay flat. Dark mode is the same proof printed white on key: every neutral in both modes is a tint of the two inks, mixed in linear light, and most sit on one eleven-step wedge. There are two surfaces. Docs and public pages print on the stock. A ship's working surface prints on the deep ground, with the fleet rail and the ship's nav flat on the ground and the working panel raised on it by a soft rake from the upper left.
 
 Every value comes from one source, `tokens/master.json`, vendored unchanged from the approved master world. `scripts/generate.ts` emits it as `dist/v2/superthread.css` (Tailwind 4), `dist/v2/superthread-plain.css` (no Tailwind) and `dist/v2/tokens.json`, and the `@mk` registry installs it into apps. The frontmatter above restates the emitted colour, type, radius and space tokens; motion, elevation, breakpoints and texture live in `.impeccable/design.json`, because the format has no place for them.
 
@@ -410,19 +410,24 @@ Every spot stays at least 10 from plum (oklab delta E x 100), and its dithered r
 
 ### Screens
 
-A screen is a 1-bit pattern that stands in for a tint, and a flat tint equals the linear-light average of its screen, so the two read as one ink. Screens come from a 4 x 4 bayer matrix in steps of 6.25 percent: `--texture-b50` prints 50 percent (8 of 16 cells) and `--texture-b19` prints 18.75 percent (3 cells). CSS inks every screen through a mask at the tile's own whole-pixel size, so the mode and the house ink re-ink it, and it stays crisp at 1x and 2x. 50 percent is the in-between state; solid is the settled one.
+A screen is a 1-bit pattern that stands in for a tint. Every screened field uses the 4 × 4 Bayer matrix on square cells at a 2 CSS px grain at every width. Live fields round the cell to a whole device pixel. Plates print at their native CSS size with nearest-neighbour sampling. Component details keep their 1 px tiles. Coverage comes in steps of 6.25 percent. A tile at 50 percent (`--texture-b50`) fills eight cells and a tile at 18.75 percent (`--texture-b19`) fills three. Half coverage is the in-between state and solid is the settled one.
 
-The five places, in the world's order:
+| place             | what prints                                                | where it ships                                 |
+| ----------------- | ---------------------------------------------------------- | ---------------------------------------------- |
+| opener            | one band per page head in the first ink and plum           | plates from `texture/plates.json`; the www sky |
+| figures           | reading figures in two inks on the same Bayer screen       | plates                                         |
+| marks             | the ship's spot region at 50 percent                       | the mark SVGs                                  |
+| state fields      | the progress fill's leading 24 px, from solid to the stock | `texture-ramp` in `Progress`                   |
+| empty and loading | a light wedge of the first ink                             | empty plates; `Skeleton` for loading rows      |
+| weave             | a solid breaking into a screen beside a hero or a band     | `@mk/weave`                                    |
 
-| place             | what prints                                                       | where it ships                                |
-| ----------------- | ----------------------------------------------------------------- | --------------------------------------------- |
-| opener            | one screened band per page head, inside crop marks                | plates from `texture/plates.json`             |
-| figures           | reading figures in two inks, and chart series as line screens     | plates; `texture-line-<ship>`                 |
-| marks             | the ship's spot region as a 1 px checker at 50 percent            | the mark SVGs                                 |
-| state fields      | the progress fill's leading 24 px, ramped from solid to the stock | `texture-ramp`, inside `Progress`             |
-| empty and loading | a light key wedge                                                 | the empty plates; `Skeleton` for loading rows |
+A chart series uses its ship's spot and hatch angle as two identifiers. The 1 px lines are knocked out to the stock every 4 px and repeat in the legend. The six component details are under Components.
 
-A chart series prints in its ship's spot with 1 px lines knocked out to the stock every 4 px at the ship's angle, so it reads by colour first and by angle without colour. Every screened field gets crop marks: 10 px corner ticks, 16 px outside the field. `scripts/texture/build.py plates` builds the plates: a masks plate prints a first plate and a spot plate per mode, inked by CSS, and a composite plate prints the master's indexed image per mode, keeping the true overprint colour where the inks overlap. `texture/plates.sha256` holds their pixel hashes. The six component details are under Components.
+Crop marks are 10 px corner ticks, 16 px outside a contained field. A weave that meets the window edge drops its marks. `scripts/texture/build.py plates` builds the opener and figure as a pair of binary masks per mode. CSS prints the first ink and plum into the masks. The same builder prints the empty wedge as an indexed image per mode. `texture/plates.sha256` holds the pixel hashes.
+
+A weave runs right beside a solid or down beneath it. On a phone a stacked band runs down. Set one spec line with the direction, a mirrored fray (line, bow, waves or arch), and the ramp. `held` keeps its density for findings and facts, `steady` falls evenly for plans and principles, `bet` breaks abruptly for hypotheses and proposals, and `fade` runs softly into the stock for notes and appendix heads. Fray wobble and thread width are in cells. One flat-core plum thread follows the fray, or the density break for `bet`. A hero can tie one knot to the thread.
+
+The fixed light runs down the middle of the weave or follows the knot. It starts past a short hold and shades only the screen. In light the solid is key and the light thins the key screen on paper. In dark the solid is the deep ground, foreground prints up to 55 percent where the light falls, and the thread and knot bloom in the same square plum cells. Plum uses the matrix shifted by two cells on both axes. Words sit on the solid or the stock.
 
 **The One House Ink Rule.** One plum fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. The focus signal is the ring, a field's focus edge and its caret, and it doesn't count against the fill. A ship never sets a control colour, and no status or spot ink fills a control.
 
@@ -843,7 +848,7 @@ A meeting brief's blocks are the reader's parts, under the meeting's `ReaderPape
 
 ### Motion
 
-Three durations on one ease. `--duration-instant` (120 ms) times hover and press colour on buttons, badges and tabs, and the select list's entry; `--duration-quick` (180 ms) times the rail's cell and tab, the sidebar's items and the dialog's fade; `--duration-travel` (240 ms) times anything that crosses the page: the progress width, the toast stack and the sidebar's collapse. Every brand transition uses `--ease-brand`, `cubic-bezier(0.22, 1, 0.36, 1)`: changes start fast and ease into place. Transitions name their properties (`transition-[color,background-color,border-color]`), so a focus ring snaps on instead of fading. Motion answers an action or an event; nothing loops, and no screen ever moves. Under `prefers-reduced-motion: reduce` the three durations become 0 and every transition and animation 0.01 ms: states still change, at once.
+Three durations on one ease. `--duration-instant` (120 ms) times hover and press colour on buttons, badges and tabs, and the select list's entry; `--duration-quick` (180 ms) times the rail's cell and tab, the sidebar's items and the dialog's fade; `--duration-travel` (240 ms) times anything that crosses the page: the progress width, the toast stack and the sidebar's collapse. Every brand transition uses `--ease-brand`, `cubic-bezier(0.22, 1, 0.36, 1)`: changes start fast and ease into place. Transitions name their properties (`transition-[color,background-color,border-color]`), so a focus ring snaps on instead of fading. Motion answers an action or an event. One live weave per page may move in a hero or video. It pauses offscreen or when the tab hides and prints a still frame in reduced motion and print. The www sky follows the same rule, and app screens print still. Under `prefers-reduced-motion: reduce` the three durations become 0 and every transition and animation 0.01 ms: states still change, at once.
 
 ## Do's and Don'ts
 
@@ -861,6 +866,8 @@ Three durations on one ease. `--duration-instant` (120 ms) times hover and press
 - **Do** keep chrome and every served label lowercase, with no em dashes.
 - **Do** reserve the space a state will need, so a click or a refresh moves nothing.
 
+- **Do** print texture as ordered cells. Keep type aligned and other surfaces flat. The weave's plum bloom is screened.
+
 ### Don't:
 
 - **Don't** write a hex value, a `dark:` class or a literal radius in item or app code: the mode and the ink come from the tokens.
@@ -869,7 +876,6 @@ Three durations on one ease. `--duration-instant` (120 ms) times hover and press
 - **Don't** use `transition`, `transition-all` or `transition-colors`, or a duration with no property beside it: each fades the focus ring.
 - **Don't** use a stock shadow (`shadow-md`, `shadow-lg`) or a backdrop blur.
 - **Don't** print a screen behind words, numbers, data or code, or give a component a second texture detail.
-- **Don't** animate a screen, or add grain, noise, glow or misregistered type.
 - **Don't** grey a component out with dots: a disabled control screens its edge and nothing else.
 - **Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink, or the outline off paper, with the trash glyph and the word.
 - **Don't** print a spot or a status ink as a large flat field.

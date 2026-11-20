@@ -1,18 +1,15 @@
 # texture
 
-Flat where you read, screened where you look. A screen is a 1-bit pattern that stands in for a tint, and a flat tint equals the linear-light average of its screen, so the two read as the same ink. CSS inks every screen through a mask, so the mode and the house ink re-ink it with no new images. Tiles are whole pixels: crisp at 1x, 2x and 3x, uneven at a fractional zoom.
+Flat where you read, screened where you look. Print a tint through the 4 × 4 Bayer matrix at a 2 CSS px grain in every field, at every width. Live canvases snap cells to device pixels. Static plates print at native CSS size with nearest-neighbour sampling. Component details keep 1 px tiles.
 
-A screen sits at an edge, a track, a shadow or a state, beside the content it serves.
-
-## the five places
-
-| place             | what prints                                                                                                     | how                                                             |
-| ----------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| opener            | a two-plate halftone band inside crop marks: key at 45 degrees, plum at 74, the title knocked out to bare stock | plates; the overview's opener and a slim band in each page head |
-| figures           | reading figures on their own two screens, and chart series as line screens                                      | plates; `texture-line-<ship>`                                   |
-| marks             | the ship's spot region as a 1 px checker at 50 percent                                                          | the mark SVGs                                                   |
-| progress edge     | the fill's leading 24 px, a bayer ramp from solid to the stock                                                  | `texture-ramp`, inside `Progress`                               |
-| empty and loading | a light key wedge, which the matrix prints as three steps: 6.25, 12.5 and 18.75 percent                         | plates; `Skeleton` for loading rows                             |
+| place             | what prints                                                       | how                              |
+| ----------------- | ----------------------------------------------------------------- | -------------------------------- |
+| opener            | one band in the first ink and plum                               | two masks; the www sky is live   |
+| figures           | reading figures in two inks                                      | two masks                        |
+| marks             | the ship's spot region at 50 percent                             | the mark SVGs                   |
+| progress edge     | the fill's leading 24 px, from solid to stock                     | `texture-ramp` in `Progress`      |
+| empty and loading | a light wedge of the first ink                                   | plates; `Skeleton` for rows      |
+| weave             | a solid breaking into a screen alongside words                   | `@mk/weave`                     |
 
 ## the six component details
 
@@ -33,26 +30,29 @@ The items already carry their detail. A raised layer's screen is an edge, never 
 
 Screens come from a 4 x 4 bayer matrix, which prints in steps of 6.25 percent. 50 percent is 8 of its 16 cells (`--texture-b50`) and 18.75 percent is 3 (`--texture-b19`).
 
-## line screens
+## chart hatches
 
-A chart series prints in its ship's spot with 1 px lines knocked out to the stock every 4 px, at the ship's own angle: 75 percent spot, 25 percent stock. The angles are orbit 45, quanta 90, trisys 27, constellation 63, artifacts 135 and soliton 117 degrees. 0, 45, 90 and 135 are exact 1 px lines; 27, 63 and 117 are 2:1 pixel steps. The legend swatch repeats the series' spot and line screen.
+A chart series prints in its ship's spot with 1 px lines knocked out to the stock every 4 px, at the ship's own angle: 75 percent spot, 25 percent stock. The angles are orbit 45, quanta 90, trisys 27, constellation 63, artifacts 135 and soliton 117 degrees. 0, 45, 90 and 135 are exact 1 px lines; 27, 63 and 117 are 2:1 pixel steps. The legend swatch repeats the series' spot and hatch.
 
-## crop marks
+## crop marks and plates
 
-Every screened field (an opener, a figure, the empty wedge) gets 10 px corner ticks, 16 px outside the field.
+Set 10 px corner ticks 16 px outside a contained field. Drop the ticks when the weave meets the window edge.
 
-## plates
+Openers and figures print two binary masks per mode. CSS inks the first and plum plates. The wedge prints an indexed image per mode. Build from `packages/superthread/texture/plates.json` with `packages/superthread/scripts/texture/build.py plates`. The site serves content-hashed files under `/texture/` and `texture/plates.sha256` records their pixel hashes.
 
-The opener, the figures and the empty wedge print from plates: one 1-bit image per ink, shipped as a mask and painted nearest neighbour, so it stays 1-bit at 2x. In dark, paper-white never prints solid: at most 78 percent in an opener and 72 in a figure.
+## weave
 
-`packages/superthread/scripts/texture/build.py plates` generates them from the spec in `packages/superthread/texture/plates.json`, with the pixel hashes in `texture/plates.sha256`. The site serves its plates under `/texture/`, named by content hash, so a plate's URL changes with the plate. A surface that needs its own opener or wedge generates plates with the same script.
+Use [@mk/weave](registry.md#weave) for a hero or a band. Put words on the flat solid or on the stock. Keep decorative texture inside the field, with ordered cells and clean type. In dark the thread and knot bloom with screened plum.
 
-## what a screen never does
+| spec key | meaning |
+| -------- | ------- |
+| `run=right\|down`, `phone=down` | run beside or below the solid. `phone` overrides the run at 600 px and below |
+| `fray=.06` or `fray=arch apex=.24 sides=.45` | the break as a fraction of the run. an arch sets the middle and the ends |
+| `bow=6`, `waves=2 amp=3`, `wobble=2 period=24 seed=11` | mirrored offsets in cells. bow leans at the middle, waves add lobes, and wobble is capped at two cells |
+| `ramp=held\|steady\|bet\|fade` | choose held for facts and findings, steady for plans and principles, bet for hypotheses and proposals, fade for notes and appendix heads |
+| `thread=4 strength=1` | the plum seam's half-width in cells and its strength. zero width hides it. in `bet` the thread runs at the ramp's break |
+| `knot=.36 knotr=13 live` | a knot at a fraction of the breadth with radius in cells. bare `live` sets it in motion |
 
-A screen never prints behind words, numbers, data or code: text, table cells, the board's rows or a control's label. The rest of the surface stays flat, which rules out:
+One light shades the screen beyond a short hold past the fray. In light it thins key ink on paper. In dark it lights the foreground screen up to 55 percent while the solid prints in the deep ground. The plum plate uses the matrix shifted two cells along both axes.
 
-- a component greyed out with dots
-- grain or noise
-- glow
-- misregistration on text
-- animation
+Put at most one knot on a page, in the hero. Only a hero or a video can print a live weave. It pauses offscreen and in a hidden tab, and prints a still frame under reduced motion and in print. The www sky follows the same motion rule. App surfaces keep their fields still. Use the same spec for a page, a still plate or each frame of a video.

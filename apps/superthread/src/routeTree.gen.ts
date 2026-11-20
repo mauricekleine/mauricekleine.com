@@ -62,6 +62,7 @@ import { Route as ComponentsToggleGroupRouteImport } from './routes/components/t
 import { Route as ComponentsTooltipRouteImport } from './routes/components/tooltip'
 import { Route as ComponentsUseMinuteRouteImport } from './routes/components/use-minute'
 import { Route as ComponentsUseMobileRouteImport } from './routes/components/use-mobile'
+import { Route as ComponentsWeaveRouteImport } from './routes/components/weave'
 import { Route as CompositionsAppShellRouteImport } from './routes/compositions/app-shell'
 import { Route as CompositionsCollectionToolbarRouteImport } from './routes/compositions/collection-toolbar'
 import { Route as CompositionsDataTableRouteImport } from './routes/compositions/data-table'
@@ -357,6 +358,11 @@ const ComponentsUseMobileRoute = ComponentsUseMobileRouteImport.update({
   path: '/components/use-mobile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComponentsWeaveRoute = ComponentsWeaveRouteImport.update({
+  id: '/components/weave',
+  path: '/components/weave',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompositionsAppShellRoute = CompositionsAppShellRouteImport.update({
   id: '/compositions/app-shell',
   path: '/compositions/app-shell',
@@ -560,6 +566,7 @@ export interface FileRoutesByFullPath {
   '/components/tooltip': typeof ComponentsTooltipRoute
   '/components/use-minute': typeof ComponentsUseMinuteRoute
   '/components/use-mobile': typeof ComponentsUseMobileRoute
+  '/components/weave': typeof ComponentsWeaveRoute
   '/compositions/app-shell': typeof CompositionsAppShellRoute
   '/compositions/collection-toolbar': typeof CompositionsCollectionToolbarRoute
   '/compositions/data-table': typeof CompositionsDataTableRoute
@@ -644,6 +651,7 @@ export interface FileRoutesByTo {
   '/components/tooltip': typeof ComponentsTooltipRoute
   '/components/use-minute': typeof ComponentsUseMinuteRoute
   '/components/use-mobile': typeof ComponentsUseMobileRoute
+  '/components/weave': typeof ComponentsWeaveRoute
   '/compositions/app-shell': typeof CompositionsAppShellRoute
   '/compositions/collection-toolbar': typeof CompositionsCollectionToolbarRoute
   '/compositions/data-table': typeof CompositionsDataTableRoute
@@ -729,6 +737,7 @@ export interface FileRoutesById {
   '/components/tooltip': typeof ComponentsTooltipRoute
   '/components/use-minute': typeof ComponentsUseMinuteRoute
   '/components/use-mobile': typeof ComponentsUseMobileRoute
+  '/components/weave': typeof ComponentsWeaveRoute
   '/compositions/app-shell': typeof CompositionsAppShellRoute
   '/compositions/collection-toolbar': typeof CompositionsCollectionToolbarRoute
   '/compositions/data-table': typeof CompositionsDataTableRoute
@@ -815,6 +824,7 @@ export interface FileRouteTypes {
     | '/components/tooltip'
     | '/components/use-minute'
     | '/components/use-mobile'
+    | '/components/weave'
     | '/compositions/app-shell'
     | '/compositions/collection-toolbar'
     | '/compositions/data-table'
@@ -899,6 +909,7 @@ export interface FileRouteTypes {
     | '/components/tooltip'
     | '/components/use-minute'
     | '/components/use-mobile'
+    | '/components/weave'
     | '/compositions/app-shell'
     | '/compositions/collection-toolbar'
     | '/compositions/data-table'
@@ -983,6 +994,7 @@ export interface FileRouteTypes {
     | '/components/tooltip'
     | '/components/use-minute'
     | '/components/use-mobile'
+    | '/components/weave'
     | '/compositions/app-shell'
     | '/compositions/collection-toolbar'
     | '/compositions/data-table'
@@ -1068,6 +1080,7 @@ export interface RootRouteChildren {
   ComponentsTooltipRoute: typeof ComponentsTooltipRoute
   ComponentsUseMinuteRoute: typeof ComponentsUseMinuteRoute
   ComponentsUseMobileRoute: typeof ComponentsUseMobileRoute
+  ComponentsWeaveRoute: typeof ComponentsWeaveRoute
   CompositionsAppShellRoute: typeof CompositionsAppShellRoute
   CompositionsCollectionToolbarRoute: typeof CompositionsCollectionToolbarRoute
   CompositionsDataTableRoute: typeof CompositionsDataTableRoute
@@ -1472,6 +1485,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsUseMobileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/components/weave': {
+      id: '/components/weave'
+      path: '/components/weave'
+      fullPath: '/components/weave'
+      preLoaderRoute: typeof ComponentsWeaveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compositions/app-shell': {
       id: '/compositions/app-shell'
       path: '/compositions/app-shell'
@@ -1732,6 +1752,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsTooltipRoute: ComponentsTooltipRoute,
   ComponentsUseMinuteRoute: ComponentsUseMinuteRoute,
   ComponentsUseMobileRoute: ComponentsUseMobileRoute,
+  ComponentsWeaveRoute: ComponentsWeaveRoute,
   CompositionsAppShellRoute: CompositionsAppShellRoute,
   CompositionsCollectionToolbarRoute: CompositionsCollectionToolbarRoute,
   CompositionsDataTableRoute: CompositionsDataTableRoute,

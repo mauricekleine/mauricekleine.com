@@ -549,6 +549,15 @@ export const catalog: CatalogItem[] = [
     upstream: null,
   },
   {
+    name: "weave",
+    type: "registry:item",
+    title: "weave",
+    description: "a screened field for a hero or a band, with four ramps and a plum thread",
+    files: [lib("weave-core"), ui("weave")],
+    tier: "brand",
+    upstream: null,
+  },
+  {
     name: "collapsible",
     type: "registry:ui",
     title: "collapsible",

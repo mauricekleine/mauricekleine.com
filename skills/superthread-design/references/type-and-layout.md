@@ -96,4 +96,4 @@ The utilities are `shadow-slip`, `shadow-leaf`, `shadow-sheet` and `shadow-lifte
 | `--duration-quick`   | 180 |
 | `--duration-travel`  | 240 |
 
-Every transition uses `--ease-brand`, `cubic-bezier(0.22, 1, 0.36, 1)`: changes start fast and ease into place. Motion follows an action; nothing moves on its own, and no screen ever moves. Reduced motion makes every duration zero, and state changes still show. For overlays, gestures and continuous updates, read [interaction craft](interaction-craft.md).
+Every transition uses `--ease-brand`, `cubic-bezier(0.22, 1, 0.36, 1)`: changes start fast and ease into place. Motion follows an action. The [weave](texture.md#weave) defines when a hero may move. Reduced motion makes every duration zero, and state changes still show. For overlays, gestures and continuous updates, read [interaction craft](interaction-craft.md).

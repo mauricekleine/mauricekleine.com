@@ -101,7 +101,7 @@ test("every plate the master has equals it, by pixels or by planes", () => {
 test("master-plates.json records each master plate's form from the file", () => {
   const master: { [file: string]: PlateRecord } = json("tokens/master-plates.json");
   for (const [file, rec] of Object.entries(master)) {
-    const want = /^(figure-|reach-opener-)/.test(file)
+    const want = /^(figure-|reach-opener-|sketch-opener.*-(first|spot)\.png$)/.test(file)
       ? "mask"
       : /^(sketch-opener|empty-)/.test(file)
         ? "composite"
@@ -134,15 +134,15 @@ test("every wedge prints the world's three steps whole at its width, the board c
   const note = uses.find((use) => use.startsWith("empty and loading:"))!;
   const steps = [.../three steps \(([^)]*)\)/.exec(note)![1]!.matchAll(/\d+(?:\.\d+)?/g)].map((m) => Number(m[0]));
   expect(steps).toHaveLength(3);
-  // each plate's coverage in percent over its whole 4 x 4 cells; fields.wedge writes the palette [stock, ink]
+  // Coverage over each whole 4 x 4 tile of 2 px cells. The wedge palette is [stock, ink].
   const stems = wedges().flatMap((name) => ["light", "dark"].map((mode) => `${name}-${mode}`));
   const coverage: { [file: string]: number[] } = python(
     `import pathlib
 out = {}
 for p in map(pathlib.Path, sys.argv[1:]):
     w, h, depth, ctype, palette, trns, rows = build.decode(p)
-    out[p.name] = sorted({sum(rows[y][x] for y in range(y0, y0 + 4) for x in range(x0, x0 + 4)) * 100 / 16
-                          for x0 in range(0, w - 3, 4) for y0 in range(0, h - 3, 4)})
+    out[p.name] = sorted({sum(rows[y][x] for y in range(y0, y0 + 8) for x in range(x0, x0 + 8)) * 100 / 64
+                          for x0 in range(0, w - 7, 8) for y0 in range(0, h - 7, 8)})
 print(json.dumps(out))`,
     ...stems.map((stem) => join(out, files.get(stem)!)),
   );
@@ -220,10 +220,10 @@ test("`plates --check` passes on its own output and fails on a changed one", () 
   expect(build("plates", "--out", out, "--check").code).toBe(0);
   const other = join(tmp, "changed");
   mkdirSync(other);
-  for (const f of readdirSync(out)) if (!f.startsWith("band-light.")) copyFileSync(join(out, f), join(other, f));
+  for (const f of readdirSync(out)) if (!f.startsWith("band-light-first.")) copyFileSync(join(out, f), join(other, f));
   const run = build("plates", "--out", other, "--check");
   expect(run.code).toBe(1);
-  expect(run.err).toContain("band-light.");
+  expect(run.err).toContain("band-light-first.");
 });
 
 test("verify passes on built plates, on an empty directory and on a missing one, and fails on a misnamed plate", () => {
@@ -234,7 +234,7 @@ test("verify passes on built plates, on an empty directory and on a missing one,
   expect(build("verify", "--dir", join(tmp, "missing")).code).toBe(0);
   const wrong = join(tmp, "wrong");
   mkdirSync(wrong);
-  copyFileSync(join(out, files.get("band-light")!), join(wrong, "band-light.00000000.png"));
+  copyFileSync(join(out, files.get("band-light-first")!), join(wrong, "band-light-first.00000000.png"));
   const run = build("verify", "--dir", wrong);
   expect(run.code).toBe(1);
   expect(run.err).toContain("does not carry its pixel hash");
