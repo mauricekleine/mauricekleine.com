@@ -30,7 +30,7 @@ function python(code: string, ...args: string[]) {
 type PlateRecord = { w: number; h: number; form: string; pixels_sha256: string; planes_sha256: string[] | null };
 type Plate = { function: string; form: string; compare?: string; master?: { [stem: string]: string[] } };
 
-// a plate run takes about 3 s; three run here
+// The 2× plate round-trips exercise the full plate set.
 setDefaultTimeout(60_000);
 
 const tmp = mkdtempSync(join(tmpdir(), "texture-test-"));
@@ -134,15 +134,15 @@ test("every wedge prints the world's three steps whole at its width, the board c
   const note = uses.find((use) => use.startsWith("empty and loading:"))!;
   const steps = [.../three steps \(([^)]*)\)/.exec(note)![1]!.matchAll(/\d+(?:\.\d+)?/g)].map((m) => Number(m[0]));
   expect(steps).toHaveLength(3);
-  // Coverage over each whole 4 x 4 tile of 2 px cells. The wedge palette is [stock, ink].
+  // Coverage over each whole 4 x 4 tile of 1 px cells. The wedge palette is [stock, ink].
   const stems = wedges().flatMap((name) => ["light", "dark"].map((mode) => `${name}-${mode}`));
   const coverage: { [file: string]: number[] } = python(
     `import pathlib
 out = {}
 for p in map(pathlib.Path, sys.argv[1:]):
     w, h, depth, ctype, palette, trns, rows = build.decode(p)
-    out[p.name] = sorted({sum(rows[y][x] for y in range(y0, y0 + 8) for x in range(x0, x0 + 8)) * 100 / 64
-                          for x0 in range(0, w - 7, 8) for y0 in range(0, h - 7, 8)})
+    out[p.name] = sorted({sum(rows[y][x] for y in range(y0, y0 + 4) for x in range(x0, x0 + 4)) * 100 / 16
+                          for x0 in range(0, w - 3, 4) for y0 in range(0, h - 3, 4)})
 print(json.dumps(out))`,
     ...stems.map((stem) => join(out, files.get(stem)!)),
   );
@@ -178,7 +178,7 @@ test("PROVENANCE.json names each file's generator, function, params, master hash
     plate: string;
     function: string;
     generator: string;
-    params: { w: number; h: number };
+    params: { w: number; h: number; dpr: number };
     pixels_sha256: string;
     module: string;
     module_sha256: string;
@@ -197,8 +197,9 @@ test("PROVENANCE.json names each file's generator, function, params, master hash
     const plate = spec[f.plate]!;
     expect(f.function).toBe(plate.function);
     expect(f.generator).toBe(prov.generator);
-    expect(f.params.w).toBe(records[file]!.w);
-    expect(f.params.h).toBe(records[file]!.h);
+    expect(f.params.dpr).toBe(plate.form === "masks" ? 2 : 1);
+    expect(f.params.w * f.params.dpr).toBe(records[file]!.w);
+    expect(f.params.h * f.params.dpr).toBe(records[file]!.h);
     expect(f.pixels_sha256).toBe(records[file]!.pixels_sha256);
     expect(f.module_sha256).toBe(prov.modules[f.module]);
     const stem = file.replace(/\.[0-9a-f]{8}\.png$/, "");

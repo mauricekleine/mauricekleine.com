@@ -38,7 +38,7 @@ function vars(prefix: string, entry: PlateEntry): Record<string, string> {
   return out;
 }
 
-// A screened plate from texture.gen.ts, printed at its own pixel size so it stays crisp at 1x and 2x: a composite
+// A screened plate from texture.gen.ts, printed at its CSS size, with 2x samples for dot masks: a composite
 // shows the active mode's image only (one file loads), masks print the mode's two plates, the house ink first and
 // the first ink over it, as the master prints them, so the key cores read on top. A narrower box crops the plate
 // rather than scaling it. `phone` names the plate that takes over at 600 px and below. A plate not generated yet

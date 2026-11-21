@@ -94,7 +94,7 @@ Brand items keep shadcn's Base UI API (exports, props, `data-slot`, variants) an
 
 Install `bunx --bun shadcn@latest add @mk/weave` beside the v2 tokens. The React `Weave` takes a `spec` line and a height set in CSS. In a [plain document](#plain-documents), the script from `@mk/doc` mounts the same renderer on each sized `[data-weave]` host.
 
-For still plates or video, use `prepareWeave(parseWeave(spec), width, height)` with dimensions in cells, and `paintWeave(field, inks, rgba, { time })` with seconds for live video. Supply the solid, screen and thread as RGB triples and set `dark` to match the token mode. Omit time for a still with transparent stock.
+For still plates or video, use `prepareWeave(parseWeave(spec), width, height)` with dimensions in two-CSS-pixel geometry cells, and `paintWeave(field, inks, rgba, { time })` with seconds for live video. Pass a reusable `prepareDots` raster and size `rgba` to four bytes per device pixel. Existing callers that omit the raster print into a geometry-cell buffer. Supply the solid, screen and thread as RGB triples and set `dark` to match the token mode. Omit time for a still with transparent stock.
 
 ### field art
 
@@ -133,7 +133,7 @@ fleet apps pin `@mk` to `https://superthread.mauricekleine.com/r/v/<version>/{na
 | `tokens/roles.ts`, `tokens/scale.ts`, `tokens/base.css`, `tokens/texture.css`, `tokens/utilities.css` | the role map, the type and motion scale, the base layer, the texture utilities and the other utilities, by hand                             |
 | `fonts.ts`                                                                                            | the face manifest                                                                                                                           |
 | `scripts/texture/master/`                                                                             | the world's own Python modules, vendored by name and unchanged                                                                              |
-| `scripts/texture/build.py`                                                                            | tiles, plates and pixel checks, run with those modules (stdlib only)                                                                        |
+| `scripts/texture/build.py`                                                                            | tiles, plates and pixel checks. Bun supplies the dot thresholds for plates.                                                                 |
 | `texture/`                                                                                            | `tiles.json` (generated), `plates.json` (the plate spec), `plates.sha256` (pixel hashes) and `places.json` (the places' caption keys)       |
 | `dist/v2/`                                                                                            | the generated CSS and `tokens.json`                                                                                                         |
 | `items/`                                                                                              | item sources, at the paths they install to. `catalog.ts` lists the items. `lib/tokens.ts`, `lib/fleet.ts` and `ui/glyphs.tsx` are generated |
@@ -165,7 +165,7 @@ At the root, `bun run test` runs this package's tests with those of the web, sha
 
 The tests run in happy-dom, which `test/dom.ts` registers before any test file loads. A failed `expect` prints a DOM node as its markup, cut at 500 characters, and `toEqual`, `toMatchObject`, `toHaveBeenCalledWith` and the other diffing matchers refuse a value that reaches the DOM, since their diff walks the whole document: compare a node's text or attributes, or use `toBe`.
 
-After editing an input, regenerate in this order: `texture`, `build`, then `upstream regen`. When `texture/plates.json` changes, also rewrite the pixel hashes from this directory: `python3 -I scripts/texture/build.py plates --out "$TMPDIR/plates" --write-hashes texture/plates.sha256`. Builds copy committed outputs and never run Python; `check`, `texture` and the tests run `python3 -I` with the standard library only.
+After editing an input, regenerate in this order: `texture`, `build`, then `upstream regen`. When `texture/plates.json` changes, also rewrite the pixel hashes from this directory: `python3 -I scripts/texture/build.py plates --out "$TMPDIR/plates" --write-hashes texture/plates.sha256`. Builds copy committed outputs and never run Python; `check`, `texture` and the tests run `python3 -I`. The plate builder queries the shared dot screen through Bun.
 
 When the master world moves, run `vendor` against it, then regenerate. The tests fail on any world key the role map does not name, any detail no item claims, and any world contrast check the contrast test has not ported.
 
@@ -190,7 +190,7 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 ## Versions and stamps
 
-- **Version.** `package.json` `version` is the one source for every item, `2.13.0`. A fix to a served item ships as the next patch, including a fix that touches only an item's look or a token, such as a role a new ship needs. A new item or variant ships as the next minor, and so does a change to how the fleet prints, in an item's look or in a token, because every ship has to look at it. A changed API is the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
+- **Version.** `package.json` `version` is the one source for every item, `2.14.0`. A fix to a served item ships as the next patch, including a fix that touches only an item's look or a token, such as a role a new ship needs. A new item or variant ships as the next minor, and so does a change to how the fleet prints, in an item's look or in a token, because every ship has to look at it. A changed API is the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
 - **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. Plain JS uses the last line. CSS and HTML use line 1, with `/* @mk/<item> <version> */` and `<!-- @mk/<item> <version> -->` respectively.
 - **Meta.** Each built item JSON carries `meta: { version, sha256, tier, upstream }`: the hash of its targets and contents, its tier, and the base-nova item and CLI it was seeded from. A block's meta adds `serves`, the apps it serves. Meta stays in the registry and never reaches an installed file.
 - **Paths.** Latest: `/r/<name>.json` and `/r/registry.json`. Pinned: `/r/v/<version>/<name>.json` and `/r/v/<version>/registry.json`. Index: `/r/versions.json`, `{ latest, versions }`.

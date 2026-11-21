@@ -3,15 +3,15 @@
   "spec": "packages/superthread/texture/plates.json",
   "modules": {
     "scripts/texture/master/details.py": "3e2835cc18040c1e9c497c9d80450c611669cc9c46dbd54f484e99e51a1ebe9a",
-    "scripts/texture/master/fields.py": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892",
+    "scripts/texture/master/fields.py": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9",
     "scripts/texture/master/ink.py": "9985cb48df02c84b430d0aab632a81bb282091a53f4e68799b9cbb4142c651e9",
-    "scripts/texture/master/opener.py": "8ccf5175a880245d3de7c15d45783ed0938afb071e40f420973c1b8e15f86132",
+    "scripts/texture/master/opener.py": "9a151a92c5f2781add53195b4d46b57d6ca2fe4abb96d001c86dae5573d1e0ef",
     "scripts/texture/master/palette.py": "555810108c1255ade167860ddc3da2b00b5c7daef8d4ef5fd58d03a416b1bee3",
     "scripts/texture/master/png.py": "78a255ce217ed4ee88dba82b0fde15ee9d93bda9453014e1539f2e924a10761f",
-    "scripts/texture/master/screen.py": "52a5a6b43fc5d7eea1a1f895b8f4ea2d492b767f642961042b256ae91f4127f2"
+    "scripts/texture/master/screen.py": "8059fffaffaa0cffa61197c814046d724497e10527f83e5c77ebe2999deb91bf"
   },
   "files": {
-    "opener-light-first.38a01b13.png": {
+    "opener-light-first.35ef6071.png": {
       "plate": "opener",
       "mode": "light",
       "plane": "first",
@@ -52,28 +52,29 @@
             0.72
           ]
         ],
-        "width": 58
+        "width": 58,
+        "dpr": 2
       },
-      "pixels_sha256": "38a01b13ab403a19a4c8ed0955bdce51c422f076d28d47600b3b4538baced8b5",
+      "pixels_sha256": "35ef6071095e97215a140bb97b55705b468f6623129800b7d065b543b668d427",
       "planes_sha256": [
-        "38a01b13ab403a19a4c8ed0955bdce51c422f076d28d47600b3b4538baced8b5"
+        "35ef6071095e97215a140bb97b55705b468f6623129800b7d065b543b668d427"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "sketch-opener-first.png",
-            "pixels_sha256": "38a01b13ab403a19a4c8ed0955bdce51c422f076d28d47600b3b4538baced8b5",
+            "pixels_sha256": "35ef6071095e97215a140bb97b55705b468f6623129800b7d065b543b668d427",
             "planes_sha256": [
-              "38a01b13ab403a19a4c8ed0955bdce51c422f076d28d47600b3b4538baced8b5"
+              "35ef6071095e97215a140bb97b55705b468f6623129800b7d065b543b668d427"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "opener-light-spot.d3f5f784.png": {
+    "opener-light-spot.5bbf53c5.png": {
       "plate": "opener",
       "mode": "light",
       "plane": "spot",
@@ -114,28 +115,29 @@
             0.72
           ]
         ],
-        "width": 58
+        "width": 58,
+        "dpr": 2
       },
-      "pixels_sha256": "d3f5f7844fb19a11a2f9c594af375e02c5abbc4d489820b2a736e03702b85e45",
+      "pixels_sha256": "5bbf53c5d82f496c3e3ad46a39ebd03eb6e5dff51e11eebf83e8196397421ee0",
       "planes_sha256": [
-        "d3f5f7844fb19a11a2f9c594af375e02c5abbc4d489820b2a736e03702b85e45"
+        "5bbf53c5d82f496c3e3ad46a39ebd03eb6e5dff51e11eebf83e8196397421ee0"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "sketch-opener-spot.png",
-            "pixels_sha256": "d3f5f7844fb19a11a2f9c594af375e02c5abbc4d489820b2a736e03702b85e45",
+            "pixels_sha256": "5bbf53c5d82f496c3e3ad46a39ebd03eb6e5dff51e11eebf83e8196397421ee0",
             "planes_sha256": [
-              "d3f5f7844fb19a11a2f9c594af375e02c5abbc4d489820b2a736e03702b85e45"
+              "5bbf53c5d82f496c3e3ad46a39ebd03eb6e5dff51e11eebf83e8196397421ee0"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "opener-dark-first.aaeef4cc.png": {
+    "opener-dark-first.9f78ad45.png": {
       "plate": "opener",
       "mode": "dark",
       "plane": "first",
@@ -176,28 +178,29 @@
             0.72
           ]
         ],
-        "width": 58
+        "width": 58,
+        "dpr": 2
       },
-      "pixels_sha256": "aaeef4cc730f471d88bf1852523677ebf91c2d6bdfccdd53d62db8ea2236fdf2",
+      "pixels_sha256": "9f78ad4505d9457732dff2d45638dd59765b65d2119a73a182e2de87984f697f",
       "planes_sha256": [
-        "aaeef4cc730f471d88bf1852523677ebf91c2d6bdfccdd53d62db8ea2236fdf2"
+        "9f78ad4505d9457732dff2d45638dd59765b65d2119a73a182e2de87984f697f"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "sketch-opener-dark-first.png",
-            "pixels_sha256": "aaeef4cc730f471d88bf1852523677ebf91c2d6bdfccdd53d62db8ea2236fdf2",
+            "pixels_sha256": "9f78ad4505d9457732dff2d45638dd59765b65d2119a73a182e2de87984f697f",
             "planes_sha256": [
-              "aaeef4cc730f471d88bf1852523677ebf91c2d6bdfccdd53d62db8ea2236fdf2"
+              "9f78ad4505d9457732dff2d45638dd59765b65d2119a73a182e2de87984f697f"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "opener-dark-spot.7918284c.png": {
+    "opener-dark-spot.28ec1472.png": {
       "plate": "opener",
       "mode": "dark",
       "plane": "spot",
@@ -238,28 +241,29 @@
             0.72
           ]
         ],
-        "width": 58
+        "width": 58,
+        "dpr": 2
       },
-      "pixels_sha256": "7918284c2a8fb85aa4fa228d8a2e7dccd1db6fb0f35601dfc644379dfcbef04d",
+      "pixels_sha256": "28ec1472127fb45b1fdc1879e5c825442f1385c8e73500f67f0411db30c854ef",
       "planes_sha256": [
-        "7918284c2a8fb85aa4fa228d8a2e7dccd1db6fb0f35601dfc644379dfcbef04d"
+        "28ec1472127fb45b1fdc1879e5c825442f1385c8e73500f67f0411db30c854ef"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "sketch-opener-dark-spot.png",
-            "pixels_sha256": "7918284c2a8fb85aa4fa228d8a2e7dccd1db6fb0f35601dfc644379dfcbef04d",
+            "pixels_sha256": "28ec1472127fb45b1fdc1879e5c825442f1385c8e73500f67f0411db30c854ef",
             "planes_sha256": [
-              "7918284c2a8fb85aa4fa228d8a2e7dccd1db6fb0f35601dfc644379dfcbef04d"
+              "28ec1472127fb45b1fdc1879e5c825442f1385c8e73500f67f0411db30c854ef"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "opener-phone-light-first.3c2d2a49.png": {
+    "opener-phone-light-first.2f21e2e7.png": {
       "plate": "opener-phone",
       "mode": "light",
       "plane": "first",
@@ -300,28 +304,29 @@
             0.58
           ]
         ],
-        "width": 44
+        "width": 44,
+        "dpr": 2
       },
-      "pixels_sha256": "3c2d2a4947881b4bfb1f9ec235abde5812d870a1b21c70e3b11ce12e5b2a1ed8",
+      "pixels_sha256": "2f21e2e71ed4371c24a4fd5d878164f423a934d5fcb57f7f9fb6c05524fafcb3",
       "planes_sha256": [
-        "3c2d2a4947881b4bfb1f9ec235abde5812d870a1b21c70e3b11ce12e5b2a1ed8"
+        "2f21e2e71ed4371c24a4fd5d878164f423a934d5fcb57f7f9fb6c05524fafcb3"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "reach-opener-light-phone-first.png",
-            "pixels_sha256": "3c2d2a4947881b4bfb1f9ec235abde5812d870a1b21c70e3b11ce12e5b2a1ed8",
+            "pixels_sha256": "2f21e2e71ed4371c24a4fd5d878164f423a934d5fcb57f7f9fb6c05524fafcb3",
             "planes_sha256": [
-              "3c2d2a4947881b4bfb1f9ec235abde5812d870a1b21c70e3b11ce12e5b2a1ed8"
+              "2f21e2e71ed4371c24a4fd5d878164f423a934d5fcb57f7f9fb6c05524fafcb3"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "opener-phone-light-spot.abb3f5ff.png": {
+    "opener-phone-light-spot.2753a3d7.png": {
       "plate": "opener-phone",
       "mode": "light",
       "plane": "spot",
@@ -362,28 +367,29 @@
             0.58
           ]
         ],
-        "width": 44
+        "width": 44,
+        "dpr": 2
       },
-      "pixels_sha256": "abb3f5ff337a90e1542363e64e001f6603d2c58f9872de16630f3e4200530475",
+      "pixels_sha256": "2753a3d717cd91f6bfc380bd3125121b1476eb7daa42a14ae81af25e041d2625",
       "planes_sha256": [
-        "abb3f5ff337a90e1542363e64e001f6603d2c58f9872de16630f3e4200530475"
+        "2753a3d717cd91f6bfc380bd3125121b1476eb7daa42a14ae81af25e041d2625"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "reach-opener-light-phone-spot.png",
-            "pixels_sha256": "abb3f5ff337a90e1542363e64e001f6603d2c58f9872de16630f3e4200530475",
+            "pixels_sha256": "2753a3d717cd91f6bfc380bd3125121b1476eb7daa42a14ae81af25e041d2625",
             "planes_sha256": [
-              "abb3f5ff337a90e1542363e64e001f6603d2c58f9872de16630f3e4200530475"
+              "2753a3d717cd91f6bfc380bd3125121b1476eb7daa42a14ae81af25e041d2625"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "opener-phone-dark-first.0835ec31.png": {
+    "opener-phone-dark-first.6aff67c7.png": {
       "plate": "opener-phone",
       "mode": "dark",
       "plane": "first",
@@ -424,28 +430,29 @@
             0.58
           ]
         ],
-        "width": 44
+        "width": 44,
+        "dpr": 2
       },
-      "pixels_sha256": "0835ec31088914ca96e5f7cd80d17e6d6ad068026a992e7b8f62a737e04ae45d",
+      "pixels_sha256": "6aff67c7089a2e50afc407d05f71be295801826b9081a658c5dc22684bb3086b",
       "planes_sha256": [
-        "0835ec31088914ca96e5f7cd80d17e6d6ad068026a992e7b8f62a737e04ae45d"
+        "6aff67c7089a2e50afc407d05f71be295801826b9081a658c5dc22684bb3086b"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "reach-opener-dark-phone-first.png",
-            "pixels_sha256": "0835ec31088914ca96e5f7cd80d17e6d6ad068026a992e7b8f62a737e04ae45d",
+            "pixels_sha256": "6aff67c7089a2e50afc407d05f71be295801826b9081a658c5dc22684bb3086b",
             "planes_sha256": [
-              "0835ec31088914ca96e5f7cd80d17e6d6ad068026a992e7b8f62a737e04ae45d"
+              "6aff67c7089a2e50afc407d05f71be295801826b9081a658c5dc22684bb3086b"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "opener-phone-dark-spot.4f7aa10c.png": {
+    "opener-phone-dark-spot.e9095f22.png": {
       "plate": "opener-phone",
       "mode": "dark",
       "plane": "spot",
@@ -486,28 +493,29 @@
             0.58
           ]
         ],
-        "width": 44
+        "width": 44,
+        "dpr": 2
       },
-      "pixels_sha256": "4f7aa10ca9ec187c7d5ccb8cdf9a668d84f5168d01fecbd737b3dcf920549c4b",
+      "pixels_sha256": "e9095f22b07ab011f9b5c7c341ef992b5111b601224bc90623dbecae0fbf6d6c",
       "planes_sha256": [
-        "4f7aa10ca9ec187c7d5ccb8cdf9a668d84f5168d01fecbd737b3dcf920549c4b"
+        "e9095f22b07ab011f9b5c7c341ef992b5111b601224bc90623dbecae0fbf6d6c"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "reach-opener-dark-phone-spot.png",
-            "pixels_sha256": "4f7aa10ca9ec187c7d5ccb8cdf9a668d84f5168d01fecbd737b3dcf920549c4b",
+            "pixels_sha256": "e9095f22b07ab011f9b5c7c341ef992b5111b601224bc90623dbecae0fbf6d6c",
             "planes_sha256": [
-              "4f7aa10ca9ec187c7d5ccb8cdf9a668d84f5168d01fecbd737b3dcf920549c4b"
+              "e9095f22b07ab011f9b5c7c341ef992b5111b601224bc90623dbecae0fbf6d6c"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "band-light-first.01f2ba50.png": {
+    "band-light-first.68f4243a.png": {
       "plate": "band",
       "mode": "light",
       "plane": "first",
@@ -548,17 +556,18 @@
             0.42
           ]
         ],
-        "width": 36
+        "width": 36,
+        "dpr": 2
       },
-      "pixels_sha256": "01f2ba5037819e4a4455322d2159093d58683b7815a188b1486c476b57d9ee0c",
+      "pixels_sha256": "68f4243a07d636b936a4529048ae6bebec9ef375a9989cdfd3aefda056db8d5f",
       "planes_sha256": [
-        "01f2ba5037819e4a4455322d2159093d58683b7815a188b1486c476b57d9ee0c"
+        "68f4243a07d636b936a4529048ae6bebec9ef375a9989cdfd3aefda056db8d5f"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "band-light-spot.9c3b5ac1.png": {
+    "band-light-spot.9473d390.png": {
       "plate": "band",
       "mode": "light",
       "plane": "spot",
@@ -599,17 +608,18 @@
             0.42
           ]
         ],
-        "width": 36
+        "width": 36,
+        "dpr": 2
       },
-      "pixels_sha256": "9c3b5ac1cb2cddd6446a47386c18dd64d6f22eb09213e59ede32996d8b97d958",
+      "pixels_sha256": "9473d390d943efa2293d8331634e7d1444842562d262a1e6177d950cd5c0c702",
       "planes_sha256": [
-        "9c3b5ac1cb2cddd6446a47386c18dd64d6f22eb09213e59ede32996d8b97d958"
+        "9473d390d943efa2293d8331634e7d1444842562d262a1e6177d950cd5c0c702"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "band-dark-first.075ebd19.png": {
+    "band-dark-first.b18bacd6.png": {
       "plate": "band",
       "mode": "dark",
       "plane": "first",
@@ -650,17 +660,18 @@
             0.42
           ]
         ],
-        "width": 36
+        "width": 36,
+        "dpr": 2
       },
-      "pixels_sha256": "075ebd195ac4ad2adf2981a958d44dd7567b6a3069f481afcf398052b28d08b3",
+      "pixels_sha256": "b18bacd6f3b59a305e151a77305c0a493980fa6ca2298a76d6f8e7db4b0f66a9",
       "planes_sha256": [
-        "075ebd195ac4ad2adf2981a958d44dd7567b6a3069f481afcf398052b28d08b3"
+        "b18bacd6f3b59a305e151a77305c0a493980fa6ca2298a76d6f8e7db4b0f66a9"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "band-dark-spot.1dce70a9.png": {
+    "band-dark-spot.9965eed7.png": {
       "plate": "band",
       "mode": "dark",
       "plane": "spot",
@@ -701,17 +712,18 @@
             0.42
           ]
         ],
-        "width": 36
+        "width": 36,
+        "dpr": 2
       },
-      "pixels_sha256": "1dce70a9c83d0f6556a9f8a638449313fa56b464d8eb15d16b7a9af5e3f065a9",
+      "pixels_sha256": "9965eed701b108174f9380b8d503031f2f1c7c57a5af4a97b69443ebbde72f0f",
       "planes_sha256": [
-        "1dce70a9c83d0f6556a9f8a638449313fa56b464d8eb15d16b7a9af5e3f065a9"
+        "9965eed701b108174f9380b8d503031f2f1c7c57a5af4a97b69443ebbde72f0f"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "band-phone-light-first.cff55538.png": {
+    "band-phone-light-first.813cb050.png": {
       "plate": "band-phone",
       "mode": "light",
       "plane": "first",
@@ -752,17 +764,18 @@
             0.58
           ]
         ],
-        "width": 36
+        "width": 36,
+        "dpr": 2
       },
-      "pixels_sha256": "cff55538b1c6783ef3e076e18edb8ab20fb27045240aa1592048226d7ca3aa5d",
+      "pixels_sha256": "813cb0506b62436e2c7fa4a029c970e212fe7ed15a4af29e84201c2680b60236",
       "planes_sha256": [
-        "cff55538b1c6783ef3e076e18edb8ab20fb27045240aa1592048226d7ca3aa5d"
+        "813cb0506b62436e2c7fa4a029c970e212fe7ed15a4af29e84201c2680b60236"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "band-phone-light-spot.8598b693.png": {
+    "band-phone-light-spot.cdebe166.png": {
       "plate": "band-phone",
       "mode": "light",
       "plane": "spot",
@@ -803,17 +816,18 @@
             0.58
           ]
         ],
-        "width": 36
+        "width": 36,
+        "dpr": 2
       },
-      "pixels_sha256": "8598b693fd5033910f5342f705698d30e95faff4c807f05ebd856699feab684c",
+      "pixels_sha256": "cdebe1665cf18c12bf829c8335948f24653875e5a104c3b56283a4d208a7c4f5",
       "planes_sha256": [
-        "8598b693fd5033910f5342f705698d30e95faff4c807f05ebd856699feab684c"
+        "cdebe1665cf18c12bf829c8335948f24653875e5a104c3b56283a4d208a7c4f5"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "band-phone-dark-first.3ed44a32.png": {
+    "band-phone-dark-first.3b6d3710.png": {
       "plate": "band-phone",
       "mode": "dark",
       "plane": "first",
@@ -854,17 +868,18 @@
             0.58
           ]
         ],
-        "width": 36
+        "width": 36,
+        "dpr": 2
       },
-      "pixels_sha256": "3ed44a321123cdc2a8675533d4104e04fef6f692ea1468ef732740f30e2505f6",
+      "pixels_sha256": "3b6d371053fc32ab2e8c39c73f275ab3132fc4863b1a9c56c6f6a50856eee34d",
       "planes_sha256": [
-        "3ed44a321123cdc2a8675533d4104e04fef6f692ea1468ef732740f30e2505f6"
+        "3b6d371053fc32ab2e8c39c73f275ab3132fc4863b1a9c56c6f6a50856eee34d"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "band-phone-dark-spot.888beeae.png": {
+    "band-phone-dark-spot.0c778ede.png": {
       "plate": "band-phone",
       "mode": "dark",
       "plane": "spot",
@@ -905,17 +920,18 @@
             0.58
           ]
         ],
-        "width": 36
+        "width": 36,
+        "dpr": 2
       },
-      "pixels_sha256": "888beeaed0b7ccdaa3de8504625f37c980e3f1480a08b54c15a9eb798dacd436",
+      "pixels_sha256": "0c778edee75e6c3e0f20f2db8de89f5b0670974427ef1d5488009e8df8dfd739",
       "planes_sha256": [
-        "888beeaed0b7ccdaa3de8504625f37c980e3f1480a08b54c15a9eb798dacd436"
+        "0c778edee75e6c3e0f20f2db8de89f5b0670974427ef1d5488009e8df8dfd739"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "figure-light-first.97a2999d.png": {
+    "figure-light-first.ae5c02a2.png": {
       "plate": "figure",
       "mode": "light",
       "plane": "first",
@@ -925,28 +941,29 @@
       "params": {
         "w": 520,
         "h": 150,
-        "mode": "light"
+        "mode": "light",
+        "dpr": 2
       },
-      "pixels_sha256": "97a2999db44a8e305fcd0887bacc88f7e73801d6923285c5394fd4aba773c515",
+      "pixels_sha256": "ae5c02a27986497aa49cba12214dcd8d34248bd2bd1468f85949f297dc8238bd",
       "planes_sha256": [
-        "97a2999db44a8e305fcd0887bacc88f7e73801d6923285c5394fd4aba773c515"
+        "ae5c02a27986497aa49cba12214dcd8d34248bd2bd1468f85949f297dc8238bd"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "figure-light-first.png",
-            "pixels_sha256": "97a2999db44a8e305fcd0887bacc88f7e73801d6923285c5394fd4aba773c515",
+            "pixels_sha256": "ae5c02a27986497aa49cba12214dcd8d34248bd2bd1468f85949f297dc8238bd",
             "planes_sha256": [
-              "97a2999db44a8e305fcd0887bacc88f7e73801d6923285c5394fd4aba773c515"
+              "ae5c02a27986497aa49cba12214dcd8d34248bd2bd1468f85949f297dc8238bd"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "figure-light-spot.1c82ac41.png": {
+    "figure-light-spot.a42a7020.png": {
       "plate": "figure",
       "mode": "light",
       "plane": "spot",
@@ -956,28 +973,29 @@
       "params": {
         "w": 520,
         "h": 150,
-        "mode": "light"
+        "mode": "light",
+        "dpr": 2
       },
-      "pixels_sha256": "1c82ac41387323f70107a8253a30641cad7ff04665dfe566825138c4afcc9c7b",
+      "pixels_sha256": "a42a7020192c5c8c24214fbc1ea7198696534b5f203826a031d39f8febb7cc2c",
       "planes_sha256": [
-        "1c82ac41387323f70107a8253a30641cad7ff04665dfe566825138c4afcc9c7b"
+        "a42a7020192c5c8c24214fbc1ea7198696534b5f203826a031d39f8febb7cc2c"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "figure-light-spot.png",
-            "pixels_sha256": "1c82ac41387323f70107a8253a30641cad7ff04665dfe566825138c4afcc9c7b",
+            "pixels_sha256": "a42a7020192c5c8c24214fbc1ea7198696534b5f203826a031d39f8febb7cc2c",
             "planes_sha256": [
-              "1c82ac41387323f70107a8253a30641cad7ff04665dfe566825138c4afcc9c7b"
+              "a42a7020192c5c8c24214fbc1ea7198696534b5f203826a031d39f8febb7cc2c"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "figure-dark-first.9c0dafb3.png": {
+    "figure-dark-first.6deb3d3c.png": {
       "plate": "figure",
       "mode": "dark",
       "plane": "first",
@@ -987,28 +1005,29 @@
       "params": {
         "w": 520,
         "h": 150,
-        "mode": "dark"
+        "mode": "dark",
+        "dpr": 2
       },
-      "pixels_sha256": "9c0dafb359380ca34072114eca1032b73fb18ea9e1b21d7ff55720b222de815b",
+      "pixels_sha256": "6deb3d3c832024b8af362242fe6d06b357e0ad9745a7280a7d48adafca45e7f7",
       "planes_sha256": [
-        "9c0dafb359380ca34072114eca1032b73fb18ea9e1b21d7ff55720b222de815b"
+        "6deb3d3c832024b8af362242fe6d06b357e0ad9745a7280a7d48adafca45e7f7"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "figure-dark-first.png",
-            "pixels_sha256": "9c0dafb359380ca34072114eca1032b73fb18ea9e1b21d7ff55720b222de815b",
+            "pixels_sha256": "6deb3d3c832024b8af362242fe6d06b357e0ad9745a7280a7d48adafca45e7f7",
             "planes_sha256": [
-              "9c0dafb359380ca34072114eca1032b73fb18ea9e1b21d7ff55720b222de815b"
+              "6deb3d3c832024b8af362242fe6d06b357e0ad9745a7280a7d48adafca45e7f7"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "figure-dark-spot.1c82ac41.png": {
+    "figure-dark-spot.a42a7020.png": {
       "plate": "figure",
       "mode": "dark",
       "plane": "spot",
@@ -1018,28 +1037,29 @@
       "params": {
         "w": 520,
         "h": 150,
-        "mode": "dark"
+        "mode": "dark",
+        "dpr": 2
       },
-      "pixels_sha256": "1c82ac41387323f70107a8253a30641cad7ff04665dfe566825138c4afcc9c7b",
+      "pixels_sha256": "a42a7020192c5c8c24214fbc1ea7198696534b5f203826a031d39f8febb7cc2c",
       "planes_sha256": [
-        "1c82ac41387323f70107a8253a30641cad7ff04665dfe566825138c4afcc9c7b"
+        "a42a7020192c5c8c24214fbc1ea7198696534b5f203826a031d39f8febb7cc2c"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "figure-dark-spot.png",
-            "pixels_sha256": "1c82ac41387323f70107a8253a30641cad7ff04665dfe566825138c4afcc9c7b",
+            "pixels_sha256": "a42a7020192c5c8c24214fbc1ea7198696534b5f203826a031d39f8febb7cc2c",
             "planes_sha256": [
-              "1c82ac41387323f70107a8253a30641cad7ff04665dfe566825138c4afcc9c7b"
+              "a42a7020192c5c8c24214fbc1ea7198696534b5f203826a031d39f8febb7cc2c"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "figure-phone-light-first.3c7c67c1.png": {
+    "figure-phone-light-first.37e1ba7c.png": {
       "plate": "figure-phone",
       "mode": "light",
       "plane": "first",
@@ -1049,28 +1069,29 @@
       "params": {
         "w": 326,
         "h": 150,
-        "mode": "light"
+        "mode": "light",
+        "dpr": 2
       },
-      "pixels_sha256": "3c7c67c128eaddcd85f3a7a86da129b6be9da1ba81dc4aab8f53d336ab8d79d1",
+      "pixels_sha256": "37e1ba7caeea93cabe151bb5d4a5f9f3e1f4b8eb0ede51f95ba45548d3273fdf",
       "planes_sha256": [
-        "3c7c67c128eaddcd85f3a7a86da129b6be9da1ba81dc4aab8f53d336ab8d79d1"
+        "37e1ba7caeea93cabe151bb5d4a5f9f3e1f4b8eb0ede51f95ba45548d3273fdf"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "figure-light-phone-first.png",
-            "pixels_sha256": "3c7c67c128eaddcd85f3a7a86da129b6be9da1ba81dc4aab8f53d336ab8d79d1",
+            "pixels_sha256": "37e1ba7caeea93cabe151bb5d4a5f9f3e1f4b8eb0ede51f95ba45548d3273fdf",
             "planes_sha256": [
-              "3c7c67c128eaddcd85f3a7a86da129b6be9da1ba81dc4aab8f53d336ab8d79d1"
+              "37e1ba7caeea93cabe151bb5d4a5f9f3e1f4b8eb0ede51f95ba45548d3273fdf"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "figure-phone-light-spot.d531224d.png": {
+    "figure-phone-light-spot.e9ab298b.png": {
       "plate": "figure-phone",
       "mode": "light",
       "plane": "spot",
@@ -1080,28 +1101,29 @@
       "params": {
         "w": 326,
         "h": 150,
-        "mode": "light"
+        "mode": "light",
+        "dpr": 2
       },
-      "pixels_sha256": "d531224dfeb595f3014f6bbc7f12033a962576aa198797f431223d8946134316",
+      "pixels_sha256": "e9ab298b819cedd96759c2175c2dab780fe7b95785c25af61b84f685e068e64e",
       "planes_sha256": [
-        "d531224dfeb595f3014f6bbc7f12033a962576aa198797f431223d8946134316"
+        "e9ab298b819cedd96759c2175c2dab780fe7b95785c25af61b84f685e068e64e"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "figure-light-phone-spot.png",
-            "pixels_sha256": "d531224dfeb595f3014f6bbc7f12033a962576aa198797f431223d8946134316",
+            "pixels_sha256": "e9ab298b819cedd96759c2175c2dab780fe7b95785c25af61b84f685e068e64e",
             "planes_sha256": [
-              "d531224dfeb595f3014f6bbc7f12033a962576aa198797f431223d8946134316"
+              "e9ab298b819cedd96759c2175c2dab780fe7b95785c25af61b84f685e068e64e"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "figure-phone-dark-first.8b7e4825.png": {
+    "figure-phone-dark-first.3cff6420.png": {
       "plate": "figure-phone",
       "mode": "dark",
       "plane": "first",
@@ -1111,28 +1133,29 @@
       "params": {
         "w": 326,
         "h": 150,
-        "mode": "dark"
+        "mode": "dark",
+        "dpr": 2
       },
-      "pixels_sha256": "8b7e4825b63553dfe28f5c372f79d0d6e4912b6be670059f07275d44717f010f",
+      "pixels_sha256": "3cff642028b85bef771036212ba785ac069c1f1fea7f95e04f379cb44ec975d8",
       "planes_sha256": [
-        "8b7e4825b63553dfe28f5c372f79d0d6e4912b6be670059f07275d44717f010f"
+        "3cff642028b85bef771036212ba785ac069c1f1fea7f95e04f379cb44ec975d8"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "figure-dark-phone-first.png",
-            "pixels_sha256": "8b7e4825b63553dfe28f5c372f79d0d6e4912b6be670059f07275d44717f010f",
+            "pixels_sha256": "3cff642028b85bef771036212ba785ac069c1f1fea7f95e04f379cb44ec975d8",
             "planes_sha256": [
-              "8b7e4825b63553dfe28f5c372f79d0d6e4912b6be670059f07275d44717f010f"
+              "3cff642028b85bef771036212ba785ac069c1f1fea7f95e04f379cb44ec975d8"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "figure-phone-dark-spot.d531224d.png": {
+    "figure-phone-dark-spot.e9ab298b.png": {
       "plate": "figure-phone",
       "mode": "dark",
       "plane": "spot",
@@ -1142,28 +1165,29 @@
       "params": {
         "w": 326,
         "h": 150,
-        "mode": "dark"
+        "mode": "dark",
+        "dpr": 2
       },
-      "pixels_sha256": "d531224dfeb595f3014f6bbc7f12033a962576aa198797f431223d8946134316",
+      "pixels_sha256": "e9ab298b819cedd96759c2175c2dab780fe7b95785c25af61b84f685e068e64e",
       "planes_sha256": [
-        "d531224dfeb595f3014f6bbc7f12033a962576aa198797f431223d8946134316"
+        "e9ab298b819cedd96759c2175c2dab780fe7b95785c25af61b84f685e068e64e"
       ],
       "master": {
         "compare": "planes",
         "files": [
           {
             "file": "figure-dark-phone-spot.png",
-            "pixels_sha256": "d531224dfeb595f3014f6bbc7f12033a962576aa198797f431223d8946134316",
+            "pixels_sha256": "e9ab298b819cedd96759c2175c2dab780fe7b95785c25af61b84f685e068e64e",
             "planes_sha256": [
-              "d531224dfeb595f3014f6bbc7f12033a962576aa198797f431223d8946134316"
+              "e9ab298b819cedd96759c2175c2dab780fe7b95785c25af61b84f685e068e64e"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "empty-light.43924891.png": {
+    "empty-light.0725758a.png": {
       "plate": "empty",
       "mode": "light",
       "plane": null,
@@ -1173,11 +1197,12 @@
       "params": {
         "w": 608,
         "h": 120,
-        "mode": "light"
+        "mode": "light",
+        "dpr": 1
       },
-      "pixels_sha256": "43924891b14ec1b4820e849ff598c9f5df8aa0cd2a497a35c17a385e4681ea8e",
+      "pixels_sha256": "0725758a8d10bbb5f2d686593da6796810838027002c3acf4d65b312ff1dd40c",
       "planes_sha256": [
-        "d57dde9a504da8036681e437e449c273a4818e2a7e3e79f490a46ff74966aa4a",
+        "dff8dbfdfc4d40bbacdbc562d8b85af59c070264db453bc6be549892dfe762c6",
         "c213e2d1493eea3956ee07e54b2974b094326e18c1ce01b63976d57ea29a0d7d"
       ],
       "master": {
@@ -1185,18 +1210,18 @@
         "files": [
           {
             "file": "empty-light.png",
-            "pixels_sha256": "43924891b14ec1b4820e849ff598c9f5df8aa0cd2a497a35c17a385e4681ea8e",
+            "pixels_sha256": "0725758a8d10bbb5f2d686593da6796810838027002c3acf4d65b312ff1dd40c",
             "planes_sha256": [
-              "d57dde9a504da8036681e437e449c273a4818e2a7e3e79f490a46ff74966aa4a",
+              "dff8dbfdfc4d40bbacdbc562d8b85af59c070264db453bc6be549892dfe762c6",
               "c213e2d1493eea3956ee07e54b2974b094326e18c1ce01b63976d57ea29a0d7d"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "empty-dark.d9c3ce21.png": {
+    "empty-dark.d54d8709.png": {
       "plate": "empty",
       "mode": "dark",
       "plane": null,
@@ -1206,11 +1231,12 @@
       "params": {
         "w": 608,
         "h": 120,
-        "mode": "dark"
+        "mode": "dark",
+        "dpr": 1
       },
-      "pixels_sha256": "d9c3ce21531d82a5f9b2e0402ec19d7f6fcca13f71fa72c72cf3503ead186b8c",
+      "pixels_sha256": "d54d87097fee133d7133f1784af156443b00d667216a1d82c792af31f75a2ba5",
       "planes_sha256": [
-        "d57dde9a504da8036681e437e449c273a4818e2a7e3e79f490a46ff74966aa4a",
+        "dff8dbfdfc4d40bbacdbc562d8b85af59c070264db453bc6be549892dfe762c6",
         "c213e2d1493eea3956ee07e54b2974b094326e18c1ce01b63976d57ea29a0d7d"
       ],
       "master": {
@@ -1218,18 +1244,18 @@
         "files": [
           {
             "file": "empty-dark.png",
-            "pixels_sha256": "d9c3ce21531d82a5f9b2e0402ec19d7f6fcca13f71fa72c72cf3503ead186b8c",
+            "pixels_sha256": "d54d87097fee133d7133f1784af156443b00d667216a1d82c792af31f75a2ba5",
             "planes_sha256": [
-              "d57dde9a504da8036681e437e449c273a4818e2a7e3e79f490a46ff74966aa4a",
+              "dff8dbfdfc4d40bbacdbc562d8b85af59c070264db453bc6be549892dfe762c6",
               "c213e2d1493eea3956ee07e54b2974b094326e18c1ce01b63976d57ea29a0d7d"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "empty-phone-light.dccb2335.png": {
+    "empty-phone-light.1adcdca1.png": {
       "plate": "empty-phone",
       "mode": "light",
       "plane": null,
@@ -1239,11 +1265,12 @@
       "params": {
         "w": 326,
         "h": 120,
-        "mode": "light"
+        "mode": "light",
+        "dpr": 1
       },
-      "pixels_sha256": "dccb2335739afdb72e646ece1a55fec32b6401b19b7f0975795e30726e4770ca",
+      "pixels_sha256": "1adcdca1c88739fed0123e7283bb652506597f5bc5042e943cdebbce106225bc",
       "planes_sha256": [
-        "fac836bfcbc3037728912a8e3344011b64dda6f4773f2131aa6a44c417b4b8b9",
+        "a07702904e9ffd2539344396372d13f927dabe3584b9864a6203d01041864395",
         "f2b798233e1ba21125b2a0ccee29cd243c4f5a5101b63052c55c4fcd0bcbc588"
       ],
       "master": {
@@ -1251,18 +1278,18 @@
         "files": [
           {
             "file": "empty-light-phone.png",
-            "pixels_sha256": "dccb2335739afdb72e646ece1a55fec32b6401b19b7f0975795e30726e4770ca",
+            "pixels_sha256": "1adcdca1c88739fed0123e7283bb652506597f5bc5042e943cdebbce106225bc",
             "planes_sha256": [
-              "fac836bfcbc3037728912a8e3344011b64dda6f4773f2131aa6a44c417b4b8b9",
+              "a07702904e9ffd2539344396372d13f927dabe3584b9864a6203d01041864395",
               "f2b798233e1ba21125b2a0ccee29cd243c4f5a5101b63052c55c4fcd0bcbc588"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "empty-phone-dark.0de882d4.png": {
+    "empty-phone-dark.fb613cb3.png": {
       "plate": "empty-phone",
       "mode": "dark",
       "plane": null,
@@ -1272,11 +1299,12 @@
       "params": {
         "w": 326,
         "h": 120,
-        "mode": "dark"
+        "mode": "dark",
+        "dpr": 1
       },
-      "pixels_sha256": "0de882d476424ba72b949afe52d2c5f87790b4a696a61e6cfd3f02537cccef0e",
+      "pixels_sha256": "fb613cb3a548134be1da970670a7495aea2e2ef47afae0352ff2bd9cc52092ea",
       "planes_sha256": [
-        "fac836bfcbc3037728912a8e3344011b64dda6f4773f2131aa6a44c417b4b8b9",
+        "a07702904e9ffd2539344396372d13f927dabe3584b9864a6203d01041864395",
         "f2b798233e1ba21125b2a0ccee29cd243c4f5a5101b63052c55c4fcd0bcbc588"
       ],
       "master": {
@@ -1284,18 +1312,18 @@
         "files": [
           {
             "file": "empty-dark-phone.png",
-            "pixels_sha256": "0de882d476424ba72b949afe52d2c5f87790b4a696a61e6cfd3f02537cccef0e",
+            "pixels_sha256": "fb613cb3a548134be1da970670a7495aea2e2ef47afae0352ff2bd9cc52092ea",
             "planes_sha256": [
-              "fac836bfcbc3037728912a8e3344011b64dda6f4773f2131aa6a44c417b4b8b9",
+              "a07702904e9ffd2539344396372d13f927dabe3584b9864a6203d01041864395",
               "f2b798233e1ba21125b2a0ccee29cd243c4f5a5101b63052c55c4fcd0bcbc588"
             ]
           }
         ]
       },
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "empty-column-light.6e2a52ee.png": {
+    "empty-column-light.9f9a3553.png": {
       "plate": "empty-column",
       "mode": "light",
       "plane": null,
@@ -1305,18 +1333,19 @@
       "params": {
         "w": 112,
         "h": 120,
-        "mode": "light"
+        "mode": "light",
+        "dpr": 1
       },
-      "pixels_sha256": "6e2a52ee316671bee550c90fec9bee812dab9a9b7e8240083c42ee28f3df20e2",
+      "pixels_sha256": "9f9a3553275cb3e937b77cf4267dd2679b6df32d49145f89a15a886db3168b51",
       "planes_sha256": [
-        "7e7cf74502b60e55f1e7dcdb79afe4fdde000b258b0da81ac95472fecfa3a494",
+        "cfa07da7b08ed81ed066320f284ab5f3b64ba26acdb7d678a07849e7aba8a620",
         "00b012eb4e071f929536f8e29e2ec2665a5a33df088ae2e09aa45349600426c4"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     },
-    "empty-column-dark.0840041c.png": {
+    "empty-column-dark.67b633a9.png": {
       "plate": "empty-column",
       "mode": "dark",
       "plane": null,
@@ -1326,16 +1355,17 @@
       "params": {
         "w": 112,
         "h": 120,
-        "mode": "dark"
+        "mode": "dark",
+        "dpr": 1
       },
-      "pixels_sha256": "0840041c1622d2c2572fbd449079f44fc611fd7a45c6bcdb4b7f4f8b39c3a2f1",
+      "pixels_sha256": "67b633a9c2333575a6ff1294965a153b7b2c76e7659dd4ecf8ad6b5843fb7a06",
       "planes_sha256": [
-        "7e7cf74502b60e55f1e7dcdb79afe4fdde000b258b0da81ac95472fecfa3a494",
+        "cfa07da7b08ed81ed066320f284ab5f3b64ba26acdb7d678a07849e7aba8a620",
         "00b012eb4e071f929536f8e29e2ec2665a5a33df088ae2e09aa45349600426c4"
       ],
       "master": null,
       "module": "scripts/texture/master/fields.py",
-      "module_sha256": "68f5731d8001d9c3f6b230c864e01074300b86326e79a67e473f5336a2168892"
+      "module_sha256": "361de45ea55c9475cdae430bb8cae3ebb32d9065bf9e889cdc58424b444ad9d9"
     }
   }
 }
