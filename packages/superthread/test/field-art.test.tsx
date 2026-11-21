@@ -100,8 +100,10 @@ test("FieldArt renders through its host, pauses offscreen or hidden and prints f
     const current = () => pixels.get(canvas)!;
     const still = current();
     expect(canvas.getAttribute("aria-hidden")).toBe("true");
-    expect(canvas.width).toBe(139);
-    expect(Math.abs((parseFloat(canvas.style.width) * 1.3) / canvas.width - 3)).toBeLessThan(0.0001);
+    expect(canvas.width).toBe(416);
+    expect(canvas.height).toBe(208);
+    expect(parseFloat(canvas.style.width)).toBe(320);
+    expect(parseFloat(canvas.style.height)).toBe(160);
     expect(still[3]).toBe(0);
     expect(still.at(-1)).toBe(255);
     expect(frames.size).toBe(0);
