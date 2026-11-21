@@ -108,9 +108,10 @@ export function mountField(host: HTMLElement, mask?: FieldMask) {
     inks = readScreenInks(win.getComputedStyle(host), inkProbe);
 
     if (!art || art.w !== width || art.h !== height || line !== spec) {
+      const next = prepare(spec, width * GRAIN, height * GRAIN, { mask });
       if (line !== spec) elapsed = frame = 0;
       line = spec;
-      art = prepare(line, width * GRAIN, height * GRAIN, { mask });
+      art = next;
       canvas.width = width;
       canvas.height = height;
       image = context.createImageData(width, height);
