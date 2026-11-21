@@ -526,7 +526,7 @@ function subscribePage({ title, description, heading, message, action, back }: S
         </div>
       </main>
     </div>
-    <script src="/sky.js?v=20261121-amsterdam"></script>
+    <script src="/sky.js?v=20261121-amsterdam-stars"></script>
     <script async src="https://api.mauricekleine.com/latest.js"></script>
   </body>
 </html>

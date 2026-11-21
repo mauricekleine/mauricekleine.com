@@ -1,5 +1,5 @@
 import { paint, prepare } from "@/components/superthread/lib/field-core";
-import { BAYER, GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core";
+import { BAYER, GRAIN, readScreenInks, smooth } from "@/components/superthread/lib/screen-core";
 
 // the sky: the night over amsterdam, stars and whatever passes by.
 // flat where you read, screened where you look. descended from a 2022 note ("Foals / Sleeping Giants
@@ -129,18 +129,29 @@ import { BAYER, GRAIN, readScreenInks } from "@/components/superthread/lib/scree
     });
   }
 
-  function drawStar(x, y, size, ink) {
-    dot(x, y, ink);
+  function starDistance(x, y) {
+    if (x < 0 || y < 0 || x >= W || y >= H) return 0;
+    const i = y * W + x;
+    // The filaments move across a fixed edge. Stars only print in open sky cells.
+    return cells[i] === 0 ? field.staticGeometry.sd[i] : 0;
+  }
+
+  function starDot(x, y) {
+    if (starDistance(x, y) > 0) dot(x, y, first);
+  }
+
+  function drawStar(x, y, size) {
+    dot(x, y, first);
     if (size < 1) return;
-    dot(x - 1, y, ink);
-    dot(x + 1, y, ink);
-    dot(x, y - 1, ink);
-    dot(x, y + 1, ink);
+    starDot(x - 1, y);
+    starDot(x + 1, y);
+    starDot(x, y - 1);
+    starDot(x, y + 1);
     if (size < 2) return;
-    dot(x - 2, y, ink);
-    dot(x + 2, y, ink);
-    dot(x, y - 2, ink);
-    dot(x, y + 2, ink);
+    starDot(x - 2, y);
+    starDot(x + 2, y);
+    starDot(x, y - 2);
+    starDot(x, y + 2);
   }
 
   // --- meteors ---------------------------------------------------------------
@@ -311,8 +322,11 @@ import { BAYER, GRAIN, readScreenInks } from "@/components/superthread/lib/scree
       let y = s.y - driftY;
       if (y < -2) y += H + 4;
       y = Math.round(y + (animate ? (pointer.y * 6 * s.depth) / cell : 0));
+      const distance = starDistance(x, y);
+      // Far stars are the last to fall away as the ramp approaches the edge.
+      if (distance <= 0 || s.depth > 0.3 + 0.7 * smooth(0, field.spec.reach, distance)) continue;
       if (s.size === 0 && Math.min(1, s.alpha * twinkle) < screen(x, y)) continue;
-      drawStar(x, y, s.size + (boost > 0.35 ? 1 : 0), first);
+      drawStar(x, y, s.size + (boost > 0.35 ? 1 : 0));
     }
 
     if (animate) {

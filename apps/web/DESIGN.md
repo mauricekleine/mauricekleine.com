@@ -44,7 +44,7 @@ Motion lives in `src/sky.js` and two stepped CSS moments. Bun bundles the sky in
 The sky takes its inks from the canvas's dark scope. The field screens the foreground and threads plum through it. Stars print in the first ink. Open cells and the field's solid take `--island-stock`.
 
 - **The night over Amsterdam** uses `@mk/field-art`. Desktop and phone each have a spec line that also fits the slim band. A held ramp rises into fine filaments above the plum thread. The filaments drift on a 22 s loop while the upper strip and portrait surround stay quiet. Stars and sky events print over the field in the same canvas.
-- **Stars**: square cells and crosses in the first ink, with twinkle as a screen threshold, slow drift and pointer parallax inside the band.
+- **Stars**: square cells and crosses in the first ink, with twinkle as a screen threshold, slow drift and pointer parallax inside the band. They print in open cells above the field’s edge and thin out through the ramp.
 - **Wish**: clicking the band sends a meteor from the click point; the first wish logs to the console. Meteors also fall on their own every 9 to 25 s.
 - **Sky traffic**: rare flybys, one at a time: a starlink train (always first, 45 to 90 s in), the ISS and a UFO, drawn as 1-bit sprites with plum lights. Each logs a line on first appearance; `window.sky.traffic('starlink' | 'iss' | 'ufo')` summons one.
 - **"dnb"**: typing it swells the stars at 174 bpm, fluncle's tempo, for 16 beats.
