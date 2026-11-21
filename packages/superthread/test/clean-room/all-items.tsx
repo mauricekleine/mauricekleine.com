@@ -87,6 +87,7 @@ import { Door, Onward } from "@/components/superthread/ui/onward";
 import { SourceLine, SourceLineItem } from "@/components/superthread/ui/source-line";
 import { Paper } from "@/components/superthread/ui/paper";
 import { SourceMark } from "@/components/superthread/ui/source-mark";
+import { Field as FieldArt } from "@/components/superthread/ui/field-art";
 import { Weave } from "@/components/superthread/ui/weave";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import {
@@ -682,6 +683,7 @@ function Sink({ mode }: { mode: Mode }) {
 
       {/* 2.0: forms */}
       <Part name="field">
+        <FieldArt spec="edge=crest ramp=fade" className="h-24" />
         <FieldSet className="max-w-md">
           <FieldLegend>notifications</FieldLegend>
           <FieldGroup>

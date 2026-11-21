@@ -27,6 +27,7 @@ import { Route as ComponentsCommandRouteImport } from './routes/components/comma
 import { Route as ComponentsDialogRouteImport } from './routes/components/dialog'
 import { Route as ComponentsDropdownMenuRouteImport } from './routes/components/dropdown-menu'
 import { Route as ComponentsFieldRouteImport } from './routes/components/field'
+import { Route as ComponentsFieldArtRouteImport } from './routes/components/field-art'
 import { Route as ComponentsFitTitleRouteImport } from './routes/components/fit-title'
 import { Route as ComponentsFleetRailRouteImport } from './routes/components/fleet-rail'
 import { Route as ComponentsGlyphsRouteImport } from './routes/components/glyphs'
@@ -182,6 +183,11 @@ const ComponentsDropdownMenuRoute = ComponentsDropdownMenuRouteImport.update({
 const ComponentsFieldRoute = ComponentsFieldRouteImport.update({
   id: '/components/field',
   path: '/components/field',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComponentsFieldArtRoute = ComponentsFieldArtRouteImport.update({
+  id: '/components/field-art',
+  path: '/components/field-art',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsFitTitleRoute = ComponentsFitTitleRouteImport.update({
@@ -539,6 +545,7 @@ export interface FileRoutesByFullPath {
   '/components/dialog': typeof ComponentsDialogRoute
   '/components/dropdown-menu': typeof ComponentsDropdownMenuRoute
   '/components/field': typeof ComponentsFieldRoute
+  '/components/field-art': typeof ComponentsFieldArtRoute
   '/components/fit-title': typeof ComponentsFitTitleRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
@@ -625,6 +632,7 @@ export interface FileRoutesByTo {
   '/components/dialog': typeof ComponentsDialogRoute
   '/components/dropdown-menu': typeof ComponentsDropdownMenuRoute
   '/components/field': typeof ComponentsFieldRoute
+  '/components/field-art': typeof ComponentsFieldArtRoute
   '/components/fit-title': typeof ComponentsFitTitleRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
@@ -712,6 +720,7 @@ export interface FileRoutesById {
   '/components/dialog': typeof ComponentsDialogRoute
   '/components/dropdown-menu': typeof ComponentsDropdownMenuRoute
   '/components/field': typeof ComponentsFieldRoute
+  '/components/field-art': typeof ComponentsFieldArtRoute
   '/components/fit-title': typeof ComponentsFitTitleRoute
   '/components/fleet-rail': typeof ComponentsFleetRailRoute
   '/components/glyphs': typeof ComponentsGlyphsRoute
@@ -800,6 +809,7 @@ export interface FileRouteTypes {
     | '/components/dialog'
     | '/components/dropdown-menu'
     | '/components/field'
+    | '/components/field-art'
     | '/components/fit-title'
     | '/components/fleet-rail'
     | '/components/glyphs'
@@ -886,6 +896,7 @@ export interface FileRouteTypes {
     | '/components/dialog'
     | '/components/dropdown-menu'
     | '/components/field'
+    | '/components/field-art'
     | '/components/fit-title'
     | '/components/fleet-rail'
     | '/components/glyphs'
@@ -972,6 +983,7 @@ export interface FileRouteTypes {
     | '/components/dialog'
     | '/components/dropdown-menu'
     | '/components/field'
+    | '/components/field-art'
     | '/components/fit-title'
     | '/components/fleet-rail'
     | '/components/glyphs'
@@ -1059,6 +1071,7 @@ export interface RootRouteChildren {
   ComponentsDialogRoute: typeof ComponentsDialogRoute
   ComponentsDropdownMenuRoute: typeof ComponentsDropdownMenuRoute
   ComponentsFieldRoute: typeof ComponentsFieldRoute
+  ComponentsFieldArtRoute: typeof ComponentsFieldArtRoute
   ComponentsFitTitleRoute: typeof ComponentsFitTitleRoute
   ComponentsFleetRailRoute: typeof ComponentsFleetRailRoute
   ComponentsGlyphsRoute: typeof ComponentsGlyphsRoute
@@ -1253,6 +1266,13 @@ declare module '@tanstack/react-router' {
       path: '/components/field'
       fullPath: '/components/field'
       preLoaderRoute: typeof ComponentsFieldRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/components/field-art': {
+      id: '/components/field-art'
+      path: '/components/field-art'
+      fullPath: '/components/field-art'
+      preLoaderRoute: typeof ComponentsFieldArtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/components/fit-title': {
@@ -1739,6 +1759,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsDialogRoute: ComponentsDialogRoute,
   ComponentsDropdownMenuRoute: ComponentsDropdownMenuRoute,
   ComponentsFieldRoute: ComponentsFieldRoute,
+  ComponentsFieldArtRoute: ComponentsFieldArtRoute,
   ComponentsFitTitleRoute: ComponentsFitTitleRoute,
   ComponentsFleetRailRoute: ComponentsFleetRailRoute,
   ComponentsGlyphsRoute: ComponentsGlyphsRoute,

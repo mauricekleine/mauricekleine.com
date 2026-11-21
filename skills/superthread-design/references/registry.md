@@ -84,7 +84,7 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.12.0/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.13.0/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions with a snapshot. A snapshot never changes once it is published.
@@ -116,3 +116,11 @@ fleet apps install `@mk` v2 from `https://superthread.mauricekleine.com/r/v/<ver
 ## weave
 
 Add `@mk/weave` beside the v2 tokens. In React, import `Weave` from `ui/weave` and set its `spec` and height. In a [plain document](#plain-documents), `doc/weave.js` mounts the same renderer on every sized element with a `data-weave` spec. The core has no runtime dependencies. `prepareWeave` and `paintWeave` print the same grammar for still plates and video. Read [texture](texture.md#weave) for the spec and the live rules.
+
+## field
+
+Add `@mk/field` beside the v2 tokens. In React, import `Field` from `ui/field-art` for concept art and set its `spec` and CSS size. Pass `mask` for a custom edge and `playing` for the page’s live field. The form parts install at `ui/field`.
+
+On a plain page, give a sized, positioned, overflow-hidden host a `data-field` spec. Inline the item’s `doc/field.js` in a classic script after the hosts. Set `data-field-play` on the host that moves. Use `mountField(host, mask)` from `lib/field-live` for a custom mask.
+
+Read [superthread-visuals](../../superthread-visuals/SKILL.md) for the spec, stills and loops.

@@ -4,8 +4,8 @@ Flat where you read, screened where you look. Print a tint through the 4 × 4 Ba
 
 | place             | what prints                                                       | how                              |
 | ----------------- | ----------------------------------------------------------------- | -------------------------------- |
-| opener            | one band in the first ink and plum                               | two masks; the www sky is live   |
-| figures           | reading figures in two inks                                      | two masks                        |
+| opener            | one band in the first ink and plum                               | `@mk/field`, `@mk/weave` or plates   |
+| figures           | concept art in two inks                                          | `@mk/field` or stills                        |
 | marks             | the ship's spot region at 50 percent                             | the mark SVGs                   |
 | progress edge     | the fill's leading 24 px, from solid to stock                     | `texture-ramp` in `Progress`      |
 | empty and loading | a light wedge of the first ink                                   | plates; `Skeleton` for rows      |
@@ -69,7 +69,13 @@ The script mounts the canvas. The page scope supplies its inks.
 
 One light shades the screen beyond a short hold past the fray. In light it thins key ink on paper. In dark it lights the foreground screen up to 55 percent while the solid prints in the deep ground. The plum plate uses the matrix shifted two cells along both axes.
 
-Put at most one knot on a page, in the hero. Only a hero or a video can print a live weave. It pauses offscreen and in a hidden tab, and prints a still frame under reduced motion and in print. The www sky follows the same motion rule and takes the live weave's place on www. App surfaces keep their fields still. Use the same spec for a page, a still plate or each frame of a video.
+A hero’s weave can carry a knot. App surfaces print still.
+
+## concept art
+
+Use [@mk/field](registry.md#field) for a concept in a figure or opener. One spec gives a verb its edge, ramp, thread, knot and motion. The host’s stock comes through the open cells. Read [superthread-visuals](../../superthread-visuals/SKILL.md) for the spec and standalone still and loop tools.
+
+One live field may move per page, a weave or a field. It pauses offscreen and in a hidden tab, and prints a still frame under reduced motion and in print. The www sky occupies that slot on www. The progress ramp moves with its fill.
 
 ## what a screen never does
 
@@ -79,4 +85,4 @@ A screen never prints behind words, numbers, data or code: text, table cells, th
 - noise or random dither
 - a soft or blurred glow; the weave's bloom prints in screened cells
 - misregistration on text
-- motion of its own outside the page's one live field, a hero's weave or the www sky in its place; the progress ramp moves only with its fill
+- screen motion outside the page’s one live field and the progress fill

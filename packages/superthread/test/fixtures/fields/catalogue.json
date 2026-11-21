@@ -1,0 +1,88 @@
+[
+  {
+    "id": "468-prs",
+    "title": "my agents merged 468 prs in 23 days",
+    "verb": "converge",
+    "line": "edge=merge at=.66 base=.52 branches=8 fan=1.03 thin=.016 trunk=.096 bend=-.045 ramp=held reach=.17 threadon=axis thread=1.4 knot=.48 knotr=9 tex=.35 pitch=7 spread=.36 seed=43 points=468 motion=knot travel=.28 duration=14",
+    "frame": "fan at the left, top and bottom. trunk at the right",
+    "size": [1200, 630]
+  },
+  {
+    "id": "floor",
+    "title": "ride the floor up",
+    "verb": "lift",
+    "line": "edge=terrace base=.83 lift=.57 at=.49 steps=4 spacing=.225 ease=.075 ramp=held reach=.39 thread=1.55 knot=.84 knotr=9 tex=.48 pitch=7.5 spread=.30 seed=34 motion=knot travel=.12 duration=12",
+    "frame": "bottom and both sides",
+    "size": [1200, 630]
+  },
+  {
+    "id": "journey",
+    "title": "the journey no longer matters",
+    "verb": "collapse",
+    "line": "edge=meander side=top base=.46 lift=.19 settle=.71 waves=3 phase=-.12 ramp=steady reach=.51 thread=1.5 knot=.76 knotr=10 tex=.49 pitch=6.8 spread=.34 seed=72 motion=knot travel=.17 duration=14",
+    "frame": "top and both sides",
+    "size": [1200, 630]
+  },
+  {
+    "id": "roi",
+    "title": "dude, where is the roi?",
+    "verb": "focus",
+    "line": "edge=mask masky=.40 maskfrom=.53 ramp=steady reach=.143 thread=1.4 knot=.61 knotr=9 tex=.52 pitch=7.1 spread=.40 seed=27 motion=filaments drift=.16 duration=12",
+    "mask": "roi",
+    "frame": "right shoulder",
+    "size": [1200, 630]
+  },
+  {
+    "id": "soliton",
+    "title": "soliton",
+    "verb": "carry",
+    "line": "edge=crest at=.49 base=.79 lift=.51 width=.108 ramp=fade reach=.58 thread=1.6 knot=.49 knotr=11 tex=.64 pitch=7.2 spread=.32 seed=37 motion=wave travel=.125 duration=16",
+    "frame": "bottom and both sides",
+    "size": [1200, 630]
+  },
+  {
+    "id": "orbit",
+    "title": "orbit",
+    "verb": "hold",
+    "line": "edge=ellipse+crest at=.51 base=.54 rx=.226 ry=.208 b.base=.94 b.at=.51 b.lift=.31 b.width=.11 blend=.095 ramp=steady reach=.33 level=.27 threadon=ring thread=1.5 knot=.85 knotr=8 tex=.52 pitch=6.3 spread=.29 seed=12 motion=knot duration=18",
+    "frame": "bottom through the bridge",
+    "size": [1200, 630]
+  },
+  {
+    "id": "constellation",
+    "title": "constellation",
+    "verb": "join",
+    "line": "edge=mask masky=.45 ramp=fade reach=.184 thread=1.25 knot=.566 knotr=8 tex=.59 pitch=7.5 spread=.47 seed=64 points=42 motion=filaments drift=.13 duration=16",
+    "mask": "constellation",
+    "frame": "left link",
+    "size": [1200, 630]
+  },
+  {
+    "id": "quanta",
+    "title": "quanta",
+    "verb": "quantise",
+    "line": "edge=terrace base=.84 at=.55 lift=.12 steps=1 ease=.025 ramp=held reach=.70 levels=.21:1,.32:.56,.16:.31,.31:.14 level=.33 jump=.21 turn=.55 thread=1.4 knot=.55 knotr=8 spread=.31 seed=98 motion=knot travel=.23 duration=14",
+    "frame": "bottom and both sides",
+    "size": [1200, 630]
+  },
+  {
+    "id": "amsterdam",
+    "title": "the night over amsterdam",
+    "verb": "drift",
+    "frame": "bottom and both sides",
+    "line": "edge=meander+crest base=.815 lift=.16 waves=2 settle=1.34 phase=.65 b.at=.64 b.lift=-.105 b.width=.17 ramp=held reach=.47 thread=1.25 knot=.23 knotr=6 tex=.85 pitch=5.4 spread=.29 seed=57 motion=filaments drift=.27 duration=22",
+    "size": [1440, 324],
+    "phone": {
+      "line": "edge=meander+crest base=.835 lift=.118 waves=1 settle=1.26 phase=.57 b.at=.77 b.lift=-.085 b.width=.25 ramp=held reach=.325 thread=1.15 knot=.25 knotr=5 tex=.64 pitch=6.4 spread=.235 seed=57 motion=filaments drift=.23 duration=22",
+      "size": [390, 200]
+    }
+  },
+  {
+    "id": "weave",
+    "title": "the weave’s arch",
+    "line": "edge=crest side=top base=.812 lift=.557 at=.5 width=.63 ramp=fade reach=.69 thread=1.65 knot=.604 knotr=13 spread=.31 seed=21",
+    "verb": "open",
+    "frame": "top and both sides",
+    "size": [1646, 588]
+  }
+]

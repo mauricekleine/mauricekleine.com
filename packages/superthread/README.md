@@ -96,6 +96,14 @@ Install `bunx --bun shadcn@latest add @mk/weave` beside the v2 tokens. The React
 
 For still plates or video, use `prepareWeave(parseWeave(spec), width, height)` with dimensions in cells, and `paintWeave(field, inks, rgba, { time })` with seconds for live video. Supply the solid, screen and thread as RGB triples and set `dark` to match the token mode. Omit time for a still with transparent stock.
 
+### field
+
+Install `bunx --bun shadcn@latest add @mk/field` beside the v2 tokens. Import `Field` from `ui/field-art`. Set its CSS size and pass a `spec` line. Pass `mask` for a custom edge and `playing` for the one live field on the page, whether it uses a field or a weave. The form parts install at `ui/field`.
+
+On a plain page, inline `doc/field.js` from the field item after the sized, positioned, overflow-hidden hosts. Set `data-field` to the spec and add `data-field-play` to the host that moves. Open cells take the scope’s stock.
+
+Use [superthread-visuals](../../skills/superthread-visuals/SKILL.md) to draw concept art for figures and openers and render stills and loops.
+
 ## The site
 
 superthread.mauricekleine.com is v2's home. Its build renders every item from the files the registry serves, the same bytes an app installs (development renders the sources in `items/`):
@@ -137,20 +145,21 @@ fleet apps pin `@mk` to `https://superthread.mauricekleine.com/r/v/<version>/{na
 
 Run them from the repo root as `bun run --cwd packages/superthread <script>`.
 
-| script       | what it does                                                                                                                                                   |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `build`      | generates `dist/v2/`, `items/lib/tokens.ts`, `items/lib/fleet.ts` and `items/ui/glyphs.tsx`                                                                    |
-| `doc-weave`  | bundles the shared weave renderer into `items/doc/weave.js` for plain HTML                                                                                     |
-| `check`      | fails when a generated file, including the document weave script, or `texture/tiles.json` is stale                                                             |
-| `texture`    | rebuilds `texture/tiles.json`                                                                                                                                  |
-| `registry`   | builds the latest registry into `out/r/`. `--out <dir>` moves it; `--base-url <url>` (or `SUPERTHREAD_BASE_URL`) sets the `@mk` URL init writes                |
-| `snapshot`   | writes `versions/<version>/r/` at the production base                                                                                                          |
-| `upstream`   | `fetch`, `regen [--check]`, `print <name>` and `diff`: the base-nova mirror, the pass items and the brand seeds                                                |
-| `vendor`     | `vendor <path to the master world> [--check]`: vendors the world. The path is required                                                                         |
-| `clean-room` | the clean room; `bun run test:clean-room` at the root runs the same                                                                                            |
-| `test`       | `bun test && bun --check`                                                                                                                                      |
-| `marks`      | `new <id> [--target soliton\|cloudflare] [--url URL\|none]` allocates a star mark; `check` verifies the fleet; `sheet [--out FILE]` renders a standalone sheet |
-| `lint`       | `designmd lint DESIGN.md` with the pinned local copy                                                                                                           |
+| script          | what it does                                                                                                                                                   |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `build`         | generates `dist/v2/`, `items/lib/tokens.ts`, `items/lib/fleet.ts` and `items/ui/glyphs.tsx`                                                                    |
+| `doc-weave`     | bundles the shared weave renderer into `items/doc/weave.js` for plain HTML                                                                                     |
+| `field-bundles` | bundles the field into `items/doc/field.js` for plain HTML and `skills/superthread-visuals/scripts/field.js` for stills and loops                              |
+| `check`         | fails when a generated file, including the document and skill scripts, or `texture/tiles.json` is stale                                                        |
+| `texture`       | rebuilds `texture/tiles.json`                                                                                                                                  |
+| `registry`      | builds the latest registry into `out/r/`. `--out <dir>` moves it; `--base-url <url>` (or `SUPERTHREAD_BASE_URL`) sets the `@mk` URL init writes                |
+| `snapshot`      | writes `versions/<version>/r/` at the production base                                                                                                          |
+| `upstream`      | `fetch`, `regen [--check]`, `print <name>` and `diff`: the base-nova mirror, the pass items and the brand seeds                                                |
+| `vendor`        | `vendor <path to the master world> [--check]`: vendors the world. The path is required                                                                         |
+| `clean-room`    | the clean room; `bun run test:clean-room` at the root runs the same                                                                                            |
+| `test`          | `bun test && bun --check`                                                                                                                                      |
+| `marks`         | `new <id> [--target soliton\|cloudflare] [--url URL\|none]` allocates a star mark; `check` verifies the fleet; `sheet [--out FILE]` renders a standalone sheet |
+| `lint`          | `designmd lint DESIGN.md` with the pinned local copy                                                                                                           |
 
 At the root, `bun run test` runs this package's tests with those of the web, share and superthread apps.
 
@@ -181,7 +190,7 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 ## Versions and stamps
 
-- **Version.** `package.json` `version` is the one source for every item, `2.12.0` now. A fix to a served item ships as the next patch, including a fix that touches only an item's look or a token, such as a role a new ship needs. A new item or variant ships as the next minor, and so does a change to how the fleet prints, in an item's look or in a token, because every ship has to look at it. A changed API is the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
+- **Version.** `package.json` `version` is the one source for every item, `2.13.0`. A fix to a served item ships as the next patch, including a fix that touches only an item's look or a token, such as a role a new ship needs. A new item or variant ships as the next minor, and so does a change to how the fleet prints, in an item's look or in a token, because every ship has to look at it. A changed API is the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
 - **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. Plain JS uses the last line. CSS and HTML use line 1, with `/* @mk/<item> <version> */` and `<!-- @mk/<item> <version> -->` respectively.
 - **Meta.** Each built item JSON carries `meta: { version, sha256, tier, upstream }`: the hash of its targets and contents, its tier, and the base-nova item and CLI it was seeded from. A block's meta adds `serves`, the apps it serves. Meta stays in the registry and never reaches an installed file.
 - **Paths.** Latest: `/r/<name>.json` and `/r/registry.json`. Pinned: `/r/v/<version>/<name>.json` and `/r/v/<version>/registry.json`. Index: `/r/versions.json`, `{ latest, versions }`.
