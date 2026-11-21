@@ -18,11 +18,10 @@ function browser() {
   Object.defineProperty(window, "matchMedia", {
     value: (query: string) => (query === motion.media ? motion : matchMedia(query)),
   });
-  const pixels = new Map<HTMLCanvasElement, Uint8ClampedArray>();
+  const pixels = new WeakMap<InstanceType<typeof window.HTMLCanvasElement>, Uint8ClampedArray>();
   const frames = new Map<number, FrameRequestCallback>();
   let callback: IntersectionObserverCallback;
   let sequence = 0;
-  window.HTMLElement.prototype.getBoundingClientRect = () => new window.DOMRect(0, 0, 320, 160);
   Object.defineProperty(window, "IntersectionObserver", {
     value: class {
       constructor(observer: IntersectionObserverCallback) {
@@ -47,23 +46,31 @@ function browser() {
       colorScheme: element.closest(".dark") ? "dark" : "light",
       getPropertyValue: (role: string) => inks[role],
     }) as ReturnType<typeof window.getComputedStyle>;
-  Object.defineProperty(window.HTMLCanvasElement.prototype, "getContext", {
-    configurable: true,
-    value(this: HTMLCanvasElement) {
-      return {
-        fillStyle: "",
-        clearRect() {},
-        fillRect() {},
-        getImageData() {
-          return { data: [Number(this.fillStyle), 0, 0, 255] };
+  // Happy DOM shares element prototypes across windows. Stub this document's elements only.
+  const createElement = document.createElement.bind(document);
+  document.createElement = ((...args: Parameters<typeof createElement>) => {
+    const element = createElement(...args);
+    element.getBoundingClientRect = () => new window.DOMRect(0, 0, 320, 160);
+    if (element instanceof window.HTMLCanvasElement) {
+      Object.defineProperty(element, "getContext", {
+        value() {
+          return {
+            fillStyle: "",
+            clearRect() {},
+            fillRect() {},
+            getImageData() {
+              return { data: [Number(this.fillStyle), 0, 0, 255] };
+            },
+            createImageData(width: number, height: number) {
+              return { data: new Uint8ClampedArray(width * height * 4) };
+            },
+            putImageData: (image: ImageData) => pixels.set(element, image.data.slice()),
+          };
         },
-        createImageData(width: number, height: number) {
-          return { data: new Uint8ClampedArray(width * height * 4) };
-        },
-        putImageData: (image: ImageData) => pixels.set(this, image.data.slice()),
-      };
-    },
-  });
+      });
+    }
+    return element;
+  }) as typeof createElement;
   return {
     document,
     window,
@@ -89,7 +96,7 @@ test("FieldArt renders through its host, pauses offscreen or hidden and prints f
   const root = createRoot(document.body as unknown as HTMLElement);
   try {
     await act(async () => root.render(<FieldArt spec={spec} playing />));
-    const canvas = document.querySelector("canvas") as unknown as HTMLCanvasElement;
+    const canvas = document.querySelector("canvas")!;
     const current = () => pixels.get(canvas)!;
     const still = current();
     expect(canvas.getAttribute("aria-hidden")).toBe("true");
@@ -133,12 +140,17 @@ test("FieldArt renders through its host, pauses offscreen or hidden and prints f
 test("the plain script mounts every host and resolves stock and solid in the host's mode", async () => {
   const { document, window, pixels } = browser();
   try {
-    document.body.innerHTML = `<div data-field-art="${spec}"></div><div class="dark" data-field-art="${spec}"></div>`;
+    for (const mode of ["light", "dark"]) {
+      const host = document.createElement("div");
+      host.dataset.fieldArt = spec;
+      host.className = mode;
+      document.body.append(host);
+    }
     const script = readFileSync(new URL("../items/doc/field-art.js", import.meta.url), "utf8");
     runInNewContext(script, { document });
     const canvases = [...document.querySelectorAll("canvas")];
     expect(canvases.length).toBe(2);
-    const [paper, dark] = canvases.map((canvas) => pixels.get(canvas as unknown as HTMLCanvasElement)!);
+    const [paper, dark] = canvases.map((canvas) => pixels.get(canvas)!);
     expect(paper[3]).toBe(0);
     expect(dark[3]).toBe(0);
     expect([...paper.slice(-4)]).toEqual([25, 0, 0, 255]);

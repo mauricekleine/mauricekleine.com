@@ -1,9 +1,14 @@
-// the sky: stars, a nebula and whatever passes by, printed as a 1-bit screen in the opener's band.
+import { paint, prepare } from "@/components/superthread/lib/field-core";
+import { BAYER, GRAIN, readScreenInks, smooth } from "@/components/superthread/lib/screen-core";
+
+// the sky: the night over amsterdam, stars and whatever passes by.
 // flat where you read, screened where you look. descended from a 2022 note ("Foals / Sleeping Giants
 // star particles"). yes, this is overengineered for a personal site. that's the point.
 (() => {
   const canvas = document.getElementById("sky");
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const print = window.matchMedia("print");
+  const phone = window.matchMedia("(max-width: 600px)");
 
   const CONSOLE_INK = "font-family:'Fragment Mono',ui-monospace,monospace;font-size:12px;line-height:1.7;";
   const CONSOLE_PLUM = `color:#aa337a;${CONSOLE_INK}`;
@@ -13,14 +18,17 @@
   if (graveGlyphs.length) {
     // dead stars occasionally go supernova. they earned it
     (function scheduleSupernova() {
-      setTimeout(() => {
-        if (!document.hidden && !reduced.matches) {
-          const glyph = graveGlyphs[Math.floor(Math.random() * graveGlyphs.length)];
-          glyph.classList.add("supernova");
-          setTimeout(() => glyph.classList.remove("supernova"), 1700);
-        }
-        scheduleSupernova();
-      }, 14000 + Math.random() * 18000);
+      setTimeout(
+        () => {
+          if (!document.hidden && !reduced.matches && !print.matches) {
+            const glyph = graveGlyphs[Math.floor(Math.random() * graveGlyphs.length)];
+            glyph.classList.add("supernova");
+            setTimeout(() => glyph.classList.remove("supernova"), 1700);
+          }
+          scheduleSupernova();
+        },
+        14000 + Math.random() * 18000,
+      );
     })();
   }
 
@@ -28,7 +36,7 @@
   const portrait = document.querySelector(".portrait-wrap");
   if (portrait) {
     portrait.addEventListener("click", () => {
-      if (reduced.matches) return;
+      if (reduced.matches || print.matches) return;
       portrait.classList.remove("eclipsing");
       void portrait.offsetWidth; // restart the animation
       portrait.classList.add("eclipsing");
@@ -37,57 +45,56 @@
   }
 
   if (!canvas) return;
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  if (!ctx) return;
-  canvas.dataset.live = ""; // the live sky takes over from the printed plate
+  const ctx = canvas.getContext("2d");
+  const screenCanvas = document.createElement("canvas");
+  const screenCtx = screenCanvas.getContext("2d");
+  const inkProbe = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+  if (!ctx || !screenCtx || !inkProbe) return;
 
-  // the master's 4 x 4 bayer matrix: every tint here is a screen of one ink
-  const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((v) => (v + 0.5) / 16);
-  const screen = (x, y) => BAYER[(((y & 3) << 2) | (x & 3)) >>> 0];
+  const desktopSpec =
+    "edge=meander+crest base=.815 lift=.16 waves=2 settle=1.34 phase=.65 b.at=.64 b.lift=-.105 b.width=.17 ramp=held reach=.47 thread=1.25 knot=.23 knotr=6 tex=.85 pitch=5.4 spread=.29 seed=57 motion=filaments drift=.27 duration=22";
+  const phoneSpec =
+    "edge=meander+crest base=.835 lift=.118 waves=1 settle=1.26 phase=.57 b.at=.77 b.lift=-.085 b.width=.25 ramp=held reach=.325 thread=1.15 knot=.25 knotr=5 tex=.64 pitch=6.4 spread=.235 seed=57 motion=filaments drift=.23 duration=22";
 
+  const screen = (x, y) => BAYER[(y & 3) * 4 + (x & 3)];
   const BEAT = 60000 / 174; // fluncle runs at 174bpm
   const PULSE_BEATS = 16;
   const FRAME = 1000 / 24;
-  const TILE = 512; // the nebula's noise tiles at this size, so it can drift forever
-
-  // The screen is painted once per cell, then enlarged by whole device pixels.
-  const screenCanvas = document.createElement("canvas");
-  const screenCtx = screenCanvas.getContext("2d");
-  const GRAIN = 2;
   let cell = GRAIN;
   let deviceCell = GRAIN;
-  let printing = false;
+  let printing = print.matches;
   let W = 0;
   let H = 0;
   let stars = [];
-  let field = new Float32Array(TILE * TILE);
-  let image = null;
-  let first = [22, 24, 29];
-  let plum = [170, 51, 122];
-  let rafId = null;
+  let field;
+  let fieldLine;
+  let cells;
+  let image;
+  let first;
+  let plum;
+  let pixels;
+  let palette;
+  let rafId;
+  let lastTick;
+  let time = 0;
   let lastFrame = -FRAME;
-  let visible = true;
+  let visible = false;
   let meteor = null;
-  let nextMeteorAt = 0;
+  let nextMeteorAt = 4000 + Math.random() * 8000;
   let pulseStart = -1;
   let flyby = null;
-  let nextTrafficAt = 0;
+  let nextTrafficAt = 45000 + Math.random() * 45000;
   const pointer = { tx: 0, ty: 0, x: 0, y: 0 };
 
-  // --- the inks come from the canvas's island --------------------------------
-  function resolveInk(name) {
-    const value = getComputedStyle(canvas).getPropertyValue(name).trim();
-    ctx.clearRect(0, 0, 1, 1);
-    ctx.fillStyle = value;
-    ctx.fillRect(0, 0, 1, 1);
-    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-    ctx.clearRect(0, 0, 1, 1);
-    return [r, g, b];
-  }
-
   function readInks() {
-    first = resolveInk("--first");
-    plum = resolveInk("--primary");
+    const style = getComputedStyle(canvas);
+    const { screen, thread } = readScreenInks(style, inkProbe);
+    plum = thread;
+    inkProbe.fillStyle = style.getPropertyValue("--first").trim();
+    inkProbe.fillRect(0, 0, 1, 1);
+    first = inkProbe.getImageData(0, 0, 1, 1).data;
+    // Stock and the solid under the thread both take the island's background.
+    palette = new Uint32Array(new Uint8ClampedArray([0, 0, 0, 0, ...screen, 255, ...thread, 255, 0, 0, 0, 0]).buffer);
   }
 
   function dot(x, y, ink) {
@@ -99,71 +106,64 @@
     image.data[at + 3] = 255;
   }
 
-  // --- the nebula: tiling value noise, folded into ridges ---------------------
-  function makeField() {
-    const size = 32;
-    const lattice = Float32Array.from({ length: size * size }, () => Math.random());
-    const noise = (x, y, cells) => {
-      const u = (x / TILE) * cells;
-      const v = (y / TILE) * cells;
-      const x0 = Math.floor(u);
-      const y0 = Math.floor(v);
-      const fx = u - x0;
-      const fy = v - y0;
-      const sx = fx * fx * (3 - 2 * fx);
-      const sy = fy * fy * (3 - 2 * fy);
-      const at = (i, j) => lattice[(((j % cells) + cells) % cells) * size + ((i % cells) + cells) % cells];
-      const top = at(x0, y0) + (at(x0 + 1, y0) - at(x0, y0)) * sx;
-      const bottom = at(x0, y0 + 1) + (at(x0 + 1, y0 + 1) - at(x0, y0 + 1)) * sx;
-      return top + (bottom - top) * sy;
-    };
-    for (let y = 0; y < TILE; y++) {
-      for (let x = 0; x < TILE; x++) {
-        const warp = noise(x, y, 4) * 90;
-        const bend = noise(y, x, 4) * 90;
-        const fbm =
-          noise(x + warp, y + bend, 6) * 0.55 + noise(x + bend, y - warp, 12) * 0.3 + noise(x, y, 24) * 0.15;
-        const ridge = 1 - Math.abs(fbm * 2 - 1);
-        field[y * TILE + x] = Math.pow(ridge, 7) * 0.72;
-      }
-    }
-  }
-
   function makeStars() {
+    // Frame zero uses the same star map as the printed plates.
+    let seed = 57;
+    const random = () => {
+      seed = (seed * 16807) % 2147483647;
+      return seed / 2147483647;
+    };
     const count = Math.min(220, Math.round((W * H * cell * cell) / 900));
     stars = Array.from({ length: count }, () => {
-      const depth = 0.3 + Math.random() * 0.7; // far..near
+      const depth = 0.3 + random() * 0.7; // far..near
       return {
-        x: Math.random() * W,
-        y: Math.random() * H,
-        size: Math.random() < 0.06 ? 1 : 0,
+        x: random() * W,
+        y: random() * H,
+        size: random() < 0.06 ? 1 : 0,
         depth,
-        alpha: 0.35 + Math.random() * 0.65,
-        phase: Math.random() * Math.PI * 2,
-        speed: 0.4 + Math.random() * 1.1,
-        drift: 0.0012 + Math.random() * 0.003,
+        alpha: 0.35 + random() * 0.65,
+        phase: random() * Math.PI * 2,
+        speed: 0.4 + random() * 1.1,
+        drift: 0.0012 + random() * 0.003,
       };
     });
   }
 
-  function drawStar(x, y, size, ink) {
-    dot(x, y, ink);
+  function starDistance(x, y) {
+    if (x < 0 || y < 0 || x >= W || y >= H) return 0;
+    const i = y * W + x;
+    // The filaments move across a fixed edge. Stars only print in open sky cells.
+    return cells[i] === 0 ? field.staticGeometry.sd[i] : 0;
+  }
+
+  function starDot(x, y) {
+    if (starDistance(x, y) > 0) dot(x, y, first);
+  }
+
+  function drawStar(x, y, size) {
+    dot(x, y, first);
     if (size < 1) return;
-    dot(x - 1, y, ink);
-    dot(x + 1, y, ink);
-    dot(x, y - 1, ink);
-    dot(x, y + 1, ink);
+    starDot(x - 1, y);
+    starDot(x + 1, y);
+    starDot(x, y - 1);
+    starDot(x, y + 1);
     if (size < 2) return;
-    dot(x - 2, y, ink);
-    dot(x + 2, y, ink);
-    dot(x, y - 2, ink);
-    dot(x, y + 2, ink);
+    starDot(x - 2, y);
+    starDot(x + 2, y);
+    starDot(x, y - 2);
+    starDot(x, y + 2);
   }
 
   // --- meteors ---------------------------------------------------------------
   function spawnMeteor(t) {
     const angle = Math.PI * (0.65 + Math.random() * 0.2); // down-left
-    meteor = { fromX: W * (0.15 + Math.random() * 0.7), fromY: H * (0.05 + Math.random() * 0.3), angle, start: t, duration: 750 };
+    meteor = {
+      fromX: W * (0.15 + Math.random() * 0.7),
+      fromY: H * (0.05 + Math.random() * 0.3),
+      angle,
+      start: t,
+      duration: 750,
+    };
     nextMeteorAt = t + 9000 + Math.random() * 16000;
   }
 
@@ -179,8 +179,8 @@
       return;
     }
     const dist = 130 + 90 * p;
-    const x = meteor.fromX + Math.cos(meteor.angle) * dist * p / cell;
-    const y = meteor.fromY - Math.sin(meteor.angle) * dist * p / cell;
+    const x = meteor.fromX + (Math.cos(meteor.angle) * dist * p) / cell;
+    const y = meteor.fromY - (Math.sin(meteor.angle) * dist * p) / cell;
     const tail = (70 / cell) * (1 - p * 0.4);
     for (let i = 0; i < tail; i++) {
       const tx = Math.round(x - Math.cos(meteor.angle) * i);
@@ -239,7 +239,16 @@
     const y0 = H * (0.15 + Math.random() * 0.4);
     const slope = (Math.random() - 0.5) * 0.16;
     if (type === "starlink") {
-      flyby = { type, start: t, duration: 26000, dir, y0, slope, count: 24 + Math.floor(Math.random() * 10), spacing: 11 };
+      flyby = {
+        type,
+        start: t,
+        duration: 26000,
+        dir,
+        y0,
+        slope,
+        count: 24 + Math.floor(Math.random() * 10),
+        spacing: 11,
+      };
     } else if (type === "iss") {
       flyby = { type, start: t, duration: 14000, dir, y0, slope };
     } else {
@@ -287,9 +296,10 @@
   }
 
   // --- frame -----------------------------------------------------------------
-  function drawFrame(t) {
-    const animate = !reduced.matches && !printing;
-    image.data.fill(0);
+  function drawFrame(t, animate) {
+    if (!field) return;
+    paint(field, "dark", t / 1000, cells);
+    for (let i = 0; i < cells.length; i++) pixels[i] = palette[cells[i]];
 
     if (animate) {
       pointer.x += (pointer.tx - pointer.x) * 0.08;
@@ -305,32 +315,24 @@
       else boost = Math.pow(1 - (pt % BEAT) / BEAT, 3) * Math.min(1, (total - pt) / (BEAT * 2));
     }
 
-    const shift = animate ? Math.floor(t * 0.0022 / cell) : 0;
-    const lift = 1 + boost * 0.9;
-    for (let y = 0; y < H; y++) {
-      for (let x = 0; x < W; x++) {
-        const sx = Math.floor((x + shift) * cell) & (TILE - 1);
-        const sy = Math.floor(y * cell) & (TILE - 1);
-        const value = field[sy * TILE + sx] * lift;
-        if (value > screen(x, y)) dot(x, y, plum);
-      }
-    }
-
     for (const s of stars) {
       const twinkle = animate ? 0.72 + 0.28 * Math.sin(s.phase + (t / 1000) * s.speed) : 0.85;
-      const driftY = animate ? (t * s.drift * s.depth / cell) % (H + 4) : 0;
-      const x = Math.round(s.x + (animate ? pointer.x * 10 * s.depth / cell : 0));
+      const driftY = animate ? ((t * s.drift * s.depth) / cell) % (H + 4) : 0;
+      const x = Math.round(s.x + (animate ? (pointer.x * 10 * s.depth) / cell : 0));
       let y = s.y - driftY;
       if (y < -2) y += H + 4;
-      y = Math.round(y + (animate ? pointer.y * 6 * s.depth / cell : 0));
+      y = Math.round(y + (animate ? (pointer.y * 6 * s.depth) / cell : 0));
+      const distance = starDistance(x, y);
+      // Far stars are the last to fall away as the ramp approaches the edge.
+      if (distance <= 0 || s.depth > 0.3 + 0.7 * smooth(0, field.spec.reach, distance)) continue;
       if (s.size === 0 && Math.min(1, s.alpha * twinkle) < screen(x, y)) continue;
-      drawStar(x, y, s.size + (boost > 0.35 ? 1 : 0), first);
+      drawStar(x, y, s.size + (boost > 0.35 ? 1 : 0));
     }
 
     if (animate) {
       if (!meteor && t > nextMeteorAt) spawnMeteor(t);
       if (meteor) drawMeteor(t);
-      if (!flyby && nextTrafficAt > 0 && t > nextTrafficAt) spawnTraffic(t);
+      if (!flyby && t > nextTrafficAt) spawnTraffic(t);
       if (flyby) drawTraffic(t);
     }
     screenCtx.putImageData(image, 0, 0);
@@ -338,84 +340,100 @@
     ctx.drawImage(screenCanvas, 0, 0, W * deviceCell, H * deviceCell);
   }
 
-  function loop(t) {
+  function loop(now) {
     rafId = requestAnimationFrame(loop);
-    const elapsed = t - lastFrame;
+    if (lastTick !== undefined) time += now - lastTick;
+    lastTick = now;
+    const elapsed = time - lastFrame;
     if (elapsed < FRAME) return;
-    lastFrame = t - (elapsed % FRAME);
-    drawFrame(t);
+    lastFrame = time - (elapsed % FRAME);
+    drawFrame(lastFrame, true);
   }
 
-  function start() {
-    if (rafId !== null) return;
-    if (reduced.matches) {
-      drawFrame(0);
-      return;
+  function update() {
+    if (field && visible && !document.hidden && !reduced.matches && !printing) {
+      rafId ??= requestAnimationFrame(loop);
+    } else {
+      if (rafId !== undefined) cancelAnimationFrame(rafId);
+      rafId = lastTick = undefined;
     }
-    if (!visible || document.hidden || printing) return;
-    const now = performance.now();
-    if (nextMeteorAt === 0) nextMeteorAt = now + 4000 + Math.random() * 8000;
-    // first pass is always a starlink train, fairly soon. worth the wait
-    if (nextTrafficAt === 0) nextTrafficAt = now + 45000 + Math.random() * 45000;
-    rafId = requestAnimationFrame(loop);
-  }
-
-  function stop() {
-    if (rafId === null) return;
-    cancelAnimationFrame(rafId);
-    rafId = null;
   }
 
   function resize() {
     const { width, height } = canvas.getBoundingClientRect();
+    if (!width || !height) return;
     const dpr = window.devicePixelRatio;
-    deviceCell = Math.max(1, Math.round(GRAIN * dpr));
+    const nextDeviceCell = Math.max(1, Math.round(GRAIN * dpr));
+    const deviceWidth = Math.round(width * dpr);
+    const deviceHeight = Math.round(height * dpr);
+    const w = Math.ceil(deviceWidth / nextDeviceCell);
+    const h = Math.ceil(deviceHeight / nextDeviceCell);
+    const spec = phone.matches ? phoneSpec : desktopSpec;
+    if (
+      field &&
+      deviceWidth === canvas.width &&
+      deviceHeight === canvas.height &&
+      nextDeviceCell === deviceCell &&
+      cell === nextDeviceCell / dpr &&
+      fieldLine === spec
+    )
+      return;
+
+    deviceCell = nextDeviceCell;
     cell = deviceCell / dpr;
-    canvas.width = Math.max(1, Math.round(width * dpr));
-    canvas.height = Math.max(1, Math.round(height * dpr));
+    if (!field || W !== w || H !== h || fieldLine !== spec) {
+      field = prepare(spec, w * GRAIN, h * GRAIN);
+      fieldLine = spec;
+      W = screenCanvas.width = w;
+      H = screenCanvas.height = h;
+      cells = new Uint8Array(W * H);
+      image = screenCtx.createImageData(W, H);
+      pixels = new Uint32Array(image.data.buffer);
+    }
+    canvas.width = deviceWidth;
+    canvas.height = deviceHeight;
     ctx.imageSmoothingEnabled = false;
-    W = screenCanvas.width = Math.ceil(canvas.width / deviceCell);
-    H = screenCanvas.height = Math.ceil(canvas.height / deviceCell);
-    image = ctx.createImageData(W, H);
-    readInks();
     makeStars();
-    drawFrame(reduced.matches ? 0 : performance.now());
+    const still = reduced.matches || printing || lastFrame < 0;
+    drawFrame(still ? 0 : time, !still);
+    canvas.dataset.live = "";
+    update();
   }
 
+  readInks();
   new ResizeObserver(resize).observe(canvas);
   window.addEventListener("resize", resize);
-  window.addEventListener("beforeprint", () => {
-    printing = true;
-    stop();
-    drawFrame(0);
-  });
-  window.addEventListener("afterprint", () => {
-    printing = false;
-    start();
-  });
+  function setPrinting(active) {
+    printing = active;
+    if (printing) drawFrame(0, false);
+    else if (!reduced.matches) lastFrame = time - FRAME;
+    update();
+  }
+  window.addEventListener("beforeprint", () => setPrinting(true));
+  window.addEventListener("afterprint", () => setPrinting(print.matches));
+  print.addEventListener("change", () => setPrinting(print.matches));
   canvas.addEventListener("pointermove", (e) => {
     const box = canvas.getBoundingClientRect();
     pointer.tx = (e.clientX - box.left) / box.width - 0.5;
     pointer.ty = (e.clientY - box.top) / box.height - 0.5;
   });
-  document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
+  document.addEventListener("visibilitychange", update);
   reduced.addEventListener("change", () => {
-    stop();
-    start();
+    if (reduced.matches) drawFrame(0, false);
+    else lastFrame = time - FRAME;
+    update();
   });
-  // nothing to print while the band is off the page
   new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting;
-    if (visible) start();
-    else stop();
+    update();
   }).observe(canvas);
 
   // click the sky, make a wish
   let wished = false;
   canvas.addEventListener("click", (e) => {
-    if (reduced.matches) return;
+    if (reduced.matches || printing) return;
     const box = canvas.getBoundingClientRect();
-    spawnMeteorAt((e.clientX - box.left) / cell, (e.clientY - box.top) / cell, performance.now());
+    spawnMeteorAt((e.clientX - box.left) / cell, (e.clientY - box.top) / cell, time);
     if (!wished) {
       wished = true;
       console.log("%cwish logged. results not guaranteed.", CONSOLE_PLUM);
@@ -430,8 +448,8 @@
     typed = (typed + e.key.toLowerCase()).slice(-3);
     if (typed === "dnb") {
       typed = "";
-      if (reduced.matches) return;
-      pulseStart = performance.now();
+      if (reduced.matches || printing) return;
+      pulseStart = time;
       console.log("%c174bpm. fluncle would approve.", CONSOLE_PLUM);
     }
   });
@@ -458,13 +476,12 @@
   window.sky = {
     traffic(type) {
       if (reduced.matches) return "reduced motion is on. the sky stays still.";
+      if (printing) return "the sky stays still in print.";
       if (!["starlink", "iss", "ufo"].includes(type)) return "options: 'starlink', 'iss', 'ufo'";
-      spawnTraffic(performance.now(), type);
+      spawnTraffic(time, type);
       return "look up.";
     },
   };
 
-  makeField();
   resize();
-  start();
 })();
