@@ -4,7 +4,7 @@ import { runInNewContext } from "node:vm";
 import { Window } from "happy-dom";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { Field } from "../items/ui/field-art";
+import { FieldArt } from "../items/ui/field-art";
 
 const spec = "edge=crest at=.45 motion=wave travel=.25";
 
@@ -84,11 +84,11 @@ function browser() {
   };
 }
 
-test("Field renders through its host, pauses offscreen or hidden and prints frame zero", async () => {
+test("FieldArt renders through its host, pauses offscreen or hidden and prints frame zero", async () => {
   const { document, window, frames, pixels, intersect, reduce, tick } = browser();
   const root = createRoot(document.body as unknown as HTMLElement);
   try {
-    await act(async () => root.render(<Field spec={spec} playing />));
+    await act(async () => root.render(<FieldArt spec={spec} playing />));
     const canvas = document.querySelector("canvas") as unknown as HTMLCanvasElement;
     const current = () => pixels.get(canvas)!;
     const still = current();
@@ -133,8 +133,8 @@ test("Field renders through its host, pauses offscreen or hidden and prints fram
 test("the plain script mounts every host and resolves stock and solid in the host's mode", async () => {
   const { document, window, pixels } = browser();
   try {
-    document.body.innerHTML = `<div data-field="${spec}"></div><div class="dark" data-field="${spec}"></div>`;
-    const script = readFileSync(new URL("../items/doc/field.js", import.meta.url), "utf8");
+    document.body.innerHTML = `<div data-field-art="${spec}"></div><div class="dark" data-field-art="${spec}"></div>`;
+    const script = readFileSync(new URL("../items/doc/field-art.js", import.meta.url), "utf8");
     runInNewContext(script, { document });
     const canvases = [...document.querySelectorAll("canvas")];
     expect(canvases.length).toBe(2);

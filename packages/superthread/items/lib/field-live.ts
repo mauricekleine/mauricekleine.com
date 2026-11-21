@@ -57,7 +57,7 @@ export function mountField(host: HTMLElement, mask?: FieldMask) {
       !destroy &&
       art &&
       art.spec.motion !== "still" &&
-      host.hasAttribute("data-field-play") &&
+      host.hasAttribute("data-field-art-play") &&
       visible &&
       !doc.hidden &&
       !reduced &&
@@ -104,7 +104,7 @@ export function mountField(host: HTMLElement, mask?: FieldMask) {
     const top = Math.floor(box.y * dpr) / dpr - box.y;
     const width = Math.ceil((box.width - left) / cell);
     const height = Math.ceil((box.height - top) / cell);
-    const spec = host.dataset.field ?? "";
+    const spec = host.dataset.fieldArt ?? "";
     inks = readScreenInks(win.getComputedStyle(host), inkProbe);
 
     if (!art || art.w !== width || art.h !== height || line !== spec) {
@@ -159,13 +159,13 @@ export function mountField(host: HTMLElement, mask?: FieldMask) {
   const resize = new win.ResizeObserver(repaint);
   resize.observe(host);
   const scope = new win.MutationObserver((changes) => {
-    if (changes.some(({ attributeName }) => attributeName !== "data-field-play")) repaint();
+    if (changes.some(({ attributeName }) => attributeName !== "data-field-art-play")) repaint();
     else update();
   });
   for (let element: HTMLElement | null = host; element; element = element.parentElement) {
     scope.observe(element, {
       attributes: true,
-      attributeFilter: ["class", "style", "data-theme", "data-field", "data-field-play"],
+      attributeFilter: ["class", "style", "data-theme", "data-field-art", "data-field-art-play"],
     });
   }
   const intersection = new win.IntersectionObserver(([entry]) => {

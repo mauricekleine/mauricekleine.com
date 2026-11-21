@@ -1,6 +1,6 @@
 ---
 name: superthread-visuals
-description: Draw Superthread concept art for a figure, a ship or a site opener. Use for a screened still, a loop or a live field.
+description: "Turn a concept into on-brand Superthread art: a screened still, a loop or a live field. Use whenever a Maurice-branded figure, essay, deck, video, ship or site opener needs an image, illustration or visualization of an idea."
 ---
 
 # superthread visuals
@@ -38,7 +38,7 @@ bun scripts/loop.ts "$spec" dark 1200 630 field-dark.mp4
 
 For `edge=mask`, put a module beside the outputs. Export a callback taking width and height in cells and returning a row-major `Uint8Array`, with 1 for solid and 0 for stock. Append its path and, for a named export, its name to either command. Paths resolve from the working directory. Use an absolute path for a mask elsewhere.
 
-Install `@mk/field` for live art. In React, import `Field` from `ui/field-art`, size it in CSS and pass `spec`, optional `mask` and `playing` for the one field that moves. In plain HTML, inline `doc/field.js` after sized, positioned, overflow-hidden hosts carrying `data-field`. Set `data-field-play` on the host that moves. For a custom mask, use `mountField(host, mask)` from `lib/field-live`. Keep words beside the art and give an informative field a short accessible name.
+Install `@mk/field-art` for live art. In React, import `FieldArt` from `ui/field-art`, size it in CSS and pass `spec`, an optional stable `mask` callback and `playing` for the one field that moves. In plain HTML, inline `doc/field-art.js` after sized, positioned, overflow-hidden hosts carrying `data-field-art`. Set `data-field-art-play` on the host that moves. For a custom mask, use `mountField(host, mask)` from `lib/field-live`. Keep words beside the art and give an informative field a short accessible name.
 
 ## spot failures
 

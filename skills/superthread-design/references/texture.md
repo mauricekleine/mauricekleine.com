@@ -4,8 +4,8 @@ Flat where you read, screened where you look. Print a tint through the 4 × 4 Ba
 
 | place             | what prints                                                       | how                              |
 | ----------------- | ----------------------------------------------------------------- | -------------------------------- |
-| opener            | one band in the first ink and plum                               | `@mk/field`, `@mk/weave` or plates   |
-| figures           | concept art in two inks                                          | `@mk/field` or stills                        |
+| opener            | one band in the first ink and plum                               | `@mk/field-art`, `@mk/weave` or plates   |
+| figures           | concept art in two inks                                          | `@mk/field-art` or stills                        |
 | marks             | the ship's spot region at 50 percent                             | the mark SVGs                   |
 | progress edge     | the fill's leading 24 px, from solid to stock                     | `texture-ramp` in `Progress`      |
 | empty and loading | a light wedge of the first ink                                   | plates; `Skeleton` for rows      |
@@ -73,7 +73,7 @@ A hero’s weave can carry a knot. App surfaces print still.
 
 ## concept art
 
-Use [@mk/field](registry.md#field) for a concept in a figure or opener. One spec gives a verb its edge, ramp, thread, knot and motion. The host’s stock comes through the open cells. Read [superthread-visuals](../../superthread-visuals/SKILL.md) for the spec and standalone still and loop tools.
+Use [@mk/field-art](registry.md#field-art) for a concept in a figure or opener. One spec gives a verb its edge, ramp, thread, knot and motion. The host’s stock comes through the open cells. Read [superthread-visuals](../../superthread-visuals/SKILL.md) for the spec and standalone still and loop tools.
 
 One live field may move per page, a weave or a field. It pauses offscreen and in a hidden tab, and prints a still frame under reduced motion and in print. The www sky occupies that slot on www. The progress ramp moves with its fill.
 

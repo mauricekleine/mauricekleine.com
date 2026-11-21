@@ -2,7 +2,7 @@ import { join } from "node:path";
 
 const packageRoot = join(import.meta.dir, "..");
 const targets = [
-  { input: "scripts/doc-field.ts", output: "items/doc/field.js", format: "iife" },
+  { input: "scripts/doc-field-art.ts", output: "items/doc/field-art.js", format: "iife" },
   {
     input: "items/lib/field-core.ts",
     output: "../../skills/superthread-visuals/scripts/field.js",

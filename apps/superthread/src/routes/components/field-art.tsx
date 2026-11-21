@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Field } from "@/components/superthread/ui/field-art";
+import { FieldArt } from "@/components/superthread/ui/field-art";
 import { Button } from "@/components/superthread/ui/button";
 import { InstallLine } from "@/site/InstallLine";
 import { ModePair } from "@/site/ModePair";
@@ -25,11 +25,11 @@ function FieldPage() {
   return (
     <>
       <header id="top" className="st-pagehead">
-        <h1 className="st-pagehead-title type-hero text-first">field</h1>
+        <h1 className="st-pagehead-title type-hero text-first">field art</h1>
         <p className="st-lede type-lede">
           a solid, a screen and a plum thread. give the edge a verb for a figure or opener.
         </p>
-        <InstallLine items={["field"]} />
+        <InstallLine items={["field-art"]} />
       </header>
       <Section id="catalogue" title="catalogue">
         <div className="space-y-12">
@@ -41,7 +41,7 @@ function FieldPage() {
               const active = playing === key;
               return (
                 <>
-                  <Field
+                  <FieldArt
                     spec={line}
                     mask={mask}
                     playing={active}
@@ -50,7 +50,7 @@ function FieldPage() {
                     style={{ aspectRatio: size.join(" / ") }}
                   />
                   {phone && (
-                    <Field
+                    <FieldArt
                       spec={phone.line}
                       playing={active}
                       aria-hidden="true"
@@ -94,12 +94,14 @@ function FieldPage() {
       </Section>
       <Section id="use" title="use">
         <p className="st-pass-prose">
-          import <code>Field</code> from <code>ui/field-art</code>. size the host in css and pass the line as{" "}
-          <code>spec</code>. pass a mask callback for a custom edge. set <code>playing</code> on the field that moves.
+          import <code>FieldArt</code> from <code>ui/field-art</code>. size the host in css and pass the line as{" "}
+          <code>spec</code>. pass a stable mask callback for a custom edge. set <code>playing</code> on the field that
+          moves.
         </p>
         <p className="mt-4 st-pass-prose">
-          in html, give a sized host <code>data-field</code> and inline <code>doc/field.js</code> after it. the stock
-          comes through the open cells. print and reduced motion show frame zero.
+          in html, give a sized host <code>data-field-art</code> and inline <code>doc/field-art.js</code> after it. set{" "}
+          <code>data-field-art-play</code> on the field that moves. the stock comes through the open cells. print and
+          reduced motion show frame zero.
         </p>
       </Section>
     </>

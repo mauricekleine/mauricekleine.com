@@ -28,7 +28,7 @@ function Page() {
   return (
     <>
       <PageHead
-        title="form field"
+        title="field"
         lede="a label, control and supporting words kept together. fieldsets group related choices, and errors lead with a bang square."
       >
         <InstallLine items={["field"]} />

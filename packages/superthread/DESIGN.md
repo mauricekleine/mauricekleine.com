@@ -414,8 +414,8 @@ A screen is a 1-bit pattern that stands in for a tint. Every screened field uses
 
 | place             | what prints                                                | where it ships                            |
 | ----------------- | ---------------------------------------------------------- | ----------------------------------------- |
-| opener            | one band per page head in the first ink and plum           | `@mk/field`, `@mk/weave` or plates        |
-| figures           | concept art in two inks on the same Bayer screen           | `@mk/field` or stills                     |
+| opener            | one band per page head in the first ink and plum           | `@mk/field-art`, `@mk/weave` or plates    |
+| figures           | concept art in two inks on the same Bayer screen           | `@mk/field-art` or stills                 |
 | marks             | the ship's spot region at 50 percent                       | the mark SVGs                             |
 | state fields      | the progress fill's leading 24 px, from solid to the stock | `texture-ramp` in `Progress`              |
 | empty and loading | a light wedge of the first ink                             | empty plates; `Skeleton` for loading rows |
