@@ -27,7 +27,7 @@ Superthread's utilities and faces, from `packages/superthread/dist/v2/superthrea
 
 Registry items come from `packages/superthread/items` through the `@/components/superthread` alias, so www never carries a copy. `site.css` owns the page blocks.
 
-- The band (`Opener`) holds the full-width `#sky` canvas. On home it takes 36svh between 220 and 440 px, or 24svh between 160 and 240 px on a phone. The slim band takes 120 px, or 96 px on a phone. `public/sky/plate-dark.png` prints the same field before the script runs and for readers without scripts.
+- The band (`Opener`) holds the full-width `#sky` canvas. On home it takes 36svh between 220 and 440 px, or 24svh between 160 and 240 px on a phone. The slim band takes 120 px, or 96 px on a phone. `public/sky/` holds frame-zero plates for the home and slim bands at desktop and phone widths. The plates leave the stock open so both page modes use the same files.
 - The portrait (`public/portrait/`) is a two-ink Bayer 4 screen of `maurice.png` at 196 and 136 px, on 2 px cells. Both page modes use the dark files inside the island. Home shows the full square. About shows the face in the slim band at native scale.
 - **Side quests** (`SideQuests`): a constellation tile (1:1 SVG, 4 px stars, 1 px lines), the project name and one line. Its lines take the first ink on hover and focus. No cards.
 - **Graveyard**: ledger rows with a `✧`, the name, a `Badge` (`done` for exits, `queued` for the rest) and mono years.
@@ -37,17 +37,17 @@ Registry items come from `packages/superthread/items` through the `@/components/
 
 ## Motion
 
-Motion lives in `public/sky.js` and two stepped CSS moments. The sky runs at 24 fps on 2 CSS px cells snapped to device pixels, pauses when the band leaves the page or the tab hides, and prints one still frame under `prefers-reduced-motion` and in print. The home opener fits the printed page.
+Motion lives in `src/sky.js` and two stepped CSS moments. Bun bundles the sky into `public/sky.js` for every page. The sky runs at 24 fps on 2 CSS px cells snapped to device pixels, pauses when the band leaves the page or the tab hides, and prints one still frame under `prefers-reduced-motion` and in print. The home opener fits the printed page.
 
 ## The sky
 
-The sky resolves its two inks, `--first` and `--primary`, from the canvas's dark scope. Both page modes use the same sky inks.
+The sky takes its inks from the canvas's dark scope. The field screens the foreground and threads plum through it. Stars print in the first ink. Open cells and the field's solid take `--island-stock`.
 
-- **Nebula**: tiled, domain-warped value noise folded into ridges and screened through Superthread's Bayer 4 in plum, drifting slowly. One noise field is built at load.
+- **The night over Amsterdam** uses `@mk/field-art`. Desktop and phone each have a spec line that also fits the slim band. A held ramp rises into fine filaments above the plum thread. The filaments drift on a 22 s loop while the upper strip and portrait surround stay quiet. Stars and sky events print over the field in the same canvas.
 - **Stars**: square cells and crosses in the first ink, with twinkle as a screen threshold, slow drift and pointer parallax inside the band.
 - **Wish**: clicking the band sends a meteor from the click point; the first wish logs to the console. Meteors also fall on their own every 9 to 25 s.
 - **Sky traffic**: rare flybys, one at a time: a starlink train (always first, 45 to 90 s in), the ISS and a UFO, drawn as 1-bit sprites with plum lights. Each logs a line on first appearance; `window.sky.traffic('starlink' | 'iss' | 'ufo')` summons one.
-- **"dnb"**: typing it pulses the nebula and stars at 174 bpm, fluncle's tempo, for 16 beats.
+- **"dnb"**: typing it swells the stars at 174 bpm, fluncle's tempo, for 16 beats.
 - **Console**: a star map, the secrets list and the llms.txt pointer.
 
 Beyond the band:
