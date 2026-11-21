@@ -79,13 +79,18 @@
   /* Let the masthead stick across the page while the opener and masthead share the island's inks. */
   .mk-island {
     --island-stock: var(--background);
-    --opener-edge: max(48px, calc((100% - 1200px) / 2));
+    /* The opener's words sit on the page column's edges, so the title, the lede and the body share one left edge. */
+    --opener-start: calc(264px + 56px);
+    --opener-end: calc(368px + 56px);
     display: contents;
     color: var(--foreground);
     color-scheme: dark;
   }
   html.dark .mk-island {
     --island-stock: var(--ground);
+  }
+  .mk-island-solo {
+    --opener-end: 56px;
   }
 
   /* the masthead: one row of cells divided by rules, held at the top while the page scrolls */
@@ -315,7 +320,7 @@
   }
   .mk-opener-copy {
     align-self: end;
-    padding: 40px var(--opener-edge) 32px;
+    padding: 40px var(--opener-end) 32px var(--opener-start);
   }
   .mk-opener-home .mk-opener-copy {
     padding-block: 48px 36px;
@@ -410,7 +415,7 @@
   .portrait-wrap {
     position: absolute;
     top: 0;
-    right: var(--opener-edge);
+    right: var(--opener-end);
     width: 196px;
     height: 100%;
     overflow: hidden;
@@ -861,6 +866,13 @@
     .mk-main {
       --gutter: 40px;
     }
+    .mk-island {
+      --opener-start: calc(264px + 40px);
+      --opener-end: calc(312px + 40px);
+    }
+    .mk-island-solo {
+      --opener-end: 40px;
+    }
     .mk-meta {
       grid-template-columns: 64px 1fr;
       width: 312px;
@@ -880,6 +892,9 @@
     .mk-foot-status {
       display: block;
     }
+    .mk-island {
+      --opener-end: 40px;
+    }
   }
 
   /* one column: the nav becomes a row under the masthead, which lets go of the top */
@@ -887,8 +902,12 @@
     html {
       scroll-padding-top: 0;
     }
+    .mk-island,
+    .mk-island-solo {
+      --opener-start: 32px;
+      --opener-end: 16px;
+    }
     .mk-island {
-      --opener-edge: 32px;
       display: flex;
       flex-direction: column;
     }
@@ -942,9 +961,6 @@
   }
 
   @media (max-width: 600px) {
-    .mk-island {
-      --opener-edge: 24px;
-    }
     .mk-brand {
       font-size: clamp(15px, 4.6vw, 18px);
     }

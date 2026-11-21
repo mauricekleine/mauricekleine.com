@@ -6,7 +6,7 @@ The site prints on Superthread v2. Its values, type and rules live in `packages/
 
 ## Frame
 
-`src/shell.tsx` puts the masthead and opener in the same dark scope, above the boxed nav, page and aside.
+`src/shell.tsx` puts the masthead and opener in the same dark scope, above the boxed nav, page and aside. The opener's words sit on the page column's edges, so the title, the lede and the body share one left edge, and the portrait ends where the page does.
 
 - The masthead holds the wordmark, crumb and status block in a 77 px row. It sticks at the top on desktop, where the island supplies its inks without enclosing its sticky box.
 - The home island fills at least `100svh`. The title and lede sit on solid stock above the sky. The "currently" link jumps to the first section. Inner pages put their title and context above a slim band.

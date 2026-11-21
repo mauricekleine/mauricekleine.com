@@ -136,7 +136,7 @@ export function Shell({
       <a href="#main" className="mk-skip">
         skip to the page
       </a>
-      <div className={cn("dark mk-island", place === "home" && "mk-island-home")}>
+      <div className={cn("dark mk-island", place === "home" && "mk-island-home", !sections && "mk-island-solo")}>
         <header className="mk-mast">
           <a href="/" className="mk-brand">
             maurice kleine
