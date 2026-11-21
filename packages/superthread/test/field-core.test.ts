@@ -105,24 +105,17 @@ test("rest takes the quarter frame of the same loop and a ring accepts travel in
   expect(paint(atQuarter, "dark")).toEqual(paint(staticKnot, "dark"));
 });
 
-test.each([
-  ["desktop", 1440, 324, 2],
-  ["phone", 390, 200, 3],
-] as const)("amsterdam %s prints warm frames within a 24 fps budget", (size, width, height, dpr) => {
-  const spec = catalogue.find(({ id }) => id === "amsterdam")!;
-  const art = prepare(size === "phone" ? spec.phone!.line : spec.line, width, height);
-  const raster = fieldScreen(art, dpr);
-  const pixels = new Uint32Array(raster.width * raster.height);
-
-  const warmupFrames = 40;
-  for (let frame = 0; frame < warmupFrames; frame++) printField(art, "dark", frame / 24, pixels, raster);
-  const samples = Array.from({ length: 11 }, (_, index) => {
-    const frameStart = performance.now();
-    printField(art, "dark", (index + warmupFrames) / 24, pixels, raster);
-    return performance.now() - frameStart;
-  }).sort((a, b) => a - b);
-  const median = samples[5]!;
-  console.log(`field ${width} × ${height} at ${dpr}x: warm paint median ${median.toFixed(1)} ms (11 samples)`);
-  // Shared CI runners have a portable frame budget. The release check measures 8 ms on Soliton.
-  expect(median).toBeLessThan(25);
-});
+test("desktop and phone frames print within the warm-frame budget", () => {
+  // Start with the live RGBA path. The still tests also exercise indexed output, which uses a different buffer type.
+  const run = Bun.spawnSync([process.execPath, new URL("./fixtures/fields/timing.ts", import.meta.url).pathname], {
+    cwd: new URL("..", import.meta.url).pathname,
+  });
+  if (!run.success) throw new Error(run.stderr.toString());
+  const results = JSON.parse(run.stdout.toString()) as { width: number; height: number; dpr: number; median: number }[];
+  expect(results).toHaveLength(2);
+  for (const { width, height, dpr, median } of results) {
+    console.log(`field ${width} × ${height} at ${dpr}x: warm paint median ${median.toFixed(1)} ms (31 samples)`);
+    // Shared CI runners have a portable frame budget. The release check measures 8 ms on Soliton.
+    expect(median).toBeLessThan(25);
+  }
+}, 15_000);
