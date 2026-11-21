@@ -38,6 +38,7 @@
 
   if (!canvas) return;
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  if (!ctx) return;
   canvas.dataset.live = ""; // the live sky takes over from the printed plate
 
   // the master's 4 x 4 bayer matrix: every tint here is a screen of one ink
@@ -73,9 +74,9 @@
   let nextTrafficAt = 0;
   const pointer = { tx: 0, ty: 0, x: 0, y: 0 };
 
-  // --- the inks follow the mode ----------------------------------------------
+  // --- the inks come from the canvas's island --------------------------------
   function resolveInk(name) {
-    const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const value = getComputedStyle(canvas).getPropertyValue(name).trim();
     ctx.clearRect(0, 0, 1, 1);
     ctx.fillStyle = value;
     ctx.fillRect(0, 0, 1, 1);
@@ -318,10 +319,10 @@
     for (const s of stars) {
       const twinkle = animate ? 0.72 + 0.28 * Math.sin(s.phase + (t / 1000) * s.speed) : 0.85;
       const driftY = animate ? (t * s.drift * s.depth / cell) % (H + 4) : 0;
-      const x = Math.round(s.x + pointer.x * 10 * s.depth / cell);
+      const x = Math.round(s.x + (animate ? pointer.x * 10 * s.depth / cell : 0));
       let y = s.y - driftY;
       if (y < -2) y += H + 4;
-      y = Math.round(y + pointer.y * 6 * s.depth / cell);
+      y = Math.round(y + (animate ? pointer.y * 6 * s.depth / cell : 0));
       if (s.size === 0 && Math.min(1, s.alpha * twinkle) < screen(x, y)) continue;
       drawStar(x, y, s.size + (boost > 0.35 ? 1 : 0), first);
     }
@@ -339,8 +340,9 @@
 
   function loop(t) {
     rafId = requestAnimationFrame(loop);
-    if (t - lastFrame < FRAME) return;
-    lastFrame = t;
+    const elapsed = t - lastFrame;
+    if (elapsed < FRAME) return;
+    lastFrame = t - (elapsed % FRAME);
     drawFrame(t);
   }
 
@@ -407,11 +409,6 @@
     if (visible) start();
     else stop();
   }).observe(canvas);
-  // the mode flips the inks, and a still sky has no next frame to pick them up
-  new MutationObserver(() => {
-    readInks();
-    drawFrame(reduced.matches ? 0 : performance.now());
-  }).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
   // click the sky, make a wish
   let wished = false;

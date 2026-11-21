@@ -99,16 +99,28 @@ function OnThisPage({ sections }: { sections: PageSection[] }) {
   );
 }
 
-// The page frame, the superthread site's: the masthead across the top, then the nav, the page and the aside in three
-// columns divided by 1 px rules. Pages are plain documents, so nav links are plain anchors and the sky starts fresh on
-// each. `interactive` is off on the lost page, which ships no client entry: its mode still applies, but a control
-// nothing runs would be a lie.
+function NavLinks({ place }: { place?: Place }) {
+  return (
+    <ul className="mk-nav-list">
+      {places.map(({ id, label, href }) => (
+        <li key={id}>
+          <a href={href} aria-current={id === place ? "page" : undefined}>
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// Pages are plain documents. The links load a fresh sky, and the lost page reads the stored mode without hydrating.
 export function Shell({
   place,
   crumb,
   title,
   sections,
   interactive = true,
+  opener,
   children,
 }: {
   place?: Place;
@@ -116,6 +128,7 @@ export function Shell({
   title: string;
   sections?: PageSection[];
   interactive?: boolean;
+  opener: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -123,44 +136,42 @@ export function Shell({
       <a href="#main" className="mk-skip">
         skip to the page
       </a>
-      <header className="mk-mast">
-        <a href="/" className="mk-brand">
-          maurice kleine
-        </a>
-        <div className="mk-crumb">
-          <span className="type-meta">{crumb}</span>
-          <span className="type-meta" aria-hidden="true">
-            /
-          </span>
-          <b>{title}</b>
-        </div>
-        <dl className="mk-meta">
-          <dt className="type-meta">status</dt>
-          <dd>
-            <span className="status-dot" aria-hidden="true"></span> operational
-          </dd>
-          <dt className="type-meta">sleep</dt>
-          <dd>degraded</dd>
-          <dt className="type-meta">ideas</dt>
-          <dd>backlogged</dd>
-        </dl>
-        {interactive && (
-          <div className="mk-mast-mode">
-            <ModeControl compact />
+      <div className={cn("dark mk-island", place === "home" && "mk-island-home")}>
+        <header className="mk-mast">
+          <a href="/" className="mk-brand">
+            maurice kleine
+          </a>
+          <div className="mk-crumb">
+            <span className="type-meta">{crumb}</span>
+            <span className="type-meta" aria-hidden="true">
+              /
+            </span>
+            <b>{title}</b>
           </div>
-        )}
-      </header>
+          <dl className="mk-meta">
+            <dt className="type-meta">status</dt>
+            <dd>
+              <span className="status-dot" aria-hidden="true"></span> operational
+            </dd>
+            <dt className="type-meta">sleep</dt>
+            <dd>degraded</dd>
+            <dt className="type-meta">ideas</dt>
+            <dd>backlogged</dd>
+          </dl>
+          {interactive && (
+            <div className="mk-mast-mode">
+              <ModeControl compact />
+            </div>
+          )}
+        </header>
+        <nav className="mk-nav mk-nav-compact" aria-label="site">
+          <NavLinks place={place} />
+        </nav>
+        {opener}
+      </div>
       <div className={cn("mk-body", !sections && "mk-body-solo")}>
         <nav className="mk-nav" aria-label="site">
-          <ul className="mk-nav-list">
-            {places.map(({ id, label, href }) => (
-              <li key={id}>
-                <a href={href} aria-current={id === place ? "page" : undefined}>
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <NavLinks place={place} />
           {interactive && (
             <div className="mk-nav-foot">
               <ModeControl />
