@@ -44,6 +44,20 @@ Openers and figures print two binary masks per mode. CSS inks the first and plum
 
 Use [@mk/weave](registry.md#weave) for a hero or a band. Put words on the flat solid or on the stock. A weave prints in the mode of the scope it sits in, so inside a `.dark` block it prints the dark inks. To carry a dark block into a light page, set the weave beside the block, in the page's scope, where its solid is key and its screen thins into the paper. Keep decorative texture inside the field, with ordered cells and clean type. In dark the thread and knot bloom with screened plum.
 
+In [plain documents](registry.md#plain-documents), copy the hero, slim head or band from `@mk/doc`. The dark island and its weave are siblings:
+
+```html
+<div class="band">
+  <div class="band-solid island dark">
+    <h2 class="band-word">findings</h2>
+    <p class="band-caption"><span>what holds</span><span>03</span></p>
+  </div>
+  <div class="band-weave" data-weave="run=right phone=down fray=.06 ramp=held thread=6" aria-hidden="true"></div>
+</div>
+```
+
+The script mounts the canvas. The page scope supplies its inks.
+
 | spec key | meaning |
 | -------- | ------- |
 | `run=right\|down`, `phone=down` | run beside or below the solid. `phone` overrides the run at 600 px and below |

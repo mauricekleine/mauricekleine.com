@@ -144,11 +144,15 @@ test("no item carries an icon library, init included", () => {
   }
 });
 
-test("every file carries its stamp: after the last import, else the last line; line 1 in css", () => {
+test("every file carries its stamp on the first line of CSS and HTML or after imports or script statements", () => {
   for (const { item, file } of files) {
     const lines = file.content.split("\n");
     if (file.target.endsWith(".css")) {
       expect(lines[0]).toBe(`/* @mk/${item.name} ${pkg.version} */`);
+      continue;
+    }
+    if (file.target.endsWith(".html")) {
+      expect(lines[0]).toBe(`<!-- @mk/${item.name} ${pkg.version} -->`);
       continue;
     }
     const stamp = `// @mk/${item.name} ${pkg.version}`;

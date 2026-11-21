@@ -810,6 +810,17 @@ The reader answers to its own width. With a rail and 640 px to spare, the lead a
 
 A meeting brief's blocks are the reader's parts, under the meeting's `ReaderPaper`. `ReaderRaised` puts one sentence on that paper at the lede step: the thing to raise before a meeting, or what was agreed after it. `ReaderBlocks` sets the small blocks two to a row at 640 px of their own width. In `ReaderWho` names, notes and sightings share their columns across the rows, a note wraps rather than cuts, and a name alone takes its row. `ReaderOwedRow` is one link whose words alone underline, or a plain line, and on a phone its date drops under the words in Supreme. `asWritten` turns a block's ink muted for what was written before the meeting, and every part in it takes that ink. `ReaderGap` prints what a block can't say where its first row would sit: `not in the record`.
 
+### Documents
+
+Build plain HTML documents from `@mk/doc` on `@mk/tokens-plain`. Use one full-bleed dark island for the opener in either mode. The hero fills the first viewport with a title, lede, meta line and contents. A brief can use the slim head with a still weave. Put the weave beside the island so it takes the page's inks.
+
+Open each section group with a band. Choose its ramp for how settled the words are: `held` for findings, `steady` for plans or principles, `bet` for open proposals, `fade` for notes and appendices. A lede sets up the group. A ruled section head divides the stock into smaller sections, with a muted line when it helps the reader act.
+
+- Use a meta line for the document's identity and date, a chip for one state, and a draft strip for a page-wide draft note. Contents link to sections with their counts.
+- Put one defensible statement beside its reason in a claim. Use a stat row for figures with short labels, a table for comparable values, and a figure for a chart with type outside the drawing and a caption. Use before and after to compare two views.
+- Use steps for ordered actions and rows for items with a status. A notice flags something the reader needs before acting. A timeline puts dated events in order. Decisions pair a question with a recommendation. Sources trace the claims, and a transcript records who said what and when.
+- End with one closing line, then a footer that names the page and its maker.
+
 ### Time words
 
 `@mk/time-words` puts time in the fleet's words, so every ship says it the same way: `sinceWords` (`today`, `since yesterday`, `since friday`, `since 9 oct`), `beforeWords` (`before 11:00`), `clockWords` (`09:30`), `dateWords` (`tue 3 nov`), `monthWords` (`november 2026`), `untilWords` (`48 min until standup`, `standup now`) and `scheduleWords` (`every day at 07:00`, `every monday and thursday at 07:15`). Clocks run on 24 hours, and a schedule set in another zone says so. A plain `2026-11-02` is a calendar date with no clock face, so the words count days and name the date: `before 2 nov`, `3 days until standup`. A schedule with an empty list of days reads `never`. Each moment comes in as an argument, so a page renders the same words on the server and in the browser. The words state when, and never judge how long something took. `@mk/use-minute` hands a page the clock's whole minute and the reader's day from one shared timer that stops while the page is hidden, so a line of time words stays true and a read keyed on the day rolls over at midnight.

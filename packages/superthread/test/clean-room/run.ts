@@ -282,7 +282,10 @@ function installedPath(target: string): string {
 }
 
 function stampOf(name: string, path: string) {
-  return path.endsWith(".css") ? `/* @mk/${name} ${version} */` : `// @mk/${name} ${version}`;
+  const stamp = `@mk/${name} ${version}`;
+  if (path.endsWith(".css")) return `/* ${stamp} */`;
+  if (path.endsWith(".html")) return `<!-- ${stamp} -->`;
+  return `// ${stamp}`;
 }
 
 // Every file of every item is installed; returns the app paths.

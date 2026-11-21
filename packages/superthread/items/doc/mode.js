@@ -1,0 +1,23 @@
+(() => {
+  const root = document.documentElement;
+  const preference = matchMedia("(prefers-color-scheme: dark)");
+  const selector = "[data-doc-mode]";
+
+  function setMode(dark) {
+    root.classList.toggle("dark", dark);
+    const next = dark ? "light" : "dark";
+    for (const button of document.querySelectorAll(selector)) {
+      button.textContent = next;
+      button.setAttribute("aria-label", `switch to ${next} mode`);
+    }
+  }
+
+  setMode(preference.matches);
+  document.addEventListener("DOMContentLoaded", () => setMode(root.classList.contains("dark")), { once: true });
+  preference.addEventListener("change", (event) => setMode(event.matches));
+  document.addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest(selector)) {
+      setMode(!root.classList.contains("dark"));
+    }
+  });
+})();

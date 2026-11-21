@@ -1,19 +1,19 @@
 # registry
 
-`@mk` is a shadcn registry of Base UI items on the superthread tokens, served at https://superthread.mauricekleine.com/r/. `/r/versions.json` lists the versions. Each item's page on the site shows it in light and dark with its install line.
+`@mk` is a shadcn registry of Base UI and plain HTML items on the superthread tokens, served at https://superthread.mauricekleine.com/r/. `/r/versions.json` lists the versions. Each item's page on the site shows it in light and dark with its install line.
 
 ## items
 
 | tier  | items                                                                                                                                                                      |
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | style | `init`, `tokens`                                                                                                                                                           |
-| lib   | `tokens-plain`, `utils`, `fleet`, `theme`, `time-words`, `use-minute`, `hotkey`                                                                                            |
+| lib   | `tokens-plain`, `doc`, `utils`, `fleet`, `theme`, `time-words`, `use-minute`, `hotkey`                                                                                            |
 | brand | `glyphs`, `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`, `input`, `input-group`, `textarea`, `field`, `select`, `native-select`, `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`, `paper`, `fit-title`, `inline-answers`, `onward`, `source-line`, `source-mark`, `weave`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
 | pass  | `card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile` |
 | block | `app-shell`, `page-header`, `section-header`, `collection-toolbar`, `list-rows`, `jump-line`, `item-cards`, `data-table`, `states`, `facts`, `form-section`, `quick-add`, `letter`, `send-bar`, `job-sheet`, `day-line`, `month-grid`, `reader`, `notice`, `search-palette` |
 
 - **style**: `init` sets up an app; `tokens` is the theme (colour roles, type, motion, shape and the texture tiles).
-- **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `theme` holds the fleet's light and dark choice; `time-words` puts time in the fleet's words (`since friday`, `before 11:00`, `09:30`, `tue 3 nov`, `november 2026`, `48 min until standup`, `every day at 07:00`); `use-minute` is the clock's minute and the reader's day, from one shared timer that stops while the page is hidden; `hotkey` says whether a bare key press is the page's to answer, away from text and from layers that keep their keys; `tokens-plain` is the theme as plain CSS and a typed module.
+- **lib**: `utils` is `cn`, taught the type steps; `fleet` lists the ships; `theme` holds the fleet's light and dark choice; `time-words` puts time in the fleet's words (`since friday`, `before 11:00`, `09:30`, `tue 3 nov`, `november 2026`, `48 min until standup`, `every day at 07:00`); `use-minute` is the clock's minute and the reader's day, from one shared timer that stops while the page is hidden; `hotkey` says whether a bare key press is the page's to answer, away from text and from layers that keep their keys; `tokens-plain` is the theme as plain CSS and a typed module. `doc` holds the plain HTML sections and scripts.
 - **brand**: superthread's own components. They keep shadcn's Base UI API (exports, props, `data-slot`, variants) and add `data-mk="<item>"` on the root.
 - **pass**: base-nova's items as shadcn ships them, on the superthread tokens, plus the few rules upstream leaves out, such as the turn of `collapsible`'s chevron.
 - **block**: the compositions the fleet's apps repeat, built from the items: a shell, headers, collections, forms, a letter, a send bar, a job sheet, a day line, a month grid, a reader, notices and states. Each installs at `components/superthread/blocks/<name>.tsx`; its meta names the apps it serves. Reach for a block before composing the same pattern by hand.
@@ -45,6 +45,12 @@ Items install in `superthread/` under the components directory (`ui/`, `lib/`, `
 The last path assumes the Start layout, with `src/styles.css` beside `src/components/`. In another layout, point it from the CSS entry to the installed file; in a Next.js app with `app/globals.css` and `components/` at the root, that is `../components/superthread/styles/superthread.css`.
 
 A surface without Tailwind installs `@mk/tokens-plain`: `styles/superthread-plain.css` (the same variables, faces and texture rules) and `lib/tokens.ts` (the values as a typed module).
+
+## plain documents
+
+Fetch `/r/v/<version>/doc.json` and `tokens-plain.json` at the same version. Copy the registry's `files[].content` by `target`. Put `doc/mode.js` in a classic inline script in `<head>`, then inline `styles/superthread-plain.css` and `styles/doc.css` in that order. Copy sections from `doc/sections/` into the body. The hero includes the mode button, and `mode-toggle.html` places it on other pages. Inline `doc/weave.js` in a classic script after the sections.
+
+The mode starts from `prefers-color-scheme` and the button flips `.dark` on `<html>` for this page. Use [the document specimens](https://superthread.mauricekleine.com/compositions/doc) to pick a section and copy its markup. See [texture](texture.md#weave) for the band's ramp and where to put the weave.
 
 ## modes
 
@@ -78,14 +84,14 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.11.0/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.12.0/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions with a snapshot. A snapshot never changes once it is published.
 
 ## updating an installed item
 
-- Every installed file names its item and version: `// @mk/<item> <version>` after the imports in TS and TSX, `/* @mk/<item> <version> */` on line 1 in CSS.
+- Every installed file names its item and version: `// @mk/<item> <version>` after the imports in TS and TSX or on the last line of plain JS. Line 1 carries the stamp in CSS and HTML, as `/* @mk/<item> <version> */` or `<!-- @mk/<item> <version> -->`.
 - A fleet ship takes a release with `mk apps sync <app> --pr`, or `--superthread <version>` for a release the template sits out.
 - `bunx --bun shadcn@latest add @mk/<item> --overwrite --yes` takes the registry's version.
 - To prove an app's items match the registry, copy the app, run `bunx --bun shadcn@latest add <items> --overwrite --yes` in the copy, then `diff -r` the copy against the app. `add --diff` is a preview, not that proof: it prints at most five of the files an add resolves, dependencies first, and exits 0 whether or not a file differs, so a change past the fifth file never shows.
@@ -109,4 +115,4 @@ fleet apps install `@mk` v2 from `https://superthread.mauricekleine.com/r/v/<ver
 
 ## weave
 
-Add `@mk/weave` beside the v2 tokens. In React, import `Weave` from `ui/weave` and set its `spec` and height. In a plain page, link the stylesheet from `@mk/tokens-plain`, bundle `lib/weave-core.ts` as a browser ES module, and call `mountWeave` on a sized element with a `data-weave` spec. The core has no runtime dependencies. `prepareWeave` and `paintWeave` print the same grammar for still plates and video. Read [texture](texture.md#weave) for the spec and the live rules.
+Add `@mk/weave` beside the v2 tokens. In React, import `Weave` from `ui/weave` and set its `spec` and height. In a [plain document](#plain-documents), `doc/weave.js` mounts the same renderer on every sized element with a `data-weave` spec. The core has no runtime dependencies. `prepareWeave` and `paintWeave` print the same grammar for still plates and video. Read [texture](texture.md#weave) for the spec and the live rules.
