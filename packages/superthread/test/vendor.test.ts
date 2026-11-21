@@ -1,3 +1,4 @@
+import { DOT_ANGLES, DOT_PITCH } from "../items/lib/dot-screen";
 // The vendored master: byte copies that match their recorded source, a closed set of modules, and dumps that agree
 // with the vendored code. Reads only the package (CI has no master world); `vendor --check` compares with the world.
 import { expect, test } from "bun:test";
@@ -92,17 +93,22 @@ print(json.dumps(missing))`,
   }
 });
 
-test("the vendored screen.py grain, phase and Bayer matrix are master.json's", () => {
+test("the live and plate screens use the master dot settings and the component tile stays Bayer", () => {
   const screen = python(
     `import screen
-print(json.dumps({k: getattr(screen, k) for k in ("GRAIN", "SPOT_PHASE", "BAYER4")}))`,
+print(json.dumps({k: getattr(screen, k) for k in ("GRAIN", "BAYER4", "DOT_PITCH", "KEY_ANGLE", "PLUM_ANGLE", "PLATE_DPR")}))`,
   );
-  const { dither } = json("tokens/master.json").texture;
+  const { dither, halftone, plates } = json("tokens/master.json").texture;
   expect(screen).toEqual({
-    GRAIN: dither.grain_px,
-    SPOT_PHASE: dither.spot_phase_cells,
+    GRAIN: 1,
     BAYER4: dither.bayer4,
+    DOT_PITCH: halftone.pitch_px,
+    KEY_ANGLE: halftone.key_angle_deg,
+    PLUM_ANGLE: halftone.plum_angle_deg,
+    PLATE_DPR: plates.pixels_per_css_px,
   });
+  expect(DOT_PITCH).toBe(halftone.pitch_px);
+  expect(DOT_ANGLES).toEqual({ key: halftone.key_angle_deg, plum: halftone.plum_angle_deg });
 });
 
 test("details.json holds what the vendored details.py returns", () => {

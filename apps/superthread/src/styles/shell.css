@@ -430,7 +430,7 @@
     border-width: 1px 0 0 1px;
   }
 
-  /* a plate at its own pixel size: a narrower box crops it, never scales it */
+  /* a plate at its native CSS size. a narrower box crops it. */
   .st-plate {
     position: relative;
     width: min(100%, var(--plate-w));

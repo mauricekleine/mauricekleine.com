@@ -8,12 +8,12 @@ export const plates = {
     "h": 196,
     "url": {
       "light": {
-        "first": "/texture/opener-light-first.38a01b13.png",
-        "spot": "/texture/opener-light-spot.d3f5f784.png"
+        "first": "/texture/opener-light-first.35ef6071.png",
+        "spot": "/texture/opener-light-spot.5bbf53c5.png"
       },
       "dark": {
-        "first": "/texture/opener-dark-first.aaeef4cc.png",
-        "spot": "/texture/opener-dark-spot.7918284c.png"
+        "first": "/texture/opener-dark-first.9f78ad45.png",
+        "spot": "/texture/opener-dark-spot.28ec1472.png"
       }
     }
   },
@@ -23,12 +23,12 @@ export const plates = {
     "h": 200,
     "url": {
       "light": {
-        "first": "/texture/opener-phone-light-first.3c2d2a49.png",
-        "spot": "/texture/opener-phone-light-spot.abb3f5ff.png"
+        "first": "/texture/opener-phone-light-first.2f21e2e7.png",
+        "spot": "/texture/opener-phone-light-spot.2753a3d7.png"
       },
       "dark": {
-        "first": "/texture/opener-phone-dark-first.0835ec31.png",
-        "spot": "/texture/opener-phone-dark-spot.4f7aa10c.png"
+        "first": "/texture/opener-phone-dark-first.6aff67c7.png",
+        "spot": "/texture/opener-phone-dark-spot.e9095f22.png"
       }
     }
   },
@@ -38,12 +38,12 @@ export const plates = {
     "h": 160,
     "url": {
       "light": {
-        "first": "/texture/band-light-first.01f2ba50.png",
-        "spot": "/texture/band-light-spot.9c3b5ac1.png"
+        "first": "/texture/band-light-first.68f4243a.png",
+        "spot": "/texture/band-light-spot.9473d390.png"
       },
       "dark": {
-        "first": "/texture/band-dark-first.075ebd19.png",
-        "spot": "/texture/band-dark-spot.1dce70a9.png"
+        "first": "/texture/band-dark-first.b18bacd6.png",
+        "spot": "/texture/band-dark-spot.9965eed7.png"
       }
     }
   },
@@ -53,12 +53,12 @@ export const plates = {
     "h": 136,
     "url": {
       "light": {
-        "first": "/texture/band-phone-light-first.cff55538.png",
-        "spot": "/texture/band-phone-light-spot.8598b693.png"
+        "first": "/texture/band-phone-light-first.813cb050.png",
+        "spot": "/texture/band-phone-light-spot.cdebe166.png"
       },
       "dark": {
-        "first": "/texture/band-phone-dark-first.3ed44a32.png",
-        "spot": "/texture/band-phone-dark-spot.888beeae.png"
+        "first": "/texture/band-phone-dark-first.3b6d3710.png",
+        "spot": "/texture/band-phone-dark-spot.0c778ede.png"
       }
     }
   },
@@ -68,12 +68,12 @@ export const plates = {
     "h": 150,
     "url": {
       "light": {
-        "first": "/texture/figure-light-first.97a2999d.png",
-        "spot": "/texture/figure-light-spot.1c82ac41.png"
+        "first": "/texture/figure-light-first.ae5c02a2.png",
+        "spot": "/texture/figure-light-spot.a42a7020.png"
       },
       "dark": {
-        "first": "/texture/figure-dark-first.9c0dafb3.png",
-        "spot": "/texture/figure-dark-spot.1c82ac41.png"
+        "first": "/texture/figure-dark-first.6deb3d3c.png",
+        "spot": "/texture/figure-dark-spot.a42a7020.png"
       }
     }
   },
@@ -83,12 +83,12 @@ export const plates = {
     "h": 150,
     "url": {
       "light": {
-        "first": "/texture/figure-phone-light-first.3c7c67c1.png",
-        "spot": "/texture/figure-phone-light-spot.d531224d.png"
+        "first": "/texture/figure-phone-light-first.37e1ba7c.png",
+        "spot": "/texture/figure-phone-light-spot.e9ab298b.png"
       },
       "dark": {
-        "first": "/texture/figure-phone-dark-first.8b7e4825.png",
-        "spot": "/texture/figure-phone-dark-spot.d531224d.png"
+        "first": "/texture/figure-phone-dark-first.3cff6420.png",
+        "spot": "/texture/figure-phone-dark-spot.e9ab298b.png"
       }
     }
   },
@@ -97,8 +97,8 @@ export const plates = {
     "w": 608,
     "h": 120,
     "url": {
-      "light": "/texture/empty-light.43924891.png",
-      "dark": "/texture/empty-dark.d9c3ce21.png"
+      "light": "/texture/empty-light.0725758a.png",
+      "dark": "/texture/empty-dark.d54d8709.png"
     }
   },
   "empty-phone": {
@@ -106,8 +106,8 @@ export const plates = {
     "w": 326,
     "h": 120,
     "url": {
-      "light": "/texture/empty-phone-light.dccb2335.png",
-      "dark": "/texture/empty-phone-dark.0de882d4.png"
+      "light": "/texture/empty-phone-light.1adcdca1.png",
+      "dark": "/texture/empty-phone-dark.fb613cb3.png"
     }
   },
   "empty-column": {
@@ -115,8 +115,8 @@ export const plates = {
     "w": 112,
     "h": 120,
     "url": {
-      "light": "/texture/empty-column-light.6e2a52ee.png",
-      "dark": "/texture/empty-column-dark.0840041c.png"
+      "light": "/texture/empty-column-light.9f9a3553.png",
+      "dark": "/texture/empty-column-dark.67b633a9.png"
     }
   }
 } as const;

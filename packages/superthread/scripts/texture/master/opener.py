@@ -2,13 +2,13 @@
 
 A greyscale 'photograph' is computed first (a two-ply cord lying across the
 stock for the opener; a two-slit fringe pattern for the reading figure);
-duotone curves split it into two Bayer plates. The spot is shifted by two cells on both axes.
+duotone curves split it into two dot screens.
 Light mode prints key (shadows) and spot (midtones) on paper; the cord's
 crests and the ground stay paper. Dark mode prints paper-white (highlights)
 and spot (midtones) on key stock, so the cord is lit the same way on both.
 """
 import math
-from screen import SPOT_PHASE, screen_field
+from screen import print_dots
 
 
 def catmull(points):
@@ -60,7 +60,7 @@ def rope_field(w, h, path, width=64, pitch=1.45):
             c = d / hw
             z = math.sqrt(max(0.0, 1 - c * c))
             diffuse = max(0.0, lx * c + lz * z)
-            s = arc[min(len(arc) - 1, max(0, x))]
+            s = arc[min(len(arc) - 1, max(0, int(x)))]
             phase = s / (width * pitch) - math.asin(max(-1, min(1, c))) / math.pi
             psi = (2 * phase) % 1.0                                       # across one ply: 0 and 1 are creases
             ply = math.sin(math.pi * psi) ** 0.55
@@ -86,7 +86,7 @@ def rope_light(inside, g, sh):
     return k, max(0.0, s)
 
 
-OPENER_PAPER_CAP = 0.78   # the opener's paper-white plate never prints solid either
+OPENER_PAPER_CAP = 0.65   # the opener's paper-white plate never prints solid either
 
 
 def rope_dark(inside, g, sh):
@@ -102,9 +102,7 @@ def render_rope(w, h, path, mode, width=64):
     """Rows of palette indexes for the opener: 0 stock, 1 first ink (key, or paper-white in dark), 2 spot, 3 both."""
     fld = rope_field(w, h, path, width)
     curve = rope_light if mode == "light" else rope_dark
-    K = screen_field(w, h, lambda x, y: curve(*fld(x, y))[0])
-    S = screen_field(w, h, lambda x, y: curve(*fld(x, y))[1], SPOT_PHASE)
-    return [[K[y][x] + 2 * S[y][x] for x in range(w)] for y in range(h)]
+    return print_dots(w, h, lambda x, y: curve(*fld(x, y)))
 
 
 def fringe_field(w, h):
@@ -124,7 +122,7 @@ def fringe_field(w, h):
 
 # white on key spreads (irradiation), so in dark the paper-white plate stops short of solid: the brightest
 # fringe cores keep visible dots and read as a printed screen, never as a lit tube.
-PAPER_CAP = 0.72
+PAPER_CAP = 0.60
 
 
 def key_curve(g):
@@ -137,7 +135,6 @@ def spot_curve(g):
 
 def split(grey, w, h, mode, ground=(0.03, 0.16)):
     """Coverage functions for the two inks from a greyscale field."""
-    G = [[grey(x, y) for x in range(w)] for y in range(h)]
     lo, hi = ground
 
     def fountain(x):
@@ -145,17 +142,17 @@ def split(grey, w, h, mode, ground=(0.03, 0.16)):
 
     if mode == "light":
         def kt(x, y):
-            return key_curve(G[y][x])
+            return key_curve(grey(x, y))
 
         def st(x, y):
-            g = G[y][x]
+            g = grey(x, y)
             return fountain(x) if g >= 0.999 else max(fountain(x), spot_curve(g))
     else:  # the same plates; paper-white prints the key's plate on key stock, capped below solid
         def kt(x, y):
-            return PAPER_CAP * key_curve(G[y][x])
+            return PAPER_CAP * key_curve(grey(x, y))
 
         def st(x, y):
-            g = G[y][x]
+            g = grey(x, y)
             return fountain(x) * 0.5 if g >= 0.999 else max(fountain(x) * 0.5, spot_curve(g))
     return kt, st
 
@@ -163,6 +160,4 @@ def split(grey, w, h, mode, ground=(0.03, 0.16)):
 def render(w, h, grey, mode="light", ground=(0.03, 0.16)):
     """Rows of palette indexes: 0 stock, 1 first ink (key, or paper-white in dark), 2 spot, 3 both."""
     kt, st = split(grey, w, h, mode, ground)
-    K = screen_field(w, h, kt)
-    S = screen_field(w, h, st, SPOT_PHASE)
-    return [[K[y][x] + 2 * S[y][x] for x in range(w)] for y in range(h)]
+    return print_dots(w, h, lambda x, y: (kt(x, y), st(x, y)))

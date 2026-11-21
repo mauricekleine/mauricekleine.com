@@ -410,12 +410,12 @@ Every spot stays at least 10 from plum (oklab delta E x 100), and its dithered r
 
 ### Screens
 
-A screen is a 1-bit pattern that stands in for a tint. Every screened field uses the 4 × 4 Bayer matrix on square cells at a 2 CSS px grain at every width. Live fields round the cell to a whole device pixel. Plates print at their native CSS size with nearest-neighbour sampling. Component details and chart line screens keep their 1 px tiles. Coverage comes in steps of 6.25 percent. A tile at 50 percent (`--texture-b50`) fills eight cells and a tile at 18.75 percent (`--texture-b19`) fills three. Half coverage is the in-between state and solid is the settled one.
+A screen is a 1-bit pattern that stands in for a tint. Fields print round dots at a 4 CSS px pitch. Key and foreground use 45° and plum uses 15°. Tone sets dot area. Each live sample is one device pixel, so the pitch holds through fractional device pixel ratios. Plates carry two samples per CSS pixel and print at their native CSS size. Component details, progress, the empty wedge and marks use a 4 × 4 Bayer tile at one CSS pixel per cell. Bayer coverage comes in steps of 6.25 percent. A tile at 50 percent (`--texture-b50`) fills eight cells and a tile at 18.75 percent (`--texture-b19`) fills three. Half coverage is the in-between state and solid is the settled one.
 
 | place             | what prints                                                | where it ships                            |
 | ----------------- | ---------------------------------------------------------- | ----------------------------------------- |
 | opener            | one band per page head in the first ink and plum           | `@mk/field-art`, `@mk/weave` or plates    |
-| figures           | concept art in two inks on the same Bayer screen           | `@mk/field-art` or stills                 |
+| figures           | concept art in two inks on the same dot screen             | `@mk/field-art` or stills                 |
 | marks             | the ship's spot region at 50 percent                       | the mark SVGs                             |
 | state fields      | the progress fill's leading 24 px, from solid to the stock | `texture-ramp` in `Progress`              |
 | empty and loading | a light wedge of the first ink                             | empty plates; `Skeleton` for loading rows |
@@ -427,7 +427,7 @@ Crop marks are 10 px corner ticks, 16 px outside a contained field. A field that
 
 A weave runs right beside a solid or down beneath it. On a phone a stacked band runs down. Set one spec line with the direction, a mirrored fray (line, bow, waves or arch), and the ramp. `held` keeps its density for findings and facts, `steady` falls evenly for plans and principles, `bet` breaks abruptly for hypotheses and proposals, and `fade` runs softly into the stock for notes and appendix heads. Fray wobble and thread width are in cells. One flat-core plum thread follows the fray, or the density break for `bet`. A hero can tie one knot to the thread.
 
-The fixed light runs down the middle of the weave or follows the knot. It starts past a short hold and shades only the screen. In light the solid is key and the light thins the key screen on paper. In dark the solid is the deep ground, foreground prints up to 55 percent where the light falls, and the thread and knot bloom in the same square plum cells. Plum uses the matrix shifted by two cells on both axes. Words sit on the solid or the stock. A weave prints in the mode of the scope it sits in, so inside a `.dark` block it prints the dark inks. A weave that carries a dark block into a light page sits beside the block, in the page's scope, where its solid is key and its screen thins into the paper.
+The fixed light runs down the middle of the weave or follows the knot. It starts past a short hold and shades only the screen. In light the solid is key and the light thins the key screen on paper. In dark the solid is the deep ground, foreground prints up to 45 percent where the light falls. The plum thread prints solid through its core. The knot and bloom print as dots. Words sit on the solid or the stock. A weave prints in the mode of the scope it sits in, so inside a `.dark` block it prints the dark inks. A weave that carries a dark block into a light page sits beside the block, in the page's scope, where its solid is key and its screen thins into the paper.
 
 A field gives the concept a verb and draws it as a smooth edge. One solid meets the frame, a ramp breaks into stock, and a knot lights one plum thread. Open cells take the stock of the scope. Use [superthread-visuals](../../skills/superthread-visuals/SKILL.md) for concept art in figures and openers.
 

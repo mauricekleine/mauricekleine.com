@@ -11,11 +11,11 @@ description: "Turn a concept into on-brand Superthread art: a screened still, a 
 2. Give the concept a verb and give that verb a smooth edge.
 3. Run one named ramp out from the edge. Fade the filaments in and out within it.
 4. Run one plum thread along the edge or a level. Set the knot on the thread where the verb turns.
-5. Light the field at the knot. Print solid key on paper and deep ground in dark. The engine holds the dark screen back from the edge and caps it at 55%.
+5. Light the field at the knot. Print solid key on paper and deep ground in dark. The engine holds the dark screen back from the edge and caps it at 45%.
 6. Print points in dark where the screen runs out. Use them for depth or for a count that means something.
 7. Move the knot, the wave or the filaments. Loop in 8 to 24 seconds at 24 fps. The live renderer pauses when the field is offscreen or the tab is hidden, and prints frame zero under reduced motion and in print.
 
-The engine prints 2 px cells in a 4 × 4 Bayer screen, with plum shifted two cells on both axes. Live cells snap to device pixels and open cells take the scope’s stock. The engine rejects a solid that misses the frame or encloses stock.
+The engine prints round dots at a 4 CSS px pitch, at 45° for the first ink and 15° for plum. Live samples snap to device pixels and the open areas take the scope’s stock. The plum thread has a solid core with a screened knot and bloom. The engine rejects a solid that misses the frame or encloses stock.
 
 ## draw a field
 
@@ -36,7 +36,7 @@ bun scripts/render.ts "$spec" dark 1200 630 0 field-dark.png
 bun scripts/loop.ts "$spec" dark 1200 630 field-dark.mp4
 ```
 
-For `edge=mask`, put a module beside the outputs. Export a callback taking width and height in cells and returning a row-major `Uint8Array`, with 1 for solid and 0 for stock. Append its path and, for a named export, its name to either command. Paths resolve from the working directory. Use an absolute path for a mask elsewhere.
+Width and height describe CSS pixels. Append `--dpr 2` to render at two samples per CSS pixel. For `edge=mask`, put a module beside the outputs. Export a callback taking width and height in cells and returning a row-major `Uint8Array`, with 1 for solid and 0 for stock. Append its path and, for a named export, its name to either command. Paths resolve from the working directory. Use an absolute path for a mask elsewhere.
 
 Install `@mk/field-art` for live art. In React, import `FieldArt` from `ui/field-art`, size it in CSS and pass `spec`, an optional stable `mask` callback and `playing` for the one field that moves. In plain HTML, inline `doc/field-art.js` after sized, positioned, overflow-hidden hosts carrying `data-field-art`. Set `data-field-art-play` on the host that moves. For a custom mask, use `mountField(host, mask)` from `lib/field-live`. Keep words beside the art and give an informative field a short accessible name.
 

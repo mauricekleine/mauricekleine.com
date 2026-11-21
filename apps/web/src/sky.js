@@ -1,5 +1,6 @@
-import { paint, prepare } from "@/components/superthread/lib/field-core";
-import { BAYER, GRAIN, readScreenInks, smooth } from "@/components/superthread/lib/screen-core";
+import { prepareSky } from "./sky-field";
+import { canvasRaster, packedInks } from "@/components/superthread/lib/dot-screen";
+import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core";
 
 // the sky: the night over amsterdam, stars and whatever passes by.
 // flat where you read, screened where you look. descended from a 2022 note ("Foals / Sleeping Giants
@@ -45,35 +46,27 @@ import { BAYER, GRAIN, readScreenInks, smooth } from "@/components/superthread/l
   }
 
   if (!canvas) return;
+  const band = canvas.parentElement;
   const ctx = canvas.getContext("2d");
-  const screenCanvas = document.createElement("canvas");
-  const screenCtx = screenCanvas.getContext("2d");
   const inkProbe = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
-  if (!ctx || !screenCtx || !inkProbe) return;
+  if (!band || !ctx || !inkProbe) return;
 
-  const desktopSpec =
-    "edge=meander+crest base=.815 lift=.16 waves=2 settle=1.34 phase=.65 b.at=.64 b.lift=-.105 b.width=.17 ramp=held reach=.47 thread=1.25 knot=.23 knotr=6 tex=.85 pitch=5.4 spread=.29 seed=57 motion=filaments drift=.27 duration=22";
-  const phoneSpec =
-    "edge=meander+crest base=.835 lift=.118 waves=1 settle=1.26 phase=.57 b.at=.77 b.lift=-.085 b.width=.25 ramp=held reach=.325 thread=1.15 knot=.25 knotr=5 tex=.64 pitch=6.4 spread=.235 seed=57 motion=filaments drift=.23 duration=22";
-
-  const screen = (x, y) => BAYER[(y & 3) * 4 + (x & 3)];
   const BEAT = 60000 / 174; // fluncle runs at 174bpm
   const PULSE_BEATS = 16;
   const FRAME = 1000 / 24;
-  let cell = GRAIN;
-  let deviceCell = GRAIN;
+  const cell = GRAIN;
+  let ratio;
+  let isPhone;
   let printing = print.matches;
   let W = 0;
   let H = 0;
-  let stars = [];
   let field;
-  let fieldLine;
-  let cells;
   let image;
   let first;
   let plum;
-  let pixels;
-  let palette;
+  let screenInk;
+  let threadInk;
+  let starInk;
   let rafId;
   let lastTick;
   let time = 0;
@@ -89,69 +82,16 @@ import { BAYER, GRAIN, readScreenInks, smooth } from "@/components/superthread/l
   function readInks() {
     const style = getComputedStyle(canvas);
     const { screen, thread } = readScreenInks(style, inkProbe);
-    plum = thread;
+    screenInk = screen;
+    threadInk = thread;
     inkProbe.fillStyle = style.getPropertyValue("--first").trim();
     inkProbe.fillRect(0, 0, 1, 1);
-    first = inkProbe.getImageData(0, 0, 1, 1).data;
-    // Stock and the solid under the thread both take the island's background.
-    palette = new Uint32Array(new Uint8ClampedArray([0, 0, 0, 0, ...screen, 255, ...thread, 255, 0, 0, 0, 0]).buffer);
+    starInk = [...inkProbe.getImageData(0, 0, 1, 1).data.slice(0, 3)];
+    [first, plum] = packedInks([starInk, threadInk]);
   }
 
-  function dot(x, y, ink) {
-    if (x < 0 || y < 0 || x >= W || y >= H) return;
-    const at = ((y | 0) * W + (x | 0)) * 4;
-    image.data[at] = ink[0];
-    image.data[at + 1] = ink[1];
-    image.data[at + 2] = ink[2];
-    image.data[at + 3] = 255;
-  }
-
-  function makeStars() {
-    // Frame zero uses the same star map as the printed plates.
-    let seed = 57;
-    const random = () => {
-      seed = (seed * 16807) % 2147483647;
-      return seed / 2147483647;
-    };
-    const count = Math.min(220, Math.round((W * H * cell * cell) / 900));
-    stars = Array.from({ length: count }, () => {
-      const depth = 0.3 + random() * 0.7; // far..near
-      return {
-        x: random() * W,
-        y: random() * H,
-        size: random() < 0.06 ? 1 : 0,
-        depth,
-        alpha: 0.35 + random() * 0.65,
-        phase: random() * Math.PI * 2,
-        speed: 0.4 + random() * 1.1,
-        drift: 0.0012 + random() * 0.003,
-      };
-    });
-  }
-
-  function starDistance(x, y) {
-    if (x < 0 || y < 0 || x >= W || y >= H) return 0;
-    const i = y * W + x;
-    // The filaments move across a fixed edge. Stars only print in open sky cells.
-    return cells[i] === 0 ? field.staticGeometry.sd[i] : 0;
-  }
-
-  function starDot(x, y) {
-    if (starDistance(x, y) > 0) dot(x, y, first);
-  }
-
-  function drawStar(x, y, size) {
-    dot(x, y, first);
-    if (size < 1) return;
-    starDot(x - 1, y);
-    starDot(x + 1, y);
-    starDot(x, y - 1);
-    starDot(x, y + 1);
-    if (size < 2) return;
-    starDot(x - 2, y);
-    starDot(x + 2, y);
-    starDot(x, y - 2);
-    starDot(x, y + 2);
+  function dot(x, y, ink, density, spot) {
+    field.dot(x | 0, y | 0, ink, density, spot);
   }
 
   // --- meteors ---------------------------------------------------------------
@@ -185,7 +125,7 @@ import { BAYER, GRAIN, readScreenInks, smooth } from "@/components/superthread/l
     for (let i = 0; i < tail; i++) {
       const tx = Math.round(x - Math.cos(meteor.angle) * i);
       const ty = Math.round(y + Math.sin(meteor.angle) * i);
-      if (1 - i / tail > screen(tx, ty)) dot(tx, ty, i < 8 ? plum : first);
+      dot(tx, ty, i < 8 ? plum : first, 1 - i / tail, i < 8);
     }
   }
 
@@ -298,8 +238,6 @@ import { BAYER, GRAIN, readScreenInks, smooth } from "@/components/superthread/l
   // --- frame -----------------------------------------------------------------
   function drawFrame(t, animate) {
     if (!field) return;
-    paint(field, "dark", t / 1000, cells);
-    for (let i = 0; i < cells.length; i++) pixels[i] = palette[cells[i]];
 
     if (animate) {
       pointer.x += (pointer.tx - pointer.x) * 0.08;
@@ -315,19 +253,7 @@ import { BAYER, GRAIN, readScreenInks, smooth } from "@/components/superthread/l
       else boost = Math.pow(1 - (pt % BEAT) / BEAT, 3) * Math.min(1, (total - pt) / (BEAT * 2));
     }
 
-    for (const s of stars) {
-      const twinkle = animate ? 0.72 + 0.28 * Math.sin(s.phase + (t / 1000) * s.speed) : 0.85;
-      const driftY = animate ? ((t * s.drift * s.depth) / cell) % (H + 4) : 0;
-      const x = Math.round(s.x + (animate ? (pointer.x * 10 * s.depth) / cell : 0));
-      let y = s.y - driftY;
-      if (y < -2) y += H + 4;
-      y = Math.round(y + (animate ? (pointer.y * 6 * s.depth) / cell : 0));
-      const distance = starDistance(x, y);
-      // Far stars are the last to fall away as the ramp approaches the edge.
-      if (distance <= 0 || s.depth > 0.3 + 0.7 * smooth(0, field.spec.reach, distance)) continue;
-      if (s.size === 0 && Math.min(1, s.alpha * twinkle) < screen(x, y)) continue;
-      drawStar(x, y, s.size + (boost > 0.35 ? 1 : 0));
-    }
+    field.draw(t, animate, pointer.x, pointer.y, boost);
 
     if (animate) {
       if (!meteor && t > nextMeteorAt) spawnMeteor(t);
@@ -335,9 +261,7 @@ import { BAYER, GRAIN, readScreenInks, smooth } from "@/components/superthread/l
       if (!flyby && t > nextTrafficAt) spawnTraffic(t);
       if (flyby) drawTraffic(t);
     }
-    screenCtx.putImageData(image, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(screenCanvas, 0, 0, W * deviceCell, H * deviceCell);
+    ctx.putImageData(image, 0, 0);
   }
 
   function loop(now) {
@@ -360,40 +284,34 @@ import { BAYER, GRAIN, readScreenInks, smooth } from "@/components/superthread/l
   }
 
   function resize() {
-    const { width, height } = canvas.getBoundingClientRect();
-    if (!width || !height) return;
+    const box = band.getBoundingClientRect();
+    if (!box.width || !box.height) return;
     const dpr = window.devicePixelRatio;
-    const nextDeviceCell = Math.max(1, Math.round(GRAIN * dpr));
-    const deviceWidth = Math.round(width * dpr);
-    const deviceHeight = Math.round(height * dpr);
-    const w = Math.ceil(deviceWidth / nextDeviceCell);
-    const h = Math.ceil(deviceHeight / nextDeviceCell);
-    const spec = phone.matches ? phoneSpec : desktopSpec;
+    const { left, top, width: deviceWidth, height: deviceHeight, cssWidth, cssHeight } = canvasRaster(box, dpr);
+    Object.assign(canvas.style, {
+      left: `${left}px`,
+      top: `${top}px`,
+      width: `${cssWidth}px`,
+      height: `${cssHeight}px`,
+    });
     if (
       field &&
       deviceWidth === canvas.width &&
       deviceHeight === canvas.height &&
-      nextDeviceCell === deviceCell &&
-      cell === nextDeviceCell / dpr &&
-      fieldLine === spec
+      ratio === dpr &&
+      isPhone === phone.matches
     )
       return;
 
-    deviceCell = nextDeviceCell;
-    cell = deviceCell / dpr;
-    if (!field || W !== w || H !== h || fieldLine !== spec) {
-      field = prepare(spec, w * GRAIN, h * GRAIN);
-      fieldLine = spec;
-      W = screenCanvas.width = w;
-      H = screenCanvas.height = h;
-      cells = new Uint8Array(W * H);
-      image = screenCtx.createImageData(W, H);
-      pixels = new Uint32Array(image.data.buffer);
-    }
+    ratio = dpr;
+    isPhone = phone.matches;
     canvas.width = deviceWidth;
     canvas.height = deviceHeight;
-    ctx.imageSmoothingEnabled = false;
-    makeStars();
+    image = ctx.createImageData(deviceWidth, deviceHeight);
+    field = prepareSky(deviceWidth, deviceHeight, dpr, isPhone, new Uint32Array(image.data.buffer));
+    field.setInks(screenInk, threadInk, starInk);
+    W = field.art.w;
+    H = field.art.h;
     const still = reduced.matches || printing || lastFrame < 0;
     drawFrame(still ? 0 : time, !still);
     canvas.dataset.live = "";
@@ -401,7 +319,7 @@ import { BAYER, GRAIN, readScreenInks, smooth } from "@/components/superthread/l
   }
 
   readInks();
-  new ResizeObserver(resize).observe(canvas);
+  new ResizeObserver(resize).observe(band);
   window.addEventListener("resize", resize);
   function setPrinting(active) {
     printing = active;

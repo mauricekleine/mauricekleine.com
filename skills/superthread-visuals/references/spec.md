@@ -2,7 +2,7 @@
 
 Write one line of space-separated `key=value` pairs. A bare spec draws a crest. Values are case-sensitive. An unknown or repeated key, missing value or out-of-range number raises an error.
 
-Coordinates start at the top left. `u` is a fraction of frame width. `v` is a fraction of frame height. A cell is 2 CSS px. Shape height, reach and radial distances use fractions of frame height unless stated. The short side of a wide image still has the same vertical proportions.
+Coordinates start at the top left. `u` is a fraction of frame width. `v` is a fraction of frame height. A geometry cell is 2 CSS px. The screen samples at device resolution. Shape height, reach and radial distances use fractions of frame height unless stated. The short side of a wide image still has the same vertical proportions.
 
 ## edge
 
@@ -49,7 +49,7 @@ Use `edge=mask` with `prepare(line, width, height, { mask })` or the React `Fiel
 | `levels` | 2 to 6 comma-separated `width:tone` pairs. each width .04 to 1, sum exactly 1. tones 0 to 1 | off | multiplies the ramp by a different tone in each unequal plate |
 | `points` | 0 to 1200, integer | 0 | isolated dark points beyond the ramp. a heavily cropped field can have fewer eligible cells |
 
-`held` keeps weight until late. `steady` loses weight evenly. `bet` drops abruptly at 46% of the reach. `fade` eases away. Dark coverage targets a 55% cap and prints at most 8 of 16 ranks. Plum uses the same matrix shifted two cells in x and y. Filaments use three octaves of domain-warped value noise folded into ridges. The ramp gates the noise at both ends. Motion samples the same continuous, untiled texture. Paper prints a lighter filament gain from the same `tex` value.
+`held` keeps weight until late. `steady` loses weight evenly. `bet` drops abruptly at 46% of the reach. `fade` eases away. Dark coverage has a 45% cap. A 4 CSS px dot screen prints the first ink at 45° and plum at 15°. Filaments use three octaves of domain-warped value noise folded into ridges. The ramp gates the noise at both ends. Motion samples the same continuous, untiled texture. Paper prints a lighter filament gain from the same `tex` value.
 
 Palette order is stock, screen, plum, solid. Values come from `packages/superthread/dist/v2/superthread-plain.css`, converted to 8-bit sRGB.
 
@@ -65,7 +65,7 @@ Light prints the solid in key. Dark prints it in deep ground. Live stock is tran
 | key | values or closed range | default | meaning |
 | --- | --- | --- | --- |
 | `threadon` | `edge`, `axis`, `ring` | `axis` for merge, otherwise `edge` | trace the edge or its level. `axis` takes the final trunk's centreline on a merge. `ring` takes the first ellipse's radial level in a composite |
-| `thread` | .65 to 4 cells | 1.5 | half-width controlling the screened plum seam |
+| `thread` | .65 to 4 cells | 1.5 | half-width controlling the solid plum core and its screened bloom |
 | `knot` | 0 to 1 | .5 | x on a graph or compound contour, progress along a merge axis, or angle in turns clockwise from the right of an ellipse ring |
 | `knotr` | 2 to 24 cells | 9 | radius of the knot |
 | `spread` | .08 to .85 | .29 | width of the one light around the knot, in frame widths |
@@ -89,6 +89,6 @@ The first edge must be a `crest` for `motion=wave`. Its knot stays on the crest 
 
 ## api
 
-Import `parse`, `prepare`, `paint` and `INKS` from `scripts/field.js`. `prepare(line, width, height, { mask })` takes whole CSS px from 2 to 8192. `paint(art, mode, seconds = 0, out?)` writes one ink index per cell, row-major, with dimensions `art.w` and `art.h`. Reuse a `Uint8Array` of that length for successive frames.
+Import `parse`, `prepare`, `paint` and `INKS` from `scripts/field.js`. `prepare(line, width, height, { mask })` takes whole CSS px from 2 to 8192. `fieldScreen(art, dpr)` prepares a raster at the requested device pixel ratio. Pass it to `paint(art, mode, seconds, out, raster)` to write one ink index per device pixel in row-major order. Reuse the raster and a `Uint8Array` sized `raster.width * raster.height` across frames. Omit the raster for the geometry-cell buffer used by existing callers.
 
 The `@mk/field-art` item’s `mountField(host, mask?)` reads the spec from `data-field-art` and returns a cleanup function. Set or remove `data-field-art-play` to control playback. The host supplies the size, stock and ink tokens. See the [skill](../SKILL.md#render) for how to install and mount the item.

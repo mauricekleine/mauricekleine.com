@@ -1,6 +1,6 @@
 """Superthread's texture build: tiles, plates and plate checks, run with the master world's own vendored modules.
 
-Stdlib only. Run as `python3 -I scripts/texture/build.py <command>`. Builds copy the committed outputs and never run this;
+Bun supplies dot thresholds for plates. Run as `python3 -I scripts/texture/build.py <command>`. Builds copy the committed outputs and never run this;
 only tests and regeneration do. Defaults resolve against the package root (packages/superthread) whatever the cwd; paths
 given on the command line resolve against the cwd.
 
@@ -298,6 +298,7 @@ def outputs(name, plate):
 def render(spec, work):
     """Run every plate through the vendored fields.py into work/; yield (stem, plate, mode, plane, params, raw path)."""
     import fields
+    from screen import PLATE_DPR
 
     fields.BUILD = work   # fields.save() writes here, never into the package
     inputs = plate_inputs()
@@ -318,6 +319,7 @@ def render(spec, work):
                 params = {"w": w, "h": h, "mode": mode}
             else:
                 raise SystemExit(f"{name}: unknown function {fn}")
+            params["dpr"] = PLATE_DPR if plate["form"] == "masks" else 1
             for stem, m, p in outputs(name, plate):
                 if m == mode:
                     yield stem, name, plate, mode, p, params, work / f"{stem}.png"
@@ -352,7 +354,8 @@ def build_plates(spec_path, out, ts, url_base):
                                "planes_sha256": masters[f]["planes_sha256"]} for f in ref]},
                 "module": f"scripts/texture/master/{module}", "module_sha256": shas[module],
             }
-            entry = site.setdefault(name, {"form": plate["form"], "w": rec["w"], "h": rec["h"], "url": {}})
+            # Geometry is expressed in CSS pixels. Dot masks contain twice as many samples on each axis.
+            entry = site.setdefault(name, {"form": plate["form"], "w": params["w"], "h": params["h"], "url": {}})
             url = url_base + file
             if plane:
                 entry["url"].setdefault(mode, {})[plane] = url

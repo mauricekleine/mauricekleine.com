@@ -110,7 +110,7 @@
   }
 }
 
-/* The host sets the measure. The canvas fills it in whole cells and clips at the last partial cell. */
+/* The host sets the measure. The canvas fills it at device resolution. */
 [data-weave] {
   position: relative;
   overflow: hidden;

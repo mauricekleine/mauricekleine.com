@@ -50,7 +50,7 @@ def opener_plates(name, w, h, mode, path=REACH_PATH, width=64):
 
 def figure_plates(name, w, h, mode):
     """The reading figure as two masks, 'first' and 'spot': two-slit fringes, the fringes counted as ink (key in light,
-    paper-white in dark), on the Bayer screen. The stock is whatever sheet it prints on."""
+    paper-white in dark), on the dot screen. The stock is whatever sheet it prints on."""
     rows = render(w, h, fringe_field(w, h), mode, ground=(0.0, 0.0))
     first = [[v & 1 for v in r] for r in rows]
     spot = [[(v >> 1) & 1 for v in r] for r in rows]

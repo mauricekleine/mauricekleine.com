@@ -1,6 +1,6 @@
 # texture
 
-Flat where you read, screened where you look. Print a tint through the 4 × 4 Bayer matrix at a 2 CSS px grain in every field, at every width. Live canvases snap cells to device pixels. Static plates print at native CSS size with nearest-neighbour sampling. Component details and chart line screens keep 1 px tiles.
+Flat where you read, screened where you look. Print fields with round dots at a 4 CSS px pitch. The first ink runs at 45° and plum runs at 15°. Coverage sets dot size. The live canvas prints one bit per device pixel at any device pixel ratio.
 
 | place             | what prints                                                       | how                              |
 | ----------------- | ----------------------------------------------------------------- | -------------------------------- |
@@ -28,7 +28,7 @@ The items already carry their detail. A raised layer's screen is an edge, never 
 
 ## levels
 
-Screens come from a 4 x 4 bayer matrix, which prints in steps of 6.25 percent. 50 percent is 8 of its 16 cells (`--texture-b50`) and 18.75 percent is 3 (`--texture-b19`).
+Component details, progress, the empty wedge and marks print from a 4 × 4 Bayer matrix at 1 CSS px per cell, in steps of 6.25 percent. 50 percent is 8 of its 16 cells (`--texture-b50`) and 18.75 percent is 3 (`--texture-b19`).
 
 ## line screens
 
@@ -38,11 +38,11 @@ A chart series prints in its ship's spot with 1 px lines knocked out to the stoc
 
 Set 10 px corner ticks 16 px outside a contained field. Drop the ticks when the weave meets the window edge.
 
-Openers and figures print two binary masks per mode. CSS inks the first and plum plates. The wedge prints an indexed image per mode. Build from `packages/superthread/texture/plates.json` with `packages/superthread/scripts/texture/build.py plates`. The site serves content-hashed files under `/texture/` and `texture/plates.sha256` records their pixel hashes.
+Openers and figures print two binary masks per mode at 2×. CSS sizes them at their native CSS width and height and crops them to fit the box. CSS inks the first and plum plates. The wedge prints an indexed image per mode. Build from `packages/superthread/texture/plates.json` with `packages/superthread/scripts/texture/build.py plates`. The site serves content-hashed files under `/texture/` and `texture/plates.sha256` records their pixel hashes.
 
 ## weave
 
-Use [@mk/weave](registry.md#weave) for a hero or a band. Put words on the flat solid or on the stock. A weave prints in the mode of the scope it sits in, so inside a `.dark` block it prints the dark inks. To carry a dark block into a light page, set the weave beside the block, in the page's scope, where its solid is key and its screen thins into the paper. Keep decorative texture inside the field, with ordered cells and clean type. In dark the thread and knot bloom with screened plum.
+Use [@mk/weave](registry.md#weave) for a hero or a band. Put words on the flat solid or on the stock. A weave prints in the mode of the scope it sits in, so inside a `.dark` block it prints the dark inks. To carry a dark block into a light page, set the weave beside the block, in the page's scope, where its solid is key and its screen thins into the paper. Keep decorative texture inside the field, with a fixed screen and clean type. The thread core is solid. The knot and bloom print as plum dots.
 
 In [plain documents](registry.md#plain-documents), copy the hero, slim head or band from `@mk/doc`. The dark island and its weave are siblings:
 
@@ -67,7 +67,7 @@ The script mounts the canvas. The page scope supplies its inks.
 | `thread=4 strength=1` | the plum seam's half-width in cells and its strength. zero width hides it. in `bet` the thread runs at the ramp's break |
 | `knot=.36 knotr=13 live` | a knot at a fraction of the breadth with radius in cells. bare `live` sets it in motion |
 
-One light shades the screen beyond a short hold past the fray. In light it thins key ink on paper. In dark it lights the foreground screen up to 55 percent while the solid prints in the deep ground. The plum plate uses the matrix shifted two cells along both axes.
+One light shades the screen beyond a short hold past the fray. In light it thins key ink on paper. In dark it lights the foreground screen up to 45 percent while the solid prints in the deep ground.
 
 A hero’s weave can carry a knot. App surfaces print still.
 
@@ -83,6 +83,6 @@ A screen never prints behind words, numbers, data or code: text, table cells, th
 
 - a component greyed out with dots
 - noise or random dither
-- a soft or blurred glow; the weave's bloom prints in screened cells
+- a soft or blurred glow; the weave's bloom prints in dots
 - misregistration on text
 - screen motion outside the page’s one live field and the progress fill

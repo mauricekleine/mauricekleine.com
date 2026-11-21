@@ -1,13 +1,11 @@
 import {
-  BAYER,
-  DARK_CAP,
-  GRAIN,
-  LIGHT,
-  RAMPS,
-  clamp,
-  smooth,
-  type RGB,
-} from "@/components/superthread/lib/screen-core";
+  prepareDots,
+  printDots,
+  screenTones,
+  type DotScreen,
+  type PrintPixels,
+} from "@/components/superthread/lib/dot-screen";
+import { DARK_CAP, GRAIN, LIGHT, RAMPS, clamp, smooth, type RGB } from "@/components/superthread/lib/screen-core";
 
 const TAU = 2 * Math.PI;
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -529,7 +527,7 @@ export function prepare(line: string, width: number, height: number, { mask }: {
   checkBoundaries(staticGeometry.sd, grid.w, grid.h, spec.edge[0]);
   const art = { ...grid, width, height, staticGeometry, texture: makeTexture(grid) };
   const points = makePoints(art);
-  const prepared = { ...art, points };
+  const prepared = { ...art, points, tones: screenTones(grid.w, grid.h), lightX: new Float32Array(grid.w) };
   // A frame-zero anchor must name an actual crossing, including on a mask.
   const phase = TAU * (spec.rest % 1);
   frameGeometry(prepared, phase).knotAt(knotPosition(spec, phase));
@@ -554,17 +552,66 @@ function knotPosition(spec: Spec, phase: number) {
   return closed ? spec.knot + travel : clamp(spec.knot + travel);
 }
 
-export function paint(art: FieldArt, mode: Mode, seconds = 0, out: Uint8Array = new Uint8Array(art.w * art.h)) {
+export function fieldScreen(
+  art: FieldArt,
+  dpr = 1,
+  width = Math.max(1, Math.round(art.width * dpr)),
+  height = Math.max(1, Math.round(art.height * dpr)),
+) {
+  return prepareDots(art.w, art.h, width, height, dpr);
+}
+
+const indices = [0, 1, 2, 3];
+
+export function paint(art: FieldArt, mode: Mode, seconds?: number, out?: undefined, screen?: DotScreen): Uint8Array;
+export function paint<T extends PrintPixels>(
+  art: FieldArt,
+  mode: Mode,
+  seconds: number,
+  out: T,
+  screen?: DotScreen,
+  inks?: ArrayLike<number>,
+): T;
+export function paint(
+  art: FieldArt,
+  mode: Mode,
+  seconds = 0,
+  out?: PrintPixels,
+  screen?: DotScreen,
+  inks: ArrayLike<number> = indices,
+) {
+  screen ??= fieldScreen(art, 1 / GRAIN, art.w, art.h);
+  out ??= new Uint8Array(screen.width * screen.height);
+  if (out.length !== screen.width * screen.height) throw new Error("wrong ink buffer size");
+  printDots(screen, fieldTones(art, mode, seconds), out, inks);
+  if (mode === "dark" && art.points) {
+    const { w, h, points } = art;
+    for (let i = 0; i < points.length; i++) {
+      if (!points[i]) continue;
+      const x = i % w,
+        y = Math.floor(i / w);
+      const left = Math.round((x * screen.width) / w);
+      const right = Math.round(((x + 1) * screen.width) / w);
+      const top = Math.round((y * screen.height) / h);
+      const bottom = Math.round(((y + 1) * screen.height) / h);
+      for (let row = top; row < bottom; row++) {
+        out.fill(inks[1], row * screen.width + left, row * screen.width + right);
+      }
+    }
+  }
+  return out;
+}
+
+function fieldTones(art: FieldArt, mode: Mode, seconds: number) {
   if (!Object.hasOwn(INKS, mode) || !Number.isFinite(seconds))
     throw new Error("expected light or dark and a finite time");
-  if (out.length !== art.w * art.h) throw new Error("wrong ink buffer size");
-  const { spec: p, w, h, texture } = art;
+  const { spec: p, w, h, texture, tones, lightX } = art;
   const dark = mode === "dark";
   const cycle = (((seconds / p.duration + p.rest) % 1) + 1) % 1;
   const phase = TAU * cycle;
   const { sd, thread, gapWidths, knotAt } = frameGeometry(art, phase);
   const [kx, ky] = knotAt(knotPosition(p, phase));
-  const lightX = Float32Array.from({ length: w }, (_, x) => Math.exp(-((((x + 0.5) / w - kx) / p.spread) ** 2)));
+  for (let x = 0; x < w; x++) lightX[x] = Math.exp(-((((x + 0.5) / w - kx) / p.spread) ** 2));
   const textureX = texture ? texture.xPad + p.drift * h * Math.sin(phase) * Number(p.motion === "filaments") : 0;
   const textureY = texture
     ? texture.yPad + 0.7 * p.drift * h * (Math.cos(phase) - 1) * 0.5 * Number(p.motion === "filaments")
@@ -583,27 +630,21 @@ export function paint(art: FieldArt, mode: Mode, seconds = 0, out: Uint8Array = 
       const i = y * w + x;
       const dx = x + 0.5 - kx * w;
       const light = lightX[x] * lightY;
-      const threshold = BAYER[(y & 3) * 4 + (x & 3)];
-      const plumThreshold = BAYER[((y + 2) & 3) * 4 + ((x + 2) & 3)];
-      const pd = (thread[i] * h) / p.thread;
-      const seam = Math.abs(pd) < 4 ? Math.max(Math.exp(-(pd ** 4)), dark ? 0.26 * Math.exp(-(pd ** 2) / 4.5) : 0) : 0;
+      const offset = 4 * i;
+      const distance = (thread[i] * h) / p.thread;
+      const pd = Math.abs(distance);
+      const seam = pd < 4 ? (dark ? 0.26 * Math.exp(-(pd ** 2) / 4.5) : 0.18 * Math.exp(-(pd ** 2) / 1.7)) : 0;
       const radius = (dx * dx + dy * dy) / (p.knotr * p.knotr);
       const knot = radius < 5 ? Math.max(Math.exp(-(radius ** 2)), dark ? 0.29 * Math.exp(-radius / 1.7) : 0) : 0;
-      if (Math.max(seam * (0.76 + 0.24 * light), knot) > plumThreshold) {
-        out[i] = 2;
-        continue;
-      }
-      if (sd[i] <= 0) {
-        out[i] = 3;
-        continue;
-      }
+      tones[offset + 1] = 256 * Math.max(seam * (0.76 + 0.24 * light), knot);
+      tones[offset + 2] = sd[i];
+      tones[offset + 3] = clamp(distance, -4, 4);
+      tones[offset] = 0;
+      if (sd[i] <= 0) continue;
       const gap = gapWidths?.[i];
       const reach = gap ? Math.min(p.reach, gap * gapReach) : p.reach;
       const r = sd[i] / reach;
-      if (r >= 1) {
-        out[i] = dark && art.points?.[i] ? 1 : 0;
-        continue;
-      }
+      if (r >= 1) continue;
       let tone = ramp(r);
       if (texture && tone > 0) {
         const j = (y + by) * texture.stride + x + bx;
@@ -620,10 +661,10 @@ export function paint(art: FieldArt, mode: Mode, seconds = 0, out: Uint8Array = 
       const density = dark
         ? tone * DARK_CAP * hold * (LIGHT.low + (1 - LIGHT.low) * light)
         : tone * (1 - hold * (LIGHT.shade * light - LIGHT.dim * (1 - light)));
-      out[i] = (density > threshold && (!dark || threshold < 0.5)) || (dark && art.points?.[i]) ? 1 : 0;
+      tones[offset] = 256 * clamp(density);
     }
   }
-  return out;
+  return tones;
 }
 
 const inStock = (distance: number) => distance > 0;

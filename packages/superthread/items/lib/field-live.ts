@@ -1,5 +1,6 @@
-import { paint, prepare, type FieldArt, type FieldMask } from "@/components/superthread/lib/field-core";
-import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core";
+import { fieldScreen, paint, prepare, type FieldArt, type FieldMask } from "@/components/superthread/lib/field-core";
+import { canvasRaster, packedInks, type DotScreen } from "@/components/superthread/lib/dot-screen";
+import { readScreenInks } from "@/components/superthread/lib/screen-core";
 
 const FPS = 24;
 
@@ -30,25 +31,17 @@ export function mountField(host: HTMLElement, mask?: FieldMask) {
   let destroy = false;
   let art: FieldArt | undefined;
   let image: ImageData;
-  let cells: Uint8Array;
+  let pixels: Uint32Array;
+  let screen: DotScreen;
+  let palette: Uint32Array;
+  let ratio: number;
   let inks: ReturnType<typeof readScreenInks>;
   let line: string;
   let resolution: MediaQueryList;
 
   function draw(index: number) {
     if (!art) return;
-    paint(art, inks.dark ? "dark" : "light", (index % (FPS * art.spec.duration)) / FPS, cells);
-    const { data } = image;
-    const palette = [inks.screen, inks.thread, inks.solid];
-    for (let i = 0; i < cells.length; i++) {
-      const index = cells[i];
-      const ink = index === 0 ? undefined : palette[index - 1];
-      const pixel = i * 4;
-      data[pixel] = ink?.[0] ?? 0;
-      data[pixel + 1] = ink?.[1] ?? 0;
-      data[pixel + 2] = ink?.[2] ?? 0;
-      data[pixel + 3] = ink ? 255 : 0;
-    }
+    paint(art, inks.dark ? "dark" : "light", (index % (FPS * art.spec.duration)) / FPS, pixels, screen, palette);
     context.putImageData(image, 0, 0);
   }
 
@@ -99,29 +92,39 @@ export function mountField(host: HTMLElement, mask?: FieldMask) {
       return;
     }
     const dpr = win.devicePixelRatio;
-    const cell = Math.max(1, Math.round(GRAIN * dpr)) / dpr;
-    const left = Math.floor(box.x * dpr) / dpr - box.x;
-    const top = Math.floor(box.y * dpr) / dpr - box.y;
-    const width = Math.ceil((box.width - left) / cell);
-    const height = Math.ceil((box.height - top) / cell);
+    const { left, top, width, height, cssWidth, cssHeight } = canvasRaster(box, dpr);
     const spec = host.dataset.fieldArt ?? "";
     inks = readScreenInks(win.getComputedStyle(host), inkProbe);
+    palette = packedInks([undefined, inks.screen, inks.thread, inks.solid]);
 
-    if (!art || art.w !== width || art.h !== height || line !== spec) {
-      const next = prepare(spec, width * GRAIN, height * GRAIN, { mask });
+    const w = Math.max(2, Math.round(cssWidth));
+    const h = Math.max(2, Math.round(cssHeight));
+    if (
+      !art ||
+      art.width !== w ||
+      art.height !== h ||
+      line !== spec ||
+      ratio !== dpr ||
+      screen.width !== width ||
+      screen.height !== height
+    ) {
+      if (!art || art.width !== w || art.height !== h || line !== spec) {
+        art = prepare(spec, w, h, { mask });
+      }
       if (line !== spec) elapsed = frame = 0;
       line = spec;
-      art = next;
+      ratio = dpr;
+      screen = fieldScreen(art, dpr, width, height);
       canvas.width = width;
       canvas.height = height;
       image = context.createImageData(width, height);
-      cells = new Uint8Array(width * height);
+      pixels = new Uint32Array(image.data.buffer);
     }
     Object.assign(canvas.style, {
       left: `${left}px`,
       top: `${top}px`,
-      width: `${width * cell}px`,
-      height: `${height * cell}px`,
+      width: `${cssWidth}px`,
+      height: `${cssHeight}px`,
     });
     draw(reduced || printing ? 0 : frame);
     update();

@@ -96,7 +96,7 @@ const places = tokens.texture.places.map((place) => {
   return open < 0 ? { name: place, note: "" } : { name: place.slice(0, open), note: place.slice(open + 2, -1) };
 });
 
-// the ordered dither every level comes from: a pixel prints where its number is below the level, in sixteenths
+// the ordered dither for component details: a pixel prints where its number is below the level, in sixteenths
 const bayer = [
   [0, 8, 2, 10],
   [12, 4, 14, 6],
@@ -225,12 +225,12 @@ const detailNote: Record<DetailKey, string> = {
 function Page() {
   return (
     <>
-      <PageHead title="texture" lede="one bayer screen for every field. component details keep their 1 px tiles." />
+      <PageHead title="texture" lede="a dot screen for fields and 1 px tiles for component details." />
 
       <Section id="rule" title="the rule">
         <Copy>
-          fields print on 2 css px cells in every mode. they sit beside words, numbers, data and code. a component takes
-          at most one small screened detail.
+          fields print round dots every 4 css px, at 45° for the first ink and 15° for plum. they sit beside words,
+          numbers, data and code. a component takes at most one small screened detail.
         </Copy>
       </Section>
 
@@ -276,8 +276,8 @@ function Page() {
             </tbody>
           </table>
           <figcaption>
-            the 4 x 4 bayer matrix. a pixel prints where its number is below the level in sixteenths: 8 of 16 for the
-            half, 3 of 16 for {tokens.texture.levels.b19} percent.
+            the 4 x 4 bayer matrix for details. a pixel prints when its number is below the level in sixteenths. 8 of 16
+            for the half, 3 of 16 for {tokens.texture.levels.b19} percent.
           </figcaption>
         </figure>
       </Section>

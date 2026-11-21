@@ -1177,9 +1177,22 @@
       "misregistration on text"
     ],
     "crop marks": "10 px corner ticks 16 px outside a contained field (openers, figures, the empty wedge, weaves); a weave at the window edge omits them",
+    "halftone": {
+      "dot": "round, grows from the cell centre, one bit at each device pixel",
+      "pitch_px": 4,
+      "key_angle_deg": 45,
+      "plum_angle_deg": 15,
+      "use": [
+        "openers",
+        "bands",
+        "weaves",
+        "figures"
+      ]
+    },
     "plates": {
-      "screen": "two 1-bit Bayer masks, with the spot shifted on both axes, inked by CSS",
-      "dark cap": "paper-white never prints solid: 78 percent at most in the openers, 72 in the figures"
+      "screen": "two 1-bit dot masks inked by CSS",
+      "pixels_per_css_px": 2,
+      "dark cap": "paper-white never prints solid: 65 percent at most in the openers, 60 in the figures"
     },
     "line screen": {
       "use": "chart series: the ship's spot with 1 px lines knocked out to the stock every 4 px, at the ship's own angle",
@@ -1223,8 +1236,7 @@
           5
         ]
       ],
-      "grain_px": 2,
-      "spot_phase_cells": 2,
+      "grain_px": 1,
       "use": [
         "marks: one region at 50 percent, a checker of spot",
         "progress: a 24 px bayer ramp from 100 to 0 percent at the fill's leading edge",

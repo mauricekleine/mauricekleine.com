@@ -27,7 +27,7 @@ Superthread's utilities and faces, from `packages/superthread/dist/v2/superthrea
 
 Registry items come from `packages/superthread/items` through the `@/components/superthread` alias, so www never carries a copy. `site.css` owns the page blocks.
 
-- The band (`Opener`) holds the full-width `#sky` canvas. On home it takes 36svh between 220 and 440 px, or 24svh between 160 and 240 px on a phone. The slim band takes 120 px, or 96 px on a phone. `public/sky/` holds frame-zero plates for the home and slim bands at desktop and phone widths. The plates leave the stock open so both page modes use the same files.
+- The band (`Opener`) holds the full-width `#sky` canvas. On home it takes 36svh between 220 and 440 px, or 24svh between 160 and 240 px on a phone. The slim band takes 120 px, or 96 px on a phone. `public/sky/` holds frame-zero plates for the home and slim bands at desktop and phone widths. The plates leave the stock open so both page modes use the same files. They print at 2×, centred at the foot of the band at native CSS size.
 - The portrait (`public/portrait/`) is a two-ink Bayer 4 screen of `maurice.png` at 196 and 136 px, on 2 px cells. Both page modes use the dark files inside the island. Home shows the full square. About shows the face in the slim band at native scale.
 - **Side quests** (`SideQuests`): a constellation tile (1:1 SVG, 4 px stars, 1 px lines), the project name and one line. Its lines take the first ink on hover and focus. No cards.
 - **Graveyard**: ledger rows with a `✧`, the name, a `Badge` (`done` for exits, `queued` for the rest) and mono years.
@@ -37,7 +37,7 @@ Registry items come from `packages/superthread/items` through the `@/components/
 
 ## Motion
 
-Motion lives in `src/sky.js` and two stepped CSS moments. Bun bundles the sky into `public/sky.js` for every page. The sky runs at 24 fps on 2 CSS px cells snapped to device pixels, pauses when the band leaves the page or the tab hides, and prints one still frame under `prefers-reduced-motion` and in print. The home opener fits the printed page.
+Motion lives in `src/sky.js` and two stepped CSS moments. Bun bundles the sky into `public/sky.js` for every page. The sky runs at 24 fps with a 4 CSS px dot pitch sampled at device resolution, pauses when the band leaves the page or the tab hides, and prints one still frame under `prefers-reduced-motion` and in print. The home opener fits the printed page.
 
 ## The sky
 
@@ -58,6 +58,6 @@ Beyond the band:
 ## Assets
 
 - `maurice.png` (touch icon and portrait source) and `favicon.ico`.
-- `og.png` is a 1200 × 630 image of the home title, lede, portrait and sky, rendered from the opener in light mode with the sky held still.
+- `og.png` is a 1200 × 630 image of the home title, lede, portrait and sky, with the sky held still. Run `bun tools/render-sky.ts` in `apps/web` to print the four fallback plates and the band in the social card with the live renderer.
 - `public/fonts/` serves the frozen v1 theme's copies; www itself loads its fonts from the superthread host.
 - Simple Analytics (`https://api.mauricekleine.com/latest.js`) at the end of the body.
