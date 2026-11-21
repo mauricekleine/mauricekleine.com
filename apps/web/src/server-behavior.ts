@@ -500,28 +500,33 @@ function subscribePage({ title, description, heading, message, action, back }: S
     <meta name="robots" content="noindex" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/maurice.png" />
-    <link rel="stylesheet" href="/style.css?v=20261101-first" />
+    <link rel="stylesheet" href="/style.css?v=20261121-island" />
   </head>
   <body>
-    <header class="mk-mast">
-      <a href="/" class="mk-brand">maurice kleine</a>
-    </header>
-    <main id="main" class="mk-main mk-solo">
-      <div class="mk-page">
-        <header id="top" class="mk-pagehead">
-          <div class="mk-field mk-field-slim">
-            <canvas id="sky" aria-hidden="true"></canvas>
-            <span class="mk-crop" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-          </div>
-          <h1 class="type-hero text-first">${heading}</h1>
+    <div class="dark mk-island mk-island-solo">
+      <header class="mk-mast">
+        <a href="/" class="mk-brand">maurice kleine</a>
+      </header>
+      <nav class="mk-nav mk-nav-compact" aria-label="site"><ul class="mk-nav-list"><li><a href="/">home</a></li><li><a href="/about">about</a></li><li><a href="/essays">essays</a></li></ul></nav>
+      <div class="mk-opener">
+        <div id="top" class="mk-opener-copy">
+          <h1 class="mk-island-title">${heading}</h1>
           <p class="mk-lede type-lede">${message}</p>
-        </header>
-        <section class="mk-section" aria-label="where to go next">${form}
-          <p class="more-link"><a href="${back.href}">${back.label}</a></p>
-        </section>
+        </div>
+        <div class="mk-field"><canvas id="sky" aria-hidden="true"></canvas></div>
       </div>
-    </main>
-    <script src="/sky.js"></script>
+    </div>
+    <div class="mk-body mk-body-solo">
+      <nav class="mk-nav" aria-label="site"><ul class="mk-nav-list"><li><a href="/">home</a></li><li><a href="/about">about</a></li><li><a href="/essays">essays</a></li></ul></nav>
+      <main id="main" class="mk-main">
+        <div class="mk-page">
+          <section class="mk-section" aria-label="where to go next">${form}
+            <p class="more-link"><a href="${back.href}">${back.label}</a></p>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script src="/sky.js?v=20261121-island"></script>
     <script async src="https://api.mauricekleine.com/latest.js"></script>
   </body>
 </html>
