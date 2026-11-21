@@ -103,15 +103,23 @@ test("rest takes the quarter frame of the same loop and a ring accepts travel in
   expect(paint(atQuarter, "dark")).toEqual(paint(staticKnot, "dark"));
 });
 
-test("prepares and paints a 1200 × 630 still in under 100 ms on a warm renderer", () => {
-  concept("roi");
-  const times = Array.from({ length: 7 }, () => {
-    const start = performance.now();
-    const frame = paint(concept("roi"), "light");
-    expect(frame.length).toBe(600 * 315);
-    return performance.now() - start;
+test.each(["amsterdam", "roi"])("%s paints a warm frame in the 24 fps budget", (id) => {
+  const start = performance.now();
+  const art = concept(id);
+  const cells = paint(art, "dark");
+  const stillMs = performance.now() - start;
+
+  const warmupFrames = 40;
+  for (let frame = 1; frame <= warmupFrames; frame++) paint(art, "dark", frame / 24, cells);
+  const samples = Array.from({ length: 11 }, (_, index) => {
+    const frameStart = performance.now();
+    paint(art, "dark", (index + warmupFrames + 1) / 24, cells);
+    return performance.now() - frameStart;
   }).sort((a, b) => a - b);
-  const median = times[3];
-  console.log(`field 1200 × 630 ROI prepare + paint median ${median.toFixed(1)} ms (7 samples)`);
-  expect(median).toBeLessThan(100);
+  const median = samples[5]!;
+  console.log(
+    `field ${id} ${art.width} × ${art.height}: prepare + paint ${stillMs.toFixed(1)} ms, warm paint median ${median.toFixed(1)} ms (11 samples)`,
+  );
+  // A 24 fps frame has 41.7 ms. Leave time for the canvas upload and the rest of the page.
+  expect(median).toBeLessThan(25);
 });
