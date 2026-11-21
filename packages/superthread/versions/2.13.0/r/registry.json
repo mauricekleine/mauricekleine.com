@@ -1233,46 +1233,25 @@
       "name": "field",
       "type": "registry:ui",
       "title": "field",
-      "description": "screened concept art for figures and openers, and the form field parts",
+      "description": "labels, descriptions and errors around any control, with the bang before an error",
       "dependencies": [
         "class-variance-authority@^0.7.1"
       ],
       "registryDependencies": [
         "@mk/glyphs",
         "@mk/separator",
-        "@mk/utils",
-        "@mk/weave"
+        "@mk/utils"
       ],
       "files": [
         {
           "path": "items/ui/field.tsx",
           "type": "registry:ui",
           "target": "@components/superthread/ui/field.tsx"
-        },
-        {
-          "path": "items/ui/field-art.tsx",
-          "type": "registry:ui",
-          "target": "@components/superthread/ui/field-art.tsx"
-        },
-        {
-          "path": "items/lib/field-core.ts",
-          "type": "registry:lib",
-          "target": "@components/superthread/lib/field-core.ts"
-        },
-        {
-          "path": "items/lib/field-live.ts",
-          "type": "registry:lib",
-          "target": "@components/superthread/lib/field-live.ts"
-        },
-        {
-          "path": "items/doc/field.js",
-          "type": "registry:file",
-          "target": "@components/superthread/doc/field.js"
         }
       ],
       "meta": {
         "version": "2.13.0",
-        "sha256": "67d376a1c38f12ddd68ea9690b537f5f25d97b1ba1f5afc3bab68d4d723c9c61",
+        "sha256": "499bd48173b07f692720112e50accdbabee8406863b7464fb1780bc022f6085b",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -1542,6 +1521,43 @@
       "meta": {
         "version": "2.13.0",
         "sha256": "a944e01b06eed275de541e1b936d8bb7bfa2031612816a08434a3efd75239c86",
+        "tier": "brand",
+        "upstream": null
+      }
+    },
+    {
+      "name": "field-art",
+      "type": "registry:item",
+      "title": "field art",
+      "description": "screened concept art for figures and openers",
+      "registryDependencies": [
+        "@mk/weave"
+      ],
+      "files": [
+        {
+          "path": "items/ui/field-art.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/field-art.tsx"
+        },
+        {
+          "path": "items/lib/field-core.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/field-core.ts"
+        },
+        {
+          "path": "items/lib/field-live.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/field-live.ts"
+        },
+        {
+          "path": "items/doc/field-art.js",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/field-art.js"
+        }
+      ],
+      "meta": {
+        "version": "2.13.0",
+        "sha256": "a16a93443136ac61874759b1654d27750b4b3d6e1f29054649ebcddac063ee71",
         "tier": "brand",
         "upstream": null
       }
