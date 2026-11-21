@@ -88,6 +88,7 @@ export const nav: readonly NavEntry[] = [
   component("source-line"),
   component("source-mark"),
   component("weave"),
+  component("field-art"),
   component("card"),
   component("collapsible"),
   component("label"),

@@ -1,15 +1,17 @@
-const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((rank) => (rank + 0.5) / 16);
-const GRAIN = 2;
-const TAU = Math.PI * 2;
-const DARK_CAP = 0.55;
-const LIGHT = { spread: 0.3, shade: 0.32, dim: 0.12, hold: 0.2, low: 0.22 };
+import {
+  BAYER,
+  DARK_CAP,
+  GRAIN,
+  LIGHT,
+  RAMPS,
+  clamp,
+  readScreenInks,
+  smooth,
+  type ScreenInks,
+  type RGB,
+} from "@/components/superthread/lib/screen-core";
 
-const clamp = (n: number, min = 0, max = 1) => Math.min(max, Math.max(min, n));
-const linear = (a: number, b: number, x: number) => clamp((x - a) / (b - a));
-function smooth(a: number, b: number, x: number) {
-  const r = linear(a, b, x);
-  return r * r * (3 - 2 * r);
-}
+const TAU = Math.PI * 2;
 
 type Run = "right" | "down";
 type Ramp = "held" | "steady" | "bet" | "fade";
@@ -32,19 +34,6 @@ export type WeaveSpec = {
   live: boolean;
   seed: number;
 };
-
-const RAMPS = {
-  held: {
-    density: (r) => (r < 0.62 ? 1 - 0.25 * linear(0, 0.62, r) : 0.75 * (1 - smooth(0.62, 1, r))),
-    seam: 0,
-  },
-  steady: {
-    density: (r) => (r < 0.85 ? 1 - 0.75 * linear(0, 0.85, r) : 0.25 * (1 - linear(0.85, 1, r))),
-    seam: 0,
-  },
-  bet: { density: (r) => (r < 0.46 ? 0.5 : 0.125 * (1 - smooth(0.85, 1, r))), seam: 0.46 },
-  fade: { density: (r) => 1 - smooth(0, 0.86, r), seam: 0 },
-} satisfies Record<Ramp, { density: (r: number) => number; seam: number }>;
 
 export function parseWeave(line: string): WeaveSpec {
   const pairs = new Map(
@@ -110,8 +99,7 @@ export function weaveFray(spec: WeaveSpec, length: number, breadth: number) {
   return edges;
 }
 
-type RGB = readonly [number, number, number];
-export type WeaveInks = { solid: RGB; screen: RGB; thread: RGB; dark: boolean };
+export type WeaveInks = ScreenInks;
 
 type Field = ReturnType<typeof prepareWeave>;
 
@@ -308,14 +296,6 @@ export function mountWeave(element: HTMLElement) {
     }
   }
 
-  function rgb(style: CSSStyleDeclaration, role: string): RGB {
-    probe!.clearRect(0, 0, 1, 1);
-    probe!.fillStyle = style.getPropertyValue(role).trim();
-    probe!.fillRect(0, 0, 1, 1);
-    const [r, g, b] = probe!.getImageData(0, 0, 1, 1).data;
-    return [r!, g!, b!];
-  }
-
   function repaint() {
     const box = element.getBoundingClientRect();
     if (box.width === 0 || box.height === 0) {
@@ -328,14 +308,7 @@ export function mountWeave(element: HTMLElement) {
     const width = Math.ceil(box.width / cell);
     const height = Math.ceil(box.height / cell);
     const spec = element.dataset.weave ?? "";
-    const style = win!.getComputedStyle(element);
-    const dark = style.colorScheme === "dark";
-    inks = {
-      dark,
-      solid: rgb(style, dark ? "--ground" : "--key"),
-      screen: rgb(style, dark ? "--foreground" : "--key"),
-      thread: rgb(style, "--primary"),
-    };
+    inks = readScreenInks(win!.getComputedStyle(element), probe!);
     if (!field || field.width !== width || field.height !== height || line !== spec || isPhone !== phone.matches) {
       line = spec;
       isPhone = phone.matches;

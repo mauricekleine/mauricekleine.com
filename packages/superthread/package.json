@@ -1,6 +1,6 @@
 {
   "name": "@mauricekleine/superthread",
-  "version": "2.12.0",
+  "version": "2.13.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -14,9 +14,10 @@
   },
   "scripts": {
     "build": "bun scripts/generate.ts",
-    "check": "bun scripts/generate.ts --check && bun run doc-weave --check && bun run marks check && python3 -I scripts/texture/build.py tiles --check",
+    "check": "bun scripts/generate.ts --check && bun run doc-weave --check && bun run field-bundles --check && bun run marks check && python3 -I scripts/texture/build.py tiles --check",
     "clean-room": "bun test/clean-room/run.ts",
     "doc-weave": "bun scripts/build-doc-weave.ts",
+    "field-bundles": "bun scripts/build-field.ts",
     "lint": "designmd lint DESIGN.md",
     "marks": "bun scripts/marks.ts",
     "registry": "bun scripts/build-registry.ts",

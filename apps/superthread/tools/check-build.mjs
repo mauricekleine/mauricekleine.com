@@ -46,6 +46,7 @@ const PUBLISHED_VERSIONS = [
   "2.10.3",
   "2.11.0",
   "2.12.0",
+  "2.13.0",
 ];
 
 // the client output: cf's build output, or Vite's own when the Cloudflare plugin writes there
