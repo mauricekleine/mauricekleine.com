@@ -950,8 +950,12 @@ body {
   .top nav {
     display: none;
   }
+  /* svh is the page's height in print, so a fixed weave keeps the hero on its first page */
   .hero {
     min-height: 0;
+  }
+  .hero-weave {
+    height: 200px;
   }
   .group {
     break-before: page;
