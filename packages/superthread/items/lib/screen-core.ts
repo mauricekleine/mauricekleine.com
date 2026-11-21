@@ -1,6 +1,5 @@
-export const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((rank) => (rank + 0.5) / 16);
 export const GRAIN = 2;
-export const DARK_CAP = 0.55;
+export const DARK_CAP = 0.45;
 export const LIGHT = { spread: 0.3, shade: 0.32, dim: 0.12, hold: 0.2, low: 0.22 };
 
 export const clamp = (n: number, min = 0, max = 1) => Math.min(max, Math.max(min, n));

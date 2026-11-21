@@ -1,9 +1,9 @@
-// bun scripts/render.ts '<spec>' <light|dark> <width> <height> <seconds> <output.png> [mask-module [export-name]]
+// bun scripts/render.ts '<spec>' <light|dark> <width> <height> <seconds> <output.png> [mask-module [export-name]] [--dpr <ratio>]
 import { deflateSync } from "node:zlib";
 import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { INKS, paint, prepare } from "./field.js";
+import { fieldScreen, INKS, paint, prepare } from "./field.js";
 
 type Mode = "light" | "dark";
 const crcTable = Uint32Array.from({ length: 256 }, (_, byte) => {
@@ -31,31 +31,31 @@ export async function loadMask(modulePath?: string, exportName = "default"): Pro
   if (typeof mask !== "function") throw new Error("no mask function named " + exportName + " in " + modulePath);
   return mask;
 }
-export function rgbFrame(art: Art, mode: Mode, time: number, cells?: Uint8Array) {
-  const { width, height, w } = art;
-  const frame = paint(art, mode, time, cells);
+export function rgbFrame(art: Art, mode: Mode, time: number, screen: ReturnType<typeof fieldScreen>, pixels: Uint8Array) {
+  const frame = paint(art, mode, time, pixels, screen);
   const palette = INKS[mode];
-  const output = Buffer.allocUnsafe(width * height * 3);
-  const stride = width * 3;
-  for (let y = 0; y < height; y += 2) {
-    const row = (y >> 1) * w;
-    let j = y * stride;
-    for (let x = 0; x < width; x++) {
-      const [r, g, b] = palette[frame[row + (x >> 1)]];
-      output[j++] = r;
-      output[j++] = g;
-      output[j++] = b;
-    }
-    if (y + 1 < height) output.copy(output, j, y * stride, j);
+  const output = Buffer.allocUnsafe(frame.length * 3);
+  for (let i = 0; i < frame.length; i++) {
+    const [r, g, b] = palette[frame[i]];
+    output[3 * i] = r;
+    output[3 * i + 1] = g;
+    output[3 * i + 2] = b;
   }
   return output;
 }
 
-export function encodePng(
-  art: Art, mode: Mode, time: number,
-) {
-  const { width, height, w } = art;
-  const indices = paint(art, mode, time);
+export function renderArgs(input: string[]) {
+  const option = input.indexOf("--dpr");
+  const args = [...input];
+  const dpr = option < 0 ? 1 : Number(args.splice(option, 2)[1]);
+  if (!Number.isFinite(dpr) || dpr <= 0) throw new Error("expected a positive DPR");
+  return { args, dpr };
+}
+
+export function encodePng(art: Art, mode: Mode, time: number, dpr = 1) {
+  const screen = fieldScreen(art, dpr);
+  const { width, height } = screen;
+  const indices = paint(art, mode, time, undefined, screen);
   const header = Buffer.alloc(13);
   header.writeUInt32BE(width);
   header.writeUInt32BE(height, 4);
@@ -65,9 +65,9 @@ export function encodePng(
   const stride = 1 + Math.ceil(width / 4);
   const scan = Buffer.alloc(height * stride);
   for (let y = 0; y < height; y++) {
-    const row = (y >> 1) * w;
+    const row = y * width;
     for (let x = 0; x < width; x++) {
-      const ink = indices[row + (x >> 1)];
+      const ink = indices[row + x];
       scan[y * stride + 1 + (x >> 2)] |= ink << (2 * (3 - (x & 3)));
     }
   }
@@ -78,10 +78,11 @@ export function encodePng(
 }
 
 if (import.meta.main) {
-  const [line, mode, width, height, seconds, path, maskModule, maskExport] = process.argv.slice(2);
+  const { args, dpr } = renderArgs(process.argv.slice(2));
+  const [line, mode, width, height, seconds, path, maskModule, maskExport] = args;
   if (!line || (mode !== "light" && mode !== "dark") || !path || !seconds || !Number.isFinite(Number(seconds))) {
-    throw new Error("usage: bun scripts/render.ts '<spec>' <light|dark> <width> <height> <seconds> <output.png> [mask-module [export-name]]");
+    throw new Error("usage: bun scripts/render.ts '<spec>' <light|dark> <width> <height> <seconds> <output.png> [mask-module [export-name]] [--dpr <ratio>]");
   }
   const art = prepare(line, Number(width), Number(height), { mask: await loadMask(maskModule, maskExport) });
-  await writeFile(path, encodePng(art, mode, Number(seconds)));
+  await writeFile(path, encodePng(art, mode, Number(seconds), dpr));
 }

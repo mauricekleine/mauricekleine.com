@@ -1,5 +1,12 @@
 import {
-  BAYER,
+  canvasRaster,
+  packedInks,
+  prepareDots,
+  printDots,
+  screenTones,
+  type DotScreen,
+} from "@/components/superthread/lib/dot-screen";
+import {
   DARK_CAP,
   GRAIN,
   LIGHT,
@@ -8,7 +15,6 @@ import {
   readScreenInks,
   smooth,
   type ScreenInks,
-  type RGB,
 } from "@/components/superthread/lib/screen-core";
 
 const TAU = Math.PI * 2;
@@ -112,7 +118,8 @@ export function prepareWeave(spec: WeaveSpec, width: number, height: number, pho
   const edges = weaveFray(spec, length, breadth);
   const screen = new Float32Array(width * height);
   const hold = new Float32Array(screen.length);
-  const thread = new Float32Array(screen.length);
+  const thread = new Float32Array(screen.length).fill(4);
+  const solid = new Float32Array(screen.length);
   const bloom = new Float32Array(screen.length);
   const lineLight = Float32Array.from(edges, (_, q) => {
     const d = ((q + 0.5) / breadth - 0.5) / LIGHT.spread;
@@ -127,20 +134,36 @@ export function prepareWeave(spec: WeaveSpec, width: number, height: number, pho
       const rest = Math.max(1, length - edge);
       const past = t - edge;
       const r = past / rest;
-      screen[i] = past < 0 ? -1 : ramp.density(r);
+      solid[i] = past;
+      screen[i] = past < 0 ? 0 : ramp.density(r);
       hold[i] = smooth(0, LIGHT.hold, r);
 
       if (spec.thread > 0) {
         const d = (past - ramp.seam * rest) / spec.thread;
         const d2 = d * d;
-        thread[i] = spec.strength * Math.exp(-d2 * d2);
+        thread[i] = clamp(d / Math.max(spec.strength, 0.001), -4, 4);
         // Fade the bloom out before it reaches the adjoining solid.
-        bloom[i] = 0.42 * Math.exp(-d2 / 5.5) * (d < 0 ? clamp(t / (3 * spec.thread)) : 1);
+        bloom[i] = spec.strength * 0.42 * Math.exp(-d2 / 5.5) * (d < 0 ? clamp(t / (3 * spec.thread)) : 1);
       }
     }
   }
 
-  return { spec, width, height, down, breadth, length, edges, screen, hold, thread, bloom, lineLight };
+  return {
+    spec,
+    width,
+    height,
+    down,
+    breadth,
+    length,
+    edges,
+    screen,
+    solid,
+    hold,
+    thread,
+    bloom,
+    lineLight,
+    tones: screenTones(width, height),
+  };
 }
 
 function knotAt(field: Field, time: number | undefined) {
@@ -157,60 +180,60 @@ function knotAt(field: Field, time: number | undefined) {
   return { x: down ? across : seam, y: down ? seam : across, radius };
 }
 
-function writePixel(pixels: Uint8ClampedArray, offset: number, ink: RGB) {
-  pixels[offset] = ink[0];
-  pixels[offset + 1] = ink[1];
-  pixels[offset + 2] = ink[2];
-  pixels[offset + 3] = 255;
-}
-
 /** Print one RGBA frame, with transparent stock. Pass seconds for video or omit time for a still plate. */
 export function paintWeave(
   field: Field,
   inks: WeaveInks,
   pixels: Uint8ClampedArray,
-  options: { time?: number; reducedMotion?: boolean } = {},
+  options: { time?: number; reducedMotion?: boolean; raster?: DotScreen; palette?: Uint32Array } = {},
 ) {
-  const { spec, width, height, breadth, down, screen, hold, thread, bloom, lineLight } = field;
+  const { spec, width, height, breadth, down, screen, solid, hold, thread, bloom, lineLight, tones } = field;
   const liveTime = spec.live && !options.reducedMotion ? options.time : undefined;
   const knot = knotAt(field, liveTime);
   const spread = LIGHT.spread * breadth;
-  pixels.fill(0);
+  const lx = knot && Float32Array.from({ length: width }, (_, x) => Math.exp(-(((x + 0.5 - knot.x) / spread) ** 2)));
 
   for (let y = 0; y < height; y++) {
+    const ly = knot ? Math.exp(-(((y + 0.5 - knot.y) / spread) ** 2)) : 0;
     for (let x = 0; x < width; x++) {
       const i = y * width + x;
       const k = screen[i]!;
       const h = hold[i]!;
-      const light = knot
-        ? Math.exp(-(((x + 0.5 - knot.x) / spread) ** 2 + ((y + 0.5 - knot.y) / spread) ** 2))
-        : lineLight[down ? x : y]!;
-      const seam = inks.dark ? Math.max(thread[i]!, bloom[i]!) : thread[i]!;
-      const threshold = BAYER[(y & 3) * 4 + (x & 3)]!;
-      const plumThreshold = BAYER[((y + 2) & 3) * 4 + ((x + 2) & 3)]!;
-      const density = inks.dark
-        ? k * DARK_CAP * h * (LIGHT.low + (1 - LIGHT.low) * light)
-        : k * (1 - h * (LIGHT.shade * light - LIGHT.dim * (1 - light)));
-
-      if (seam * (0.72 + 0.28 * light) > plumThreshold) writePixel(pixels, i * 4, inks.thread);
-      else if (k < 0) writePixel(pixels, i * 4, inks.solid);
-      // A 55% target can round up to 9 of 16 cells. Keep the printed tile under the cap too.
-      else if (density > threshold && (!inks.dark || threshold < 0.5)) writePixel(pixels, i * 4, inks.screen);
+      const light = lx ? lx[x]! * ly : lineLight[down ? x : y]!;
+      const offset = 4 * i;
+      tones[offset] =
+        256 *
+        clamp(
+          inks.dark
+            ? k * DARK_CAP * h * (LIGHT.low + (1 - LIGHT.low) * light)
+            : k * (1 - h * (LIGHT.shade * light - LIGHT.dim * (1 - light))),
+        );
+      tones[offset + 1] = 256 * bloom[i]! * (inks.dark ? 1 : 0.43) * (0.72 + 0.28 * light);
+      tones[offset + 2] = solid[i]!;
+      tones[offset + 3] = spec.strength ? thread[i]! : 4;
     }
   }
 
-  if (knot) drawKnot(field, inks, pixels, knot, liveTime ?? 0);
+  if (knot) drawKnot(field, inks.dark, knot, liveTime ?? 0);
+  const raster = options.raster ?? prepareDots(width, height, width, height, 1 / GRAIN);
+  if (pixels.length !== 4 * raster.width * raster.height) throw new Error("wrong weave buffer size");
+  const palette = options.palette ?? packedInks([undefined, inks.screen, inks.thread, inks.solid]);
+  const aligned = pixels.byteOffset % Uint32Array.BYTES_PER_ELEMENT === 0;
+  const out = aligned
+    ? new Uint32Array(pixels.buffer, pixels.byteOffset, pixels.length / 4)
+    : new Uint32Array(pixels.length / 4);
+  printDots(raster, tones, out, palette);
+  if (!aligned) pixels.set(new Uint8Array(out.buffer));
   return pixels;
 }
 
 function drawKnot(
-  { width, height }: Field,
-  inks: WeaveInks,
-  pixels: Uint8ClampedArray,
+  { width, height, tones }: Field,
+  dark: boolean,
   knot: NonNullable<ReturnType<typeof knotAt>>,
   time: number,
 ) {
-  const reach = Math.ceil(knot.radius * (inks.dark ? 4 : 3));
+  const reach = Math.ceil(knot.radius * (dark ? 4 : 3));
   const lobe2 = (TAU * time) / 11;
   const lobe3 = (TAU * time) / 17;
   const lobe5 = (TAU * time) / 23;
@@ -227,9 +250,9 @@ function drawKnot(
           0.05 * Math.sin(5 * angle + lobe5 + 0.4));
       const d2 = (dx * dx + dy * dy) / (radius * radius);
       const core = Math.exp(-d2 * d2);
-      const density = inks.dark ? Math.max(core, 0.36 * Math.exp(-d2 / 2.2)) : core;
-      const threshold = BAYER[((y + 2) & 3) * 4 + ((x + 2) & 3)]!;
-      if (Math.round(density * 8) / 8 > threshold) writePixel(pixels, (y * width + x) * 4, inks.thread);
+      const density = dark ? Math.max(core, 0.36 * Math.exp(-d2 / 2.2)) : core;
+      const offset = 4 * (y * width + x) + 1;
+      tones[offset] = Math.max(tones[offset]!, 256 * density);
     }
   }
 }
@@ -258,13 +281,16 @@ export function mountWeave(element: HTMLElement) {
   let lastFrame: number | undefined;
   let field: Field | undefined;
   let image: ImageData | undefined;
+  let raster: DotScreen | undefined;
+  let palette: Uint32Array;
+  let ratio: number;
   let inks: WeaveInks;
   let line: string;
   let isPhone: boolean;
 
   function draw(time?: number) {
     if (!field || !image) return;
-    paintWeave(field, inks, image.data, { time });
+    paintWeave(field, inks, image.data, { time, raster, palette });
     context!.putImageData(image, 0, 0);
   }
 
@@ -304,21 +330,30 @@ export function mountWeave(element: HTMLElement) {
       return;
     }
     const dpr = win!.devicePixelRatio;
-    const cell = Math.max(1, Math.round(GRAIN * dpr)) / dpr;
-    const width = Math.ceil(box.width / cell);
-    const height = Math.ceil(box.height / cell);
+    const { left, top, width, height, cssWidth, cssHeight } = canvasRaster(box, dpr);
+    const cols = Math.ceil(cssWidth / GRAIN);
+    const rows = Math.ceil(cssHeight / GRAIN);
     const spec = element.dataset.weave ?? "";
     inks = readScreenInks(win!.getComputedStyle(element), probe!);
-    if (!field || field.width !== width || field.height !== height || line !== spec || isPhone !== phone.matches) {
+    palette = packedInks([undefined, inks.screen, inks.thread, inks.solid]);
+    if (!field || field.width !== cols || field.height !== rows || line !== spec || isPhone !== phone.matches) {
       line = spec;
       isPhone = phone.matches;
-      field = prepareWeave(parseWeave(line), width, height, isPhone);
+      field = prepareWeave(parseWeave(line), cols, rows, isPhone);
+    }
+    if (!raster || raster.width !== width || raster.height !== height || ratio !== dpr) {
+      raster = prepareDots(cols, rows, width, height, dpr);
+      ratio = dpr;
       canvas.width = width;
       canvas.height = height;
       image = context!.createImageData(width, height);
     }
-    canvas.style.width = `${width * cell}px`;
-    canvas.style.height = `${height * cell}px`;
+    Object.assign(canvas.style, {
+      left: `${left}px`,
+      top: `${top}px`,
+      width: `${cssWidth}px`,
+      height: `${cssHeight}px`,
+    });
     draw(reduced || printing ? undefined : elapsed || undefined);
     updateAnimation();
   }

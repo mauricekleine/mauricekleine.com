@@ -582,7 +582,7 @@ export const catalog: CatalogItem[] = [
     type: "registry:item",
     title: "weave",
     description: "a screened field for a hero or a band, with four ramps and a plum thread",
-    files: [lib("screen-core"), lib("weave-core"), ui("weave")],
+    files: [lib("screen-core"), lib("dot-screen"), lib("weave-core"), ui("weave")],
     tier: "brand",
     upstream: null,
   },

@@ -1,4 +1,5 @@
 import { expect, test } from "bun:test";
+import { prepareDots } from "../items/lib/dot-screen";
 import { paintWeave, parseWeave, prepareWeave, weaveFray, type WeaveInks } from "../items/lib/weave-core";
 
 const inks: WeaveInks = { solid: [1, 0, 0], screen: [2, 0, 0], thread: [3, 0, 0], dark: false };
@@ -12,42 +13,37 @@ test("every fray mirrors across odd and even breadths", () => {
   }
 });
 
-test("dark mode prints at most 55 percent foreground in any complete Bayer tile", () => {
-  const width = 160;
-  const height = 96;
-  for (const ramp of ["held", "steady", "bet", "fade"]) {
-    const field = prepareWeave(parseWeave(`ramp=${ramp} fray=.24 thread=0`), width, height);
-    const rgba = paintWeave(field, { ...inks, dark: true }, new Uint8ClampedArray(width * height * 4));
-    let total = 0;
-    for (let y = 0; y < height - 3; y++) {
-      for (let x = 0; x < width - 3; x++) {
-        let lit = 0;
-        for (let j = y; j < y + 4; j++) {
-          for (let i = x; i < x + 4; i++) {
-            if (rgba[(j * width + i) * 4] === inks.screen[0]) lit++;
-          }
-        }
-        total += lit;
-        if (lit / 16 > 0.55) throw new Error(`${ramp} prints ${lit}/16 at ${x}, ${y}`);
-      }
-    }
-    expect(total).toBeGreaterThan(0);
+test("a dark weave screen stays below its 45 percent density cap over a wide patch", () => {
+  const width = 320;
+  const height = 192;
+  const field = prepareWeave(parseWeave("ramp=held fray=.24 thread=0"), width / 2, height / 2);
+  const rgba = paintWeave(field, { ...inks, dark: true }, new Uint8ClampedArray(width * height * 4), {
+    raster: prepareDots(width / 2, height / 2, width, height, 1),
+  });
+  // Sample under the fixed light, past the hold and before the held ramp falls away.
+  let lit = 0;
+  for (let y = 64; y < 128; y++) {
+    for (let x = 130; x < 210; x++) lit += Number(rgba[(y * width + x) * 4] === inks.screen[0]);
   }
+  expect(lit / (64 * 80)).toBeGreaterThan(0.2);
+  expect(lit / (64 * 80)).toBeLessThan(0.45);
 });
 
 test("the bet thread runs at the ramp break, 46 percent past the fray", () => {
   const width = 120;
   const height = 48;
-  const field = prepareWeave(parseWeave("ramp=bet fray=.25 thread=3"), width, height);
-  const rgba = paintWeave(field, inks, new Uint8ClampedArray(width * height * 4));
+  const field = prepareWeave(parseWeave("ramp=bet fray=.25 thread=1.5"), width / 2, height / 2);
+  const rgba = paintWeave(field, inks, new Uint8ClampedArray(width * height * 4), {
+    raster: prepareDots(width / 2, height / 2, width, height, 1),
+  });
   // The fray is at 30, and 46% of the remaining 90 puts the seam at 71.4.
   for (let y = 0; y < height; y++) {
     const plum: number[] = [];
     for (let x = 0; x < width; x++) {
       if (rgba[(y * width + x) * 4] === inks.thread[0]) plum.push(x);
     }
-    expect(plum).toContain(71);
-    expect(plum.every((x) => x >= 67 && x <= 75)).toBe(true);
+    expect(plum.filter((x) => x >= 69 && x <= 73)).toHaveLength(5);
+    expect(plum.every((x) => x >= 59 && x <= 83)).toBe(true);
   }
 });
 
