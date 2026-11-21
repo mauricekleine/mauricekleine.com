@@ -11,16 +11,28 @@ const sections = [
 
 export function HomePage() {
   return (
-    <Shell place="home" crumb="maurice kleine" title="home" sections={sections}>
-      <Opener title="maurice kleine" portrait>
-        <p className="mk-lede type-lede">
-          i build small internet things
-          <br />
-          and sometimes they work
-        </p>
-        <p className="mk-where type-meta">amsterdam, nl</p>
-      </Opener>
-
+    <Shell
+      place="home"
+      crumb="maurice kleine"
+      title="home"
+      sections={sections}
+      opener={
+        <Opener home portrait>
+          <h1>maurice kleine</h1>
+          <p className="mk-lede type-lede">
+            i build small internet things
+            <br />
+            and sometimes they work
+          </p>
+          <div className="mk-opener-meta type-meta">
+            <p>amsterdam, nl</p>
+            <a href="#currently">
+              currently <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+        </Opener>
+      }
+    >
       <Section id="currently" title="currently" className="prose">
         <p>
           ai engineering lead at <a href="https://waimakers.com">waimakers</a>, helping organizations put ai to work.

@@ -76,6 +76,23 @@
     }
   }
 
+  /* Let the masthead stick across the page while the opener and masthead share the island's inks. */
+  .mk-island {
+    --island-stock: var(--background);
+    /* The opener's words sit on the page column's edges, so the title, the lede and the body share one left edge. */
+    --opener-start: calc(264px + 56px);
+    --opener-end: calc(368px + 56px);
+    display: contents;
+    color: var(--foreground);
+    color-scheme: dark;
+  }
+  html.dark .mk-island {
+    --island-stock: var(--ground);
+  }
+  .mk-island-solo {
+    --opener-end: 56px;
+  }
+
   /* the masthead: one row of cells divided by rules, held at the top while the page scrolls */
   .mk-mast {
     position: sticky;
@@ -84,7 +101,7 @@
     display: flex;
     height: 77px;
     border-bottom: 1px solid var(--rule);
-    background: var(--background);
+    background: var(--island-stock);
   }
   .mk-brand {
     flex: none;
@@ -161,6 +178,9 @@
     flex-direction: column;
     justify-content: space-between;
     height: calc(100dvh - 77px);
+  }
+  .mk-nav-compact {
+    display: none;
   }
   .mk-nav-list {
     padding: 40px 16px 20px;
@@ -289,74 +309,28 @@
     font-weight: 500;
   }
 
-  /* the band: the sky's screened field, inside its crop marks */
-  .mk-opener,
-  .mk-pagehead {
-    padding-top: 40px;
+  /* The title sits on solid stock. The sky fills the band at the island's lower edge. */
+  .mk-opener {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    background: var(--island-stock);
   }
-  .mk-band {
-    position: relative;
+  .mk-opener-home {
+    min-height: calc(100svh - 77px);
   }
-  .mk-field {
-    position: relative;
-    height: 196px;
+  .mk-opener-copy {
+    align-self: end;
+    padding: 40px var(--opener-end) 32px var(--opener-start);
   }
-  .mk-field-slim {
-    height: 120px;
+  .mk-opener-home .mk-opener-copy {
+    padding-block: 48px 36px;
   }
-  #sky {
-    display: block;
-    width: 100%;
-    height: 100%;
-    background: url("/sky/plate-light.png") 0 0 no-repeat;
-    image-rendering: pixelated;
+  .mk-opener h1 {
+    color: var(--first);
+    overflow-wrap: anywhere;
   }
-  html.dark #sky {
-    background-image: url("/sky/plate-dark.png");
-  }
-  #sky[data-live] {
-    background: none;
-  }
-  .mk-crop {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-  .mk-crop i {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border: 0 solid var(--foreground);
-  }
-  .mk-crop i:nth-child(1) {
-    top: -16px;
-    left: -16px;
-    border-width: 1px 0 0 1px;
-  }
-  .mk-crop i:nth-child(2) {
-    top: -16px;
-    right: -16px;
-    border-width: 1px 1px 0 0;
-  }
-  .mk-crop i:nth-child(3) {
-    bottom: -16px;
-    left: -16px;
-    border-width: 0 0 1px 1px;
-  }
-  .mk-crop i:nth-child(4) {
-    right: -16px;
-    bottom: -16px;
-    border-width: 0 1px 1px 0;
-  }
-  .mk-knock {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    max-width: 100%;
-    padding: 14px 30px 0 0;
-    background: var(--background);
-  }
-  .mk-knock h1 {
+  .mk-island-title,
+  .mk-opener-home h1 {
     color: var(--first);
     font-family: var(--font-display);
     font-size: var(--text-hero);
@@ -364,36 +338,71 @@
     line-height: var(--text-hero--line-height);
     letter-spacing: var(--text-hero--letter-spacing);
   }
-  .mk-knock-stacked h1 {
+  .mk-opener-home h1 {
     width: min-content;
+    max-width: 100%;
+    overflow-wrap: normal;
+    font-size: clamp(52px, 6.2vw, 120px);
+    line-height: 1.05;
+    letter-spacing: var(--text-display--letter-spacing);
   }
-  .mk-lede {
+  .mk-lede,
+  .essay-title {
     max-width: 696px;
-    margin-top: 44px;
     text-wrap: pretty;
   }
-  .mk-where {
-    margin-top: 16px;
-    color: var(--muted-foreground);
-  }
-  .err-code {
-    margin-top: 40px;
-    color: var(--muted-foreground);
-  }
-  .err-code + .mk-lede {
+  .mk-lede {
     margin-top: 16px;
   }
-  .mk-pagehead > :not(.mk-field) {
-    margin-top: 40px;
-  }
-  .mk-pagehead > .mk-lede {
+  .mk-opener-home .mk-lede {
     margin-top: 24px;
   }
-  .essay-title {
-    text-wrap: balance;
+  .mk-opener-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 16px;
+    margin-top: 8px;
+    color: var(--muted-foreground);
   }
-  .mk-pagehead > .essay-meta {
-    margin-top: 16px;
+  .mk-opener-meta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    color: var(--first);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .err-code,
+  .mk-opener .essay-meta {
+    margin-top: 12px;
+  }
+  .err-code {
+    color: var(--muted-foreground);
+  }
+  .mk-opener .essay-meta a {
+    color: var(--foreground);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .mk-field {
+    position: relative;
+    height: 120px;
+  }
+  .mk-opener-home .mk-field {
+    height: clamp(220px, 36svh, 440px);
+  }
+  #sky {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: url("/sky/plate-dark.png") left top repeat;
+    image-rendering: pixelated;
+  }
+  #sky[data-live] {
+    background: none;
   }
   .essay-meta {
     color: var(--muted-foreground);
@@ -402,27 +411,28 @@
     line-height: 20px;
   }
 
-  /* the portrait: two inks, whole pixels, at the band's right end. A moon crosses it in steps when clicked */
+  /* The slim band crops the portrait at whole pixels. The home band holds the full square. */
   .portrait-wrap {
     position: absolute;
     top: 0;
-    right: 0;
+    right: var(--opener-end);
     width: 196px;
-    height: 196px;
+    height: 100%;
     overflow: hidden;
-    background: var(--background);
+    background: var(--island-stock);
     cursor: pointer;
+  }
+  .mk-opener-home .portrait-wrap {
+    top: 50%;
+    height: 196px;
+    translate: 0 -50%;
   }
   .portrait,
   .portrait img {
     display: block;
     width: 100%;
-    height: 100%;
+    height: auto;
     image-rendering: pixelated;
-  }
-  html.dark .portrait-light,
-  html:not(.dark) .portrait-dark {
-    display: none;
   }
   .moon {
     position: absolute;
@@ -452,6 +462,9 @@
     position: relative;
     margin-top: 64px;
     padding-top: 44px;
+  }
+  .mk-page > .mk-section:first-child {
+    margin-top: 0;
   }
   .mk-section::before {
     content: "";
@@ -853,6 +866,13 @@
     .mk-main {
       --gutter: 40px;
     }
+    .mk-island {
+      --opener-start: calc(264px + 40px);
+      --opener-end: calc(312px + 40px);
+    }
+    .mk-island-solo {
+      --opener-end: 40px;
+    }
     .mk-meta {
       grid-template-columns: 64px 1fr;
       width: 312px;
@@ -872,12 +892,31 @@
     .mk-foot-status {
       display: block;
     }
+    .mk-island {
+      --opener-end: 40px;
+    }
   }
 
   /* one column: the nav becomes a row under the masthead, which lets go of the top */
   @media (max-width: 900px) {
     html {
       scroll-padding-top: 0;
+    }
+    .mk-island,
+    .mk-island-solo {
+      --opener-start: 32px;
+      --opener-end: 16px;
+    }
+    .mk-island {
+      display: flex;
+      flex-direction: column;
+    }
+    .mk-island-home {
+      min-height: 100svh;
+    }
+    .mk-opener-home {
+      flex: 1;
+      min-height: 0;
     }
     .mk-mast {
       position: static;
@@ -890,7 +929,7 @@
       border-right: 0;
     }
     .mk-crumb,
-    .mk-nav-foot {
+    .mk-body > .mk-nav {
       display: none;
     }
     .mk-mast-mode {
@@ -903,10 +942,12 @@
       min-height: 0;
       background: none;
     }
-    .mk-nav {
+    .mk-nav-compact {
+      display: block;
       position: static;
       height: auto;
       border-bottom: 1px solid var(--rule);
+      background: var(--island-stock);
     }
     .mk-nav-list {
       display: flex;
@@ -917,18 +958,17 @@
       --gutter: 32px;
       padding: 0 16px 56px 32px;
     }
-    /* the crop ticks sit 16 px outside the plate, so the plate leaves them that much window on the right */
-    .mk-field {
-      margin-right: 16px;
-    }
   }
 
-  /* a phone: the wordmark comes out of the band and sits under it */
   @media (max-width: 600px) {
     .mk-brand {
-      font-size: 18px;
+      font-size: clamp(15px, 4.6vw, 18px);
+    }
+    .mk-nav-compact a {
+      height: 44px;
     }
     .mk-mode-compact button {
+      min-width: 44px;
       padding: 0 8px;
     }
     /* hand-built links hold the phone target an item does: a link keeps its box and takes the hit area, and a cell
@@ -948,27 +988,31 @@
     .icons a {
       height: 44px;
     }
-    .mk-field {
-      height: 136px;
+    .mk-opener-copy {
+      padding-block: 32px 24px;
     }
-    .mk-field-slim {
+    .mk-opener-home .mk-opener-copy {
+      align-self: center;
+      padding-block: 32px 24px;
+    }
+    .mk-island-title {
+      font-size: min(44px, 12vw);
+      line-height: 1.08;
+    }
+    .mk-opener-home h1 {
+      font-size: min(52px, 14vw);
+    }
+    .mk-field {
       height: 96px;
+    }
+    .mk-opener-home .mk-field {
+      height: clamp(160px, 24svh, 240px);
     }
     .portrait-wrap {
       width: 136px;
+    }
+    .mk-opener-home .portrait-wrap {
       height: 136px;
-    }
-    .mk-knock {
-      position: static;
-      padding: 40px 0 0;
-    }
-    .mk-knock h1,
-    .mk-pagehead > h1.type-hero {
-      font-size: min(52px, 13vw);
-      line-height: 1.08;
-    }
-    .mk-lede {
-      margin-top: 24px;
     }
     .waypoint {
       grid-template-columns: minmax(0, 1fr);
@@ -987,10 +1031,23 @@
     .mk-mast,
     .mk-nav,
     .mk-aside,
-    .mk-field,
+    .mk-opener-meta a,
     .subscribe,
     .mk-foot {
       display: none;
+    }
+    .mk-island {
+      display: contents;
+    }
+    .mk-opener-home {
+      min-height: 0;
+    }
+    .mk-opener {
+      break-inside: avoid;
+      print-color-adjust: exact;
+    }
+    .mk-opener-home .mk-field {
+      height: 196px;
     }
     .mk-body {
       display: block;

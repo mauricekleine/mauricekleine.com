@@ -23,76 +23,39 @@ export function EssayList({ variant }: { variant: "home" | "index" }) {
   );
 }
 
-// Corner crop marks: 10 px ticks set 16 px outside a screened field, as a printer marks a plate.
-function CropMarks() {
-  return (
-    <span className="mk-crop" aria-hidden="true">
-      <i />
-      <i />
-      <i />
-      <i />
-    </span>
-  );
-}
-
-// Maurice as a two-ink screen: the master ink's own 4 x 4 bayer, one file per mode so the ink always falls on the
-// light of the face. Click it: there's a moon.
+// The portrait shares the sky's dark scope. The white ink falls on the light of the face.
 function Portrait() {
   return (
     <span className="portrait-wrap">
-      {(["light", "dark"] as const).map((mode) => (
-        <picture key={mode} className={`portrait portrait-${mode}`}>
-          <source media="(max-width: 600px)" srcSet={`/portrait/maurice-136-${mode}.png`} />
-          <img src={`/portrait/maurice-196-${mode}.png`} alt="Portrait of Maurice Kleine" width="196" height="196" />
-        </picture>
-      ))}
+      <picture className="portrait">
+        <source media="(max-width: 600px)" srcSet="/portrait/maurice-136-dark.png" />
+        <img src="/portrait/maurice-196-dark.png" alt="Portrait of Maurice Kleine" width="196" height="196" />
+      </picture>
       <span className="moon" aria-hidden="true"></span>
     </span>
   );
 }
 
-// The screened field inside its crop marks: the live sky (sky.js), and a printed plate of it for anyone without
-// scripts. `slim` is the inner pages' band.
-function Band({ slim = false, children }: { slim?: boolean; children?: ReactNode }) {
-  return (
-    <div className={slim ? "mk-field mk-field-slim" : "mk-field"}>
-      <canvas id="sky" aria-hidden="true" suppressHydrationWarning />
-      <CropMarks />
-      {children}
-    </div>
-  );
-}
-
-// The opener: the band with the title knocked out of its lower left, then the lede. The page's "top" in the aside.
+// The title sits on solid stock. The live sky and its fallback plate share the full-bleed band below.
 export function Opener({
-  title,
+  home = false,
   portrait = false,
   children,
 }: {
-  title: string;
+  home?: boolean;
   portrait?: boolean;
-  children?: ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <header id="top" className="mk-opener">
-      <div className="mk-band">
-        <Band>{portrait && <Portrait />}</Band>
-        <div className={portrait ? "mk-knock mk-knock-stacked" : "mk-knock"}>
-          <h1>{title}</h1>
-        </div>
+    <div className={home ? "mk-opener mk-opener-home" : "mk-opener"}>
+      <div id="top" className="mk-opener-copy">
+        {children}
       </div>
-      {children}
-    </header>
-  );
-}
-
-// An inner page's head: the slim band, the title under it clear of the marks, then whatever the page says next.
-export function PageHead({ children }: { children: ReactNode }) {
-  return (
-    <header id="top" className="mk-pagehead">
-      <Band slim />
-      {children}
-    </header>
+      <div className="mk-field">
+        <canvas id="sky" aria-hidden="true" suppressHydrationWarning />
+        {portrait && <Portrait />}
+      </div>
+    </div>
   );
 }
 

@@ -1,4 +1,4 @@
-import { EssayList, Footer, PageHead, Section, Subscribe } from "../components";
+import { EssayList, Footer, Opener, Section, Subscribe } from "../components";
 import { Shell } from "../shell";
 
 const sections = [
@@ -8,16 +8,22 @@ const sections = [
 
 export function EssaysPage() {
   return (
-    <Shell place="essays" crumb="maurice kleine" title="essays" sections={sections}>
-      <PageHead>
-        <h1 className="type-hero text-first">essays</h1>
-        <p className="mk-lede type-lede">
-          longer thoughts, first posted on x and linkedin.
-          <br />
-          mirrored here so they have a home
-        </p>
-      </PageHead>
-
+    <Shell
+      place="essays"
+      crumb="maurice kleine"
+      title="essays"
+      sections={sections}
+      opener={
+        <Opener>
+          <h1 className="mk-island-title">essays</h1>
+          <p className="mk-lede type-lede">
+            longer thoughts, first posted on x and linkedin.
+            <br />
+            mirrored here so they have a home
+          </p>
+        </Opener>
+      }
+    >
       <Section id="all-essays" title="all essays" hideTitle>
         <EssayList variant="index" />
       </Section>

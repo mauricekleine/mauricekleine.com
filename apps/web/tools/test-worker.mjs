@@ -410,7 +410,8 @@ test("GET and POST /subscribe/confirm reject a tampered token", async () => {
     const body = await res.text();
     assert.match(body, /essays/);
     assert.match(body, /mk-theme/, "the no-js page follows the fleet's mode");
-    assert.match(body, /src="\/sky\.js"/);
+    assert.match(body, /src="\/sky\.js\?v=[^"]+"/);
+    assert.match(body, /class="dark mk-island/, "the no-js page opens on the island, like every page");
     assert.equal(stub.calls.length, 0);
   } finally {
     stub.restore();

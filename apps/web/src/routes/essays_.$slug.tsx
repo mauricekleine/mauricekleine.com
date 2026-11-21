@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { essayNeighbors, essaysBySlug } from "../essay-content";
 import { EssayArticle, essayHeadings } from "../essay-markdown";
-import { EssayNav, Footer, PageHead, Subscribe } from "../components";
+import { EssayNav, Footer, Opener, Subscribe } from "../components";
 import { essayHead } from "../seo";
 import { Shell } from "../shell";
 
@@ -19,20 +19,27 @@ function EssayPage() {
   const essay = Route.useLoaderData();
   const { older, newer } = essayNeighbors(essay);
   return (
-    <Shell place="essays" crumb="essays" title={essay.title} sections={essayHeadings(essay)}>
-      <PageHead>
-        <h1 className="essay-title type-page">{essay.title}</h1>
-        <p className="essay-meta">
-          by <a href="/about">maurice kleine</a> · <time dateTime={essay.date}>{essay.dateDisplay}</time> · first posted
-          on <a href={essay.x}>x</a>
-          {essay.linkedin && (
-            <>
-              {" "}
-              and <a href={essay.linkedin}>linkedin</a>
-            </>
-          )}
-        </p>
-      </PageHead>
+    <Shell
+      place="essays"
+      crumb="essays"
+      title={essay.title}
+      sections={essayHeadings(essay)}
+      opener={
+        <Opener>
+          <h1 className="essay-title type-page">{essay.title}</h1>
+          <p className="essay-meta">
+            by <a href="/about">maurice kleine</a> · <time dateTime={essay.date}>{essay.dateDisplay}</time> · first
+            posted on <a href={essay.x}>x</a>
+            {essay.linkedin && (
+              <>
+                {" "}
+                and <a href={essay.linkedin}>linkedin</a>
+              </>
+            )}
+          </p>
+        </Opener>
+      }
+    >
       <EssayArticle essay={essay} />
       <Subscribe />
       <Footer>

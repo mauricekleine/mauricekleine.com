@@ -12,11 +12,18 @@ const sections = [
 
 export function AboutPage() {
   return (
-    <Shell place="about" crumb="maurice kleine" title="about" sections={sections}>
-      <Opener title="maurice kleine" portrait>
-        <p className="mk-lede type-lede">build it till you make it</p>
-      </Opener>
-
+    <Shell
+      place="about"
+      crumb="maurice kleine"
+      title="about"
+      sections={sections}
+      opener={
+        <Opener portrait>
+          <h1 className="mk-island-title">maurice kleine</h1>
+          <p className="mk-lede type-lede">build it till you make it</p>
+        </Opener>
+      }
+    >
       <Section id="about" title="about" className="prose">
         <p>
           i'm based in amsterdam. started studying psychology, switched to tech when i wanted something more concrete.
