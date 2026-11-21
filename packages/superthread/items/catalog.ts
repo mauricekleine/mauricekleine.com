@@ -1,7 +1,6 @@
 // The @mk registry's item list. build-registry.ts reads it, derives every npm and @mk dependency
 // from the files' imports (scripts/imports.ts), stamps the files and runs shadcn build.
-// Only init and tokens list dependencies by hand: init has no files, and tokens' css imports
-// packages that no TS file imports. Sources mirror their install targets under items/.
+// Items list dependencies by hand when imports cannot express them. Sources mirror their install targets under items/.
 
 export type Tier = "style" | "brand" | "pass" | "lib" | "block";
 
@@ -72,6 +71,19 @@ const lib = (name: string): CatalogFile => ({
   target: `@components/superthread/lib/${name}.ts`,
 });
 
+const file = (path: string): CatalogFile => ({
+  path: `items/${path}`,
+  type: "registry:file",
+  target: `@components/superthread/${path}`,
+});
+
+export const docSectionGroups = {
+  openers: ["hero", "slim-head", "band"],
+  lines: ["meta-line", "contents", "lede", "section-head", "steps", "rows", "timeline", "sources"],
+  blocks: ["claim", "stat-row", "table", "figure", "before-and-after", "notice", "decisions", "transcript"],
+  endings: ["closing-line", "footer", "draft-strip", "chip", "mode-toggle"],
+} as const;
+
 export const catalog: CatalogItem[] = [
   {
     name: "init",
@@ -128,6 +140,23 @@ export const catalog: CatalogItem[] = [
     ],
     tier: "lib",
     upstream: null,
+  },
+  {
+    name: "doc",
+    type: "registry:item",
+    title: "doc",
+    description: "plain html document sections, their stylesheet, a mode control and the weave runtime",
+    files: [
+      file("styles/doc.css"),
+      file("doc/mode.js"),
+      file("doc/weave.js"),
+      ...Object.values(docSectionGroups)
+        .flat()
+        .map((name) => file(`doc/sections/${name}.html`)),
+    ],
+    tier: "lib",
+    upstream: null,
+    registryDependencies: ["@mk/tokens-plain"],
   },
   {
     name: "utils",

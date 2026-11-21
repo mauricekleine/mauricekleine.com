@@ -119,6 +119,7 @@ export const nav: readonly NavEntry[] = [
   composition("notice"),
   composition("states"),
   composition("search-palette"),
+  composition("doc", "documents"),
   mock("board"),
   mock("orbit"),
   mock("reading"),

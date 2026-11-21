@@ -2,7 +2,7 @@
 // served words hold the rules (no em dash, no private host, no prose lifted from the surface contract), every
 // raster says where it came from, the registry is complete and serves every published snapshot byte for byte, init
 // points at the base it was built for, the deploy stamp is HEAD, the mock pages compose registry components only, and
-// the pages rendered the registry's payloads as served.
+// the pages rendered the registry's payloads as served, including every document partial.
 // Prints each failure and exits 1 on any. CHECK_BUILD_OUT and CHECK_BUILD_VERSIONS point it at another client output
 // and another versions/ tree, for a negative control on a copy.
 import { execFileSync } from "node:child_process";
@@ -45,6 +45,7 @@ const PUBLISHED_VERSIONS = [
   "2.10.2",
   "2.10.3",
   "2.11.0",
+  "2.12.0",
 ];
 
 // the client output: cf's build output, or Vite's own when the Cloudflare plugin writes there
@@ -306,6 +307,22 @@ done("mock imports", `${mocks.length} pages`);
   const problems = drift(files);
   for (const problem of problems) fail("payload", problem);
   if (problems.length === 0) done("payload", `${files.size} files`);
+
+  // Check the static page against the served bytes so new or edited partials reach both the preview and its code.
+  const docPage = join(out, htmlFor("/compositions/doc"));
+  if (existsSync(docPage)) {
+    const html = readFileSync(docPage, "utf8");
+    const frames = [...html.matchAll(/ srcDoc="([^"]*)"/g)].map((match) => match[1]);
+    const sections = [...files].filter(([path]) => path.startsWith("doc/sections/"));
+    const entities = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#x27;" };
+    for (const [path, source] of sections) {
+      const escaped = source.replace(/[&<>"']/g, (char) => entities[char]);
+      if (!frames.some((frame) => frame.includes(escaped)))
+        fail("doc preview", `${path}: missing from the live preview`);
+      if (!html.includes(`<code>${escaped}</code>`)) fail("doc preview", `${path}: missing from the displayed html`);
+    }
+    done("doc preview", `${sections.length} partials`);
+  }
 }
 
 if (failures.length > 0) {

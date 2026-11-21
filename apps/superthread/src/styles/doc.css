@@ -1,0 +1,34 @@
+.st-doc-specimen {
+  min-width: 0;
+  margin-block: 32px;
+}
+
+.st-doc-panes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+  align-items: start;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.st-doc-preview {
+  color-scheme: inherit;
+  display: block;
+  width: 100%;
+  height: 64px;
+  border: 1px solid var(--border);
+  box-sizing: content-box;
+  max-width: calc(100% - 2px);
+}
+
+.st-doc-html {
+  max-height: 30rem;
+  overflow: auto;
+  border: 1px solid var(--code-border);
+  background: var(--code);
+  color: var(--code-foreground);
+  padding: 16px;
+  font: var(--text-instrument)/var(--text-instrument--line-height) var(--font-mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

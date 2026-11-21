@@ -3,7 +3,7 @@
 The design system for Maurice's fleet, as a shadcn registry. This package holds two versions side by side:
 
 - **v1, frozen.** The theme at `dist/superthread.css`, for installs that still carry it. Nothing regenerates it.
-- **v2.** Tokens generated from the master world, and the versioned `@mk` registry of Base UI items built on them.
+- **v2.** Tokens generated from the master world, and the versioned `@mk` registry of Base UI and plain HTML items built on them.
 
 ## Install v2
 
@@ -37,6 +37,17 @@ The last line is relative to the Start layout, where `src/styles.css` sits besid
 
 Only the Start layout is tested. For a surface without Tailwind, `@mk/tokens-plain` installs `styles/superthread-plain.css` (the same variables, font faces and texture rules as plain CSS) and `lib/tokens.ts`, the values as a typed module.
 
+### plain documents
+
+Fetch `/r/v/<version>/doc.json` and its `tokens-plain.json` dependency from the same version. Read each file's bytes from `files[].content` by its `target`. A plain page inlines these in order:
+
+1. In `<head>`, run `doc/mode.js` in a classic `<script>` before the page paints. It starts from `prefers-color-scheme` and sets `.dark` on `<html>`.
+2. Inline `styles/superthread-plain.css` from `tokens-plain`, then `styles/doc.css`. Put any template CSS after both.
+3. In `<body>`, assemble the HTML from `doc/sections/`. The hero includes the mode button. Add `mode-toggle.html` where another opener needs one.
+4. At the end of `<body>`, inline `doc/weave.js` in a classic `<script>`. It mounts every `[data-weave]` host using the mode of its own scope.
+
+The scripts run in an opaque-origin sandbox with inline scripts enabled. The mode control keeps its choice on the page. See [the document specimens](https://superthread.mauricekleine.com/compositions/doc) for the partials and [the document spec](DESIGN.md#documents) for when to use them.
+
 ### modes, fonts and marks
 
 - `:root` and `.light` are light; `.dark` on an ancestor is dark. A `.light` inside a dark page renders light again, so specimens can sit side by side.
@@ -66,7 +77,7 @@ www and the share Worker print on v2 from this package. Apps in this repo can im
 | tier  | items                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | style | `init`, `tokens`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| lib   | `tokens-plain`, `utils`, `fleet`, `theme`, `time-words`, `use-minute`, `hotkey`                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| lib   | `tokens-plain`, `doc`, `utils`, `fleet`, `theme`, `time-words`, `use-minute`, `hotkey`                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | brand | `glyphs`; controls `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`; fields `input`, `input-group`, `textarea`, `field`, `select`, `native-select`; layers `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`; structure `paper`, `fit-title`, `inline-answers`, `onward`, `source-line`, `source-mark`, `weave`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
 | pass  | `card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile`: base-nova's items on the superthread tokens                                                                                                                                                                                                                                                                                                                                                                                                   |
 | block | `app-shell`, `page-header`, `section-header`, `collection-toolbar`, `list-rows`, `jump-line`, `item-cards`, `data-table`, `states`, `facts`, `form-section`, `quick-add`, `letter`, `send-bar`, `job-sheet`, `day-line`, `month-grid`, `reader`, `notice`, `search-palette`: the compositions the fleet's apps repeat, built from the items above. Each installs at `components/superthread/blocks/<name>.tsx`, and its meta's `serves` names the apps it serves                                                             |
@@ -81,17 +92,9 @@ Brand items keep shadcn's Base UI API (exports, props, `data-slot`, variants) an
 
 ### weave
 
-Install `bunx --bun shadcn@latest add @mk/weave` beside the v2 tokens. The React `Weave` takes a `spec` line and a height set in CSS. On a plain page, install `@mk/tokens-plain` and link its stylesheet. Build the installed `lib/weave-core.ts` to a browser ES module with `bun build path/to/lib/weave-core.ts --target browser --outfile weave.js`. Use it with a sized host:
+Install `bunx --bun shadcn@latest add @mk/weave` beside the v2 tokens. The React `Weave` takes a `spec` line and a height set in CSS. In a [plain document](#plain-documents), the script from `@mk/doc` mounts the same renderer on each sized `[data-weave]` host.
 
-```html
-<div style="height: 160px" data-weave="run=down fray=arch ramp=fade thread=2.4 knot=.36"></div>
-<script type="module">
-  import { mountWeave } from "./weave.js";
-  mountWeave(document.querySelector("[data-weave]"));
-</script>
-```
-
-`mountWeave` returns a cleanup function. For still plates or video, use `prepareWeave(parseWeave(spec), width, height)` with dimensions in cells, and `paintWeave(field, inks, rgba, { time })` with seconds for live video. Supply the solid, screen and thread as RGB triples and set `dark` to match the token mode. Omit time for a still with transparent stock.
+For still plates or video, use `prepareWeave(parseWeave(spec), width, height)` with dimensions in cells, and `paintWeave(field, inks, rgba, { time })` with seconds for live video. Supply the solid, screen and thread as RGB triples and set `dark` to match the token mode. Omit time for a still with transparent stock.
 
 ## The site
 
@@ -128,7 +131,7 @@ fleet apps pin `@mk` to `https://superthread.mauricekleine.com/r/v/<version>/{na
 | `items/`                                                                                              | item sources, at the paths they install to. `catalog.ts` lists the items. `lib/tokens.ts`, `lib/fleet.ts` and `ui/glyphs.tsx` are generated |
 | `upstream/`                                                                                           | base-nova as fetched, with its manifest; the recorded CLI mirror (`cli/`); the pinned Start template; shadcn's licence                      |
 | `versions/<version>/r/`                                                                               | committed snapshots                                                                                                                         |
-| `test/clean-room/`                                                                                    | the clean room, its fixture app and the page that renders every item                                                                        |
+| `test/clean-room/`                                                                                    | the clean room, its fixture app and the pages that render the app items                                                                     |
 
 ## Scripts
 
@@ -137,7 +140,8 @@ Run them from the repo root as `bun run --cwd packages/superthread <script>`.
 | script       | what it does                                                                                                                                                   |
 | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `build`      | generates `dist/v2/`, `items/lib/tokens.ts`, `items/lib/fleet.ts` and `items/ui/glyphs.tsx`                                                                    |
-| `check`      | fails when a generated file or `texture/tiles.json` is stale                                                                                                   |
+| `doc-weave`  | bundles the shared weave renderer into `items/doc/weave.js` for plain HTML                                                                                     |
+| `check`      | fails when a generated file, including the document weave script, or `texture/tiles.json` is stale                                                             |
 | `texture`    | rebuilds `texture/tiles.json`                                                                                                                                  |
 | `registry`   | builds the latest registry into `out/r/`. `--out <dir>` moves it; `--base-url <url>` (or `SUPERTHREAD_BASE_URL`) sets the `@mk` URL init writes                |
 | `snapshot`   | writes `versions/<version>/r/` at the production base                                                                                                          |
@@ -177,8 +181,8 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 ## Versions and stamps
 
-- **Version.** `package.json` `version` is the one source for every item, `2.11.0` now. A fix to a served item ships as the next patch, including a fix that touches only an item's look or a token, such as a role a new ship needs. A new item or variant ships as the next minor, and so does a change to how the fleet prints, in an item's look or in a token, because every ship has to look at it. A changed API is the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
-- **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. In CSS, `/* @mk/<item> <version> */` is line 1.
+- **Version.** `package.json` `version` is the one source for every item, `2.12.0` now. A fix to a served item ships as the next patch, including a fix that touches only an item's look or a token, such as a role a new ship needs. A new item or variant ships as the next minor, and so does a change to how the fleet prints, in an item's look or in a token, because every ship has to look at it. A changed API is the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
+- **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. Plain JS uses the last line. CSS and HTML use line 1, with `/* @mk/<item> <version> */` and `<!-- @mk/<item> <version> -->` respectively.
 - **Meta.** Each built item JSON carries `meta: { version, sha256, tier, upstream }`: the hash of its targets and contents, its tier, and the base-nova item and CLI it was seeded from. A block's meta adds `serves`, the apps it serves. Meta stays in the registry and never reaches an installed file.
 - **Paths.** Latest: `/r/<name>.json` and `/r/registry.json`. Pinned: `/r/v/<version>/<name>.json` and `/r/v/<version>/registry.json`. Index: `/r/versions.json`, `{ latest, versions }`.
 - **Snapshots.** `versions/<version>/r/` holds that version's item JSONs and `registry.json`, with a `SHA256SUMS` beside them. A snapshot's `init.json` maps `@mk` to its own version. Once a snapshot is on main it never changes: CI fails a pull request that modifies or deletes one, and `registry.test.ts` fails when the current version's snapshot differs from a fresh build.

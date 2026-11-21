@@ -67,6 +67,7 @@ import { Route as CompositionsAppShellRouteImport } from './routes/compositions/
 import { Route as CompositionsCollectionToolbarRouteImport } from './routes/compositions/collection-toolbar'
 import { Route as CompositionsDataTableRouteImport } from './routes/compositions/data-table'
 import { Route as CompositionsDayLineRouteImport } from './routes/compositions/day-line'
+import { Route as CompositionsDocRouteImport } from './routes/compositions/doc'
 import { Route as CompositionsFactsRouteImport } from './routes/compositions/facts'
 import { Route as CompositionsFormSectionRouteImport } from './routes/compositions/form-section'
 import { Route as CompositionsItemCardsRouteImport } from './routes/compositions/item-cards'
@@ -384,6 +385,13 @@ const CompositionsDayLineRoute = CompositionsDayLineRouteImport.update({
   path: '/compositions/day-line',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompositionsDocRoute = CompositionsDocRouteImport.update({
+  id: '/compositions/doc',
+  path: '/compositions/doc',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() =>
+  import('./routes/compositions/doc.lazy').then((d) => d.Route),
+)
 const CompositionsFactsRoute = CompositionsFactsRouteImport.update({
   id: '/compositions/facts',
   path: '/compositions/facts',
@@ -571,6 +579,7 @@ export interface FileRoutesByFullPath {
   '/compositions/collection-toolbar': typeof CompositionsCollectionToolbarRoute
   '/compositions/data-table': typeof CompositionsDataTableRoute
   '/compositions/day-line': typeof CompositionsDayLineRoute
+  '/compositions/doc': typeof CompositionsDocRoute
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
@@ -656,6 +665,7 @@ export interface FileRoutesByTo {
   '/compositions/collection-toolbar': typeof CompositionsCollectionToolbarRoute
   '/compositions/data-table': typeof CompositionsDataTableRoute
   '/compositions/day-line': typeof CompositionsDayLineRoute
+  '/compositions/doc': typeof CompositionsDocRoute
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
@@ -742,6 +752,7 @@ export interface FileRoutesById {
   '/compositions/collection-toolbar': typeof CompositionsCollectionToolbarRoute
   '/compositions/data-table': typeof CompositionsDataTableRoute
   '/compositions/day-line': typeof CompositionsDayLineRoute
+  '/compositions/doc': typeof CompositionsDocRoute
   '/compositions/facts': typeof CompositionsFactsRoute
   '/compositions/form-section': typeof CompositionsFormSectionRoute
   '/compositions/item-cards': typeof CompositionsItemCardsRoute
@@ -829,6 +840,7 @@ export interface FileRouteTypes {
     | '/compositions/collection-toolbar'
     | '/compositions/data-table'
     | '/compositions/day-line'
+    | '/compositions/doc'
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
@@ -914,6 +926,7 @@ export interface FileRouteTypes {
     | '/compositions/collection-toolbar'
     | '/compositions/data-table'
     | '/compositions/day-line'
+    | '/compositions/doc'
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
@@ -999,6 +1012,7 @@ export interface FileRouteTypes {
     | '/compositions/collection-toolbar'
     | '/compositions/data-table'
     | '/compositions/day-line'
+    | '/compositions/doc'
     | '/compositions/facts'
     | '/compositions/form-section'
     | '/compositions/item-cards'
@@ -1085,6 +1099,7 @@ export interface RootRouteChildren {
   CompositionsCollectionToolbarRoute: typeof CompositionsCollectionToolbarRoute
   CompositionsDataTableRoute: typeof CompositionsDataTableRoute
   CompositionsDayLineRoute: typeof CompositionsDayLineRoute
+  CompositionsDocRoute: typeof CompositionsDocRoute
   CompositionsFactsRoute: typeof CompositionsFactsRoute
   CompositionsFormSectionRoute: typeof CompositionsFormSectionRoute
   CompositionsItemCardsRoute: typeof CompositionsItemCardsRoute
@@ -1520,6 +1535,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompositionsDayLineRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compositions/doc': {
+      id: '/compositions/doc'
+      path: '/compositions/doc'
+      fullPath: '/compositions/doc'
+      preLoaderRoute: typeof CompositionsDocRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compositions/facts': {
       id: '/compositions/facts'
       path: '/compositions/facts'
@@ -1757,6 +1779,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompositionsCollectionToolbarRoute: CompositionsCollectionToolbarRoute,
   CompositionsDataTableRoute: CompositionsDataTableRoute,
   CompositionsDayLineRoute: CompositionsDayLineRoute,
+  CompositionsDocRoute: CompositionsDocRoute,
   CompositionsFactsRoute: CompositionsFactsRoute,
   CompositionsFormSectionRoute: CompositionsFormSectionRoute,
   CompositionsItemCardsRoute: CompositionsItemCardsRoute,
