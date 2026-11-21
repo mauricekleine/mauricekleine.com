@@ -28,7 +28,7 @@ function RootDocument() {
       </head>
       <body>
         <Outlet />
-        <script src="/sky.js?v=20261121-amsterdam-stars" />
+        <script src="/sky.js?v=20261121-sky-iife" />
         {!lost && <script src="/webmcp.js" />}
         {essayPage && <script src="/subscribe.js" />}
         <script async src="https://api.mauricekleine.com/latest.js" />
