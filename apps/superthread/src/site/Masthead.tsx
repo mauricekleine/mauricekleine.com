@@ -42,10 +42,10 @@ function crumbFor(section: string) {
 // The masthead's cells, left to right: the mark and wordmark, the crumb and the search, the system's name, version
 // and build date, and the house swatch. At 900 px and below it becomes the top bar: the wordmark, the menu and the
 // swatch, with the search on its own row.
-export function Masthead() {
+export function Masthead({ island }: { island: boolean }) {
   const entry = useEntry();
   return (
-    <header className="st-mast">
+    <header className={island ? "st-mast st-island dark" : "st-mast"}>
       <Link to="/" className="st-brand">
         <Mark />
         superthread

@@ -155,6 +155,8 @@
      column, not to the sticky nav, so it runs past the first screen on a long page */
   .st-body {
     display: grid;
+    --st-page-start: 56px;
+    --st-page-end: 56px;
     grid-template-columns: 264px minmax(0, 1fr) 368px;
     align-items: start;
     min-height: calc(100dvh - 77px);
@@ -172,14 +174,10 @@
     grid-row: 1;
     grid-column: 2;
     min-width: 0;
-    padding: 0 56px 96px;
+    padding: 0 var(--st-page-end) 96px var(--st-page-start);
   }
   .st-page {
     max-width: 696px;
-  }
-  /* the overview is one screen at 1440 x 900, as the sketch is: its foot is 64 px, so the page ends at the window */
-  .st-main:has(.st-opener) {
-    padding-bottom: 64px;
   }
   /* beside the page the aside spans both rows, so its rule runs to the foot like the nav's */
   .st-aside {
@@ -369,23 +367,15 @@
     margin-top: 12px;
   }
 
-  /* an inner page's head: the slim band whole inside its crop marks, the title set under it clear of the marks,
-     the lede at the reach head's 36 px */
+  /* specimen pages open on their title, followed by the lede and install line */
   .st-pagehead {
     padding-top: 40px;
   }
-  .st-pagehead > :not(.st-band) {
+  .st-pagehead > :not(:first-child) {
     margin-top: 40px;
   }
-  .st-pagehead > .st-pagehead-title {
-    margin-top: 28px;
-  }
   .st-pagehead > .st-lede {
-    margin-top: 36px;
-  }
-  .st-band {
-    position: relative;
-    max-width: 696px;
+    margin-top: 28px;
   }
   .st-lede {
     max-width: 696px;
@@ -652,10 +642,9 @@
 
   @media (max-width: 1279px) {
     .st-body {
+      --st-page-start: 40px;
+      --st-page-end: 40px;
       grid-template-columns: 264px minmax(0, 1fr) 312px;
-    }
-    .st-main {
-      padding: 0 40px 96px;
     }
     .st-crumb {
       padding: 0 20px;
@@ -731,6 +720,8 @@
       margin: 14px 16px;
     }
     .st-body {
+      --st-page-start: 32px;
+      --st-page-end: 16px;
       grid-template-columns: minmax(0, 1fr);
       min-height: 0;
       background: none;
@@ -740,7 +731,7 @@
     }
     .st-main {
       grid-column: 1;
-      padding: 0 16px 64px 32px;
+      padding-bottom: 64px;
     }
     .st-aside {
       grid-column: 1;

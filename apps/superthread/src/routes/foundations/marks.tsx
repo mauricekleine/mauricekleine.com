@@ -6,11 +6,12 @@ import { drawn, markBase, markFile, markUrl, shipSpot, tabColor, type MarkId } f
 import { modes, spotName, type Mode } from "@/foundations/master";
 import { Copy, Legend } from "@/foundations/parts";
 import { SourceMarksExample } from "@/examples/source-mark";
-import { PageHead } from "@/site/PageHead";
 import { Section } from "@/site/Section";
 
 export const Route = createFileRoute("/foundations/marks")({
   staticData: {
+    openerLede:
+      "every ship has a 16 px mark: a key tile, a paper silhouette and one region in the ship's spot, dithered at 50 percent. the mark is where a ship's colour lives.",
     sections: [
       { id: "drawings", title: "drawings" },
       { id: "home", title: "home mark" },
@@ -64,11 +65,6 @@ function Drawings({ mode, list = ships }: { mode: Mode; list?: readonly Entry[] 
 function Page() {
   return (
     <>
-      <PageHead
-        title="marks"
-        lede="every ship has a 16 px mark: a key tile, a paper silhouette and one region in the ship's spot, dithered at 50 percent. the mark is where a ship's colour lives."
-      />
-
       <Section id="drawings" title="drawings">
         <Copy>
           each mark is drawn on a 16 x 16 grid, shown here with every pixel as one cell. a 1 px notch cuts each corner

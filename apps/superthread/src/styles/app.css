@@ -3,6 +3,7 @@
 @import "shadcn/tailwind.css";
 @import "../../../../packages/superthread/dist/v2/site/superthread.css";
 @import "./shell.css";
+@import "./opener.css";
 @import "./overview.css";
 @import "./foundations.css";
 @import "./icons.css";
