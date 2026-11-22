@@ -1,6 +1,7 @@
 import { createRootRoute, HeadContent, Outlet, Scripts, useLocation } from "@tanstack/react-router";
 import { themeScript } from "@/components/superthread/lib/theme";
 import tokens from "../../../../packages/superthread/dist/v2/tokens.json";
+import { assetVersion } from "../assets";
 
 export const Route = createRootRoute({
   component: RootDocument,
@@ -28,7 +29,7 @@ function RootDocument() {
       </head>
       <body>
         <Outlet />
-        <script src="/sky.js?v=20261122-page-stock" />
+        <script src={`/sky.js?v=${assetVersion}`} />
         {!lost && <script src="/webmcp.js" />}
         {essayPage && <script src="/subscribe.js" />}
         <script async src="https://api.mauricekleine.com/latest.js" />

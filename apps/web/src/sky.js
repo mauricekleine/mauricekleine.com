@@ -14,7 +14,7 @@ import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core"
   const CONSOLE_INK = "font-family:'Fragment Mono',ui-monospace,monospace;font-size:12px;line-height:1.7;";
   const CONSOLE_PLUM = `color:#aa337a;${CONSOLE_INK}`;
 
-  // the page talks back wherever a sky prints. the graveyard and the portrait can live without one
+  // the page talks back wherever a sky prints. the graveyard can live without one
   const graveGlyphs = document.querySelectorAll(".graveyard .glyph");
   if (graveGlyphs.length) {
     // dead stars occasionally go supernova. they earned it
@@ -31,18 +31,6 @@ import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core"
         14000 + Math.random() * 18000,
       );
     })();
-  }
-
-  // click the portrait -> solar eclipse. why? why not
-  const portrait = document.querySelector(".portrait-wrap");
-  if (portrait) {
-    portrait.addEventListener("click", () => {
-      if (reduced.matches || print.matches) return;
-      portrait.classList.remove("eclipsing");
-      void portrait.offsetWidth; // restart the animation
-      portrait.classList.add("eclipsing");
-    });
-    portrait.addEventListener("animationend", () => portrait.classList.remove("eclipsing"));
   }
 
   if (!canvas) return;
@@ -62,6 +50,10 @@ import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core"
   let H = 0;
   let field;
   let image;
+  let pixels;
+  let solid;
+  let ruleInk;
+  let rules = [];
   let first;
   let plum;
   let screenInk;
@@ -91,10 +83,40 @@ import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core"
   }
 
   function setFieldInks() {
-    inkProbe.fillStyle = getComputedStyle(canvas).getPropertyValue("--page-stock").trim();
+    const style = getComputedStyle(canvas);
+    inkProbe.fillStyle = style.getPropertyValue("--page-stock").trim();
     inkProbe.fillRect(0, 0, 1, 1);
     const solidInk = [...inkProbe.getImageData(0, 0, 1, 1).data.slice(0, 3)];
+    inkProbe.fillStyle = style.getPropertyValue("--page-rule").trim();
+    inkProbe.fillRect(0, 0, 1, 1);
+    const rule = [...inkProbe.getImageData(0, 0, 1, 1).data.slice(0, 3)];
     field.setInks(screenInk, threadInk, starInk, solidInk);
+    [solid, ruleInk] = packedInks([solidInk, rule]);
+  }
+
+  // The page stock rises to the thread, so the column rules rise with it: wherever the band prints page stock in a
+  // rule's column, it prints the rule instead. The nav's rule is its last pixel; the aside's is its first.
+  function measureRules(box, left, dpr) {
+    rules = [];
+    for (const [selector, side] of [
+      [".mk-body > .mk-nav", "right"],
+      [".mk-aside", "left"],
+    ]) {
+      const column = document.querySelector(selector);
+      if (!column?.getClientRects().length) continue;
+      const edge = column.getBoundingClientRect();
+      const from = Math.round(((side === "right" ? edge.right - 1 : edge.left) - box.left - left) * dpr);
+      rules.push([Math.max(0, from), Math.min(image.width, from + Math.max(1, Math.floor(dpr)))]);
+    }
+  }
+
+  function printRules() {
+    for (let row = 0; row < image.height; row++) {
+      const start = row * image.width;
+      for (const [from, to] of rules) {
+        for (let i = start + from; i < start + to; i++) if (pixels[i] === solid) pixels[i] = ruleInk;
+      }
+    }
   }
 
   function dot(x, y, ink, density, spot) {
@@ -268,6 +290,7 @@ import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core"
       if (!flyby && t > nextTrafficAt) spawnTraffic(t);
       if (flyby) drawTraffic(t);
     }
+    printRules();
     ctx.putImageData(image, 0, 0);
   }
 
@@ -307,16 +330,22 @@ import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core"
       deviceHeight === canvas.height &&
       ratio === dpr &&
       isPhone === phone.matches
-    )
+    ) {
+      const before = rules.join();
+      measureRules(box, left, dpr);
+      if (rules.join() !== before) drawFrame(reduced.matches || printing ? 0 : time, !(reduced.matches || printing));
       return;
+    }
 
     ratio = dpr;
     isPhone = phone.matches;
     canvas.width = deviceWidth;
     canvas.height = deviceHeight;
     image = ctx.createImageData(deviceWidth, deviceHeight);
-    field = prepareSky(deviceWidth, deviceHeight, dpr, isPhone, new Uint32Array(image.data.buffer));
+    pixels = new Uint32Array(image.data.buffer);
+    field = prepareSky(deviceWidth, deviceHeight, dpr, isPhone, pixels);
     setFieldInks();
+    measureRules(box, left, dpr);
     W = field.art.w;
     H = field.art.h;
     const still = reduced.matches || printing || lastFrame < 0;
@@ -395,7 +424,7 @@ import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core"
       "\n     ✦ hackadam         nonobench ✦\n" +
       "%c\n" +
       "prerendered html, css, and one canvas of 1-bit stars.\n" +
-      'secrets: type "dnb" · click the sky · click the portrait\n' +
+      'secrets: type "dnb" · click the sky\n' +
       "impatient? window.sky.traffic('starlink' | 'iss' | 'ufo')\n" +
       "source: https://github.com/mauricekleine/mauricekleine.com\n" +
       "for robots: https://www.mauricekleine.com/llms.txt\n",

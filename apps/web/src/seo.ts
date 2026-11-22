@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+import { assetVersion } from "./assets";
 import type { Essay } from "./essay-content";
 
 const origin = "https://www.mauricekleine.com";
@@ -118,7 +119,7 @@ function buildHead(page: PageSeo): { meta: Meta[]; links: Link[]; scripts: Scrip
       crossOrigin: "",
     },
   );
-  links.push({ rel: "stylesheet", href: `${page.relativeStylesheet ? "" : "/"}style.css?v=20261122-page-stock` });
+  links.push({ rel: "stylesheet", href: `${page.relativeStylesheet ? "" : "/"}style.css?v=${assetVersion}` });
 
   const scripts: Script[] = [];
   if (page.turnstile)

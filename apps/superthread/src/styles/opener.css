@@ -1,6 +1,7 @@
 @layer components {
   html {
     --st-page-stock: var(--background);
+    --st-page-rule: var(--rule);
     --st-island-stock: var(--key);
   }
   html.dark {
@@ -82,7 +83,7 @@
   .st-opener-field {
     --ground: var(--st-page-stock);
     position: relative;
-    grid-column: 1 / -1;
+    grid-area: 2 / 1 / 3 / -1;
     height: 120px;
     overflow: hidden;
   }
@@ -102,8 +103,32 @@
   .st-opener-field:has(canvas) .st-opener-plate {
     visibility: hidden;
   }
+  /* The page stock rises to the thread, and the page's column rules rise with it over the plate and the canvas. */
+  .st-opener-rules {
+    --st-rules-drop: 5px;
+    position: relative;
+    display: grid;
+    grid-area: 2 / 1 / 3 / -1;
+    grid-template-columns: subgrid;
+    pointer-events: none;
+  }
+  .st-opener-rules::before,
+  .st-opener-rules::after {
+    content: "";
+  }
+  .st-opener-rules::before {
+    grid-column: 1;
+    border-right: 1px solid var(--st-page-rule);
+  }
+  .st-opener-rules::after {
+    grid-column: 3;
+    border-left: 1px solid var(--st-page-rule);
+  }
 
   @media (max-width: 1099px) {
+    .st-opener-rules::after {
+      content: none;
+    }
     .st-body[data-opener] .st-column {
       grid-row: 2;
     }
@@ -113,8 +138,9 @@
   }
 
   @media (max-width: 900px) {
-    .st-body[data-opener]::before {
-      content: none;
+    .st-body[data-opener]::before,
+    .st-opener-rules {
+      display: none;
     }
     .st-body[data-opener] .st-column,
     .st-opener-copy {

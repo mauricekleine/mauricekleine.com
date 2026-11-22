@@ -40,12 +40,12 @@ function Portrait() {
           height="196"
         />
       </picture>
-      <span className="moon" aria-hidden="true"></span>
     </span>
   );
 }
 
-// The title sits on solid stock. The live sky and its fallback plate share the full-bleed band below.
+// The title sits on solid stock. The live sky and its fallback plate share the full-bleed band below. Home sets the
+// portrait beside the title; about crops it into the band.
 export function Opener({
   home = false,
   portrait = false,
@@ -59,10 +59,11 @@ export function Opener({
     <div className={home ? "mk-opener mk-opener-home" : "mk-opener"}>
       <div id="top" className="mk-opener-copy">
         {children}
+        {home && portrait && <Portrait />}
       </div>
       <div className="mk-field">
         <canvas id="sky" aria-hidden="true" suppressHydrationWarning />
-        {portrait && <Portrait />}
+        {!home && portrait && <Portrait />}
       </div>
     </div>
   );

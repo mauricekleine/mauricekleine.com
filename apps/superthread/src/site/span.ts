@@ -1,18 +1,29 @@
+// The ribbon's upper edge, as a fraction of the band's height at a fraction u of its width. It carries the thread,
+// and page stock fills everything below it.
+function spanEdge(phone: boolean, u: number) {
+  const rise = u * u * (3 - 2 * u);
+  const centre = phone ? 0.7 - 0.29 * rise : 0.72 - 0.37 * rise;
+  const halfWidth = (phone ? 0.073 : 0.072) + 0.048 * u;
+  return centre - halfWidth;
+}
+
 function spanMask(phone: boolean) {
   return (width: number, height: number) => {
     const mask = new Uint8Array(width * height);
     for (let x = 0; x < width; x++) {
-      const u = (x + 0.5) / width;
-      const rise = u * u * (3 - 2 * u);
-      const centre = phone ? 0.7 - 0.29 * rise : 0.72 - 0.37 * rise;
-      const halfWidth = (phone ? 0.073 : 0.072) + 0.048 * u;
-      // The ribbon's upper edge carries the thread. Page stock fills everything below it.
-      const edge = centre - halfWidth;
+      const edge = spanEdge(phone, (x + 0.5) / width);
       for (let y = 0; y < height; y++) mask[y * width + x] = Number((y + 0.5) / height >= edge);
     }
     return mask;
   };
 }
+
+// The page's column rules rise to the thread: the band below the desktop ribbon's upper edge, as a clip. The rules
+// leave the band at 900 px, so the phone crop never needs one.
+export const spanRulesClip = `polygon(${Array.from({ length: 33 }, (_, i) => {
+  const u = i / 32;
+  return `${(u * 100).toFixed(3)}% calc(${(spanEdge(false, u) * 100).toFixed(3)}% + var(--st-rules-drop))`;
+}).join(", ")}, 100% 100%, 0 100%)`;
 
 export const span = {
   desktop: {
