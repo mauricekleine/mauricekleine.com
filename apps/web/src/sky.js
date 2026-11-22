@@ -90,6 +90,13 @@ import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core"
     [first, plum] = packedInks([starInk, threadInk]);
   }
 
+  function setFieldInks() {
+    inkProbe.fillStyle = getComputedStyle(canvas).getPropertyValue("--page-stock").trim();
+    inkProbe.fillRect(0, 0, 1, 1);
+    const solidInk = [...inkProbe.getImageData(0, 0, 1, 1).data.slice(0, 3)];
+    field.setInks(screenInk, threadInk, starInk, solidInk);
+  }
+
   function dot(x, y, ink, density, spot) {
     field.dot(x | 0, y | 0, ink, density, spot);
   }
@@ -309,7 +316,7 @@ import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core"
     canvas.height = deviceHeight;
     image = ctx.createImageData(deviceWidth, deviceHeight);
     field = prepareSky(deviceWidth, deviceHeight, dpr, isPhone, new Uint32Array(image.data.buffer));
-    field.setInks(screenInk, threadInk, starInk);
+    setFieldInks();
     W = field.art.w;
     H = field.art.h;
     const still = reduced.matches || printing || lastFrame < 0;
@@ -319,6 +326,12 @@ import { GRAIN, readScreenInks } from "@/components/superthread/lib/screen-core"
   }
 
   readInks();
+  new MutationObserver(() => {
+    if (!field) return;
+    setFieldInks();
+    const still = reduced.matches || printing;
+    drawFrame(still ? 0 : time, !still);
+  }).observe(document.documentElement, { attributeFilter: ["data-theme"] });
   new ResizeObserver(resize).observe(band);
   window.addEventListener("resize", resize);
   function setPrinting(active) {
