@@ -68,8 +68,8 @@ export function prepareSky(width: number, height: number, dpr: number, phone: bo
 
   let palette: Uint32Array;
   let first: number;
-  function setInks(screen: RGB, thread: RGB, star: RGB) {
-    palette = packedInks([undefined, screen, thread, undefined, star]);
+  function setInks(screen: RGB, thread: RGB, star: RGB, solid: RGB) {
+    palette = packedInks([undefined, screen, thread, solid, star]);
     first = palette[4]!;
   }
 

@@ -12,14 +12,16 @@ function convert(args: string[], stdin?: Uint8Array) {
 const firstInk = [231, 231, 231] as const;
 const plumInk = [192, 116, 161] as const;
 
-function sky(width: number, height: number, dpr: number, phone: boolean) {
+function sky(width: number, height: number, dpr: number, phone: boolean, solid: readonly [number, number, number]) {
   const pixels = new Uint32Array(width * height);
   const frame = prepareSky(width, height, dpr, phone, pixels);
-  frame.setInks(firstInk, plumInk, [255, 255, 255]);
+  frame.setInks(firstInk, plumInk, [255, 255, 255], solid);
   frame.draw(0, false);
   return new Uint8Array(pixels.buffer);
 }
 
+const lightStock = [255, 255, 255] as const;
+const darkStock = [22, 24, 29] as const;
 const publicDir = join(import.meta.dir, "../public");
 for (const [name, width, height, phone] of [
   ["home-desktop", 1440, 324, false],
@@ -29,10 +31,15 @@ for (const [name, width, height, phone] of [
 ] as const) {
   const w = width * 2,
     h = height * 2;
-  convert(
-    ["-size", `${w}x${h}`, "-depth", "8", "rgba:-", "-strip", `PNG8:${publicDir}/sky/plate-${name}.png`],
-    sky(w, h, 2, phone),
-  );
+  for (const [suffix, stock] of [
+    ["", lightStock],
+    ["-dark", darkStock],
+  ] as const) {
+    convert(
+      ["-size", `${w}x${h}`, "-depth", "8", "rgba:-", "-strip", `PNG8:${publicDir}/sky/plate-${name}${suffix}.png`],
+      sky(w, h, 2, phone, stock),
+    );
+  }
 }
 
 const portraitInks = [
@@ -96,13 +103,22 @@ const image = convert(
     ")",
     "+swap",
     "-append",
+    "(",
     join(publicDir, "portrait/maurice-196-1x.png"),
+    "-background",
+    "#16181d",
+    "-alpha",
+    "remove",
+    "-crop",
+    "196x176+0+0",
+    "+repage",
+    ")",
     "-geometry",
-    "+956+418",
+    "+956+404",
     "-composite",
     "-strip",
     "PNG24:-",
   ],
-  sky(1200, 230, 1, false),
+  sky(1200, 230, 1, false, lightStock),
 );
 await Bun.write(card, image);

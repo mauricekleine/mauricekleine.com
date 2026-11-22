@@ -22,6 +22,7 @@
 
 @layer components {
   html {
+    --page-stock: var(--background);
     scroll-padding-top: 77px;
     scrollbar-color: var(--muted-foreground) var(--background);
     scrollbar-width: thin;
@@ -389,6 +390,7 @@
   }
   .mk-field {
     --sky-plate: url("/sky/plate-slim-desktop.png");
+    --sky-plate-dark: url("/sky/plate-slim-desktop-dark.png");
     --sky-plate-size: 1440px 120px;
     position: relative;
     overflow: hidden;
@@ -396,8 +398,12 @@
   }
   .mk-opener-home .mk-field {
     --sky-plate: url("/sky/plate-home-desktop.png");
+    --sky-plate-dark: url("/sky/plate-home-desktop-dark.png");
     --sky-plate-size: 1440px 324px;
     height: clamp(220px, 36svh, 440px);
+  }
+  html.dark .mk-field {
+    --sky-plate-current: var(--sky-plate-dark);
   }
   #sky {
     position: absolute;
@@ -405,7 +411,7 @@
     display: block;
     width: 100%;
     height: 100%;
-    background: var(--sky-plate) center bottom / var(--sky-plate-size) no-repeat;
+    background: var(--sky-plate-current, var(--sky-plate)) center bottom / var(--sky-plate-size) repeat-x;
     image-rendering: pixelated;
   }
   #sky[data-live] {
@@ -424,7 +430,7 @@
     top: 0;
     right: var(--opener-end);
     width: 196px;
-    height: 100%;
+    height: 100px;
     overflow: hidden;
     background: var(--island-stock);
     cursor: pointer;
@@ -440,6 +446,9 @@
     width: 100%;
     height: auto;
     image-rendering: pixelated;
+  }
+  .mk-opener:not(.mk-opener-home) .portrait {
+    translate: 0 -12px;
   }
   .moon {
     position: absolute;
@@ -1011,16 +1020,22 @@
     }
     .mk-field {
       --sky-plate: url("/sky/plate-slim-phone.png");
+      --sky-plate-dark: url("/sky/plate-slim-phone-dark.png");
       --sky-plate-size: 390px 96px;
       height: 96px;
     }
     .mk-opener-home .mk-field {
       --sky-plate: url("/sky/plate-home-phone.png");
+      --sky-plate-dark: url("/sky/plate-home-phone-dark.png");
       --sky-plate-size: 390px 203px;
       height: clamp(160px, 24svh, 240px);
     }
     .portrait-wrap {
       width: 136px;
+      height: 80px;
+    }
+    .mk-opener:not(.mk-opener-home) .portrait {
+      translate: 0 -4px;
     }
     .mk-opener-home .portrait-wrap {
       height: 136px;

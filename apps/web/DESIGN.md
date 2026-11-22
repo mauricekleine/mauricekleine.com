@@ -2,7 +2,7 @@
 
 ## Theme
 
-The site prints on Superthread v2. Its values, type and rules live in `packages/superthread/DESIGN.md`. Each page opens on a full-bleed dark island in both modes. The island uses key on a light page and deep ground on a dark page. The page body uses the selected stock. The night sky over Amsterdam is the one live screen. Its band meets both sides of the window and ends at the edge of the island.
+The site prints on Superthread v2. Its values, type and rules live in `packages/superthread/DESIGN.md`. Each page opens on a full-bleed dark island in both modes. The island uses key on a light page and deep ground on a dark page. The page body uses the selected stock. The night sky over Amsterdam is the one live screen. Its band meets both sides of the window, and the page stock rises to the plum thread.
 
 ## Frame
 
@@ -27,8 +27,8 @@ Superthread's utilities and faces, from `packages/superthread/dist/v2/superthrea
 
 Registry items come from `packages/superthread/items` through the `@/components/superthread` alias, so www never carries a copy. `site.css` owns the page blocks.
 
-- The band (`Opener`) holds the full-width `#sky` canvas. On home it takes 36svh between 220 and 440 px, or 24svh between 160 and 240 px on a phone. The slim band takes 120 px, or 96 px on a phone. `public/sky/` holds frame-zero plates for the home and slim bands at desktop and phone widths. The plates leave the stock open so both page modes use the same files. They print at 2×, centred at the foot of the band at native CSS size.
-- The portrait (`public/portrait/`) prints `maurice.png` through the sky’s 4 CSS px dot screen at 196 and 136 px. The first ink runs at 45° and plum at 15°. Both page modes use the same transparent plates at 1×, 2× and 3×, with each pixel printed in one ink or left open to the island stock. Home shows the full square. About shows the face in the slim band at native scale.
+- The band (`Opener`) holds the full-width `#sky` canvas. On home it takes 36svh between 220 and 440 px, or 24svh between 160 and 240 px on a phone. The slim band takes 120 px, or 96 px on a phone. `public/sky/` holds frame-zero plates for the home and slim bands at desktop and phone widths. Each mode has its own fallback plates. They leave the island stock open above the thread and carry the page stock below it. They print at 2×, centred at the foot of the band at native CSS size.
+- The portrait (`public/portrait/`) prints `maurice.png` through the sky’s 4 CSS px dot screen at 196 and 136 px. The first ink runs at 45° and plum at 15°. Both page modes use the same transparent plates at 1×, 2× and 3×, with each pixel printed in one ink or left open to the island stock. Home shows the full square. About crops around the face at native scale above the thread.
 - **Side quests** (`SideQuests`): a constellation tile (1:1 SVG, 4 px stars, 1 px lines), the project name and one line. Its lines take the first ink on hover and focus. No cards.
 - **Graveyard**: ledger rows with a `✧`, the name, a `Badge` (`done` for exits, `queued` for the rest) and mono years.
 - **Essays**: rows on the home page. On `/essays`, each row holds the cover with a 1 px edge, title, summary and date. The essay page sets its title in `type-page` above the slim band, lists its `h2`s in "on this page" and keeps images at full opacity with a 1 px edge.
@@ -41,7 +41,7 @@ Motion lives in `src/sky.js` and two stepped CSS moments. Bun bundles the sky in
 
 ## The sky
 
-The sky takes its inks from the canvas's dark scope. The field screens the foreground and threads plum through it. Stars print in the first ink. Open cells and the field's solid take `--island-stock`.
+The sky takes its inks from the canvas's dark scope. The field screens the foreground and threads plum through it. Stars print in the first ink. Open cells take `--island-stock`. The field's solid takes `--page-stock` from the page.
 
 - **The night over Amsterdam** uses `@mk/field-art`. Desktop and phone each have a spec line that also fits the slim band. A held ramp rises into fine filaments above the plum thread. The filaments drift on a 22 s loop while the upper strip and portrait surround stay quiet. Stars and sky events print over the field in the same canvas.
 - **Stars**: square cells and crosses in the first ink, with twinkle as a screen threshold, slow drift and pointer parallax inside the band. They print in open cells above the field’s edge and thin out through the ramp.
@@ -58,6 +58,6 @@ Beyond the band:
 ## Assets
 
 - `maurice.png` (touch icon and portrait source) and `favicon.ico`.
-- `og.png` is a 1200 × 630 image of the home title, lede, portrait and sky, with the sky held still. Run `bun tools/render-sky.ts` in `apps/web` to print the four sky fallback plates and the six portrait plates, then compose the band and portrait into the social card.
+- `og.png` is a 1200 × 630 image of the home title, lede, portrait and sky, with the sky held still. Run `bun tools/render-sky.ts` in `apps/web` to print the eight sky fallback plates and the six portrait plates, then compose the band and portrait into the social card.
 - `public/fonts/` serves the frozen v1 theme's copies; www itself loads its fonts from the superthread host.
 - Simple Analytics (`https://api.mauricekleine.com/latest.js`) at the end of the body.
