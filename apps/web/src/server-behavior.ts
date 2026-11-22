@@ -3,6 +3,7 @@ import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod";
 import { themeScript } from "../../../packages/superthread/items/lib/theme.ts";
 import tokens from "../../../packages/superthread/dist/v2/tokens.json" with { type: "json" };
+import { assetVersion } from "./assets.ts";
 import { handleShortLink, isShortLinkHost } from "./links.ts";
 
 export interface WorkerEnv {
@@ -500,7 +501,7 @@ function subscribePage({ title, description, heading, message, action, back }: S
     <meta name="robots" content="noindex" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/maurice.png" />
-    <link rel="stylesheet" href="/style.css?v=20261122-page-stock" />
+    <link rel="stylesheet" href="/style.css?v=${assetVersion}" />
   </head>
   <body>
     <div class="dark mk-island mk-island-solo">
@@ -526,7 +527,7 @@ function subscribePage({ title, description, heading, message, action, back }: S
         </div>
       </main>
     </div>
-    <script src="/sky.js?v=20261121-dot-screen"></script>
+    <script src="/sky.js?v=${assetVersion}"></script>
     <script async src="https://api.mauricekleine.com/latest.js"></script>
   </body>
 </html>
