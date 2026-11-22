@@ -27,7 +27,7 @@ export function HomePage() {
           <div className="mk-opener-meta type-meta">
             <p>amsterdam, nl</p>
             <a href="#currently">
-              currently <span aria-hidden="true">↓</span>
+              keep reading <span aria-hidden="true">↓</span>
             </a>
           </div>
         </Opener>

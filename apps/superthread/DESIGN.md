@@ -9,7 +9,7 @@ This app is superthread's own site, and it uses the system without a design of i
 
 ## the opener
 
-The overview, foundations and install open full bleed. The masthead, title and lede sit on key on a light page and deep ground on a dark page. Span prints in dark inks below the copy. The page's stock fills the solid up to the plum thread, and the body columns start with their side rules at the foot of the band. The overview runs the band at the www home heights and keeps the install line below it. Foundations and install take a slim still. Component, composition and mock pages open with their own content.
+The overview, foundations and install open full bleed. The masthead, title and lede sit on key on a light page and deep ground on a dark page. Span prints in dark inks below the copy. The page's stock fills the solid up to the plum thread, and the body's side rules rise through it to the thread: `src/site/span.ts` turns Span's upper edge into the clip for a rule overlay above the plate and the canvas. The overview runs the band at the www home heights and keeps the install line below it. Foundations and install take a slim still. Component, composition and mock pages open with their own content.
 
 The overview plays one 14-second loop. The plum knot follows the rise from left to right as its light moves across the screen. The field pauses offscreen and when the tab hides, and prints frame zero under reduced motion and in print. The desktop and phone frame-zero plates print before hydration, with 1× and 2× samples in both page modes. They fit the band; the live field samples the dots at a 4 css px pitch at the window's size.
 

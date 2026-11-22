@@ -23,6 +23,7 @@
 @layer components {
   html {
     --page-stock: var(--background);
+    --page-rule: var(--rule);
     scroll-padding-top: 77px;
     scrollbar-color: var(--muted-foreground) var(--background);
     scrollbar-width: thin;
@@ -323,8 +324,24 @@
     align-self: end;
     padding: 40px var(--opener-end) 32px var(--opener-start);
   }
+  /* Home sets the portrait beside the title, top to top, and ends it where the page column ends. */
   .mk-opener-home .mk-opener-copy {
+    --portrait: 196px;
+    --portrait-gap: 32px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--portrait);
+    column-gap: var(--portrait-gap);
     padding-block: 48px 36px;
+    container-type: inline-size;
+  }
+  .mk-opener-home h1 {
+    grid-area: 1 / 1;
+  }
+  .mk-opener-home .mk-lede {
+    grid-area: 2 / 1;
+  }
+  .mk-opener-home .mk-opener-meta {
+    grid-area: 3 / 1 / auto / -1;
   }
   .mk-opener h1 {
     color: var(--first);
@@ -343,7 +360,8 @@
     width: min-content;
     max-width: 100%;
     overflow-wrap: normal;
-    font-size: clamp(52px, 6.2vw, 120px);
+    /* "maurice" sets 4.45 em wide, so the title gives way before it reaches the portrait */
+    font-size: min(clamp(52px, 6.2vw, 120px), (100cqi - var(--portrait) - var(--portrait-gap)) / 4.45);
     line-height: 1.05;
     letter-spacing: var(--text-display--letter-spacing);
   }
@@ -424,7 +442,7 @@
     line-height: 20px;
   }
 
-  /* The slim band crops the portrait at whole pixels. The home band holds the full square. */
+  /* The slim band crops the portrait at whole pixels. Home holds the full square beside the title. */
   .portrait-wrap {
     position: absolute;
     top: 0;
@@ -433,12 +451,12 @@
     height: 100px;
     overflow: hidden;
     background: var(--island-stock);
-    cursor: pointer;
   }
   .mk-opener-home .portrait-wrap {
-    top: 50%;
-    height: 196px;
-    translate: 0 -50%;
+    position: static;
+    grid-area: 1 / 2 / span 2;
+    width: var(--portrait);
+    height: var(--portrait);
   }
   .portrait,
   .portrait img {
@@ -449,28 +467,6 @@
   }
   .mk-opener:not(.mk-opener-home) .portrait {
     translate: 0 -12px;
-  }
-  .moon {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: var(--first);
-    translate: -110% 0;
-  }
-  .eclipsing .moon {
-    animation: eclipse 2.4s steps(24) both;
-  }
-  @keyframes eclipse {
-    0% {
-      translate: -110% 0;
-    }
-    40%,
-    60% {
-      translate: 0 0;
-    }
-    100% {
-      translate: 110% 0;
-    }
   }
 
   /* a section: 64 px above the rule, 44 below it; the rule runs across the whole column */
@@ -1011,6 +1007,8 @@
       padding-block: 32px 24px;
     }
     .mk-opener-home .mk-opener-copy {
+      --portrait: 136px;
+      --portrait-gap: 16px;
       align-self: center;
       padding-block: 32px 24px;
     }
@@ -1018,8 +1016,16 @@
       font-size: min(44px, 12vw);
       line-height: 1.08;
     }
+    /* the phone keeps the portrait to the title's row, sets the name on its foot and runs the lede across */
     .mk-opener-home h1 {
-      font-size: min(52px, 14vw);
+      align-self: end;
+      font-size: min(52px, 14vw, (100cqi - var(--portrait) - var(--portrait-gap)) / 4.45);
+    }
+    .mk-opener-home .mk-lede {
+      grid-column: 1 / -1;
+    }
+    .mk-opener-home .portrait-wrap {
+      grid-row: 1;
     }
     .mk-field {
       --sky-plate: url("/sky/plate-slim-phone.png");
@@ -1039,9 +1045,6 @@
     }
     .mk-opener:not(.mk-opener-home) .portrait {
       translate: 0 -4px;
-    }
-    .mk-opener-home .portrait-wrap {
-      height: 136px;
     }
     .waypoint {
       grid-template-columns: minmax(0, 1fr);

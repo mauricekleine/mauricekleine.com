@@ -1,7 +1,7 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { FieldArt } from "@/components/superthread/ui/field-art";
 import { breakpoints } from "./layout";
-import { span, spanPlate, type OpenerKind, type SpanCrop } from "./span";
+import { span, spanPlate, spanRulesClip, type OpenerKind, type SpanCrop } from "./span";
 
 function LiveSpan() {
   const [crop, setCrop] = useState<SpanCrop>();
@@ -38,6 +38,7 @@ export function Opener({ kind, title, lede }: { kind: OpenerKind; title: string;
         <div className="st-opener-plate" />
         {kind === "home" && <LiveSpan />}
       </div>
+      <div className="st-opener-rules" style={{ clipPath: spanRulesClip }} aria-hidden="true" />
     </header>
   );
 }

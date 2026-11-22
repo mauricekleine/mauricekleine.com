@@ -425,7 +425,7 @@ A chart series prints in its ship's spot as a line screen at the ship's angle, s
 
 Crop marks are 10 px corner ticks, 16 px outside a contained field. A field that meets the window edge drops its marks. `scripts/texture/build.py plates` builds contained fields as pairs of binary masks per mode. CSS prints the first ink and plum into the masks. The same builder prints the empty wedge as an indexed image per mode. `texture/plates.sha256` holds the pixel hashes.
 
-A public opener sits on a full-bleed dark island in both modes: key on a light page, deep ground on a dark page. Where a field joins the body, its solid takes the page's stock below the plum thread. A boxed page column starts with its side rules at the foot of the band. A ship's page head takes a slim band.
+A public opener sits on a full-bleed dark island in both modes: key on a light page, deep ground on a dark page. Where a field joins the body, its solid takes the page's stock below the plum thread. A boxed page column's side rules rise through the solid and stop at the thread, so the page's stock and its rules reach the field together. A ship's page head takes a slim band.
 
 A weave runs right beside a solid or down beneath it. On a phone a stacked band runs down. Set one spec line with the direction, a mirrored fray (line, bow, waves or arch), and the ramp. `held` keeps its density for findings and facts, `steady` falls evenly for plans and principles, `bet` breaks abruptly for hypotheses and proposals, and `fade` runs softly into the stock for notes and appendix heads. Fray wobble and thread width are in cells. One flat-core plum thread follows the fray, or the density break for `bet`. A hero can tie one knot to the thread.
 
