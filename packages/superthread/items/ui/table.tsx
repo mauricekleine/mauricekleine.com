@@ -35,10 +35,20 @@ const Folding = React.createContext(false);
 
 function Table({
   className,
+  appearance,
   rows = "table",
   fold = false,
   ...props
-}: React.ComponentProps<"table"> & Omit<VariantProps<typeof tableVariants>, "fold"> & { fold?: boolean }) {
+}: React.ComponentProps<"table"> &
+  Omit<VariantProps<typeof tableVariants>, "fold"> & { fold?: boolean; appearance?: "document" }) {
+  if (appearance === "document") {
+    return (
+      <div className="tbl-wrap">
+        <table className={cn("tbl", className)} {...props} />
+      </div>
+    );
+  }
+
   return (
     <div
       data-slot="table-container"

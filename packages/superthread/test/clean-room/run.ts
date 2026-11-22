@@ -20,7 +20,7 @@ import { cp, mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/pr
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { parseArgs } from "node:util";
-import { catalog } from "../../items/catalog.ts";
+import { catalog, docSectionGroups } from "../../items/catalog.ts";
 
 const here = import.meta.dir;
 const pkg = resolve(here, "../..");
@@ -796,7 +796,7 @@ async function main(): Promise<boolean> {
       }
     });
 
-    // 11. a pinned version installs the same files
+    // 11. the pinned version installs the same button and renders a document from a standalone add
     await step(11, "pinned version", [4], async (detail) => {
       const pinned = `${base}/r/v/${version}`;
       if (!(await fetch(`${pinned}/registry.json`)).ok) {
@@ -804,7 +804,27 @@ async function main(): Promise<boolean> {
         return;
       }
       const app11 = await freshApp("pinned", `${pinned}/{name}.json`);
-      await expectOk(await shadcn(["add", "@mk/button", "-y"], app11, "add-pinned"), "add");
+      await expectOk(await shadcn(["add", "@mk/doc-react", "-y"], app11, "add-doc-react-pinned"), "add doc-react");
+      const docItems = await closure(["doc-react"], pinned);
+      checkPresent(app11, docItems);
+      await checkStamps(app11, docItems);
+      await expectOk(await shadcn(["add", "@mk/button", "-y"], app11, "add-pinned"), "add button");
+      await cp(join(here, "../fixtures/doc-examples.tsx"), join(app11, "src/doc-examples.tsx"));
+      await cp(join(here, "documents.tsx"), join(app11, "src/routes/documents.tsx"));
+      await build(app11, "build-doc-react-pinned");
+      const docHtml = await page(app11, "documents.html");
+      const rendered = [...docHtml.matchAll(/ data-section="([^"]+)"/g)].map(([, name]) => name);
+      const names = Object.values(docSectionGroups)
+        .flat()
+        .filter((name) => name !== "hero" && name !== "footer");
+      check(rendered.sort().join() === names.sort().join(), "the prerendered document lacks sections");
+      check(
+        docHtml.includes('<header class="hero">') && docHtml.includes('<footer class="foot">'),
+        "the document lacks its header or footer",
+      );
+      check((await builtCss(app11)).includes(".hero-weave"), "the built document lacks doc.css");
+      detail.documentSections = rendered.length + 2;
+
       const items = await closure(["button"], pinned);
       const files = checkPresent(app11, items);
       await checkStamps(app11, items);

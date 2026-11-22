@@ -814,7 +814,7 @@ A meeting brief's blocks are the reader's parts, under the meeting's `ReaderPape
 
 ### Documents
 
-Build plain HTML documents from `@mk/doc` on `@mk/tokens-plain`. Use one full-bleed dark island for the opener in either mode. The hero fills the first viewport with a title, lede, meta line and contents. A brief can use the slim head with a still weave. Put the weave beside the island so it takes the page's inks.
+Build documents from `@mk/doc` in plain HTML or `@mk/doc-react` in React. Both print the same sections with `styles/doc.css` on `@mk/tokens-plain`. Use one full-bleed dark island for the opener in either mode. The hero fills the first viewport with a title, lede, meta line and contents. A brief can use the slim head with a still weave. Put the weave beside the island so it takes the page's inks. Only one field moves per page. In React, give the hero `still` when another field moves. The live weave pauses offscreen and prints still under reduced motion and in print.
 
 Open each section group with a band. Choose its ramp for how settled the words are: `held` for findings, `steady` for plans or principles, `bet` for open proposals, `fade` for notes and appendices. A lede sets up the group. A ruled section head divides the stock into smaller sections, with a muted line when it helps the reader act.
 
