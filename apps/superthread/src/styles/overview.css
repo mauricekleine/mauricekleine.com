@@ -1,44 +1,6 @@
-/* The overview and the install page. The overview follows the master's sketch at 1440 x 900: the opener band 696 x 196
-   at 40 px under the masthead, the wordmark knocked out of it, the lede 44 px below, the install patch 40 px below
-   that, the fleet 48 px below, and the way in 44 px below the fleet. Narrower columns step by the column's own width
-   (container queries), so the same rules hold beside the aside, under it and on a phone. In the components layer,
-   like the shell, so an item's own utilities still win. */
+/* The overview fleet, its way in, and the install page. */
 
 @layer components {
-  /* the opener: a container, so the wordmark steps with the band's width and never runs past it */
-  .st-opener {
-    container-type: inline-size;
-    padding-top: 40px;
-  }
-  .st-opener-band {
-    position: relative;
-    max-width: 696px;
-  }
-  .st-opener-knock {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    max-width: 100%;
-    padding: 14px 30px 0 0;
-    background: var(--background);
-  }
-  .st-opener-knock h1 {
-    color: var(--first);
-    font-family: var(--font-display);
-    font-size: var(--text-display);
-    font-weight: 300;
-    line-height: var(--text-display--line-height);
-    letter-spacing: var(--text-display--letter-spacing);
-    white-space: nowrap;
-  }
-  .st-opener-lede {
-    max-width: 696px;
-    margin-top: 44px;
-  }
-  .st-ov-install {
-    margin-top: 40px;
-  }
-
   /* the fleet: six cells in one ruled box, each after the first divided by the border ink */
   .st-ov-fleet {
     container-type: inline-size;
@@ -117,30 +79,6 @@
   @media (hover: hover) {
     .st-ov-nextbox:hover {
       background: var(--control-hover);
-    }
-  }
-
-  /* a column too narrow for the wordmark at its full size: the reach sheet's phone step */
-  @container (max-width: 559px) {
-    .st-opener-knock {
-      padding: 10px 16px 0 0;
-    }
-    .st-opener-knock h1 {
-      font-size: 52px;
-      line-height: 56px;
-    }
-  }
-  /* a phone column: the wordmark steps down once more so it stays inside the 342 px band, and again on a 320 px phone */
-  @container (max-width: 379px) {
-    .st-opener-knock h1 {
-      font-size: 44px;
-      line-height: 48px;
-    }
-  }
-  @container (max-width: 319px) {
-    .st-opener-knock h1 {
-      font-size: 38px;
-      line-height: 42px;
     }
   }
 

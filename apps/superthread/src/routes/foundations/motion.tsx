@@ -3,11 +3,11 @@ import { useState } from "react";
 import { tokens } from "@/components/superthread/lib/tokens";
 import { Button } from "@/components/superthread/ui/button";
 import { Copy } from "@/foundations/parts";
-import { PageHead } from "@/site/PageHead";
 import { Section } from "@/site/Section";
 
 export const Route = createFileRoute("/foundations/motion")({
   staticData: {
+    openerLede: "three durations and one ease. interface changes start fast and ease into place.",
     sections: [
       { id: "durations", title: "durations" },
       { id: "ease", title: "ease" },
@@ -56,8 +56,6 @@ function Page() {
   const [played, setPlayed] = useState(false);
   return (
     <>
-      <PageHead title="motion" lede="three durations and one ease. interface changes start fast and ease into place." />
-
       <Section id="durations" title="durations">
         <Copy>press play to send each bar across its track at its own duration, all on the brand ease.</Copy>
         <div className="st-f-play">

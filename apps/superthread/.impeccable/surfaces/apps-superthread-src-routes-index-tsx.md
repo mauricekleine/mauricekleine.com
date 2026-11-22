@@ -15,7 +15,7 @@ Scope: the site's overview and every page under it (foundations, components, moc
 - Proof: the mock pages are real compositions from the registry's own components, in light and dark.
 - Constraints: the four pinned faces from one delivery, light and dark from one set of tokens, phone to wide desktop, lowercase and understated words.
 
-Chosen direction: the master, Maurice's own remix of the direction round (scratch `week1/i1/MASTER-BRIEF.md`, built in `worlds/master/`). Memorable moment: the cropped opener band, a thread screened in key and plum, with the wordmark set over it.
+Chosen direction: the master, Maurice's own remix of the direction round (scratch `week1/i1/MASTER-BRIEF.md`, built in `worlds/master/`). Memorable moment: span runs across the window and carries the page's stock up to the plum thread. the wordmark sits above the field.
 
 ## Direction contract
 
@@ -25,7 +25,7 @@ OWN-WORLD: key ink #16181d and its wedge of tints on white; one house ink, plum 
 
 STORY: the visitor understands what superthread is, sees it hold on docs, a board and a reading page, and installs it.
 
-FIRST VIEWPORT: masthead cells across the top (mark and wordmark, breadcrumb and search, system, version and date, the house swatch); left nav with the neutral current item and the light, dark and auto control at its foot; centre, the cropped opener with the Unbounded wordmark, one Erode sentence, the install patch, the six-ship fleet row and the plum primary action; right, on this page, the wedge and the states. Signature interaction: the fleet rail's label slides out as a tab on hover and focus. Motion: 120, 180 and 240 ms on one ease-out curve; reduced motion keeps every state and drops the travel.
+FIRST VIEWPORT: a dark island holds the masthead, the Unbounded wordmark and the Erode lede. Span takes the full width and the install line follows below. The columns underneath hold the nav, fleet and ways into the system, and the on-page links and reference specimens. Signature interaction: the fleet rail's label slides out as a tab on hover and focus. Motion: 120, 180 and 240 ms on one ease-out curve; reduced motion keeps every state and drops the travel.
 
 FORM: the exposure record's zone sheets carrying the two-ink proof's screens; first on the ordered list as Maurice's remix; seed:9553ea8ea3c775a6
 

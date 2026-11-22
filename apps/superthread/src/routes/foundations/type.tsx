@@ -3,11 +3,12 @@ import { AppShellPanel } from "@/components/superthread/blocks/app-shell";
 import { tokens } from "@/components/superthread/lib/tokens";
 import { Copy } from "@/foundations/parts";
 import { ModePair } from "@/site/ModePair";
-import { PageHead } from "@/site/PageHead";
 import { Section } from "@/site/Section";
 
 export const Route = createFileRoute("/foundations/type")({
   staticData: {
+    openerLede:
+      "four faces, each with one job: unbounded for display, supreme for the interface, erode for reading and fragment mono for ids, times, code and any figure that holds a column.",
     sections: [
       { id: "faces", title: "faces" },
       { id: "steps", title: "steps" },
@@ -117,11 +118,6 @@ function spec({ size, line, tracking, caps, family, weight }: StepSpec): string 
 function Page() {
   return (
     <>
-      <PageHead
-        title="type"
-        lede="four faces, each with one job: unbounded for display, supreme for the interface, erode for reading and fragment mono for ids, times, code and any figure that holds a column."
-      />
-
       <Section id="faces" title="faces">
         <Copy>{tokens.fonts.faces.length} files in all. each line below is set in the cut it names.</Copy>
         <ul className="st-f-faces">

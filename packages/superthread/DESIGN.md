@@ -414,7 +414,7 @@ A screen is a 1-bit pattern that stands in for a tint. Fields print round dots a
 
 | place             | what prints                                                | where it ships                            |
 | ----------------- | ---------------------------------------------------------- | ----------------------------------------- |
-| opener            | one band per page head in the first ink and plum           | `@mk/field-art`, `@mk/weave` or plates    |
+| opener            | a band in the first ink and plum beside the page head      | `@mk/field-art`, `@mk/weave` or plates    |
 | figures           | concept art in two inks on the same dot screen             | `@mk/field-art` or stills                 |
 | marks             | the ship's spot region at 50 percent                       | the mark SVGs                             |
 | state fields      | the progress fill's leading 24 px, from solid to the stock | `texture-ramp` in `Progress`              |
@@ -423,7 +423,9 @@ A screen is a 1-bit pattern that stands in for a tint. Fields print round dots a
 
 A chart series prints in its ship's spot as a line screen at the ship's angle, so it reads by colour first and by angle without colour: 1 px lines knocked out to the stock every 4 px, repeated in the legend. The six component details are under Components.
 
-Crop marks are 10 px corner ticks, 16 px outside a contained field. A field that meets the window edge drops its marks. `scripts/texture/build.py plates` builds the opener and figure as a pair of binary masks per mode. CSS prints the first ink and plum into the masks. The same builder prints the empty wedge as an indexed image per mode. `texture/plates.sha256` holds the pixel hashes.
+Crop marks are 10 px corner ticks, 16 px outside a contained field. A field that meets the window edge drops its marks. `scripts/texture/build.py plates` builds contained fields as pairs of binary masks per mode. CSS prints the first ink and plum into the masks. The same builder prints the empty wedge as an indexed image per mode. `texture/plates.sha256` holds the pixel hashes.
+
+A public opener sits on a full-bleed dark island in both modes: key on a light page, deep ground on a dark page. Where a field joins the body, its solid takes the page's stock below the plum thread. A boxed page column starts with its side rules at the foot of the band. A ship's page head takes a slim band.
 
 A weave runs right beside a solid or down beneath it. On a phone a stacked band runs down. Set one spec line with the direction, a mirrored fray (line, bow, waves or arch), and the ramp. `held` keeps its density for findings and facts, `steady` falls evenly for plans and principles, `bet` breaks abruptly for hypotheses and proposals, and `fade` runs softly into the stock for notes and appendix heads. Fray wobble and thread width are in cells. One flat-core plum thread follows the fray, or the density break for `bet`. A hero can tie one knot to the thread.
 

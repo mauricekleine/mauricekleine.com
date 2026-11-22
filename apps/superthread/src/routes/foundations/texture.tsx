@@ -15,12 +15,12 @@ import { Copy, Legend } from "@/foundations/parts";
 import { Caption, type DetailKey } from "@/site/Caption";
 import { CropMarks } from "@/site/CropMarks";
 import { ModePair } from "@/site/ModePair";
-import { PageHead } from "@/site/PageHead";
 import { Plate, plate } from "@/site/Plate";
 import { Section } from "@/site/Section";
 
 export const Route = createFileRoute("/foundations/texture")({
   staticData: {
+    openerLede: "a dot screen for fields and 1 px tiles for component details.",
     sections: [
       { id: "rule", title: "the rule" },
       { id: "places", title: "field specimens" },
@@ -225,8 +225,6 @@ const detailNote: Record<DetailKey, string> = {
 function Page() {
   return (
     <>
-      <PageHead title="texture" lede="a dot screen for fields and 1 px tiles for component details." />
-
       <Section id="rule" title="the rule">
         <Copy>
           fields print round dots every 4 css px, at 45° for the first ink and 15° for plum. they sit beside words,

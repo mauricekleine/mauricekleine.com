@@ -4,7 +4,6 @@ import { catalog, type CatalogItem, type Tier } from "@/components/superthread/c
 import { CodePatch } from "@/site/CodePatch";
 import { installCommand, InstallLine } from "@/site/InstallLine";
 import { nav } from "@/site/nav";
-import { PageHead } from "@/site/PageHead";
 import { Section } from "@/site/Section";
 import initForm from "../../../../packages/superthread/upstream/cli/init-form.json";
 
@@ -12,6 +11,8 @@ declare const __SUPERTHREAD_VERSION__: string;
 
 export const Route = createFileRoute("/install")({
   staticData: {
+    openerLede:
+      "two commands put superthread into a tanstack start app on tailwind 4: init once, then add what you need.",
     sections: [
       { id: "init", title: "init" },
       { id: "add", title: "add an item" },
@@ -85,10 +86,6 @@ function Code({ children }: { children: ReactNode }) {
 function Page() {
   return (
     <>
-      <PageHead
-        title="install"
-        lede="two commands put superthread into a tanstack start app on tailwind 4: init once, then add what you need."
-      />
       <Section id="init" title="init" className="st-in">
         <p className="st-in-text">
           init sets an app up for <Code>@mk</Code>. it writes the base-nova style and the registry into{" "}

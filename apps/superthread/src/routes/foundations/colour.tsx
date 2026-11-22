@@ -17,12 +17,13 @@ import {
 } from "@/foundations/master";
 import { Copy, Ink, Legend } from "@/foundations/parts";
 import { ModePair } from "@/site/ModePair";
-import { PageHead } from "@/site/PageHead";
 import { Section } from "@/site/Section";
 import { Swatch } from "@/site/Swatch";
 
 export const Route = createFileRoute("/foundations/colour")({
   staticData: {
+    openerLede:
+      "one key ink on white stock, and one plum fill per viewport. each ship keeps one bright spot for its mark and its chart series, and five status inks name the state of a run.",
     sections: [
       { id: "wedge", title: "the wedge" },
       { id: "house", title: "house ink" },
@@ -243,11 +244,6 @@ function Page() {
   const roles = Object.keys(recipes.light);
   return (
     <>
-      <PageHead
-        title="colour"
-        lede="one key ink on white stock, and one plum fill per viewport. each ship keeps one bright spot for its mark and its chart series, and five status inks name the state of a run."
-      />
-
       <Section id="wedge" title="the wedge">
         <Copy>
           every neutral is the key ink printed as a tint over the stock: light prints key over white, dark prints

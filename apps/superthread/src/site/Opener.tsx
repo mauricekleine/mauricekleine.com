@@ -1,30 +1,43 @@
-import type { ReactNode } from "react";
-import { CropMarks } from "./CropMarks";
-import { Plate } from "./Plate";
+import { useEffect, useState, type CSSProperties } from "react";
+import { FieldArt } from "@/components/superthread/ui/field-art";
+import { breakpoints } from "./layout";
+import { span, spanPlate, type OpenerKind, type SpanCrop } from "./span";
 
-// The overview's head: the opener plate inside its crop marks, with the wordmark knocked out of its lower left, then
-// the lede and whatever follows it. CSS inks the active mode's two masks; at
-// 600 px and below the phone plate takes over. A narrower column crops the plate and never scales it, and the
-// wordmark steps down with the band's own width (overview.css), so it never runs past the band. Like PageHead, it is
-// the page's "top" in the aside.
-export function Opener({ title, lede, children }: { title: string; lede?: ReactNode; children?: ReactNode }) {
+function LiveSpan() {
+  const [crop, setCrop] = useState<SpanCrop>();
+  useEffect(() => {
+    const phone = matchMedia(`(max-width: ${breakpoints.phone}px)`);
+    const update = () => setCrop(phone.matches ? "phone" : "desktop");
+    update();
+    phone.addEventListener("change", update);
+    return () => phone.removeEventListener("change", update);
+  }, []);
+  if (!crop) return null;
+  const { line, mask } = span[crop];
+  return <FieldArt spec={line} mask={mask} playing style={{ position: "absolute", inset: 0 }} />;
+}
+
+// The plate and the canvas share a band. It prints frame zero as soon as the page's CSS loads.
+export function Opener({ kind, title, lede }: { kind: OpenerKind; title: string; lede: string }) {
+  const plate = (crop: SpanCrop, mode: "light" | "dark") =>
+    `image-set(url("${spanPlate(kind, crop, mode, 1)}") 1x, url("${spanPlate(kind, crop, mode, 2)}") 2x)`;
+  const plates = {
+    "--st-span-light": plate("desktop", "light"),
+    "--st-span-dark": plate("desktop", "dark"),
+    "--st-span-phone-light": plate("phone", "light"),
+    "--st-span-phone-dark": plate("phone", "dark"),
+  } as CSSProperties;
+
   return (
-    <header id="top" className="st-opener">
-      <div className="st-opener-band">
-        <Plate
-          name="opener"
-          phone="opener-phone"
-          width={696}
-          height={196}
-          label="a two-ply cord, screened in two inks"
-        />
-        <CropMarks />
-        <div className="st-opener-knock">
-          <h1>{title}</h1>
-        </div>
+    <header id="top" className="st-opener st-island dark">
+      <div className="st-opener-copy">
+        <h1>{title}</h1>
+        <p className="type-lede">{lede}</p>
       </div>
-      {lede && <p className="st-opener-lede type-lede">{lede}</p>}
-      {children}
+      <div className="st-opener-field" style={plates} aria-hidden="true">
+        <div className="st-opener-plate" />
+        {kind === "home" && <LiveSpan />}
+      </div>
     </header>
   );
 }

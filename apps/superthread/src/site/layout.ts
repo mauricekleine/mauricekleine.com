@@ -8,6 +8,7 @@ export type PageSection = { id: string; title: string };
 declare module "@tanstack/react-router" {
   interface StaticDataRouteOption {
     sections?: readonly PageSection[];
+    openerLede?: string;
   }
 }
 

@@ -7,11 +7,11 @@ import type { Mode } from "@/foundations/master";
 import { Copy } from "@/foundations/parts";
 import { breakpoints } from "@/site/layout";
 import { ModePair } from "@/site/ModePair";
-import { PageHead } from "@/site/PageHead";
 import { Section } from "@/site/Section";
 
 export const Route = createFileRoute("/foundations/space")({
   staticData: {
+    openerLede: `a ${tokens.space.base} px base, square corners and 1 px edges. layers lift under one light from the upper left, and in light their contact edge prints as a screen.`,
     sections: [
       { id: "scale", title: "scale" },
       { id: "rows", title: "rows" },
@@ -112,11 +112,6 @@ function Page() {
   const contact = tokens.texture.contact;
   return (
     <>
-      <PageHead
-        title="space"
-        lede={`a ${tokens.space.base} px base, square corners and 1 px edges. layers lift under one light from the upper left, and in light their contact edge prints as a screen.`}
-      />
-
       <Section id="scale" title="scale">
         <Copy>every gap, padding and size is a step on the {tokens.space.base} px base.</Copy>
         <ol className="st-f-scale">
