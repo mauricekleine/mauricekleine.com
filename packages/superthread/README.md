@@ -48,6 +48,22 @@ Fetch `/r/v/<version>/doc.json` and its `tokens-plain.json` dependency from the 
 
 The scripts run in an opaque-origin sandbox with inline scripts enabled. The mode control keeps its choice on the page. See [the document specimens](https://superthread.mauricekleine.com/compositions/doc) for the partials and [the document spec](DESIGN.md#documents) for when to use them.
 
+### react documents
+
+```sh
+bunx --bun shadcn@latest add @mk/doc-react
+```
+
+Import the sections from `@/components/superthread/ui/doc-react`. Link `styles/superthread-plain.css` then
+`styles/doc.css` in the document route's head. Both come from the item's dependencies. The document stylesheet
+styles the whole page, so keep its link with the document route. Run `themeScript` from `lib/theme` before the
+page paints. The React sections mount their own weaves and use the fleet theme store for the mode button.
+
+Put the full-bleed opener, bands and footer outside `.frame`. Wrap the reading column in `<main className="frame">`.
+The hero is live by default. Pass `still` when another field moves, and `modeToggle={false}` when the page already
+has a mode control. Each [document specimen](https://superthread.mauricekleine.com/compositions/doc) pairs the JSX
+with the matching HTML.
+
 ### modes, fonts and marks
 
 - `:root` and `.light` are light; `.dark` on an ancestor is dark. A `.light` inside a dark page renders light again, so specimens can sit side by side.
@@ -77,7 +93,7 @@ www and the share Worker print on v2 from this package. Apps in this repo can im
 | tier  | items                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | style | `init`, `tokens`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| lib   | `tokens-plain`, `doc`, `utils`, `fleet`, `theme`, `time-words`, `use-minute`, `hotkey`                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| lib   | `tokens-plain`, `doc`, `doc-react`, `utils`, `fleet`, `theme`, `time-words`, `use-minute`, `hotkey`                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | brand | `glyphs`; controls `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`; fields `input`, `input-group`, `textarea`, `field`, `select`, `native-select`; layers `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`; structure `field-art`, `paper`, `fit-title`, `inline-answers`, `onward`, `source-line`, `source-mark`, `weave`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
 | pass  | `card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile`: base-nova's items on the superthread tokens                                                                                                                                                                                                                                                                                                                                                                                                                |
 | block | `app-shell`, `page-header`, `section-header`, `collection-toolbar`, `list-rows`, `jump-line`, `item-cards`, `data-table`, `states`, `facts`, `form-section`, `quick-add`, `letter`, `send-bar`, `job-sheet`, `day-line`, `month-grid`, `reader`, `notice`, `search-palette`: the compositions the fleet's apps repeat, built from the items above. Each installs at `components/superthread/blocks/<name>.tsx`, and its meta's `serves` names the apps it serves                                                                          |
@@ -179,7 +195,7 @@ When the master world moves, run `vendor` against it, then regenerate. The tests
 4. add every item and build a page that renders each brand item in light and dark
 5. `apply nova` and `init --reinstall --preset nova` leave every installed file unchanged
 6. init on a fresh app, in the recorded form
-7. a pinned version installs the same files, once a snapshot exists
+7. a pinned version installs the same button files and builds a route with all 24 sections after a standalone add of `@mk/doc-react`
 8. every upstream request came from the mirror, and none missed
 
 The report lands in `test/clean-room/.out/report.json`. Flags: `--record` re-records the mirror and the init form (network; rerun when the CLI pin or the init form moves, or a run misses on `/upstream`), `--keep <name>` keeps the app with every item installed, `--overlay <file...>` builds from `HEAD` plus only the named files, `--registry <url>` installs from a running site, `--cli latest` runs `shadcn@latest`, and `--refresh-lock` refreshes the fixture's lock when web's pins move.
@@ -190,7 +206,7 @@ This package pins its own shadcn (4.22.1) for the registry build, the mirror and
 
 ## Versions and stamps
 
-- **Version.** `package.json` `version` is the one source for every item, `2.14.0`. A fix to a served item ships as the next patch, including a fix that touches only an item's look or a token, such as a role a new ship needs. A new item or variant ships as the next minor, and so does a change to how the fleet prints, in an item's look or in a token, because every ship has to look at it. A changed API is the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
+- **Version.** `package.json` `version` is the one source for every item, `2.15.0`. A fix to a served item ships as the next patch, including a fix that touches only an item's look or a token, such as a role a new ship needs. A new item or variant ships as the next minor, and so does a change to how the fleet prints, in an item's look or in a token, because every ship has to look at it. A changed API is the next major. The `2.0.0-next.N` snapshots stay published for the apps that pinned them.
 - **Stamps.** Every installed file names its item and version. In TS and TSX, `// @mk/<item> <version>` sits on the line after the last import, or as the last line in a file with no imports, because the CLI strips a leading comment. Plain JS uses the last line. CSS and HTML use line 1, with `/* @mk/<item> <version> */` and `<!-- @mk/<item> <version> -->` respectively.
 - **Meta.** Each built item JSON carries `meta: { version, sha256, tier, upstream }`: the hash of its targets and contents, its tier, and the base-nova item and CLI it was seeded from. A block's meta adds `serves`, the apps it serves. Meta stays in the registry and never reaches an installed file.
 - **Paths.** Latest: `/r/<name>.json` and `/r/registry.json`. Pinned: `/r/v/<version>/<name>.json` and `/r/v/<version>/registry.json`. Index: `/r/versions.json`, `{ latest, versions }`.

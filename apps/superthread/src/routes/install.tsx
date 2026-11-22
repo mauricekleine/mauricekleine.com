@@ -142,7 +142,8 @@ function Page() {
             <h3 className="type-meta">{group.title}</h3>
             <ul>
               {group.items.map((entry) => {
-                const page = nav.find((candidate) => candidate.item === entry.name);
+                const item = entry.name === "doc-react" ? "doc" : entry.name;
+                const page = nav.find((candidate) => candidate.item === item);
                 return (
                   <li key={entry.name} id={`item-${entry.name}`}>
                     <p className="st-in-item">

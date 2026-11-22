@@ -159,6 +159,17 @@ export const catalog: CatalogItem[] = [
     registryDependencies: ["@mk/tokens-plain"],
   },
   {
+    name: "doc-react",
+    type: "registry:item",
+    title: "documents in react",
+    description:
+      "react sections for reports and briefs, with the same markup and stylesheet as the plain html sections",
+    files: [ui("doc-react")],
+    tier: "lib",
+    upstream: null,
+    registryDependencies: ["@mk/doc"],
+  },
+  {
     name: "utils",
     type: "registry:lib",
     title: "utils",

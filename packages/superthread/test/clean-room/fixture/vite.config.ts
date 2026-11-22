@@ -1,5 +1,5 @@
 // The clean room's app: TanStack Start on the Cloudflare Vite plugin, at web's pins.
-// It prerenders / and, once clean-room step 8 has copied all-items.tsx and all-blocks.tsx in, /all and /blocks.
+// It prerenders / and, the routes copied by the clean room for the installed items.
 import { cloudflare } from "@cloudflare/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
@@ -9,7 +9,7 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const copied = (route: string) => existsSync(new URL(`./src/routes${route}.tsx`, import.meta.url));
-const paths = ["/", ...["/all", "/blocks"].filter(copied)];
+const paths = ["/", ...["/all", "/blocks", "/documents"].filter(copied)];
 
 export default defineConfig({
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },

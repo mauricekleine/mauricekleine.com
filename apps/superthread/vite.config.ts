@@ -53,6 +53,15 @@ export default defineConfig(({ command }) => ({
     alias: [
       // the catalog is the registry's index, not a served item, so it always comes from the source
       { find: "@/components/superthread/catalog", replacement: local("../../packages/superthread/items/catalog.ts") },
+      // the plain tokens are generated under dist instead of items, and only the registry moves them into styles
+      ...(command === "serve"
+        ? [
+            {
+              find: /^@\/components\/superthread\/styles\/superthread-plain\.css(?=\?|$)/,
+              replacement: local("../../packages/superthread/dist/v2/superthread-plain.css"),
+            },
+          ]
+        : []),
       { find: "@/components/superthread", replacement: items(command) },
       { find: "@", replacement: local("./src") },
     ],
