@@ -23,13 +23,22 @@ export function EssayList({ variant }: { variant: "home" | "index" }) {
   );
 }
 
-// The portrait shares the sky's dark scope. The white ink falls on the light of the face.
+// The portrait shares the sky's dark scope. The dot plates leave the island stock open.
 function Portrait() {
   return (
     <span className="portrait-wrap">
       <picture className="portrait">
-        <source media="(max-width: 600px)" srcSet="/portrait/maurice-136-dark.png" />
-        <img src="/portrait/maurice-196-dark.png" alt="Portrait of Maurice Kleine" width="196" height="196" />
+        <source
+          media="(max-width: 600px)"
+          srcSet="/portrait/maurice-136-1x.png 1x, /portrait/maurice-136-2x.png 2x, /portrait/maurice-136-3x.png 3x"
+        />
+        <img
+          src="/portrait/maurice-196-1x.png"
+          srcSet="/portrait/maurice-196-1x.png 1x, /portrait/maurice-196-2x.png 2x, /portrait/maurice-196-3x.png 3x"
+          alt="Portrait of Maurice Kleine"
+          width="196"
+          height="196"
+        />
       </picture>
       <span className="moon" aria-hidden="true"></span>
     </span>
