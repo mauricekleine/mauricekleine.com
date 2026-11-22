@@ -10,7 +10,7 @@ The site prints on Superthread v2. Its values, type and rules live in `packages/
 
 - The masthead holds the wordmark, crumb and status block in a 77 px row. It sticks at the top on desktop, where the island supplies its inks without enclosing its sticky box.
 - The home island fills at least `100svh`. The title and lede sit on solid stock above the sky. The "currently" link jumps to the first section. Inner pages put their title and context above a slim band.
-- The body has three columns divided by 1 px rules. The 264 px boxed nav holds the mode control at its foot. The page runs to 696 px in a column with 56 px gutters. The 368 px aside holds "on this page".
+- The body has three columns divided by 1 px rules. The 264 px boxed nav holds the mode control at its foot. The page runs to 696 px in a column with 56 px gutters. The 368 px aside holds "on this page". The column rules rise from the foot of the band, and the first section starts with an open top.
 - At 1279 the aside narrows to 312 px and the gutters to 40 px. At 1099 the aside drops out and the status prints in the foot. At 900 the masthead becomes static and carries the compact mode control. A nav row sits under it inside the island and the body becomes one column. At 600 the band and portrait take their phone sizes and the nav and mode targets reach 44 px.
 - The lost page uses the stored mode from the head script and ships without a client entry. Its nav links work as plain anchors.
 

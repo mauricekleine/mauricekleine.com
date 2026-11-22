@@ -118,7 +118,7 @@ function buildHead(page: PageSeo): { meta: Meta[]; links: Link[]; scripts: Scrip
       crossOrigin: "",
     },
   );
-  links.push({ rel: "stylesheet", href: `${page.relativeStylesheet ? "" : "/"}style.css?v=20261121-amsterdam` });
+  links.push({ rel: "stylesheet", href: `${page.relativeStylesheet ? "" : "/"}style.css?v=20261122-page-stock` });
 
   const scripts: Script[] = [];
   if (page.turnstile)

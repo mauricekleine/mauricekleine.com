@@ -491,6 +491,9 @@
     height: 1px;
     background: var(--rule);
   }
+  .mk-page > .mk-section:first-child::before {
+    content: none;
+  }
   .mk-section h2 + * {
     margin-top: 24px;
   }

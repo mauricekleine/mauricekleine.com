@@ -500,7 +500,7 @@ function subscribePage({ title, description, heading, message, action, back }: S
     <meta name="robots" content="noindex" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/maurice.png" />
-    <link rel="stylesheet" href="/style.css?v=20261121-amsterdam" />
+    <link rel="stylesheet" href="/style.css?v=20261122-page-stock" />
   </head>
   <body>
     <div class="dark mk-island mk-island-solo">
