@@ -1,0 +1,2457 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "mk",
+  "homepage": "https://superthread.mauricekleine.com",
+  "items": [
+    {
+      "name": "init",
+      "type": "registry:base",
+      "extends": "none",
+      "title": "init",
+      "description": "sets up an app for @mk: the base-nova style, the tokens, utils and the button",
+      "dependencies": [
+        "@base-ui/react@^1.8.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@mk/utils",
+        "@mk/tokens",
+        "@mk/button"
+      ],
+      "config": {
+        "style": "base-nova",
+        "rsc": false,
+        "tsx": true,
+        "registries": {
+          "@mk": "https://superthread.mauricekleine.com/r/v/2.15.1/{name}.json"
+        }
+      },
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "tier": "style",
+        "upstream": null
+      }
+    },
+    {
+      "name": "tokens",
+      "type": "registry:style",
+      "extends": "none",
+      "title": "tokens",
+      "description": "the superthread theme: colour roles for light and dark, type, motion, shape and the texture tiles",
+      "dependencies": [
+        "tw-animate-css@^1.4.0",
+        "shadcn@^4.22.1"
+      ],
+      "files": [
+        {
+          "path": "dist/v2/superthread.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread.css"
+        }
+      ],
+      "css": {
+        "@import \"tw-animate-css\"": {},
+        "@import \"shadcn/tailwind.css\"": {},
+        "@import \"./components/superthread/styles/superthread.css\"": {}
+      },
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "cb490dab4994861299cd8238f3e7555e0b13d1bb761eb5227272aa0a9e9a0121",
+        "tier": "style",
+        "upstream": null
+      }
+    },
+    {
+      "name": "tokens-plain",
+      "type": "registry:item",
+      "title": "plain tokens",
+      "description": "the same tokens as plain css with no tailwind, and as a typed module",
+      "files": [
+        {
+          "path": "dist/v2/superthread-plain.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/superthread-plain.css"
+        },
+        {
+          "path": "items/lib/tokens.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/tokens.ts"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "63da9d5bfc9011e57f4625940b7658e31f901060d6ba1b240037d89d147e88ad",
+        "tier": "lib",
+        "upstream": null
+      }
+    },
+    {
+      "name": "doc",
+      "type": "registry:item",
+      "title": "doc",
+      "description": "plain html document sections, their stylesheet, a mode control and the weave runtime",
+      "registryDependencies": [
+        "@mk/tokens-plain"
+      ],
+      "files": [
+        {
+          "path": "items/styles/doc.css",
+          "type": "registry:file",
+          "target": "@components/superthread/styles/doc.css"
+        },
+        {
+          "path": "items/doc/mode.js",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/mode.js"
+        },
+        {
+          "path": "items/doc/weave.js",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/weave.js"
+        },
+        {
+          "path": "items/doc/sections/hero.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/hero.html"
+        },
+        {
+          "path": "items/doc/sections/slim-head.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/slim-head.html"
+        },
+        {
+          "path": "items/doc/sections/band.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/band.html"
+        },
+        {
+          "path": "items/doc/sections/meta-line.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/meta-line.html"
+        },
+        {
+          "path": "items/doc/sections/contents.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/contents.html"
+        },
+        {
+          "path": "items/doc/sections/lede.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/lede.html"
+        },
+        {
+          "path": "items/doc/sections/section-head.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/section-head.html"
+        },
+        {
+          "path": "items/doc/sections/steps.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/steps.html"
+        },
+        {
+          "path": "items/doc/sections/rows.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/rows.html"
+        },
+        {
+          "path": "items/doc/sections/timeline.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/timeline.html"
+        },
+        {
+          "path": "items/doc/sections/sources.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/sources.html"
+        },
+        {
+          "path": "items/doc/sections/claim.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/claim.html"
+        },
+        {
+          "path": "items/doc/sections/stat-row.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/stat-row.html"
+        },
+        {
+          "path": "items/doc/sections/table.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/table.html"
+        },
+        {
+          "path": "items/doc/sections/figure.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/figure.html"
+        },
+        {
+          "path": "items/doc/sections/before-and-after.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/before-and-after.html"
+        },
+        {
+          "path": "items/doc/sections/notice.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/notice.html"
+        },
+        {
+          "path": "items/doc/sections/decisions.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/decisions.html"
+        },
+        {
+          "path": "items/doc/sections/transcript.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/transcript.html"
+        },
+        {
+          "path": "items/doc/sections/closing-line.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/closing-line.html"
+        },
+        {
+          "path": "items/doc/sections/footer.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/footer.html"
+        },
+        {
+          "path": "items/doc/sections/draft-strip.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/draft-strip.html"
+        },
+        {
+          "path": "items/doc/sections/chip.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/chip.html"
+        },
+        {
+          "path": "items/doc/sections/mode-toggle.html",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/sections/mode-toggle.html"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "c247a4e80e32e3da1b9009c4213a74c8feca18631acf24c94b9399bea0713b5d",
+        "tier": "lib",
+        "upstream": null
+      }
+    },
+    {
+      "name": "doc-react",
+      "type": "registry:item",
+      "title": "documents in react",
+      "description": "react sections for reports and briefs, with the same markup and stylesheet as the plain html sections",
+      "registryDependencies": [
+        "@mk/doc",
+        "@mk/table",
+        "@mk/theme",
+        "@mk/weave"
+      ],
+      "files": [
+        {
+          "path": "items/ui/doc-react.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/doc-react.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "932ff1c415a05f97b5e0875b6c2d15529be0ff5b4525528594af4f0722dbba8c",
+        "tier": "lib",
+        "upstream": null
+      }
+    },
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "utils",
+      "description": "cn, with superthread's type steps taught to the class merger",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "files": [
+        {
+          "path": "items/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/utils.ts"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "17d5cb005e11f7122fb6f30db01aab14987f1f390801eaa88c4073e30caf4b7f",
+        "tier": "lib",
+        "upstream": {
+          "style": "base-nova",
+          "item": "utils",
+          "sha256": "74f5bc88a74dfc19f7cbfaa0c152a5e9b9d3a62823b32b48677652968b442593",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "fleet",
+      "type": "registry:lib",
+      "title": "fleet",
+      "description": "the ships: ids, names, one-line descriptors, rail membership, line-screen angles and mark file names",
+      "files": [
+        {
+          "path": "items/lib/fleet.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/fleet.ts"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "f1c2f05fdfa4542da8cc49ab864f6272cc57c2c8d2b2e2c0e260a0a56a75667b",
+        "tier": "lib",
+        "upstream": null
+      }
+    },
+    {
+      "name": "theme",
+      "type": "registry:lib",
+      "title": "theme",
+      "description": "the fleet's one light and dark choice: the script that sets it before paint, and its store",
+      "files": [
+        {
+          "path": "items/lib/theme.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/theme.ts"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "7d66dbf68ffef6d92b7b06c3084f955bb9cf0be9dcfe2e972f1b65922b5029b0",
+        "tier": "lib",
+        "upstream": null
+      }
+    },
+    {
+      "name": "time-words",
+      "type": "registry:lib",
+      "title": "time-words",
+      "description": "time in the fleet's words: since friday, before 11:00, 48 min until standup, every day at 07:00",
+      "files": [
+        {
+          "path": "items/lib/time-words.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/time-words.ts"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "76429092a89cb6b074850c7b93e73f999505bd0f42ebc4072ee43eea45ed2a53",
+        "tier": "lib",
+        "upstream": null
+      }
+    },
+    {
+      "name": "hotkey",
+      "type": "registry:lib",
+      "title": "hotkey",
+      "description": "whether a bare key press is the page's to answer, away from typing and from layers that keep their keys",
+      "files": [
+        {
+          "path": "items/lib/hotkey.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/hotkey.ts"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "a99b980c15216136e6a9a6917edf2c5f66cb54e77ea4390f7246cd9c2581dc8a",
+        "tier": "lib",
+        "upstream": null
+      }
+    },
+    {
+      "name": "glyphs",
+      "type": "registry:ui",
+      "title": "glyphs",
+      "description": "the pixel icons and status glyphs, drawn as whole-pixel squares in the current colour, and a state word beside its 8 px square",
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/glyphs.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/glyphs.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "f16aa309ba44bc2a7e75af998557eb19fc12ce2895341a504dcf781dc14af5dc",
+        "tier": "brand",
+        "upstream": null
+      }
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "button",
+      "description": "a button in the house ink on paper and an outline off it, with secondary, outline, ghost, key, link and destructive variants",
+      "dependencies": [
+        "@base-ui/react@^1.8.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/button.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/button.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "f79157baf41e906577d4d508540a29ae90e0b0230604e4d3f6efaecae96680cf",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "button",
+          "sha256": "9ba7e870178813f0552b818a913a2792fb500c779e36395740b4973e3025d427",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "badge",
+      "description": "a badge, with a status variant for each state: done, running, waiting, failed and queued",
+      "dependencies": [
+        "@base-ui/react@^1.8.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/badge.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/badge.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "61b334414fde365a843c3fe17cfaf7ec7199d11c59b9816080ed190203e06dc5",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "badge",
+          "sha256": "ccc20021cdcbf0fb23c0d4d28f1da4adde8e51ba59f4b11dd2722ed97a5ee3a4",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "input",
+      "description": "a text field with the one focus edge",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/input.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/input.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "3e7e9de667f8cb47785a542810d499b4ae5c5766604c16a3cf552b788c80c07f",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "input",
+          "sha256": "bbad1bba130ac9750a61844eeb8f043e8a710846e07689fa85398b80a46c2741",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "input-group",
+      "type": "registry:ui",
+      "title": "input group",
+      "description": "a field box that holds a text control with addons and buttons beside it",
+      "dependencies": [
+        "@base-ui/react@^1.8.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/input-group.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/input-group.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "e6a12ed4a9858a974afdbe88ee24c198c883154418b4f538e654a5ac0dfe7798",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "input-group",
+          "sha256": "acf9c5497a6c844dee87fbd4afefb6cd8be9ce50d050d14d58a340d955e517a1",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "textarea",
+      "description": "a multi-line text field with the one focus edge, and a code form for json and keys",
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/textarea.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/textarea.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "954571013db7472e5364c1985bf5d9f473a4cc7c237d71ec05ab77776edeb053",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "textarea",
+          "sha256": "8f01f6bc4ee556263bae7644e8b527022fa77ff203f33a258bb47142ef7d9c81",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "select",
+      "description": "a select whose trigger is a field and whose list is a raised layer",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/select.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/select.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "42726c5731bc036470e2dcd36c24713909f186199e15963aa02d23bf16111a8e",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "select",
+          "sha256": "425e9b0a28b72617f18fabd75384050113295b88e7ba01c35bede2c72bd5d476",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "dialog",
+      "description": "a square dialog on the sheet lift",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/dialog.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/dialog.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "82728732d0a623040250835db2c8cb693275f543d927a38c574abd038fb6bd5f",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "dialog",
+          "sha256": "40fc321d25eb9590d07db54b00d9bc1a74274a549aa06d5915a34ba302ed8b94",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "tabs",
+      "description": "tabs with a solid current tab",
+      "dependencies": [
+        "@base-ui/react@^1.8.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/tabs.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/tabs.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "6d23910a28de52049e8611e849c8b4a61de1d0816d06f273b06f4ee6b6b8ed8f",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "tabs",
+          "sha256": "b4552a0329dd9a6e2bfaf03405c133874df5a4930c7bb3dd84c9ab5c45b89402",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "table",
+      "description": "a table with mono ids and tabular numbers, an edge beside the row under the pointer, and a full-bleed form that folds at its own width",
+      "dependencies": [
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/table.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/table.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "7fa360eb923b5a7b27537d3b15a707b59533069748441024a437c79a1794cd41",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "table",
+          "sha256": "054c89df40058a96723c9ed8cde6308e738f3a303fd19301ce94ade032306b60",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "progress",
+      "description": "a flat foreground bar with a screened leading edge",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/progress.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/progress.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "5471f271b75cd6ea0792cad0c72fe4f946c5d39fd8df20538a40681bf21c0ae5",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "progress",
+          "sha256": "359e72beff723311ec2e4d5154a0f80dedd253bd6b16959a4db0773714ceab52",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "toast",
+      "description": "base ui toasts on the leaf lift, with a status glyph for each kind",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/toast.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/toast.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "dc32a0576beb9c2a1b716e881447029c21ed2f0bb384f4844a1a6a7d5a4fb63a",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "toast",
+          "sha256": "161ed77c409fe7345ee6308f7cf66f7bcf2717d8d5e1a8b36a7f8e8fa0df745e",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "sidebar",
+      "description": "the sidebar on the deep ground, with a neutral current item",
+      "dependencies": [
+        "@base-ui/react@^1.8.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/glyphs",
+        "@mk/input",
+        "@mk/separator",
+        "@mk/sheet",
+        "@mk/skeleton",
+        "@mk/tooltip",
+        "@mk/use-mobile",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/sidebar.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/sidebar.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "a2b34d352d78a0b859ccb0c17687e3a3f17c677acb229bf930860525e14f677d",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "sidebar",
+          "sha256": "02b1ea430fb246da062048f0161a01d1b34a2c787f6974958c9b20a3142120a6",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "fleet-rail",
+      "type": "registry:block",
+      "title": "fleet rail",
+      "description": "the rail of ship marks for moving between fleet surfaces; each ship links to its fleet url unless you pass an href",
+      "registryDependencies": [
+        "@mk/fleet",
+        "@mk/sidebar",
+        "@mk/theme",
+        "@mk/tooltip",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/fleet-rail.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/fleet-rail.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "2e45c2e3670ebaf19d7a29e47972d732520fe2743ad9035424c1a6a805426d4b",
+        "tier": "brand",
+        "upstream": null
+      }
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "checkbox",
+      "description": "a square checkbox with a screened mixed state",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/checkbox.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/checkbox.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "8146195bae7143a0e0169f4cede3566c72d9196befb1ccaf1f40aa396eb0115c",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "checkbox",
+          "sha256": "e6df7b595f25a7ee97c3fb94e0ddc35998f74c98b990d3030e485905ec677178",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "skeleton",
+      "description": "loading rows, screened on whole-pixel bars",
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/skeleton.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/skeleton.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "3f022ac6995777f2995ba4fe2142d0dc845cfa1bd27fe0d62c62b4c55bf1086b",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "skeleton",
+          "sha256": "85692a09912f518ffd64c540dfcf098fe748a807baf288c107cf8126496cf886",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "switch",
+      "description": "a square switch: foreground when on, a stock square that crosses the track",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/switch.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/switch.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "e5733545e584c3f83f9ae26db22f7d3d6e468b125407ac30b69be07a2396ecbd",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "switch",
+          "sha256": "1f22350ccbf358a3aa198305c41d91e146abc0a7d5b18a9a23488b8d6b264ab4",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "radio group",
+      "description": "square radios: the chosen one edged in foreground with its 8 px square",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/radio-group.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/radio-group.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "7328ae3e4e154485ffc979ec6bc48fd49072c9f899e284628a10e885a7bcb38b",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "radio-group",
+          "sha256": "874b30662ba338d06362491b663cae9198281a4bc385b6be6425f2de442384d7",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "slider",
+      "description": "a slider on a ruled track, with a flat foreground range and a square thumb",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/slider.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/slider.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "b9e0b116a17b8c29bf53430832dddbea53fba46a6fc37e5266ce8decf94f1e4c",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "slider",
+          "sha256": "646bcd7913417b786bbf7578484f851bf89c81a62f70ef9c4f3522e2af80a951",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "toggle",
+      "description": "a button that stays pressed, with a foreground edge and a tick while it is on",
+      "dependencies": [
+        "@base-ui/react@^1.8.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/toggle.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/toggle.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "4b0f11c705b6bac0fc2b33b56ece8db9f9947094bd3bb80758774d83342133be",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "toggle",
+          "sha256": "f06447a03bcc1e510f3a50d5e7735bd82bdc17bc77849596709727c215bcc20e",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "title": "toggle group",
+      "description": "toggles joined on shared 1 px edges, one or several pressed",
+      "dependencies": [
+        "@base-ui/react@^1.8.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@mk/toggle",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/toggle-group.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/toggle-group.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "725a0235dfba20d8ddbd74bb4ca123ff12cc8aa9c74a7929f450ec79c31993c6",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "toggle-group",
+          "sha256": "9f103af4a048ec392cb09b886985ec733a360a0033cc7138349f1775851a89d4",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "button group",
+      "description": "buttons and fields joined on shared 1 px edges",
+      "dependencies": [
+        "@base-ui/react@^1.8.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@mk/separator",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/button-group.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/button-group.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "d7c6d9945a5f9e7da8dbf8c62044e01550543ef255d6926d01bec0869a4325fb",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "button-group",
+          "sha256": "da9bceac03af172022b214f89561b2bf9e0cccac63d46cfe2e1c9f2c8e6792e9",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "kbd",
+      "description": "a key, set in mono in a 1 px box",
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/kbd.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/kbd.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "bd0764376dc8768c0c6cee652aae14c2bca90be6a5c251726cc125de9a916cba",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "kbd",
+          "sha256": "4cfe2ba8e19f4d19d090eb039e3f1c041c9cfb379ce948237a9b5018203f7a6c",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "dropdown menu",
+      "description": "a menu on the leaf lift, with checkbox, radio and sub-menu items",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/dropdown-menu.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/dropdown-menu.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "26b60d0d99e79656e3f2d399cfd8a0efc329a89b78da4075064c9a1db7bc4304",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "dropdown-menu",
+          "sha256": "335c59dba30145f434a9cc9ccb0438a3c5e2afe857fc11b029de1ecb415224d7",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "combobox",
+      "description": "a field that filters a list on the leaf lift, for one value or several as chips",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/glyphs",
+        "@mk/input-group",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/combobox.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/combobox.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "9805bd76fd973880d845ae2045c10ff45beb0d9668b01efc6ab271dde97fc0f2",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "combobox",
+          "sha256": "d4b9231b00428269f6fa42bf3e26714f15c69245f35b62d1bbae6d1a4853d314",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "command",
+      "type": "registry:ui",
+      "title": "command",
+      "description": "a command list with a search field, inline or in a dialog",
+      "dependencies": [
+        "cmdk@^1.1.1"
+      ],
+      "registryDependencies": [
+        "@mk/dialog",
+        "@mk/glyphs",
+        "@mk/input-group",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/command.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/command.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "fe6ea63ccdfa0e9c07be01554eefb4c0dfd62035849974e8670344a906ca6923",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "command",
+          "sha256": "626b25da7b65ae2e800e5c7bc516f2223c2a144fb745ddaf0dcbf746d879f3d1",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:ui",
+      "title": "alert dialog",
+      "description": "a dialog that asks before an action, on the sheet lift",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/alert-dialog.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/alert-dialog.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "02c31b4f4333ab2013fde6960b6615117d901ac1fdf4443bd1f92f495655b914",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "alert-dialog",
+          "sha256": "974543244faee02eb4ea40264b7e0bbda2b01c3f2c369de965d2ac771c57a8af",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "sonner",
+      "type": "registry:ui",
+      "title": "sonner",
+      "description": "sonner's toaster in the toast's dress: the leaf lift and a status glyph for each kind",
+      "dependencies": [
+        "sonner@^2.0.8"
+      ],
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/sonner.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/sonner.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "a21c766dd65ce4adc34e477e3ddfae6ce33d7ee36c5d4c16a3c96259830c89fb",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "sonner",
+          "sha256": "831967f80f645ac3908b356a44748698a9ceed1c6a51b232dd5e87c52a54d7c3",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "accordion",
+      "description": "sections that open in place, ruled edge to edge",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/accordion.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/accordion.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "18310b2921a85e86aa967c5af4ee9387f6d0d14b695531dbc8038a5cd2434023",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "accordion",
+          "sha256": "01509cb2a91779ee74c2d4a1f75842c0a258bed1758be4f2567af9daabdc39ac",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "field",
+      "description": "labels, descriptions and errors around any control, with the bang before an error",
+      "dependencies": [
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/separator",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/field.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/field.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "7ae4fb5226984f7b809a70cd3bae0a7ba7f1658aa946bb1064b090d5dbe78ac4",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "field",
+          "sha256": "586110f5563cbb5dc0929207ee34361f1349cf2f816465799c60b98821e4cedc",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "native-select",
+      "type": "registry:ui",
+      "title": "native select",
+      "description": "the browser's own select in a field box",
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/native-select.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/native-select.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "0048add5699c9d3f9bf50593b07babc4c5788c2f832478a09cf0aa56c8d57ce3",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "native-select",
+          "sha256": "743d128b09f67c1921e3c302e778834639e5be92c454205cabfb61eed34b4ff1",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "breadcrumb",
+      "description": "the path to the page, in muted words with the current one in the first ink",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/breadcrumb.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/breadcrumb.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "55751faf7f2829cb72ee1aba888d1b51157f1e61bc380eed28e6de7eee21263a",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "breadcrumb",
+          "sha256": "5e7a33d921824d659494dc90411393cdf795c0ad5c94631da5c2883924623350",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "resizable",
+      "type": "registry:ui",
+      "title": "resizable",
+      "description": "panels split by a 1 px rule you can drag, with an optional grip",
+      "dependencies": [
+        "react-resizable-panels@^4.14.1"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/resizable.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/resizable.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "baf6f666bda15e031375fd9698523a1e083196994934ff82a23509fbe27d28cb",
+        "tier": "brand",
+        "upstream": {
+          "style": "base-nova",
+          "item": "resizable",
+          "sha256": "7415e497f342485720b6c878c81604eda0aa8b479a2211e4355c324de89a1672",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "paper",
+      "type": "registry:ui",
+      "title": "paper",
+      "description": "the one white block on a page, white in every theme and on the slip lift in light",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/paper.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/paper.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "cffbb4bb6f7e39dd3d593fd09ccd151e87df145f1a358567bbd27e56bbc127ed",
+        "tier": "brand",
+        "upstream": null
+      }
+    },
+    {
+      "name": "fit-title",
+      "type": "registry:ui",
+      "title": "fit title",
+      "description": "a title that steps down until it fits its box, by measurement, and cuts at a word only when the whole title can't",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/fit-title.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/fit-title.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "80740d537283daef23761ae9e58f93a78f7d0a1071106cbd4c837e5a1434129d",
+        "tier": "brand",
+        "upstream": null
+      }
+    },
+    {
+      "name": "inline-answers",
+      "type": "registry:ui",
+      "title": "inline answers",
+      "description": "a suggestion that takes correction in its own slot: a wrong? control swaps the line for plain answers there",
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/inline-answers.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/inline-answers.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "ad85029e50a637d1c4b3b0cb0358ed1f47903293e93871c6c6862793c3a01546",
+        "tier": "brand",
+        "upstream": null
+      }
+    },
+    {
+      "name": "onward",
+      "type": "registry:ui",
+      "title": "onward",
+      "description": "the way onward from a page: a word and its arrow, or a door, one line of words with an arrow",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/onward.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/onward.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "6ac630959657c664dd58d0881ec72f5cf2d87e7cd7fcf84ebfd2c43fa458f97e",
+        "tier": "brand",
+        "upstream": null
+      }
+    },
+    {
+      "name": "source-line",
+      "type": "registry:ui",
+      "title": "source line",
+      "description": "a wrapping row of cited sources at the instrument step, and what closes the line at its far side",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/source-line.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/source-line.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "a04cd06b902b9eecf76891a521fdfbd41488620f5c0dd51261513bdd0837ba40",
+        "tier": "brand",
+        "upstream": null
+      }
+    },
+    {
+      "name": "source-mark",
+      "type": "registry:ui",
+      "title": "source mark",
+      "description": "the 96 px frame a third-party mark prints in, in one ink, with a second frame on hover",
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/source-mark.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/source-mark.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "62c18bff06f8401b51cd30e9b783f6d81b3713af6c4592070b780010927d3369",
+        "tier": "brand",
+        "upstream": null
+      }
+    },
+    {
+      "name": "weave",
+      "type": "registry:item",
+      "title": "weave",
+      "description": "a screened field for a hero or a band, with four ramps and a plum thread",
+      "files": [
+        {
+          "path": "items/lib/screen-core.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/screen-core.ts"
+        },
+        {
+          "path": "items/lib/dot-screen.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/dot-screen.ts"
+        },
+        {
+          "path": "items/lib/weave-core.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/weave-core.ts"
+        },
+        {
+          "path": "items/ui/weave.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/weave.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "cd5f238c44bf8e44e83aad87a7ea21a4d47d5c54ce41a942c91c2bf46b7efd1b",
+        "tier": "brand",
+        "upstream": null
+      }
+    },
+    {
+      "name": "field-art",
+      "type": "registry:item",
+      "title": "field art",
+      "description": "screened concept art for figures and openers",
+      "registryDependencies": [
+        "@mk/weave"
+      ],
+      "files": [
+        {
+          "path": "items/ui/field-art.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/field-art.tsx"
+        },
+        {
+          "path": "items/lib/field-core.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/field-core.ts"
+        },
+        {
+          "path": "items/lib/field-live.ts",
+          "type": "registry:lib",
+          "target": "@components/superthread/lib/field-live.ts"
+        },
+        {
+          "path": "items/doc/field-art.js",
+          "type": "registry:file",
+          "target": "@components/superthread/doc/field-art.js"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "c29d98cd3beb3a8d021863ff2deec5236f5a570f4a0d92e5f89b58530534c55a",
+        "tier": "brand",
+        "upstream": null
+      }
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:ui",
+      "title": "collapsible",
+      "description": "base-nova's collapsible, on the superthread tokens",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/collapsible.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/collapsible.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "9870da6e29d1986082f3aefbe48151ea6292f63ef5229c9f9997db827881aa8e",
+        "tier": "pass",
+        "upstream": {
+          "style": "base-nova",
+          "item": "collapsible",
+          "sha256": "74f78cd88a30185243847968977cf1de9ffbf576547f2ec1f14b5ef55505b90d",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "card",
+      "description": "base-nova's card, on the superthread tokens",
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/card.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/card.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "5490cb6b7488c6b9f80fd49c1831d08df64d7af77e0c7ade7cd10cae8ef8e0d7",
+        "tier": "pass",
+        "upstream": {
+          "style": "base-nova",
+          "item": "card",
+          "sha256": "e73e3fe00ab2e14c4db1dccb1ff5c67041a94c0926ac3216c1dc6dd6dee9d7e0",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "label",
+      "description": "base-nova's label, on the superthread tokens",
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/label.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/label.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "79e63380db36cb8e7f2148fa6d3ff6f2d11d61aae4428f85336419cdae2337d9",
+        "tier": "pass",
+        "upstream": {
+          "style": "base-nova",
+          "item": "label",
+          "sha256": "89b01e14fd39dceece9fa421e71e78ea83286bd43a2ca1c2f55d2e8d3958fff2",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "separator",
+      "description": "base-nova's separator, on the superthread tokens",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/separator.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/separator.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "d28239e3a29294a64dc0ecfedca7bdb1bdcb08b97bd941f416d0d23e3303fcb0",
+        "tier": "pass",
+        "upstream": {
+          "style": "base-nova",
+          "item": "separator",
+          "sha256": "3ad65962485f464592201cb90017b3d52a5c9fe272ce41ee049485b4c42e0d76",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "sheet",
+      "description": "base-nova's sheet, on the superthread tokens",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/sheet.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/sheet.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "3fae4eff08a748f8fcc4045888236efffd48a446bb5110b43ea589167405c994",
+        "tier": "pass",
+        "upstream": {
+          "style": "base-nova",
+          "item": "sheet",
+          "sha256": "72b36d92af7fcbc9bd2d1d4ef0cbc65f4fc8178f7bb2bedaf657460f15011cf4",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "tooltip",
+      "description": "base-nova's tooltip, on the superthread tokens",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/ui/tooltip.tsx",
+          "type": "registry:ui",
+          "target": "@components/superthread/ui/tooltip.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "b3de2e3779ca85550431c5abc11772687bcb8755059ec4f4ac064dc2f10d23d6",
+        "tier": "pass",
+        "upstream": {
+          "style": "base-nova",
+          "item": "tooltip",
+          "sha256": "2f55867faecee2d3616cfd8c6a80b538909a21e62fdfa2788b1ead56093e5395",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "use-mobile",
+      "type": "registry:hook",
+      "title": "use mobile",
+      "description": "base-nova's hook that tells a phone-width viewport",
+      "files": [
+        {
+          "path": "items/hooks/use-mobile.ts",
+          "type": "registry:hook",
+          "target": "@components/superthread/hooks/use-mobile.ts"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "d81deb24374f36ea182330458a894f3e08dd357a87a267ff89ca02b8f3ff2876",
+        "tier": "pass",
+        "upstream": {
+          "style": "base-nova",
+          "item": "use-mobile",
+          "sha256": "f4bfd840445a84352265d7cf66fcd886454b6a2f3834f7caf29d00f68620f87d",
+          "cli": "4.22.1"
+        }
+      }
+    },
+    {
+      "name": "use-minute",
+      "type": "registry:hook",
+      "title": "use minute",
+      "description": "the clock's minute and the reader's day, from one shared timer that stops while the page is hidden",
+      "registryDependencies": [
+        "@mk/time-words"
+      ],
+      "files": [
+        {
+          "path": "items/hooks/use-minute.ts",
+          "type": "registry:hook",
+          "target": "@components/superthread/hooks/use-minute.ts"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "d0d9700aee07ea6a8356d23fd1982d6e6fe2c41f7c6c0c180ffbb2c495f1b7bf",
+        "tier": "lib",
+        "upstream": null
+      }
+    },
+    {
+      "name": "page-header",
+      "type": "registry:block",
+      "title": "page header",
+      "description": "a page's title, with a way back, a lede, its meta and its actions",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/page-header.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/page-header.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "6aa9a6bf0984d348b7a06c86604ff4e23adaa8b39f2f4f311987f68fdf2339eb",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "constellation",
+          "quanta",
+          "trisys",
+          "orbit",
+          "artifacts",
+          "www"
+        ]
+      }
+    },
+    {
+      "name": "states",
+      "type": "registry:block",
+      "title": "states",
+      "description": "what a collection shows while it loads, when it fails and when it is empty, and a page when it's clear",
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/fit-title",
+        "@mk/glyphs",
+        "@mk/onward",
+        "@mk/skeleton",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/states.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/states.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "1550bd64ddf9393f8523d2ca03c3e27ff5df359bbc677944fbfdd56d85519c68",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "constellation",
+          "quanta",
+          "trisys",
+          "orbit",
+          "artifacts"
+        ]
+      }
+    },
+    {
+      "name": "app-shell",
+      "type": "registry:block",
+      "title": "app shell",
+      "description": "a ship's frame: the fleet rail, the ship's own nav with a quiet second tier and the working panel on the deep ground",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/fleet-rail",
+        "@mk/glyphs",
+        "@mk/sidebar",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/app-shell.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "86735994efe685cca793209d094563b8309e735522bca018fa8206b30233aa10",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "constellation",
+          "quanta",
+          "trisys",
+          "orbit",
+          "artifacts"
+        ]
+      }
+    },
+    {
+      "name": "section-header",
+      "type": "registry:block",
+      "title": "section header",
+      "description": "a section's head, with its count and a link to the rest",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/section-header.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/section-header.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "a303090702a3e298c2392cf10ebfbfd3bdb6aa6d90b7a3907a068ba19d00ec50",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "constellation",
+          "quanta",
+          "trisys",
+          "orbit",
+          "www"
+        ]
+      }
+    },
+    {
+      "name": "search-palette",
+      "type": "registry:block",
+      "title": "search palette",
+      "description": "one search over everything, opened from its button or its key",
+      "registryDependencies": [
+        "@mk/command",
+        "@mk/glyphs",
+        "@mk/hotkey",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/search-palette.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/search-palette.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "f1bfadff9f68d161496a94fc28b749869d1063373b5d466b05789d502854bd35",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "constellation",
+          "trisys",
+          "artifacts"
+        ]
+      }
+    },
+    {
+      "name": "collection-toolbar",
+      "type": "registry:block",
+      "title": "collection toolbar",
+      "description": "the row above a collection: its filters, how many show, and how to view them",
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/toggle-group",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/collection-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/collection-toolbar.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "6ae42e56650e05b7d9afcfe462d48d7f7d1923c0b619f7937e61da55fcd3881a",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "constellation",
+          "trisys",
+          "orbit",
+          "artifacts"
+        ]
+      }
+    },
+    {
+      "name": "list-rows",
+      "type": "registry:block",
+      "title": "list rows",
+      "description": "ruled rows, each a title with its time, a meta line and its actions, and plain rows that read as words",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/list-rows.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/list-rows.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "4f3a7ccbc06ded448c08cddf3169fb414230704eb2f7de18ebaec809fee8b6b2",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "constellation",
+          "quanta",
+          "trisys",
+          "orbit",
+          "www"
+        ]
+      }
+    },
+    {
+      "name": "item-cards",
+      "type": "registry:block",
+      "title": "item cards",
+      "description": "a grid of cards, each a title with its status, meta and actions, full-width cards that collapse to one line once decided, or full-bleed tiles in ruled cells",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/card",
+        "@mk/glyphs",
+        "@mk/paper",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/item-cards.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/item-cards.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "5bb0fd691bf1000f7185eeeefdcdcc02c06b4b1228b43c6a098e888c124fdd38",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "trisys",
+          "orbit",
+          "artifacts",
+          "www"
+        ]
+      }
+    },
+    {
+      "name": "data-table",
+      "type": "registry:block",
+      "title": "data table",
+      "description": "a table its heads sort, with chosen rows, a row that opens a detail, sub-entries and a row for when it is empty",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/states",
+        "@mk/table",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/data-table.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "e82b8b985c41ac272d5c7d2e3d6fe8ff8b31f3a3fd4abdb9fe4cea3b342a0513",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "constellation",
+          "quanta",
+          "trisys",
+          "orbit",
+          "artifacts"
+        ]
+      }
+    },
+    {
+      "name": "form-section",
+      "type": "registry:block",
+      "title": "form section",
+      "description": "a titled group of fields that saves or discards its changes",
+      "registryDependencies": [
+        "@mk/field",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/form-section.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/form-section.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "80899a12df6dbb3cdb7fb1d0d98d6d078a95237a644fecf1c857d6d985a3db67",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "quanta",
+          "trisys",
+          "orbit",
+          "www"
+        ]
+      }
+    },
+    {
+      "name": "quick-add",
+      "type": "registry:block",
+      "title": "quick add",
+      "description": "one field and its button, for adding a thing by its name",
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/field",
+        "@mk/glyphs",
+        "@mk/hotkey",
+        "@mk/input",
+        "@mk/input-group",
+        "@mk/sidebar",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/quick-add.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/quick-add.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "d02a0dccde2f32313330fc51e90c5cc5dcf6bfccddaeae256afd39e7fb39f466",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "trisys",
+          "orbit",
+          "www"
+        ]
+      }
+    },
+    {
+      "name": "facts",
+      "type": "registry:block",
+      "title": "facts",
+      "description": "labelled values in a ruled grid",
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/facts.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/facts.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "d18786ef964752acdfc9ea82a116bba1698af77088ccd31eb817f71c06b8c91c",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "constellation",
+          "quanta",
+          "trisys",
+          "orbit",
+          "artifacts"
+        ]
+      }
+    },
+    {
+      "name": "letter",
+      "type": "registry:block",
+      "title": "letter",
+      "description": "a piece of writing read whole: its subject and kind, the body at the reading measure, and its tools",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/letter.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/letter.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "522984f65b631a2421bd31eabe5a84bc43e021bd7985fb1cad827cdf83f416ae",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "orbit",
+          "artifacts"
+        ]
+      }
+    },
+    {
+      "name": "jump-line",
+      "type": "registry:block",
+      "title": "jump line",
+      "description": "a line of anchors to a long page's sections, each with how many it holds",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/jump-line.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/jump-line.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "54fc39256b8bb862f696744fa96f8c7464342b1eed83be208fe5a5b76d58d269",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "quanta",
+          "trisys",
+          "orbit"
+        ]
+      }
+    },
+    {
+      "name": "send-bar",
+      "type": "registry:block",
+      "title": "send bar",
+      "description": "the foot of a review: who it goes to, every address and file, the send and a note under it",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/paper",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/send-bar.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/send-bar.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "ead3e693f2c9de906c683040d3d2ec34002fde63fc743f9a37d6b0639fe94ecd",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "orbit",
+          "artifacts"
+        ]
+      }
+    },
+    {
+      "name": "job-sheet",
+      "type": "registry:block",
+      "title": "job sheet",
+      "description": "the one job on paper: a cue, its title, why, one quiet line and its actions, each in a held slot",
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/fit-title",
+        "@mk/notice",
+        "@mk/paper",
+        "@mk/toggle",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/job-sheet.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/job-sheet.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "dfae0f4279dd02a059c858066b980fbd822612a075f2377a2ac61d2ec11c9cad",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "quanta",
+          "trisys",
+          "orbit"
+        ]
+      }
+    },
+    {
+      "name": "day-line",
+      "type": "registry:block",
+      "title": "day line",
+      "description": "a day at true scale: the date, names over blocks, ticks and a now mark, with every state a calendar has",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/glyphs",
+        "@mk/skeleton",
+        "@mk/time-words",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/day-line.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/day-line.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "c3068333a879f6c38fb2f3c41482bbebe65ea9d14e523c2d97ef0ad66310fdd7",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "constellation",
+          "trisys",
+          "orbit"
+        ]
+      }
+    },
+    {
+      "name": "month-grid",
+      "type": "registry:block",
+      "title": "month grid",
+      "description": "a month as six weeks: a dot on days with content, today's edge, the open day's bar, mono figures and arrow keys that step it",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/button",
+        "@mk/glyphs",
+        "@mk/skeleton",
+        "@mk/time-words",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/month-grid.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/month-grid.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "92c5c10289f57f38435760af8f53a7ea38cfd8d2dff56326559e6f54f5c23882",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "orbit",
+          "artifacts"
+        ]
+      }
+    },
+    {
+      "name": "reader",
+      "type": "registry:block",
+      "title": "reader",
+      "description": "a page of reading: a lead line, the next action on paper, a margin rail, a closing line and a foot, with a meeting brief's who, owed and raised blocks",
+      "dependencies": [
+        "@base-ui/react@^1.8.0"
+      ],
+      "registryDependencies": [
+        "@mk/app-shell",
+        "@mk/paper",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/reader.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/reader.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "6bc1becb07d4ccfe0df2a589c9cfcb69d1847c6dec94979712dc5648a1b34d3b",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "quanta",
+          "trisys",
+          "orbit"
+        ]
+      }
+    },
+    {
+      "name": "notice",
+      "type": "registry:block",
+      "title": "notice",
+      "description": "a flat notice in the flow: its status glyph, what happened and what to do, or one quiet line",
+      "registryDependencies": [
+        "@mk/glyphs",
+        "@mk/utils"
+      ],
+      "files": [
+        {
+          "path": "items/blocks/notice.tsx",
+          "type": "registry:component",
+          "target": "@components/superthread/blocks/notice.tsx"
+        }
+      ],
+      "meta": {
+        "version": "2.15.1",
+        "sha256": "0e24076f986b10e8aa332c23aee74f66157be878e25274f8e367592809d3869e",
+        "tier": "block",
+        "upstream": null,
+        "serves": [
+          "constellation",
+          "trisys",
+          "orbit",
+          "artifacts"
+        ]
+      }
+    }
+  ]
+}
