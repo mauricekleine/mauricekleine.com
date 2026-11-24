@@ -88,6 +88,7 @@ Each ship has one bright spot. It prints in the ship's mark (so its rail cell an
 | artifacts     | manila gold  | `#e3ae34` | `#e7b546` | 135               |
 | telemetry     | tachyon teal | `#14b8a6` | `#2dd4bf` | 153               |
 | soliton       | canal indigo | `#6272e9` | `#6a7be5` | 117               |
+| hyperspeed    | warp pink    | `#ed2e83` | `#e63281` | 1                 |
 
 - The variables are `--ship-<id>`. Charts take `--chart-1` to `--chart-5`: orbit, constellation, quanta, artifacts, trisys.
 - Every spot stays at least 10 from plum (oklab delta E x 100), and its dithered region clears 3:1 on its mark's tile.

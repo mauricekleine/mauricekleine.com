@@ -103,6 +103,7 @@ colors:
   ship-artifacts: "#e3ae34" # provisional
   ship-telemetry: "#14b8a6" # provisional
   ship-soliton: "#6272e9" # provisional
+  ship-hyperspeed: "#ed2e83" # provisional
   shadow-ink: "#020203" # provisional
   # dark: --<role> under .dark
   dark-background: "#16181d"
@@ -199,6 +200,7 @@ colors:
   dark-ship-artifacts: "#e7b546" # provisional
   dark-ship-telemetry: "#2dd4bf" # provisional
   dark-ship-soliton: "#6a7be5" # provisional
+  dark-ship-hyperspeed: "#e63281" # provisional
   dark-shadow-ink: "#000000" # provisional
 typography:
   meta:
@@ -405,8 +407,9 @@ Each ship has one bright spot. It prints in the ship's mark (so its rail cell an
 | artifacts     | manila gold  | `#e3ae34` | `#e7b546` | 135               |
 | telemetry     | tachyon teal | `#14b8a6` | `#2dd4bf` | 153               |
 | soliton       | canal indigo | `#6272e9` | `#6a7be5` | 117               |
+| hyperspeed    | warp pink    | `#ed2e83` | `#e63281` | 1                 |
 
-Every spot stays at least 10 from plum (oklab delta E x 100), and its dithered region clears 3:1 on its mark's tile. A ship the master world doesn't name, such as telemetry, takes its spot and angle from `marks/fleet.json`; its role and line screen are generated like the others. An angle the world has no screen for mirrors its screen at 180 minus that angle, or takes the nearest one.
+Every spot stays at least 10 from plum (oklab delta E x 100), and its dithered region clears 3:1 on its mark's tile. A ship the master world doesn't name, such as telemetry or hyperspeed, takes its spot and angle from `marks/fleet.json`; its role and line screen are generated like the others. An angle the world has no screen for mirrors its screen at 180 minus that angle, or takes the nearest one.
 
 ### Screens
 
@@ -643,7 +646,7 @@ The ship's nav, on the deep ground. Everything that prints on the ground (status
 
 ### Fleet rail (signature)
 
-The column of ship marks down the left of every ship surface, on the deep ground: home, the ships, then the mode cell, each ship a 32 px mark in a reversed cell. `lib/fleet` lists soliton too, but with `rail: false`: its mark serves other places and has no cell here. Hover or focus inverts the cell, swaps in the light mark and slides a joined tab out from it at the quick duration, the ship's name over its one-line descriptor; with reduced motion the tab appears in place. The current ship's cell is neutral, with a `sidebar-border` edge and its 8 px plum corner mark. The mode cell is the fleet's one light and dark toggle, so a ship adds no mode control of its own. Above 900 px the rail and `sidebar` stick to the top of the window while the panel scrolls. At 900 px and below the rail is a 48 px bar above the panel that scrolls with the page, and from the fourth cell on the bar's tab hangs right so it stays on screen. The consumer passes `current`, and optionally the `hrefs`, the ship's `sidebar` and a `markBase`. A ship the `hrefs` leave out links to its fleet url, and home to superthread's; a ship with no url, or an href of `null`, prints as a disabled cell (`aria-disabled`), its mark at half opacity unless it is the current ship. The rail's first child is the skip link, `skip to content` to `#main`, off the page until focus lands on it; `AppShellGround` is its target when it renders `main`, and `skipLink={false}` leaves it out of a rail embedded in a page that owns its own.
+The column of ship marks down the left of every ship surface, on the deep ground: home, the ships, then the mode cell, each ship a 32 px mark in a reversed cell. `lib/fleet` lists soliton and hyperspeed too, but with `rail: false`: their marks serve other places and have no cell here. Hover or focus inverts the cell, swaps in the light mark and slides a joined tab out from it at the quick duration, the ship's name over its one-line descriptor; with reduced motion the tab appears in place. The current ship's cell is neutral, with a `sidebar-border` edge and its 8 px plum corner mark. The mode cell is the fleet's one light and dark toggle, so a ship adds no mode control of its own. Above 900 px the rail and `sidebar` stick to the top of the window while the panel scrolls. At 900 px and below the rail is a 48 px bar above the panel that scrolls with the page, and from the fourth cell on the bar's tab hangs right so it stays on screen. The consumer passes `current`, and optionally the `hrefs`, the ship's `sidebar` and a `markBase`. A ship the `hrefs` leave out links to its fleet url, and home to superthread's; a ship with no url, or an href of `null`, prints as a disabled cell (`aria-disabled`), its mark at half opacity unless it is the current ship. The rail's first child is the skip link, `skip to content` to `#main`, off the page until focus lands on it; `AppShellGround` is its target when it renders `main`, and `skipLink={false}` leaves it out of a rail embedded in a page that owns its own.
 
 ### Card, label and separator
 

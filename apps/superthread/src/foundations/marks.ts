@@ -21,6 +21,7 @@ const originalDrawings: Partial<Record<MarkId, string>> = {
   artifacts: "a sheet lifted out of a folder; the folder takes the spot",
   soliton: "one solitary wave; the water under its crest takes the spot",
   telemetry: "five readings on a chart; the body of each bar takes the spot",
+  hyperspeed: "a chevron at speed; the after-image it leaves behind takes the spot",
 };
 
 // New ships live in the marks manifest until their glyph is drawn; the master stays immutable.
@@ -47,6 +48,7 @@ export const lineScreen: Record<ShipId, string> = {
   artifacts: "texture-line-artifacts",
   telemetry: "texture-line-telemetry",
   soliton: "texture-line-soliton",
+  hyperspeed: "texture-line-hyperspeed",
 };
 
 // the browser chrome a 16 px mark sits on as a favicon: the tab strip and the tab itself, light then dark. These are

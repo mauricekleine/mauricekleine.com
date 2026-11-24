@@ -86,6 +86,18 @@ export const fleet = [
       "light": "soliton.svg",
       "dark": "soliton-dark.svg"
     }
+  },
+  {
+    "id": "hyperspeed",
+    "name": "hyperspeed",
+    "desc": "reviews pull requests",
+    "url": null,
+    "rail": false,
+    "angle": 1,
+    "mark": {
+      "light": "hyperspeed.svg",
+      "dark": "hyperspeed-dark.svg"
+    }
   }
 ] as const
 
