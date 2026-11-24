@@ -446,6 +446,11 @@ export const tokens = {
       "oklch": "oklch(0.7038 0.123 182.5)",
       "provisional": true
     },
+    "ship-hyperspeed": {
+      "hex": "#ed2e83",
+      "oklch": "oklch(0.6302 0.2297 0.19)",
+      "provisional": true
+    },
     "shadow-ink": {
       "hex": "#020203",
       "oklch": "oklch(0.086 0.0056 285.17)",
@@ -896,6 +901,11 @@ export const tokens = {
     "ship-telemetry": {
       "hex": "#2dd4bf",
       "oklch": "oklch(0.7845 0.1325 181.91)",
+      "provisional": true
+    },
+    "ship-hyperspeed": {
+      "hex": "#e63281",
+      "oklch": "oklch(0.6204 0.2206 359.93)",
       "provisional": true
     },
     "shadow-ink": {
@@ -1386,6 +1396,17 @@ export const tokens = {
         "oklch": "oklch(0.7845 0.1325 181.91)"
       },
       "angle": 153
+    },
+    "hyperspeed": {
+      "light": {
+        "hex": "#ed2e83",
+        "oklch": "oklch(0.6302 0.2297 0.19)"
+      },
+      "dark": {
+        "hex": "#e63281",
+        "oklch": "oklch(0.6204 0.2206 359.93)"
+      },
+      "angle": 1
     }
   },
   "status": {
@@ -1669,7 +1690,8 @@ export const tokens = {
       "line-quanta",
       "line-soliton",
       "line-artifacts",
-      "line-telemetry"
+      "line-telemetry",
+      "line-hyperspeed"
     ]
   }
 } as const

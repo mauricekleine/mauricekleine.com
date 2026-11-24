@@ -139,6 +139,25 @@
       },
       "kind": "master",
       "home": true
+    },
+    {
+      "id": "hyperspeed",
+      "name": "hyperspeed",
+      "desc": "reviews pull requests",
+      "target": "soliton",
+      "url": null,
+      "angle": 1,
+      "spot": {
+        "light": "#ed2e83",
+        "dark": "#e63281"
+      },
+      "mark": {
+        "light": "hyperspeed.svg",
+        "dark": "hyperspeed-dark.svg"
+      },
+      "kind": "glyph",
+      "rail": false,
+      "spotName": "warp pink"
     }
   ]
 }

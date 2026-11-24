@@ -81,9 +81,12 @@ describe("/install", () => {
 describe("the fleet row", () => {
   test("each ship's spot ink has the master's name", () => {
     const master = readJson("tokens/master.json") as { ships: Record<string, { "spot name": string }> };
+    // a ship the master world doesn't name carries its drawn spot's name in the marks manifest
+    const manifest = readJson("marks/fleet.json") as { fleet: { id: string; spotName?: string }[] };
     for (const ship of fleet) {
       if (master.ships[ship.id]) expect(spotNames[ship.id]).toBe(master.ships[ship.id]!["spot name"]);
-      else expect(spotNames[ship.id]).toBe(ship.id === "telemetry" ? "tachyon teal" : "new star");
+      else
+        expect(spotNames[ship.id]).toBe(manifest.fleet.find((entry) => entry.id === ship.id)?.spotName ?? "new star");
     }
   });
 });

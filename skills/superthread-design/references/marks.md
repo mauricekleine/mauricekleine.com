@@ -23,6 +23,7 @@ The spot pops at rail and fleet-row sizes (32 to 48 px) and in the chart. At 16 
 | artifacts     | manila gold  |
 | telemetry     | tachyon teal |
 | soliton       | canal indigo |
+| hyperspeed    | warp pink    |
 | superthread   | plum         |
 
 superthread's own mark is the home mark. Its spot is plum, the house ink, and it sits in the fleet rail's home cell and serves as the site's favicon. The spot values are in [colour](colour.md).
@@ -38,7 +39,7 @@ https://superthread.mauricekleine.com/marks/<id>/<id>.svg
 https://superthread.mauricekleine.com/marks/<id>/<id>-dark.svg
 ```
 
-`FleetRail` reads them from its `markBase` prop, which defaults to `https://superthread.mauricekleine.com/marks`. A surface that hosts its own copies passes its own folder. `@mk/fleet` (`lib/fleet.ts`) lists the ships in rail order, each with its id, name, rail membership, line-screen angle and mark file names. A ship with `"rail": false` in the manifest, soliton today, keeps its mark for other places and has no rail cell.
+`FleetRail` reads them from its `markBase` prop, which defaults to `https://superthread.mauricekleine.com/marks`. A surface that hosts its own copies passes its own folder. `@mk/fleet` (`lib/fleet.ts`) lists the ships in rail order, each with its id, name, rail membership, line-screen angle and mark file names. A ship with `"rail": false` in the manifest, such as soliton or hyperspeed, keeps its mark for other places and has no rail cell.
 
 [Download marks at /icons](https://superthread.mauricekleine.com/icons): the home mark and every current ship, in both chromes. Each drawing has its SVG and transparent PNGs at 16, 32, 48, 64, 128, 256, 512 and 1024 px. PNGs are exact integer upscales of the 16 px grid, with hard edges and transparent corner notches. Plain download links work without JavaScript. A per-mark zip includes both SVGs and every PNG size; the whole-set zip includes every current mark.
 

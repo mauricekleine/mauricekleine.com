@@ -1414,6 +1414,21 @@
           "oklch(0.95 0.0237 273.99)"
         ]
       },
+      "ship-hyperspeed": {
+        "role": "spot",
+        "displayName": "hyperspeed spot, warp pink",
+        "canonical": "oklch(0.6302 0.2297 0.19)",
+        "tonalRamp": [
+          "oklch(0.15 0.0608 0.19)",
+          "oklch(0.2643 0.1071 0.19)",
+          "oklch(0.3786 0.1534 0.19)",
+          "oklch(0.4929 0.1997 0.19)",
+          "oklch(0.6071 0.2297 0.19)",
+          "oklch(0.7214 0.1894 0.19)",
+          "oklch(0.8357 0.0984 0.19)",
+          "oklch(0.95 0.0268 0.19)"
+        ]
+      },
       "shadow-ink": {
         "role": "neutral",
         "displayName": "shadow ink",
@@ -2837,6 +2852,21 @@
           "oklch(0.7214 0.1448 273.97)",
           "oklch(0.8357 0.0816 273.97)",
           "oklch(0.95 0.0237 273.97)"
+        ]
+      },
+      "dark-ship-hyperspeed": {
+        "role": "spot",
+        "displayName": "hyperspeed spot, warp pink (dark)",
+        "canonical": "oklch(0.6204 0.2206 359.93)",
+        "tonalRamp": [
+          "oklch(0.15 0.0608 359.93)",
+          "oklch(0.2643 0.1072 359.93)",
+          "oklch(0.3786 0.1535 359.93)",
+          "oklch(0.4929 0.1998 359.93)",
+          "oklch(0.6071 0.2206 359.93)",
+          "oklch(0.7214 0.1897 359.93)",
+          "oklch(0.8357 0.0986 359.93)",
+          "oklch(0.95 0.0269 359.93)"
         ]
       },
       "dark-shadow-ink": {
