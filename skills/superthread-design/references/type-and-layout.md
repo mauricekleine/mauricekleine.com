@@ -1,19 +1,19 @@
-# type and layout
+# Type and layout
 
-## faces
+## Faces
 
 Four faces, each with one job. The tokens load them; app code picks a face through a type step or the font roles (`font-display`, `font-sans`, `font-serif`, `font-mono`).
 
-| face          | weights                 | job                                                              |
+| Face          | Weights                 | Job                                                              |
 | ------------- | ----------------------- | ---------------------------------------------------------------- |
-| Unbounded     | 300; 400 for the wordmark | titles, section heads, the board                                |
-| Supreme       | 400, 500                | controls, tables, notes, dialog titles and the body of docs pages |
-| Erode         | 400, 400 italic, 500, 600 | the reading page, ledes and page titles                       |
-| Fragment Mono | 400                     | ids, times, figures that hold a column, code and the caps legends |
+| Unbounded     | 300; 400 for the wordmark | Titles, section heads, the board                                |
+| Supreme       | 400, 500                | Controls, tables, notes, dialog titles and the body of docs pages |
+| Erode         | 400, 400 italic, 500, 600 | The reading page, ledes and page titles                       |
+| Fragment Mono | 400                     | IDs, times, figures that hold a column, code and uppercase metadata kickers |
 
-Chrome (nav, labels, headings, buttons) is lowercase. Authored titles keep their own casing. Supreme and Erode have no tabular figures, so times and any figure that must hold a column set in Fragment Mono, and numbers in a table align right. A title in the display face prints in the first ink.
+Chrome (nav, labels, headings, buttons), body copy and authored titles all use natural sentence case. Metadata kickers (`meta` step) set in uppercase Fragment Mono, and the `superthread` wordmark may stay lowercase as a brand mark. Supreme and Erode have no tabular figures, so times and any figure that must hold a column set in Fragment Mono, and numbers in a table align right. A title in the display face prints in the first ink.
 
-## type steps
+## Type steps
 
 Each step is a `type-<step>` utility that sets face, size, line, tracking and weight together. Steps marked phone change at 600 px and below.
 
@@ -42,7 +42,7 @@ The base layer sets `code` and `time` in Fragment Mono. A `time` inside a `p` or
 
 Links print in foreground, 4 px above their underline. A link in running text keeps a 1 px underline at rest, and inside `AppShellPanel` the base layer prints any anchor no item owns that way. A chrome link with no box, such as a row title or a door, underlines on hover. A nav item has a box, so it hovers with its fill. `link-quiet` is the one second form: a muted word that turns foreground on hover.
 
-## space and layout
+## Space and layout
 
 - Space runs on a 4 px base: 4, 8, 12, 16, 24, 32, 48, 64 and 96.
 - Rows: 56 px on the board, 48 px in a table, 32 px for a nav item (`--spacing-row-board`, `-table`, `-nav`), 40 px for a plain row and 36 px for one nested under a section head (`-plain`, `-nested`).
@@ -59,13 +59,13 @@ Links print in foreground, 4 px above their underline. A link in running text ke
 - A ship's window scrolls what focus or a link brings into view 16 px clear of its top and bottom, from the base layer's scroll padding, so a ring never meets the window's edge. The frame never covers the panel at any width, so no nav's height adds to it.
 - At 600 px and below every target reaches 44 px, in hand-built nav as in an item. A field, a tab, an option row or a joined button grows to 44 px, and so does a field row or a label holding a checkbox, radio or switch. A button, a toggle, a link part or a nav item keeps its box and takes the `hit-area` utility, which needs a positioned host. A scroller that holds hit areas takes `hit-area-scroller`, so their reach adds no scrollbar, and a link inside it is an `inline-block`. A row of nav items wraps on a 44 px pitch, and rail cells at 36 px or less carry a hit area as wide as their share. Hit areas never overlap, and only a link in running text keeps its line's height.
 
-## shape
+## Shape
 
 - Radius 0 everywhere.
 - Edges are 1 px.
 - Horizontal rules belong to the page: they run to both window edges, past every column.
 
-## focus
+## Focus
 
 - **Controls** (buttons, tabs, links, rail cells) take a 2 px plum ring at a 2 px offset. The tokens' base layer draws it on `:focus-visible` for every control role and anything else in the tab order. A link in running text, an anchor no item owns inside a paragraph, takes it flush to its sides and 2 px above and below its words, so the word space beside it keeps the ring off the words around it, and the line never moves. Inside the ship's nav the ring prints in `sidebar-foreground`, so the nav holds no plum. Inside a key block the ring prints in `first`, because the block sets `--ring` to `--first`.
 - **Fields** (input, textarea, input group, the select trigger) own their focus. While the text control holds focus, the box's 1 px edge becomes a 2 px edge drawn inside it (`outline: 2px` at `-2px` offset, in `--fx`) and the caret takes the same ink. `--fx` is the ring's ink, so a field in the ship's nav or a key block takes that surface's ring, or the error ink when the field is invalid. The text never moves, and a disabled field takes no focus.
@@ -75,20 +75,20 @@ Links print in foreground, 4 px above their underline. A link in running text ke
 
 Every focusable element shows its ring or its edge. `outline-none` and `outline-hidden` stay out of the code: in Tailwind 4 both remove the ring.
 
-## elevation
+## Elevation
 
 One light from the upper left: shadows fall right and down at 3:2 and grow with the lift.
 
-| lift     | shadow              | where                                       |
+| Lift     | Shadow              | Where                                       |
 | -------- | ------------------- | ------------------------------------------- |
-| `slip`   | 6px 4px 6px -2px    | the lowest lift, for paper on a light page  |
-| `leaf`   | 12px 8px 14px -4px  | select list, toast, a floating sidebar     |
-| `sheet`  | 27px 18px 26px -6px | dialog, the board panel, the reading sheet  |
-| `lifted` | 39px 26px 36px -8px | the highest lift; no item uses it yet       |
+| `slip`   | 6px 4px 6px -2px    | The lowest lift, for paper on a light page  |
+| `leaf`   | 12px 8px 14px -4px  | Select list, toast, a floating sidebar     |
+| `sheet`  | 27px 18px 26px -6px | Dialog, the board panel, the reading sheet  |
+| `lifted` | 39px 26px 36px -8px | The highest lift; no item uses it yet       |
 
 The utilities are `shadow-slip`, `shadow-leaf`, `shadow-sheet` and `shadow-lifted`. In light, a raised layer on stock prints its contact edge as a 50 percent screen 3 px right of the layer and 2 px below it. An app's own raised layer gets it the way the items do: `texture-contact` with `[--contact-lift:var(--elevation-<lift>-rake)]`, beside its `shadow-<lift>`. In dark the contact stays soft and the raised surface draws a 1 px lighter edge, because the dark ground is too near black for a shadow to show. Paper sets no `shadow-slip` beside the utility, so on a dark page it prints flat. The board and the reading sheet on the deep ground keep the soft shadow alone.
 
-## motion
+## Motion
 
 | duration           | ms  |
 | ------------------ | --- |

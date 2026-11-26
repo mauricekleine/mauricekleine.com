@@ -1,54 +1,84 @@
 ---
 name: superthread-visuals
-description: "Turn a concept into on-brand Superthread art: a screened still, a loop or a live field. Use whenever a Maurice-branded figure, essay, deck, video, ship or site opener needs an image, illustration or visualization of an idea."
+description: "Turn a photograph, illustration, or structural idea into an on-brand Superthread plate: a 3.5 px two-ink proof halftone still, light-breath MP4 loop, or live @mk/plate canvas. Use whenever a Maurice-branded figure, opener, chapter break, essay, deck, video, or site needs framed imagery or tonal plates."
 ---
 
-# superthread visuals
+# Superthread visuals
 
-## the rule
+## The proof halftone language
 
-1. Fill the frame with the field. Let its solid meet at least one edge.
-2. Give the concept a verb and give that verb a smooth edge.
-3. Run one named ramp out from the edge. Fade the filaments in and out within it.
-4. Run one plum thread along the edge or a level. Set the knot on the thread where the verb turns.
-5. Light the field at the knot. Print solid key on paper and deep ground in dark. The engine holds the dark screen back from the edge and caps it at 45%.
-6. Print points in dark where the screen runs out. Use them for depth or for a count that means something.
-7. Move the knot, the wave or the filaments. Loop in 8 to 24 seconds at 24 fps. The live renderer pauses when the field is offscreen or the tab is hidden, and prints frame zero under reduced motion and in print.
+Every Superthread visual plate prints on a **3.5 CSS px** two-ink cosine halftone screen:
 
-The engine prints round dots at a 4 CSS px pitch, at 45° for the first ink and 15° for plum. Live samples snap to device pixels and the open areas take the scope’s stock. The plum thread has a solid core with a screened knot and bloom. The engine rejects a solid that misses the frame or encloses stock.
+- **Screen angles:** key ink at `45°` and plum house ink at `15°`.
+- **Square, hairline frames:** `0px` corners and uniform `1px solid var(--border)` hairlines (`#e7e7e7` light, `#37373a` dark). No plum vertical divider, no corner rectangle stamped on the image, and no dark-island slab on light stock.
+- **Light mode:** key `#16181d` and plum `#aa337a` dots printed on white stock `#ffffff`. A drifting **light breath** (default `vivid`) sweeps gently across the plate, opening dark dots toward white paper and warming the `15°` plum pass.
+- **Dark mode:** calm white `#e7e7e7` dots resting at ~48% max on `#16181d` key stock, illuminated upward as the light breath sweeps across, with `15°` dark plum `#c074a1` printing cleanly over the lit pass.
+- **Motion discipline:** live plates pause when offscreen or in hidden tabs, and hold frame zero under `prefers-reduced-motion: reduce` and in print. Text, numbers, data, and code stay flat beside the plate, never printed over dots.
 
-## draw a field
+## Choose the subject
 
-1. **Draw the verb.** Find the change that reads in silhouette. Choose which frame edge the solid meets, its direction, scale, ramp and motion. Use a mask path for a one-off edge the primitives cannot draw. Add a primitive only when it serves two concepts. Read the [spec](references/spec.md) for shape keys and units.
-2. **Print the ramp.** Choose held for weight, steady for even falloff, bet for a decisive drop or fade for a soft exit. Tune reach with texture off, then bring up `tex` and check paper first for scratches.
-3. **Place the thread, knot and points.** Use the edge, a ramp level or a merge axis to carry the thread. Start a mask thread at the main crossing with `maskfrom`. When the count behind the points is unknown, leave them out and ask for the figure. Verify the count at delivery size.
-4. **Play the turn.** `travel` uses the same unit as `knot` on each edge. Set `rest` to choose where frame zero lands in the cycle. Watch the full loop and check that the knot stays on the thread at both extremes.
-5. **Check the crops.** Compare the light and dark stills at delivery size and at about 240 px. Refit the edge and knot in each required crop, such as square for a card. For an opener, measure desktop and phone separately. Keep the portrait surround and a strip of stock above the band clear through the loop.
+1. **Real imagery first (`--src` / `data-plate-src`).** Pass a photograph, portrait, screenshot, or editorial illustration through the proof screen. The renderer center-crops to fill the frame and maps luminance to the `45°` key plate and midtone/saturation warmth to the `15°` plum plate.
+2. **Structure-driven no-photo plates (`planes` or `grid`).** When a report, deck, video plate, or opener has no photograph, derive a blocky tonal composition from the piece's own structure:
+   - `planes`: proportional vertical bands (`ratios=42,24,18,16`) with a stepped tonal shelf (`shelf=0.56`) and a crisp light window. Vary `ratios`, `seed`, `shelf`, and `flip` so no two plates in a piece repeat.
+   - `grid`: an architectural density matrix (`cols=6 rows=4`) with diagonal tonal weight and per-cell shading. Vary `cols`, `rows`, `seed`, and `flip`.
+   - Never use wavy lines, bouncing orbs, cut-plane horizons, or one canned pattern cloned across documents.
+3. **Skip plates on working sheets.** Everyday RFCs, audits, dossiers, specs, and comparisons open flat on stock (`sheet-head`) with ruled `section-head` dividers and zero decorative plates.
 
-## render
+## Spec keys
 
-Use Bun and ffmpeg. Run from the skill folder or pass absolute paths to the scripts. Save both stills at delivery size. Make a dark loop at the still’s size and a light loop if the field moves on paper.
+Pass a spec string to `<Plate spec="..." />`, `data-plate="..."`, or `scripts/plate.ts --spec "..."`:
+
+| Key | Applies to | Default | Meaning |
+| --- | --- | --- | --- |
+| `planes` / `grid` | both | `planes` | Geometry kind |
+| `ratios=a,b,c,...` | `planes` | `42,24,18,16` | Proportional column weights (at least 2 positive numbers) |
+| `shelf=0..0.9` | `planes` | `0.56` | Vertical start of the stepped shadow shelf (`0` disables it) |
+| `cols=2..16` | `grid` | `6` | Matrix columns |
+| `rows=2..12` | `grid` | `4` | Matrix rows |
+| `seed=<int>` | both | `1` | Deterministic tonal variation seed |
+| `flip` | both | off | Mirror composition horizontally |
+| `breath=<level>` | both | `vivid` | Light breath strength: `vivid`, `balanced`, `gentle`, or `off` |
+| `still` | both | off | Alias for `breath=off` |
+| `pitch=2..8` | both | `3.5` | CSS dot pitch in pixels |
+
+## Render stills and MP4 loops
+
+Use `scripts/plate.ts` with Bun and ffmpeg (no npm dependencies). Run from the skill folder or pass the absolute path to `scripts/plate.ts`.
 
 ```sh
-spec='edge=crest at=.49 lift=.45 ramp=fade knot=.49 motion=wave travel=.12 rest=.25 duration=16'
-bun scripts/render.ts "$spec" light 1200 630 0 field-light.png
-bun scripts/render.ts "$spec" dark 1200 630 0 field-dark.png
-bun scripts/loop.ts "$spec" dark 1200 630 field-dark.mp4
+# 1. Proportional planes still (light and dark)
+bun scripts/plate.ts --spec "planes ratios=42,24,18,16 seed=7" --mode light --width 1200 --height 630 --out planes-light.png
+bun scripts/plate.ts --spec "planes ratios=42,24,18,16 seed=7" --mode dark --width 1200 --height 630 --out planes-dark.png
+
+# 2. Screen a photograph or illustration at 2x DPR
+bun scripts/plate.ts --src ./portrait.png --mode light --width 800 --height 800 --dpr 2 --out portrait-light.png
+bun scripts/plate.ts --src ./portrait.png --mode dark --width 800 --height 800 --dpr 2 --out portrait-dark.png
+
+# 3. Animated vivid light-breath MP4 loop (for Remotion / mk-motion / decks)
+bun scripts/plate.ts --spec "grid cols=6 rows=4 seed=19" --mode dark --width 1200 --height 630 --breath vivid --duration 8 --fps 24 --out plate-loop.mp4
+bun scripts/plate.ts --src ./portrait.png --mode light --width 1920 --height 1080 --breath vivid --duration 8 --fps 30 --out video-plate.mp4
 ```
 
-Width and height describe CSS pixels. Append `--dpr 2` to render at two samples per CSS pixel. For `edge=mask`, put a module beside the outputs. Export a callback taking width and height in cells and returning a row-major `Uint8Array`, with 1 for solid and 0 for stock. Append its path and, for a named export, its name to either command. Paths resolve from the working directory. Use an absolute path for a mask elsewhere.
+Key flags:
 
-Install `@mk/field-art` for live art. In React, import `FieldArt` from `ui/field-art`, size it in CSS and pass `spec`, an optional stable `mask` callback and `playing` for the one field that moves. In plain HTML, inline `doc/field-art.js` after sized, positioned, overflow-hidden hosts carrying `data-field-art`. Set `data-field-art-play` on the host that moves. For a custom mask, use `mountField(host, mask)` from `lib/field-live`. Keep words beside the art and give an informative field a short accessible name.
+- `--out <file.png|file.mp4>`: extension picks still PNG vs H.264 `yuv420p` MP4 loop.
+- `--src <path>`: center-crops any image ffmpeg can read (transparent cutouts composite cleanly over white stock).
+- `--spec "<spec>"`: `planes` or `grid` geometry when `--src` is omitted.
+- `--mode <light|dark>`: light (`#ffffff` stock, `#16181d` key, `#aa337a` plum) or dark (`#16181d` stock, `#e7e7e7` white, `#c074a1` plum).
+- `--width`, `--height`, `--dpr`: CSS dimensions and pixel ratio multiplier (default `1200 x 630`, `dpr 1`).
+- `--breath <vivid|balanced|gentle|off>` and `--still`: control light breath strength (default `vivid`).
+- `--time <sec>`, `--phase <rad>`: sample a specific breath moment in a PNG still.
+- `--duration <sec>`, `--fps <n>`, `--crf <n>`: MP4 loop timing and quality (defaults: cycle length `8s` for `vivid`, `24` fps, CRF `14`).
 
-## spot failures
+## Live web and document plates
 
-- **branch gaps fill in.** Open the fan or thin the branches until the paths read up to the join.
-- **branch gaps print white stripes.** Extend a held ramp until the gaps read as screened paper at 240 px.
-- **joined centres form a symbol.** Vary the spacing, size and height and give the knot one larger centre.
-- **scatter looks like a merge.** Leave separate islands and bend the anchored mass away from their axis.
-- **the opener band is faint.** Broaden the ramp or tune filament pitch in the installed crop.
-- **levels turn to fog.** Use unequal widths and step down the density. Join the thread with one eased jump.
-- **filaments look scratched in.** Check paper first. Lower `tex` or raise `pitch` until the ridges read as one texture.
-- **the solid encloses stock.** Move the second edge or adjust `blend` to open the pocket. `b.base` applies when the first edge is `merge` or `ellipse`.
-- **the edge looks like an object.** Ease the changes until the verb reads in the silhouette.
-- **the knot floats.** Move it onto a visible crossing. Tighten its radius and verify contact through the loop.
+Install `@mk/plate` beside the Superthread v2 tokens.
+
+- **React:** import `Plate` from `@/components/superthread/ui/plate`, size the element in CSS, and pass `src` for an image, `spec` for `planes`/`grid`, or a stable `draw` callback for custom canvas tonal input. Pass `breath="vivid"` (default), `breath="balanced"`, `breath="gentle"`, or `still` to hold frame zero.
+- **Plain HTML documents:** add `data-mk="plate"` plus `data-plate="<spec>"` or `data-plate-src="<url>"` (or wrap a child `<img>`) on a sized container, then inline `doc/plate.js` in a classic script after the sections. Set `data-plate-breath` or `data-plate-still` as needed.
+
+Always inspect both light and dark renders at delivery size (and mobile width for responsive openers) before shipping.
+
+## Legacy field art
+
+Older 4 CSS px `@mk/field-art` verb fields (wavy/knot filaments and edge masks) remain in `scripts/render.ts`, `scripts/loop.ts`, and [references/spec.md](references/spec.md) solely to maintain existing installs that already use them. For all new openers, chapter breaks, figures, decks, and video plates, use `@mk/plate` and `scripts/plate.ts` above.
