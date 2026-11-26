@@ -11,14 +11,14 @@ import { Section } from "@/site/Section";
 
 export const Route = createFileRoute("/foundations/space")({
   staticData: {
-    openerLede: `a ${tokens.space.base} px base, square corners and 1 px edges. layers lift under one light from the upper left, and in light their contact edge prints as a screen.`,
+    openerLede: `A ${tokens.space.base} px base, square corners and 1 px edges. Layers lift under one light from the upper left, and in light their contact edge prints as a screen.`,
     sections: [
-      { id: "scale", title: "scale" },
-      { id: "rows", title: "rows" },
-      { id: "panel-inset", title: "panel inset" },
-      { id: "breakpoints", title: "breakpoints" },
-      { id: "shape", title: "shape" },
-      { id: "elevation", title: "elevation" },
+      { id: "scale", title: "Scale" },
+      { id: "rows", title: "Rows" },
+      { id: "panel-inset", title: "Panel inset" },
+      { id: "breakpoints", title: "Breakpoints" },
+      { id: "shape", title: "Shape" },
+      { id: "elevation", title: "Elevation" },
     ],
   },
   component: Page,
@@ -33,18 +33,18 @@ const rowHeight = {
 } as const satisfies Record<keyof typeof tokens.space.rows, string>;
 
 const rowUse: Record<keyof typeof tokens.space.rows, string> = {
-  board: "a board's rows",
-  table: "a table's rows",
-  nav: "a nav item",
-  plain: "a plain row, with no rule",
-  nested: "a plain row under a section head, with no rule",
+  board: "A board's rows",
+  table: "A table's rows",
+  nav: "A nav item",
+  plain: "A plain row, with no rule",
+  nested: "A plain row under a section head, with no rule",
 };
 
 const breakpointUse: Record<keyof typeof breakpoints, string> = {
-  wide: "the masthead and the aside tighten",
-  aside: "the aside drops below the page",
-  bar: "the nav moves into the top bar and mode pairs stack",
-  phone: "the phone type sizes and plates take over, and every target reaches 44 px",
+  wide: "The masthead and the aside tighten",
+  aside: "The aside drops below the page",
+  bar: "The nav moves into the top bar and mode pairs stack",
+  phone: "The phone type sizes and plates take over, and every target reaches 44 px",
 };
 
 type Lift = keyof typeof tokens.shadow.elevation;
@@ -68,10 +68,10 @@ const rake = {
 const geometry = (lift: Lift) => tokens.shadow.elevation[lift].rake.split(" ").slice(0, 4).join(" ");
 
 const bands: readonly { mode: Mode; ground: boolean; label: string }[] = [
-  { mode: "light", ground: false, label: "light · on stock" },
-  { mode: "light", ground: true, label: "light · on the deep ground" },
-  { mode: "dark", ground: false, label: "dark · on stock" },
-  { mode: "dark", ground: true, label: "dark · on the deep ground" },
+  { mode: "light", ground: false, label: "Light · on stock" },
+  { mode: "light", ground: true, label: "Light · on the deep ground" },
+  { mode: "dark", ground: false, label: "Dark · on stock" },
+  { mode: "dark", ground: true, label: "Dark · on the deep ground" },
 ];
 
 function Band({ mode, ground, label }: { mode: Mode; ground: boolean; label: string }) {
@@ -85,7 +85,7 @@ function Band({ mode, ground, label }: { mode: Mode; ground: boolean; label: str
           <li key={lift} className={cn("st-f-lift", shadow[lift], !ground && cn("texture-contact", rake[lift]))}>
             <b>{lift}</b>
             <code>{geometry(lift)}</code>
-            <small>{screened ? "contact screened" : "soft contact"}</small>
+            <small>{screened ? "Contact screened" : "Soft contact"}</small>
           </li>
         ))}
       </ul>
@@ -97,12 +97,12 @@ function Focus() {
   return (
     <div className="st-f-focus">
       <figure>
-        <Checkbox defaultChecked data-demo="focus-visible" aria-label="control focus" tabIndex={-1} />
-        <figcaption className="type-meta">control</figcaption>
+        <Checkbox defaultChecked data-demo="focus-visible" aria-label="Control focus" tabIndex={-1} />
+        <figcaption className="type-meta">Control</figcaption>
       </figure>
       <figure>
-        <Input defaultValue="orbit" data-demo="focus" aria-label="field focus" tabIndex={-1} readOnly />
-        <figcaption className="type-meta">field</figcaption>
+        <Input defaultValue="Orbit" data-demo="focus" aria-label="Field focus" tabIndex={-1} readOnly />
+        <figcaption className="type-meta">Field</figcaption>
       </figure>
     </div>
   );
@@ -112,8 +112,8 @@ function Page() {
   const contact = tokens.texture.contact;
   return (
     <>
-      <Section id="scale" title="scale">
-        <Copy>every gap, padding and size is a step on the {tokens.space.base} px base.</Copy>
+      <Section id="scale" title="Scale">
+        <Copy>Every gap, padding and size is a step on the {tokens.space.base} px base.</Copy>
         <ol className="st-f-scale">
           {tokens.space.steps.map((step) => (
             <li key={step}>
@@ -124,8 +124,8 @@ function Page() {
         </ol>
       </Section>
 
-      <Section id="rows" title="rows">
-        <Copy>five row heights. the first three carry a 1 px rule under them, and the plain two carry none.</Copy>
+      <Section id="rows" title="Rows">
+        <Copy>Five row heights. The first three carry a 1 px rule under them, and the plain two carry none.</Copy>
         <ul className="st-f-rows">
           {(Object.keys(rowHeight) as (keyof typeof rowHeight)[]).map((row) => (
             <li
@@ -141,21 +141,21 @@ function Page() {
         </ul>
       </Section>
 
-      <Section id="panel-inset" title="panel inset">
+      <Section id="panel-inset" title="Panel inset">
         <Copy>
-          the working panel&rsquo;s sides: {tokens.space.panelInset.value} px, and {tokens.space.panelInset.phone} px at{" "}
-          {breakpoints.phone} px and below. a row that reaches the panel&rsquo;s edges uses{" "}
+          The working panel&rsquo;s sides: {tokens.space.panelInset.value} px, and {tokens.space.panelInset.phone} px at{" "}
+          {breakpoints.phone} px and below. A row that reaches the panel&rsquo;s edges uses{" "}
           <code>-mx-panel-inset px-panel-inset</code>, so it never repeats the number.
         </Copy>
       </Section>
 
-      <Section id="breakpoints" title="breakpoints">
-        <Copy>four widths where the layout changes, each a max-width.</Copy>
+      <Section id="breakpoints" title="Breakpoints">
+        <Copy>Four widths where the layout changes, each a max-width.</Copy>
         <table className="st-f-table st-f-breaks">
           <thead>
             <tr>
-              <th scope="col">width</th>
-              <th scope="col">what changes</th>
+              <th scope="col">Width</th>
+              <th scope="col">What changes</th>
             </tr>
           </thead>
           <tbody>
@@ -171,22 +171,22 @@ function Page() {
         </table>
       </Section>
 
-      <Section id="shape" title="shape">
+      <Section id="shape" title="Shape">
         <Copy>
-          no radius anywhere: every corner is square and every edge is 1 px. a control shows focus as a 2 px ring in
-          plum, 2 px outside it. a field thickens its own edge to 2 px inside, so focus never draws a second frame.
+          No radius anywhere: every corner is square and every edge is 1 px. A control shows focus as a 2 px ring in
+          plum, 2 px outside it. A field thickens its own edge to 2 px inside, so focus never draws a second frame.
         </Copy>
         <ModePair>
           <Focus />
         </ModePair>
       </Section>
 
-      <Section id="elevation" title="elevation">
+      <Section id="elevation" title="Elevation">
         <Copy>
-          one light from the upper left, so shadows fall right and down and grow with the lift. in light, on stock, a
-          layer's contact edge prints as a {tokens.texture.levels.b50} percent screen, {contact.x} right and {contact.y}{" "}
-          below. in dark the shadow is black and heavier, the contact stays soft, and a 1 px raised edge draws the
-          layer's frame.
+          One light from the upper left, so shadows fall right and down and grow with the lift. In light, on stock, a
+          layer&apos;s contact edge prints as a {tokens.texture.levels.b50} percent screen, {contact.x} right and{" "}
+          {contact.y} below. In dark the shadow is black and heavier, the contact stays soft, and a 1 px raised edge
+          draws the layer&apos;s frame.
         </Copy>
         <div className="st-f-bands">
           {bands.map((band) => (

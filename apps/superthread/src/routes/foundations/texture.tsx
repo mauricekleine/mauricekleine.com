@@ -20,16 +20,18 @@ import { Section } from "@/site/Section";
 
 export const Route = createFileRoute("/foundations/texture")({
   staticData: {
-    openerLede: "a dot screen for fields and 1 px tiles for component details.",
+    openerLede: "A dot screen for fields and 1 px tiles for component details.",
     sections: [
-      { id: "rule", title: "the rule" },
-      { id: "places", title: "field specimens" },
-      { id: "screens", title: "screens" },
-      { id: "details", title: "component details" },
+      { id: "rule", title: "The rule" },
+      { id: "places", title: "Field specimens" },
+      { id: "screens", title: "Screens" },
+      { id: "details", title: "Component details" },
     ],
   },
   component: Page,
 });
+
+const sentence = (text: string) => (text ? text.charAt(0).toUpperCase() + text.slice(1) : text);
 
 // a screened plate inside its crop marks, 10 px ticks set 16 px outside each corner. The box is the plate's own
 // width (the phone plate's at 600 px and below) or the pane's, whichever is narrower, so the marks hold the field.
@@ -84,7 +86,7 @@ const placeSpecimen: Record<string, (mode: Mode) => ReactNode> = {
   marks: (mode) => <Marks mode={mode} />,
   "state fields": () => (
     <Progress value={62} className="st-f-progress">
-      <ProgressLabel>deploying orbit</ProgressLabel>
+      <ProgressLabel>Deploying Orbit</ProgressLabel>
       <ProgressValue />
     </Progress>
   ),
@@ -112,9 +114,9 @@ const levels = [
 function Screens() {
   return (
     <>
-      <Legend>chart hatches</Legend>
+      <Legend>Chart hatches</Legend>
       <LineScreens />
-      <Legend>levels</Legend>
+      <Legend>Levels</Legend>
       <ul className="st-f-levels">
         {levels.map(({ key, className }) => (
           <li key={key}>
@@ -128,9 +130,9 @@ function Screens() {
 }
 
 const runs = [
-  { id: "7f3a2c", ship: "orbit", time: "00:04:12" },
-  { id: "b81e07", ship: "quanta", time: "00:01:38" },
-  { id: "4c9d51", ship: "trisys", time: "00:12:05" },
+  { id: "7f3a2c", ship: "Orbit", time: "00:04:12" },
+  { id: "b81e07", ship: "Quanta", time: "00:01:38" },
+  { id: "4c9d51", ship: "Trisys", time: "00:12:05" },
 ] as const;
 
 // one live specimen per component detail; the record's type makes every detail in the tokens need one
@@ -138,9 +140,9 @@ const detailSpecimen: Record<DetailKey, ReactNode> = {
   contact: (
     <div className="st-f-layer border border-border bg-popover text-popover-foreground shadow-leaf texture-contact [--contact-lift:var(--elevation-leaf-rake)]">
       <ul>
-        <li>orbit</li>
-        <li>quanta</li>
-        <li>trisys</li>
+        <li>Orbit</li>
+        <li>Quanta</li>
+        <li>Trisys</li>
       </ul>
     </div>
   ),
@@ -148,26 +150,26 @@ const detailSpecimen: Record<DetailKey, ReactNode> = {
     <div className="st-f-checks">
       <label>
         <Checkbox />
-        none
+        None
       </label>
       <label>
         <Checkbox indeterminate />
-        some
+        Some
       </label>
       <label>
         <Checkbox defaultChecked />
-        all
+        All
       </label>
     </div>
   ),
   tabhover: (
     <Tabs defaultValue="board">
       <TabsList>
-        <TabsTrigger value="board">board</TabsTrigger>
+        <TabsTrigger value="board">Board</TabsTrigger>
         <TabsTrigger value="runs" data-demo="hover">
-          runs
+          Runs
         </TabsTrigger>
-        <TabsTrigger value="notes">notes</TabsTrigger>
+        <TabsTrigger value="notes">Notes</TabsTrigger>
       </TabsList>
     </Tabs>
   ),
@@ -175,9 +177,9 @@ const detailSpecimen: Record<DetailKey, ReactNode> = {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead kind="id">run</TableHead>
-          <TableHead>ship</TableHead>
-          <TableHead kind="number">time</TableHead>
+          <TableHead kind="id">Run</TableHead>
+          <TableHead>Ship</TableHead>
+          <TableHead kind="number">Time</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -197,9 +199,9 @@ const detailSpecimen: Record<DetailKey, ReactNode> = {
   ),
   disabled: (
     <div className="st-f-disabled">
-      <Button disabled>deploy</Button>
+      <Button disabled>Deploy</Button>
       <div className="st-f-field">
-        <Input disabled placeholder="ship name" aria-label="ship name" />
+        <Input disabled placeholder="Ship name" aria-label="Ship name" />
       </div>
     </div>
   ),
@@ -214,49 +216,50 @@ const detailSpecimen: Record<DetailKey, ReactNode> = {
 
 // which state each specimen prints beyond rest, so the reader knows what to look at
 const detailNote: Record<DetailKey, string> = {
-  contact: "a select list, open",
-  mixed: "none, some and all",
-  tabhover: "runs, under the pointer",
-  rowedge: "the second row under the pointer, the third selected",
-  disabled: "a button and a field, both disabled",
-  skeleton: "three rows loading",
+  contact: "A select list, open",
+  mixed: "None, some and all",
+  tabhover: "Runs, under the pointer",
+  rowedge: "The second row under the pointer, the third selected",
+  disabled: "A button and a field, both disabled",
+  skeleton: "Three rows loading",
 };
 
 function Page() {
   return (
     <>
-      <Section id="rule" title="the rule">
+      <Section id="rule" title="The rule">
         <Copy>
-          fields print round dots every 4 css px, at 45° for the first ink and 15° for plum. they sit beside words,
-          numbers, data and code. a component takes at most one small screened detail.
+          Fields print round dots every 3.5 CSS px for proof plates (and 4 CSS px on legacy bands), at 45° for the first
+          ink and 15° for plum. They sit beside words, numbers, data and code. A component takes at most one small
+          screened detail.
         </Copy>
       </Section>
 
-      <Section id="places" title="field specimens">
+      <Section id="places" title="Field specimens">
         <Copy>
-          crop marks sit 16 px outside a contained field. <a href="/components/plate">plate</a> prints framed 3.5 px
-          proof-halftone subjects and geometry with light breath for documents; <a href="/components/weave">weave</a>{" "}
-          keeps the legacy solid-to-screen band.
+          Crop marks sit 16 px outside a contained field. <a href="/components/plate">Plate</a> prints framed 3.5 px
+          proof-halftone subjects and geometry with light breath for openers and documents;{" "}
+          <a href="/components/weave">Weave</a> keeps the legacy solid-to-screen band.
         </Copy>
         <ol className="st-f-places">
           {places.map(({ name, note }) => (
             <li key={name}>
-              <h3 className="type-title text-first">{name}</h3>
-              <p className="st-f-note">{note}</p>
+              <h3 className="type-title text-first">{sentence(name)}</h3>
+              <p className="st-f-note">{sentence(note)}</p>
               <ModePair
                 className="st-f-stack"
-                light={placeSpecimen[name]?.("light")}
-                dark={placeSpecimen[name]?.("dark")}
+                light={placeSpecimen[name.toLowerCase()]?.("light")}
+                dark={placeSpecimen[name.toLowerCase()]?.("dark")}
               />
             </li>
           ))}
         </ol>
       </Section>
 
-      <Section id="screens" title="screens">
+      <Section id="screens" title="Screens">
         <Copy>
-          a chart series prints in its ship's spot with 1 px lines knocked out at the ship's own angle, so two series
-          part by angle as well as colour. the detail tiles print the half for an in-between state, and a light
+          A chart series prints in its ship&apos;s spot with 1 px lines knocked out at the ship&apos;s own angle, so two
+          series part by angle as well as colour. The detail tiles print the half for an in-between state, and a light{" "}
           {tokens.texture.levels.b19} percent for loading.
         </Copy>
         <ModePair>
@@ -275,18 +278,18 @@ function Page() {
             </tbody>
           </table>
           <figcaption>
-            the 4 x 4 bayer matrix for details. a pixel prints when its number is below the level in sixteenths. 8 of 16
+            The 4 x 4 Bayer matrix for details. A pixel prints when its number is below the level in sixteenths: 8 of 16
             for the half, 3 of 16 for {tokens.texture.levels.b19} percent.
           </figcaption>
         </figure>
       </Section>
 
-      <Section id="details" title="component details">
-        <Copy>each detail with its job, in both modes, on the component itself.</Copy>
+      <Section id="details" title="Component details">
+        <Copy>Each detail with its job, in both modes, on the component itself.</Copy>
         <ol className="st-f-details">
           {tokens.texture.details.map((detail) => (
             <li key={detail.key}>
-              <h3 className="type-title text-first">{detail.component}</h3>
+              <h3 className="type-title text-first">{sentence(detail.component)}</h3>
               <Caption detail={detail.key} />
               <p className="st-f-note">{detailNote[detail.key]}</p>
               <ModePair className="st-f-detail-pair">{detailSpecimen[detail.key]}</ModePair>

@@ -8,14 +8,14 @@ export function SwitchExample() {
     <div className="st-e-stack">
       <label className="st-e-control">
         <Switch checked={notify} onCheckedChange={setNotify} />
-        notify when an orbit run finishes
+        Notify when an Orbit run finishes
       </label>
       <p className="st-e-hint" role="status">
-        {notify ? "completion notices are on" : "completion notices are off"}
+        {notify ? "Completion notices are on" : "Completion notices are off"}
       </p>
       <label className="st-e-control">
         <Switch size="sm" />
-        include queued runs
+        Include queued runs
       </label>
     </div>
   );
@@ -25,21 +25,27 @@ export function SwitchSizes() {
     <div className="st-e-states">
       {(["sm", "default"] as const).map((size) => (
         <State key={size} name={size} note={size === "sm" ? "24 × 14 px" : "32 × 18 px"}>
-          <Switch size={size} checked readOnly aria-label={`${size} switch`} tabIndex={-1} />
+          <Switch
+            size={size}
+            checked
+            readOnly
+            aria-label={`${size === "sm" ? "Small" : "Default"} switch`}
+            tabIndex={-1}
+          />
         </State>
       ))}
     </div>
   );
 }
 const states = [
-  { name: "off", note: "input edge and square" },
-  { name: "hover, off", note: "control hover fill", demo: "hover" },
-  { name: "on", note: "solid foreground", checked: true },
-  { name: "hover, on", note: "foreground hover", checked: true, demo: "hover" },
-  { name: "focus", note: "2 px ring, 2 px out", demo: "focus-visible" },
-  { name: "invalid", note: "error edge", invalid: true },
-  { name: "disabled, off", note: "faint stock, dim square", disabled: true },
-  { name: "disabled, on", note: "square stays at the end", checked: true, disabled: true },
+  { name: "Off", note: "Input edge and square" },
+  { name: "Hover, off", note: "Control hover fill", demo: "hover" },
+  { name: "On", note: "Solid foreground", checked: true },
+  { name: "Hover, on", note: "Foreground hover", checked: true, demo: "hover" },
+  { name: "Focus", note: "2 px ring, 2 px out", demo: "focus-visible" },
+  { name: "Invalid", note: "Error edge", invalid: true },
+  { name: "Disabled, off", note: "Faint stock, dim square", disabled: true },
+  { name: "Disabled, on", note: "Square stays at the end", checked: true, disabled: true },
 ];
 export function SwitchStates() {
   return (
@@ -50,7 +56,7 @@ export function SwitchStates() {
             checked={s.checked ?? false}
             readOnly
             tabIndex={-1}
-            aria-label={`notices, ${s.name}`}
+            aria-label={`Notices, ${s.name.toLowerCase()}`}
             aria-invalid={s.invalid || undefined}
             disabled={s.disabled}
             data-demo={s.demo}

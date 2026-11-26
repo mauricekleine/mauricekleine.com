@@ -106,14 +106,14 @@ export function Search({ className }: { className?: string }) {
           ref={input}
           type="text"
           role="combobox"
-          aria-label="search the docs"
+          aria-label="Search the docs"
           aria-autocomplete="list"
           aria-expanded={showList}
           aria-controls={listId}
           aria-activedescendant={activeId}
           autoComplete="off"
           spellCheck={false}
-          placeholder="search the docs"
+          placeholder="Search the docs"
           value={query}
           onChange={(event) => {
             setQuery(event.target.value);
@@ -133,7 +133,7 @@ export function Search({ className }: { className?: string }) {
       <ul
         id={listId}
         role="listbox"
-        aria-label="pages"
+        aria-label="Pages"
         className="st-search-list border border-border bg-popover text-popover-foreground shadow-leaf texture-contact [--contact-lift:var(--elevation-leaf-rake)]"
         hidden={!showList}
       >
@@ -153,7 +153,7 @@ export function Search({ className }: { className?: string }) {
         ))}
         {results.length === 0 && (
           <li className="st-search-none" role="option" aria-selected={false} aria-disabled="true">
-            no page matches
+            No page matches
           </li>
         )}
       </ul>

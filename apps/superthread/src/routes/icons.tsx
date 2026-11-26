@@ -16,11 +16,11 @@ function Page() {
   return (
     <>
       <PageHead
-        title="icons"
-        lede="every mark, in both chromes. pick an svg or a png size in pixels. every png keeps the hard edges and transparent corner notches of the 16 px drawing."
+        title="Icons"
+        lede="Every mark, in both chromes. Pick an SVG or a PNG size in pixels. Every PNG keeps the hard edges and transparent corner notches of the 16 px drawing."
       >
         <a className="st-icons-all" href={allMarksZipUrl} download>
-          download all marks · zip
+          Download all marks · zip
         </a>
       </PageHead>
       <div className="st-icons">
@@ -33,9 +33,9 @@ function Page() {
               <a
                 href={markZipUrl(mark.id)}
                 download
-                aria-label={`download ${mark.name}, both chromes and all sizes, zip`}
+                aria-label={`Download ${mark.name}, both chromes and all sizes, zip`}
               >
-                download zip
+                Download zip
               </a>
             </header>
             <div className="st-icon-themes">
@@ -45,17 +45,17 @@ function Page() {
                     <img src={markUrl(mark.id, mode)} alt={`${mark.name} for ${mode} chrome`} width={48} height={48} />
                   </div>
                   <div className="st-icon-files">
-                    <h3 className="type-meta">{mode} chrome</h3>
-                    <a href={markUrl(mark.id, mode)} download aria-label={`download ${mark.name}, ${mode} chrome, svg`}>
-                      svg
+                    <h3 className="type-meta">{mode === "light" ? "Light" : "Dark"} chrome</h3>
+                    <a href={markUrl(mark.id, mode)} download aria-label={`Download ${mark.name}, ${mode} chrome, SVG`}>
+                      SVG
                     </a>
-                    <ul aria-label={`${mark.name}, ${mode} chrome, png sizes in pixels`}>
+                    <ul aria-label={`${mark.name}, ${mode} chrome, PNG sizes in pixels`}>
                       {pngSizes.map((size) => (
                         <li key={size}>
                           <a
                             href={markPngUrl(mark.id, mode, size)}
                             download
-                            aria-label={`download ${mark.name}, ${mode} chrome, ${size} px png`}
+                            aria-label={`Download ${mark.name}, ${mode} chrome, ${size} px PNG`}
                           >
                             {size}
                           </a>

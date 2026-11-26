@@ -12,24 +12,24 @@ import {
 } from "@/components/superthread/ui/dialog";
 
 const drafts = [
-  { chapter: "chapter 8", title: "waves that keep their shape" },
-  { chapter: "chapter 9", title: "what a measurement does" },
-  { chapter: "chapter 10", title: "the double slit, again" },
-  { chapter: "chapter 11", title: "spin, without the spinning" },
+  { chapter: "Chapter 8", title: "Waves that keep their shape" },
+  { chapter: "Chapter 9", title: "What a measurement does" },
+  { chapter: "Chapter 10", title: "The double slit, again" },
+  { chapter: "Chapter 11", title: "Spin, without the spinning" },
 ];
 
 function Confirm() {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>delete this draft?</DialogTitle>
+        <DialogTitle>Delete this draft?</DialogTitle>
         <DialogDescription>
-          the draft and its 3 comments go for good. published chapters stay as they are.
+          The draft and its 3 comments go for good. Published chapters stay as they are.
         </DialogDescription>
       </DialogHeader>
       <DialogFooter>
-        <DialogClose render={<Button variant="outline" />}>cancel</DialogClose>
-        <DialogClose render={<Button variant="destructive" />}>delete draft</DialogClose>
+        <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+        <DialogClose render={<Button variant="destructive" />}>Delete draft</DialogClose>
       </DialogFooter>
     </>
   );
@@ -44,7 +44,7 @@ export function DialogPrinted() {
   return (
     <div ref={setFrame} className="st-c-screen" inert>
       <div className="st-c-drafts">
-        <p className="type-meta">drafts</p>
+        <p className="type-meta">Drafts</p>
         <ul>
           {drafts.map((draft) => (
             <li key={draft.chapter}>
@@ -68,7 +68,7 @@ export function DialogPrinted() {
 export function DialogLive() {
   return (
     <Dialog>
-      <DialogTrigger render={<Button variant="destructive" />}>delete draft</DialogTrigger>
+      <DialogTrigger render={<Button variant="destructive" />}>Delete draft</DialogTrigger>
       <DialogContent>
         <Confirm />
       </DialogContent>

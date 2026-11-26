@@ -72,7 +72,7 @@ describe("/install", () => {
     for (const block of blocks) {
       const row = html.split(`id="item-${block.name}"`)[1]?.split("</li>")[0] ?? "";
       const apps = block.serves ?? [];
-      const said = `serves ${apps.slice(0, -1).join(", ")} and ${apps.at(-1)}`;
+      const said = `Serves ${apps.slice(0, -1).join(", ")} and ${apps.at(-1)}`;
       expect(row).toContain(said);
     }
   });

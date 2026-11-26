@@ -8,11 +8,11 @@ import { InstallLine } from "@/site/InstallLine";
 export const Route = createFileRoute("/")({
   staticData: {
     openerLede:
-      "maurice's design system as a shadcn registry: tokens for light and dark, four typefaces, a mark for every ship and the components his apps share.",
+      "Maurice's design system as a shadcn registry: tokens for light and dark, four typefaces, a mark for every ship and the components his apps share.",
     sections: [
-      { id: "install", title: "install" },
-      { id: "fleet", title: "the fleet" },
-      { id: "next", title: "next" },
+      { id: "install", title: "Install" },
+      { id: "fleet", title: "The fleet" },
+      { id: "next", title: "Next" },
     ],
   },
   component: Page,
@@ -30,22 +30,22 @@ function Page() {
       </div>
       <section id="fleet" aria-labelledby="fleet-title" className="st-ov-fleet">
         <h2 id="fleet-title" className="type-section text-first">
-          the fleet
+          The fleet
         </h2>
         <FleetRow />
       </section>
-      <nav id="next" aria-label="where to go next" className="st-ov-next">
+      <nav id="next" aria-label="Where to go next" className="st-ov-next">
         <div className="st-ov-next-row">
           <Link to="/install" className={cn(buttonVariants(), action)}>
-            install superthread
+            Install Superthread
           </Link>
           <Link to="/foundations/colour" className={cn(buttonVariants({ variant: "outline" }), action)}>
-            read the foundations
+            Read the foundations
           </Link>
           <Link to="/foundations/colour" className="st-ov-nextbox">
-            <span className="type-meta">next</span>
+            <span className="type-meta">Next</span>
             <b>
-              colour: the wedge
+              Colour: the wedge
               <Icon name="arrow" />
             </b>
           </Link>

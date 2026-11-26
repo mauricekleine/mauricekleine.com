@@ -1,12 +1,12 @@
 import { PageHeader, PageHeaderTitle } from "@/components/superthread/blocks/page-header";
 import { FitTitle } from "@/components/superthread/ui/fit-title";
 
-export const SHORT_TITLE = "reply to sam about chapter 7";
-export const MEDIAN_TITLE = "reply to sam about the chapter 7 notes and say when the next draft goes up";
+export const SHORT_TITLE = "Reply to Sam about chapter 7";
+export const MEDIAN_TITLE = "Reply to Sam about the chapter 7 notes and say when the next draft goes up";
 const DECK_TITLE =
-  "check whether the deck for thursday's review still matches the numbers sam sent after the last call";
+  "Check whether the deck for Thursday's review still matches the numbers Sam sent after the last call";
 export const LONG_TITLE =
-  "check whether the deck for thursday's review still matches the numbers sam sent after the last call, and fix the ones that moved, then send the whole thing back to the three people who asked for it";
+  "Check whether the deck for Thursday's review still matches the numbers Sam sent after the last call, and fix the ones that moved, then send the whole thing back to the three people who asked for it";
 
 // A held box at a fixed width, so the page prints the same fit whatever its column does.
 function Box({ width, height = 176, title }: { width: number; height?: number; title: string }) {

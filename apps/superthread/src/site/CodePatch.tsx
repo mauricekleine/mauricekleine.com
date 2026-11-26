@@ -27,12 +27,12 @@ export function CodePatch({ command, className }: { command: string; className?:
         $
       </span>
       <code>{words(command)}</code>
-      <button type="button" onClick={copy} aria-label={copied ? "copied" : `copy: ${command}`}>
+      <button type="button" onClick={copy} aria-label={copied ? "Copied" : `Copy: ${command}`}>
         <Icon name={copied ? "check" : "copy"} />
-        <span aria-hidden="true">{copied ? "copied" : "copy"}</span>
+        <span aria-hidden="true">{copied ? "Copied" : "Copy"}</span>
       </button>
       <span className="sr-only" role="status">
-        {copied ? "copied to the clipboard" : ""}
+        {copied ? "Copied to the clipboard" : ""}
       </span>
     </div>
   );

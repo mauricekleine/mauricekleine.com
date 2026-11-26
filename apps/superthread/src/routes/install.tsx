@@ -12,13 +12,13 @@ declare const __SUPERTHREAD_VERSION__: string;
 export const Route = createFileRoute("/install")({
   staticData: {
     openerLede:
-      "two commands put superthread into a tanstack start app on tailwind 4: init once, then add what you need.",
+      "Two commands put Superthread into a TanStack Start app on Tailwind 4: init once, then add what you need.",
     sections: [
-      { id: "init", title: "init" },
-      { id: "add", title: "add an item" },
-      { id: "css", title: "the css entry" },
-      { id: "pin", title: "pin a version" },
-      { id: "items", title: "every item" },
+      { id: "init", title: "Init" },
+      { id: "add", title: "Add an item" },
+      { id: "css", title: "The CSS entry" },
+      { id: "pin", title: "Pin a version" },
+      { id: "items", title: "Every item" },
     ],
   },
   component: Page,
@@ -55,11 +55,11 @@ export function pinnedMapping(version: string): string {
 }
 
 const tiers: readonly { tier: Tier; title: string }[] = [
-  { tier: "style", title: "the theme" },
-  { tier: "lib", title: "code" },
-  { tier: "brand", title: "branded components" },
-  { tier: "pass", title: "base-nova on the tokens" },
-  { tier: "block", title: "compositions" },
+  { tier: "style", title: "The theme" },
+  { tier: "lib", title: "Code" },
+  { tier: "brand", title: "Branded components" },
+  { tier: "pass", title: "Base-nova on the tokens" },
+  { tier: "block", title: "Compositions" },
 ];
 
 // every catalog item under its tier, in catalog order
@@ -69,10 +69,10 @@ export const itemGroups = tiers.map(({ tier, title }) => ({
   items: catalog.filter((candidate) => candidate.tier === tier),
 }));
 
-// the apps a composition serves, as a sentence: "serves orbit, trisys and www"
+// the apps a composition serves, as a sentence: "Serves orbit, trisys and www"
 export function servesLine(apps: readonly string[]): string {
   const list = apps.length > 1 ? `${apps.slice(0, -1).join(", ")} and ${apps.at(-1)}` : (apps[0] ?? "");
-  return `serves ${list}`;
+  return `Serves ${list}`;
 }
 
 export function commandFor(name: string): string {
@@ -86,40 +86,40 @@ function Code({ children }: { children: ReactNode }) {
 function Page() {
   return (
     <>
-      <Section id="init" title="init" className="st-in">
+      <Section id="init" title="Init" className="st-in">
         <p className="st-in-text">
-          init sets an app up for <Code>@mk</Code>. it writes the base-nova style and the registry into{" "}
+          Init sets an app up for <Code>@mk</Code>. It writes the base-nova style and the registry into{" "}
           <Code>components.json</Code>, then installs the utils, the tokens and the button.
         </p>
         <InitLine />
       </Section>
-      <Section id="add" title="add an item" className="st-in">
+      <Section id="add" title="Add an item" className="st-in">
         <p className="st-in-text">
-          after init, every item installs by name, and the <Code>@mk</Code> items it needs come with it. most apps start
+          After init, every item installs by name, and the <Code>@mk</Code> items it needs come with it. Most apps start
           with the tokens and the button:
         </p>
         <InstallLine items={["tokens", "button"]} />
         <p className="st-in-text">
-          the files go to <Code>components/superthread/</Code>, outside <Code>components/ui/</Code>, so a later{" "}
+          The files go to <Code>components/superthread/</Code>, outside <Code>components/ui/</Code>, so a later{" "}
           <Code>shadcn apply</Code> or <Code>init --reinstall</Code> never overwrites them.
         </p>
       </Section>
-      <Section id="css" title="the css entry" className="st-in">
+      <Section id="css" title="The CSS entry" className="st-in">
         <p className="st-in-text">
-          <Code>@mk/tokens</Code> adds three imports to the app&apos;s css entry, after tailwind&apos;s:
+          <Code>@mk/tokens</Code> adds three imports to the app&apos;s CSS entry, after Tailwind&apos;s:
         </p>
         <pre className="st-in-block">
           <code>{cssLines.join("\n")}</code>
         </pre>
         <p className="st-in-text">
-          the third import is relative to <Code>src/styles.css</Code> in a start app. elsewhere, point it at the
-          installed file from wherever your css entry sits: next&apos;s <Code>app/globals.css</Code> needs{" "}
+          The third import is relative to <Code>src/styles.css</Code> in a Start app. Elsewhere, point it at the
+          installed file from wherever your CSS entry sits: Next&apos;s <Code>app/globals.css</Code> needs{" "}
           <Code>../components/superthread/styles/superthread.css</Code>.
         </p>
       </Section>
-      <Section id="pin" title="pin a version" className="st-in">
+      <Section id="pin" title="Pin a version" className="st-in">
         <p className="st-in-text">
-          to stay on one version, map <Code>@mk</Code> to its snapshot in <Code>components.json</Code>. an item that
+          To stay on one version, map <Code>@mk</Code> to its snapshot in <Code>components.json</Code>. An item that
           needs other <Code>@mk</Code> items fetches them from the same snapshot.
         </p>
         <pre className="st-in-block">
@@ -129,10 +129,10 @@ function Page() {
           <Code>/r/versions.json</Code> lists every version with a snapshot.
         </p>
       </Section>
-      <Section id="items" title="every item" className="st-in">
+      <Section id="items" title="Every item" className="st-in">
         <p className="st-in-text">
-          each item in the registry with its line. an item with a page links to it, and a composition names the apps it
-          serves.
+          Each item in the registry with its install line. An item with a page links to it, and a composition names the
+          apps it serves.
         </p>
         {itemGroups.map((group) => (
           <div key={group.tier} className="st-in-group">

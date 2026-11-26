@@ -17,13 +17,13 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/compositions/month-grid")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "marks", title: "the marks" },
-      { id: "weeks", title: "the week column" },
-      { id: "keys", title: "steps and keys" },
-      { id: "unread", title: "while the days are unread" },
-      { id: "phone", title: "on a phone" },
-      { id: "parts", title: "parts" },
+      { id: "example", title: "Example" },
+      { id: "marks", title: "The marks" },
+      { id: "weeks", title: "The week column" },
+      { id: "keys", title: "Steps and keys" },
+      { id: "unread", title: "While the days are unread" },
+      { id: "phone", title: "On a phone" },
+      { id: "parts", title: "Parts" },
     ],
   },
   component: Page,
@@ -33,84 +33,85 @@ function Page() {
   return (
     <>
       <PageHead
-        title="month grid"
-        lede="a month at a glance: a dot on the days that hold something, today's edge and the open day's bar. it sits in a reader's rail or beside any list of days."
+        title="Month grid"
+        lede="A month at a glance: a dot on the days that hold something, today's edge and the open day's bar. It sits in a reader's rail or beside any list of days."
       >
         <InstallLine items={["month-grid"]} />
       </PageHead>
       <Serves name="month-grid" />
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-cb-copy">
-          the grid always prints six weeks from a monday, so a step never moves what sits under it. figures print in
-          mono, so the columns hold. pick a day and its bar moves: nothing else does.
+          The grid always prints six weeks from a Monday, so a step never moves what sits under it. Figures print in
+          mono, so the columns hold. Pick a day and its bar moves: nothing else does.
         </p>
         <ModePair>
           <MonthGridExample />
         </ModePair>
       </Section>
-      <Section id="marks" title="the marks">
+      <Section id="marks" title="The marks">
         <p className="st-cb-copy">
-          a dot says a day holds something. ink says what it holds and where it falls: foreground with something on it,
-          muted when it&rsquo;s empty or sits in the month beside it, faint when it&rsquo;s both. today prints a 1 px
-          edge and the open day a 2 px bar along its foot. they&rsquo;re separate marks, so a day that is both prints
-          both, and its aria label says <code>selected</code> because aria-current is already saying the date.
+          A dot says a day holds something. Ink says what it holds and where it falls: foreground with something on it,
+          muted when it&rsquo;s empty or sits in the month beside it, faint when it&rsquo;s both. Today prints a 1 px
+          edge and the open day a 2 px bar along its foot. They&rsquo;re separate marks, so a day that is both prints
+          both, and its ARIA label says <code>selected</code> because <code>aria-current</code> is already saying the
+          date.
         </p>
         <ModePair>
           <MonthGridMarks />
         </ModePair>
       </Section>
-      <Section id="weeks" title="the week column">
+      <Section id="weeks" title="The week column">
         <p className="st-cb-copy">
           <code>weeks</code>, even an empty list, prints each week&rsquo;s number under <code>wk</code>, in the same
-          calendar weeks the year uses. a week in the list takes a dot and a link like a day does. without{" "}
-          <code>weeks</code> there&rsquo;s no column. a day with no link still prints its dot and says its label, and a
+          calendar weeks the year uses. A week in the list takes a dot and a link like a day does. Without{" "}
+          <code>weeks</code> there&rsquo;s no column. A day with no link still prints its dot and says its label, and a
           month with no links reads as a table.
         </p>
         <ModePair>
           <MonthGridReadOnly />
         </ModePair>
       </Section>
-      <Section id="keys" title="steps and keys">
+      <Section id="keys" title="Steps and keys">
         <p className="st-cb-copy">
-          <code>onMonthChange</code> prints the two steps, and <code>min</code> and <code>max</code> bound them. at a
-          bound a step keeps its place and its focus, and prints a faint arrow. the links are one tab stop: the open
-          day, else today, else the first link, and it follows the keys. left and right walk the links in reading order,
-          and past either end they turn the month and carry on from that date. up and down keep the column.
+          <code>onMonthChange</code> prints the two steps, and <code>min</code> and <code>max</code> bound them. At a
+          bound a step keeps its place and its focus, and prints a faint arrow. The links are one tab stop: the open
+          day, else today, else the first link, and it follows the keys. Left and right walk the links in reading order,
+          and past either end they turn the month and carry on from that date. Up and down keep the column.
         </p>
         <p className="st-cb-copy">
-          when the month that opens has no link past that date, focus moves to its step, or to the month&rsquo;s nearest
-          link if that step is closed. a step answers left and right too, so a month with no links still turns by key.
-          while <code>loading</code> is set, focus waits on the step until the days arrive.
+          When the month that opens has no link past that date, focus moves to its step, or to the month&rsquo;s nearest
+          link if that step is closed. A step answers left and right too, so a month with no links still turns by key.
+          While <code>loading</code> is set, focus waits on the step until the days arrive.
         </p>
         <ModePair>
           <MonthGridBounded />
         </ModePair>
       </Section>
-      <Section id="unread" title="while the days are unread">
+      <Section id="unread" title="While the days are unread">
         <p className="st-cb-copy">
-          an empty month and an unread month aren&rsquo;t the same thing. <code>loading</code> holds the grid&rsquo;s
+          An empty month and an unread month aren&rsquo;t the same thing. <code>loading</code> holds the grid&rsquo;s
           shape, marks where a dot could land and tells a screen reader the table is busy.
         </p>
         <ModePair>
           <MonthGridLoading />
         </ModePair>
       </Section>
-      <Section id="phone" title="on a phone">
+      <Section id="phone" title="On a phone">
         <p className="st-cb-copy">
-          every cell stands 44 px tall and every step reaches 44 px, each on its own box, so no two reaches overlap.
-          with the week column the grid hangs 9 px into each side of a panel, which makes eight cells 44 px wide at 390
-          px. a narrower phone gives up width, about 40 px at 360.
+          Every cell stands 44 px tall and every step reaches 44 px, each on its own box, so no two reaches overlap.
+          With the week column the grid hangs 9 px into each side of a panel, which makes eight cells 44 px wide at 390
+          px. A narrower phone gives up width, about 40 px at 360.
         </p>
         <ModePair
           light={
-            <GroundFrame mode="light" title="a month on a phone, light" height={428}>
+            <GroundFrame mode="light" title="A month on a phone, light" height={428}>
               <AppShellPanel>
                 <MonthGridPhone />
               </AppShellPanel>
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="a month on a phone, dark" height={428}>
+            <GroundFrame mode="dark" title="A month on a phone, dark" height={428}>
               <AppShellPanel>
                 <MonthGridPhone />
               </AppShellPanel>
@@ -118,22 +119,22 @@ function Page() {
           }
         />
       </Section>
-      <Section id="parts" title="parts">
+      <Section id="parts" title="Parts">
         <dl className="st-ca-parts">
           <dt>
             <code>MonthGrid</code>
           </dt>
           <dd>
-            the head and six weeks, from <code>month</code>, <code>today</code>, <code>days</code>, <code>weeks</code>,{" "}
-            <code>loading</code>, <code>min</code>, <code>max</code> and <code>onMonthChange</code>. months and dates
+            The head and six weeks, from <code>month</code>, <code>today</code>, <code>days</code>, <code>weeks</code>,{" "}
+            <code>loading</code>, <code>min</code>, <code>max</code> and <code>onMonthChange</code>. Months and dates
             are plain, like <code>2026-11</code> and <code>2026-11-03</code>, and <code>useMinute</code>&rsquo;s{" "}
-            <code>day</code> is today. give it an <code>aria-label</code> that says what the month holds.
+            <code>day</code> is today. Give it an <code>aria-label</code> that says what the month holds.
           </dd>
           <dt>
             <code>MonthGridEntry</code>
           </dt>
           <dd>
-            a day or a week with something in it: its <code>date</code>, the <code>label</code> said before that date,
+            A day or a week with something in it: its <code>date</code>, the <code>label</code> said before that date,
             and <code>selected</code>. <code>href</code> or a router link through <code>render</code> makes it a link.
           </dd>
         </dl>

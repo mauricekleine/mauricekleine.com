@@ -21,20 +21,20 @@ import { Section } from "@/site/Section";
 
 const serves = catalog
   .find((entry) => entry.name === "form-section")!
-  .serves!.map((app) => (app === "www" ? "the public site" : app))
+  .serves!.map((app) => (app === "www" ? "the public site" : app[0]!.toUpperCase() + app.slice(1)))
   .join(", ");
 export const Route = createFileRoute("/compositions/form-section")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "states", title: "save states" },
+      { id: "example", title: "Example" },
+      { id: "states", title: "Save states" },
     ],
   },
   component: Page,
 });
 
 function SettingsForm({
-  initialStatus = "unsaved changes",
+  initialStatus = "Unsaved changes",
   invalid = false,
 }: {
   initialStatus?: string;
@@ -53,26 +53,26 @@ function SettingsForm({
         event.preventDefault();
         setAttempted(true);
         if (!prefix.trim()) {
-          setStatus("enter a prefix before saving");
+          setStatus("Enter a prefix before saving");
           return;
         }
         setSaved(prefix);
-        setStatus("saved");
+        setStatus("Saved");
       }}
       onReset={(event) => {
         event.preventDefault();
         setPrefix(saved);
         setAttempted(false);
-        setStatus("changes discarded");
+        setStatus("Changes discarded");
       }}
     >
       <FormSectionHeader>
-        <FormSectionTitle>chapter names</FormSectionTitle>
-        <FormSectionDescription>new chapters use this prefix. existing names stay as they are.</FormSectionDescription>
+        <FormSectionTitle>Chapter names</FormSectionTitle>
+        <FormSectionDescription>New chapters use this prefix. Existing names stay as they are.</FormSectionDescription>
       </FormSectionHeader>
       <FormSectionFields>
         <Field data-invalid={error || undefined}>
-          <FieldLabel htmlFor={id}>name prefix</FieldLabel>
+          <FieldLabel htmlFor={id}>Name prefix</FieldLabel>
           <Input
             id={id}
             required
@@ -81,19 +81,19 @@ function SettingsForm({
             aria-describedby={`${id}-hint${error ? ` ${id}-error` : ""}`}
             onChange={(event) => {
               setPrefix(event.target.value);
-              setStatus("unsaved changes");
+              setStatus("Unsaved changes");
             }}
           />
-          <FieldDescription id={`${id}-hint`}>for example, chapter- followed by a number.</FieldDescription>
-          {error && <FieldError id={`${id}-error`}>enter a name prefix, such as chapter-.</FieldError>}
+          <FieldDescription id={`${id}-hint`}>For example, chapter- followed by a number.</FieldDescription>
+          {error && <FieldError id={`${id}-error`}>Enter a name prefix, such as chapter-.</FieldError>}
         </Field>
       </FormSectionFields>
       <FormSectionFooter>
         <FormSectionStatus>{status}</FormSectionStatus>
         <Button type="reset" variant="outline">
-          discard
+          Discard
         </Button>
-        <Button type="submit">save</Button>
+        <Button type="submit">Save</Button>
       </FormSectionFooter>
     </FormSection>
   );
@@ -103,54 +103,54 @@ function Page() {
   return (
     <>
       <PageHead
-        title="form section"
-        lede="a form named by its heading, with fields below and a ruled save row. the app owns the draft, validation and save status."
+        title="Form section"
+        lede="A form named by its heading, with fields below and a ruled save row. The app owns the draft, validation and save status."
       >
         <InstallLine items={["form-section"]} />
       </PageHead>
-      <p className="st-cb-serves">serves {serves}.</p>
+      <p className="st-cb-serves">Serves {serves}.</p>
 
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-cb-copy">
-          edit the prefix, then save or discard. clear the field and save to see its error; the draft stays in place
+          Edit the prefix, then save or discard. Clear the field and save to see its error; the draft stays in place
           until it is valid.
         </p>
         <ModePair className="st-cb-stack">
           <SettingsForm />
         </ModePair>
       </Section>
-      <Section id="states" title="save states">
+      <Section id="states" title="Save states">
         <p className="st-cb-copy">
-          the status sits beside the actions and is read out when it changes. save keeps the new value, and discard
+          The status sits beside the actions and is read out when it changes. Save keeps the new value, and Discard
           returns to the last saved value.
         </p>
         <ModePair className="st-cb-stack">
           <div className="st-cb-flow">
-            <State name="unsaved" note="the form starts with a draft">
-              <FormSection aria-label="unsaved chapter settings">
+            <State name="Unsaved" note="The form starts with a draft">
+              <FormSection aria-label="Unsaved chapter settings">
                 <FormSectionHeader>
-                  <FormSectionTitle>chapter settings</FormSectionTitle>
+                  <FormSectionTitle>Chapter settings</FormSectionTitle>
                 </FormSectionHeader>
                 <FormSectionFooter>
-                  <FormSectionStatus>unsaved changes</FormSectionStatus>
+                  <FormSectionStatus>Unsaved changes</FormSectionStatus>
                   <Button disabled variant="outline">
-                    discard
+                    Discard
                   </Button>
-                  <Button disabled>save</Button>
+                  <Button disabled>Save</Button>
                 </FormSectionFooter>
               </FormSection>
             </State>
-            <State name="saved" note="the app confirms the write">
-              <FormSection aria-label="saved chapter settings">
+            <State name="Saved" note="The app confirms the write">
+              <FormSection aria-label="Saved chapter settings">
                 <FormSectionHeader>
-                  <FormSectionTitle>chapter settings</FormSectionTitle>
+                  <FormSectionTitle>Chapter settings</FormSectionTitle>
                 </FormSectionHeader>
                 <FormSectionFooter>
-                  <FormSectionStatus>saved</FormSectionStatus>
+                  <FormSectionStatus>Saved</FormSectionStatus>
                   <Button disabled variant="outline">
-                    discard
+                    Discard
                   </Button>
-                  <Button disabled>save</Button>
+                  <Button disabled>Save</Button>
                 </FormSectionFooter>
               </FormSection>
             </State>

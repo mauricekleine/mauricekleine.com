@@ -8,10 +8,10 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/resizable")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "orientation", title: "orientation" },
-      { id: "handles", title: "handles" },
-      { id: "states", title: "states" },
+      { id: "example", title: "Example" },
+      { id: "orientation", title: "Orientation" },
+      { id: "handles", title: "Handles" },
+      { id: "states", title: "States" },
     ],
   },
   component: Page,
@@ -21,39 +21,39 @@ function Page() {
   return (
     <>
       <PageHead
-        title="resizable"
-        lede="panels that share a movable 1 px rule. its 8 px hit area works with the pointer, and a focused handle moves with the arrow keys."
+        title="Resizable"
+        lede="Panels that share a movable 1 px rule. Its 8 px hit area works with the pointer, and a focused handle moves with the arrow keys."
       >
         <InstallLine items={["resizable"]} />
       </PageHead>
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-gl-copy">
-          drag the grip to divide the run list and its log. tab to the separator and use left or right to resize with
+          Drag the grip to divide the run list and its log. Tab to the separator and use left or right to resize with
           the keyboard.
         </p>
         <ModePair className="st-gl-pair">
           <ResizableExample />
         </ModePair>
       </Section>
-      <Section id="orientation" title="orientation">
+      <Section id="orientation" title="Orientation">
         <p className="st-gl-copy">
-          vertical groups stack the same panels and turn the grip. the separator now responds to up and down.
+          Vertical groups stack the same panels and turn the grip. The separator now responds to up and down.
         </p>
         <ModePair className="st-gl-pair">
           <ResizableExample orientation="vertical" />
         </ModePair>
       </Section>
-      <Section id="handles" title="handles">
+      <Section id="handles" title="Handles">
         <p className="st-gl-copy">
-          a plain rule works without the grip. its keyboard ring straddles the rule at zero offset.
+          A plain rule works without the grip. Its keyboard ring straddles the rule at zero offset.
         </p>
         <ModePair className="st-gl-pair">
           <ResizableExample withHandle={false} />
         </ModePair>
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-gl-copy">
-          hover and drag turn the rule foreground. a gripped separator draws its focus edge inside the small grip;
+          Hover and drag turn the rule foreground. A gripped separator draws its focus edge inside the small grip;
           disabled fixes the split.
         </p>
         <ModePair className="st-gl-pair">

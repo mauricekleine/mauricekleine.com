@@ -11,15 +11,15 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="st-app">
       <a href="#main" className="st-skip">
-        skip to the page
+        Skip to the page
       </a>
       <header className="st-strip">
         <Link to="/" className="st-strip-back">
           <Icon name="left" />
-          docs
+          Docs
         </Link>
         <p className="st-strip-crumb">
-          <span className="type-meta">mock pages</span>
+          <span className="type-meta">Mock pages</span>
           <span className="type-meta" aria-hidden="true">
             /
           </span>

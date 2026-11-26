@@ -15,11 +15,11 @@ export function BadgeStates() {
 
 // A status badge keeps its glyph and takes the word it is given.
 const words = [
-  { state: "done", word: "shipped" },
+  { state: "done", word: "Shipped" },
   { state: "running", word: "3 running" },
-  { state: "waiting", word: "needs review" },
+  { state: "waiting", word: "Needs review" },
   { state: "failed", word: "2 failed" },
-  { state: "queued", word: "next up" },
+  { state: "queued", word: "Next up" },
 ] as const;
 
 export function BadgeWords() {
@@ -44,12 +44,12 @@ export function BadgeSizes() {
         ))}
       </div>
       <div className="st-b-row">
-        <Badge size="sm">new</Badge>
+        <Badge size="sm">New</Badge>
         <Badge size="sm" variant="secondary">
-          draft
+          Draft
         </Badge>
         <Badge size="sm" variant="outline">
-          beta
+          Beta
         </Badge>
       </div>
     </>
@@ -57,20 +57,20 @@ export function BadgeSizes() {
 }
 
 const variants = [
-  { variant: "default", word: "new" },
-  { variant: "secondary", word: "draft" },
-  { variant: "outline", word: "beta" },
-  { variant: "ghost", word: "archived" },
-  { variant: "destructive", word: "removed" },
-  { variant: "link", word: "changelog" },
+  { variant: "default", word: "New" },
+  { variant: "secondary", word: "Draft" },
+  { variant: "outline", word: "Beta" },
+  { variant: "ghost", word: "Archived" },
+  { variant: "destructive", word: "Removed" },
+  { variant: "link", word: "Changelog" },
 ] as const;
 
 // A narrow parent stands in for a phone column.
 export function BadgeLong() {
   return (
     <div className="st-b-row max-w-[240px]">
-      <Badge variant="outline">a label long enough to reach the end of its column and carry on</Badge>
-      <Badge variant="waiting">waiting on the second reader of the chapter</Badge>
+      <Badge variant="outline">A label long enough to reach the end of its column and carry on</Badge>
+      <Badge variant="waiting">Waiting on the second reader of the chapter</Badge>
     </div>
   );
 }

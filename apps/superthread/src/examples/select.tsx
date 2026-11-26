@@ -27,7 +27,7 @@ export function ShipMark({ ship }: { ship: Ship }) {
 // What the trigger shows: the chosen ship's mark and name, or the placeholder.
 function shipValue(value: ShipId | null) {
   const ship = value ? ships.get(value) : undefined;
-  if (!ship) return "pick a ship";
+  if (!ship) return "Pick a ship";
   return (
     <>
       <ShipMark ship={ship} />
@@ -88,7 +88,7 @@ function ShipField({
         <ShipList mode={mode} />
       </Select>
       {invalid ? (
-        <FieldError id={noteId(id)}>pick the ship this run belongs to.</FieldError>
+        <FieldError id={noteId(id)}>Pick the ship this run belongs to.</FieldError>
       ) : (
         hint && <Hint id={noteId(id)}>{hint}</Hint>
       )}
@@ -100,8 +100,8 @@ function ShipField({
 export function SelectExample({ mode }: { mode: Mode }) {
   return (
     <div className="st-a-grid">
-      <ShipField mode={mode} label="ship" hint="the ship this run belongs to" initial="trisys" />
-      <ShipField mode={mode} label="ship" required />
+      <ShipField mode={mode} label="Ship" hint="The ship this run belongs to" initial="trisys" />
+      <ShipField mode={mode} label="Ship" required />
     </div>
   );
 }
@@ -114,7 +114,7 @@ export function SelectOpen({ mode }: { mode: Mode }) {
   return (
     <div className="st-a-open">
       <span id={`${id}-label`} className="st-a-label">
-        ship
+        Ship
       </span>
       <Select<ShipId> defaultValue="trisys">
         <SelectTrigger className="w-full" aria-labelledby={`${id}-label ${id}-value`}>
@@ -168,18 +168,18 @@ type PrintedState = {
 };
 
 const states: PrintedState[] = [
-  { name: "rest", label: "ship, rest", note: "1 px input edge", value: "trisys" },
-  { name: "focus", label: "ship, focus", note: "2 px house edge, inside", value: "trisys", demo: true },
-  { name: "invalid", label: "ship, unpicked", note: "1 px error edge", value: null, invalid: true },
+  { name: "Rest", label: "Ship, rest", note: "1 px input edge", value: "trisys" },
+  { name: "Focus", label: "Ship, focus", note: "2 px house edge, inside", value: "trisys", demo: true },
+  { name: "Invalid", label: "Ship, unpicked", note: "1 px error edge", value: null, invalid: true },
   {
-    name: "invalid, focus",
-    label: "ship, unpicked, focus",
+    name: "Invalid, focus",
+    label: "Ship, unpicked, focus",
     note: "2 px error edge, inside",
     value: null,
     demo: true,
     invalid: true,
   },
-  { name: "disabled", label: "ship, disabled", note: "flat fill, full edge", value: "trisys", disabled: true },
+  { name: "Disabled", label: "Ship, disabled", note: "Flat fill, full edge", value: "trisys", disabled: true },
 ];
 
 export function SelectStates({ mode }: { mode: Mode }) {

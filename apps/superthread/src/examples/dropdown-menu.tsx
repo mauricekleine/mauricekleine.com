@@ -6,33 +6,33 @@ import { State, States, type Mode } from "@/examples/input";
 
 export function DropdownMenuExample({ mode }: { mode: Mode }) {
   const [notify, setNotify] = useState(true);
-  const [ship, setShip] = useState("orbit");
-  const [result, setResult] = useState("run or-412 is ready");
+  const [ship, setShip] = useState("Orbit");
+  const [result, setResult] = useState("Run or-412 is ready");
   return (
     <div className="st-gl-stack">
       <Menu.DropdownMenu>
         <Menu.DropdownMenuTrigger render={<Button variant="outline" />}>
-          run actions <Icon name="chevron" />
+          Run actions <Icon name="chevron" />
         </Menu.DropdownMenuTrigger>
         <Menu.DropdownMenuContent className="min-w-56" portalProps={{ className: mode }}>
           <Menu.DropdownMenuGroup>
             <Menu.DropdownMenuLabel inset>or-412</Menu.DropdownMenuLabel>
-            <Menu.DropdownMenuItem inset onClick={() => setResult("showing the log for or-412")}>
-              view log <Menu.DropdownMenuShortcut>⌘o</Menu.DropdownMenuShortcut>
+            <Menu.DropdownMenuItem inset onClick={() => setResult("Showing the log for or-412")}>
+              View log <Menu.DropdownMenuShortcut>⌘O</Menu.DropdownMenuShortcut>
             </Menu.DropdownMenuItem>
             <Menu.DropdownMenuItem inset disabled>
-              retry run
+              Retry run
             </Menu.DropdownMenuItem>
           </Menu.DropdownMenuGroup>
           <Menu.DropdownMenuSeparator />
           <Menu.DropdownMenuCheckboxItem checked={notify} onCheckedChange={setNotify}>
-            notify on finish
+            Notify on finish
           </Menu.DropdownMenuCheckboxItem>
           <Menu.DropdownMenuSub>
-            <Menu.DropdownMenuSubTrigger inset>move to ship</Menu.DropdownMenuSubTrigger>
+            <Menu.DropdownMenuSubTrigger inset>Move to ship</Menu.DropdownMenuSubTrigger>
             <Menu.DropdownMenuSubContent portalProps={{ className: mode }}>
               <Menu.DropdownMenuRadioGroup value={ship} onValueChange={setShip}>
-                {["orbit", "quanta", "trisys"].map((value) => (
+                {["Orbit", "Quanta", "Trisys"].map((value) => (
                   <Menu.DropdownMenuRadioItem key={value} value={value}>
                     {value}
                   </Menu.DropdownMenuRadioItem>
@@ -43,7 +43,7 @@ export function DropdownMenuExample({ mode }: { mode: Mode }) {
           <Menu.DropdownMenuSeparator />
           <Menu.DropdownMenuItem variant="destructive" onClick={() => setResult("or-412 removed from this example")}>
             <Icon name="trash" />
-            delete run
+            Delete run
           </Menu.DropdownMenuItem>
         </Menu.DropdownMenuContent>
       </Menu.DropdownMenu>
@@ -87,37 +87,37 @@ export function DropdownMenuOpen() {
       <div className="st-gl-leaf relative isolate border border-border bg-popover p-1 text-popover-foreground shadow-leaf texture-contact [--contact-lift:var(--elevation-leaf-rake)]">
         <div className="px-2.5 pt-1.5 pb-1 type-meta text-muted-foreground">or-412</div>
         <Row inset highlighted>
-          view log <Menu.DropdownMenuShortcut>⌘o</Menu.DropdownMenuShortcut>
+          View log <Menu.DropdownMenuShortcut>⌘O</Menu.DropdownMenuShortcut>
         </Row>
         <Row inset disabled>
-          retry run
+          Retry run
         </Row>
         <div className="-mx-1 my-1 h-px bg-border" />
         <Row inset>
           <span className="absolute left-2.5">
             <Icon name="check" />
           </span>
-          notify on finish
+          Notify on finish
         </Row>
         <Row inset>
-          move to ship <Icon name="chevron" className="-rotate-90 ml-auto" />
+          Move to ship <Icon name="chevron" className="-rotate-90 ml-auto" />
         </Row>
         <div className="-mx-1 my-1 h-px bg-border" />
         <Row>
           <Icon name="trash" />
-          delete run
+          Delete run
         </Row>
       </div>
       <div className="st-gl-leaf relative isolate border border-border bg-popover p-1 text-popover-foreground shadow-leaf texture-contact [--contact-lift:var(--elevation-leaf-rake)]">
-        <div className="px-2.5 pt-1.5 pb-1 type-meta text-muted-foreground">move to ship</div>
+        <div className="px-2.5 pt-1.5 pb-1 type-meta text-muted-foreground">Move to ship</div>
         <Row inset>
           <span className="absolute left-2.5 flex size-3 items-center justify-center">
             <span className="size-1.5 bg-foreground" />
           </span>
-          orbit
+          Orbit
         </Row>
-        <Row inset>quanta</Row>
-        <Row inset>trisys</Row>
+        <Row inset>Quanta</Row>
+        <Row inset>Trisys</Row>
       </div>
     </div>
   );
@@ -132,16 +132,16 @@ export function DropdownMenuVariants() {
           name={variant}
           note={
             variant === "destructive"
-              ? "trash glyph, key ink"
+              ? "Trash glyph, key ink"
               : variant === "inset"
-                ? "room for an indicator"
+                ? "Room for an indicator"
                 : "36 px action row"
           }
         >
           <div inert aria-hidden="true" className="bg-popover text-popover-foreground">
             <Row inset={variant === "inset"}>
               {variant === "destructive" && <Icon name="trash" />}
-              {variant === "destructive" ? "delete run" : "view log"}
+              {variant === "destructive" ? "Delete run" : "View log"}
             </Row>
           </div>
         </State>
@@ -154,16 +154,24 @@ export function DropdownMenuStates() {
   return (
     <div className="st-gl-stack">
       <States>
-        {["rest", "hover", "focus-visible", "active", "disabled"].map((state) => (
+        {(
+          [
+            ["rest", "Rest"],
+            ["hover", "Hover"],
+            ["focus-visible", "Focus"],
+            ["active", "Pressed"],
+            ["disabled", "Disabled"],
+          ] as const
+        ).map(([state, name]) => (
           <State
             key={state}
-            name={state === "focus-visible" ? "focus" : state === "active" ? "pressed" : state}
+            name={name}
             note={
               state === "disabled"
-                ? "disabled trigger"
+                ? "Disabled trigger"
                 : state === "focus-visible"
-                  ? "outside control ring"
-                  : "outline trigger"
+                  ? "Outside control ring"
+                  : "Outline trigger"
             }
           >
             <Menu.DropdownMenu>
@@ -173,30 +181,25 @@ export function DropdownMenuStates() {
                 disabled={state === "disabled"}
                 data-demo={state}
               >
-                run actions
+                Run actions
               </Menu.DropdownMenuTrigger>
             </Menu.DropdownMenu>
           </State>
         ))}
       </States>
       <States>
-        {["rest", "highlighted", "focus", "disabled"].map((state) => (
-          <State
-            key={state}
-            name={`row, ${state}`}
-            note={
-              state === "focus"
-                ? "inside control ring"
-                : state === "highlighted"
-                  ? "raised hover fill"
-                  : state === "disabled"
-                    ? "disabled word ink"
-                    : "flat popover fill"
-            }
-          >
+        {(
+          [
+            ["rest", "Row, rest", "Flat popover fill"],
+            ["highlighted", "Row, highlighted", "Raised hover fill"],
+            ["focus", "Row, focus", "Inside control ring"],
+            ["disabled", "Row, disabled", "Disabled word ink"],
+          ] as const
+        ).map(([state, name, note]) => (
+          <State key={state} name={name} note={note}>
             <div inert aria-hidden="true" className="bg-popover text-popover-foreground">
               <Row highlighted={state === "highlighted"} focus={state === "focus"} disabled={state === "disabled"}>
-                view log
+                View log
               </Row>
             </div>
           </State>

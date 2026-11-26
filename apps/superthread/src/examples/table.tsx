@@ -39,13 +39,13 @@ const runs: readonly { ship: ShipId; runs: number; median: string; last: State }
 export function TableRuns() {
   return (
     <Table>
-      <TableCaption className="text-left">runs this week</TableCaption>
+      <TableCaption className="text-left">Runs this week</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>ship</TableHead>
-          <TableHead kind="number">runs</TableHead>
-          <TableHead kind="number">median</TableHead>
-          <TableHead className="st-b-lr">last run</TableHead>
+          <TableHead>Ship</TableHead>
+          <TableHead kind="number">Runs</TableHead>
+          <TableHead kind="number">Median</TableHead>
+          <TableHead className="st-b-lr">Last run</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -71,21 +71,21 @@ export function TableRuns() {
 }
 
 const tasks: readonly { id: string; task: string; ship: ShipId; state: State }[] = [
-  { id: "t-2041", task: "rotate the build cache", ship: "orbit", state: "running" },
-  { id: "t-2038", task: "pin the font headers", ship: "trisys", state: "waiting" },
-  { id: "t-2035", task: "draw the figure plates", ship: "quanta", state: "done" },
-  { id: "t-2033", task: "move the rail to the bar", ship: "constellation", state: "queued" },
+  { id: "t-2041", task: "Rotate the build cache", ship: "orbit", state: "running" },
+  { id: "t-2038", task: "Pin the font headers", ship: "trisys", state: "waiting" },
+  { id: "t-2035", task: "Draw the figure plates", ship: "quanta", state: "done" },
+  { id: "t-2033", task: "Move the rail to the bar", ship: "constellation", state: "queued" },
 ];
 
 const reports: readonly { due: string; report: string; period: string; pages: number; owner: string }[] = [
-  { due: "mon", report: "the reading layout", period: "every monday at 09:00", pages: 12, owner: "quanta" },
-  { due: "wed", report: "fonts on every ship", period: "every wednesday at 14:00", pages: 7, owner: "trisys" },
+  { due: "Mon", report: "The reading layout", period: "Every Monday at 09:00", pages: 12, owner: "Quanta" },
+  { due: "Wed", report: "Fonts on every ship", period: "Every Wednesday at 14:00", pages: 7, owner: "Trisys" },
   {
-    due: "fri",
-    report: "a long name that runs past its own column",
-    period: "when a draft lands",
+    due: "Fri",
+    report: "A long name that runs past its own column",
+    period: "When a draft lands",
     pages: 31,
-    owner: "artifacts",
+    owner: "Artifacts",
   },
 ];
 
@@ -95,11 +95,11 @@ export function TableFold() {
     <Table fold>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[116px]">next</TableHead>
-          <TableHead>report</TableHead>
-          <TableHead className="w-[200px]">schedule</TableHead>
+          <TableHead className="w-[116px]">Next</TableHead>
+          <TableHead>Report</TableHead>
+          <TableHead className="w-[200px]">Schedule</TableHead>
           <TableHead kind="number" className="w-[140px]">
-            pages
+            Pages
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -126,13 +126,13 @@ export function TableFold() {
 export function TableBoard() {
   return (
     <Table rows="board">
-      <TableCaption className="text-left">tasks on the board</TableCaption>
+      <TableCaption className="text-left">Tasks on the board</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead kind="id">id</TableHead>
-          <TableHead>task</TableHead>
-          <TableHead>ship</TableHead>
-          <TableHead>state</TableHead>
+          <TableHead kind="id">ID</TableHead>
+          <TableHead>Task</TableHead>
+          <TableHead>Ship</TableHead>
+          <TableHead>State</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

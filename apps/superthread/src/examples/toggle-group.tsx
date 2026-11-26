@@ -3,15 +3,20 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/superthread/ui/toggle
 import { State } from "@/examples/input";
 function Views({ demo, invalid, ...props }: ComponentProps<typeof ToggleGroup> & { demo?: string; invalid?: boolean }) {
   return (
-    <ToggleGroup aria-label="orbit view" defaultValue={["day"]} {...props}>
-      {["day", "week"].map((value) => (
+    <ToggleGroup aria-label="Orbit view" defaultValue={["day"]} {...props}>
+      {(
+        [
+          ["day", "Day"],
+          ["week", "Week"],
+        ] as const
+      ).map(([value, label]) => (
         <ToggleGroupItem
           key={value}
           value={value}
           data-demo={value === "week" ? demo : undefined}
           aria-invalid={(value === "week" && invalid) || undefined}
         >
-          {value}
+          {label}
         </ToggleGroupItem>
       ))}
     </ToggleGroup>
@@ -23,13 +28,13 @@ export function ToggleGroupExample() {
     <div className="st-e-stack">
       <Views variant="outline" value={view} onValueChange={setView} />
       <p className="st-e-hint" role="status">
-        {view[0] ? `orbit shows the ${view[0]}` : "choose a view"}. arrow keys move between items.
+        {view[0] ? `Orbit shows the ${view[0]}` : "Choose a view"}. Arrow keys move between items.
       </p>
-      <ToggleGroup multiple variant="outline" aria-label="ships shown on the board" defaultValue={["orbit"]} size="sm">
-        <ToggleGroupItem value="orbit">orbit</ToggleGroupItem>
-        <ToggleGroupItem value="quanta">quanta</ToggleGroupItem>
+      <ToggleGroup multiple variant="outline" aria-label="Ships shown on the board" defaultValue={["orbit"]} size="sm">
+        <ToggleGroupItem value="orbit">Orbit</ToggleGroupItem>
+        <ToggleGroupItem value="quanta">Quanta</ToggleGroupItem>
       </ToggleGroup>
-      <p className="st-e-hint">ship filters allow more than one selection.</p>
+      <p className="st-e-hint">Ship filters allow more than one selection.</p>
     </div>
   );
 }
@@ -37,7 +42,7 @@ export function ToggleGroupVariants() {
   return (
     <div className="st-e-states" inert>
       {(["default", "outline"] as const).map((variant) => (
-        <State key={variant} name={variant} note="shared edge, pressed edge and tick">
+        <State key={variant} name={variant} note="Shared edge, pressed edge and tick">
           <Views variant={variant} />
         </State>
       ))}
@@ -58,13 +63,13 @@ export function ToggleGroupSizes() {
 export function ToggleGroupLayout() {
   return (
     <div className="st-e-stack" inert>
-      <State name="joined" note="spacing 0, shared 1 px edge">
+      <State name="Joined" note="Spacing 0, shared 1 px edge">
         <Views variant="outline" />
       </State>
-      <State name="separate" note="spacing 3, 12 px between items">
+      <State name="Separate" note="Spacing 3, 12 px between items">
         <Views variant="outline" spacing={3} demo="focus-visible" />
       </State>
-      <State name="vertical" note="shared horizontal edges">
+      <State name="Vertical" note="Shared horizontal edges">
         <Views variant="outline" orientation="vertical" />
       </State>
     </div>
@@ -74,11 +79,11 @@ export function ToggleGroupStates() {
   return (
     <div className="st-e-stack" inert>
       {[
-        { name: "rest and pressed", note: "current edge rises above its neighbour" },
-        { name: "hover", note: "control hover fill", demo: "hover" },
-        { name: "focus, joined", note: "house ring inside the item", demo: "focus-visible" },
-        { name: "invalid", note: "error edge on the unselected item", invalid: true },
-        { name: "disabled", note: "dim labels, faint stock", disabled: true },
+        { name: "Rest and pressed", note: "Current edge rises above its neighbour" },
+        { name: "Hover", note: "Control hover fill", demo: "hover" },
+        { name: "Focus, joined", note: "House ring inside the item", demo: "focus-visible" },
+        { name: "Invalid", note: "Error edge on the unselected item", invalid: true },
+        { name: "Disabled", note: "Dim labels, faint stock", disabled: true },
       ].map((s) => (
         <State className="st-a-wide" key={s.name} name={s.name} note={s.note}>
           <Views variant="outline" demo={s.demo} invalid={s.invalid} disabled={s.disabled} />

@@ -15,13 +15,13 @@ export function Specimen({ note, children }: { note: ReactNode; children: ReactN
 }
 
 const variants = [
-  { variant: "default", word: "publish" },
-  { variant: "secondary", word: "save draft" },
-  { variant: "outline", word: "preview" },
-  { variant: "ghost", word: "cancel" },
-  { variant: "destructive", word: "delete" },
-  { variant: "key", word: "open in orbit" },
-  { variant: "link", word: "read the log" },
+  { variant: "default", word: "Publish" },
+  { variant: "secondary", word: "Save draft" },
+  { variant: "outline", word: "Preview" },
+  { variant: "ghost", word: "Cancel" },
+  { variant: "destructive", word: "Delete" },
+  { variant: "key", word: "Open in Orbit" },
+  { variant: "link", word: "Read the log" },
 ] as const;
 
 export function ButtonVariants() {
@@ -38,8 +38,8 @@ export function ButtonVariants() {
 
 // The world's notes for each state: light overprints key on the ink, and dark's default takes the outline's states.
 const notes = {
-  light: { hover: "+ key 20", pressed: "+ key 36, inset", outline: "key 5", destructive: "key 88" },
-  dark: { hover: "paper 1", pressed: "paper 3", outline: "paper 1", destructive: "paper 60" },
+  light: { hover: "+ Key 20", pressed: "+ Key 36, inset", outline: "Key 5", destructive: "Key 88" },
+  dark: { hover: "Paper 1", pressed: "Paper 3", outline: "Paper 1", destructive: "Paper 60" },
 } as const;
 
 // Printed states: data-demo draws each from the button's own classes, so they are specimens, not controls, and
@@ -51,32 +51,32 @@ export function ButtonStates({ mode }: { mode: Mode }) {
       <div className="st-b-row st-b-specimens">
         <Specimen note={note.hover}>
           <Button size="sm" data-demo="hover" tabIndex={-1}>
-            hover
+            Hover
           </Button>
         </Specimen>
         <Specimen note={note.pressed}>
           <Button size="sm" data-demo="active" tabIndex={-1}>
-            pressed
+            Pressed
           </Button>
         </Specimen>
         <Specimen note="2 px ring, 2 px out">
           <Button size="sm" data-demo="focus-visible" tabIndex={-1}>
-            focus
+            Focus
           </Button>
         </Specimen>
         <Specimen note={note.outline}>
           <Button size="sm" variant="outline" data-demo="hover" tabIndex={-1}>
-            hover
+            Hover
           </Button>
         </Specimen>
         <Specimen note={note.destructive}>
           <Button size="sm" variant="destructive" data-demo="hover" tabIndex={-1}>
-            hover
+            Hover
           </Button>
         </Specimen>
         <Specimen note={note.destructive}>
           <Button size="sm" variant="key" data-demo="hover" tabIndex={-1}>
-            hover
+            Hover
           </Button>
         </Specimen>
       </div>
@@ -84,7 +84,7 @@ export function ButtonStates({ mode }: { mode: Mode }) {
         {(["default", "secondary", "outline"] as const).map((variant) => (
           <Specimen key={variant} note={`${variant}, disabled`}>
             <Button variant={variant} disabled>
-              publish
+              Publish
             </Button>
           </Specimen>
         ))}
@@ -114,7 +114,7 @@ export function ButtonSizes() {
         {textSizes.map(({ size, note }) => (
           <Specimen key={size} note={note}>
             <Button size={size} variant="outline">
-              preview
+              Preview
             </Button>
           </Specimen>
         ))}
@@ -122,7 +122,7 @@ export function ButtonSizes() {
       <div className="st-b-row st-b-specimens">
         {iconSizes.map(({ size, note }) => (
           <Specimen key={size} note={note}>
-            <Button size={size} variant="outline" aria-label="add a run">
+            <Button size={size} variant="outline" aria-label="Add a run">
               <Icon name="plus" />
             </Button>
           </Specimen>
@@ -138,14 +138,14 @@ export function ButtonEnter() {
   const [guarded, setGuarded] = useState(0);
   return (
     <div className="st-b-row st-b-specimens">
-      <Specimen note={`enter or space: ${plain}`}>
+      <Specimen note={`Enter or Space: ${plain}`}>
         <Button variant="outline" onClick={() => setPlain(plain + 1)}>
-          save
+          Save
         </Button>
       </Specimen>
-      <Specimen note={`space only: ${guarded}`}>
+      <Specimen note={`Space only: ${guarded}`}>
         <Button variant="key" ignoreEnter onClick={() => setGuarded(guarded + 1)}>
-          send
+          Send
         </Button>
       </Specimen>
     </div>

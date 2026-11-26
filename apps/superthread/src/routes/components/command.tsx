@@ -9,9 +9,9 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/command")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "open", title: "open" },
-      { id: "states", title: "states" },
+      { id: "example", title: "Example" },
+      { id: "open", title: "Open" },
+      { id: "states", title: "States" },
     ],
   },
   component: Page,
@@ -21,14 +21,14 @@ function Page() {
   return (
     <>
       <PageHead
-        title="command"
-        lede="search and run a command from a flat list or a raised palette. the highlighted row follows the pointer or keys, while groups and shortcuts keep their place."
+        title="Command"
+        lede="Search and run a command from a flat list or a raised palette. The highlighted row follows the pointer or keys, while groups and shortcuts keep their place."
       >
         <InstallLine items={["command"]} />
       </PageHead>
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-gl-copy">
-          type to filter, use the arrow keys to move and press enter to select. the palette opens the same commands in a
+          Type to filter, use the arrow keys to move and press Enter to select. The palette opens the same commands in a
           sheet.
         </p>
         <ModePair
@@ -37,9 +37,9 @@ function Page() {
           dark={<CommandExample mode="dark" />}
         />
       </Section>
-      <Section id="open" title="open">
+      <Section id="open" title="Open">
         <p className="st-gl-copy">
-          the palette printed as a sheet, with its search field, grouped commands and shortcuts. the disabled build
+          The palette printed as a sheet, with its search field, grouped commands and shortcuts. The disabled build
           action stays in view.
         </p>
         <ModePair className="st-gl-pair">
@@ -47,9 +47,9 @@ function Page() {
         </ModePair>
         <Caption detail="contact" />
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-gl-copy">
-          highlight marks the next command to run. a search with no match explains the miss, and disabled commands
+          Highlight marks the next command to run. A search with no match explains the miss, and disabled commands
           cannot be selected.
         </p>
         <ModePair className="st-gl-pair">

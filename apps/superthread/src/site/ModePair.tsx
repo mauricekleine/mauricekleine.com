@@ -18,11 +18,11 @@ export function ModePair({
   return (
     <div className={cn("st-modepair", className)}>
       <div className="light st-modepair-pane">
-        <p className="type-meta">light</p>
+        <p className="type-meta">Light</p>
         <div className="st-modepair-body">{light ?? children}</div>
       </div>
       <div className="dark st-modepair-pane">
-        <p className="type-meta">dark</p>
+        <p className="type-meta">Dark</p>
         <div className="st-modepair-body">{dark ?? children}</div>
       </div>
     </div>

@@ -28,11 +28,11 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/compositions/letter")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "whole", title: "the whole body" },
-      { id: "foot", title: "with a foot" },
-      { id: "phone", title: "on a phone" },
-      { id: "parts", title: "parts" },
+      { id: "example", title: "Example" },
+      { id: "whole", title: "The whole body" },
+      { id: "foot", title: "With a foot" },
+      { id: "phone", title: "On a phone" },
+      { id: "parts", title: "Parts" },
     ],
   },
   component: Page,
@@ -42,62 +42,62 @@ function Tools() {
   return (
     <LetterTools>
       <LetterActions>
-        <Button variant="ghost">edit</Button>
-        <Button variant="outline">reject</Button>
+        <Button variant="ghost">Edit</Button>
+        <Button variant="outline">Reject</Button>
       </LetterActions>
-      <LetterSource href="#whole">sam&rsquo;s mail, mon 2 nov</LetterSource>
+      <LetterSource href="#whole">Sam&rsquo;s mail, Mon 2 Nov</LetterSource>
     </LetterTools>
   );
 }
 
 function ShortLetter({ last }: { last?: boolean }) {
   return (
-    <Letter aria-label="the draft, as it goes out" last={last}>
+    <Letter aria-label="The draft, as it goes out" last={last}>
       <LetterHead>
-        <LetterSubject>re: chapter 7 notes</LetterSubject>
-        <LetterKind>reply · mail</LetterKind>
+        <LetterSubject>Re: chapter 7 notes</LetterSubject>
+        <LetterKind>Reply · mail</LetterKind>
       </LetterHead>
       <LetterBody>
-        <p>hi sam,</p>
+        <p>Hi Sam,</p>
         <p>
-          thanks for the notes. the three figures stay, and the bands move to the end of the chapter so the reader meets
+          Thanks for the notes. The three figures stay, and the bands move to the end of the chapter so the reader meets
           the result first.
         </p>
-        <p>the next draft goes up on thursday.</p>
-        <p>maurice</p>
+        <p>The next draft goes up on Thursday.</p>
+        <p>Maurice</p>
       </LetterBody>
       <Tools />
     </Letter>
   );
 }
 
-const longBody = `hi sam,
+const longBody = `Hi Sam,
 
-the outline for chapter 8 is below, with the order i'd like to try. it runs long, so here's all of it.
+The outline for chapter 8 is below, with the order I'd like to try. It runs long, so here's all of it.
 
-1. start at the barrier, with one electron and one wall.
-2. show the wave reaching the far side before naming tunnelling.
-3. work the number for a wall a few atoms thick.
-4. give the reader the scanning microscope as the first thing it builds.
+1. Start at the barrier, with one electron and one wall.
+2. Show the wave reaching the far side before naming tunnelling.
+3. Work the number for a wall a few atoms thick.
+4. Give the reader the scanning microscope as the first thing it builds.
 
-the figures sit in https://quanta.example/chapters/08-tunnelling/figures/draft-3/barrier-and-wave-at-three-widths.png if you want them first.
+The figures sit in https://quanta.example/chapters/08-tunnelling/figures/draft-3/barrier-and-wave-at-three-widths.png if you want them first.
 
-two open questions.
+Two open questions.
 
-does the transistor belong here, or in the chapter after? i lean towards after, since it needs bands.
+Does the transistor belong here, or in the chapter after? I lean towards after, since it needs bands.
 
-should the worked number use metres or nanometres? nanometres read better, but the reader has only met metres so far.
+Should the worked number use metres or nanometres? Nanometres read better, but the reader has only met metres so far.
 
-no rush on either. i'll hold the draft until you've read this.
+No rush on either. I'll hold the draft until you've read this.
 
-maurice`;
+Maurice`;
 
 function LongLetter() {
   return (
-    <Letter aria-label="a long draft, whole">
+    <Letter aria-label="A long draft, whole">
       <LetterHead>
-        <LetterSubject>fwd: outline for chapter 8, with the order, the figures and two open questions</LetterSubject>
-        <LetterKind>forward · mail</LetterKind>
+        <LetterSubject>Fwd: outline for chapter 8, with the order, the figures and two open questions</LetterSubject>
+        <LetterKind>Forward · mail</LetterKind>
       </LetterHead>
       <LetterBody>{longBody}</LetterBody>
       <Tools />
@@ -107,20 +107,20 @@ function LongLetter() {
 
 function LetterWithFoot() {
   return (
-    <Letter aria-label="the draft, and where it goes">
+    <Letter aria-label="The draft, and where it goes">
       <LetterHead>
-        <LetterSubject>re: chapter 7 notes</LetterSubject>
-        <LetterKind>reply · mail</LetterKind>
+        <LetterSubject>Re: chapter 7 notes</LetterSubject>
+        <LetterKind>Reply · mail</LetterKind>
       </LetterHead>
-      <LetterBody>the next draft goes up on thursday.</LetterBody>
+      <LetterBody>The next draft goes up on Thursday.</LetterBody>
       <Tools />
-      <SendBar aria-label="where it goes">
+      <SendBar aria-label="Where it goes">
         <SendBarTo>
-          <SendBarTitle>sam okafor</SendBarTitle>
+          <SendBarTitle>Sam Okafor</SendBarTitle>
           <SendBarAddress>sam@quanta.example</SendBarAddress>
         </SendBarTo>
         <SendBarActions>
-          <SendBarButton>send to sam</SendBarButton>
+          <SendBarButton>Send to Sam</SendBarButton>
         </SendBarActions>
       </SendBar>
     </Letter>
@@ -131,55 +131,55 @@ function Page() {
   return (
     <>
       <PageHead
-        title="letter"
-        lede="a piece of writing read whole before someone acts on it: the subject and kind, all of the body, and what can be done to it."
+        title="Letter"
+        lede="A piece of writing read whole before someone acts on it: the subject and kind, all of the body, and what can be done to it."
       >
         <InstallLine items={["letter"]} />
       </PageHead>
       <Serves name="letter" />
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-ca-copy">
-          the words sit at the reading measure on the page&rsquo;s own fill. a leading ghost takes the text&rsquo;s
+          The words sit at the reading measure on the page&rsquo;s own fill. A leading ghost takes the text&rsquo;s
           edge, so <code>edit</code> starts where the body starts.
         </p>
         <ModePair className="st-ca-wide-pair">
           <ShortLetter />
         </ModePair>
       </Section>
-      <Section id="whole" title="the whole body">
+      <Section id="whole" title="The whole body">
         <p className="st-ca-copy">
-          nothing clamps. a plain string keeps the line breaks it was written with, and a long link wraps so the letter
-          holds its width. paragraphs passed as elements sit 12 px apart.
+          Nothing clamps. A plain string keeps the line breaks it was written with, and a long link wraps so the letter
+          holds its width. Paragraphs passed as elements sit 12 px apart.
         </p>
         <ModePair className="st-ca-wide-pair">
           <LongLetter />
         </ModePair>
       </Section>
-      <Section id="foot" title="with a foot">
+      <Section id="foot" title="With a foot">
         <p className="st-ca-copy">
-          the box takes no padding of its own, so a block after the tools reaches both edges. this foot is a{" "}
+          The box takes no padding of its own, so a block after the tools reaches both edges. This foot is a{" "}
           <a href="/compositions/send-bar">send bar</a>.
         </p>
         <ModePair className="st-ca-wide-pair">
           <LetterWithFoot />
         </ModePair>
       </Section>
-      <Section id="phone" title="on a phone">
+      <Section id="phone" title="On a phone">
         <p className="st-ca-copy">
-          inside the working panel at 600 px and below, the letter gives up its side edges and takes the panel&rsquo;s
+          Inside the working panel at 600 px and below, the letter gives up its side edges and takes the panel&rsquo;s
           whole width. <code>last</code> says nothing follows it in the panel, so it runs down to the panel&rsquo;s foot
-          too. both frames use a 390 px viewport.
+          too. Both frames use a 390 px viewport.
         </p>
         <ModePair
           light={
-            <GroundFrame mode="light" title="letter phone, light" height={430}>
+            <GroundFrame mode="light" title="Letter phone, light" height={430}>
               <AppShellPanel>
                 <ShortLetter last />
               </AppShellPanel>
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="letter phone, dark" height={430}>
+            <GroundFrame mode="dark" title="Letter phone, dark" height={430}>
               <AppShellPanel>
                 <ShortLetter last />
               </AppShellPanel>
@@ -187,31 +187,31 @@ function Page() {
           }
         />
       </Section>
-      <Section id="parts" title="parts">
+      <Section id="parts" title="Parts">
         <dl className="st-ca-parts">
           <dt>
             <code>Letter</code>
           </dt>
           <dd>
-            the ruled box, an <code>article</code>. name it with <code>aria-label</code>. set <code>last</code> when
+            The ruled box, an <code>article</code>. Name it with <code>aria-label</code>. Set <code>last</code> when
             nothing follows it in the working panel.
           </dd>
           <dt>
             <code>LetterHead</code>
           </dt>
           <dd>
-            holds <code>LetterSubject</code>, a heading, and <code>LetterKind</code>, one muted line. render the subject
+            Holds <code>LetterSubject</code>, a heading, and <code>LetterKind</code>, one muted line. Render the subject
             a level down under a section&rsquo;s title.
           </dd>
           <dt>
             <code>LetterBody</code>
           </dt>
-          <dd>the whole text, in reading type at 27.5 em. it also holds the field that edits the text.</dd>
+          <dd>The whole text, in reading type at 27.5 em. It also holds the field that edits the text.</dd>
           <dt>
             <code>LetterTools</code>
           </dt>
           <dd>
-            the row under the body: <code>LetterActions</code> for the app&rsquo;s buttons, then{" "}
+            The row under the body: <code>LetterActions</code> for the app&rsquo;s buttons, then{" "}
             <code>LetterSource</code>, a quiet link to what the writing answers.
           </dd>
         </dl>

@@ -7,26 +7,26 @@ import { State, States, type Mode } from "@/examples/input";
 
 function Commands({ onSelect }: { onSelect?: (value: string) => void }) {
   return (
-    <Cmd.Command defaultValue="unselected" label="fleet commands">
-      <Cmd.CommandInput aria-label="search fleet commands" placeholder="search commands" />
+    <Cmd.Command defaultValue="unselected" label="Fleet commands">
+      <Cmd.CommandInput aria-label="Search fleet commands" placeholder="Search commands" />
       <Cmd.CommandList>
-        <Cmd.CommandEmpty>no commands match. try another word.</Cmd.CommandEmpty>
-        <Cmd.CommandGroup heading="orbit">
+        <Cmd.CommandEmpty>No commands match. Try another word.</Cmd.CommandEmpty>
+        <Cmd.CommandGroup heading="Orbit">
           <Cmd.CommandItem value="view runs" onSelect={onSelect}>
             <Icon name="search" />
-            view runs <Cmd.CommandShortcut>g r</Cmd.CommandShortcut>
+            View runs <Cmd.CommandShortcut>G R</Cmd.CommandShortcut>
           </Cmd.CommandItem>
           <Cmd.CommandItem value="new run" onSelect={onSelect}>
-            new run <Cmd.CommandShortcut>n</Cmd.CommandShortcut>
+            New run <Cmd.CommandShortcut>N</Cmd.CommandShortcut>
           </Cmd.CommandItem>
           <Cmd.CommandItem value="retry build" disabled>
-            retry build
+            Retry build
           </Cmd.CommandItem>
         </Cmd.CommandGroup>
         <Cmd.CommandSeparator />
-        <Cmd.CommandGroup heading="quanta">
+        <Cmd.CommandGroup heading="Quanta">
           <Cmd.CommandItem value="open drafts" onSelect={onSelect}>
-            open drafts <Cmd.CommandShortcut>g d</Cmd.CommandShortcut>
+            Open drafts <Cmd.CommandShortcut>G D</Cmd.CommandShortcut>
           </Cmd.CommandItem>
         </Cmd.CommandGroup>
       </Cmd.CommandList>
@@ -34,10 +34,10 @@ function Commands({ onSelect }: { onSelect?: (value: string) => void }) {
   );
 }
 export function CommandExample({ mode }: { mode: Mode }) {
-  const [result, setResult] = useState("no command run yet");
+  const [result, setResult] = useState("No command run yet");
   const [open, setOpen] = useState(false);
   const select = (value: string) => {
-    setResult(`${value} selected`);
+    setResult(`${value.slice(0, 1).toUpperCase()}${value.slice(1)} selected`);
     setOpen(false);
   };
   return (
@@ -46,7 +46,7 @@ export function CommandExample({ mode }: { mode: Mode }) {
         <Commands onSelect={select} />
       </div>
       <Button variant="outline" onClick={() => setOpen(true)}>
-        open command palette
+        Open command palette
       </Button>
       <Cmd.CommandDialog open={open} onOpenChange={setOpen} portalProps={{ className: mode }} showCloseButton>
         <Commands onSelect={select} />
@@ -84,9 +84,9 @@ function PrintedCommands({ empty = false }: { empty?: boolean }) {
       <div className="p-1 pb-0">
         <InputGroup className="h-10">
           <InputGroupInput
-            aria-label="search commands print"
+            aria-label="Search commands print"
             value={empty ? "lunar" : ""}
-            placeholder="search commands"
+            placeholder="Search commands"
             readOnly
           />
           <InputGroupAddon>
@@ -96,23 +96,23 @@ function PrintedCommands({ empty = false }: { empty?: boolean }) {
       </div>
       {empty ? (
         <p data-slot="command-empty" className="py-6 text-center type-instrument text-muted-foreground">
-          no commands match. try another word.
+          No commands match. Try another word.
         </p>
       ) : (
         <div className="p-1">
-          <div className="px-2.5 pt-1.5 pb-1 type-meta text-muted-foreground">orbit</div>
+          <div className="px-2.5 pt-1.5 pb-1 type-meta text-muted-foreground">Orbit</div>
           <PrintedCommandRow selected>
             <Icon name="search" />
-            view runs<Cmd.CommandShortcut>g r</Cmd.CommandShortcut>
+            View runs<Cmd.CommandShortcut>G R</Cmd.CommandShortcut>
           </PrintedCommandRow>
           <PrintedCommandRow>
-            new run<Cmd.CommandShortcut>n</Cmd.CommandShortcut>
+            New run<Cmd.CommandShortcut>N</Cmd.CommandShortcut>
           </PrintedCommandRow>
-          <PrintedCommandRow disabled>retry build</PrintedCommandRow>
+          <PrintedCommandRow disabled>Retry build</PrintedCommandRow>
           <div className="-mx-1 h-px bg-border" />
-          <div className="px-2.5 pt-1.5 pb-1 type-meta text-muted-foreground">quanta</div>
+          <div className="px-2.5 pt-1.5 pb-1 type-meta text-muted-foreground">Quanta</div>
           <PrintedCommandRow>
-            open drafts<Cmd.CommandShortcut>g d</Cmd.CommandShortcut>
+            Open drafts<Cmd.CommandShortcut>G D</Cmd.CommandShortcut>
           </PrintedCommandRow>
         </div>
       )}
@@ -134,45 +134,42 @@ export function CommandStates() {
   return (
     <div className="st-gl-stack">
       <States>
-        {["rest", "highlighted", "disabled"].map((state) => (
-          <State
-            key={state}
-            name={state}
-            note={
-              state === "highlighted"
-                ? "keys position, hover fill"
-                : state === "disabled"
-                  ? "skipped by the arrow keys"
-                  : "flat command row"
-            }
-          >
+        {(
+          [
+            ["rest", "Rest", "Flat command row"],
+            ["highlighted", "Highlighted", "Keys position, hover fill"],
+            ["disabled", "Disabled", "Skipped by the arrow keys"],
+          ] as const
+        ).map(([state, name, note]) => (
+          <State key={state} name={name} note={note}>
             <div inert aria-hidden="true">
               <div className="bg-popover p-1 text-popover-foreground">
                 <PrintedCommandRow selected={state === "highlighted"} disabled={state === "disabled"}>
-                  view runs
+                  View runs
                 </PrintedCommandRow>
               </div>
             </div>
           </State>
         ))}
       </States>
-      <State className="st-gl-full" name="empty" note="search keeps its value; the list explains the miss">
+      <State className="st-gl-full" name="Empty" note="Search keeps its value; the list explains the miss">
         <div inert className="st-gl-command">
           <PrintedCommands empty />
         </div>
       </State>
       <States>
-        {["focus", "disabled"].map((state) => (
-          <State
-            key={state}
-            name={`search, ${state}`}
-            note={state === "focus" ? "field box owns the inside edge" : "disabled input ink"}
-          >
+        {(
+          [
+            ["focus", "Search, focus", "Field box owns the inside edge"],
+            ["disabled", "Search, disabled", "Disabled input ink"],
+          ] as const
+        ).map(([state, name, note]) => (
+          <State key={state} name={name} note={note}>
             <div inert>
               <InputGroup className="h-10" data-demo={state === "focus" ? "focus" : undefined}>
                 <InputGroupInput
-                  aria-label={`search commands, ${state}`}
-                  placeholder="search commands"
+                  aria-label={`Search commands, ${state}`}
+                  placeholder="Search commands"
                   disabled={state === "disabled"}
                 />
                 <InputGroupAddon>

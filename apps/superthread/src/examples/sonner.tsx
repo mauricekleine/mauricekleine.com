@@ -8,12 +8,12 @@ import { SentReview } from "@/examples/toast";
 
 type Kind = "plain" | "success" | "info" | "warning" | "error" | "loading";
 const messages = {
-  plain: ["run saved", "or-412 is ready for its next step."],
-  success: ["chapter 7 published", "quanta rebuilt 14 pages in 38 s."],
-  info: ["run or-412 started", "orbit picked up the next task."],
-  warning: ["review is waiting", "artifacts needs a review before it ships."],
-  error: ["the build failed", "trisys stopped at step 3. open the log to retry."],
-  loading: ["publishing chapter 8", "quanta is building its pages."],
+  plain: ["Run saved", "or-412 is ready for its next step."],
+  success: ["Chapter 7 published", "Quanta rebuilt 14 pages in 38 s."],
+  info: ["Run or-412 started", "Orbit picked up the next task."],
+  warning: ["Review is waiting", "Artifacts needs a review before it ships."],
+  error: ["The build failed", "Trisys stopped at step 3. Open the log to retry."],
+  loading: ["Publishing chapter 8", "Quanta is building its pages."],
 } as const;
 function notify(
   kind: Kind,
@@ -29,8 +29,8 @@ function notify(
     onAutoClose: options.onDismiss,
     ...(options.actions
       ? {
-          action: { label: "view", onClick: () => {} },
-          cancel: { label: "undo", onClick: () => {} },
+          action: { label: "View", onClick: () => {} },
+          cancel: { label: "Undo", onClick: () => {} },
         }
       : {}),
   };
@@ -91,10 +91,10 @@ export function SonnerExample({ mode }: { mode: Mode }) {
         setTimeout(() => {
           timers.current.delete(item);
           if (ids.current.has(item))
-            toast.success("chapter 8 published", {
+            toast.success("Chapter 8 published", {
               id: item,
               toasterId: id,
-              description: "quanta rebuilt 15 pages in 41 s.",
+              description: "Quanta rebuilt 15 pages in 41 s.",
               duration: 3500,
               onDismiss: () => {
                 ids.current.delete(item);
@@ -109,16 +109,24 @@ export function SonnerExample({ mode }: { mode: Mode }) {
   return (
     <div className="st-gl-stack">
       <div className="st-gl-tools">
-        {(["success", "info", "warning", "error", "loading"] as const).map((kind) => (
+        {(
+          [
+            ["success", "Success"],
+            ["info", "Info"],
+            ["warning", "Warning"],
+            ["error", "Error"],
+            ["loading", "Loading"],
+          ] as const
+        ).map(([kind, label]) => (
           <Button key={kind} variant="outline" onClick={() => show(kind)}>
-            {kind}
+            {label}
           </Button>
         ))}
         <Button variant="ghost" onClick={dismissAll}>
-          dismiss all
+          Dismiss all
         </Button>
       </div>
-      <p className="st-gl-note">notifications close after a few seconds. loading finishes with a success message.</p>
+      <p className="st-gl-note">Notifications close after a few seconds. Loading finishes with a success message.</p>
       <div className="st-gl-live-toasts">
         <Toaster
           id={id}
@@ -137,9 +145,9 @@ export function SonnerExample({ mode }: { mode: Mode }) {
 function SentSonner({ mode }: { mode: Mode }) {
   const id = useId();
   useEffect(() => {
-    const toastId = toast.success("sent to sam", {
+    const toastId = toast.success("Sent to Sam", {
       toasterId: id,
-      description: "the reply to chapter 7 notes is on its way.",
+      description: "The reply to chapter 7 notes is on its way.",
       duration: Infinity,
     });
     return () => {
@@ -157,7 +165,7 @@ function SentSonner({ mode }: { mode: Mode }) {
 // window and the send bar keeps the foot.
 export function SonnerOnPhone({ mode }: { mode: Mode }) {
   return (
-    <GroundFrame mode={mode} title={`sonner on a phone, ${mode}`} height={520}>
+    <GroundFrame mode={mode} title={`Sonner on a phone, ${mode}`} height={520}>
       <SentReview />
       <SentSonner mode={mode} />
     </GroundFrame>
@@ -176,10 +184,10 @@ export function SonnerKinds({ mode }: { mode: Mode }) {
           name={kind}
           note={
             kind === "loading"
-              ? "static running glyph, no spinner"
+              ? "Static running glyph, no spinner"
               : kind === "plain"
-                ? "words without a status glyph"
-                : "status glyph beside the words"
+                ? "Words without a status glyph"
+                : "Status glyph beside the words"
           }
         >
           <PrintedToast mode={mode} kind={kind} />
@@ -194,16 +202,24 @@ export function SonnerKinds({ mode }: { mode: Mode }) {
 export function SonnerStates() {
   return (
     <States>
-      {["rest", "hover", "focus-visible", "active", "disabled"].map((state) => (
+      {(
+        [
+          ["rest", "Rest"],
+          ["hover", "Hover"],
+          ["focus-visible", "Focus"],
+          ["active", "Pressed"],
+          ["disabled", "Disabled"],
+        ] as const
+      ).map(([state, name]) => (
         <State
           key={state}
-          name={state === "focus-visible" ? "focus" : state === "active" ? "pressed" : state}
+          name={name}
           note={
             state === "disabled"
-              ? "flat disabled actions"
+              ? "Flat disabled actions"
               : state === "focus-visible"
-                ? "outside control ring"
-                : "small action and outline cancel"
+                ? "Outside control ring"
+                : "Small action and outline cancel"
           }
         >
           <div inert className="st-gl-tools">
@@ -213,7 +229,7 @@ export function SonnerStates() {
               disabled={state === "disabled"}
               className={buttonVariants({ size: "sm" }).replace("texture-disabled", "")}
             >
-              view
+              View
             </button>
             <button
               type="button"
@@ -221,7 +237,7 @@ export function SonnerStates() {
               disabled={state === "disabled"}
               className={buttonVariants({ variant: "outline", size: "sm" }).replace("texture-disabled", "")}
             >
-              undo
+              Undo
             </button>
           </div>
         </State>

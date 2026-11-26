@@ -9,7 +9,7 @@ import { Shell } from "@/site/Shell";
 import appCss from "../styles/app.css?url";
 
 const description =
-  "superthread is maurice's design system: the tokens, the type, a mark for each ship and the branded shadcn components his apps install from one registry.";
+  "Superthread is Maurice's design system: light and dark tokens, four typefaces, a mark for each ship and the branded shadcn components his apps install from one registry.";
 
 export const Route = createRootRoute({
   head: ({ matches }) => {
@@ -76,10 +76,10 @@ function RootDocument() {
 export function NotFoundPage(): ReactNode {
   return (
     <PageHead
-      title="not found"
+      title="Not found"
       lede={
         <>
-          no page lives at this address. the nav lists every page, or start at the <Link to="/">overview</Link>.
+          No page lives at this address. The nav lists every page, or start at the <Link to="/">Overview</Link>.
         </>
       }
     />

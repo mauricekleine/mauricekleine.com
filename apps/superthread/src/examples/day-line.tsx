@@ -32,29 +32,29 @@ function meeting(id: string, title: string, start: string, end: string, more?: P
 }
 
 const tuesday = [
-  meeting("standup", "team standup", "09:30", "10:00", { href: "#through-the-day" }),
-  meeting("renewal", "renewal call", "11:00", "11:45", { href: "#through-the-day", brief: true }),
-  meeting("sam", "1:1 with sam", "14:00", "14:30", { href: "#through-the-day" }),
-  meeting("kickoff", "project kickoff", "16:30", "17:30", { href: "#through-the-day", brief: true }),
+  meeting("standup", "Team standup", "09:30", "10:00", { href: "#through-the-day" }),
+  meeting("renewal", "Renewal call", "11:00", "11:45", { href: "#through-the-day", brief: true }),
+  meeting("sam", "1:1 with Sam", "14:00", "14:30", { href: "#through-the-day" }),
+  meeting("kickoff", "Project kickoff", "16:30", "17:30", { href: "#through-the-day", brief: true }),
 ];
 
 function Head() {
   return (
     <DayLineHead>
-      <DayLineDate href="#the-date">tue 3 nov</DayLineDate>
+      <DayLineDate href="#the-date">Tue 3 Nov</DayLineDate>
       <DayLineSteps>
-        <Onward href="#the-date">wed 4 nov</Onward>
+        <Onward href="#the-date">Wed 4 Nov</Onward>
       </DayLineSteps>
     </DayLineHead>
   );
 }
 
-// The same tuesday at any clock: the morning by default, and the afternoon a clear page reads from.
+// The same Tuesday at any clock: the morning by default, and the afternoon a clear page reads from.
 export function DayLineExample({ now = "08:42" }: { now?: string }) {
   return (
     <DayLine>
       <Head />
-      <DayLineStrip aria-label="tuesday's meetings" day={day} events={tuesday} now={clock(now)} timeZone={timeZone} />
+      <DayLineStrip aria-label="Tuesday's meetings" day={day} events={tuesday} now={clock(now)} timeZone={timeZone} />
     </DayLine>
   );
 }
@@ -66,33 +66,33 @@ export function DayLineWithRows() {
     <DayLine>
       <DayLineHead>
         <DayLineDate render={<button type="button" />} aria-expanded={open} onClick={() => setOpen(!open)}>
-          tue 3 nov
+          Tue 3 Nov
         </DayLineDate>
         <DayLineSteps>
-          <Onward href="#the-date">wed 4 nov</Onward>
+          <Onward href="#the-date">Wed 4 Nov</Onward>
         </DayLineSteps>
       </DayLineHead>
       <DayLineStrip
-        aria-label="tuesday's meetings"
+        aria-label="Tuesday's meetings"
         day={day}
         events={tuesday}
         now={clock("08:42")}
         timeZone={timeZone}
       />
       {open && (
-        <ListRows aria-label="tuesday's meetings, as a list">
+        <ListRows aria-label="Tuesday's meetings, as a list">
           {tuesday.map((event) => (
             <ListRow key={event.id} variant="day">
               <ListRowTime dateTime={String(event.start)}>{String(event.start).slice(11, 16)}</ListRowTime>
               <ListRowTitle>{event.title}</ListRowTitle>
               {event.brief && (
-                <ListRowKind href="#the-date" aria-label={`brief for ${event.title}`}>
-                  brief
+                <ListRowKind href="#the-date" aria-label={`Brief for ${event.title}`}>
+                  Brief
                 </ListRowKind>
               )}
               <ListRowWhen>
-                <Button size="sm" variant="outline" aria-label={`join ${event.title}`}>
-                  join
+                <Button size="sm" variant="outline" aria-label={`Join ${event.title}`}>
+                  Join
                 </Button>
               </ListRowWhen>
             </ListRow>
@@ -107,13 +107,13 @@ export function DayLineWithRows() {
 export function DayLineThroughTheDay() {
   return (
     <DayLineStrip
-      aria-label="the day at 11:12"
+      aria-label="The day at 11:12"
       day={day}
       events={[
-        meeting("standup", "team standup", "09:30", "10:00", { href: "#through-the-day", brief: true }),
-        meeting("renewal", "renewal call", "11:00", "11:45", { href: "#through-the-day", brief: true }),
-        meeting("sam", "1:1 with sam", "14:00", "14:30", { href: "#through-the-day" }),
-        meeting("review", "design review", "14:30", "15:30", { href: "#through-the-day", brief: true }),
+        meeting("standup", "Team standup", "09:30", "10:00", { href: "#through-the-day", brief: true }),
+        meeting("renewal", "Renewal call", "11:00", "11:45", { href: "#through-the-day", brief: true }),
+        meeting("sam", "1:1 with Sam", "14:00", "14:30", { href: "#through-the-day" }),
+        meeting("review", "Design review", "14:30", "15:30", { href: "#through-the-day", brief: true }),
       ]}
       now={clock("11:12")}
       timeZone={timeZone}
@@ -127,29 +127,29 @@ export function DayLineKinds() {
   return (
     <DayLine>
       <DayLineHead>
-        <DayLineDate href="#kinds">tue 3 nov</DayLineDate>
-        <DayLineNote>times in amsterdam</DayLineNote>
-        <DayLineAllDay>anna out of office</DayLineAllDay>
+        <DayLineDate href="#kinds">Tue 3 Nov</DayLineDate>
+        <DayLineNote>Times in Amsterdam</DayLineNote>
+        <DayLineAllDay>Anna out of office</DayLineAllDay>
         <DayLineSteps>
-          <Onward href="#kinds">wed 4 nov</Onward>
+          <Onward href="#kinds">Wed 4 Nov</Onward>
         </DayLineSteps>
       </DayLineHead>
       <DayLineStrip
-        aria-label="a day of every kind"
+        aria-label="A day of every kind"
         day={day}
         events={[
-          { id: "anna", title: "anna out of office", start: day, end: day },
-          meeting("hold", "supplier hold", "09:30", "10:30", { href: "#kinds", tentative: true }),
-          meeting("renewal", "renewal call", "12:00", "12:45", { href: "#kinds", brief: true, selected: true }),
-          meeting("sam", "1:1 with sam", "14:00", "14:45", { href: "#kinds" }),
-          meeting("scope", "scope check", "14:30", "15:15", { href: "#kinds" }),
-          meeting("dentist", "dentist", "16:30", "17:15", { note: "personal calendar may be behind", stale: true }),
+          { id: "anna", title: "Anna out of office", start: day, end: day },
+          meeting("hold", "Supplier hold", "09:30", "10:30", { href: "#kinds", tentative: true }),
+          meeting("renewal", "Renewal call", "12:00", "12:45", { href: "#kinds", brief: true, selected: true }),
+          meeting("sam", "1:1 with Sam", "14:00", "14:45", { href: "#kinds" }),
+          meeting("scope", "Scope check", "14:30", "15:15", { href: "#kinds" }),
+          meeting("dentist", "Dentist", "16:30", "17:15", { note: "Personal calendar may be behind", stale: true }),
         ]}
         now={clock("08:42")}
         timeZone={timeZone}
       />
-      <DayLineFoot action={<DayLineAction>try again</DayLineAction>}>
-        personal calendar isn&rsquo;t answering · as of 08:10
+      <DayLineFoot action={<DayLineAction>Try again</DayLineAction>}>
+        Personal calendar isn&rsquo;t answering · as of 08:10
       </DayLineFoot>
     </DayLine>
   );
@@ -159,19 +159,19 @@ export function DayLineKinds() {
 export function DayLineHeavy() {
   return (
     <DayLineStrip
-      aria-label="a full tuesday"
+      aria-label="A full Tuesday"
       day={day}
       events={[
-        meeting("standup", "team standup", "09:00", "09:30", { href: "#heavy" }),
-        meeting("review", "design review", "09:30", "10:30", { href: "#heavy", brief: true }),
-        meeting("renewal", "renewal call", "10:45", "11:30", { href: "#heavy", brief: true }),
-        meeting("sam", "1:1 with sam", "11:30", "12:00", { href: "#heavy" }),
-        meeting("lunch", "lunch with the team", "12:00", "13:00"),
-        meeting("planning", "quarter planning", "13:00", "14:00", { href: "#heavy", brief: true }),
-        meeting("hiring", "hiring sync", "14:15", "14:45", { href: "#heavy", tentative: true }),
-        meeting("support", "support review", "15:00", "15:30", { href: "#heavy" }),
-        meeting("kickoff", "project kickoff", "15:30", "16:30", { href: "#heavy", brief: true }),
-        meeting("wrap", "weekly wrap", "17:00", "17:30", { href: "#heavy" }),
+        meeting("standup", "Team standup", "09:00", "09:30", { href: "#heavy" }),
+        meeting("review", "Design review", "09:30", "10:30", { href: "#heavy", brief: true }),
+        meeting("renewal", "Renewal call", "10:45", "11:30", { href: "#heavy", brief: true }),
+        meeting("sam", "1:1 with Sam", "11:30", "12:00", { href: "#heavy" }),
+        meeting("lunch", "Lunch with the team", "12:00", "13:00"),
+        meeting("planning", "Quarter planning", "13:00", "14:00", { href: "#heavy", brief: true }),
+        meeting("hiring", "Hiring sync", "14:15", "14:45", { href: "#heavy", tentative: true }),
+        meeting("support", "Support review", "15:00", "15:30", { href: "#heavy" }),
+        meeting("kickoff", "Project kickoff", "15:30", "16:30", { href: "#heavy", brief: true }),
+        meeting("wrap", "Weekly wrap", "17:00", "17:30", { href: "#heavy" }),
       ]}
       now={clock("10:05")}
       timeZone={timeZone}
@@ -183,11 +183,11 @@ export function DayLineHeavy() {
 export function DayLineEvening() {
   return (
     <DayLineStrip
-      aria-label="a tuesday with an evening"
+      aria-label="A Tuesday with an evening"
       day={day}
       events={[
-        meeting("standup", "team standup", "09:30", "10:00", { href: "#scale" }),
-        meeting("dinner", "dinner with the board", "19:00", "21:30", { href: "#scale" }),
+        meeting("standup", "Team standup", "09:30", "10:00", { href: "#scale" }),
+        meeting("dinner", "Dinner with the board", "19:00", "21:30", { href: "#scale" }),
       ]}
       now={clock("08:42")}
       timeZone={timeZone}
@@ -198,13 +198,13 @@ export function DayLineEvening() {
 export function DayLineNothingFixed() {
   return (
     <DayLineStrip
-      aria-label="saturday"
+      aria-label="Saturday"
       day="2026-11-07"
       events={[]}
       now="2026-11-07T10:20:00+01:00"
       timeZone={timeZone}
     >
-      nothing fixed today
+      Nothing fixed today
     </DayLineStrip>
   );
 }
@@ -215,20 +215,20 @@ export function DayLineFault() {
   return (
     <DayLine>
       <DayLineHead>
-        <DayLineDate href="#faults">tue 3 nov</DayLineDate>
+        <DayLineDate href="#faults">Tue 3 Nov</DayLineDate>
         <DayLineSteps>
-          <Onward href="#faults">wed 4 nov</Onward>
+          <Onward href="#faults">Wed 4 Nov</Onward>
         </DayLineSteps>
       </DayLineHead>
       <DayLineStrip
-        aria-label="tuesday's meetings, from a read that may be behind"
+        aria-label="Tuesday's meetings, from a read that may be behind"
         day={day}
         events={tuesday.map((event) => ({ ...event, href: "#faults", stale: true }))}
         now={clock("08:42")}
         timeZone={timeZone}
       />
-      <DayLineFoot action={<DayLineAction>try again</DayLineAction>}>
-        work calendar isn&rsquo;t answering · as of 08:10
+      <DayLineFoot action={<DayLineAction>Try again</DayLineAction>}>
+        Work calendar isn&rsquo;t answering · as of 08:10
       </DayLineFoot>
     </DayLine>
   );
@@ -238,12 +238,12 @@ export function DayLineFault() {
 export function DayLineFailedRead() {
   return (
     <DayLine>
-      <DayLineStrip aria-label="today" day={day} events={[]} now={clock("08:42")} timeZone={timeZone} />
-      <DayLineFoot action={<DayLineAction>try again</DayLineAction>}>calendar isn&rsquo;t answering</DayLineFoot>
+      <DayLineStrip aria-label="Today" day={day} events={[]} now={clock("08:42")} timeZone={timeZone} />
+      <DayLineFoot action={<DayLineAction>Try again</DayLineAction>}>Calendar isn&rsquo;t answering</DayLineFoot>
     </DayLine>
   );
 }
 
 export function DayLineLoading() {
-  return <DayLineStrip aria-label="wednesday" day="2026-11-04" events={[]} loading timeZone={timeZone} />;
+  return <DayLineStrip aria-label="Wednesday" day="2026-11-04" events={[]} loading timeZone={timeZone} />;
 }

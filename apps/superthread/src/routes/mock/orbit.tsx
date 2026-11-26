@@ -48,7 +48,7 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/compon
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/superthread/ui/tabs";
 import { Textarea } from "@/components/superthread/ui/textarea";
 import { Toaster, toast } from "@/components/superthread/ui/toast";
-import { agentsSummary, earlierRuns, orbitNav, type Run, runs, ships } from "@/mock/data";
+import { agentsSummary, earlierRuns, orbitNav, type Run, runs, shipLabel, ships } from "@/mock/data";
 import { ShipMark } from "@/mock/parts";
 import { RunsChart } from "@/mock/RunsChart";
 import { ShipFrame } from "@/mock/ShipFrame";
@@ -61,36 +61,36 @@ export const Route = createFileRoute("/mock/orbit")({
 // the panels stay mounted, so a draft and the loaded runs survive a tab switch
 function Page() {
   return (
-    <ShipFrame ship="orbit" nav={orbitNav} current="agents">
+    <ShipFrame ship="orbit" nav={orbitNav} current="Agents">
       <Toaster>
         <AppShellPanel>
           <Tabs defaultValue="overview" className="gap-0">
             <PageHeader className="mb-7">
               <ShipMark ship="orbit" />
-              <PageHeaderTitle>agents</PageHeaderTitle>
+              <PageHeaderTitle>Agents</PageHeaderTitle>
               <PageHeaderMeta>{agentsSummary}</PageHeaderMeta>
             </PageHeader>
-            <TabsList className="mb-8" aria-label="agents">
-              <TabsTrigger value="overview">overview</TabsTrigger>
-              <TabsTrigger value="runs">runs</TabsTrigger>
-              <TabsTrigger value="settings">settings</TabsTrigger>
+            <TabsList className="mb-8" aria-label="Agents">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="runs">Runs</TabsTrigger>
+              <TabsTrigger value="settings">Settings</TabsTrigger>
             </TabsList>
             <TabsContent value="overview" keepMounted>
               <Section className="mock-section" titleId="per-week">
                 <SectionHeader>
-                  <SectionTitle>runs per week</SectionTitle>
+                  <SectionTitle>Runs per week</SectionTitle>
                 </SectionHeader>
                 <RunsChart />
               </Section>
               <Section className="mock-section" titleId="recent">
                 <SectionHeader>
-                  <SectionTitle>recent runs</SectionTitle>
+                  <SectionTitle>Recent runs</SectionTitle>
                 </SectionHeader>
                 <RunsTable runs={runs} />
               </Section>
               <Section className="mock-section" titleId="schedule">
                 <SectionHeader>
-                  <SectionTitle>schedule a run</SectionTitle>
+                  <SectionTitle>Schedule a run</SectionTitle>
                 </SectionHeader>
                 <ScheduleForm />
               </Section>
@@ -112,18 +112,18 @@ function Page() {
 // took fit the sheet, as on the board
 function RunsTable({ runs }: { runs: readonly Run[] }) {
   return (
-    <DataTable label="agent runs">
+    <DataTable label="Agent runs">
       <TableHeader>
         <TableRow>
-          <TableHead kind="id">run</TableHead>
-          <TableHead>task</TableHead>
-          <TableHead className="mock-narrow-off">ship</TableHead>
-          <TableHead className="mock-narrow-off">agent</TableHead>
-          <TableHead>status</TableHead>
+          <TableHead kind="id">Run</TableHead>
+          <TableHead>Task</TableHead>
+          <TableHead className="mock-narrow-off">Ship</TableHead>
+          <TableHead className="mock-narrow-off">Agent</TableHead>
+          <TableHead>Status</TableHead>
           <TableHead kind="number" className="mock-narrow-off">
-            started
+            Started
           </TableHead>
-          <TableHead kind="number">took</TableHead>
+          <TableHead kind="number">Took</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -138,7 +138,7 @@ function RunsTable({ runs }: { runs: readonly Run[] }) {
             <TableCell className="mock-narrow-off">
               <span className="mock-ship">
                 <ShipMark ship={run.ship} size={16} />
-                {run.ship}
+                {shipLabel(run.ship)}
               </span>
             </TableCell>
             <TableCell className="mock-narrow-off text-muted-foreground">{run.agent}</TableCell>
@@ -175,15 +175,15 @@ function RunLog() {
   return (
     <div className="mock-section" aria-busy={loading}>
       <RunsTable runs={shown} />
-      {loading && <LoadingState rows={earlierRuns.length} label="loading earlier runs" />}
+      {loading && <LoadingState rows={earlierRuns.length} label="Loading earlier runs" />}
       <div className="mt-5">
         {more ? (
           <Button variant="outline" onClick={load} disabled={loading}>
-            {loading ? "loading earlier runs" : "show earlier runs"}
+            {loading ? "Loading earlier runs" : "Show earlier runs"}
           </Button>
         ) : (
           <Notice>
-            <NoticeTitle>that is every run from today.</NoticeTitle>
+            <NoticeTitle>That is every run from today.</NoticeTitle>
           </Notice>
         )}
       </div>
@@ -191,14 +191,14 @@ function RunLog() {
   );
 }
 
-const shipItems = ships.map((ship) => ({ value: ship, label: ship }));
-const checkNames = ["type-check", "unit tests", "screenshots"] as const;
+const shipItems = ships.map((ship) => ({ value: ship, label: shipLabel(ship) }));
+const checkNames = ["Type-check", "Unit tests", "Screenshots"] as const;
 const fresh = {
   query: "select listbox",
   ship: "orbit",
   branch: "Fix Select Loop",
   notes: "",
-  checks: ["type-check", "unit tests"] as readonly string[],
+  checks: ["Type-check", "Unit tests"] as readonly string[],
 };
 const branchShape = /^[a-z0-9][a-z0-9/-]*$/;
 
@@ -214,10 +214,10 @@ function ScheduleForm() {
 
   const branchError =
     branch === ""
-      ? "a run needs a branch."
+      ? "A run needs a branch."
       : branchShape.test(branch)
         ? null
-        : "use lowercase letters, numbers, dashes and slashes, like fix/select-loop.";
+        : "Use lowercase letters, numbers, dashes and slashes, like fix/select-loop.";
   const all = checks.length === checkNames.length;
   const some = checks.length > 0 && !all;
 
@@ -230,7 +230,7 @@ function ScheduleForm() {
     toast.add({
       type: "success",
       title: `r-${nextRun} scheduled`,
-      description: `${ship ?? "orbit"} runs it on ${branch} when an agent is free.`,
+      description: `${shipLabel(ship ?? "orbit")} runs it on ${branch} when an agent is free.`,
     });
     setNextRun((run) => run + 1);
   };
@@ -241,14 +241,14 @@ function ScheduleForm() {
     setBranch("");
     setNotes("");
     setChecks(fresh.checks);
-    toast.add({ title: "draft discarded", description: "the form is empty again." });
+    toast.add({ title: "Draft discarded", description: "The form is empty again." });
   };
 
   return (
     <FormSection className="max-w-[640px]" aria-labelledby="schedule" onSubmit={schedule} noValidate>
       <FormSectionFields className="grid grid-cols-2 gap-6 [@media(max-width:600px)]:grid-cols-1">
         <Field className="mock-wide">
-          <FieldLabel htmlFor="run-task">task</FieldLabel>
+          <FieldLabel htmlFor="run-task">Task</FieldLabel>
           <InputGroup>
             <InputGroupAddon>
               <Icon name="search" />
@@ -258,14 +258,14 @@ function ScheduleForm() {
               id="run-task"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="find a task by id or title"
+              placeholder="Find a task by ID or title"
               autoComplete="off"
             />
             {query && (
               <InputGroupAddon align="inline-end">
                 <InputGroupButton
                   size="icon-xs"
-                  aria-label="clear the task"
+                  aria-label="Clear the task"
                   onClick={() => {
                     setQuery("");
                     queryRef.current?.focus();
@@ -279,7 +279,7 @@ function ScheduleForm() {
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="run-ship">ship</FieldLabel>
+          <FieldLabel htmlFor="run-ship">Ship</FieldLabel>
           <Select items={shipItems} value={ship} onValueChange={(value) => setShip(value as string | null)}>
             <SelectTrigger id="run-ship" className="w-full">
               <SelectValue />
@@ -295,7 +295,7 @@ function ScheduleForm() {
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="run-branch">branch</FieldLabel>
+          <FieldLabel htmlFor="run-branch">Branch</FieldLabel>
           <Input
             ref={branchRef}
             id="run-branch"
@@ -310,16 +310,16 @@ function ScheduleForm() {
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="run-agent">agent</FieldLabel>
-          <Input id="run-agent" defaultValue="picked by the queue" disabled aria-describedby="run-agent-hint" />
-          <FieldDescription id="run-agent-hint">the queue hands the run to the first free agent.</FieldDescription>
+          <FieldLabel htmlFor="run-agent">Agent</FieldLabel>
+          <Input id="run-agent" defaultValue="Picked by the queue" disabled aria-describedby="run-agent-hint" />
+          <FieldDescription id="run-agent-hint">The queue hands the run to the first free agent.</FieldDescription>
         </Field>
 
         <FieldSet className="gap-3">
-          <FieldLegend variant="label">checks before merge</FieldLegend>
+          <FieldLegend variant="label">Checks before merge</FieldLegend>
           <FieldLabel>
             <Checkbox checked={all} indeterminate={some} onCheckedChange={(on) => setChecks(on ? checkNames : [])} />
-            every check
+            Every check
           </FieldLabel>
           <div className="flex flex-col gap-3 pl-[26px]">
             {checkNames.map((name) => (
@@ -337,34 +337,34 @@ function ScheduleForm() {
         </FieldSet>
 
         <Field className="mock-wide">
-          <FieldLabel htmlFor="run-notes">notes for the agent</FieldLabel>
+          <FieldLabel htmlFor="run-notes">Notes for the agent</FieldLabel>
           <Textarea
             id="run-notes"
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
-            placeholder="what should it know before it starts?"
+            placeholder="What should it know before it starts?"
           />
         </Field>
       </FormSectionFields>
       <FormSectionFooter className="justify-between">
         <Dialog>
-          <DialogTrigger render={<Button variant="destructive" />}>discard draft</DialogTrigger>
+          <DialogTrigger render={<Button variant="destructive" />}>Discard draft</DialogTrigger>
           <DialogContent showCloseButton={false}>
             <DialogHeader>
-              <DialogTitle>discard this draft?</DialogTitle>
+              <DialogTitle>Discard this draft?</DialogTitle>
               <DialogDescription>
-                the task, branch and notes you entered are cleared. runs already scheduled keep going.
+                The task, branch and notes you entered are cleared. Runs already scheduled keep going.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <DialogClose render={<Button variant="outline" />}>keep editing</DialogClose>
+              <DialogClose render={<Button variant="outline" />}>Keep editing</DialogClose>
               <DialogClose render={<Button variant="destructive" />} onClick={discard}>
-                discard draft
+                Discard draft
               </DialogClose>
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        <Button type="submit">schedule run</Button>
+        <Button type="submit">Schedule run</Button>
       </FormSectionFooter>
     </FormSection>
   );
@@ -377,17 +377,17 @@ function SettingsForm() {
   const save = (event: FormEvent) => {
     event.preventDefault();
     setSaved(true);
-    toast.add({ type: "success", title: "settings saved", description: "new runs use them from now on." });
+    toast.add({ type: "success", title: "Settings saved", description: "New runs use them from now on." });
   };
 
   return (
     <FormSection className="max-w-[640px]" onSubmit={save} onChange={() => setSaved(false)}>
       <FormSectionHeader>
-        <FormSectionTitle>run settings</FormSectionTitle>
+        <FormSectionTitle>Run settings</FormSectionTitle>
       </FormSectionHeader>
       <FormSectionFields className="grid grid-cols-2 gap-6 [@media(max-width:600px)]:grid-cols-1">
         <Field>
-          <FieldLabel htmlFor="set-parallel">runs at once</FieldLabel>
+          <FieldLabel htmlFor="set-parallel">Runs at once</FieldLabel>
           <Select items={parallel} defaultValue="2">
             <SelectTrigger id="set-parallel" className="w-full">
               <SelectValue />
@@ -402,19 +402,19 @@ function SettingsForm() {
           </Select>
         </Field>
         <Field>
-          <FieldLabel htmlFor="set-prefix">branch prefix</FieldLabel>
+          <FieldLabel htmlFor="set-prefix">Branch prefix</FieldLabel>
           <Input id="set-prefix" defaultValue="agent/" autoComplete="off" spellCheck={false} />
         </Field>
         <Field className="mock-wide">
           <FieldLabel>
             <Checkbox defaultChecked />
-            tell me when a run fails
+            Tell me when a run fails
           </FieldLabel>
         </Field>
       </FormSectionFields>
       <FormSectionFooter>
-        <FormSectionStatus>{saved ? "saved for new runs" : "changes apply to new runs"}</FormSectionStatus>
-        <Button type="submit">save settings</Button>
+        <FormSectionStatus>{saved ? "Saved for new runs" : "Changes apply to new runs"}</FormSectionStatus>
+        <Button type="submit">Save settings</Button>
       </FormSectionFooter>
     </FormSection>
   );

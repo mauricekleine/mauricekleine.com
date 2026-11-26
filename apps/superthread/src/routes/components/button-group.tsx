@@ -7,10 +7,10 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/button-group")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "parts", title: "parts" },
-      { id: "orientation", title: "orientation" },
-      { id: "states", title: "states" },
+      { id: "example", title: "Example" },
+      { id: "parts", title: "Parts" },
+      { id: "orientation", title: "Orientation" },
+      { id: "states", title: "States" },
     ],
   },
   component: Page,
@@ -19,41 +19,41 @@ function Page() {
   return (
     <>
       <PageHead
-        title="button group"
-        lede="related actions on shared 1 px edges. the children keep their own button states and keyboard focus."
+        title="Button group"
+        lede="Related actions on shared 1 px edges. The children keep their own button states and keyboard focus."
       >
         <InstallLine items={["button-group"]} />
       </PageHead>
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-e-copy">
-          add an orbit run to the queue, then start it. the text addon follows the count; start becomes unavailable when
+          Add an Orbit run to the queue, then start it. The text addon follows the count; start becomes unavailable when
           the queue is empty.
         </p>
         <ModePair className="st-e-wide">
           <ButtonGroupExample />
         </ModePair>
       </Section>
-      <Section id="parts" title="parts">
+      <Section id="parts" title="Parts">
         <p className="st-e-copy">
-          a text addon prints at the default button height. a separator stretches along the row, and nested groups keep
+          A text addon prints at the default button height. A separator stretches along the row, and nested groups keep
           a gap between their action sets.
         </p>
         <ModePair className="st-e-wide">
           <ButtonGroupParts />
         </ModePair>
       </Section>
-      <Section id="orientation" title="orientation">
+      <Section id="orientation" title="Orientation">
         <p className="st-e-copy">
-          horizontal joins vertical edges. vertical joins horizontal edges. each child remains a separate action in the
+          Horizontal joins vertical edges. Vertical joins horizontal edges. Each child remains a separate action in the
           tab order.
         </p>
         <ModePair className="st-e-wide">
           <ButtonGroupLayout />
         </ModePair>
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-e-copy">
-          each child draws its own hover, press and disabled state. the focused child rises above its neighbour so its
+          Each child draws its own hover, press and disabled state. The focused child rises above its neighbour so its
           outside ring stays visible.
         </p>
         <ModePair className="st-e-wide">
