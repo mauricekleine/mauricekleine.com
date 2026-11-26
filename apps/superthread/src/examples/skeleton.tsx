@@ -9,7 +9,7 @@ const names = [160, 120, 192] as const;
 
 export function SkeletonRows() {
   return (
-    <ul className="st-b-skel" aria-label="runs this week, loading" aria-busy="true">
+    <ul className="st-b-skel" aria-label="Runs this week, loading" aria-busy="true">
       {names.map((width) => (
         <li key={width}>
           <Skeleton className="h-4 w-4" />
@@ -28,13 +28,13 @@ const shipNames = [28, 80, 44] as const;
 
 export function SkeletonTable() {
   return (
-    <Table aria-label="runs this week, loading" aria-busy="true">
+    <Table aria-label="Runs this week, loading" aria-busy="true">
       <TableHeader>
         <TableRow>
-          <TableHead>ship</TableHead>
-          <TableHead kind="number">runs</TableHead>
-          <TableHead kind="number">median</TableHead>
-          <TableHead className="st-b-lr">last run</TableHead>
+          <TableHead>Ship</TableHead>
+          <TableHead kind="number">Runs</TableHead>
+          <TableHead kind="number">Median</TableHead>
+          <TableHead className="st-b-lr">Last run</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -76,7 +76,7 @@ export function EmptyRuns() {
     <div className="st-b-empty" style={style}>
       <Plate name="empty" phone="empty-phone" width={608} height={120} />
       <p>
-        <b>no runs yet</b> the first run lands here when an agent picks up a task.
+        <b>No runs yet</b> The first run lands here when an agent picks up a task.
       </p>
       <CropMarks />
     </div>

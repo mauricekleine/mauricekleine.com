@@ -19,7 +19,7 @@ function EveryShip() {
           onCheckedChange={(checked) => setPicked(checked ? fleet.map((ship) => ship.id) : [])}
         />
         <span>
-          every ship{" "}
+          Every ship{" "}
           <span className="st-a-count">
             · {picked.length} of {fleet.length}
           </span>
@@ -48,16 +48,16 @@ export function CheckboxExample() {
     <div className="st-a-checks">
       <label className="st-a-check">
         <Checkbox defaultChecked />
-        notify me when a run fails
+        Notify me when a run fails
       </label>
       <EveryShip />
       <label className="st-a-check">
         <Checkbox />
-        include drafts
+        Include drafts
       </label>
       <label className="st-a-check">
         <Checkbox defaultChecked disabled />
-        keep the run log
+        Keep the run log
       </label>
     </div>
   );
@@ -66,13 +66,13 @@ export function CheckboxExample() {
 // The states, printed: each box is held in its state and read-only, out of the tab order. Focus is printed through
 // data-demo, which the site's variants read as keyboard focus.
 const states = [
-  { name: "empty", note: "1 px input edge" },
-  { name: "checked", note: "foreground, tick", checked: true },
-  { name: "mixed", note: "ink at 50 percent", indeterminate: true },
-  { name: "focus", note: "2 px ring, 2 px out", demo: true },
-  { name: "invalid", note: "1 px error edge", invalid: true },
-  { name: "disabled", note: "flat fill", disabled: true },
-  { name: "disabled, checked", note: "flat, tick dimmed", checked: true, disabled: true },
+  { name: "Empty", note: "1 px input edge" },
+  { name: "Checked", note: "Foreground, tick", checked: true },
+  { name: "Mixed", note: "Ink at 50 percent", indeterminate: true },
+  { name: "Focus", note: "2 px ring, 2 px out", demo: true },
+  { name: "Invalid", note: "1 px error edge", invalid: true },
+  { name: "Disabled", note: "Flat fill", disabled: true },
+  { name: "Disabled, checked", note: "Flat, tick dimmed", checked: true, disabled: true },
 ];
 
 export function CheckboxStates() {
@@ -86,7 +86,7 @@ export function CheckboxStates() {
             disabled={state.disabled}
             readOnly
             tabIndex={-1}
-            aria-label={`notify, ${state.name}`}
+            aria-label={`Notify, ${state.name.toLowerCase()}`}
             aria-invalid={state.invalid || undefined}
             data-demo={state.demo ? "focus-visible" : undefined}
           />

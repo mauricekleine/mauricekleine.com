@@ -9,11 +9,11 @@ const briefs = Array.from({ length: 37 }, (_, day) => new Date(Date.UTC(2026, 8,
   .filter((date) => date.getUTCDay() % 6 !== 0)
   .map((date) => date.toISOString().slice(0, 10));
 
-const week = (date: string): MonthGridEntry => ({ date, label: "read the weekly brief", href: "#weeks" });
+const week = (date: string): MonthGridEntry => ({ date, label: "Read the weekly brief", href: "#weeks" });
 const weeklies = [week("2026-09-28"), week("2026-10-05"), week("2026-10-12"), week("2026-10-19"), week("2026-10-26")];
 
 function links(open?: string, href = "#example") {
-  return briefs.map((date) => ({ date, label: "read the brief", selected: date === open, href }));
+  return briefs.map((date) => ({ date, label: "Read the brief", selected: date === open, href }));
 }
 
 // The way the grid usually works: an app holds the month, and a day opens in place, so its bar moves with the click.
@@ -22,14 +22,14 @@ export function MonthGridExample() {
   const [open, setOpen] = useState("2026-11-02");
   const days = briefs.map((date) => ({
     date,
-    label: "read the brief",
+    label: "Read the brief",
     selected: date === open,
     render: <button type="button" onClick={() => setOpen(date)} />,
   }));
   return (
     <div className="st-month-grid">
       <MonthGrid
-        aria-label="briefs by month"
+        aria-label="Briefs by month"
         days={days}
         max="2026-11"
         min="2026-09"
@@ -47,11 +47,11 @@ export function MonthGridMarks() {
   return (
     <div className="st-month-grid">
       <MonthGrid
-        aria-label="briefs by month"
+        aria-label="Briefs by month"
         days={[
-          { date: "2026-10-30", label: "read the brief", href: "#marks" },
-          { date: "2026-11-02", label: "read the brief", href: "#marks" },
-          { date: "2026-11-03", label: "read the brief", selected: true, href: "#marks" },
+          { date: "2026-10-30", label: "Read the brief", href: "#marks" },
+          { date: "2026-11-02", label: "Read the brief", href: "#marks" },
+          { date: "2026-11-03", label: "Read the brief", selected: true, href: "#marks" },
         ]}
         month="2026-11"
         today={today}
@@ -64,7 +64,7 @@ export function MonthGridMarks() {
 export function MonthGridReadOnly() {
   return (
     <div className="st-month-grid">
-      <MonthGrid aria-label="runs by month" days={briefs.map((date) => ({ date, label: "a run" }))} month="2026-10" />
+      <MonthGrid aria-label="Runs by month" days={briefs.map((date) => ({ date, label: "A run" }))} month="2026-10" />
     </div>
   );
 }
@@ -74,7 +74,7 @@ export function MonthGridBounded() {
   return (
     <div className="st-month-grid">
       <MonthGrid
-        aria-label="briefs by month"
+        aria-label="Briefs by month"
         days={links("2026-10-30", "#keys")}
         max="2026-11"
         min="2026-10"
@@ -89,7 +89,7 @@ export function MonthGridBounded() {
 export function MonthGridLoading() {
   return (
     <div className="st-month-grid">
-      <MonthGrid aria-label="briefs by month" loading month="2026-11" today={today} weeks={[]} />
+      <MonthGrid aria-label="Briefs by month" loading month="2026-11" today={today} weeks={[]} />
     </div>
   );
 }
@@ -98,7 +98,7 @@ export function MonthGridLoading() {
 export function MonthGridPhone() {
   return (
     <MonthGrid
-      aria-label="briefs by month"
+      aria-label="Briefs by month"
       days={links("2026-11-02", "#phone")}
       max="2026-11"
       min="2026-09"

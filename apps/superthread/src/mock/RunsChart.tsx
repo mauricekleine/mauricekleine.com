@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { fleet } from "@/components/superthread/lib/fleet";
-import { type ChartShip, series, weeks } from "./data";
+import { type ChartShip, series, shipLabel, weeks } from "./data";
 import { ShipMark } from "./parts";
 
 // Each series prints in its ship's spot with 1 px lines knocked out at the angle its mark carries, so it reads by
@@ -26,7 +26,7 @@ export function RunsChart() {
 
   return (
     <figure className="mock-chart">
-      <div className="mock-plot" role="img" aria-label={`agent runs per week by ship: ${summary}`}>
+      <div className="mock-plot" role="img" aria-label={`Agent runs per week by ship: ${summary}`}>
         {ticks.map((tick) => (
           <span key={tick} className="mock-tick" data-zero={tick === 0 || undefined} style={{ bottom: y(tick) }}>
             <span>{tick}</span>
@@ -65,7 +65,7 @@ export function RunsChart() {
               <b className={screen[line.ship]} />
             </span>
             <ShipMark ship={line.ship} />
-            <b>{line.ship}</b>
+            <b>{shipLabel(line.ship)}</b>
             <span className="mock-quiet">{angle(line.ship)}°</span>
             <span className="mock-quiet">{line.runs.reduce((sum, runs) => sum + runs, 0)} runs</span>
           </li>

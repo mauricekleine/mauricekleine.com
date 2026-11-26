@@ -26,13 +26,13 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/compositions/send-bar")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "one", title: "one recipient" },
-      { id: "states", title: "states" },
-      { id: "panel", title: "in the panel" },
-      { id: "narrow", title: "in a narrow column" },
-      { id: "phone", title: "on a phone" },
-      { id: "parts", title: "parts" },
+      { id: "example", title: "Example" },
+      { id: "one", title: "One recipient" },
+      { id: "states", title: "States" },
+      { id: "panel", title: "In the panel" },
+      { id: "narrow", title: "In a narrow column" },
+      { id: "phone", title: "On a phone" },
+      { id: "parts", title: "Parts" },
     ],
   },
   component: Page,
@@ -41,12 +41,12 @@ export const Route = createFileRoute("/compositions/send-bar")({
 function People() {
   return (
     <SendBarFacts>
-      <SendBarLabel>to</SendBarLabel>
-      <SendBarFact address="sam@quanta.example">sam okafor</SendBarFact>
-      <SendBarLabel>cc</SendBarLabel>
-      <SendBarFact address="mina@quanta.example">mina rao</SendBarFact>
-      <SendBarFact address="lee@quanta.example">lee park</SendBarFact>
-      <SendBarLabel>attaches</SendBarLabel>
+      <SendBarLabel>To</SendBarLabel>
+      <SendBarFact address="sam@quanta.example">Sam Okafor</SendBarFact>
+      <SendBarLabel>CC</SendBarLabel>
+      <SendBarFact address="mina@quanta.example">Mina Rao</SendBarFact>
+      <SendBarFact address="lee@quanta.example">Lee Park</SendBarFact>
+      <SendBarLabel>Attaches</SendBarLabel>
       <SendBarFile>chapter-7-notes.pdf</SendBarFile>
     </SendBarFacts>
   );
@@ -55,14 +55,14 @@ function People() {
 function Example() {
   const [sent, setSent] = useState(false);
   return (
-    <SendBar aria-label="where it goes">
+    <SendBar aria-label="Where it goes">
       <SendBarTo>
-        <SendBarTitle>{sent ? "went to 3 people" : "goes to 3 people"}</SendBarTitle>
+        <SendBarTitle>{sent ? "Went to 3 people" : "Goes to 3 people"}</SendBarTitle>
         <People />
       </SendBarTo>
       <SendBarActions>
         <SendBarButton disabled={sent} onClick={() => setSent(true)}>
-          {sent ? "sent to 3 people" : "send to 3 people"}
+          {sent ? "Sent to 3 people" : "Send to 3 people"}
         </SendBarButton>
       </SendBarActions>
     </SendBar>
@@ -71,13 +71,13 @@ function Example() {
 
 function OneRecipient() {
   return (
-    <SendBar aria-label="where it goes">
+    <SendBar aria-label="Where it goes">
       <SendBarTo>
-        <SendBarTitle>sam okafor</SendBarTitle>
+        <SendBarTitle>Sam Okafor</SendBarTitle>
         <SendBarAddress>sam@quanta.example</SendBarAddress>
       </SendBarTo>
       <SendBarActions>
-        <SendBarButton>send to sam</SendBarButton>
+        <SendBarButton>Send to Sam</SendBarButton>
       </SendBarActions>
     </SendBar>
   );
@@ -85,13 +85,13 @@ function OneRecipient() {
 
 function Sent() {
   return (
-    <SendBar aria-label="where it went">
+    <SendBar aria-label="Where it went">
       <SendBarTo>
-        <SendBarTitle>went to 3 people</SendBarTitle>
+        <SendBarTitle>Went to 3 people</SendBarTitle>
         <People />
       </SendBarTo>
       <SendBarActions>
-        <SendBarButton disabled>sent to 3 people</SendBarButton>
+        <SendBarButton disabled>Sent to 3 people</SendBarButton>
       </SendBarActions>
     </SendBar>
   );
@@ -99,14 +99,14 @@ function Sent() {
 
 function Handoff() {
   return (
-    <SendBar aria-label="where it goes">
+    <SendBar aria-label="Where it goes">
       <SendBarTo>
-        <SendBarTitle>in your outlook drafts</SendBarTitle>
+        <SendBarTitle>In your Outlook drafts</SendBarTitle>
         <SendBarAddress>sam@quanta.example</SendBarAddress>
       </SendBarTo>
       <SendBarActions>
-        <SendBarLink href="#states">open in outlook</SendBarLink>
-        <SendBarNote>you send it from there.</SendBarNote>
+        <SendBarLink href="#states">Open in Outlook</SendBarLink>
+        <SendBarNote>You send it from there.</SendBarNote>
       </SendBarActions>
     </SendBar>
   );
@@ -114,17 +114,17 @@ function Handoff() {
 
 function Uncertain() {
   return (
-    <SendBar aria-label="where it goes">
+    <SendBar aria-label="Where it goes">
       <SendBarTo>
-        <SendBarTitle>this may have gone out</SendBarTitle>
+        <SendBarTitle>This may have gone out</SendBarTitle>
         <People />
       </SendBarTo>
       <SendBarActions>
-        <SendBarLink href="#states">open sent items</SendBarLink>
-        <SendBarButton variant="outline" aria-label="retry, sends to 3 people">
-          retry
+        <SendBarLink href="#states">Open sent items</SendBarLink>
+        <SendBarButton variant="outline" aria-label="Retry, sends to 3 people">
+          Retry
         </SendBarButton>
-        <SendBarNote>retry can send it twice, so check first.</SendBarNote>
+        <SendBarNote>Retry can send it twice, so check first.</SendBarNote>
       </SendBarActions>
     </SendBar>
   );
@@ -132,14 +132,14 @@ function Uncertain() {
 
 function Focused() {
   return (
-    <SendBar aria-label="where it goes">
+    <SendBar aria-label="Where it goes">
       <SendBarTo>
-        <SendBarTitle>goes to 3 people</SendBarTitle>
+        <SendBarTitle>Goes to 3 people</SendBarTitle>
         <People />
       </SendBarTo>
       <SendBarActions>
         <SendBarButton data-demo="focus-visible" tabIndex={-1}>
-          send to 3 people
+          Send to 3 people
         </SendBarButton>
       </SendBarActions>
     </SendBar>
@@ -147,21 +147,21 @@ function Focused() {
 }
 
 const states = [
-  { name: "ready", note: "key, the whole column", specimen: <Focused /> },
-  { name: "sent", note: "no fill, same place, same width", specimen: <Sent /> },
-  { name: "handoff", note: "a link: the send happens elsewhere", specimen: <Handoff /> },
-  { name: "uncertain", note: "check first, retry beside it", specimen: <Uncertain /> },
+  { name: "Ready", note: "Key, the whole column", specimen: <Focused /> },
+  { name: "Sent", note: "No fill, same place, same width", specimen: <Sent /> },
+  { name: "Handoff", note: "A link: the send happens elsewhere", specimen: <Handoff /> },
+  { name: "Uncertain", note: "Check first, retry beside it", specimen: <Uncertain /> },
 ];
 
 function InAPanel() {
   return (
     <AppShellPanel>
-      <Letter aria-label="the draft, and where it goes" last>
+      <Letter aria-label="The draft, and where it goes" last>
         <LetterHead>
-          <LetterSubject>re: chapter 7 notes</LetterSubject>
-          <LetterKind>reply · mail</LetterKind>
+          <LetterSubject>Re: chapter 7 notes</LetterSubject>
+          <LetterKind>Reply · mail</LetterKind>
         </LetterHead>
-        <LetterBody>the next draft goes up on thursday.</LetterBody>
+        <LetterBody>The next draft goes up on Thursday.</LetterBody>
         <Example />
       </Letter>
     </AppShellPanel>
@@ -172,30 +172,30 @@ function Page() {
   return (
     <>
       <PageHead
-        title="send bar"
-        lede="the foot of a review: who the writing goes to, every address and file, and the one way out."
+        title="Send bar"
+        lede="The foot of a review: who the writing goes to, every address and file, and the one way out."
       >
         <InstallLine items={["send-bar"]} />
       </PageHead>
       <Serves name="send-bar" />
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-ca-copy">
-          tab to the button and press space, or click it. enter does nothing, so a key held from the last field
-          can&rsquo;t send. the title says what happened, and the button stays where it was.
+          Tab to the button and press Space, or click it. Enter does nothing, so a key held from the last field
+          can&rsquo;t send. The title says what happened, and the button stays where it was.
         </p>
         <ModePair className="st-ca-wide-pair">
           <Example />
         </ModePair>
       </Section>
-      <Section id="one" title="one recipient">
-        <p className="st-ca-copy">one person needs no facts: their name is the title and the address sits under it.</p>
+      <Section id="one" title="One recipient">
+        <p className="st-ca-copy">One person needs no facts: their name is the title and the address sits under it.</p>
         <ModePair className="st-ca-wide-pair">
           <OneRecipient />
         </ModePair>
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-ca-copy">
-          the bar prints on paper, so it reads the light roles in both modes. it&rsquo;s a key block: the send prints in
+          The bar prints on paper, so it reads the light roles in both modes. It&rsquo;s a key block: the send prints in
           key, and the focus ring takes the first ink, where the rest of the page rings in the house ink.
         </p>
         <ModePair className="st-ca-wide-pair">
@@ -208,81 +208,81 @@ function Page() {
           </div>
         </ModePair>
       </Section>
-      <Section id="panel" title="in the panel">
+      <Section id="panel" title="In the panel">
         <p className="st-ca-copy">
-          as the letter&rsquo;s foot in a full working panel, names and addresses share their columns across the rows.
-          both frames use an 880 px viewport.
+          As the letter&rsquo;s foot in a full working panel, names and addresses share their columns across the rows.
+          Both frames use an 880 px viewport.
         </p>
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <GroundFrame mode="light" title="send bar in the panel, light" width={880} height={480}>
+            <GroundFrame mode="light" title="Send bar in the panel, light" width={880} height={480}>
               <InAPanel />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="send bar in the panel, dark" width={880} height={480}>
+            <GroundFrame mode="dark" title="Send bar in the panel, dark" width={880} height={480}>
               <InAPanel />
             </GroundFrame>
           }
         />
       </Section>
-      <Section id="narrow" title="in a narrow column">
+      <Section id="narrow" title="In a narrow column">
         <p className="st-ca-copy">
-          the bar answers to its own width. under 732 px the address drops below its name, and under 592 px the action
+          The bar answers to its own width. Under 732 px the address drops below its name, and under 592 px the action
           moves below the facts.
         </p>
         <ModePair>
           <Example />
         </ModePair>
       </Section>
-      <Section id="phone" title="on a phone">
+      <Section id="phone" title="On a phone">
         <p className="st-ca-copy">
-          as the foot of a letter marked <code>last</code>, the bar runs to the panel&rsquo;s edges and down to its
-          foot. both frames use a 390 px viewport.
+          As the foot of a letter marked <code>last</code>, the bar runs to the panel&rsquo;s edges and down to its
+          foot. Both frames use a 390 px viewport.
         </p>
         <ModePair
           light={
-            <GroundFrame mode="light" title="send bar phone, light" height={470}>
+            <GroundFrame mode="light" title="Send bar phone, light" height={470}>
               <InAPanel />
             </GroundFrame>
           }
           dark={
-            <GroundFrame mode="dark" title="send bar phone, dark" height={470}>
+            <GroundFrame mode="dark" title="Send bar phone, dark" height={470}>
               <InAPanel />
             </GroundFrame>
           }
         />
       </Section>
-      <Section id="parts" title="parts">
+      <Section id="parts" title="Parts">
         <dl className="st-ca-parts">
           <dt>
             <code>SendBar</code>
           </dt>
           <dd>
-            the paper, a <code>section</code>. name it with <code>aria-label</code>. it holds two columns,{" "}
+            The paper, a <code>section</code>. Name it with <code>aria-label</code>. It holds two columns,{" "}
             <code>SendBarTo</code> and <code>SendBarActions</code>.
           </dd>
           <dt>
             <code>SendBarTitle</code>
           </dt>
-          <dd>where it goes or where it went, in the display face. it announces itself when it changes.</dd>
+          <dd>Where it goes or where it went, in the display face. It announces itself when it changes.</dd>
           <dt>
             <code>SendBarAddress</code>
           </dt>
-          <dd>one address under the title, for a single recipient.</dd>
+          <dd>One address under the title, for a single recipient.</dd>
           <dt>
             <code>SendBarFacts</code>
           </dt>
           <dd>
-            the list, with <code>SendBarLabel</code> for each word. a <code>SendBarFact</code> is a person with an{" "}
-            <code>address</code>, a <code>SendBarFile</code> is a file. several sit under one label.
+            The list, with <code>SendBarLabel</code> for each word. A <code>SendBarFact</code> is a person with an{" "}
+            <code>address</code>, a <code>SendBarFile</code> is a file. Several sit under one label.
           </dd>
           <dt>
             <code>SendBarButton</code>
           </dt>
           <dd>
-            the send, in key, or a second action with <code>variant=&quot;outline&quot;</code>. enter never fires it,
+            The send, in key, or a second action with <code>variant=&quot;outline&quot;</code>. Enter never fires it,
             even from a field in the same form, and a label naming the reach tells a screen reader what a short word
             sends.
           </dd>
@@ -290,13 +290,13 @@ function Page() {
             <code>SendBarLink</code>
           </dt>
           <dd>
-            a handoff in key, for a send that happens elsewhere. takes an <code>href</code> or the app&rsquo;s router
-            link through <code>render</code>, and enter opens it.
+            A handoff in key, for a send that happens elsewhere. Takes an <code>href</code> or the app&rsquo;s router
+            link through <code>render</code>, and Enter opens it.
           </dd>
           <dt>
             <code>SendBarNote</code>
           </dt>
-          <dd>one muted line under the action: why it works this way, or what to check first.</dd>
+          <dd>One muted line under the action: why it works this way, or what to check first.</dd>
         </dl>
       </Section>
     </>

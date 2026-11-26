@@ -42,9 +42,9 @@ function meeting(id: string, title: string, start: string, end: string, more?: P
 }
 
 const tuesday = [
-  meeting("standup", "team standup", "09:30", "10:00", { href: "#example" }),
-  meeting("sam", "1:1 with sam", "14:00", "14:30", { href: "#example" }),
-  meeting("kickoff", "project kickoff", "16:30", "17:30", { href: "#a-meeting-brief", brief: true }),
+  meeting("standup", "Team standup", "09:30", "10:00", { href: "#example" }),
+  meeting("sam", "1:1 with Sam", "14:00", "14:30", { href: "#example" }),
+  meeting("kickoff", "Project kickoff", "16:30", "17:30", { href: "#a-meeting-brief", brief: true }),
 ];
 
 // A brief every weekday this month so far, and the one before it.
@@ -56,14 +56,14 @@ function Rail() {
   return (
     <ReaderRail>
       <MonthGrid
-        aria-label="briefs by month"
-        days={briefs.map((date) => ({ date, label: "read the brief", selected: date === day, href: "#example" }))}
+        aria-label="Briefs by month"
+        days={briefs.map((date) => ({ date, label: "Read the brief", selected: date === day, href: "#example" }))}
         max="2026-11"
         min="2026-10"
         month={month}
         onMonthChange={setMonth}
         today={day}
-        weeks={[{ date: "2026-10-26", label: "read the weekly brief", href: "#example" }]}
+        weeks={[{ date: "2026-10-26", label: "Read the weekly brief", href: "#example" }]}
       />
     </ReaderRail>
   );
@@ -75,40 +75,40 @@ export function ReaderBrief() {
     <AppShellPanel>
       <Reader>
         <ReaderLead>
-          <ReaderHead written="written 07:00">tue 3 nov</ReaderHead>
-          <ReaderLine>reply to sam before standup, then read the outline before the kickoff.</ReaderLine>
+          <ReaderHead written="Written 07:00">Tue 3 Nov</ReaderHead>
+          <ReaderLine>Reply to Sam before standup, then read the outline before the kickoff.</ReaderLine>
           <ReaderNext>
-            <ReaderNextText label="do next">reply to sam about chapter 7</ReaderNextText>
-            <Button size="lg">read the draft</Button>
+            <ReaderNextText label="Do next">Reply to Sam about chapter 7</ReaderNextText>
+            <Button size="lg">Read the draft</Button>
           </ReaderNext>
         </ReaderLead>
         <ReaderWide>
           <DayLine>
-            <DayLineStrip aria-label="the day as written at 07:00" day={day} events={tuesday} timeZone={timeZone} />
+            <DayLineStrip aria-label="The day as written at 07:00" day={day} events={tuesday} timeZone={timeZone} />
           </DayLine>
         </ReaderWide>
         <ReaderBody>
           <ReaderSection>
-            <ReaderSectionTitle>what changed</ReaderSectionTitle>
+            <ReaderSectionTitle>What changed</ReaderSectionTitle>
             <ReaderText>
-              sam sent the chapter 7 notes last night. they ask for one new figure and a shorter second section.
+              Sam sent the chapter 7 notes last night. They ask for one new figure and a shorter second section.
             </ReaderText>
           </ReaderSection>
           <ReaderSection>
-            <ReaderSectionTitle>what&rsquo;s coming</ReaderSectionTitle>
+            <ReaderSectionTitle>What&rsquo;s coming</ReaderSectionTitle>
             <ReaderText>
-              the kickoff is at 16:30, and <a href="#a-meeting-brief">its brief</a> is ready. the chapter 8 outline
+              The kickoff is at 16:30, and <a href="#a-meeting-brief">its brief</a> is ready. The chapter 8 outline
               waits on it.
             </ReaderText>
           </ReaderSection>
-          <ReaderEnd>that&rsquo;s all for today.</ReaderEnd>
+          <ReaderEnd>That&rsquo;s all for today.</ReaderEnd>
         </ReaderBody>
         <Rail />
         <ReaderFoot>
           <Onward back href="#example">
-            monday
+            Monday
           </Onward>
-          <Onward href="#example">wednesday</Onward>
+          <Onward href="#example">Wednesday</Onward>
         </ReaderFoot>
       </Reader>
     </AppShellPanel>
@@ -121,18 +121,18 @@ function MeetingPaper({ label, line, actions = false }: { label: string; line: s
   const titleId = useId();
   return (
     <ReaderPaper render={<section aria-labelledby={titleId} />}>
-      <p className="type-instrument text-muted-foreground">16:30 to 17:30 · video</p>
+      <p className="type-instrument text-muted-foreground">16:30 to 17:30 · Video</p>
       <h2 id={titleId} className="mt-1 type-title text-first">
-        project kickoff
+        Project kickoff
       </h2>
       <ReaderRaised label={label}>{line}</ReaderRaised>
       {actions && (
         <div className="mt-4 flex flex-wrap gap-2">
           <Button size="lg" variant="outline">
-            join
+            Join
           </Button>
           <Button size="lg" variant="ghost">
-            open in calendar
+            Open in calendar
           </Button>
         </div>
       )}
@@ -140,56 +140,56 @@ function MeetingPaper({ label, line, actions = false }: { label: string; line: s
   );
 }
 
-// What a meeting brief prints before the meeting. tom has no note in the record, and the block with nothing to say
+// What a meeting brief prints before the meeting. Tom has no note in the record, and the block with nothing to say
 // says so.
 export function ReaderMeeting() {
   return (
     <AppShellPanel>
       <MeetingPaper
         actions
-        label="one thing to raise"
-        line="ask sam who signs off the chapter order now that mina has the outline."
+        label="One thing to raise"
+        line="Ask Sam who signs off the chapter order now that Mina has the outline."
       />
       <ReaderBlocks>
         <ReaderBlock>
-          <ReaderBlockTitle>who&rsquo;s in the room</ReaderBlockTitle>
+          <ReaderBlockTitle>Who&rsquo;s in the room</ReaderBlockTitle>
           <ReaderWho>
-            <ReaderPerson note="edits the series" seen="mail, mon 2 nov">
-              sam
+            <ReaderPerson note="Edits the series" seen="Mail, Mon 2 Nov">
+              Sam
             </ReaderPerson>
-            <ReaderPerson note="production" seen="call, 22 sep">
-              mina
+            <ReaderPerson note="Production" seen="Call, 22 Sep">
+              Mina
             </ReaderPerson>
-            <ReaderPerson note="not in the record">tom</ReaderPerson>
+            <ReaderPerson note="Not in the record">Tom</ReaderPerson>
           </ReaderWho>
         </ReaderBlock>
         <ReaderBlock>
-          <ReaderBlockTitle>last time</ReaderBlockTitle>
-          <ReaderText>you agreed the outline for chapters 7 and 8, and sam took the figures.</ReaderText>
+          <ReaderBlockTitle>Last time</ReaderBlockTitle>
+          <ReaderText>You agreed the outline for chapters 7 and 8, and Sam took the figures.</ReaderText>
         </ReaderBlock>
         <ReaderBlock>
-          <ReaderBlockTitle>what you owe them</ReaderBlockTitle>
+          <ReaderBlockTitle>What you owe them</ReaderBlockTitle>
           <ReaderOwed>
-            <ReaderOwedRow href="#a-meeting-brief" when="thu 5 nov">
-              the chapter 7 notes
+            <ReaderOwedRow href="#a-meeting-brief" when="Thu 5 Nov">
+              The chapter 7 notes
             </ReaderOwedRow>
-            <ReaderOwedRow when="promised for thu">a date for the printer</ReaderOwedRow>
+            <ReaderOwedRow when="Promised for Thu">A date for the printer</ReaderOwedRow>
           </ReaderOwed>
         </ReaderBlock>
         <ReaderBlock>
-          <ReaderBlockTitle>what they owe you</ReaderBlockTitle>
-          <ReaderGap>not in the record</ReaderGap>
+          <ReaderBlockTitle>What they owe you</ReaderBlockTitle>
+          <ReaderGap>Not in the record</ReaderGap>
         </ReaderBlock>
-        <SourceLine className="col-span-full" end="written 07:00">
-          <SourceLineItem href="#a-meeting-brief">22 sep call recap</SourceLineItem>
-          <SourceLineItem href="#a-meeting-brief">sam&rsquo;s mail, mon 2 nov</SourceLineItem>
+        <SourceLine className="col-span-full" end="Written 07:00">
+          <SourceLineItem href="#a-meeting-brief">22 Sep call recap</SourceLineItem>
+          <SourceLineItem href="#a-meeting-brief">Sam&rsquo;s mail, Mon 2 Nov</SourceLineItem>
         </SourceLine>
       </ReaderBlocks>
       <ReaderFoot>
         <Onward back href="#a-meeting-brief">
-          today
+          Today
         </Onward>
-        <Onward href="#after-the-meeting">the notes</Onward>
+        <Onward href="#after-the-meeting">The notes</Onward>
       </ReaderFoot>
     </AppShellPanel>
   );
@@ -200,39 +200,39 @@ export function ReaderMeetingAfter() {
   return (
     <AppShellPanel>
       <MeetingPaper
-        label="what was agreed"
-        line="twelve chapters at the current pace. mina signs the order on friday."
+        label="What was agreed"
+        line="Twelve chapters at the current pace. Mina signs the order on Friday."
       />
       <ReaderBlocks>
         <ReaderBlock>
-          <ReaderBlockTitle>your follow-ups</ReaderBlockTitle>
+          <ReaderBlockTitle>Your follow-ups</ReaderBlockTitle>
           <ReaderOwed>
-            <ReaderOwedRow href="#after-the-meeting" when="fri 6 nov">
-              send mina the chapter order
+            <ReaderOwedRow href="#after-the-meeting" when="Fri 6 Nov">
+              Send Mina the chapter order
             </ReaderOwedRow>
           </ReaderOwed>
         </ReaderBlock>
         <ReaderBlock>
-          <ReaderBlockTitle>their follow-ups</ReaderBlockTitle>
+          <ReaderBlockTitle>Their follow-ups</ReaderBlockTitle>
           <ReaderOwed>
-            <ReaderOwedRow when="sam, mon 9 nov">the last two figures</ReaderOwedRow>
+            <ReaderOwedRow when="Sam, Mon 9 Nov">The last two figures</ReaderOwedRow>
           </ReaderOwed>
         </ReaderBlock>
         <ReaderBlock>
-          <ReaderBlockTitle>who was in the room</ReaderBlockTitle>
+          <ReaderBlockTitle>Who was in the room</ReaderBlockTitle>
           <ReaderWho>
-            <ReaderPerson>sam</ReaderPerson>
-            <ReaderPerson>mina</ReaderPerson>
+            <ReaderPerson>Sam</ReaderPerson>
+            <ReaderPerson>Mina</ReaderPerson>
           </ReaderWho>
         </ReaderBlock>
         <ReaderBlock asWritten>
-          <ReaderBlockTitle>one thing to raise, as written</ReaderBlockTitle>
-          <ReaderText>ask sam who signs off the chapter order now that mina has the outline.</ReaderText>
+          <ReaderBlockTitle>One thing to raise, as written</ReaderBlockTitle>
+          <ReaderText>Ask Sam who signs off the chapter order now that Mina has the outline.</ReaderText>
         </ReaderBlock>
       </ReaderBlocks>
       <ReaderFoot>
         <Onward back href="#after-the-meeting">
-          today
+          Today
         </Onward>
       </ReaderFoot>
     </AppShellPanel>
@@ -244,17 +244,17 @@ export function ReaderAsWritten() {
   return (
     <ReaderBlocks>
       <ReaderBlock asWritten>
-        <ReaderBlockTitle>who&rsquo;s in the room, as written</ReaderBlockTitle>
+        <ReaderBlockTitle>Who&rsquo;s in the room, as written</ReaderBlockTitle>
         <ReaderWho>
-          <ReaderPerson note="edits the series" seen="mail, mon 2 nov">
-            sam
+          <ReaderPerson note="Edits the series" seen="Mail, Mon 2 Nov">
+            Sam
           </ReaderPerson>
-          <ReaderPerson note="production">mina</ReaderPerson>
+          <ReaderPerson note="Production">Mina</ReaderPerson>
         </ReaderWho>
       </ReaderBlock>
       <ReaderBlock asWritten>
-        <ReaderBlockTitle>last time, as written</ReaderBlockTitle>
-        <ReaderText>you agreed the outline for chapters 7 and 8.</ReaderText>
+        <ReaderBlockTitle>Last time, as written</ReaderBlockTitle>
+        <ReaderText>You agreed the outline for chapters 7 and 8.</ReaderText>
       </ReaderBlock>
     </ReaderBlocks>
   );
@@ -265,11 +265,11 @@ export function ReaderNamesOnly() {
   return (
     <ReaderBlocks>
       <ReaderBlock>
-        <ReaderBlockTitle>on the invite</ReaderBlockTitle>
+        <ReaderBlockTitle>On the invite</ReaderBlockTitle>
         <ReaderWho>
-          <ReaderPerson>sam okafor</ReaderPerson>
-          <ReaderPerson>mina rao</ReaderPerson>
-          <ReaderPerson>tom</ReaderPerson>
+          <ReaderPerson>Sam Okafor</ReaderPerson>
+          <ReaderPerson>Mina Rao</ReaderPerson>
+          <ReaderPerson>Tom</ReaderPerson>
         </ReaderWho>
       </ReaderBlock>
     </ReaderBlocks>
@@ -277,5 +277,5 @@ export function ReaderNamesOnly() {
 }
 
 export function ReaderClosingLine() {
-  return <ReaderEnd className="mt-0">that&rsquo;s all for today.</ReaderEnd>;
+  return <ReaderEnd className="mt-0">That&rsquo;s all for today.</ReaderEnd>;
 }

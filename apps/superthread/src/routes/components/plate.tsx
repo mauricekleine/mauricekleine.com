@@ -10,27 +10,32 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/plate")({
   staticData: {
     sections: [
-      { id: "breath", title: "light breath" },
-      { id: "geometry", title: "no-photo grids and planes" },
-      { id: "use", title: "use" },
+      { id: "breath", title: "Light breath" },
+      { id: "geometry", title: "No-photo grids and planes" },
+      { id: "use", title: "Use" },
     ],
   },
   component: PlatePage,
 });
 
-const strengths: readonly BreathStrength[] = ["gentle", "balanced", "vivid", "off"];
+const strengths: readonly { value: BreathStrength; label: string }[] = [
+  { value: "gentle", label: "Gentle" },
+  { value: "balanced", label: "Balanced" },
+  { value: "vivid", label: "Vivid" },
+  { value: "off", label: "Off" },
+];
 
 const studies = [
   {
     id: "planes",
-    title: "proportional planes",
-    note: "column widths reflect the document's own ratios or layers.",
+    title: "Proportional planes",
+    note: "Column widths reflect the document's own ratios or layers.",
     spec: "planes ratios=42,24,18,16 seed=7",
   },
   {
     id: "grid",
-    title: "architectural grid",
-    note: "cell tones carry coverage, counts or inventory density.",
+    title: "Architectural grid",
+    note: "Cell tones carry coverage, counts or inventory density.",
     spec: "grid cols=6 rows=4 seed=19",
   },
 ] as const;
@@ -41,31 +46,31 @@ function PlatePage() {
   return (
     <>
       <header id="top" className="st-pagehead">
-        <h1 className="st-pagehead-title type-hero text-first">plate</h1>
+        <h1 className="st-pagehead-title type-hero text-first">Plate</h1>
         <p className="st-lede type-lede">
-          a framed 3.5 px two-ink proof halftone (key 45° and plum 15°) with a calm light breath for document openers,
+          A framed 3.5 px two-ink proof halftone (key 45° and plum 15°) with a calm light breath for document openers,
           chapter breaks and figures.
         </p>
         <InstallLine items={["plate"]} />
       </header>
 
-      <Section id="breath" title="light breath">
+      <Section id="breath" title="Light breath">
         <p className="st-pass-prose">
-          in light mode the drifting light opens dark halftone dots toward paper and warms the 15° plum plate. in dark
-          mode white dots rest calmly on key stock and brighten as light passes across. reduced motion and print hold
+          In light mode the drifting light opens dark halftone dots toward paper and warms the 15° plum plate. In dark
+          mode white dots rest calmly on key stock and brighten as light passes across. Reduced motion and print hold
           frame zero.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
-          {strengths.map((level) => (
+          {strengths.map(({ value, label }) => (
             <Button
-              key={level}
+              key={value}
               type="button"
               size="sm"
-              variant={breath === level ? "secondary" : "outline"}
-              aria-pressed={breath === level}
-              onClick={() => setBreath(level)}
+              variant={breath === value ? "secondary" : "outline"}
+              aria-pressed={breath === value}
+              onClick={() => setBreath(value)}
             >
-              {level}
+              {label}
             </Button>
           ))}
         </div>
@@ -76,9 +81,9 @@ function PlatePage() {
         </div>
       </Section>
 
-      <Section id="geometry" title="no-photo grids and planes">
+      <Section id="geometry" title="No-photo grids and planes">
         <p className="st-pass-prose">
-          pass any photograph or illustration through <code>src</code> or a child <code>img</code>. when a technical
+          Pass any photograph or illustration through <code>src</code> or a child <code>img</code>. When a technical
           document has no photography, derive a blocky grid or set of proportional planes from the subject rather than
           reusing a canned pattern.
         </p>
@@ -100,13 +105,13 @@ function PlatePage() {
         </div>
       </Section>
 
-      <Section id="use" title="use">
+      <Section id="use" title="Use">
         <p className="st-pass-prose">
-          import <code>Plate</code> from <code>ui/plate</code>. size the host in css and pass <code>src</code> for an
+          Import <code>Plate</code> from <code>ui/plate</code>. Size the host in CSS and pass <code>src</code> for an
           image, <code>draw</code> for custom canvas geometry, or <code>spec</code> for grids and planes.
         </p>
         <p className="mt-4 st-pass-prose">
-          in plain html, give a sized host <code>data-plate</code> or <code>data-plate-src</code> and inline{" "}
+          In plain HTML, give a sized host <code>data-plate</code> or <code>data-plate-src</code> and inline{" "}
           <code>doc/plate.js</code> from <code>@mk/doc</code> after the sections.
         </p>
       </Section>

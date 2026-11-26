@@ -8,8 +8,8 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/separator")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "upstream", title: "upstream" },
+      { id: "example", title: "Example" },
+      { id: "upstream", title: "Upstream" },
     ],
   },
   component: Page,
@@ -18,18 +18,18 @@ export const Route = createFileRoute("/components/separator")({
 function Page() {
   return (
     <>
-      <PageHead title="separator" lede="a 1 px line between groups, across or down.">
+      <PageHead title="Separator" lede="A 1 px line between groups, across or down.">
         <InstallLine items={["separator"]} />
       </PageHead>
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <ModePair>
           <SeparatorExample />
         </ModePair>
       </Section>
-      <Section id="upstream" title="upstream">
+      <Section id="upstream" title="Upstream">
         <p className="st-pass-prose">
-          base-nova&rsquo;s separator on base ui, with only its imports changed. it draws in <code>--border</code>, the
-          quiet edge. the page&rsquo;s own rules, the ones that run across the whole column, print in the stronger{" "}
+          Base-nova&rsquo;s separator on Base UI, with only its imports changed. It draws in <code>--border</code>, the
+          quiet edge. The page&rsquo;s own rules, the ones that run across the whole column, print in the stronger{" "}
           <code>--rule</code>.
         </p>
       </Section>

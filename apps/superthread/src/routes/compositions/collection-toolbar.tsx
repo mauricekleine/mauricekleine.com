@@ -19,52 +19,52 @@ import { Section } from "@/site/Section";
 
 const serves = catalog
   .find((entry) => entry.name === "collection-toolbar")!
-  .serves!.map((app) => (app === "www" ? "the public site" : app))
+  .serves!.map((app) => (app === "www" ? "the public site" : app[0]!.toUpperCase() + app.slice(1)))
   .join(", ");
 export const Route = createFileRoute("/compositions/collection-toolbar")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "filters", title: "filters and counts" },
-      { id: "states", title: "view states" },
-      { id: "phone", title: "on a phone" },
+      { id: "example", title: "Example" },
+      { id: "filters", title: "Filters and counts" },
+      { id: "states", title: "View states" },
+      { id: "phone", title: "On a phone" },
     ],
   },
   component: Page,
 });
 
 const views = [
-  { value: "rows", label: "rows" },
-  { value: "cards", label: "cards" },
+  { value: "rows", label: "Rows" },
+  { value: "cards", label: "Cards" },
 ] as const;
 const tasks = [
-  { title: "check the reading layout", ship: "quanta" },
-  { title: "name the new collection", ship: "orbit" },
-  { title: "review the chapter notes", ship: "quanta" },
+  { title: "Check the reading layout", ship: "Quanta" },
+  { title: "Name the new collection", ship: "Orbit" },
+  { title: "Review the chapter notes", ship: "Quanta" },
 ];
 function ToolbarExample() {
   const [filtered, setFiltered] = useState(true);
   const [view, setView] = useState("rows");
-  const shown = filtered ? tasks.filter((task) => task.ship === "quanta") : tasks;
+  const shown = filtered ? tasks.filter((task) => task.ship === "Quanta") : tasks;
   return (
     <div>
-      <CollectionToolbar label="task collection controls">
-        <ToolbarGroup label="ship">
+      <CollectionToolbar label="Task collection controls">
+        <ToolbarGroup label="Ship">
           {filtered ? (
-            <FilterChip onClear={() => setFiltered(false)} clearLabel="clear quanta filter">
-              quanta
+            <FilterChip onClear={() => setFiltered(false)} clearLabel="Clear Quanta filter">
+              Quanta
             </FilterChip>
           ) : (
             <Button size="sm" variant="outline" onClick={() => setFiltered(true)}>
-              filter quanta
+              Filter Quanta
             </Button>
           )}
         </ToolbarGroup>
         <ToolbarSpacer />
         <ToolbarCount shown={shown.length} total={tasks.length} />
-        <ViewSwitch views={views} value={view} onValueChange={setView} label="task view" />
+        <ViewSwitch views={views} value={view} onValueChange={setView} label="Task view" />
       </CollectionToolbar>
-      <ul aria-label="matching tasks" className={view === "cards" ? "st-cb-preview-cards" : "st-cb-preview-rows"}>
+      <ul aria-label="Matching tasks" className={view === "cards" ? "st-cb-preview-cards" : "st-cb-preview-rows"}>
         {shown.map((task) => (
           <li key={task.title}>
             <b>{task.title}</b>
@@ -82,7 +82,7 @@ function PrintedView({ demo }: { demo: "hover" | "focus-visible" }) {
   }, [demo]);
   return (
     <div ref={host}>
-      <ViewSwitch views={views} label={`${demo} view switch`} />
+      <ViewSwitch views={views} label={`${demo === "hover" ? "Hover" : "Focus"} view switch`} />
     </div>
   );
 }
@@ -91,32 +91,32 @@ function FilterStates() {
   const [plain, setPlain] = useState(true);
   return (
     <div className="st-cb-states">
-      <State name="with a count" note="the result stays beside its filter">
+      <State name="With a count" note="The result stays beside its filter">
         {counted ? (
           <FilterChip shown={2} total={8} onClear={() => setCounted(false)}>
-            queued
+            Queued
           </FilterChip>
         ) : (
           <Button variant="outline" size="sm" onClick={() => setCounted(true)}>
-            restore queued filter
+            Restore queued filter
           </Button>
         )}
       </State>
-      <State name="without a count" note="the clear control has its own name">
+      <State name="Without a count" note="The clear control has its own name">
         {plain ? (
-          <FilterChip onClear={() => setPlain(false)} clearLabel="clear orbit filter">
-            orbit
+          <FilterChip onClear={() => setPlain(false)} clearLabel="Clear Orbit filter">
+            Orbit
           </FilterChip>
         ) : (
           <Button variant="outline" size="sm" onClick={() => setPlain(true)}>
-            restore orbit filter
+            Restore Orbit filter
           </Button>
         )}
       </State>
-      <State name="zero results" note="zero remains a result">
+      <State name="Zero results" note="Zero remains a result">
         <ToolbarCount shown={0} total={8} />
       </State>
-      <State name="all results" note="a count also stands alone">
+      <State name="All results" note="A count also stands alone">
         <ToolbarCount shown={8} total={8} />
       </State>
     </div>
@@ -157,7 +157,7 @@ function PhoneFrame({ mode, children }: { mode: "light" | "dark"; children: Reac
     <iframe
       ref={frame}
       height={height}
-      title={`phone specimen, ${mode}`}
+      title={`Phone specimen, ${mode}`}
       className="st-cb-phone"
       srcDoc="<!doctype html><html><head><base target=_parent></head><body></body></html>"
     >
@@ -170,57 +170,57 @@ function Page() {
   return (
     <>
       <PageHead
-        title="collection toolbar"
-        lede="filters, a result count and a view switch above one collection. each group keeps its name when the row wraps."
+        title="Collection toolbar"
+        lede="Filters, a result count and a view switch above one collection. Each group keeps its name when the row wraps."
       >
         <InstallLine items={["collection-toolbar"]} />
       </PageHead>
-      <p className="st-cb-serves">serves {serves}.</p>
+      <p className="st-cb-serves">Serves {serves}.</p>
 
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-cb-copy">
-          clear the ship filter to see every task. switch to cards and the same results change their layout.
+          Clear the ship filter to see every task. Switch to cards and the same results change their layout.
         </p>
         <ModePair className="st-cb-stack">
           <ToolbarExample />
         </ModePair>
       </Section>
-      <Section id="filters" title="filters and counts">
+      <Section id="filters" title="Filters and counts">
         <p className="st-cb-copy">
-          a filter can carry its own count, or leave the count beside the view switch. clearing a chip removes the
+          A filter can carry its own count, or leave the count beside the view switch. Clearing a chip removes the
           filter.
         </p>
         <ModePair className="st-cb-stack">
           <FilterStates />
         </ModePair>
       </Section>
-      <Section id="states" title="view states">
+      <Section id="states" title="View states">
         <p className="st-cb-copy">
-          one view stays pressed, including when it is chosen again. use the arrow keys to move between views.
+          One view stays pressed, including when it is chosen again. Use the arrow keys to move between views.
         </p>
         <ModePair className="st-cb-stack">
           <div className="st-cb-states">
-            <State name="rows pressed" note="the first view is the default">
+            <State name="Rows pressed" note="The first view is the default">
               <ViewSwitch views={views} />
             </State>
-            <State name="cards pressed" note="a different initial view">
+            <State name="Cards pressed" note="A different initial view">
               <ViewSwitch views={views} defaultValue="cards" />
             </State>
-            <State name="disabled" note="the selected view stays visible">
+            <State name="Disabled" note="The selected view stays visible">
               <ViewSwitch views={views} defaultValue="cards" disabled />
             </State>
-            <State name="hover" note="the unselected control under the pointer">
+            <State name="Hover" note="The unselected control under the pointer">
               <PrintedView demo="hover" />
             </State>
-            <State name="focus" note="the control keeps its keyboard ring">
+            <State name="Focus" note="The control keeps its keyboard ring">
               <PrintedView demo="focus-visible" />
             </State>
           </div>
         </ModePair>
       </Section>
-      <Section id="phone" title="on a phone">
+      <Section id="phone" title="On a phone">
         <p className="st-cb-copy">
-          a phone viewport, capped at 320 px. the groups wrap before the results begin; the spacer takes only the room
+          A phone viewport, capped at 320 px. The groups wrap before the results begin; the spacer takes only the room
           left over.
         </p>
         <ModePair

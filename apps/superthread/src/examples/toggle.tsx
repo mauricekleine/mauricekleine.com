@@ -8,11 +8,11 @@ export function ToggleExample() {
     <div className="st-e-stack">
       <div className="st-e-row">
         <Toggle variant="outline" pressed={pinned} onPressedChange={setPinned}>
-          pin run 024
+          Pin run 024
         </Toggle>
       </div>
       <p className="st-e-hint" role="status">
-        {pinned ? "run 024 stays at the top of orbit" : "run 024 follows the board order"}
+        {pinned ? "Run 024 stays at the top of Orbit" : "Run 024 follows the board order"}
       </p>
     </div>
   );
@@ -24,12 +24,12 @@ export function ToggleVariants() {
         <State
           key={variant}
           name={variant}
-          note={variant === "outline" ? "input edge at rest" : "no visible rest edge"}
+          note={variant === "outline" ? "Input edge at rest" : "No visible rest edge"}
         >
           <div className="st-e-row">
-            <Toggle variant={variant}>pin</Toggle>
+            <Toggle variant={variant}>Pin</Toggle>
             <Toggle variant={variant} pressed>
-              pin
+              Pin
             </Toggle>
           </div>
         </State>
@@ -44,15 +44,15 @@ export function ToggleSizes() {
         <State key={size} name={size} note={`${[32, 40, 48][i]} px high`}>
           <div className="st-e-row">
             <Toggle variant="outline" size={size}>
-              pin
+              Pin
             </Toggle>
           </div>
         </State>
       ))}
-      <State name="icon" note="a square of one glyph, 32, 40 or 48 px; the edge says pressed">
+      <State name="icon" note="A square of one glyph, 32, 40 or 48 px; the edge says pressed">
         <div className="st-e-row">
           {(["icon-sm", "icon", "icon-lg"] as const).map((size) => (
-            <Toggle key={size} variant="outline" size={size} pressed={size === "icon"} aria-label="pin">
+            <Toggle key={size} variant="outline" size={size} pressed={size === "icon"} aria-label="Pin">
               <Icon name="plus" />
             </Toggle>
           ))}
@@ -65,13 +65,13 @@ export function ToggleStates() {
   return (
     <div className="st-e-states" inert>
       {[
-        { name: "rest", note: "quiet outline" },
-        { name: "hover", note: "control hover fill", demo: "hover" },
-        { name: "focus", note: "2 px ring, 2 px out", demo: "focus-visible" },
-        { name: "pressed", note: "foreground edge, tick", pressed: true },
-        { name: "invalid", note: "error edge", invalid: true },
-        { name: "disabled", note: "faint stock, dim label", disabled: true },
-        { name: "disabled, pressed", note: "pressed box stays visible", disabled: true, pressed: true },
+        { name: "Rest", note: "Quiet outline" },
+        { name: "Hover", note: "Control hover fill", demo: "hover" },
+        { name: "Focus", note: "2 px ring, 2 px out", demo: "focus-visible" },
+        { name: "Pressed", note: "Foreground edge, tick", pressed: true },
+        { name: "Invalid", note: "Error edge", invalid: true },
+        { name: "Disabled", note: "Faint stock, dim label", disabled: true },
+        { name: "Disabled, pressed", note: "Pressed box stays visible", disabled: true, pressed: true },
       ].map((s) => (
         <State key={s.name} name={s.name} note={s.note}>
           <div className="st-e-row">
@@ -82,7 +82,7 @@ export function ToggleStates() {
               aria-invalid={s.invalid || undefined}
               disabled={s.disabled}
             >
-              pin
+              Pin
             </Toggle>
           </div>
         </State>

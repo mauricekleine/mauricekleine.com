@@ -18,8 +18,8 @@ export function HotkeyExample() {
         <dt>n on the page</dt>
         <dd>{presses}</dd>
       </dl>
-      <Input aria-label="type an n here" placeholder="type an n here" />
-      <p className="st-pass-hint">both copies on this page count together.</p>
+      <Input aria-label="Type an n here" placeholder="Type an n here" />
+      <p className="st-pass-hint">Both copies on this page count together.</p>
     </>
   );
 }

@@ -13,8 +13,8 @@ const masks = { constellation, roi };
 export const Route = createFileRoute("/components/field-art")({
   staticData: {
     sections: [
-      { id: "catalogue", title: "catalogue" },
-      { id: "use", title: "use" },
+      { id: "catalogue", title: "Catalogue" },
+      { id: "use", title: "Use" },
     ],
   },
   component: FieldPage,
@@ -25,13 +25,13 @@ function FieldPage() {
   return (
     <>
       <header id="top" className="st-pagehead">
-        <h1 className="st-pagehead-title type-hero text-first">field art</h1>
+        <h1 className="st-pagehead-title type-hero text-first">Field art</h1>
         <p className="st-lede type-lede">
-          a solid, a screen and a plum thread. give the edge a verb for a figure or opener.
+          A solid, a screen and a plum thread. Give the edge a verb for a figure or opener.
         </p>
         <InstallLine items={["field-art"]} />
       </header>
-      <Section id="catalogue" title="catalogue">
+      <Section id="catalogue" title="Catalogue">
         <div className="space-y-12">
           {catalogue.map((entry) => {
             const { id, title, verb, frame, line, size, phone } = entry;
@@ -64,10 +64,10 @@ function FieldPage() {
                       variant="outline"
                       size="sm"
                       className="mt-4 min-w-20"
-                      aria-label={`${active ? "pause" : "play"} ${title} in ${mode}`}
+                      aria-label={`${active ? "Pause" : "Play"} ${title} in ${mode}`}
                       onClick={() => setPlaying(active ? undefined : key)}
                     >
-                      {active ? "pause" : "play"}
+                      {active ? "Pause" : "Play"}
                     </Button>
                   )}
                 </>
@@ -83,24 +83,24 @@ function FieldPage() {
                 </figcaption>
                 <ModePair light={preview("light")} dark={preview("dark")} />
                 <details className="mt-3 type-summary">
-                  <summary className="w-fit cursor-pointer">spec line</summary>
+                  <summary className="w-fit cursor-pointer">Spec line</summary>
                   <SpecLine line={line} />
-                  {phone && <SpecLine line={phone.line} label="phone" />}
+                  {phone && <SpecLine line={phone.line} label="Phone" />}
                 </details>
               </figure>
             );
           })}
         </div>
       </Section>
-      <Section id="use" title="use">
+      <Section id="use" title="Use">
         <p className="st-pass-prose">
-          import <code>FieldArt</code> from <code>ui/field-art</code>. size the host in css and pass the line as{" "}
-          <code>spec</code>. pass a stable mask callback for a custom edge. set <code>playing</code> on the field that
+          Import <code>FieldArt</code> from <code>ui/field-art</code>. Size the host in CSS and pass the line as{" "}
+          <code>spec</code>. Pass a stable mask callback for a custom edge. Set <code>playing</code> on the field that
           moves.
         </p>
         <p className="mt-4 st-pass-prose">
-          in html, give a sized host <code>data-field-art</code> and inline <code>doc/field-art.js</code> after it. set{" "}
-          <code>data-field-art-play</code> on the field that moves. the stock comes through the open cells. print and
+          In HTML, give a sized host <code>data-field-art</code> and inline <code>doc/field-art.js</code> after it. Set{" "}
+          <code>data-field-art-play</code> on the field that moves. The stock comes through the open cells. Print and
           reduced motion show frame zero.
         </p>
       </Section>

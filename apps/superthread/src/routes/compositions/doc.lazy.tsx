@@ -44,7 +44,7 @@ function partial(name: DocSection) {
 
 const groups = Object.entries(docSectionGroups).map(([id, sections]) => ({
   id,
-  title: id === "endings" ? "endings and controls" : id,
+  title: id === "endings" ? "Endings and controls" : id[0]!.toUpperCase() + id.slice(1),
   sections,
 }));
 
@@ -54,19 +54,19 @@ function Documents() {
   return (
     <>
       <PageHead
-        title="documents"
-        lede="stock-first openers, framed 3.5 px proof halftone plates, draft highlight notes and ruled sections in plain html or react."
+        title="Documents"
+        lede="Stock-first openers, framed 3.5 px proof halftone plates, draft highlight notes and ruled sections in plain HTML or React."
       >
         <div className="st-doc-installs">
           <InstallLine items={["doc"]} />
           <InstallLine items={["doc-react"]} />
         </div>
       </PageHead>
-      <Section id="example" title="one brief, two ways">
+      <Section id="example" title="One brief, two ways">
         <DocumentComparison />
         <p className="st-doc-setup">
-          for react, link <code>styles/superthread-plain.css</code> then <code>styles/doc.css</code> in the document
-          route's head. run <code>themeScript</code> from <code>lib/theme</code> before first paint and import the
+          For React, link <code>styles/superthread-plain.css</code> then <code>styles/doc.css</code> in the document
+          route's head. Run <code>themeScript</code> from <code>lib/theme</code> before first paint and import the
           sections from <code>ui/doc-react</code>.
         </p>
       </Section>
@@ -82,7 +82,8 @@ function Documents() {
 }
 
 function Specimen({ name }: { name: DocSection }) {
-  const title = name.replaceAll("-", " ");
+  const words = name.replaceAll("-", " ");
+  const title = words[0]!.toUpperCase() + words.slice(1);
   const html = partial(name);
   const jsx = reactSnippets.get(name);
   if (jsx === undefined) throw new Error(`missing doc react example: ${name}`);
@@ -95,14 +96,14 @@ function Specimen({ name }: { name: DocSection }) {
       <DocPreview title={`${title} preview`} html={html} bleed={bleed} lazy />
       <div className="st-doc-panes">
         <div>
-          <h4 className="type-meta">html</h4>
-          <pre className="st-doc-html" tabIndex={0} aria-label={`${title} html`}>
+          <h4 className="type-meta">HTML</h4>
+          <pre className="st-doc-html" tabIndex={0} aria-label={`${title} HTML`}>
             <code>{html}</code>
           </pre>
         </div>
         <div>
-          <h4 className="type-meta">react</h4>
-          <pre className="st-doc-html" tabIndex={0} aria-label={`${title} react`}>
+          <h4 className="type-meta">React</h4>
+          <pre className="st-doc-html" tabIndex={0} aria-label={`${title} React`}>
             <code>{jsx}</code>
           </pre>
         </div>
@@ -118,12 +119,12 @@ function DocumentComparison() {
   return (
     <div className="st-doc-panes">
       <div>
-        <h3 className="type-meta">plain html</h3>
-        <DocPreview title="brief in plain html" html={html} bleed />
+        <h3 className="type-meta">Plain HTML</h3>
+        <DocPreview title="Brief in plain HTML" html={html} bleed />
       </div>
       <div>
-        <h3 className="type-meta">react</h3>
-        <DocPreview title="brief in react" bleed>
+        <h3 className="type-meta">React</h3>
+        <DocPreview title="Brief in React" bleed>
           {docExamples["sheet-head"]}
           <main className="frame">
             {briefBody.map((name) => (

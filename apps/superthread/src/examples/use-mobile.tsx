@@ -24,10 +24,10 @@ export function UseMobileExample() {
       <dl className="st-pass-readout">
         <dt>useIsMobile()</dt>
         <dd>{String(isMobile)}</dd>
-        <dt>window</dt>
-        <dd>{width === null ? "not measured yet" : `${width} px wide`}</dd>
+        <dt>Window</dt>
+        <dd>{width === null ? "Not measured yet" : `${width} px wide`}</dd>
       </dl>
-      <p className="st-pass-hint">resize the window across 768 px and the value flips.</p>
+      <p className="st-pass-hint">Resize the window across 768 px and the value flips.</p>
     </>
   );
 }

@@ -13,9 +13,9 @@ function Summary({ initial }: { initial: string }) {
   return (
     <Field
       id={id}
-      label="summary"
-      hint={`shown in the chapter list, ${most} characters at most`}
-      error={over > 0 ? `a summary takes ${most} characters at most. cut ${over}.` : undefined}
+      label="Summary"
+      hint={`Shown in the chapter list, ${most} characters at most`}
+      error={over > 0 ? `A summary takes ${most} characters at most. Cut ${over}.` : undefined}
     >
       <Textarea
         id={id}
@@ -31,8 +31,8 @@ function Summary({ initial }: { initial: string }) {
 export function TextareaExample() {
   return (
     <div className="st-a-grid">
-      <Summary initial="why a single photon still draws the bands, and what that says about light." />
-      <Summary initial="why a single photon still draws the bands, what that says about light, and why the bands are gone the moment you look for the slit it took." />
+      <Summary initial="Why a single photon still draws the bands, and what that says about light." />
+      <Summary initial="Why a single photon still draws the bands, what that says about light, and why the bands are gone the moment you look for the slit it took." />
     </div>
   );
 }
@@ -49,10 +49,10 @@ export function TextareaCode() {
   const key = useId();
   return (
     <div className="st-a-grid">
-      <Field id={file} label="settings" hint="json, as the app reads it">
+      <Field id={file} label="Settings" hint="JSON, as the app reads it">
         <Textarea id={file} kind="code" defaultValue={config} aria-describedby={noteId(file)} />
       </Field>
-      <Field id={key} label="public key" hint="paste it whole">
+      <Field id={key} label="Public key" hint="Paste it whole">
         <Textarea
           id={key}
           kind="code"
@@ -68,10 +68,10 @@ export function TextareaCode() {
 // printed caret, and disabled is the real disabled box. An invalid state carries aria-invalid, which draws the error
 // ink, and its label ends in "invalid", so a screen reader hears it too.
 const states = printedStates({
-  valid: "one photon, then the bands.",
-  typed: "one photon, then",
-  invalid: "one photon, then the bands, and then",
-  typedInvalid: "one photon, then the bands, and",
+  valid: "One photon, then the bands.",
+  typed: "One photon, then",
+  invalid: "One photon, then the bands, and then",
+  typedInvalid: "One photon, then the bands, and",
 });
 
 export function TextareaStates() {
@@ -82,7 +82,7 @@ export function TextareaStates() {
           <Textarea
             defaultValue={state.value}
             tabIndex={-1}
-            aria-label={`summary, ${state.label ?? state.name}`}
+            aria-label={`Summary, ${(state.label ?? state.name).toLowerCase()}`}
             aria-invalid={state.invalid || undefined}
             disabled={state.disabled}
             data-demo={state.demo ? "focus" : undefined}

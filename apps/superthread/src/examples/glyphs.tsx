@@ -15,12 +15,12 @@ const marks: Record<IconName, string | null> = {
   plus: null,
   more: null,
   brief: null,
-  tick: "done",
-  i: "running",
-  pause: "waiting",
-  cross: "failed",
-  dash: "queued",
-  bang: "a field to fix",
+  tick: "Done",
+  i: "Running",
+  pause: "Waiting",
+  cross: "Failed",
+  dash: "Queued",
+  bang: "A field to fix",
 };
 
 // each status square and the glyph it knocks out, in the order a board reads them
@@ -102,10 +102,10 @@ export function StateWordsExample() {
         <StateWord />
       </li>
       <li>
-        <StateWord on>every day at 07:00</StateWord>
+        <StateWord on>Every day at 07:00</StateWord>
       </li>
       <li>
-        <StateWord>paused</StateWord>
+        <StateWord>Paused</StateWord>
       </li>
     </ul>
   );

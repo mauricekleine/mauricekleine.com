@@ -34,18 +34,17 @@ export function Mark({ size = 32 }: { size?: number }) {
   );
 }
 
-// where the page sits: the system for the overview, install and the not-found page, its section otherwise
+// Where the page sits: the system for the overview, icons, install and the not-found page, its section otherwise.
 function crumbFor(section: string) {
-  return section === "overview" || section === "icons" || section === "install" ? "superthread" : section;
+  return section === "Overview" || section === "Icons" || section === "Install" ? "superthread" : section;
 }
 
 // The masthead's cells, left to right: the mark and wordmark, the crumb and the search, the system's name, version
-// and build date, and the house swatch. At 900 px and below it becomes the top bar: the wordmark, the menu and the
-// swatch, with the search on its own row.
-export function Masthead({ island }: { island: boolean }) {
+// and build date. At 900 px and below it becomes the top bar with the search on its own row.
+export function Masthead() {
   const entry = useEntry();
   return (
-    <header className={island ? "st-mast st-island dark" : "st-mast"}>
+    <header className="st-mast">
       <Link to="/" className="st-brand">
         <Mark />
         superthread
@@ -59,11 +58,11 @@ export function Masthead({ island }: { island: boolean }) {
       </div>
       <Search className="st-mast-search" />
       <dl className="st-meta">
-        <dt className="type-meta">system</dt>
+        <dt className="type-meta">System</dt>
         <dd>superthread</dd>
-        <dt className="type-meta">version</dt>
+        <dt className="type-meta">Version</dt>
         <dd>{__SUPERTHREAD_VERSION__}</dd>
-        <dt className="type-meta">date</dt>
+        <dt className="type-meta">Date</dt>
         <dd>{__BUILD_DATE__}</dd>
       </dl>
       <div className="st-mast-menu">

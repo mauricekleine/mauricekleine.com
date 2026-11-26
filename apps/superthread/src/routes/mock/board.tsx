@@ -43,6 +43,7 @@ import {
   columns,
   emptyColumn,
   orbitNav,
+  statusLabels,
   type Task,
   tasks as seed,
 } from "@/mock/data";
@@ -56,8 +57,8 @@ export const Route = createFileRoute("/mock/board")({
 
 type View = "list" | "columns";
 const views = [
-  { value: "list", label: "list" },
-  { value: "columns", label: "columns" },
+  { value: "list", label: "List" },
+  { value: "columns", label: "Columns" },
 ] as const;
 const agentItems = boardAgents.map((agent) => ({ value: agent, label: agent }));
 
@@ -79,28 +80,28 @@ function Page() {
   // a new task lands in queued, unassigned, with the next id
   const add = (title: string) => {
     const id = `or-${Math.max(...tasks.map((task) => Number(task.id.slice(3)))) + 1}`;
-    setTasks((list) => [...list, { id, title, state: "queued", agent: "unassigned", age: "now" }]);
+    setTasks((list) => [...list, { id, title, state: "queued", agent: "Unassigned", age: "now" }]);
     setStatus("all");
     setAgent(anyone);
-    toast.add({ title: `${id} queued`, description: "it stays queued until an agent picks it up." });
+    toast.add({ title: `${id} queued`, description: "It stays queued until an agent picks it up." });
   };
 
   return (
-    <ShipFrame ship="orbit" nav={orbitNav} current="board">
+    <ShipFrame ship="orbit" nav={orbitNav} current="Board">
       <Toaster>
         <AppShellPanel>
           <Tabs value={status} onValueChange={(value) => setStatus(value as BoardStatus)} className="gap-0">
             <PageHeader className="mb-7">
               <ShipMark ship="orbit" />
-              <PageHeaderTitle>board</PageHeaderTitle>
+              <PageHeaderTitle>Board</PageHeaderTitle>
               <PageHeaderMeta>
                 {tasks.length} tasks, {running} running
               </PageHeaderMeta>
               <PageHeaderActions>
-                <TabsList variant="line" aria-label="status">
+                <TabsList variant="line" aria-label="Status">
                   {boardStatuses.map((value) => (
                     <TabsTrigger key={value} value={value} className="pt-3">
-                      {value}
+                      {statusLabels[value]}
                     </TabsTrigger>
                   ))}
                 </TabsList>
@@ -110,7 +111,7 @@ function Page() {
                   onClick={() => setAdding((open) => !open)}
                 >
                   <Icon name="plus" />
-                  new task
+                  New task
                 </Button>
               </PageHeaderActions>
             </PageHeader>
@@ -118,14 +119,14 @@ function Page() {
               <QuickAdd
                 id={addId}
                 className="mb-6"
-                label="task title"
-                placeholder="what needs doing?"
-                submitLabel="new task"
+                label="Task title"
+                placeholder="What needs doing?"
+                submitLabel="New task"
                 inputProps={{ autoFocus: true }}
                 onAdd={add}
               />
             )}
-            <CollectionToolbar label="board controls">
+            <CollectionToolbar label="Board controls">
               <Select
                 items={agentItems}
                 value={agent}
@@ -133,7 +134,7 @@ function Page() {
               >
                 <SelectTrigger aria-labelledby={agentLabel} className="h-9 w-52">
                   <span id={agentLabel} className="type-meta text-muted-foreground">
-                    agent
+                    Agent
                   </span>
                   <SelectValue />
                 </SelectTrigger>
@@ -151,7 +152,7 @@ function Page() {
                 </FilterChip>
               )}
               <ToolbarSpacer />
-              <ToolbarGroup label="view">
+              <ToolbarGroup label="View">
                 <ViewSwitch views={views} value={view} onValueChange={(next) => setView(next as View)} />
               </ToolbarGroup>
             </CollectionToolbar>
@@ -192,16 +193,16 @@ function List({ tasks, status, agent }: { tasks: readonly Task[]; status: BoardS
   return (
     <>
       <div className="mock-board-table">
-        <DataTable label="tasks" rows="board">
+        <DataTable label="Tasks" rows="board">
           <TableHeader>
             <TableRow>
               <SortableHead kind="id" sort={sort} onSort={setSort}>
-                id
+                ID
               </SortableHead>
-              <TableHead>title</TableHead>
-              <TableHead>status</TableHead>
-              <TableHead className="mock-agent">agent</TableHead>
-              <TableHead kind="number">age</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="mock-agent">Agent</TableHead>
+              <TableHead kind="number">Age</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -223,7 +224,7 @@ function List({ tasks, status, agent }: { tasks: readonly Task[]; status: BoardS
           </TableBody>
         </DataTable>
       </div>
-      <ListRows className="mock-board-rows" aria-label="tasks">
+      <ListRows className="mock-board-rows" aria-label="Tasks">
         {ordered.map((task) => (
           <ListRow key={task.id}>
             <ListRowTitle>{task.title}</ListRowTitle>
@@ -247,7 +248,7 @@ function Column({ state, agent, tasks }: { state: StatusState; agent: string; ta
   return (
     <Section className="mock-column mt-0" titleId={id}>
       <SectionHeader>
-        <SectionTitle className="sr-only">{state} tasks</SectionTitle>
+        <SectionTitle className="sr-only">{statusLabels[state]} tasks</SectionTitle>
         <Badge variant={state} />
         <SectionCount className="ml-auto">{tasks.length}</SectionCount>
       </SectionHeader>
@@ -269,7 +270,7 @@ function Empty({ state, agent, column = false }: { state?: StatusState; agent: s
   const words =
     agent === anyone && state
       ? emptyColumn[state]
-      : { title: "nothing for this agent", body: `set agent to anyone to see every ${state ? `${state} ` : ""}task.` };
+      : { title: "Nothing for this agent", body: `Set agent to Anyone to see every ${state ? `${state} ` : ""}task.` };
   return (
     <EmptyState className="mock-empty" role="status" aria-live="polite">
       <EmptyStateMedia>

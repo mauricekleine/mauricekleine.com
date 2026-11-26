@@ -4,7 +4,7 @@
 export type Layout = "docs" | "app";
 
 export type NavSection =
-  "overview" | "foundations" | "icons" | "components" | "compositions" | "mock pages" | "install";
+  "Overview" | "Foundations" | "Icons" | "Components" | "Compositions" | "Mock pages" | "Install";
 
 export type NavEntry = {
   path: string;
@@ -15,40 +15,50 @@ export type NavEntry = {
   item?: string;
 };
 
-const foundation = (slug: string, title = slug): NavEntry => ({
+const sentence = (slug: string) => {
+  const words = slug.replaceAll("-", " ");
+  return words.charAt(0).toUpperCase() + words.slice(1);
+};
+
+const foundation = (slug: string, title = sentence(slug)): NavEntry => ({
   path: `/foundations/${slug}`,
   title,
-  section: "foundations",
+  section: "Foundations",
   layout: "docs",
 });
 
-const component = (item: string, title = item.replaceAll("-", " ")): NavEntry => ({
+const component = (item: string, title = sentence(item)): NavEntry => ({
   path: `/components/${item}`,
   title,
-  section: "components",
+  section: "Components",
   layout: "docs",
   item,
 });
 
-const composition = (item: string, title = item.replaceAll("-", " ")): NavEntry => ({
+const composition = (item: string, title = sentence(item)): NavEntry => ({
   path: `/compositions/${item}`,
   title,
-  section: "compositions",
+  section: "Compositions",
   layout: "docs",
   item,
 });
 
-const mock = (slug: string): NavEntry => ({ path: `/mock/${slug}`, title: slug, section: "mock pages", layout: "app" });
+const mock = (slug: string): NavEntry => ({
+  path: `/mock/${slug}`,
+  title: sentence(slug),
+  section: "Mock pages",
+  layout: "app",
+});
 
 export const nav: readonly NavEntry[] = [
-  { path: "/", title: "overview", section: "overview", layout: "docs" },
+  { path: "/", title: "Overview", section: "Overview", layout: "docs" },
   foundation("colour"),
   foundation("type"),
   foundation("space"),
   foundation("motion"),
   foundation("marks"),
   foundation("texture"),
-  { path: "/icons", title: "icons", section: "icons", layout: "docs" },
+  { path: "/icons", title: "Icons", section: "Icons", layout: "docs" },
   component("button"),
   component("button-group"),
   component("toggle"),
@@ -121,32 +131,32 @@ export const nav: readonly NavEntry[] = [
   composition("notice"),
   composition("states"),
   composition("search-palette"),
-  composition("doc", "documents"),
+  composition("doc", "Documents"),
   mock("board"),
   mock("orbit"),
   mock("reading"),
-  { path: "/install", title: "install", section: "install", layout: "docs" },
+  { path: "/install", title: "Install", section: "Install", layout: "docs" },
 ];
 
-// the nav's groups, in order; overview and install stand alone
+// the nav's groups, in order; Overview and Install stand alone
 export const navSections: readonly NavSection[] = [
-  "overview",
-  "foundations",
-  "icons",
-  "components",
-  "compositions",
-  "mock pages",
-  "install",
+  "Overview",
+  "Foundations",
+  "Icons",
+  "Components",
+  "Compositions",
+  "Mock pages",
+  "Install",
 ];
 
-// the groups the docs nav holds at its foot, above the mode control, so the mock pages and install stay in view
+// the groups the docs nav holds at its foot, above the mode control, so the mock pages and Install stay in view
 // while the rest of the list scrolls
-export const navPinned: readonly NavSection[] = ["mock pages", "install"];
+export const navPinned: readonly NavSection[] = ["Mock pages", "Install"];
 
 // every nav page plus /404, which notFoundHandling serves for any path the site does not have
 export const prerenderPaths: readonly string[] = [...nav.map((entry) => entry.path), "/404"];
 
-export const notFound: NavEntry = { path: "/404", title: "not found", section: "overview", layout: "docs" };
+export const notFound: NavEntry = { path: "/404", title: "Not found", section: "Overview", layout: "docs" };
 
 export function entryFor(pathname: string): NavEntry {
   const path = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;

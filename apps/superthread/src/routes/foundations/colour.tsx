@@ -23,13 +23,13 @@ import { Swatch } from "@/site/Swatch";
 export const Route = createFileRoute("/foundations/colour")({
   staticData: {
     openerLede:
-      "one key ink on white stock, and one plum fill per viewport. each ship keeps one bright spot for its mark and its chart series, and five status inks name the state of a run.",
+      "One key ink on white stock, and one plum fill per viewport. Each ship keeps one bright spot for its mark and its chart series, and five status inks name the state of a run.",
     sections: [
-      { id: "wedge", title: "the wedge" },
-      { id: "house", title: "house ink" },
-      { id: "roles", title: "roles" },
-      { id: "ships", title: "ship spots" },
-      { id: "status", title: "statuses" },
+      { id: "wedge", title: "The wedge" },
+      { id: "house", title: "House ink" },
+      { id: "roles", title: "Roles" },
+      { id: "ships", title: "Ship spots" },
+      { id: "status", title: "Statuses" },
     ],
   },
   component: Page,
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/foundations/colour")({
 const paper = tokens.light.background.hex;
 const key = tokens.light.foreground.hex;
 
-const strip = { light: "key over white", dark: "paper-white over key" } as const;
+const strip = { light: "Key over white", dark: "Paper-white over key" } as const;
 
 // one mode's wedge as a strip of its steps, each labelled in whichever of white and key reads on it
 function Strip({ mode }: { mode: Mode }) {
@@ -59,9 +59,9 @@ function Strip({ mode }: { mode: Mode }) {
 
 const houseRoles = ["primary", "primary-hover", "primary-press", "accent", "selection", "ring"] as const;
 const pressed = [
-  { label: "rest", demo: undefined },
-  { label: "hover", demo: "hover" },
-  { label: "pressed", demo: "active" },
+  { label: "Rest", demo: undefined },
+  { label: "Hover", demo: "hover" },
+  { label: "Pressed", demo: "active" },
 ] as const;
 
 function House({ mode }: { mode: Mode }) {
@@ -77,11 +77,11 @@ function House({ mode }: { mode: Mode }) {
       </ul>
       <dl className="st-f-ratios">
         <div>
-          <dt>label on primary</dt>
+          <dt>Label on primary</dt>
           <dd>{ratio(ink["primary-foreground"].hex, ink.primary.hex)}:1</dd>
         </div>
         <div>
-          <dt>primary on the page</dt>
+          <dt>Primary on the page</dt>
           <dd>{ratio(ink.primary.hex, ink.background.hex)}:1</dd>
         </div>
       </dl>
@@ -89,7 +89,7 @@ function House({ mode }: { mode: Mode }) {
         {pressed.map(({ label, demo }) => (
           <li key={label}>
             <Button data-demo={demo} tabIndex={-1}>
-              save
+              Save
             </Button>
             <span className="type-meta">{label}</span>
           </li>
@@ -123,15 +123,15 @@ function Ships({ mode }: { mode: Mode }) {
             </span>
             <dl className="st-f-ship-proof">
               <div>
-                <dt>angle</dt>
+                <dt>Angle</dt>
                 <dd>{ship.angle}°</dd>
               </div>
               <div>
-                <dt>from {near.ink}</dt>
+                <dt>From {near.ink}</dt>
                 <dd>{near.distance.toFixed(1)}</dd>
               </div>
               <div>
-                <dt>region on tile</dt>
+                <dt>Region on tile</dt>
                 <dd>{regionOnTile(ship.id, mode).toFixed(2)}:1</dd>
               </div>
             </dl>
@@ -162,13 +162,13 @@ function States({ mode }: { mode: Mode }) {
               {state === "failed" ? (
                 <>
                   <div>
-                    <dt>solid</dt>
+                    <dt>Solid</dt>
                     <dd>
                       <Ink
                         hex={tokens[mode]["error-solid"].hex}
                         note={
                           <>
-                            label{" "}
+                            Label{" "}
                             <Ratio
                               of={ratio(tokens[mode]["error-solid-foreground"].hex, tokens[mode]["error-solid"].hex)}
                             />
@@ -178,26 +178,26 @@ function States({ mode }: { mode: Mode }) {
                     </dd>
                   </div>
                   <div>
-                    <dt>glyph</dt>
+                    <dt>Glyph</dt>
                     <dd>
                       <Ink
                         hex={ink.glyph.hex}
                         note={
                           <>
-                            on the page <Ratio of={ratio(ink.glyph.hex, tokens[mode].background.hex)} />
+                            On the page <Ratio of={ratio(ink.glyph.hex, tokens[mode].background.hex)} />
                           </>
                         }
                       />
                     </dd>
                   </div>
                   <div>
-                    <dt>word</dt>
+                    <dt>Word</dt>
                     <dd>
                       <Ink
                         hex={ink.text.hex}
                         note={
                           <>
-                            on the page <Ratio of={ratio(ink.text.hex, tokens[mode].background.hex)} />
+                            On the page <Ratio of={ratio(ink.text.hex, tokens[mode].background.hex)} />
                           </>
                         }
                       />
@@ -207,25 +207,25 @@ function States({ mode }: { mode: Mode }) {
               ) : (
                 <>
                   <div>
-                    <dt>glyph</dt>
+                    <dt>Glyph</dt>
                     <dd>
                       <Ink hex={ink.glyph.hex} note={<Ratio of={ratio(ink.glyph.hex, ink.fill.hex)} />} />
                     </dd>
                   </div>
                   <div>
-                    <dt>word</dt>
+                    <dt>Word</dt>
                     <dd>
                       <Ink hex={ink.text.hex} note={<Ratio of={ratio(ink.text.hex, ink.fill.hex)} />} />
                     </dd>
                   </div>
                   <div>
-                    <dt>fill</dt>
+                    <dt>Fill</dt>
                     <dd>
                       <Ink hex={ink.fill.hex} />
                     </dd>
                   </div>
                   <div>
-                    <dt>edge</dt>
+                    <dt>Edge</dt>
                     <dd>
                       <Ink hex={ink.edge.hex} />
                     </dd>
@@ -244,10 +244,10 @@ function Page() {
   const roles = Object.keys(recipes.light);
   return (
     <>
-      <Section id="wedge" title="the wedge">
+      <Section id="wedge" title="The wedge">
         <Copy>
-          every neutral is the key ink printed as a tint over the stock: light prints key over white, dark prints
-          paper-white over key. each neutral role sits on one step, and the step is how much ink it carries.
+          Every neutral is the key ink printed as a tint over the stock: light prints key over white, dark prints
+          paper-white over key. Each neutral role sits on one step, and the step is how much ink it carries.
         </Copy>
         <div className="st-f-strips">
           {modes.map((mode) => (
@@ -256,28 +256,28 @@ function Page() {
         </div>
       </Section>
 
-      <Section id="house" title="house ink">
+      <Section id="house" title="House ink">
         <Copy>
-          one plum fill per viewport, on paper only, in the deep value. as ink it prints only in the focus signal, the
-          rail&rsquo;s corner mark and home cell, the plates, the code accent and a ship&rsquo;s mark. the current item
-          in a nav is neutral, in the selected role. hover and press take a step of their own in each mode.
+          One plum fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the
+          rail&rsquo;s corner mark and home cell, the plates, the code accent and a ship&rsquo;s mark. The current item
+          in a nav is neutral, in the selected role. Hover and press take a step of their own in each mode.
         </Copy>
         <ModePair light={<House mode="light" />} dark={<House mode="dark" />} />
       </Section>
 
-      <Section id="roles" title="roles">
+      <Section id="roles" title="Roles">
         <Copy>
-          shadcn's roles plus the system's own, each with the step or ink it is mixed from. key and paper are the wedge,
-          house is plum, and the status roles borrow a state's ink.
+          Shadcn&apos;s roles plus the system&apos;s own, each with the step or ink it is mixed from. Key and paper are
+          the wedge, house is plum, and the status roles borrow a state&apos;s ink.
         </Copy>
         <div className="st-f-scroll">
           <table className="st-f-table st-f-roles">
             <thead>
               <tr>
-                <th scope="col">role</th>
+                <th scope="col">Role</th>
                 {modes.map((mode) => (
                   <th key={mode} scope="col">
-                    {mode}
+                    {mode === "light" ? "Light" : "Dark"}
                   </th>
                 ))}
               </tr>
@@ -298,22 +298,22 @@ function Page() {
         </div>
       </Section>
 
-      <Section id="ships" title="ship spots">
+      <Section id="ships" title="Ship spots">
         <Copy>
-          a ship's spot is its identity, never a control. it fills the one dithered region of the ship's mark and the
-          ship's series in a chart, where a line screen at the ship's own angle keeps the series apart without colour.
-          each spot stays at least {spotFloor} from plum (oklab delta e x 100), and its mark's dithered region keeps 3:1
-          on its tile.
+          A ship&apos;s spot is its identity, never a control. It fills the one dithered region of the ship&apos;s mark
+          and the ship&apos;s series in a chart, where a line screen at the ship&apos;s own angle keeps the series apart
+          without colour. Each spot stays at least {spotFloor} from plum (Oklab delta E x 100), and its mark&apos;s
+          dithered region keeps 3:1 on its tile.
         </Copy>
-        <Legend>spot, line screen, hex</Legend>
+        <Legend>Spot, line screen, hex</Legend>
         <ModePair light={<Ships mode="light" />} dark={<Ships mode="dark" />} />
       </Section>
 
-      <Section id="status" title="statuses">
+      <Section id="status" title="Statuses">
         <Copy>
-          one vocabulary everywhere: done, running, waiting, failed and queued. a badge prints a fill close to the
+          One vocabulary everywhere: done, running, waiting, failed and queued. A badge prints a fill close to the
           stock, an edge at about half strength, a glyph square and the word, so a state never rests on colour alone.
-          glyphs clear 3:1 and words 4.5:1 on their fill. failed is the one solid badge.
+          Glyphs clear 3:1 and words 4.5:1 on their fill. Failed is the one solid badge.
         </Copy>
         <ModePair light={<States mode="light" />} dark={<States mode="dark" />} />
       </Section>

@@ -6,22 +6,22 @@ export function CollapsibleExample({ open = false }: { open?: boolean }) {
   return (
     <Collapsible defaultOpen={open} className="st-gl-stack">
       <CollapsibleTrigger render={<Button variant="outline" />}>
-        run logs
+        Run logs
         <Icon name="chevron" data-icon="inline-end" />
       </CollapsibleTrigger>
       <CollapsibleContent>
         <ul className="st-gl-logs">
           <li>
             <span>or-412</span>
-            <span>build complete</span>
+            <span>Build complete</span>
           </li>
           <li>
             <span>or-413</span>
-            <span>review ready</span>
+            <span>Review ready</span>
           </li>
           <li>
             <span>or-414</span>
-            <span>waiting for a task</span>
+            <span>Waiting for a task</span>
           </li>
         </ul>
       </CollapsibleContent>
@@ -31,20 +31,17 @@ export function CollapsibleExample({ open = false }: { open?: boolean }) {
 export function CollapsibleStates() {
   return (
     <States>
-      {["closed", "open", "hover", "focus", "pressed", "disabled"].map((state) => (
-        <State
-          key={state}
-          name={state}
-          note={
-            state === "open"
-              ? "panel follows, chevron turns"
-              : state === "disabled"
-                ? "disclosure cannot open"
-                : state === "focus"
-                  ? "button's outside ring"
-                  : "trigger uses the caller's button"
-          }
-        >
+      {(
+        [
+          ["closed", "Closed", "Trigger uses the caller's button"],
+          ["open", "Open", "Panel follows, chevron turns"],
+          ["hover", "Hover", "Trigger uses the caller's button"],
+          ["focus", "Focus", "Button's outside ring"],
+          ["pressed", "Pressed", "Trigger uses the caller's button"],
+          ["disabled", "Disabled", "Disclosure cannot open"],
+        ] as const
+      ).map(([state, name, note]) => (
+        <State key={state} name={name} note={note}>
           <div inert>
             <Collapsible open={state === "open"} disabled={state === "disabled"}>
               <CollapsibleTrigger
@@ -52,7 +49,7 @@ export function CollapsibleStates() {
                 data-demo={state === "focus" ? "focus-visible" : state === "pressed" ? "active" : state}
                 tabIndex={-1}
               >
-                run logs
+                Run logs
                 <Icon name="chevron" data-icon="inline-end" />
               </CollapsibleTrigger>
               <CollapsibleContent>

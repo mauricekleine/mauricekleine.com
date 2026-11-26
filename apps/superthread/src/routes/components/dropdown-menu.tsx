@@ -14,10 +14,10 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/dropdown-menu")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "open", title: "open" },
-      { id: "variants", title: "variants" },
-      { id: "states", title: "states" },
+      { id: "example", title: "Example" },
+      { id: "open", title: "Open" },
+      { id: "variants", title: "Variants" },
+      { id: "states", title: "States" },
     ],
   },
   component: Page,
@@ -27,14 +27,14 @@ function Page() {
   return (
     <>
       <PageHead
-        title="dropdown menu"
-        lede="actions in a leaf list, with checks, choices and submenus. the list floats 6 px from its trigger and keeps a screened contact edge in light."
+        title="Dropdown menu"
+        lede="Actions in a leaf list, with checks, choices and submenus. The list floats 6 px from its trigger and keeps a screened contact edge in light."
       >
         <InstallLine items={["dropdown-menu"]} />
       </PageHead>
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-gl-copy">
-          open the run menu. change notifications, move the run to another ship, or choose an action.
+          Open the run menu. Change notifications, move the run to another ship, or choose an action.
         </p>
         <ModePair
           className="st-gl-pair"
@@ -42,9 +42,9 @@ function Page() {
           dark={<DropdownMenuExample mode="dark" />}
         />
       </Section>
-      <Section id="open" title="open">
+      <Section id="open" title="Open">
         <p className="st-gl-copy">
-          the parent list and its ship submenu, printed in place. the checked row and the chosen ship keep their own
+          The parent list and its ship submenu, printed in place. The checked row and the chosen ship keep their own
           indicator columns.
         </p>
         <ModePair className="st-gl-pair">
@@ -52,18 +52,18 @@ function Page() {
         </ModePair>
         <Caption detail="contact" />
       </Section>
-      <Section id="variants" title="variants">
+      <Section id="variants" title="Variants">
         <p className="st-gl-copy">
-          default actions, inset words and destructive actions share the same 36 px row, 44 px on a phone. destructive
+          Default actions, inset words and destructive actions share the same 36 px row, 44 px on a phone. Destructive
           uses key ink and the trash glyph.
         </p>
         <ModePair className="st-gl-pair">
           <DropdownMenuVariants />
         </ModePair>
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-gl-copy">
-          the trigger keeps its control ring outside. inside the list, focus stays inside the row and highlight uses the
+          The trigger keeps its control ring outside. Inside the list, focus stays inside the row and highlight uses the
           raised hover fill.
         </p>
         <ModePair className="st-gl-pair">

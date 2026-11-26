@@ -13,7 +13,7 @@ import {
   SidebarSeparator,
 } from "@/components/superthread/ui/sidebar";
 
-const pages = ["board", "direction", "agents", "settings"];
+const pages = ["Board", "Direction", "Agents", "Settings"];
 
 const runs: { id: string; state: StatusState }[] = [
   { id: "or-412", state: "running" },
@@ -29,7 +29,7 @@ export function SidebarExample() {
     <SidebarProvider className="min-h-0">
       <Sidebar collapsible="none">
         <SidebarHeader className="h-[57px] justify-center px-[19px] py-0">
-          <p className="type-subtitle">orbit</p>
+          <p className="type-subtitle">Orbit</p>
         </SidebarHeader>
         <SidebarSeparator className="mx-0" />
         <SidebarContent>
@@ -37,16 +37,16 @@ export function SidebarExample() {
             <SidebarMenu>
               {pages.map((page) => (
                 <SidebarMenuItem key={page}>
-                  <SidebarMenuButton isActive={page === "board"}>
+                  <SidebarMenuButton isActive={page === "Board"}>
                     <span>{page}</span>
                   </SidebarMenuButton>
-                  {page === "agents" && <SidebarMenuBadge>3</SidebarMenuBadge>}
+                  {page === "Agents" && <SidebarMenuBadge>3</SidebarMenuBadge>}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroup>
           <SidebarGroup>
-            <SidebarGroupLabel>runs</SidebarGroupLabel>
+            <SidebarGroupLabel>Runs</SidebarGroupLabel>
             <SidebarMenu>
               {runs.map((run) => (
                 <SidebarMenuItem key={run.id}>
@@ -67,11 +67,11 @@ export function SidebarExample() {
 }
 
 const states: { label: string; demo?: string; active?: boolean; disabled?: boolean }[] = [
-  { label: "rest" },
-  { label: "hover", demo: "hover" },
-  { label: "focus", demo: "focus-visible" },
-  { label: "current", active: true },
-  { label: "disabled", disabled: true },
+  { label: "Rest" },
+  { label: "Hover", demo: "hover" },
+  { label: "Focus", demo: "focus-visible" },
+  { label: "Current", active: true },
+  { label: "Disabled", disabled: true },
 ];
 
 // The menu button's states, printed: data-demo holds hover and focus, isActive marks the current page. Inert, so the

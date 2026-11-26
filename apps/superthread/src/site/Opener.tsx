@@ -1,44 +1,51 @@
-import { useEffect, useState, type CSSProperties } from "react";
-import { FieldArt } from "@/components/superthread/ui/field-art";
-import { breakpoints } from "./layout";
-import { span, spanPlate, spanRulesClip, type OpenerKind, type SpanCrop } from "./span";
+import { Plate } from "@/components/superthread/ui/plate";
 
-function LiveSpan() {
-  const [crop, setCrop] = useState<SpanCrop>();
-  useEffect(() => {
-    const phone = matchMedia(`(max-width: ${breakpoints.phone}px)`);
-    const update = () => setCrop(phone.matches ? "phone" : "desktop");
-    update();
-    phone.addEventListener("change", update);
-    return () => phone.removeEventListener("change", update);
-  }, []);
-  if (!crop) return null;
-  const { line, mask } = span[crop];
-  return <FieldArt spec={line} mask={mask} playing style={{ position: "absolute", inset: 0 }} />;
+export type OpenerKind = "home" | "slim";
+
+const plateSpecs: Record<string, string> = {
+  "/": "planes ratios=42,24,18,16 seed=7",
+  "/foundations/colour": "planes ratios=36,26,20,18 seed=11",
+  "/foundations/type": "planes ratios=48,22,18,12 seed=23 flip",
+  "/foundations/space": "grid cols=6 rows=4 seed=19",
+  "/foundations/motion": "planes ratios=16,24,28,32 seed=31",
+  "/foundations/marks": "grid cols=8 rows=4 seed=43",
+  "/foundations/texture": "grid cols=5 rows=3 seed=59 flip",
+  "/install": "planes ratios=30,25,25,20 seed=71",
+};
+
+function specFor(kind: OpenerKind, path?: string) {
+  if (path && plateSpecs[path]) return plateSpecs[path];
+  return kind === "home" ? plateSpecs["/"] : "grid cols=6 rows=4 seed=19";
 }
 
-// The plate and the canvas share a band. It prints frame zero as soon as the page's CSS loads.
-export function Opener({ kind, title, lede }: { kind: OpenerKind; title: string; lede: string }) {
-  const plate = (crop: SpanCrop, mode: "light" | "dark") =>
-    `image-set(url("${spanPlate(kind, crop, mode, 1)}") 1x, url("${spanPlate(kind, crop, mode, 2)}") 2x)`;
-  const plates = {
-    "--st-span-light": plate("desktop", "light"),
-    "--st-span-dark": plate("desktop", "dark"),
-    "--st-span-phone-light": plate("phone", "light"),
-    "--st-span-phone-dark": plate("phone", "dark"),
-  } as CSSProperties;
-
+// Stock-first framed split opener: flat typography on the left, a 3.5 px two-ink proof halftone plate on the right,
+// separated by uniform 1 px hairlines.
+export function Opener({
+  kind,
+  title,
+  lede,
+  kicker,
+  path,
+}: {
+  kind: OpenerKind;
+  title: string;
+  lede: string;
+  kicker: string;
+  path?: string;
+}) {
   return (
-    <header id="top" className="st-opener st-island dark">
+    <header id="top" className="st-opener" data-kind={kind}>
       <div className="st-opener-copy">
+        <p className="st-opener-kicker">
+          <span className="st-opener-sq" aria-hidden="true" />
+          {kicker}
+        </p>
         <h1>{title}</h1>
-        <p className="type-lede">{lede}</p>
+        <p className="st-opener-lede type-lede">{lede}</p>
       </div>
-      <div className="st-opener-field" style={plates} aria-hidden="true">
-        <div className="st-opener-plate" />
-        {kind === "home" && <LiveSpan />}
+      <div className="st-opener-art" aria-hidden="true">
+        <Plate spec={specFor(kind, path)} breath="vivid" className="st-opener-plate" />
       </div>
-      <div className="st-opener-rules" style={{ clipPath: spanRulesClip }} aria-hidden="true" />
     </header>
   );
 }

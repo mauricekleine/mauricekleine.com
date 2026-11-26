@@ -62,7 +62,7 @@ export function SourceMarkFrames() {
       <li className="st-marks-cell">
         <SourceMark d={marks.phone.d} hover={marks.phone.hover} />
         <span className="st-glyphs-name">
-          <code>at rest</code>
+          <code>At rest</code>
         </span>
       </li>
       <li className="st-marks-cell">

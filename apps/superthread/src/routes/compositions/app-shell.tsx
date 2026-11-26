@@ -23,12 +23,12 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/compositions/app-shell")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "states", title: "states" },
-      { id: "feet", title: "feet" },
-      { id: "tiers", title: "tiers" },
-      { id: "phone", title: "phone" },
-      { id: "parts", title: "parts" },
+      { id: "example", title: "Example" },
+      { id: "states", title: "States" },
+      { id: "feet", title: "Feet" },
+      { id: "tiers", title: "Tiers" },
+      { id: "phone", title: "Phone" },
+      { id: "parts", title: "Parts" },
     ],
   },
   component: Page,
@@ -43,8 +43,11 @@ const hrefs = {
   constellation: "/mock/board",
 };
 
+const capitalize = (word: string) => word[0]!.toUpperCase() + word.slice(1);
+
 function Workspace({ printed = false }: { printed?: boolean }) {
   const [page, setPage] = useState("board");
+  const pageLabel = capitalize(page);
   return (
     <AppShell
       current="orbit"
@@ -64,12 +67,12 @@ function Workspace({ printed = false }: { printed?: boolean }) {
               tabIndex={printed ? -1 : undefined}
               onClick={() => setPage(name)}
             >
-              {name}
+              {capitalize(name)}
             </AppShellNavItem>
           ))}
           {printed && (
             <AppShellNavItem render={<button type="button" />} disabled>
-              archive
+              Archive
             </AppShellNavItem>
           )}
         </AppShellNav>
@@ -77,25 +80,25 @@ function Workspace({ printed = false }: { printed?: boolean }) {
     >
       <AppShellGround render={<div />}>
         <AppShellPanel>
-          <h1 className="type-section text-first">{page}</h1>
+          <h1 className="type-section text-first">{pageLabel}</h1>
           <p className="st-ca-panel-copy">
             {page === "board"
-              ? "12 tasks, 2 running. the next check starts here."
+              ? "12 tasks, 2 running. The next check starts here."
               : page === "direction"
-                ? "make each run small enough to review."
-                : "two agents are running. one is ready for the next task."}
+                ? "Make each run small enough to review."
+                : "Two agents are running. One is ready for the next task."}
           </p>
-          <Facts aria-label={`${page} summary`}>
+          <Facts aria-label={`${pageLabel} summary`}>
             <Fact>
-              <FactLabel>ship</FactLabel>
-              <FactValue>orbit</FactValue>
+              <FactLabel>Ship</FactLabel>
+              <FactValue>Orbit</FactValue>
             </Fact>
             <Fact>
-              <FactLabel>running</FactLabel>
+              <FactLabel>Running</FactLabel>
               <FactValue kind="number">2</FactValue>
             </Fact>
             <Fact>
-              <FactLabel>next run</FactLabel>
+              <FactLabel>Next run</FactLabel>
               <FactValue kind="id">run-024</FactValue>
             </Fact>
           </Facts>
@@ -109,7 +112,7 @@ function Workspace({ printed = false }: { printed?: boolean }) {
 // page's are one value, so a phone reads the same words.
 function FootedWorkspace() {
   const [added, setAdded] = useState<string[]>([]);
-  const needsYou = <a href="#feet">google needs signing in</a>;
+  const needsYou = <a href="#feet">Google needs signing in</a>;
   return (
     <AppShell
       current="orbit"
@@ -119,14 +122,14 @@ function FootedWorkspace() {
       sidebar={
         <AppShellNav ship="orbit" foot={needsYou}>
           <AppShellNavItem render={<button type="button" />} isActive number={1}>
-            now
+            Now
           </AppShellNavItem>
           <AppShellNavItem render={<button type="button" />} number={2}>
-            week
+            Week
           </AppShellNavItem>
           <QuickAddNav
-            label="add a task"
-            placeholder="add a task"
+            label="Add a task"
+            placeholder="Add a task"
             hotkey={null}
             onAdd={(title) => setAdded((current) => [...current, title])}
           />
@@ -135,15 +138,15 @@ function FootedWorkspace() {
     >
       <AppShellGround render={<div />}>
         <AppShellPanel>
-          <h1 className="type-section text-first">now</h1>
+          <h1 className="type-section text-first">Now</h1>
           <p className="st-ca-panel-copy">
-            {added.length > 0 ? `added: ${added.join(", ")}` : "add a task from the nav. it lands here."}
+            {added.length > 0 ? `Added: ${added.join(", ")}` : "Add a task from the nav. It lands here."}
           </p>
-          <AppShellPanelFoot render={<nav aria-label="briefs" />}>
-            <span>briefs</span>
-            <a href="#feet">today</a>
-            <a href="#feet">yesterday</a>
-            <a href="#feet">last week</a>
+          <AppShellPanelFoot render={<nav aria-label="Briefs" />}>
+            <span>Briefs</span>
+            <a href="#feet">Today</a>
+            <a href="#feet">Yesterday</a>
+            <a href="#feet">Last week</a>
           </AppShellPanelFoot>
         </AppShellPanel>
         <AppShellPageFoot>{needsYou}</AppShellPageFoot>
@@ -155,8 +158,12 @@ function FootedWorkspace() {
 // A phone's page taller than its window, with tabbed sections down it, so keyboard focus scrolls the page as it moves.
 function LongWorkspace() {
   const days = [
-    { title: "today", runs: ["run-024 type-check", "run-025 unit tests", "run-026 screenshots"] },
-    { title: "this week", runs: ["run-018 select listbox", "run-019 toast place", "run-021 field type"] },
+    { title: "Today", label: "today", runs: ["run-024 type-check", "run-025 unit tests", "run-026 screenshots"] },
+    {
+      title: "This week",
+      label: "this week",
+      runs: ["run-018 select listbox", "run-019 toast place", "run-021 field type"],
+    },
   ];
   return (
     <AppShell
@@ -167,23 +174,23 @@ function LongWorkspace() {
       sidebar={
         <AppShellNav ship="orbit">
           <AppShellNavItem render={<button type="button" />} isActive number={1}>
-            runs
+            Runs
           </AppShellNavItem>
           <AppShellNavItem render={<button type="button" />} number={2}>
-            agents
+            Agents
           </AppShellNavItem>
         </AppShellNav>
       }
     >
       <AppShellGround render={<div />}>
         <AppShellPanel>
-          <h1 className="type-section text-first">runs</h1>
+          <h1 className="type-section text-first">Runs</h1>
           {days.map((day) => (
             <section key={day.title} aria-label={day.title} className="mt-8">
               <Tabs defaultValue="queued">
                 <TabsList>
-                  <TabsTrigger value="queued">queued</TabsTrigger>
-                  <TabsTrigger value="done">done</TabsTrigger>
+                  <TabsTrigger value="queued">Queued</TabsTrigger>
+                  <TabsTrigger value="done">Done</TabsTrigger>
                 </TabsList>
                 <TabsContent value="queued">
                   <ul className="st-ca-panel-copy">
@@ -193,7 +200,7 @@ function LongWorkspace() {
                   </ul>
                 </TabsContent>
                 <TabsContent value="done">
-                  <p className="st-ca-panel-copy">nothing finished {day.title}.</p>
+                  <p className="st-ca-panel-copy">Nothing finished {day.label}.</p>
                 </TabsContent>
               </Tabs>
             </section>
@@ -219,7 +226,7 @@ function TieredWorkspace({ initial = "inbox" }: { initial?: string }) {
       isActive={page === name}
       onClick={() => setPage(name)}
     >
-      {name}
+      {capitalize(name)}
     </AppShellNavItem>
   );
   return (
@@ -229,12 +236,12 @@ function TieredWorkspace({ initial = "inbox" }: { initial?: string }) {
       hrefs={hrefs}
       skipLink={false}
       sidebar={
-        <AppShellNav ship="orbit" overflow="schedules, history and sources">
+        <AppShellNav ship="orbit" overflow="Schedules, history and sources">
           {firstTier.map(link)}
           <AppShellNavTier>{secondTier.map(link)}</AppShellNavTier>
           <QuickAddNav
-            label="add a task"
-            placeholder="add a task"
+            label="Add a task"
+            placeholder="Add a task"
             hotkey={null}
             onAdd={(title) => setAdded((current) => [...current, title])}
           />
@@ -243,11 +250,11 @@ function TieredWorkspace({ initial = "inbox" }: { initial?: string }) {
     >
       <AppShellGround render={<div />}>
         <AppShellPanel>
-          <h1 className="type-section text-first">{page}</h1>
+          <h1 className="type-section text-first">{capitalize(page)}</h1>
           <p className="st-ca-panel-copy">
             {added.length > 0
-              ? `added: ${added.join(", ")}`
-              : "the first tier is the day's work. the second is the rest."}
+              ? `Added: ${added.join(", ")}`
+              : "The first tier is the day's work. The second is the rest."}
           </p>
         </AppShellPanel>
       </AppShellGround>
@@ -259,204 +266,204 @@ function Page() {
   return (
     <>
       <PageHead
-        title="app shell"
-        lede="the fleet rail, a ship's own nav and a working panel on the deep ground. the panel takes the sheet lift; the frame stays flat."
+        title="App shell"
+        lede="The fleet rail, a ship's own nav and a working panel on the deep ground. The panel takes the sheet lift; the frame stays flat."
       >
         <InstallLine items={["app-shell"]} />
       </PageHead>
       <Serves name="app-shell" />
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-ca-copy">
-          switch between board, direction and agents. the current link holds its box, and its count stays beside the
-          label. ships without a destination stay unlinked.
+          Switch between Board, Direction and Agents. The current link holds its box, and its count stays beside the
+          label. Ships without a destination stay unlinked.
         </p>
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <ViewportFrame mode="light" title="orbit desktop, light" width={1100} height={490}>
+            <ViewportFrame mode="light" title="Orbit desktop, light" width={1100} height={490}>
               <Workspace />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="orbit desktop, dark" width={1100} height={490}>
+            <ViewportFrame mode="dark" title="Orbit desktop, dark" width={1100} height={490}>
               <Workspace />
             </ViewportFrame>
           }
         />
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-ca-copy">
-          board is current, direction prints hover, agents prints keyboard focus and archive is disabled. a nav item
+          Board is current, Direction prints hover, Agents prints keyboard focus and Archive is disabled. A nav item
           keeps the sidebar control states.
         </p>
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <ViewportFrame mode="light" title="orbit nav states, light" width={1100} height={490}>
+            <ViewportFrame mode="light" title="Orbit nav states, light" width={1100} height={490}>
               <Workspace printed />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="orbit nav states, dark" width={1100} height={490}>
+            <ViewportFrame mode="dark" title="Orbit nav states, dark" width={1100} height={490}>
               <Workspace printed />
             </ViewportFrame>
           }
         />
       </Section>
-      <Section id="feet" title="feet">
+      <Section id="feet" title="Feet">
         <p className="st-ca-copy">
-          pass <code>foot</code> to the nav, even as <code>null</code>, and its column runs to full height with a slot
-          at the bottom. the slot holds its place while it&rsquo;s empty, so a line that comes and goes moves nothing.
-          it prints one line, only when something needs the reader. <code>AppShellPanelFoot</code> closes the panel with
+          Pass <code>foot</code> to the nav, even as <code>null</code>, and its column runs to full height with a slot
+          at the bottom. The slot holds its place while it&rsquo;s empty, so a line that comes and goes moves nothing.
+          It prints one line, only when something needs the reader. <code>AppShellPanelFoot</code> closes the panel with
           a row under a rule that reaches both edges of the sheet.
         </p>
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <ViewportFrame mode="light" title="orbit with both feet, light" width={1100} height={490}>
+            <ViewportFrame mode="light" title="Orbit with both feet, light" width={1100} height={490}>
               <FootedWorkspace />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="orbit with both feet, dark" width={1100} height={490}>
+            <ViewportFrame mode="dark" title="Orbit with both feet, dark" width={1100} height={490}>
               <FootedWorkspace />
             </ViewportFrame>
           }
         />
         <p className="st-ca-copy">
-          at 900 px and below the slot steps aside with the ship&rsquo;s name, and <code>AppShellPageFoot</code> prints
-          the same words under the panel. print both or neither. each link in the panel&rsquo;s row is a 44 px box on a
+          At 900 px and below the slot steps aside with the ship&rsquo;s name, and <code>AppShellPageFoot</code> prints
+          the same words under the panel. Print both or neither. Each link in the panel&rsquo;s row is a 44 px box on a
           phone.
         </p>
         <ModePair
           light={
-            <ViewportFrame mode="light" title="orbit with both feet on a phone, light" height={420}>
+            <ViewportFrame mode="light" title="Orbit with both feet on a phone, light" height={420}>
               <FootedWorkspace />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="orbit with both feet on a phone, dark" height={420}>
+            <ViewportFrame mode="dark" title="Orbit with both feet on a phone, dark" height={420}>
               <FootedWorkspace />
             </ViewportFrame>
           }
         />
       </Section>
-      <Section id="tiers" title="tiers">
+      <Section id="tiers" title="Tiers">
         <p className="st-ca-copy">
-          <code>AppShellNavTier</code> holds the pages a reader visits now and then, under a rule, in muted words. the
-          current one prints like any current item. at 900 px and below the rule steps aside and its items join the row.
+          <code>AppShellNavTier</code> holds the pages a reader visits now and then, under a rule, in muted words. The
+          current one prints like any current item. At 900 px and below the rule steps aside and its items join the row.
         </p>
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <ViewportFrame mode="light" title="a nav with two tiers, light" width={1100} height={490}>
+            <ViewportFrame mode="light" title="A nav with two tiers, light" width={1100} height={490}>
               <TieredWorkspace initial="schedules" />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="a nav with two tiers, dark" width={1100} height={490}>
+            <ViewportFrame mode="dark" title="A nav with two tiers, dark" width={1100} height={490}>
               <TieredWorkspace initial="schedules" />
             </ViewportFrame>
           }
         />
         <p className="st-ca-copy">
-          set <code>overflow</code> on the nav to the words that name the tier, and at 600 px and below it sits behind a{" "}
-          <code>...</code> at the row&rsquo;s end. the <code>...</code> opens a list of 44 px rows, and prints selected
-          while the current page sits behind it. open it here and pick one.
+          Set <code>overflow</code> on the nav to the words that name the tier, and at 600 px and below it sits behind a{" "}
+          <code>...</code> at the row&rsquo;s end. The <code>...</code> opens a list of 44 px rows, and prints selected
+          while the current page sits behind it. Open it here and pick one.
         </p>
         <ModePair
           light={
-            <ViewportFrame mode="light" title="a nav with overflow on a phone, light" height={420}>
+            <ViewportFrame mode="light" title="A nav with overflow on a phone, light" height={420}>
               <TieredWorkspace />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="a nav with overflow on a phone, dark" height={420}>
+            <ViewportFrame mode="dark" title="A nav with overflow on a phone, dark" height={420}>
               <TieredWorkspace />
             </ViewportFrame>
           }
         />
       </Section>
-      <Section id="phone" title="phone">
+      <Section id="phone" title="Phone">
         <p className="st-ca-copy">
-          at 900 px the rail becomes a bar and the ship nav wraps below it. at 600 px the panel keeps 16 px beside its
-          content. these frames have a 390 px viewport.
+          At 900 px the rail becomes a bar and the ship nav wraps below it. At 600 px the panel keeps 16 px beside its
+          content. These frames have a 390 px viewport.
         </p>
         <ModePair
           light={
-            <ViewportFrame mode="light" title="orbit phone, light" height={540}>
+            <ViewportFrame mode="light" title="Orbit phone, light" height={540}>
               <Workspace />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="orbit phone, dark" height={540}>
+            <ViewportFrame mode="dark" title="Orbit phone, dark" height={540}>
               <Workspace />
             </ViewportFrame>
           }
         />
         <p className="st-ca-copy">
-          a ship&rsquo;s window scrolls what focus brings into view 16 px clear of its top and bottom, so a ring never
-          meets the edge. the frame never covers the panel, so no nav&rsquo;s height adds to it. click into a frame and
-          press tab: each tab that scrolls in stops short of the edge with its ring whole.
+          A ship&rsquo;s window scrolls what focus brings into view 16 px clear of its top and bottom, so a ring never
+          meets the edge. The frame never covers the panel, so no nav&rsquo;s height adds to it. Click into a frame and
+          press Tab: each tab that scrolls in stops short of the edge with its ring whole.
         </p>
         <ModePair
           light={
-            <ViewportFrame mode="light" title="orbit phone with tabs, light" height={320}>
+            <ViewportFrame mode="light" title="Orbit phone with tabs, light" height={320}>
               <LongWorkspace />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="orbit phone with tabs, dark" height={320}>
+            <ViewportFrame mode="dark" title="Orbit phone with tabs, dark" height={320}>
               <LongWorkspace />
             </ViewportFrame>
           }
         />
       </Section>
-      <Section id="parts" title="parts">
+      <Section id="parts" title="Parts">
         <dl className="st-ca-parts">
           <dt>
             <code>AppShell</code>
           </dt>
           <dd>
-            passes the current ship, links, marks and sidebar to the fleet rail. the specimen holds its viewport inside
+            Passes the current ship, links, marks and sidebar to the fleet rail. The specimen holds its viewport inside
             a bounded frame.
           </dd>
           <dt>
             <code>AppShellNav</code>
           </dt>
           <dd>
-            holds the ship name and its named nav, with an optional <code>foot</code> and <code>overflow</code>. each{" "}
+            Holds the ship name and its named nav, with an optional <code>foot</code> and <code>overflow</code>. Each{" "}
             <code>AppShellNavItem</code> takes a number, a live count and the app's link or button.
           </dd>
           <dt>
             <code>AppShellNavTier</code>
           </dt>
           <dd>
-            the nav&rsquo;s quiet second tier, a list of <code>AppShellNavItem</code>s. it sits after the first tier and
+            The nav&rsquo;s quiet second tier, a list of <code>AppShellNavItem</code>s. It sits after the first tier and
             before a <code>QuickAddNav</code>, so on a phone the row reads first tier, add, <code>...</code>.
           </dd>
           <dt>
             <code>AppShellGround</code>
           </dt>
           <dd>
-            is the page's main, named workspace, with <code>id="main"</code> for the rail&rsquo;s skip link, and leaves
-            the gutter around <code>AppShellPanel</code>, the raised working surface. inside a layout that already owns
-            main, render a div and pass <code>role="group"</code> to <code>AppShellNav</code>. the panel takes{" "}
+            The page's main, named workspace, with <code>id="main"</code> for the rail&rsquo;s skip link, leaving the
+            gutter around <code>AppShellPanel</code>, the raised working surface. Inside a layout that already owns
+            main, render a div and pass <code>role="group"</code> to <code>AppShellNav</code>. The panel takes{" "}
             <code>render</code> too, so a hand-built main needs no wrapper.
           </dd>
           <dt>
             <code>AppShellPanelFoot</code>
           </dt>
           <dd>
-            the panel&rsquo;s last row. a span prints as the muted lead word, and links read as chrome. render a named
+            The panel&rsquo;s last row. A span prints as the muted lead word, and links read as chrome. Render a named
             nav for a row of links.
           </dd>
           <dt>
             <code>AppShellPageFoot</code>
           </dt>
           <dd>
-            the nav&rsquo;s foot line, 900 px and below, last in the ground. pass it what <code>foot</code> holds.
-            empty, it takes no room.
+            The nav&rsquo;s foot line, 900 px and below, last in the ground. Pass it what <code>foot</code> holds.
+            Empty, it takes no room.
           </dd>
         </dl>
       </Section>

@@ -7,8 +7,8 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/radio-group")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "states", title: "states" },
+      { id: "example", title: "Example" },
+      { id: "states", title: "States" },
     ],
   },
   component: Page,
@@ -17,24 +17,24 @@ function Page() {
   return (
     <>
       <PageHead
-        title="radio group"
-        lede="one choice from a named set. an 18 px square holds an 8 px foreground square when chosen."
+        title="Radio group"
+        lede="One choice from a named set. An 18 px square holds an 8 px foreground square when chosen."
       >
         <InstallLine items={["radio-group"]} />
       </PageHead>
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-e-copy">
-          pick the ship that new runs open in. tab enters the group; the arrow keys move the choice and space selects
+          Pick the ship that new runs open in. Tab enters the group; the arrow keys move the choice and Space selects
           it.
         </p>
         <ModePair>
           <RadioGroupExample />
         </ModePair>
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-e-copy">
-          each choice keeps the input edge at rest and on hover. chosen changes the edge and adds the square; keyboard
-          focus draws outside it. invalid uses the error edge.
+          Each choice keeps the input edge at rest and on hover. Chosen changes the edge and adds the square; keyboard
+          focus draws outside it. Invalid uses the error edge.
         </p>
         <ModePair className="st-e-wide">
           <RadioGroupStates />

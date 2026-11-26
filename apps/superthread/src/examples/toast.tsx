@@ -48,24 +48,24 @@ export function ToastPrinted() {
   useEffect(() => {
     const ids = [
       manager.add({
-        title: "artifacts is waiting",
-        description: "a review needs you before it ships.",
+        title: "Artifacts is waiting",
+        description: "A review needs you before it ships.",
         type: "warning",
         timeout: 0,
       }),
       manager.add({
         title: "or-412 picked up",
-        description: "codex 2 started on the select listbox.",
+        description: "Codex 2 started on the select listbox.",
         type: "info",
         timeout: 0,
       }),
       manager.add({
-        title: "chapter 7 published",
-        description: "quanta rebuilt 14 pages in 38 s.",
+        title: "Chapter 7 published",
+        description: "Quanta rebuilt 14 pages in 38 s.",
         type: "success",
         timeout: 0,
-        actionProps: { children: "view chapter" },
-        data: { undo: "undo" },
+        actionProps: { children: "View chapter" },
+        data: { undo: "Undo" },
       }),
     ];
     return () => {
@@ -89,26 +89,26 @@ export function ToastPrinted() {
 export function SentReview() {
   return (
     <AppShellPanel>
-      <Letter aria-label="the reply, as it went out" last>
+      <Letter aria-label="The reply, as it went out" last>
         <LetterHead>
-          <LetterSubject>re: chapter 7 notes</LetterSubject>
-          <LetterKind>reply · mail</LetterKind>
+          <LetterSubject>Re: Chapter 7 notes</LetterSubject>
+          <LetterKind>Reply · Mail</LetterKind>
         </LetterHead>
         <LetterBody>
-          <p>hi sam,</p>
+          <p>Hi Sam,</p>
           <p>
-            thanks for the notes. the three figures stay, and the bands move to the end of the chapter so the reader
+            Thanks for the notes. The three figures stay, and the bands move to the end of the chapter so the reader
             meets the result first.
           </p>
-          <p>maurice</p>
+          <p>Maurice</p>
         </LetterBody>
-        <SendBar aria-label="where it went">
+        <SendBar aria-label="Where it went">
           <SendBarTo>
-            <SendBarTitle>sam okafor</SendBarTitle>
+            <SendBarTitle>Sam Okafor</SendBarTitle>
             <SendBarAddress>sam@quanta.example</SendBarAddress>
           </SendBarTo>
           <SendBarActions>
-            <SendBarButton disabled>sent to sam</SendBarButton>
+            <SendBarButton disabled>Sent to Sam</SendBarButton>
           </SendBarActions>
         </SendBar>
       </Letter>
@@ -122,8 +122,8 @@ function SentToast() {
   const [manager] = useState(() => createToastManager());
   useEffect(() => {
     const id = manager.add({
-      title: "sent to sam",
-      description: "the reply to chapter 7 notes is on its way.",
+      title: "Sent to Sam",
+      description: "The reply to chapter 7 notes is on its way.",
       type: "success",
       timeout: 0,
     });
@@ -144,7 +144,7 @@ function SentToast() {
 // window and the send bar keeps the foot.
 export function ToastOnPhone({ mode }: { mode: "light" | "dark" }) {
   return (
-    <GroundFrame mode={mode} title={`toast on a phone, ${mode}`} height={520}>
+    <GroundFrame mode={mode} title={`Toast on a phone, ${mode}`} height={520}>
       <SentReview />
       <SentToast />
     </GroundFrame>
@@ -157,15 +157,15 @@ function success() {
   const id = `chapter-${++undone}`;
   toast.add({
     id,
-    title: "chapter 7 published",
-    description: "quanta rebuilt 14 pages in 38 s.",
+    title: "Chapter 7 published",
+    description: "Quanta rebuilt 14 pages in 38 s.",
     type: "success",
     actionProps: {
-      children: "undo",
+      children: "Undo",
       onClick: () =>
         toast.update(id, {
-          title: "chapter 7 is a draft again",
-          description: "readers see the last published version.",
+          title: "Chapter 7 is a draft again",
+          description: "Readers see the last published version.",
           type: "info",
           actionProps: undefined,
         }),
@@ -174,37 +174,41 @@ function success() {
 }
 
 const kinds = [
-  { type: "success", show: success },
+  { type: "success", label: "Success", show: success },
   {
     type: "info",
+    label: "Info",
     show: () =>
-      toast.add({ title: "or-412 picked up", description: "codex 2 started on the select listbox.", type: "info" }),
+      toast.add({ title: "or-412 picked up", description: "Codex 2 started on the select listbox.", type: "info" }),
   },
   {
     type: "warning",
+    label: "Warning",
     show: () =>
       toast.add({
-        title: "artifacts is waiting",
-        description: "a review needs you before it ships.",
+        title: "Artifacts is waiting",
+        description: "A review needs you before it ships.",
         type: "warning",
       }),
   },
   {
     type: "error",
+    label: "Error",
     show: () =>
       toast.add({
-        title: "the build failed",
-        description: "trisys stopped at step 3 of 5. the log has the rest.",
+        title: "The build failed",
+        description: "Trisys stopped at step 3 of 5. The log has the rest.",
         type: "error",
       }),
   },
   {
     type: "loading",
+    label: "Loading",
     show: () =>
       toast.promise(new Promise((resolve) => setTimeout(resolve, 2400)), {
-        loading: { title: "publishing chapter 8", description: "quanta is building its pages." },
-        success: { title: "chapter 8 published", description: "quanta rebuilt 15 pages in 41 s." },
-        error: { title: "chapter 8 did not publish", description: "the build stopped. try again." },
+        loading: { title: "Publishing chapter 8", description: "Quanta is building its pages." },
+        success: { title: "Chapter 8 published", description: "Quanta rebuilt 15 pages in 41 s." },
+        error: { title: "Chapter 8 did not publish", description: "The build stopped. Try again." },
       }),
   },
 ] as const;
@@ -217,7 +221,7 @@ export function ToastLive() {
       <div className="st-c-tools">
         {kinds.map((kind) => (
           <Button key={kind.type} variant="outline" onClick={kind.show}>
-            {kind.type}
+            {kind.label}
           </Button>
         ))}
       </div>

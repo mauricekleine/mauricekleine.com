@@ -7,9 +7,9 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/slider")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "variants", title: "variants" },
-      { id: "states", title: "states" },
+      { id: "example", title: "Example" },
+      { id: "variants", title: "Variants" },
+      { id: "states", title: "States" },
     ],
   },
   component: Page,
@@ -18,32 +18,32 @@ function Page() {
   return (
     <>
       <PageHead
-        title="slider"
-        lede="a flat foreground range inside an 8 px ruled track. square thumbs set one value or the two ends of a range."
+        title="Slider"
+        lede="A flat foreground range inside an 8 px ruled track. Square thumbs set one value or the two ends of a range."
       >
         <InstallLine items={["slider"]} />
       </PageHead>
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-e-copy">
-          set how many workers an orbit run can use. drag the thumb or use the arrow keys; home and end reach the
+          Set how many workers an Orbit run can use. Drag the thumb or use the arrow keys; Home and End reach the
           limits.
         </p>
         <ModePair>
           <SliderExample />
         </ModePair>
       </Section>
-      <Section id="variants" title="variants">
+      <Section id="variants" title="Variants">
         <p className="st-e-copy">
-          one value gives one thumb. an array gives one per bound, and a vertical track keeps the same dimensions.
+          One value gives one thumb. An array gives one per bound, and a vertical track keeps the same dimensions.
         </p>
         <ModePair>
           <SliderVariants />
         </ModePair>
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-e-copy">
-          the 16 px thumb takes the control hover fill on hover and while dragging. keyboard focus draws the house ring
-          outside it. at either limit, the thumb stays inside the track.
+          The 16 px thumb takes the control hover fill on hover and while dragging. Keyboard focus draws the house ring
+          outside it. At either limit, the thumb stays inside the track.
         </p>
         <ModePair className="st-e-wide">
           <SliderStates />

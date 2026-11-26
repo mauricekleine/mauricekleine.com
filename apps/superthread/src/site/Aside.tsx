@@ -32,8 +32,8 @@ export function Aside() {
   return (
     <aside className="st-aside">
       <div className="st-aside-inner">
-        <nav className="st-toc" aria-label="on this page">
-          <p className="type-meta">on this page</p>
+        <nav className="st-toc" aria-label="On this page">
+          <p className="type-meta">On this page</p>
           <ul>
             {links.map((link) => (
               <li key={link.id}>

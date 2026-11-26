@@ -68,14 +68,14 @@ export function RailStates({ hover, focus }: { hover?: ShipId; focus?: ShipId })
   );
 }
 
-const pages = ["board", "direction", "agents", "settings"];
+const pages = ["Board", "Direction", "Agents", "Settings"];
 
 // Orbit's own nav, passed as the rail's sidebar: it prints beside the rail on the same ground.
 function OrbitNav() {
   return (
     <>
       <SidebarHeader className="h-[57px] justify-center px-[11px] py-0">
-        <p className="type-subtitle">orbit</p>
+        <p className="type-subtitle">Orbit</p>
       </SidebarHeader>
       <SidebarSeparator className="mx-0" />
       <SidebarContent>
@@ -83,7 +83,7 @@ function OrbitNav() {
           <SidebarMenu>
             {pages.map((page) => (
               <SidebarMenuItem key={page}>
-                <SidebarMenuButton isActive={page === "board"}>
+                <SidebarMenuButton isActive={page === "Board"}>
                   <span>{page}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>

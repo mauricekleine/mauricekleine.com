@@ -11,10 +11,10 @@ import {
 } from "@/components/superthread/ui/sheet";
 
 const board = [
-  { id: "or-418", title: "write the release notes for next.2" },
-  { id: "or-412", title: "tighten the select listbox keyboard loop" },
-  { id: "or-414", title: "split the board query by ship" },
-  { id: "or-411", title: "regenerate the registry css after the token change" },
+  { id: "or-418", title: "Write the release notes for next.2" },
+  { id: "or-412", title: "Tighten the select listbox keyboard loop" },
+  { id: "or-414", title: "Split the board query by ship" },
+  { id: "or-411", title: "Regenerate the registry CSS after the token change" },
 ];
 
 // A run's details: the sheet's header, then its facts on the sheet's 16 px inset.
@@ -23,19 +23,19 @@ function Run() {
     <>
       <SheetHeader>
         <SheetTitle>or-412</SheetTitle>
-        <SheetDescription>tighten the select listbox keyboard loop</SheetDescription>
+        <SheetDescription>Tighten the select listbox keyboard loop</SheetDescription>
       </SheetHeader>
       <dl className="st-pass-facts">
-        <dt>status</dt>
+        <dt>Status</dt>
         <dd>
           <Badge variant="running" />
         </dd>
-        <dt>agent</dt>
-        <dd>codex 2</dd>
-        <dt>started</dt>
+        <dt>Agent</dt>
+        <dd>Codex 2</dd>
+        <dt>Started</dt>
         <dd className="st-pass-q">4m ago</dd>
-        <dt>ship</dt>
-        <dd>orbit</dd>
+        <dt>Ship</dt>
+        <dd>Orbit</dd>
       </dl>
     </>
   );
@@ -50,7 +50,7 @@ export function SheetPrinted() {
   return (
     <div ref={setFrame} className="st-pass-screen" inert>
       <div className="st-pass-board">
-        <p className="type-meta">board</p>
+        <p className="type-meta">Board</p>
         <ul>
           {board.map((task) => (
             <li key={task.id}>
@@ -75,12 +75,12 @@ export function SheetExample({ mode }: { mode: "light" | "dark" }) {
   return (
     <>
       <Sheet>
-        <SheetTrigger render={<Button variant="outline" />}>open or-412</SheetTrigger>
+        <SheetTrigger render={<Button variant="outline" />}>Open or-412</SheetTrigger>
         <SheetContent portalProps={{ className: mode }}>
           <Run />
         </SheetContent>
       </Sheet>
-      <p className="st-pass-hint">it opens from the right in this pane&rsquo;s mode. close it with the x or escape.</p>
+      <p className="st-pass-hint">It opens from the right in this pane&rsquo;s mode. Close it with the X or Escape.</p>
     </>
   );
 }

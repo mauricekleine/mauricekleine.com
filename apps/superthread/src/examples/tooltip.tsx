@@ -4,9 +4,9 @@ import { Icon, type IconName } from "@/components/superthread/ui/glyphs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/superthread/ui/tooltip";
 
 const tools: readonly { icon: IconName; label: string }[] = [
-  { icon: "copy", label: "copy the command" },
-  { icon: "search", label: "search the docs" },
-  { icon: "plus", label: "new task" },
+  { icon: "copy", label: "Copy the command" },
+  { icon: "search", label: "Search the docs" },
+  { icon: "plus", label: "New task" },
 ];
 
 // the button the printed tooltip names
@@ -55,7 +55,7 @@ export function TooltipExample({ mode }: { mode: "light" | "dark" }) {
           </Tooltip>
         ))}
       </div>
-      <p className="st-pass-hint">point at a button, or tab to it.</p>
+      <p className="st-pass-hint">Point at a button, or tab to it.</p>
     </TooltipProvider>
   );
 }
