@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "fleet",
-  "title": "fleet",
-  "description": "the ships: ids, names, one-line descriptors, rail membership, line-screen angles and mark file names",
+  "title": "Fleet",
+  "description": "The ships: IDs, names, one-line descriptors, rail membership, line-screen angles and mark file names",
   "files": [
     {
       "path": "items/lib/fleet.ts",

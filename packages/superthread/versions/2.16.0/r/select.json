@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "select",
-  "title": "select",
-  "description": "a select whose trigger is a field and whose list is a raised layer",
+  "title": "Select",
+  "description": "A select whose trigger is a field and whose list is a raised layer",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

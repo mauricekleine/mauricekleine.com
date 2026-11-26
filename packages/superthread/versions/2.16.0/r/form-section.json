@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "form-section",
-  "title": "form section",
-  "description": "a titled group of fields that saves or discards its changes",
+  "title": "Form section",
+  "description": "A titled group of fields that saves or discards its changes",
   "registryDependencies": [
     "@mk/field",
     "@mk/utils"

@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "input-group",
-  "title": "input group",
-  "description": "a field box that holds a text control with addons and buttons beside it",
+  "title": "Input group",
+  "description": "A field box that holds a text control with addons and buttons beside it",
   "dependencies": [
     "@base-ui/react@^1.8.0",
     "class-variance-authority@^0.7.1"

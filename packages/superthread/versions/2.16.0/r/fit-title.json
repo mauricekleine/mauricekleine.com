@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "fit-title",
-  "title": "fit title",
-  "description": "a title that steps down until it fits its box, by measurement, and cuts at a word only when the whole title can't",
+  "title": "Fit title",
+  "description": "A title that steps down until it fits its box, by measurement, and cuts at a word only when the whole title can't",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "paper",
-  "title": "paper",
-  "description": "the one white block on a page, white in every theme and on the slip lift in light",
+  "title": "Paper",
+  "description": "The one white block on a page, white in every theme and on the slip lift in light",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

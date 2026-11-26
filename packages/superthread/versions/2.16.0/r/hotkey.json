@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "hotkey",
-  "title": "hotkey",
-  "description": "whether a bare key press is the page's to answer, away from typing and from layers that keep their keys",
+  "title": "Hotkey",
+  "description": "Whether a bare key press is the page's to answer, away from typing and from layers that keep their keys",
   "files": [
     {
       "path": "items/lib/hotkey.ts",

@@ -2,8 +2,8 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "extends": "none",
   "name": "init",
-  "title": "init",
-  "description": "sets up an app for @mk: the base-nova style, the tokens, utils and the button",
+  "title": "Init",
+  "description": "Sets up an app for @mk: the base-nova style, the tokens, utils and the button",
   "dependencies": [
     "@base-ui/react@^1.8.0",
     "class-variance-authority@^0.7.1"

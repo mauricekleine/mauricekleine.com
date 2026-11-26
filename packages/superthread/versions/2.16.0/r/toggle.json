@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "toggle",
-  "title": "toggle",
-  "description": "a button that stays pressed, with a foreground edge and a tick while it is on",
+  "title": "Toggle",
+  "description": "A button that stays pressed, with a foreground edge and a tick while it is on",
   "dependencies": [
     "@base-ui/react@^1.8.0",
     "class-variance-authority@^0.7.1"

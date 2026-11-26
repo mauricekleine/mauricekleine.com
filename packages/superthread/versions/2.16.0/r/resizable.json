@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "resizable",
-  "title": "resizable",
-  "description": "panels split by a 1 px rule you can drag, with an optional grip",
+  "title": "Resizable",
+  "description": "Panels split by a 1 px rule you can drag, with an optional grip",
   "dependencies": [
     "react-resizable-panels@^4.14.1"
   ],

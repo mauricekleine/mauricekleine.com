@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "checkbox",
-  "title": "checkbox",
-  "description": "a square checkbox with a screened mixed state",
+  "title": "Checkbox",
+  "description": "A square checkbox with a screened mixed state",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

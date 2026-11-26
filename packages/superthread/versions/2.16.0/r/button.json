@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "button",
-  "title": "button",
-  "description": "a button in the house ink on paper and an outline off it, with secondary, outline, ghost, key, link and destructive variants",
+  "title": "Button",
+  "description": "A button in the house ink on paper and an outline off it, with secondary, outline, ghost, key, link and destructive variants",
   "dependencies": [
     "@base-ui/react@^1.8.0",
     "class-variance-authority@^0.7.1"

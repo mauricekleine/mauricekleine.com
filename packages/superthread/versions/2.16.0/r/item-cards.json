@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "item-cards",
-  "title": "item cards",
-  "description": "a grid of cards, each a title with its status, meta and actions, full-width cards that collapse to one line once decided, or full-bleed tiles in ruled cells",
+  "title": "Item cards",
+  "description": "A grid of cards, each a title with its status, meta and actions, full-width cards that collapse to one line once decided, or full-bleed tiles in ruled cells",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

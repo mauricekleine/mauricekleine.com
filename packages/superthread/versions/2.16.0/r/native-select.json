@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "native-select",
-  "title": "native select",
-  "description": "the browser's own select in a field box",
+  "title": "Native select",
+  "description": "The browser's own select in a field box",
   "registryDependencies": [
     "@mk/glyphs",
     "@mk/utils"

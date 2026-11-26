@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "slider",
-  "title": "slider",
-  "description": "a slider on a ruled track, with a flat foreground range and a square thumb",
+  "title": "Slider",
+  "description": "A slider on a ruled track, with a flat foreground range and a square thumb",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

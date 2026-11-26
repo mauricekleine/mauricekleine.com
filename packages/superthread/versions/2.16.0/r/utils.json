@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "utils",
-  "title": "utils",
-  "description": "cn, with superthread's type steps taught to the class merger",
+  "title": "Utils",
+  "description": "cn, with Superthread's type steps taught to the class merger",
   "dependencies": [
     "cn@^0.4.0"
   ],

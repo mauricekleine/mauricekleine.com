@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "card",
-  "title": "card",
-  "description": "base-nova's card, on the superthread tokens",
+  "title": "Card",
+  "description": "Base-nova's card, on the Superthread tokens",
   "registryDependencies": [
     "@mk/utils"
   ],

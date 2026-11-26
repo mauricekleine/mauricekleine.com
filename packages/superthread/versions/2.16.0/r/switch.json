@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "switch",
-  "title": "switch",
-  "description": "a square switch: foreground when on, a stock square that crosses the track",
+  "title": "Switch",
+  "description": "A square switch: foreground when on, a stock square that crosses the track",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

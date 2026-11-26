@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "alert-dialog",
-  "title": "alert dialog",
-  "description": "a dialog that asks before an action, on the sheet lift",
+  "title": "Alert dialog",
+  "description": "A dialog that asks before an action, on the sheet lift",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

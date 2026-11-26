@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "job-sheet",
-  "title": "job sheet",
-  "description": "the one job on paper: a cue, its title, why, one quiet line and its actions, each in a held slot",
+  "title": "Job sheet",
+  "description": "The one job on paper: a cue, its title, why, one quiet line and its actions, each in a held slot",
   "registryDependencies": [
     "@mk/button",
     "@mk/fit-title",

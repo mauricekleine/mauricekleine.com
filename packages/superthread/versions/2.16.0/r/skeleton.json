@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "skeleton",
-  "title": "skeleton",
-  "description": "loading rows, screened on whole-pixel bars",
+  "title": "Skeleton",
+  "description": "Loading rows, screened on whole-pixel bars",
   "registryDependencies": [
     "@mk/utils"
   ],

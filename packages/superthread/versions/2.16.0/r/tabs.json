@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "tabs",
-  "title": "tabs",
-  "description": "tabs with a solid current tab",
+  "title": "Tabs",
+  "description": "Tabs with a solid current tab",
   "dependencies": [
     "@base-ui/react@^1.8.0",
     "class-variance-authority@^0.7.1"

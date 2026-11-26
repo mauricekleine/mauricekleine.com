@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "theme",
-  "title": "theme",
-  "description": "the fleet's one light and dark choice: the script that sets it before paint, and its store",
+  "title": "Theme",
+  "description": "The fleet's one light and dark choice: the script that sets it before paint, and its store",
   "files": [
     {
       "path": "items/lib/theme.ts",

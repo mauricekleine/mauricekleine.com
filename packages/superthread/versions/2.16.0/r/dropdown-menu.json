@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "dropdown-menu",
-  "title": "dropdown menu",
-  "description": "a menu on the leaf lift, with checkbox, radio and sub-menu items",
+  "title": "Dropdown menu",
+  "description": "A menu on the leaf lift, with checkbox, radio and sub-menu items",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

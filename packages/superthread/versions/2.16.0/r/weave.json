@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "weave",
-  "title": "weave",
-  "description": "a screened field for a hero or a band, with four ramps and a plum thread",
+  "title": "Weave",
+  "description": "A screened field for a hero or a band, with four ramps and a plum thread",
   "files": [
     {
       "path": "items/lib/screen-core.ts",

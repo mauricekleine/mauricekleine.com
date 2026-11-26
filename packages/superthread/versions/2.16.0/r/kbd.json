@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "kbd",
-  "title": "kbd",
-  "description": "a key, set in mono in a 1 px box",
+  "title": "Kbd",
+  "description": "A key, set in mono in a 1 px box",
   "registryDependencies": [
     "@mk/utils"
   ],

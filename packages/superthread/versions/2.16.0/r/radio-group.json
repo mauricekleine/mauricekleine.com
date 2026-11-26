@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "radio-group",
-  "title": "radio group",
-  "description": "square radios: the chosen one edged in foreground with its 8 px square",
+  "title": "Radio group",
+  "description": "Square radios: the chosen one edged in foreground with its 8 px square",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

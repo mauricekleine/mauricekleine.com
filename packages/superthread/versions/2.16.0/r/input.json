@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "input",
-  "title": "input",
-  "description": "a text field with the one focus edge",
+  "title": "Input",
+  "description": "A text field with the one focus edge",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

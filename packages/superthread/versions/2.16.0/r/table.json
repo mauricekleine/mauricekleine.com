@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "table",
-  "title": "table",
-  "description": "a table with mono ids and tabular numbers, an edge beside the row under the pointer, and a full-bleed form that folds at its own width",
+  "title": "Table",
+  "description": "A table with mono IDs and tabular numbers, an edge beside the row under the pointer, and a full-bleed form that folds at its own width",
   "dependencies": [
     "class-variance-authority@^0.7.1"
   ],

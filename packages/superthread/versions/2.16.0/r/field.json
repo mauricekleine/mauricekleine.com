@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "field",
-  "title": "field",
-  "description": "labels, descriptions and errors around any control, with the bang before an error",
+  "title": "Field",
+  "description": "Labels, descriptions and errors around any control, with the bang before an error",
   "dependencies": [
     "class-variance-authority@^0.7.1"
   ],

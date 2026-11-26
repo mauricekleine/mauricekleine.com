@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "notice",
-  "title": "notice",
-  "description": "a flat notice in the flow: its status glyph, what happened and what to do, or one quiet line",
+  "title": "Notice",
+  "description": "A flat notice in the flow: its status glyph, what happened and what to do, or one quiet line",
   "registryDependencies": [
     "@mk/glyphs",
     "@mk/utils"

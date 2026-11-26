@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "source-mark",
-  "title": "source mark",
-  "description": "the 96 px frame a third-party mark prints in, in one ink, with a second frame on hover",
+  "title": "Source mark",
+  "description": "The 96 px frame a third-party mark prints in, in one ink, with a second frame on hover",
   "registryDependencies": [
     "@mk/utils"
   ],

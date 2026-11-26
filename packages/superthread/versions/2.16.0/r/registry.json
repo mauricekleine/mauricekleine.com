@@ -7,8 +7,8 @@
       "name": "init",
       "type": "registry:base",
       "extends": "none",
-      "title": "init",
-      "description": "sets up an app for @mk: the base-nova style, the tokens, utils and the button",
+      "title": "Init",
+      "description": "Sets up an app for @mk: the base-nova style, the tokens, utils and the button",
       "dependencies": [
         "@base-ui/react@^1.8.0",
         "class-variance-authority@^0.7.1"
@@ -37,8 +37,8 @@
       "name": "tokens",
       "type": "registry:style",
       "extends": "none",
-      "title": "tokens",
-      "description": "the superthread theme: colour roles for light and dark, type, motion, shape and the texture tiles",
+      "title": "Tokens",
+      "description": "The Superthread theme: colour roles for light and dark, type, motion, shape and the texture tiles",
       "dependencies": [
         "tw-animate-css@^1.4.0",
         "shadcn@^4.22.1"
@@ -65,8 +65,8 @@
     {
       "name": "tokens-plain",
       "type": "registry:item",
-      "title": "plain tokens",
-      "description": "the same tokens as plain css with no tailwind, and as a typed module",
+      "title": "Plain tokens",
+      "description": "The same tokens as plain CSS with no Tailwind, and as a typed module",
       "files": [
         {
           "path": "dist/v2/superthread-plain.css",
@@ -89,8 +89,8 @@
     {
       "name": "doc",
       "type": "registry:item",
-      "title": "doc",
-      "description": "plain html document sections, their stylesheet, a mode control, the 3.5 px proof halftone plate runtime, draft highlight notes and the weave runtime",
+      "title": "Doc",
+      "description": "Plain HTML document sections, their stylesheet, a mode control, the 3.5 px proof halftone plate runtime, draft highlight notes and the weave runtime",
       "registryDependencies": [
         "@mk/tokens-plain"
       ],
@@ -268,7 +268,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "bd06834e23dfc807e5e6a59d9ce1f768032aa7c33549f61ad765cedab95caad7",
+        "sha256": "e1d6867e2aca3f611b9f7f537575799e6df426a0a2d4cc019070721722d76744",
         "tier": "lib",
         "upstream": null
       }
@@ -276,8 +276,8 @@
     {
       "name": "doc-react",
       "type": "registry:item",
-      "title": "documents in react",
-      "description": "react sections for reports and briefs, with the same markup and stylesheet as the plain html sections",
+      "title": "Documents in React",
+      "description": "React sections for reports and briefs, with the same markup and stylesheet as the plain HTML sections",
       "registryDependencies": [
         "@mk/doc",
         "@mk/plate",
@@ -294,7 +294,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "43fac8e8fa360e765f2e5e2183555a6a8650d7d4505db654fb4f165f0b20602d",
+        "sha256": "3d337d71f394c3318063657e10a0237279c584e2ad6be8399a8736bb008ce28a",
         "tier": "lib",
         "upstream": null
       }
@@ -302,8 +302,8 @@
     {
       "name": "utils",
       "type": "registry:lib",
-      "title": "utils",
-      "description": "cn, with superthread's type steps taught to the class merger",
+      "title": "Utils",
+      "description": "cn, with Superthread's type steps taught to the class merger",
       "dependencies": [
         "cn@^0.4.0"
       ],
@@ -329,8 +329,8 @@
     {
       "name": "fleet",
       "type": "registry:lib",
-      "title": "fleet",
-      "description": "the ships: ids, names, one-line descriptors, rail membership, line-screen angles and mark file names",
+      "title": "Fleet",
+      "description": "The ships: IDs, names, one-line descriptors, rail membership, line-screen angles and mark file names",
       "files": [
         {
           "path": "items/lib/fleet.ts",
@@ -348,8 +348,8 @@
     {
       "name": "theme",
       "type": "registry:lib",
-      "title": "theme",
-      "description": "the fleet's one light and dark choice: the script that sets it before paint, and its store",
+      "title": "Theme",
+      "description": "The fleet's one light and dark choice: the script that sets it before paint, and its store",
       "files": [
         {
           "path": "items/lib/theme.ts",
@@ -367,8 +367,8 @@
     {
       "name": "time-words",
       "type": "registry:lib",
-      "title": "time-words",
-      "description": "time in the fleet's words: since friday, before 11:00, 48 min until standup, every day at 07:00",
+      "title": "Time words",
+      "description": "Time in the fleet's words: since Friday, before 11:00, 48 min until standup, every day at 07:00",
       "files": [
         {
           "path": "items/lib/time-words.ts",
@@ -378,7 +378,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "2903e5472f0ccd7b005cb85d3f552639f4ac87ef7fe15f996b695f1a5f64f606",
+        "sha256": "56ad79e5f41d11daa75f4894d55d8db9a092734b73abc3df88b6abd113ddd595",
         "tier": "lib",
         "upstream": null
       }
@@ -386,8 +386,8 @@
     {
       "name": "hotkey",
       "type": "registry:lib",
-      "title": "hotkey",
-      "description": "whether a bare key press is the page's to answer, away from typing and from layers that keep their keys",
+      "title": "Hotkey",
+      "description": "Whether a bare key press is the page's to answer, away from typing and from layers that keep their keys",
       "files": [
         {
           "path": "items/lib/hotkey.ts",
@@ -405,8 +405,8 @@
     {
       "name": "glyphs",
       "type": "registry:ui",
-      "title": "glyphs",
-      "description": "the pixel icons and status glyphs, drawn as whole-pixel squares in the current colour, and a state word beside its 8 px square",
+      "title": "Glyphs",
+      "description": "The pixel icons and status glyphs, drawn as whole-pixel squares in the current colour, and a state word beside its 8 px square",
       "registryDependencies": [
         "@mk/utils"
       ],
@@ -419,7 +419,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "5457bcfcea6cd7b85150c92f185adddc14410596a0c7b7e8af907bd8a3715599",
+        "sha256": "6c53337f84aa380dbf3c6e2bf2fa285d35169d69fbd16c51f54b0b784870b81c",
         "tier": "brand",
         "upstream": null
       }
@@ -427,8 +427,8 @@
     {
       "name": "button",
       "type": "registry:ui",
-      "title": "button",
-      "description": "a button in the house ink on paper and an outline off it, with secondary, outline, ghost, key, link and destructive variants",
+      "title": "Button",
+      "description": "A button in the house ink on paper and an outline off it, with secondary, outline, ghost, key, link and destructive variants",
       "dependencies": [
         "@base-ui/react@^1.8.0",
         "class-variance-authority@^0.7.1"
@@ -459,8 +459,8 @@
     {
       "name": "badge",
       "type": "registry:ui",
-      "title": "badge",
-      "description": "a badge, with a status variant for each state: done, running, waiting, failed and queued",
+      "title": "Badge",
+      "description": "A badge, with a status variant for each state: done, running, waiting, failed and queued",
       "dependencies": [
         "@base-ui/react@^1.8.0",
         "class-variance-authority@^0.7.1"
@@ -478,7 +478,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "020cc232ed0781eaabd49bef3091e7c9e54af9f791e4b78743c1e7725f00d98d",
+        "sha256": "de1611ce7eb3895d0f7605ee4f328be2aad3640353c8a726958eeb0493631620",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -491,8 +491,8 @@
     {
       "name": "input",
       "type": "registry:ui",
-      "title": "input",
-      "description": "a text field with the one focus edge",
+      "title": "Input",
+      "description": "A text field with the one focus edge",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -521,8 +521,8 @@
     {
       "name": "input-group",
       "type": "registry:ui",
-      "title": "input group",
-      "description": "a field box that holds a text control with addons and buttons beside it",
+      "title": "Input group",
+      "description": "A field box that holds a text control with addons and buttons beside it",
       "dependencies": [
         "@base-ui/react@^1.8.0",
         "class-variance-authority@^0.7.1"
@@ -553,8 +553,8 @@
     {
       "name": "textarea",
       "type": "registry:ui",
-      "title": "textarea",
-      "description": "a multi-line text field with the one focus edge, and a code form for json and keys",
+      "title": "Textarea",
+      "description": "A multi-line text field with the one focus edge, and a code form for JSON and keys",
       "registryDependencies": [
         "@mk/utils"
       ],
@@ -580,8 +580,8 @@
     {
       "name": "select",
       "type": "registry:ui",
-      "title": "select",
-      "description": "a select whose trigger is a field and whose list is a raised layer",
+      "title": "Select",
+      "description": "A select whose trigger is a field and whose list is a raised layer",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -611,8 +611,8 @@
     {
       "name": "dialog",
       "type": "registry:ui",
-      "title": "dialog",
-      "description": "a square dialog on the sheet lift",
+      "title": "Dialog",
+      "description": "A square dialog on the sheet lift",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -630,7 +630,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "0006f62640e5c8ae8c4b8f0a8e71695a54dc68883cdb101aa139421e66c15fdc",
+        "sha256": "ef0a64aef2d6b4dd3a17c105549590b90ef7de3d318973f8c914bf3fa276801a",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -643,8 +643,8 @@
     {
       "name": "tabs",
       "type": "registry:ui",
-      "title": "tabs",
-      "description": "tabs with a solid current tab",
+      "title": "Tabs",
+      "description": "Tabs with a solid current tab",
       "dependencies": [
         "@base-ui/react@^1.8.0",
         "class-variance-authority@^0.7.1"
@@ -674,8 +674,8 @@
     {
       "name": "table",
       "type": "registry:ui",
-      "title": "table",
-      "description": "a table with mono ids and tabular numbers, an edge beside the row under the pointer, and a full-bleed form that folds at its own width",
+      "title": "Table",
+      "description": "A table with mono IDs and tabular numbers, an edge beside the row under the pointer, and a full-bleed form that folds at its own width",
       "dependencies": [
         "class-variance-authority@^0.7.1"
       ],
@@ -704,8 +704,8 @@
     {
       "name": "progress",
       "type": "registry:ui",
-      "title": "progress",
-      "description": "a flat foreground bar with a screened leading edge",
+      "title": "Progress",
+      "description": "A flat foreground bar with a screened leading edge",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -734,8 +734,8 @@
     {
       "name": "toast",
       "type": "registry:ui",
-      "title": "toast",
-      "description": "base ui toasts on the leaf lift, with a status glyph for each kind",
+      "title": "Toast",
+      "description": "Base UI toasts on the leaf lift, with a status glyph for each kind",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -753,7 +753,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "e23463aa5fa93a75c9b20baedac949e4cb7bdf6d30f3f760c484aa0defef398b",
+        "sha256": "5bfe4ab0301c01dfbe23a9df2f4790da6d2f4fbe6d1263b6b4ac79d16d2b4aef",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -766,8 +766,8 @@
     {
       "name": "sidebar",
       "type": "registry:ui",
-      "title": "sidebar",
-      "description": "the sidebar on the deep ground, with a neutral current item",
+      "title": "Sidebar",
+      "description": "The sidebar on the deep ground, with a neutral current item",
       "dependencies": [
         "@base-ui/react@^1.8.0",
         "class-variance-authority@^0.7.1"
@@ -792,7 +792,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "18f3d6eb088cb54de8cc30a072a28f83a655cbaab2841ba00687426bb4cf3aab",
+        "sha256": "e5f019541a1098b2d3bd3da6e94dbf6ac68a87315d72525b6ecc7fcec30a3cb3",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -805,8 +805,8 @@
     {
       "name": "fleet-rail",
       "type": "registry:block",
-      "title": "fleet rail",
-      "description": "the rail of ship marks for moving between fleet surfaces; each ship links to its fleet url unless you pass an href",
+      "title": "Fleet rail",
+      "description": "The rail of ship marks for moving between fleet surfaces; each ship links to its fleet URL unless you pass an href",
       "registryDependencies": [
         "@mk/fleet",
         "@mk/sidebar",
@@ -823,7 +823,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "5bcdb76b7021473e25a0db333f0b83347ec272e0b9138cc0c25f3d48363141ab",
+        "sha256": "ccd3342550b3f4f5ac606abe63f317501d0ef95ed9afbf2d6699cdd7d971d2cc",
         "tier": "brand",
         "upstream": null
       }
@@ -831,8 +831,8 @@
     {
       "name": "checkbox",
       "type": "registry:ui",
-      "title": "checkbox",
-      "description": "a square checkbox with a screened mixed state",
+      "title": "Checkbox",
+      "description": "A square checkbox with a screened mixed state",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -862,8 +862,8 @@
     {
       "name": "skeleton",
       "type": "registry:ui",
-      "title": "skeleton",
-      "description": "loading rows, screened on whole-pixel bars",
+      "title": "Skeleton",
+      "description": "Loading rows, screened on whole-pixel bars",
       "registryDependencies": [
         "@mk/utils"
       ],
@@ -889,8 +889,8 @@
     {
       "name": "switch",
       "type": "registry:ui",
-      "title": "switch",
-      "description": "a square switch: foreground when on, a stock square that crosses the track",
+      "title": "Switch",
+      "description": "A square switch: foreground when on, a stock square that crosses the track",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -919,8 +919,8 @@
     {
       "name": "radio-group",
       "type": "registry:ui",
-      "title": "radio group",
-      "description": "square radios: the chosen one edged in foreground with its 8 px square",
+      "title": "Radio group",
+      "description": "Square radios: the chosen one edged in foreground with its 8 px square",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -949,8 +949,8 @@
     {
       "name": "slider",
       "type": "registry:ui",
-      "title": "slider",
-      "description": "a slider on a ruled track, with a flat foreground range and a square thumb",
+      "title": "Slider",
+      "description": "A slider on a ruled track, with a flat foreground range and a square thumb",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -979,8 +979,8 @@
     {
       "name": "toggle",
       "type": "registry:ui",
-      "title": "toggle",
-      "description": "a button that stays pressed, with a foreground edge and a tick while it is on",
+      "title": "Toggle",
+      "description": "A button that stays pressed, with a foreground edge and a tick while it is on",
       "dependencies": [
         "@base-ui/react@^1.8.0",
         "class-variance-authority@^0.7.1"
@@ -1011,8 +1011,8 @@
     {
       "name": "toggle-group",
       "type": "registry:ui",
-      "title": "toggle group",
-      "description": "toggles joined on shared 1 px edges, one or several pressed",
+      "title": "Toggle group",
+      "description": "Toggles joined on shared 1 px edges, one or several pressed",
       "dependencies": [
         "@base-ui/react@^1.8.0",
         "class-variance-authority@^0.7.1"
@@ -1043,8 +1043,8 @@
     {
       "name": "button-group",
       "type": "registry:ui",
-      "title": "button group",
-      "description": "buttons and fields joined on shared 1 px edges",
+      "title": "Button group",
+      "description": "Buttons and fields joined on shared 1 px edges",
       "dependencies": [
         "@base-ui/react@^1.8.0",
         "class-variance-authority@^0.7.1"
@@ -1075,8 +1075,8 @@
     {
       "name": "kbd",
       "type": "registry:ui",
-      "title": "kbd",
-      "description": "a key, set in mono in a 1 px box",
+      "title": "Kbd",
+      "description": "A key, set in mono in a 1 px box",
       "registryDependencies": [
         "@mk/utils"
       ],
@@ -1102,8 +1102,8 @@
     {
       "name": "dropdown-menu",
       "type": "registry:ui",
-      "title": "dropdown menu",
-      "description": "a menu on the leaf lift, with checkbox, radio and sub-menu items",
+      "title": "Dropdown menu",
+      "description": "A menu on the leaf lift, with checkbox, radio and sub-menu items",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1133,8 +1133,8 @@
     {
       "name": "combobox",
       "type": "registry:ui",
-      "title": "combobox",
-      "description": "a field that filters a list on the leaf lift, for one value or several as chips",
+      "title": "Combobox",
+      "description": "A field that filters a list on the leaf lift, for one value or several as chips",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1153,7 +1153,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "8d26c7fbad199699f3fb21b018f264da382116edd1183baf67debd23deda61d8",
+        "sha256": "f763574afb07f18523c0b5f5b1760f8c56615b3ce8cfbccb92bedf53c790827b",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -1166,8 +1166,8 @@
     {
       "name": "command",
       "type": "registry:ui",
-      "title": "command",
-      "description": "a command list with a search field, inline or in a dialog",
+      "title": "Command",
+      "description": "A command list with a search field, inline or in a dialog",
       "dependencies": [
         "cmdk@^1.1.1"
       ],
@@ -1186,7 +1186,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "4a88c4d3404097596a7817714a48c7967b287ab692147fc76cb1d45eddd969c6",
+        "sha256": "8e052997c3920617d2d47684582310e96dbe821f2db8524ca1c3cb3c31f11791",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -1199,8 +1199,8 @@
     {
       "name": "alert-dialog",
       "type": "registry:ui",
-      "title": "alert dialog",
-      "description": "a dialog that asks before an action, on the sheet lift",
+      "title": "Alert dialog",
+      "description": "A dialog that asks before an action, on the sheet lift",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1230,8 +1230,8 @@
     {
       "name": "sonner",
       "type": "registry:ui",
-      "title": "sonner",
-      "description": "sonner's toaster in the toast's dress: the leaf lift and a status glyph for each kind",
+      "title": "Sonner",
+      "description": "Sonner's toaster in the toast's dress: the leaf lift and a status glyph for each kind",
       "dependencies": [
         "sonner@^2.0.8"
       ],
@@ -1249,7 +1249,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "a934e28cc79a5e410fd0de6ff2f92b7afc320cde155a195dd7c7e8230cdee1f1",
+        "sha256": "87236b4e9be395642dff0683ab1cb7b35d3511baf9576bb74ce6025301ccbf70",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -1262,8 +1262,8 @@
     {
       "name": "accordion",
       "type": "registry:ui",
-      "title": "accordion",
-      "description": "sections that open in place, ruled edge to edge",
+      "title": "Accordion",
+      "description": "Sections that open in place, ruled edge to edge",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1293,8 +1293,8 @@
     {
       "name": "field",
       "type": "registry:ui",
-      "title": "field",
-      "description": "labels, descriptions and errors around any control, with the bang before an error",
+      "title": "Field",
+      "description": "Labels, descriptions and errors around any control, with the bang before an error",
       "dependencies": [
         "class-variance-authority@^0.7.1"
       ],
@@ -1325,8 +1325,8 @@
     {
       "name": "native-select",
       "type": "registry:ui",
-      "title": "native select",
-      "description": "the browser's own select in a field box",
+      "title": "Native select",
+      "description": "The browser's own select in a field box",
       "registryDependencies": [
         "@mk/glyphs",
         "@mk/utils"
@@ -1353,8 +1353,8 @@
     {
       "name": "breadcrumb",
       "type": "registry:ui",
-      "title": "breadcrumb",
-      "description": "the path to the page, in muted words with the current one in the first ink",
+      "title": "Breadcrumb",
+      "description": "The path to the page, in muted words with the current one in the first ink",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1371,7 +1371,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "26c26e701b2317bd0972b270065cd6eb6dbc5f010e8eb72e70fd627c2050fb06",
+        "sha256": "4fe5fcd6f8633ecf7043019ce347106cca782cbb3e076726d0ca85f04f01b923",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -1384,8 +1384,8 @@
     {
       "name": "resizable",
       "type": "registry:ui",
-      "title": "resizable",
-      "description": "panels split by a 1 px rule you can drag, with an optional grip",
+      "title": "Resizable",
+      "description": "Panels split by a 1 px rule you can drag, with an optional grip",
       "dependencies": [
         "react-resizable-panels@^4.14.1"
       ],
@@ -1414,8 +1414,8 @@
     {
       "name": "paper",
       "type": "registry:ui",
-      "title": "paper",
-      "description": "the one white block on a page, white in every theme and on the slip lift in light",
+      "title": "Paper",
+      "description": "The one white block on a page, white in every theme and on the slip lift in light",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1439,8 +1439,8 @@
     {
       "name": "fit-title",
       "type": "registry:ui",
-      "title": "fit title",
-      "description": "a title that steps down until it fits its box, by measurement, and cuts at a word only when the whole title can't",
+      "title": "Fit title",
+      "description": "A title that steps down until it fits its box, by measurement, and cuts at a word only when the whole title can't",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1464,8 +1464,8 @@
     {
       "name": "inline-answers",
       "type": "registry:ui",
-      "title": "inline answers",
-      "description": "a suggestion that takes correction in its own slot: a wrong? control swaps the line for plain answers there",
+      "title": "Inline answers",
+      "description": "A suggestion that takes correction in its own slot: a Wrong? control swaps the line for plain answers there",
       "registryDependencies": [
         "@mk/glyphs",
         "@mk/utils"
@@ -1479,7 +1479,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "6cc277918db2d7124266a151a8a16fc5acced10ba09aad9f93d7ec4f810287b1",
+        "sha256": "b3ee6e270875b4e44265fc5588c26bf70a79b3f676ccb57048761723fedd4d01",
         "tier": "brand",
         "upstream": null
       }
@@ -1487,8 +1487,8 @@
     {
       "name": "onward",
       "type": "registry:ui",
-      "title": "onward",
-      "description": "the way onward from a page: a word and its arrow, or a door, one line of words with an arrow",
+      "title": "Onward",
+      "description": "The way onward from a page: a word and its arrow, or a door, one line of words with an arrow",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1513,8 +1513,8 @@
     {
       "name": "source-line",
       "type": "registry:ui",
-      "title": "source line",
-      "description": "a wrapping row of cited sources at the instrument step, and what closes the line at its far side",
+      "title": "Source line",
+      "description": "A wrapping row of cited sources at the instrument step, and what closes the line at its far side",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1530,7 +1530,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "ec7bc9324fe56b05a4d883bf466efe1d6044c591bde12efdbbea129ecdd423cd",
+        "sha256": "5f935bea3a572fe54981f6240902a022b59cd97fec0aad38fc917e5bafe18ecb",
         "tier": "brand",
         "upstream": null
       }
@@ -1538,8 +1538,8 @@
     {
       "name": "source-mark",
       "type": "registry:ui",
-      "title": "source mark",
-      "description": "the 96 px frame a third-party mark prints in, in one ink, with a second frame on hover",
+      "title": "Source mark",
+      "description": "The 96 px frame a third-party mark prints in, in one ink, with a second frame on hover",
       "registryDependencies": [
         "@mk/utils"
       ],
@@ -1560,8 +1560,8 @@
     {
       "name": "plate",
       "type": "registry:item",
-      "title": "plate",
-      "description": "a 3.5 px two-ink proof halftone plate (key 45 deg and plum 15 deg) with light breath for document openers, chapter breaks and figures",
+      "title": "Plate",
+      "description": "A 3.5 px two-ink proof halftone plate (key 45 deg and plum 15 deg) with light breath for document openers, chapter breaks and figures",
       "files": [
         {
           "path": "items/lib/plate-core.ts",
@@ -1584,8 +1584,8 @@
     {
       "name": "weave",
       "type": "registry:item",
-      "title": "weave",
-      "description": "a screened field for a hero or a band, with four ramps and a plum thread",
+      "title": "Weave",
+      "description": "A screened field for a hero or a band, with four ramps and a plum thread",
       "files": [
         {
           "path": "items/lib/screen-core.ts",
@@ -1618,8 +1618,8 @@
     {
       "name": "field-art",
       "type": "registry:item",
-      "title": "field art",
-      "description": "screened concept art for figures and openers",
+      "title": "Field art",
+      "description": "Screened concept art for figures and openers",
       "registryDependencies": [
         "@mk/weave"
       ],
@@ -1655,8 +1655,8 @@
     {
       "name": "collapsible",
       "type": "registry:ui",
-      "title": "collapsible",
-      "description": "base-nova's collapsible, on the superthread tokens",
+      "title": "Collapsible",
+      "description": "Base-nova's collapsible, on the Superthread tokens",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1685,8 +1685,8 @@
     {
       "name": "card",
       "type": "registry:ui",
-      "title": "card",
-      "description": "base-nova's card, on the superthread tokens",
+      "title": "Card",
+      "description": "Base-nova's card, on the Superthread tokens",
       "registryDependencies": [
         "@mk/utils"
       ],
@@ -1712,8 +1712,8 @@
     {
       "name": "label",
       "type": "registry:ui",
-      "title": "label",
-      "description": "base-nova's label, on the superthread tokens",
+      "title": "Label",
+      "description": "Base-nova's label, on the Superthread tokens",
       "registryDependencies": [
         "@mk/utils"
       ],
@@ -1739,8 +1739,8 @@
     {
       "name": "separator",
       "type": "registry:ui",
-      "title": "separator",
-      "description": "base-nova's separator, on the superthread tokens",
+      "title": "Separator",
+      "description": "Base-nova's separator, on the Superthread tokens",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1769,8 +1769,8 @@
     {
       "name": "sheet",
       "type": "registry:ui",
-      "title": "sheet",
-      "description": "base-nova's sheet, on the superthread tokens",
+      "title": "Sheet",
+      "description": "Base-nova's sheet, on the Superthread tokens",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1788,7 +1788,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "2f5b3b054dfdcf2866ae967fe32787aa47adc0d41b38234d3a51d2e944a0c786",
+        "sha256": "2d6d29852739ffb622ccfc8ac398db4ec3f0a0dd080d942a29b825d847e764e0",
         "tier": "pass",
         "upstream": {
           "style": "base-nova",
@@ -1801,8 +1801,8 @@
     {
       "name": "tooltip",
       "type": "registry:ui",
-      "title": "tooltip",
-      "description": "base-nova's tooltip, on the superthread tokens",
+      "title": "Tooltip",
+      "description": "Base-nova's tooltip, on the Superthread tokens",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1831,8 +1831,8 @@
     {
       "name": "use-mobile",
       "type": "registry:hook",
-      "title": "use mobile",
-      "description": "base-nova's hook that tells a phone-width viewport",
+      "title": "Use mobile",
+      "description": "Base-nova's hook that tells a phone-width viewport",
       "files": [
         {
           "path": "items/hooks/use-mobile.ts",
@@ -1855,8 +1855,8 @@
     {
       "name": "use-minute",
       "type": "registry:hook",
-      "title": "use minute",
-      "description": "the clock's minute and the reader's day, from one shared timer that stops while the page is hidden",
+      "title": "Use minute",
+      "description": "The clock's minute and the reader's day, from one shared timer that stops while the page is hidden",
       "registryDependencies": [
         "@mk/time-words"
       ],
@@ -1877,8 +1877,8 @@
     {
       "name": "page-header",
       "type": "registry:block",
-      "title": "page header",
-      "description": "a page's title, with a way back, a lede, its meta and its actions",
+      "title": "Page header",
+      "description": "A page's title, with a way back, a lede, its meta and its actions",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1911,8 +1911,8 @@
     {
       "name": "states",
       "type": "registry:block",
-      "title": "states",
-      "description": "what a collection shows while it loads, when it fails and when it is empty, and a page when it's clear",
+      "title": "States",
+      "description": "What a collection shows while it loads, when it fails and when it is empty, and a page when it's clear",
       "registryDependencies": [
         "@mk/button",
         "@mk/fit-title",
@@ -1930,7 +1930,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "c0e88de38688d027729ffb88b6c3f18afce4811a5db20ca6038732a53b1a8ff0",
+        "sha256": "f500fb11200a1ce9a159d802c79c41b54bff467872c044f0fdb653ce29c2e403",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -1945,8 +1945,8 @@
     {
       "name": "app-shell",
       "type": "registry:block",
-      "title": "app shell",
-      "description": "a ship's frame: the fleet rail, the ship's own nav with a quiet second tier and the working panel on the deep ground",
+      "title": "App shell",
+      "description": "A ship's frame: the fleet rail, the ship's own nav with a quiet second tier and the working panel on the deep ground",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1965,7 +1965,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "df860b8e1850b31a76832e717756d3b3c19caa2f29ca5a6cf363bb6ae8ed6c83",
+        "sha256": "26bb4286fedcb98ac2b332533eef6a633dc6c9ec190c5e956c3e81153e2e02c6",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -1980,8 +1980,8 @@
     {
       "name": "section-header",
       "type": "registry:block",
-      "title": "section header",
-      "description": "a section's head, with its count and a link to the rest",
+      "title": "Section header",
+      "description": "A section's head, with its count and a link to the rest",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -1998,7 +1998,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "eaffa74ef5fb51fedd297513239c1cec1dc5df8e2dcfbe76692e68e2b860ba0d",
+        "sha256": "398db93319c7cc4bfcef3ee1fec3e8e975c9c5931d4b95a4b288a6671723df0a",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -2013,8 +2013,8 @@
     {
       "name": "search-palette",
       "type": "registry:block",
-      "title": "search palette",
-      "description": "one search over everything, opened from its button or its key",
+      "title": "Search palette",
+      "description": "One search over everything, opened from its button or its key",
       "registryDependencies": [
         "@mk/command",
         "@mk/glyphs",
@@ -2030,7 +2030,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "447b6ee1b45502c081e595133a88516420f6109aff0b33b90cb63738196d5aba",
+        "sha256": "a267aa7cb05f2e24c72909780d4e4270e1a38ea03d6567fe180b4f6fdb56f8e5",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -2043,8 +2043,8 @@
     {
       "name": "collection-toolbar",
       "type": "registry:block",
-      "title": "collection toolbar",
-      "description": "the row above a collection: its filters, how many show, and how to view them",
+      "title": "Collection toolbar",
+      "description": "The row above a collection: its filters, how many show, and how to view them",
       "registryDependencies": [
         "@mk/glyphs",
         "@mk/toggle-group",
@@ -2059,7 +2059,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "14a930a67cea4a9448013e10fd1eccea20d990d61bd29791da4ed4253b625077",
+        "sha256": "84b09d822d5175379b84386bf8b96e817aebf5600d613180952ea081578eac99",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -2073,8 +2073,8 @@
     {
       "name": "list-rows",
       "type": "registry:block",
-      "title": "list rows",
-      "description": "ruled rows, each a title with its time, a meta line and its actions, and plain rows that read as words",
+      "title": "List rows",
+      "description": "Ruled rows, each a title with its time, a meta line and its actions, and plain rows that read as words",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -2105,8 +2105,8 @@
     {
       "name": "item-cards",
       "type": "registry:block",
-      "title": "item cards",
-      "description": "a grid of cards, each a title with its status, meta and actions, full-width cards that collapse to one line once decided, or full-bleed tiles in ruled cells",
+      "title": "Item cards",
+      "description": "A grid of cards, each a title with its status, meta and actions, full-width cards that collapse to one line once decided, or full-bleed tiles in ruled cells",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -2139,8 +2139,8 @@
     {
       "name": "data-table",
       "type": "registry:block",
-      "title": "data table",
-      "description": "a table its heads sort, with chosen rows, a row that opens a detail, sub-entries and a row for when it is empty",
+      "title": "Data table",
+      "description": "A table its heads sort, with chosen rows, a row that opens a detail, sub-entries and a row for when it is empty",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -2159,7 +2159,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "21744a9a8ebefc40b9fa6cdedf3322cb7ac04bcd61c47cbe735648730707e7f4",
+        "sha256": "00727830065552a4dd458e21ba5f8a8da7c5aa3b171ce762a57ce3399a10c02d",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -2174,8 +2174,8 @@
     {
       "name": "form-section",
       "type": "registry:block",
-      "title": "form section",
-      "description": "a titled group of fields that saves or discards its changes",
+      "title": "Form section",
+      "description": "A titled group of fields that saves or discards its changes",
       "registryDependencies": [
         "@mk/field",
         "@mk/utils"
@@ -2203,8 +2203,8 @@
     {
       "name": "quick-add",
       "type": "registry:block",
-      "title": "quick add",
-      "description": "one field and its button, for adding a thing by its name",
+      "title": "Quick add",
+      "description": "One field and its button, for adding a thing by its name",
       "registryDependencies": [
         "@mk/button",
         "@mk/field",
@@ -2224,7 +2224,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "f6dbc5791f109cd741844f99a71d21c931ec05e558745e1e9d72d0c91ce98f37",
+        "sha256": "479de747a9754566c8dd29c913a52ef4504b82adfe6ffb8ef2f0cd80ca871763",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -2237,8 +2237,8 @@
     {
       "name": "facts",
       "type": "registry:block",
-      "title": "facts",
-      "description": "labelled values in a ruled grid",
+      "title": "Facts",
+      "description": "Labelled values in a ruled grid",
       "registryDependencies": [
         "@mk/utils"
       ],
@@ -2266,8 +2266,8 @@
     {
       "name": "letter",
       "type": "registry:block",
-      "title": "letter",
-      "description": "a piece of writing read whole: its subject and kind, the body at the reading measure, and its tools",
+      "title": "Letter",
+      "description": "A piece of writing read whole: its subject and kind, the body at the reading measure, and its tools",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -2295,8 +2295,8 @@
     {
       "name": "jump-line",
       "type": "registry:block",
-      "title": "jump line",
-      "description": "a line of anchors to a long page's sections, each with how many it holds",
+      "title": "Jump line",
+      "description": "A line of anchors to a long page's sections, each with how many it holds",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -2312,7 +2312,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "2e037a3f694aa0b372d00c9e14a27022cb01339b9f657e3bc09530581c8fb754",
+        "sha256": "18c114107b2c6cbbc0405818e147e68c94f6ea3fafca362b2b022e8635d4f99d",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -2325,8 +2325,8 @@
     {
       "name": "send-bar",
       "type": "registry:block",
-      "title": "send bar",
-      "description": "the foot of a review: who it goes to, every address and file, the send and a note under it",
+      "title": "Send bar",
+      "description": "The foot of a review: who it goes to, every address and file, the send and a note under it",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -2356,8 +2356,8 @@
     {
       "name": "job-sheet",
       "type": "registry:block",
-      "title": "job sheet",
-      "description": "the one job on paper: a cue, its title, why, one quiet line and its actions, each in a held slot",
+      "title": "Job sheet",
+      "description": "The one job on paper: a cue, its title, why, one quiet line and its actions, each in a held slot",
       "registryDependencies": [
         "@mk/button",
         "@mk/fit-title",
@@ -2388,8 +2388,8 @@
     {
       "name": "day-line",
       "type": "registry:block",
-      "title": "day line",
-      "description": "a day at true scale: the date, names over blocks, ticks and a now mark, with every state a calendar has",
+      "title": "Day line",
+      "description": "A day at true scale: the date, names over blocks, ticks and a now mark, with every state a calendar has",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -2409,7 +2409,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "330b7d17ae877f445e297d08e19dffae1499e779cfe9cd5f09a5c66f792ddb2b",
+        "sha256": "734e5c07375fb2cd46292c09f56ec16fa013e0e8db7ce2ce7ef042c7f1bb1660",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -2422,8 +2422,8 @@
     {
       "name": "month-grid",
       "type": "registry:block",
-      "title": "month grid",
-      "description": "a month as six weeks: a dot on days with content, today's edge, the open day's bar, mono figures and arrow keys that step it",
+      "title": "Month grid",
+      "description": "A month as six weeks: a dot on days with content, today's edge, the open day's bar, mono figures and arrow keys that step it",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -2443,7 +2443,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "b02055d0dea1c96a563064d78bc80b161afb04ef1f20a5a3492764c88cbd92bb",
+        "sha256": "cc3f598935b93a6b7844534ac526ffae7fc48e6e0f571f19da45ef9634a74c55",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -2455,8 +2455,8 @@
     {
       "name": "reader",
       "type": "registry:block",
-      "title": "reader",
-      "description": "a page of reading: a lead line, the next action on paper, a margin rail, a closing line and a foot, with a meeting brief's who, owed and raised blocks",
+      "title": "Reader",
+      "description": "A page of reading: a lead line, the next action on paper, a margin rail, a closing line and a foot, with a meeting brief's who, owed and raised blocks",
       "dependencies": [
         "@base-ui/react@^1.8.0"
       ],
@@ -2487,8 +2487,8 @@
     {
       "name": "notice",
       "type": "registry:block",
-      "title": "notice",
-      "description": "a flat notice in the flow: its status glyph, what happened and what to do, or one quiet line",
+      "title": "Notice",
+      "description": "A flat notice in the flow: its status glyph, what happened and what to do, or one quiet line",
       "registryDependencies": [
         "@mk/glyphs",
         "@mk/utils"

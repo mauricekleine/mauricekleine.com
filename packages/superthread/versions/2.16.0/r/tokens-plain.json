@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "tokens-plain",
-  "title": "plain tokens",
-  "description": "the same tokens as plain css with no tailwind, and as a typed module",
+  "title": "Plain tokens",
+  "description": "The same tokens as plain CSS with no Tailwind, and as a typed module",
   "files": [
     {
       "path": "dist/v2/superthread-plain.css",

@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "facts",
-  "title": "facts",
-  "description": "labelled values in a ruled grid",
+  "title": "Facts",
+  "description": "Labelled values in a ruled grid",
   "registryDependencies": [
     "@mk/utils"
   ],

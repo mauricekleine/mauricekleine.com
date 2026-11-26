@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "use-minute",
-  "title": "use minute",
-  "description": "the clock's minute and the reader's day, from one shared timer that stops while the page is hidden",
+  "title": "Use minute",
+  "description": "The clock's minute and the reader's day, from one shared timer that stops while the page is hidden",
   "registryDependencies": [
     "@mk/time-words"
   ],

@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "onward",
-  "title": "onward",
-  "description": "the way onward from a page: a word and its arrow, or a door, one line of words with an arrow",
+  "title": "Onward",
+  "description": "The way onward from a page: a word and its arrow, or a door, one line of words with an arrow",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

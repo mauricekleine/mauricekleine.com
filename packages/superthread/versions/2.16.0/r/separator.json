@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "separator",
-  "title": "separator",
-  "description": "base-nova's separator, on the superthread tokens",
+  "title": "Separator",
+  "description": "Base-nova's separator, on the Superthread tokens",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],

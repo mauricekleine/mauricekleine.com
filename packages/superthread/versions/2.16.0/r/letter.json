@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "letter",
-  "title": "letter",
-  "description": "a piece of writing read whole: its subject and kind, the body at the reading measure, and its tools",
+  "title": "Letter",
+  "description": "A piece of writing read whole: its subject and kind, the body at the reading measure, and its tools",
   "dependencies": [
     "@base-ui/react@^1.8.0"
   ],
