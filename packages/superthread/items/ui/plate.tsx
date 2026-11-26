@@ -9,9 +9,10 @@ type PlateProps = Omit<ComponentPropsWithoutRef<"div">, "children"> & {
   draw?: PlateDraw;
   breath?: BreathStrength;
   still?: boolean;
+  positive?: boolean;
 };
 
-export function Plate({ spec = "planes", src, draw, breath, still = false, ...props }: PlateProps) {
+export function Plate({ spec = "planes", src, draw, breath, still = false, positive, ...props }: PlateProps) {
   const host = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (host.current) return mountPlate(host.current, draw);
@@ -26,6 +27,7 @@ export function Plate({ spec = "planes", src, draw, breath, still = false, ...pr
       data-plate-src={src}
       data-plate-breath={breath}
       data-plate-still={still ? "" : undefined}
+      data-plate-positive={positive === undefined ? undefined : positive ? "1" : "0"}
     />
   );
 }

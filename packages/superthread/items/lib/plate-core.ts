@@ -10,8 +10,17 @@ export type PlateSpec = {
   seed: number;
   flip: boolean;
   shelf: number;
+  cutout: boolean;
+  positive?: boolean;
   breath: BreathStrength;
   pitch: number;
+};
+
+export type PaintOptions = {
+  breath: BreathStrength;
+  seconds?: number;
+  phaseOffset?: number;
+  positive?: boolean;
 };
 
 type RGB = readonly [number, number, number];
@@ -83,6 +92,16 @@ export function parsePlate(line: string): PlateSpec {
         ? "off"
         : "vivid";
 
+  const bool = (key: string): boolean | undefined => {
+    if (!pairs.has(key)) return undefined;
+    const raw = pairs.get(key)?.toLowerCase();
+    if (raw === undefined || raw === "1" || raw === "true" || raw === "yes" || raw === "on") return true;
+    if (raw === "0" || raw === "false" || raw === "no" || raw === "off") return false;
+    return undefined;
+  };
+
+  const positive = bool("positive");
+
   return {
     kind,
     ratios,
@@ -91,6 +110,8 @@ export function parsePlate(line: string): PlateSpec {
     seed: Math.round(num("seed", 1, 0, 2147483647)),
     flip: pairs.has("flip"),
     shelf: num("shelf", 0.56, 0, 0.9),
+    cutout: bool("cutout") ?? true,
+    ...(positive !== undefined ? { positive } : {}),
     breath,
     pitch: num("pitch", PLATE_PITCH, 2, 8),
   };
@@ -193,10 +214,12 @@ export function drawPlateGeometry(ctx: CanvasRenderingContext2D, spec: PlateSpec
     ctx.fillStyle = sg;
     ctx.fillRect(sx, sy, sw, h - sy);
   }
-  const wx = w * (spec.flip ? 0.62 : 0.14);
-  const wy = h * (0.14 + 0.12 * hash(29, spec.seed));
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(wx, wy, w * 0.18, h * 0.26);
+  if (spec.cutout) {
+    const wx = w * (spec.flip ? 0.62 : 0.14);
+    const wy = h * (0.14 + 0.12 * hash(29, spec.seed));
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(wx, wy, w * 0.18, h * 0.26);
+  }
 }
 
 /** Print one 3.5 px two-ink proof halftone frame (key 45 deg + plum 15 deg) with optional light breath. */
@@ -209,7 +232,7 @@ export function paintProofPlate(
   h: number,
   inks: PlateInks,
   out: Uint8ClampedArray,
-  options: { breath: BreathStrength; seconds?: number; phaseOffset?: number } = { breath: "vivid" },
+  options: PaintOptions = { breath: "vivid" },
 ) {
   const preset = BREATH[options.breath];
   const active = preset.lum > 0 && options.seconds !== undefined;
@@ -289,7 +312,10 @@ export function paintProofPlate(
     return;
   }
 
-  // Dark mode: calm white dots at rest (~48% max) on key stock, illuminated upward by light breath + dark plum overprint.
+  // Dark mode: calm white dots at rest (~48% abstract, ~52% positive photo) on key stock, illuminated upward by light
+  // breath + dark plum overprint. Real photos use positive polarity so highlights stay bright and shadows stay dark.
+  const positive = Boolean(options.positive);
+  const restScale = positive ? 0.52 : 0.48;
   const bgR = inks.stock[0],
     bgG = inks.stock[1],
     bgB = inks.stock[2];
@@ -310,11 +336,11 @@ export function paintProofPlate(
       const idx = row + x;
       const baseLum = lumMap[idx]!;
       const s = satMap[idx]!;
-      const inkPresence = smoothstep(0.96, 0.78, baseLum);
+      const inkPresence = positive ? smoothstep(0.04, 0.22, baseLum) : smoothstep(0.96, 0.78, baseLum);
       const wave = active ? gxArr[x]! * gy * inkPresence : 0;
 
-      const ink = clamp((1 - baseLum) * 1.04 - 0.02);
-      const whiteTone = clamp(ink * 0.48 + lumSwing * 1.15 * wave * (0.35 + 0.65 * ink), 0, 0.88);
+      const ink = positive ? Math.pow(clamp(baseLum * 1.04 - 0.02), 0.9) : clamp((1 - baseLum) * 1.04 - 0.02);
+      const whiteTone = clamp(ink * restScale + lumSwing * 1.15 * wave * (0.35 + 0.65 * ink), 0, 0.88);
       const midBand = Math.max(0, 1 - Math.abs(ink - 0.48) * 2.2);
       const plumTone = clamp(midBand * 0.34 + s * 0.28 + plumSwing * 1.05 * wave * (0.4 + 0.6 * ink), 0, 0.82);
 
@@ -400,12 +426,21 @@ export function mountPlate(element: HTMLElement, draw?: PlateDraw) {
   let loadedSrc = "";
   let loadedImage: HTMLImageElement | undefined;
   let subjectKey = "";
+  let usingImage = false;
 
   function activeBreath(): BreathStrength {
     if (reduced || printing || element.hasAttribute("data-plate-still")) return "off";
     const attr = element.dataset.plateBreath;
     if (attr === "off" || attr === "gentle" || attr === "balanced" || attr === "vivid") return attr;
     return spec?.breath ?? "vivid";
+  }
+
+  function isPositive(): boolean {
+    const attr = element.dataset.platePositive?.trim().toLowerCase();
+    if (attr === "1" || attr === "true" || attr === "yes" || attr === "on") return true;
+    if (attr === "0" || attr === "false" || attr === "no" || attr === "off") return false;
+    if (spec?.positive !== undefined) return spec.positive;
+    return usingImage;
   }
 
   function resolveSourceImage(): HTMLImageElement | undefined {
@@ -453,13 +488,16 @@ export function mountPlate(element: HTMLElement, draw?: PlateDraw) {
     offscreen.height = targetH;
     offCtx!.clearRect(0, 0, targetW, targetH);
     if (draw) {
+      usingImage = false;
       draw(offCtx!, targetW, targetH);
     } else if (img && img.complete && img.naturalWidth > 0) {
+      usingImage = true;
       const scale = Math.max(targetW / img.naturalWidth, targetH / img.naturalHeight);
       const dw = img.naturalWidth * scale;
       const dh = img.naturalHeight * scale;
       offCtx!.drawImage(img, (targetW - dw) / 2, (targetH - dh) / 2, dw, dh);
     } else {
+      usingImage = false;
       drawPlateGeometry(offCtx!, spec, targetW, targetH);
     }
 
@@ -469,9 +507,11 @@ export function mountPlate(element: HTMLElement, draw?: PlateDraw) {
     satMap = new Float32Array(count);
     for (let i = 0; i < count; i++) {
       const o = i * 4;
-      const r = (px[o] ?? 255) / 255;
-      const g = (px[o + 1] ?? 255) / 255;
-      const b = (px[o + 2] ?? 255) / 255;
+      const a = (px[o + 3] ?? 255) / 255;
+      // Composite transparent image areas over white stock so cutouts screen cleanly.
+      const r = ((px[o] ?? 255) / 255) * a + (1 - a);
+      const g = ((px[o + 1] ?? 255) / 255) * a + (1 - a);
+      const b = ((px[o + 2] ?? 255) / 255) * a + (1 - a);
       lumMap[i] = 0.299 * r + 0.587 * g + 0.114 * b;
       satMap[i] = Math.max(r, g, b) - Math.min(r, g, b);
     }
@@ -483,6 +523,7 @@ export function mountPlate(element: HTMLElement, draw?: PlateDraw) {
       breath: activeBreath(),
       seconds,
       phaseOffset,
+      positive: isPositive(),
     });
     context!.putImageData(image, 0, 0);
   }
@@ -557,6 +598,7 @@ export function mountPlate(element: HTMLElement, draw?: PlateDraw) {
         "data-plate-src",
         "data-plate-breath",
         "data-plate-still",
+        "data-plate-positive",
       ],
     });
   }

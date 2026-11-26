@@ -26,8 +26,18 @@ export type PlateSpec = {
   seed: number;
   flip: boolean;
   shelf: number;
+  cutout: boolean;
+  positive?: boolean;
   breath: BreathStrength;
   pitch: number;
+};
+
+export type PaintOptions = {
+  breath: BreathStrength;
+  seconds?: number;
+  phaseOffset?: number;
+  positive?: boolean;
+  channels?: 3 | 4;
 };
 
 type RGB = readonly [number, number, number];
@@ -115,6 +125,16 @@ export function parsePlate(line: string): PlateSpec {
         ? "off"
         : "vivid";
 
+  const bool = (key: string): boolean | undefined => {
+    if (!pairs.has(key)) return undefined;
+    const raw = pairs.get(key)?.toLowerCase();
+    if (raw === undefined || raw === "1" || raw === "true" || raw === "yes" || raw === "on") return true;
+    if (raw === "0" || raw === "false" || raw === "no" || raw === "off") return false;
+    return undefined;
+  };
+
+  const positive = bool("positive");
+
   return {
     kind,
     ratios,
@@ -123,6 +143,8 @@ export function parsePlate(line: string): PlateSpec {
     seed: Math.round(num("seed", 1, 0, 2147483647)),
     flip: pairs.has("flip"),
     shelf: num("shelf", 0.56, 0, 0.9),
+    cutout: bool("cutout") ?? true,
+    ...(positive !== undefined ? { positive } : {}),
     breath,
     pitch: num("pitch", PLATE_PITCH, 2, 8),
   };
@@ -260,21 +282,23 @@ export function sampleGeometry(spec: PlateSpec, w: number, h: number): { lumMap:
       }
     }
 
-    const wx = w * (spec.flip ? 0.62 : 0.14);
-    const wy = h * (0.14 + 0.12 * hash(29, spec.seed));
-    const ww = w * 0.18;
-    const wh = h * 0.26;
-    const wxStart = Math.max(0, Math.floor(wx));
-    const wxEnd = Math.min(w, Math.ceil(wx + ww));
-    const wyStart = Math.max(0, Math.floor(wy));
-    const wyEnd = Math.min(h, Math.ceil(wy + wh));
-    for (let py = wyStart; py < wyEnd; py++) {
-      const row = py * w;
-      for (let px = wxStart; px < wxEnd; px++) {
-        const o = row + px;
-        rBuf[o] = 1;
-        gBuf[o] = 1;
-        bBuf[o] = 1;
+    if (spec.cutout) {
+      const wx = w * (spec.flip ? 0.62 : 0.14);
+      const wy = h * (0.14 + 0.12 * hash(29, spec.seed));
+      const ww = w * 0.18;
+      const wh = h * 0.26;
+      const wxStart = Math.max(0, Math.floor(wx));
+      const wxEnd = Math.min(w, Math.ceil(wx + ww));
+      const wyStart = Math.max(0, Math.floor(wy));
+      const wyEnd = Math.min(h, Math.ceil(wy + wh));
+      for (let py = wyStart; py < wyEnd; py++) {
+        const row = py * w;
+        for (let px = wxStart; px < wxEnd; px++) {
+          const o = row + px;
+          rBuf[o] = 1;
+          gBuf[o] = 1;
+          bBuf[o] = 1;
+        }
       }
     }
   }
@@ -348,7 +372,7 @@ export function paintProofPlate(
   h: number,
   inks: PlateInks,
   out: Uint8Array,
-  options: { breath: BreathStrength; seconds?: number; phaseOffset?: number; channels?: 3 | 4 } = { breath: "vivid" },
+  options: PaintOptions = { breath: "vivid" },
 ) {
   const channels = options.channels ?? 3;
   const preset = BREATH[options.breath];
@@ -429,7 +453,10 @@ export function paintProofPlate(
     return;
   }
 
-  // Dark mode: calm white dots at rest (~48% max) on key stock, illuminated upward by light breath + dark plum overprint.
+  // Dark mode: calm white dots at rest (~48% abstract, ~52% positive photo) on key stock, illuminated upward by light
+  // breath + dark plum overprint. Real photos use positive polarity so highlights stay bright and shadows stay dark.
+  const positive = Boolean(options.positive);
+  const restScale = positive ? 0.52 : 0.48;
   const bgR = inks.stock[0];
   const bgG = inks.stock[1];
   const bgB = inks.stock[2];
@@ -450,11 +477,11 @@ export function paintProofPlate(
       const idx = row + x;
       const baseLum = lumMap[idx]!;
       const s = satMap[idx]!;
-      const inkPresence = smoothstep(0.96, 0.78, baseLum);
+      const inkPresence = positive ? smoothstep(0.04, 0.22, baseLum) : smoothstep(0.96, 0.78, baseLum);
       const wave = active ? gxArr[x]! * gy * inkPresence : 0;
 
-      const ink = clamp((1 - baseLum) * 1.04 - 0.02);
-      const whiteTone = clamp(ink * 0.48 + lumSwing * 1.15 * wave * (0.35 + 0.65 * ink), 0, 0.88);
+      const ink = positive ? Math.pow(clamp(baseLum * 1.04 - 0.02), 0.9) : clamp((1 - baseLum) * 1.04 - 0.02);
+      const whiteTone = clamp(ink * restScale + lumSwing * 1.15 * wave * (0.35 + 0.65 * ink), 0, 0.88);
       const midBand = Math.max(0, 1 - Math.abs(ink - 0.48) * 2.2);
       const plumTone = clamp(midBand * 0.34 + s * 0.28 + plumSwing * 1.05 * wave * (0.4 + 0.6 * ink), 0, 0.82);
 
@@ -545,6 +572,8 @@ function usage(): string {
     "  --pitch <px>            CSS dot pitch in pixels (default: 3.5)",
     "  --breath <strength>     vivid | balanced | gentle | off (default: from spec, else vivid)",
     "  --still                 Shortcut for --breath off",
+    "  --positive              Map bright tones to white dots in dark mode (default for --src)",
+    "  --negative              Map dark tones to white dots in dark mode (default for --spec)",
     "  --time <sec>            Timestamp in seconds for a PNG still (default: 0 when breath is active)",
     "  --phase <rad>           Initial breath phase offset in radians (default: 0)",
     "  --duration <sec>        Video loop duration in seconds (default: breath cycle length, 8 for vivid)",
@@ -565,6 +594,7 @@ type CliOptions = {
   pitch?: number;
   breath?: BreathStrength;
   still: boolean;
+  positive?: boolean;
   time?: number;
   phase: number;
   duration?: number;
@@ -596,6 +626,14 @@ function parseCli(argv: string[]): CliOptions {
     }
     if (arg === "--still") {
       opts.still = true;
+      continue;
+    }
+    if (arg === "--positive") {
+      opts.positive = true;
+      continue;
+    }
+    if (arg === "--negative") {
+      opts.positive = false;
       continue;
     }
     const next = () => {
@@ -682,6 +720,7 @@ async function renderMp4(
   fps: number,
   phaseOffset: number,
   crf: number,
+  positive: boolean,
 ) {
   const totalFrames = Math.max(1, Math.round(duration * fps));
   const vf =
@@ -739,6 +778,7 @@ async function renderMp4(
         breath,
         seconds: breath === "off" ? undefined : n / fps,
         phaseOffset,
+        positive,
         channels: 3,
       });
       yield buf;
@@ -767,6 +807,7 @@ async function main() {
 
   const spec = parsePlate(opts.spec);
   const breath: BreathStrength = opts.still ? "off" : (opts.breath ?? spec.breath);
+  const positive = opts.positive ?? spec.positive ?? Boolean(opts.src);
   const pitch = opts.pitch ?? spec.pitch;
   const w = Math.max(2, Math.round(opts.width * opts.dpr));
   const h = Math.max(2, Math.round(opts.height * opts.dpr));
@@ -780,7 +821,22 @@ async function main() {
   if (ext === ".mp4") {
     const duration = opts.duration ?? BREATH[breath].sec;
     if (duration <= 0) throw new Error("--duration must be positive");
-    await renderMp4(opts.out, lumMap, satMap, gridK, gridP, w, h, inks, breath, duration, opts.fps, opts.phase, opts.crf);
+    await renderMp4(
+      opts.out,
+      lumMap,
+      satMap,
+      gridK,
+      gridP,
+      w,
+      h,
+      inks,
+      breath,
+      duration,
+      opts.fps,
+      opts.phase,
+      opts.crf,
+      positive,
+    );
     return;
   }
 
@@ -793,6 +849,7 @@ async function main() {
     breath,
     seconds: breath === "off" ? undefined : (opts.time ?? 0),
     phaseOffset: opts.phase,
+    positive,
     channels: 3,
   });
   await writeFile(opts.out, encodeRgbPng(rgb, w, h));
