@@ -1,95 +1,104 @@
-import { ElsewhereLinks, EssayList, Footer, GraveyardItem, Opener, Section, SideQuests } from "../components";
+import {
+  ElsewhereLinks,
+  EssayList,
+  Footer,
+  Graveyard,
+  GraveyardItem,
+  Opener,
+  Section,
+  SideQuests,
+} from "../components";
 import { Shell } from "../shell";
 
 const sections = [
-  { id: "currently", title: "currently" },
-  { id: "side-quests", title: "side quests" },
-  { id: "graveyard", title: "the graveyard" },
-  { id: "essays", title: "essays" },
-  { id: "elsewhere", title: "elsewhere" },
+  { id: "currently", title: "Currently" },
+  { id: "side-quests", title: "Side quests" },
+  { id: "graveyard", title: "The graveyard" },
+  { id: "essays", title: "Essays" },
+  { id: "elsewhere", title: "Elsewhere" },
 ];
 
 export function HomePage() {
   return (
     <Shell
       place="home"
-      crumb="maurice kleine"
-      title="home"
+      crumb="Maurice Kleine"
+      title="Home"
       sections={sections}
       opener={
-        <Opener home portrait>
-          <h1>maurice kleine</h1>
-          <p className="mk-lede type-lede">
-            i build small internet things
-            <br />
-            and sometimes they work
-          </p>
-          <div className="mk-opener-meta type-meta">
-            <p>amsterdam, nl</p>
+        <Opener
+          home
+          kicker="Amsterdam, NL"
+          plateSrc="/maurice.png"
+          plateLabel="Portrait of Maurice Kleine"
+          action={
             <a href="#currently">
-              keep reading <span aria-hidden="true">↓</span>
+              Keep reading <span aria-hidden="true">↓</span>
             </a>
-          </div>
+          }
+        >
+          <h1>Maurice Kleine</h1>
+          <p className="mk-lede type-lede">I build small internet things, and sometimes they work.</p>
         </Opener>
       }
     >
-      <Section id="currently" title="currently" className="prose">
+      <Section id="currently" title="Currently" className="prose">
         <p>
-          ai engineering lead at <a href="https://waimakers.com">waimakers</a>, helping organizations put ai to work.
-          before that: 14+ years of building software as an engineer, product owner, engineering manager, and founder.
+          AI Engineering Lead at <a href="https://waimakers.com">Waimakers</a>, helping organizations put AI to work.
+          Before that: 14+ years of building software as an engineer, product owner, engineering manager, and founder.
         </p>
         <p>
-          that's the day job. everything below happens after dinner, and these days a fleet of coding agents does most
-          of the typing. <a href="/essays/my-agents-merged-468-prs">468 prs in 23 days</a>, and i didn't read a single
+          That's the day job. Everything below happens after dinner, and these days a fleet of coding agents does most
+          of the typing. <a href="/essays/my-agents-merged-468-prs">468 PRs in 23 days</a>, and I didn't read a single
           one.
         </p>
       </Section>
 
-      <Section id="side-quests" title="side quests">
+      <Section id="side-quests" title="Side quests">
         <SideQuests />
       </Section>
 
-      <Section id="graveyard" title="the graveyard">
+      <Section id="graveyard" title="The graveyard">
         <p className="section-intro">
-          life is a series of experiments. some of them end, and that's fine, as long as you keep learning.
+          Life is a series of experiments. Some of them end, and that's fine, as long as you keep learning.
         </p>
-        <ul className="graveyard">
-          <GraveyardItem name="logistics system" stamp="sold" exit years="2013–2019">
-            built at uni because my part-time job ran on spreadsheets and hope. sold it six years later. small exit,
-            still proud
+        <Graveyard>
+          <GraveyardItem name="Logistics system" stamp="Sold" exit years="2013–2019">
+            Built at uni because my part-time job ran on spreadsheets and hope. Sold it six years later. Small exit,
+            still proud.
           </GraveyardItem>
-          <GraveyardItem name="subthread" stamp="dissolved" years="2023–2025">
-            co-founded a studio, shipped dozens of ai products. chatbots, recruitment pipelines, consumer apps. learned
-            how much ai can do for normal businesses
+          <GraveyardItem name="Subthread" stamp="Dissolved" years="2023–2025">
+            Co-founded a studio, shipped dozens of AI products. Chatbots, recruitment pipelines, consumer apps. Learned
+            how much AI can do for normal businesses.
           </GraveyardItem>
-          <GraveyardItem name="onesixtyeight" stamp="discontinued" years="2025–2026">
-            functional mushroom blend for focus. turns out atoms are harder than bits
+          <GraveyardItem name="Onesixtyeight" stamp="Discontinued" years="2025–2026">
+            Functional mushroom blend for focus. Turns out atoms are harder than bits.
           </GraveyardItem>
-          <GraveyardItem name="spinup" stamp="spun down" exit years="2025–2026">
-            cloud agent runtime on firecracker microvms. joining waimakers was part of the deal, so it counts as an
-            exit. probably
+          <GraveyardItem name="Spinup" stamp="Spun down" exit years="2025–2026">
+            Cloud agent runtime on Firecracker microVMs. Joining Waimakers was part of the deal, so it counts as an
+            exit. Probably.
           </GraveyardItem>
-        </ul>
+        </Graveyard>
       </Section>
 
-      <Section id="essays" title="essays">
+      <Section id="essays" title="Essays">
         <EssayList variant="home" />
         <p className="more-link">
-          <a href="/essays">all essays →</a>
+          <a href="/essays">All essays →</a>
         </p>
       </Section>
 
-      <Section id="elsewhere" title="elsewhere">
+      <Section id="elsewhere" title="Elsewhere">
         <ElsewhereLinks />
         <p className="said-out-loud">
-          said out loud:{" "}
-          <a href="https://amsterdam.aitinkerers.org/profile/client_kBU1ebRuvug">ai tinkerers amsterdam</a> ·{" "}
-          <a href="https://open.spotify.com/show/6qrTPgmddsRwlreYeKu7Ki">ai, je nieuwe collega</a> (dutch) ·{" "}
-          <a href="https://www.youtube.com/watch?v=RDPkCs7foXs">demystifying ai</a> ·{" "}
-          <a href="https://startremote.webflow.io/interviews/maurice-kleine">startremote</a> (2020)
+          Said out loud:{" "}
+          <a href="https://amsterdam.aitinkerers.org/profile/client_kBU1ebRuvug">AI Tinkerers Amsterdam</a> ·{" "}
+          <a href="https://open.spotify.com/show/6qrTPgmddsRwlreYeKu7Ki">AI, je nieuwe collega</a> (Dutch) ·{" "}
+          <a href="https://www.youtube.com/watch?v=RDPkCs7foXs">Demystifying AI</a> ·{" "}
+          <a href="https://startremote.webflow.io/interviews/maurice-kleine">StartRemote</a> (2020)
         </p>
         <p className="more-link">
-          <a href="/about">more about me →</a>
+          <a href="/about">More about me →</a>
         </p>
       </Section>
 

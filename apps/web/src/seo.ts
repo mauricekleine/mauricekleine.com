@@ -5,8 +5,7 @@ import type { Essay } from "./essay-content";
 const origin = "https://www.mauricekleine.com";
 const personId = `${origin}/#maurice`;
 const socialImage = `${origin}/og.png`;
-const socialImageAlt =
-  "maurice kleine, amsterdam. i build small internet things and sometimes they work. a night sky screened in two inks, beside his portrait.";
+const socialImageAlt = "Maurice Kleine, Amsterdam. I build small internet things, and sometimes they work.";
 const sameAs = [
   "https://github.com/mauricekleine",
   "https://www.linkedin.com/in/mauricekleine/",
@@ -66,9 +65,9 @@ function buildHead(page: PageSeo): { meta: Meta[]; links: Link[]; scripts: Scrip
 
   if (page.path !== undefined) links.push({ rel: "canonical", href: canonical(page.path) });
   if (page.feed)
-    links.push({ rel: "alternate", type: "application/atom+xml", href: "/feed.xml", title: "essays feed" });
+    links.push({ rel: "alternate", type: "application/atom+xml", href: "/feed.xml", title: "Essays feed" });
   if (page.markdown)
-    links.push({ rel: "alternate", type: "text/markdown", href: page.markdown, title: "markdown version" });
+    links.push({ rel: "alternate", type: "text/markdown", href: page.markdown, title: "Markdown version" });
   if (page.apiCatalog) links.push({ rel: "api-catalog", href: "/.well-known/api-catalog" });
   if (page.authorLink) links.push({ rel: "author", href: "/humans.txt" });
 
@@ -135,7 +134,7 @@ function buildHead(page: PageSeo): { meta: Meta[]; links: Link[]; scripts: Scrip
 const homePerson = {
   ...author,
   image: canonical("/maurice.png"),
-  description: "ai engineer and indie hacker. i build small internet things and sometimes they work",
+  description: "AI engineer and indie hacker. I build small internet things, and sometimes they work.",
   email: "mailto:hey@mauricekleine.com",
   jobTitle: "AI Engineering Lead",
   worksFor: { "@type": "Organization", name: "Waimakers", url: "https://waimakers.com" },
@@ -144,7 +143,7 @@ const homePerson = {
     "@type": "Place",
     address: { "@type": "PostalAddress", addressLocality: "Amsterdam", addressCountry: "NL" },
   },
-  knowsAbout: ["artificial intelligence", "llm applications", "web development", "indie hacking", "ai automation"],
+  knowsAbout: ["artificial intelligence", "LLM applications", "web development", "indie hacking", "AI automation"],
   sameAs,
   knows,
 };
@@ -152,15 +151,15 @@ const homePerson = {
 export function homeHead() {
   return buildHead({
     path: "/",
-    title: "maurice kleine - ai engineer in amsterdam",
+    title: "Maurice Kleine - AI engineer in Amsterdam",
     description:
-      "ai engineer and indie hacker in amsterdam. day job at waimakers, building mockly, fluncle, hackadam and nonobench after dinner.",
+      "AI engineer and indie hacker in Amsterdam. Day job at Waimakers, building Mockly, Fluncle, Hackadam and Nonobench after dinner.",
     markdown: "/index.md",
     feed: true,
     authorLink: true,
     apiCatalog: true,
     ogType: "website",
-    ogDescription: "i build small internet things and sometimes they work",
+    ogDescription: "I build small internet things, and sometimes they work.",
     twitterImageAlt: true,
     relativeStylesheet: true,
     jsonLd: { "@context": "https://schema.org", ...homePerson },
@@ -170,12 +169,12 @@ export function homeHead() {
 export function aboutHead() {
   return buildHead({
     path: "/about",
-    title: "about maurice kleine - ai engineer and indie hacker",
+    title: "About Maurice Kleine - AI engineer and indie hacker",
     description:
-      "about maurice kleine: 14+ years of building software from amsterdam. a logistics exit, co-founding subthread, now ai engineering lead at waimakers.",
+      "About Maurice Kleine: 14+ years of building software from Amsterdam. A logistics exit, co-founding Subthread, now AI Engineering Lead at Waimakers.",
     markdown: "/about.md",
     ogType: "profile",
-    ogDescription: "about maurice kleine - i build stuff on the internet from amsterdam",
+    ogDescription: "About Maurice Kleine - I build stuff on the internet from Amsterdam.",
     twitterImageAlt: true,
     relativeStylesheet: true,
     jsonLd: {
@@ -190,19 +189,19 @@ export function aboutHead() {
 export function essaysHead(essays: readonly Pick<Essay, "slug" | "title">[]) {
   return buildHead({
     path: "/essays",
-    title: "essays on ai and building software - maurice kleine",
+    title: "Essays on AI and building software - Maurice Kleine",
     description:
-      "essays by maurice kleine, first posted on x and linkedin. on ai coding agents, hyperspeed, and building small internet things.",
+      "Essays by Maurice Kleine, first posted on X and LinkedIn. On AI coding agents, Hyperspeed, and building small internet things.",
     markdown: "/essays.md",
     feed: true,
     authorLink: true,
     ogType: "website",
-    imageAlt: "maurice kleine, amsterdam. a night sky with project constellations.",
+    imageAlt: "Maurice Kleine, Amsterdam. Essays on AI and building software.",
     turnstile: true,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      name: "essays",
+      name: "Essays",
       url: canonical("/essays"),
       author,
       mainEntity: {
@@ -221,7 +220,7 @@ export function essaysHead(essays: readonly Pick<Essay, "slug" | "title">[]) {
 export function notFoundHead() {
   return buildHead({
     title: "404 - Maurice Kleine",
-    description: "this page drifted out of orbit",
+    description: "This page drifted out of orbit.",
     robots: "noindex",
   });
 }
@@ -247,7 +246,7 @@ export function essayHead(essay: Essay) {
     image,
     imageWidth: essay.coverWidth,
     imageHeight: essay.coverHeight,
-    imageAlt: `cover image for ${essay.title}`,
+    imageAlt: `Cover image for ${essay.title}`,
     twitterImageAlt: true,
     published: essay.date,
     turnstile: true,

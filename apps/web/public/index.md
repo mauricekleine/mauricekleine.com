@@ -1,50 +1,50 @@
-# maurice kleine
+# Maurice Kleine
 
-> i build small internet things and sometimes they work
+> I build small internet things, and sometimes they work.
 
-amsterdam, nl
+Amsterdam, NL
 
-this is the markdown mirror of [mauricekleine.com](https://www.mauricekleine.com/). same content, fewer divs.
+This is the Markdown mirror of [mauricekleine.com](https://www.mauricekleine.com/). Same content, fewer divs.
 
-## currently
+## Currently
 
-ai engineering lead at [waimakers](https://waimakers.com), helping organizations put ai to work. before that: 14+ years of building software as an engineer, product owner, engineering manager, and founder.
+AI Engineering Lead at [Waimakers](https://waimakers.com), helping organizations put AI to work. Before that: 14+ years of building software as an engineer, product owner, engineering manager, and founder.
 
-that's the day job. everything below happens after dinner, and these days a fleet of coding agents does most of the typing. [468 prs in 23 days](https://www.mauricekleine.com/essays/my-agents-merged-468-prs.md), and i didn't read a single one.
+That's the day job. Everything below happens after dinner, and these days a fleet of coding agents does most of the typing. [468 PRs in 23 days](https://www.mauricekleine.com/essays/my-agents-merged-468-prs.md), and I didn't read a single one.
 
-## side quests
+## Side quests
 
-- [mockly](https://www.getmockly.com) - fake chat screenshots for 17+ platforms. built it in a weekend, [techcrunch](https://techcrunch.com/2025/07/10/mockly-made-a-fake-dm-generator-thats-actually-user-friendly/) wrote about it, 10k people use it. now i run it with [jasper](https://x.com/jasperdeboer). i still can't believe this is legal
-- [fluncle](https://www.fluncle.com) - drum & bass bangers from another dimension. it has a radio, an api, and an ssh rave terminal
-- [hackadam](https://hackadam.nl) - monthly meetup in amsterdam for indie makers building their own stuff. co-organized with [abner](https://x.com/AbnerHout)
-- [nonobench](https://www.nonobench.com) - benchmark for how well llms solve nonogram puzzles. the top score went from 63% in february to 93% in september
+- [Mockly](https://www.getmockly.com) - Fake chat screenshots for 17+ platforms. Built it in a weekend, [TechCrunch](https://techcrunch.com/2025/07/10/mockly-made-a-fake-dm-generator-thats-actually-user-friendly/) wrote about it, 10k people use it. Now I run it with [Jasper](https://x.com/jasperdeboer). I still can't believe this is legal.
+- [Fluncle](https://www.fluncle.com) - Drum & bass bangers from another dimension. It has a radio, an API, and an SSH rave terminal.
+- [Hackadam](https://hackadam.nl) - Monthly meetup in Amsterdam for indie makers building their own stuff. Co-organized with [Abner](https://x.com/AbnerHout).
+- [Nonobench](https://www.nonobench.com) - Benchmark for how well LLMs solve nonogram puzzles. The top score went from 63% in February to 93% in September.
 
-## the graveyard
+## The graveyard
 
-life is a series of experiments. some of them end, and that's fine, as long as you keep learning.
+Life is a series of experiments. Some of them end, and that's fine, as long as you keep learning.
 
-- **logistics system** (sold, 2013-2019) - built at uni because my part-time job ran on spreadsheets and hope. sold it six years later. small exit, still proud
-- **subthread** (dissolved, 2023-2025) - co-founded a studio, shipped dozens of ai products. chatbots, recruitment pipelines, consumer apps. learned how much ai can do for normal businesses
-- **onesixtyeight** (discontinued, 2025-2026) - functional mushroom blend for focus. turns out atoms are harder than bits
-- **spinup** (spun down, 2025-2026) - cloud agent runtime on firecracker microvms. joining waimakers was part of the deal, so it counts as an exit. probably
+- **Logistics system** (Sold, 2013-2019) - Built at uni because my part-time job ran on spreadsheets and hope. Sold it six years later. Small exit, still proud.
+- **Subthread** (Dissolved, 2023-2025) - Co-founded a studio, shipped dozens of AI products. Chatbots, recruitment pipelines, consumer apps. Learned how much AI can do for normal businesses.
+- **Onesixtyeight** (Discontinued, 2025-2026) - Functional mushroom blend for focus. Turns out atoms are harder than bits.
+- **Spinup** (Spun down, 2025-2026) - Cloud agent runtime on Firecracker microVMs. Joining Waimakers was part of the deal, so it counts as an exit. Probably.
 
-## essays
+## Essays
 
-- [ride the floor up](https://www.mauricekleine.com/essays/ride-the-floor-up.md) (2026-09-13) - ai raises the floor of what technology does for us. how to keep raising your own ceiling while it does
-- [the journey no longer matters](https://www.mauricekleine.com/essays/the-journey-no-longer-matters.md) (2026-09-09) - fifteen years of loving the craft of building software. what happens when the craft stops being the point
-- [my agents merged 468 prs in 23 days. i didn't read a single one of them.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs.md) (2026-08-25) - how hyperspeed runs my coding agents overnight, and why planning and validation are the job now
-- [dude, where is the roi?](https://www.mauricekleine.com/essays/dude-where-is-the-roi.md) (2026-03-11) - you followed every step of the ai hype cycle. so where is the return? on tinkering versus shipping
+- [Ride the Floor Up](https://www.mauricekleine.com/essays/ride-the-floor-up.md) (2026-09-13) - AI raises the floor of what technology does for us. How to keep raising your own ceiling while it does.
+- [The Journey No Longer Matters](https://www.mauricekleine.com/essays/the-journey-no-longer-matters.md) (2026-09-09) - Fifteen years of loving the craft of building software. What happens when the craft stops being the point.
+- [My agents merged 468 PRs in 23 days. I didn't read a single one of them.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs.md) (2026-08-25) - How Hyperspeed runs my coding agents overnight, and why planning and validation are the job now.
+- [Dude, where is the ROI?](https://www.mauricekleine.com/essays/dude-where-is-the-roi.md) (2026-03-11) - You followed every step of the AI hype cycle. So where is the return? On tinkering versus shipping.
 
-[all essays](https://www.mauricekleine.com/essays.md)
+[All essays](https://www.mauricekleine.com/essays.md)
 
-## elsewhere
+## Elsewhere
 
-- [github](https://github.com/mauricekleine)
-- [linkedin](https://www.linkedin.com/in/mauricekleine/)
-- [x](https://x.com/mauricekleine)
-- [reddit](https://www.reddit.com/user/mauricekleine/)
-- [email](mailto:hey@mauricekleine.com)
+- [GitHub](https://github.com/mauricekleine)
+- [LinkedIn](https://www.linkedin.com/in/mauricekleine/)
+- [X](https://x.com/mauricekleine)
+- [Reddit](https://www.reddit.com/user/mauricekleine/)
+- [Email](mailto:hey@mauricekleine.com)
 
-said out loud: [ai tinkerers amsterdam](https://amsterdam.aitinkerers.org/profile/client_kBU1ebRuvug) · [ai, je nieuwe collega](https://open.spotify.com/show/6qrTPgmddsRwlreYeKu7Ki) (dutch) · [demystifying ai](https://www.youtube.com/watch?v=RDPkCs7foXs) · [startremote](https://startremote.webflow.io/interviews/maurice-kleine) (2020)
+Said out loud: [AI Tinkerers Amsterdam](https://amsterdam.aitinkerers.org/profile/client_kBU1ebRuvug) · [AI, je nieuwe collega](https://open.spotify.com/show/6qrTPgmddsRwlreYeKu7Ki) (Dutch) · [Demystifying AI](https://www.youtube.com/watch?v=RDPkCs7foXs) · [StartRemote](https://startremote.webflow.io/interviews/maurice-kleine) (2020)
 
-[more about me](https://www.mauricekleine.com/about.md)
+[More about me](https://www.mauricekleine.com/about.md)

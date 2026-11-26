@@ -455,15 +455,15 @@ async function resendConfirmContact(env: WorkerEnv, email: string): Promise<bool
 
 async function sendConfirmationEmail(env: WorkerEnv, email: string, token: string, origin: string): Promise<boolean> {
   const link = `${origin}/subscribe/confirm?t=${encodeURIComponent(token)}`;
-  const text = `hey,\n\nsomeone (hopefully you) asked for new essays from mauricekleine.com. click to confirm:\n\n${link}\n\ndidn't ask? ignore this and nothing happens.\n\n- maurice\n`;
-  const html = `<p>hey,</p><p>someone (hopefully you) asked for new essays from mauricekleine.com. click to confirm:</p><p><a href="${link}">${link}</a></p><p>didn't ask? ignore this and nothing happens.</p><p>- maurice</p>`;
+  const text = `Hey,\n\nSomeone (hopefully you) asked for new essays from mauricekleine.com. Click to confirm:\n\n${link}\n\nDidn't ask? Ignore this and nothing happens.\n\n- Maurice\n`;
+  const html = `<p>Hey,</p><p>Someone (hopefully you) asked for new essays from mauricekleine.com. Click to confirm:</p><p><a href="${link}">${link}</a></p><p>Didn't ask? Ignore this and nothing happens.</p><p>- Maurice</p>`;
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
     body: JSON.stringify({
-      from: "maurice kleine <hey@mauricekleine.com>",
+      from: "Maurice Kleine <hey@mauricekleine.com>",
       to: email,
-      subject: "confirm: new essays from maurice",
+      subject: "Confirm: new essays from Maurice",
       html,
       text,
     }),
@@ -475,7 +475,7 @@ async function sendConfirmationEmail(env: WorkerEnv, email: string, token: strin
   return true;
 }
 
-// small, self-contained page in the site's visual system, for the no-js path
+// Small, self-contained stock-first page in the site's visual system, for the no-js path.
 function subscribePage({ title, description, heading, message, action, back }: SubscribePage): string {
   const form = action
     ? `
@@ -504,30 +504,29 @@ function subscribePage({ title, description, heading, message, action, back }: S
     <link rel="stylesheet" href="/style.css?v=${assetVersion}" />
   </head>
   <body>
-    <div class="dark mk-island mk-island-solo">
+    <div class="mk-head mk-head-solo">
       <header class="mk-mast">
-        <a href="/" class="mk-brand">maurice kleine</a>
+        <a href="/" class="mk-brand">Maurice Kleine</a>
       </header>
-      <nav class="mk-nav mk-nav-compact" aria-label="site"><ul class="mk-nav-list"><li><a href="/">home</a></li><li><a href="/about">about</a></li><li><a href="/essays">essays</a></li></ul></nav>
-      <div class="mk-opener">
-        <div id="top" class="mk-opener-copy">
-          <h1 class="mk-island-title">${heading}</h1>
+      <nav class="mk-nav mk-nav-compact" aria-label="Site"><ul class="mk-nav-list"><li><a href="/">Home</a></li><li><a href="/about">About</a></li><li><a href="/essays">Essays</a></li></ul></nav>
+      <div id="top" class="mk-opener mk-sheet-head">
+        <div class="mk-opener-copy">
+          <p class="mk-opener-kicker type-meta">Essays</p>
+          <h1 class="mk-page-title">${heading}</h1>
           <p class="mk-lede type-lede">${message}</p>
         </div>
-        <div class="mk-field"><canvas id="sky" aria-hidden="true"></canvas></div>
       </div>
     </div>
     <div class="mk-body mk-body-solo">
-      <nav class="mk-nav" aria-label="site"><ul class="mk-nav-list"><li><a href="/">home</a></li><li><a href="/about">about</a></li><li><a href="/essays">essays</a></li></ul></nav>
+      <nav class="mk-nav" aria-label="Site"><ul class="mk-nav-list"><li><a href="/">Home</a></li><li><a href="/about">About</a></li><li><a href="/essays">Essays</a></li></ul></nav>
       <main id="main" class="mk-main">
         <div class="mk-page">
-          <section class="mk-section" aria-label="where to go next">${form}
+          <section class="mk-section" aria-label="Where to go next">${form}
             <p class="more-link"><a href="${back.href}">${back.label}</a></p>
           </section>
         </div>
       </main>
     </div>
-    <script src="/sky.js?v=${assetVersion}"></script>
     <script async src="https://api.mauricekleine.com/latest.js"></script>
   </body>
 </html>
@@ -543,11 +542,11 @@ function subscribeErrorResponse(request: Request, status: number, message: strin
   }
   return new Response(
     subscribePage({
-      title: "subscription failed",
+      title: "Subscription failed",
       description: message,
-      heading: "that didn't work",
+      heading: "That didn't work",
       message,
-      back: { href: "/essays", label: "← back to essays" },
+      back: { href: "/essays", label: "← Back to essays" },
     }),
     { status, headers: { "content-type": "text/html; charset=utf-8" } },
   );
@@ -557,32 +556,32 @@ async function handleSubscribe(request: Request, env: WorkerEnv, url: URL): Prom
   const missing = (["RESEND_API_KEY", "TURNSTILE_SECRET", "SUBSCRIBE_SECRET"] as const).filter((k) => !env[k]);
   if (missing.length) {
     console.error("subscribe: missing required secret(s):", missing.join(", "));
-    return subscribeErrorResponse(request, 500, "subscriptions are misconfigured right now. try again later.");
+    return subscribeErrorResponse(request, 500, "Subscriptions are misconfigured right now. Try again later.");
   }
 
   const { email, turnstileToken } = await parseSubscribeBody(request);
   if (!isValidEmail(email)) {
-    return subscribeErrorResponse(request, 400, "that doesn't look like a valid email.");
+    return subscribeErrorResponse(request, 400, "That doesn't look like a valid email.");
   }
   if (!turnstileToken) {
-    return subscribeErrorResponse(request, 400, "couldn't verify you're human. try again.");
+    return subscribeErrorResponse(request, 400, "Couldn't verify you're human. Try again.");
   }
 
   const human = await verifyTurnstile(env.TURNSTILE_SECRET!, turnstileToken, request.headers.get("cf-connecting-ip"));
   if (!human) {
-    return subscribeErrorResponse(request, 400, "couldn't verify you're human. try again.");
+    return subscribeErrorResponse(request, 400, "Couldn't verify you're human. Try again.");
   }
 
-  // never reveal whether this email was already subscribed
+  // Never reveal whether this email was already subscribed.
   const contactOk = await resendCreateContact(env, email);
   if (!contactOk) {
-    return subscribeErrorResponse(request, 500, "couldn't save your subscription. try again in a bit.");
+    return subscribeErrorResponse(request, 500, "Couldn't save your subscription. Try again in a bit.");
   }
 
   const token = await makeSubscribeToken(env.SUBSCRIBE_SECRET!, email);
   const emailed = await sendConfirmationEmail(env, email, token, url.origin);
   if (!emailed) {
-    return subscribeErrorResponse(request, 500, "couldn't send the confirmation email. try again in a bit.");
+    return subscribeErrorResponse(request, 500, "Couldn't send the confirmation email. Try again in a bit.");
   }
 
   if (wantsJson(request)) {
@@ -592,22 +591,22 @@ async function handleSubscribe(request: Request, env: WorkerEnv, url: URL): Prom
   }
   return new Response(
     subscribePage({
-      title: "check your inbox",
-      description: "confirm your subscription to new essays from maurice kleine",
-      heading: "almost there",
-      message: "check your inbox for a confirmation link.",
-      back: { href: "/essays", label: "← back to essays" },
+      title: "Check your inbox",
+      description: "Confirm your subscription to new essays from Maurice Kleine",
+      heading: "Almost there",
+      message: "Check your inbox for a confirmation link.",
+      back: { href: "/essays", label: "← Back to essays" },
     }),
     { headers: { "content-type": "text/html; charset=utf-8" } },
   );
 }
 
-// the emailed link only shows a button: mail scanners and link previews follow GETs, so only the POST confirms
+// The emailed link only shows a button: mail scanners and link previews follow GETs, so only the POST confirms.
 async function handleSubscribeConfirm(request: Request, env: WorkerEnv, url: URL): Promise<Response> {
   const missing = (["RESEND_API_KEY", "RESEND_SEGMENT_ID", "SUBSCRIBE_SECRET"] as const).filter((k) => !env[k]);
   if (missing.length) {
     console.error("subscribe/confirm: missing required secret(s):", missing.join(", "));
-    return new Response("confirmation is misconfigured right now. try again later.", { status: 500 });
+    return new Response("Confirmation is misconfigured right now. Try again later.", { status: 500 });
   }
 
   const field =
@@ -617,11 +616,11 @@ async function handleSubscribeConfirm(request: Request, env: WorkerEnv, url: URL
   if (!verified || verified.expired) {
     return new Response(
       subscribePage({
-        title: "link expired",
-        description: "this confirmation link is no longer valid",
-        heading: "that link's gone stale",
-        message: "confirmation links expire after 7 days. subscribe again and we'll send a fresh one.",
-        back: { href: "/essays", label: "← back to essays" },
+        title: "Link expired",
+        description: "This confirmation link is no longer valid",
+        heading: "That link's gone stale",
+        message: "Confirmation links expire after 7 days. Subscribe again and we'll send a fresh one.",
+        back: { href: "/essays", label: "← Back to essays" },
       }),
       { status: 410, headers: { "content-type": "text/html; charset=utf-8" } },
     );
@@ -630,12 +629,12 @@ async function handleSubscribeConfirm(request: Request, env: WorkerEnv, url: URL
   if (request.method !== "POST") {
     return new Response(
       subscribePage({
-        title: "confirm your subscription",
-        description: "confirm your subscription to new essays from maurice kleine",
-        heading: "one more click",
-        message: "confirm and the next essay lands in your inbox.",
-        action: { href: "/subscribe/confirm", field: { name: "t", value: token! }, label: "send me new essays" },
-        back: { href: "/essays", label: "← back to essays" },
+        title: "Confirm your subscription",
+        description: "Confirm your subscription to new essays from Maurice Kleine",
+        heading: "One more click",
+        message: "Confirm and the next essay lands in your inbox.",
+        action: { href: "/subscribe/confirm", field: { name: "t", value: token! }, label: "Send me new essays" },
+        back: { href: "/essays", label: "← Back to essays" },
       }),
       { headers: { "content-type": "text/html; charset=utf-8" } },
     );
@@ -643,16 +642,16 @@ async function handleSubscribeConfirm(request: Request, env: WorkerEnv, url: URL
 
   const confirmed = await resendConfirmContact(env, verified.email);
   if (!confirmed) {
-    return new Response("couldn't confirm your subscription. try again in a bit.", { status: 500 });
+    return new Response("Couldn't confirm your subscription. Try again in a bit.", { status: 500 });
   }
 
   return new Response(
     subscribePage({
-      title: "you're in",
-      description: "subscribed to new essays from maurice kleine",
-      heading: "you're in",
-      message: "next essay lands in your inbox.",
-      back: { href: "/essays", label: "← read the essays so far" },
+      title: "You're in",
+      description: "Subscribed to new essays from Maurice Kleine",
+      heading: "You're in",
+      message: "Next essay lands in your inbox.",
+      back: { href: "/essays", label: "← Read the essays so far" },
     }),
     { headers: { "content-type": "text/html; charset=utf-8" } },
   );

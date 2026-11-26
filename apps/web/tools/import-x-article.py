@@ -5,8 +5,8 @@ Usage: python3 apps/web/tools/import-x-article.py <status-url-or-id> <slug>
        [--summary "one line"] [--linkedin <pulse-url>] [--seo-title "search title"]
 
 Run sync-essays.py after import. The React pages and older/newer navigation read
-content directly. The body keeps the author's casing; the display title is
-lowercase. Re-importing preserves the existing SEO title unless overridden.
+content directly. The title and body keep the author's casing. Re-importing
+preserves the existing SEO title unless overridden.
 """
 
 import json
@@ -174,7 +174,7 @@ def main():
     title = art["title"].strip()
     created = datetime.fromtimestamp(tweet["created_timestamp"], tz=timezone.utc)
     iso = created.strftime("%Y-%m-%d")
-    human = created.strftime("%-d %b %Y").lower()
+    human = created.strftime("%-d %b %Y")
     source = f"https://x.com/mauricekleine/status/{status_id}"
     entities = {e["key"]: e["value"] for e in art["content"]["entityMap"]}
     media = {m["media_id"]: m["media_info"] for m in art.get("media_entities") or []}
@@ -280,11 +280,10 @@ def main():
 
     existing = CONTENT / f"{slug}.md"
     previous = read_content(existing)[0] if existing.exists() else None
-    title_lower = title.lower()
     metadata = {
         "slug": slug,
-        "title": title_lower,
-        "seoTitle": f"{seo_title.lower() or title_lower} - maurice kleine" if seo_title or not previous else previous["seoTitle"],
+        "title": title,
+        "seoTitle": f"{seo_title or title} - Maurice Kleine" if seo_title or not previous else previous["seoTitle"],
         "summary": summary or (art.get("preview_text") or "").replace("\n", " ").strip()[:155],
         "date": iso,
         "dateDisplay": human,

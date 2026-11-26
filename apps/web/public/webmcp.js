@@ -1,5 +1,4 @@
-// webmcp: expose page tools to browser agents.
-// yes, this means an ai agent can summon the ufo. you're welcome.
+// WebMCP: expose page tools to browser agents.
 (() => {
   const mc = navigator.modelContext;
   if (!mc || typeof mc.provideContext !== "function") return;
@@ -10,7 +9,7 @@
   };
 
   // essays.md lines look like:
-  // - [title](https://www.mauricekleine.com/essays/slug.md) (2026-09-13) - summary
+  // - [Title](https://www.mauricekleine.com/essays/slug.md) (2026-09-13) - Summary
   const parseEssayIndex = (markdown) => {
     const re = /^- \[(.+?)\]\((.+?)\.md\) \((\d{4}-\d{2}-\d{2})\) - (.+)$/gm;
     const essays = [];
@@ -33,7 +32,7 @@
     return essays;
   };
 
-  // the first real paragraph of an essay's .md twin: skip the h1, the date/
+  // The first real paragraph of an essay's .md twin: skip the h1, the date/
   // source line, the cover image and any divider, then take the next block.
   const essayOpening = (markdown) => {
     const blocks = markdown.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
@@ -55,40 +54,22 @@
   mc.provideContext({
     tools: [
       {
-        name: "summon_sky_traffic",
-        description:
-          "make something fly across the night sky on this page: a starlink train, the iss, or a ufo",
-        inputSchema: {
-          type: "object",
-          properties: {
-            type: { type: "string", enum: ["starlink", "iss", "ufo"] },
-          },
-          required: ["type"],
-        },
-        async execute({ type }) {
-          const text = window.sky
-            ? window.sky.traffic(type)
-            : "the sky isn't awake yet";
-          return { content: [{ type: "text", text }] };
-        },
-      },
-      {
         name: "about_maurice",
-        description: "who maurice kleine is: bio, role, location, links",
+        description: "Who Maurice Kleine is: bio, role, location, links",
         inputSchema: { type: "object", properties: {} },
         execute: () => readJson("/api/maurice.json"),
       },
       {
         name: "list_projects",
         description:
-          "maurice's side quests and the graveyard of ended experiments",
+          "Maurice's side quests and the graveyard of ended experiments",
         inputSchema: { type: "object", properties: {} },
         execute: () => readJson("/api/projects.json"),
       },
       {
         name: "list_essays",
         description:
-          "maurice's essays, newest first: slug, title, summary, date, links and cover image for each",
+          "Maurice's essays, newest first: slug, title, summary, date, links and cover image for each",
         inputSchema: { type: "object", properties: {} },
         async execute() {
           const essays = await listEssays();
@@ -98,12 +79,12 @@
       {
         name: "get_essay",
         description:
-          "read one essay by slug. by default returns a teaser (title, summary, opening paragraph, links); pass full: true for the whole markdown",
+          "Read one essay by slug. By default returns a teaser (title, summary, opening paragraph, links); pass full: true for the whole Markdown",
         inputSchema: {
           type: "object",
           properties: {
-            slug: { type: "string", description: "essay slug, e.g. ride-the-floor-up" },
-            full: { type: "boolean", description: "return the full essay markdown instead of a teaser" },
+            slug: { type: "string", description: "Essay slug, e.g. ride-the-floor-up" },
+            full: { type: "boolean", description: "Return the full essay Markdown instead of a teaser" },
           },
           required: ["slug"],
         },
@@ -111,7 +92,7 @@
           const essays = await listEssays();
           const entry = essays.find((e) => e.slug === slug);
           if (!entry) {
-            return { content: [{ type: "text", text: `unknown essay: ${slug}` }], isError: true };
+            return { content: [{ type: "text", text: `Unknown essay: ${slug}` }], isError: true };
           }
           const res = await fetch(entry.markdown_url.replace(location.origin, ""));
           const body = await res.text();

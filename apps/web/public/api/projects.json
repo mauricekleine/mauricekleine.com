@@ -1,63 +1,63 @@
 {
-  "philosophy": "life is a series of experiments. some of them end, and that's fine, as long as you keep learning.",
+  "philosophy": "Life is a series of experiments. Some of them end, and that's fine, as long as you keep learning.",
   "side_quests": [
     {
-      "name": "mockly",
+      "name": "Mockly",
       "url": "https://www.getmockly.com",
       "status": "active",
-      "description": "fake chat screenshots for 17+ platforms. built it in a weekend, techcrunch wrote about it, 10k people use it. i can't believe this is legal",
+      "description": "Fake chat screenshots for 17+ platforms. Built it in a weekend, TechCrunch wrote about it, 10k people use it. I can't believe this is legal.",
       "team": [
-        "maurice kleine",
-        "jasper de boer"
+        "Maurice Kleine",
+        "Jasper de Boer"
       ]
     },
     {
-      "name": "fluncle",
+      "name": "Fluncle",
       "url": "https://www.fluncle.com",
       "status": "active",
-      "description": "drum & bass bangers from another dimension. it has a radio, an api, and an ssh rave terminal"
+      "description": "Drum & bass bangers from another dimension. It has a radio, an API, and an SSH rave terminal."
     },
     {
-      "name": "hackadam",
+      "name": "Hackadam",
       "url": "https://hackadam.nl",
       "status": "active",
-      "description": "monthly meetup in amsterdam for indie makers building their own stuff",
+      "description": "Monthly meetup in Amsterdam for indie makers building their own stuff.",
       "team": [
-        "maurice kleine",
-        "abner van den hout"
+        "Maurice Kleine",
+        "Abner van den Hout"
       ]
     },
     {
-      "name": "nonobench",
+      "name": "Nonobench",
       "url": "https://www.nonobench.com",
       "status": "active",
-      "description": "benchmark for how well llms solve nonogram puzzles. the top score went from 63% in february to 93% in september"
+      "description": "Benchmark for how well LLMs solve nonogram puzzles. The top score went from 63% in February to 93% in September."
     }
   ],
   "graveyard": [
     {
-      "name": "logistics system",
-      "status": "sold",
+      "name": "Logistics system",
+      "status": "Sold",
       "years": "2013-2019",
-      "epitaph": "built at uni because my part-time job ran on spreadsheets and hope. sold it six years later. small exit, still proud"
+      "epitaph": "Built at uni because my part-time job ran on spreadsheets and hope. Sold it six years later. Small exit, still proud."
     },
     {
-      "name": "subthread",
-      "status": "dissolved",
+      "name": "Subthread",
+      "status": "Dissolved",
       "years": "2023-2025",
-      "epitaph": "co-founded a studio, shipped dozens of ai products. chatbots, recruitment pipelines, consumer apps. learned how much ai can do for normal businesses"
+      "epitaph": "Co-founded a studio, shipped dozens of AI products. Chatbots, recruitment pipelines, consumer apps. Learned how much AI can do for normal businesses."
     },
     {
-      "name": "onesixtyeight",
-      "status": "discontinued",
+      "name": "Onesixtyeight",
+      "status": "Discontinued",
       "years": "2025-2026",
-      "epitaph": "functional mushroom blend for focus. turns out atoms are harder than bits"
+      "epitaph": "Functional mushroom blend for focus. Turns out atoms are harder than bits."
     },
     {
-      "name": "spinup",
-      "status": "spun down",
+      "name": "Spinup",
+      "status": "Spun down",
       "years": "2025-2026",
-      "epitaph": "cloud agent runtime on firecracker microvms. joining waimakers was part of the deal, so it counts as an exit. probably"
+      "epitaph": "Cloud agent runtime on Firecracker microVMs. Joining Waimakers was part of the deal, so it counts as an exit. Probably."
     }
   ]
 }

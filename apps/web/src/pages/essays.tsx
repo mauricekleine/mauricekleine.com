@@ -2,36 +2,34 @@ import { EssayList, Footer, Opener, Section, Subscribe } from "../components";
 import { Shell } from "../shell";
 
 const sections = [
-  { id: "all-essays", title: "all essays" },
-  { id: "subscribe", title: "new essays by email" },
+  { id: "all-essays", title: "All essays" },
+  { id: "subscribe", title: "New essays by email" },
 ];
 
 export function EssaysPage() {
   return (
     <Shell
       place="essays"
-      crumb="maurice kleine"
-      title="essays"
+      crumb="Maurice Kleine"
+      title="Essays"
       sections={sections}
       opener={
-        <Opener>
-          <h1 className="mk-island-title">essays</h1>
+        <Opener kicker="Writing">
+          <h1 className="mk-page-title">Essays</h1>
           <p className="mk-lede type-lede">
-            longer thoughts, first posted on x and linkedin.
-            <br />
-            mirrored here so they have a home
+            Longer thoughts, first posted on X and LinkedIn. Mirrored here so they have a home.
           </p>
         </Opener>
       }
     >
-      <Section id="all-essays" title="all essays" hideTitle>
+      <Section id="all-essays" title="All essays" hideTitle>
         <EssayList variant="index" />
       </Section>
 
       <Subscribe />
 
       <Footer>
-        <p className="type-meta">amsterdam</p>
+        <p className="type-meta">Amsterdam</p>
       </Footer>
     </Shell>
   );
