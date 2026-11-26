@@ -1,8 +1,8 @@
-# colour
+# Colour
 
 Every value here comes from `packages/superthread/tokens/master.json`, and the installed `superthread.css` carries each one as a CSS variable. App code names the role (`bg-primary`, `text-muted-foreground`, `border-input`); the hex values are here for checking a screen against the system.
 
-## the wedge
+## The wedge
 
 Each neutral is a tint of the first ink over the stock, mixed in linear light (`color-mix(in srgb-linear, ...)`), so a flat tint equals the average of the screen that stands in for it.
 
@@ -13,7 +13,7 @@ Each neutral is a tint of the first ink over the stock, mixed in linear light (`
 
 Each neutral role names its step: in light, `muted-foreground` is key 88, `input` key 78, `border` key 20, `secondary` key 12 and `muted` key 5.
 
-## roles
+## Roles
 
 | role                  | light     | dark      | note                                       |
 | --------------------- | --------- | --------- | ------------------------------------------ |
@@ -39,7 +39,7 @@ Each neutral role names its step: in light, `muted-foreground` is key 88, `input
 
 Two names differ from shadcn's habits. `--destructive` is the key ink. A status role's `-foreground` (`--success-foreground`) is that status's word ink, for words on its own fill.
 
-## the house ink
+## The house ink
 
 Plum is the house ink on every surface, one fill per viewport, on paper only, in the deep value. As ink it prints only in the focus signal, the rail's corner mark and home cell, the plates, the code accent and a ship's mark. The focus signal is the ring, a field's focus edge and its caret, and it doesn't count against the fill. A ship never sets a control colour, so every working page prints in two inks: key and plum.
 
@@ -57,7 +57,7 @@ The label on plum clears 6.06:1 in light and 5.29:1 in dark. The other control s
 
 A current item in a nav prints in the `selected` role: the word, a 1 px edge and an 8 px square before the word, with no fill. `selected` is `foreground` on paper, and the frame and the ground pin it to the words beside it, so a nav drawn by hand reads the same role. The rail's current cell is neutral with its 8 px plum corner mark. `accent` is shadcn's tint role, which no item prints. Words inside accent and selection fills print in `foreground` or `muted-foreground`. Words in a status ink sit on `background`, `card`, `muted`, `popover` or their own badge fill.
 
-## statuses
+## Statuses
 
 Five states, at badge scale only. Each badge has a fill near the stock, a 1 px edge at about half strength, a 14 px glyph square and the word. The states part by glyph, word and square, never by colour alone.
 
@@ -75,7 +75,7 @@ Five states, at badge scale only. Each badge has a fill near the stock, a 1 px e
 - Destructive actions print in the key ink, or the outline off paper, with the trash glyph and the word.
 - Glyphs clear 3:1 and words 4.5:1 on their fill.
 
-## ship spots
+## Ship spots
 
 Each ship has one bright spot. It prints in the ship's mark (so its rail cell and its fleet row) and in its chart series, and nowhere else: never on a control, never for a state.
 
@@ -94,10 +94,10 @@ Each ship has one bright spot. It prints in the ship's mark (so its rail cell an
 - Every spot stays at least 10 from plum (oklab delta E x 100), and its dithered region clears 3:1 on its mark's tile.
 - A large area of spot or status colour breaks the system. A ship is told apart by its mark.
 
-## the deep ground
+## The deep ground
 
 A ship surface prints on the deep ground, which is dark in both modes. Words flat on it (the ship's nav, a legend, a reading page's contents) print in `ground-foreground`. The rest of what prints flat on it takes the dark tokens in both modes, so plum prints as its dark value there. The working panel raised on it (the board, the reading sheet) takes the page's own mode. `FleetRail` sets this scope for the rail and the sidebar.
 
-## the code patch
+## The code patch
 
 A code block or install line prints on a dark patch in both modes: key in light, the deep ground in dark. Its words are paper, package names and the copy link's focus ring print in plum's dark value `#c074a1`, and the ring sits 4 px inside the link (`--code-ring-offset: -4px`).

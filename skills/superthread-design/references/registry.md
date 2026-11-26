@@ -1,8 +1,8 @@
-# registry
+# Registry
 
-`@mk` is a shadcn registry of Base UI and plain HTML items on the superthread tokens, served at https://superthread.mauricekleine.com/r/. `/r/versions.json` lists the versions. Each item's page on the site shows it in light and dark with its install line.
+`@mk` is a shadcn registry of Base UI and plain HTML items on the Superthread tokens, served at https://superthread.mauricekleine.com/r/. `/r/versions.json` lists the versions. Each item's page on the site shows it in light and dark with its install line.
 
-## items
+## Items
 
 | tier  | items                                                                                                                                                                      |
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -121,22 +121,18 @@ Brand items hold these rules, and the package's item tests enforce them:
 
 `packages/superthread/README.md` covers the scripts, the clean room that installs every item into a fresh app, snapshots and cutting the next version.
 
-## fleet installs
+## Fleet installs
 
-fleet apps install `@mk` v2 from `https://superthread.mauricekleine.com/r/v/<version>/{name}.json`. fleet rails load marks from `https://superthread.mauricekleine.com/marks` by default.
+Fleet apps install `@mk` v2 from `https://superthread.mauricekleine.com/r/v/<version>/{name}.json`. Fleet rails load marks from `https://superthread.mauricekleine.com/marks` by default.
 
-## plate
+## Plate
 
-Add `@mk/plate` beside the v2 tokens. In React, import `Plate` from `ui/plate`, size it in CSS and pass `src` for a photograph/illustration, `draw` for a custom canvas callback, or `spec` for structure-driven `planes` or `grid` geometry (`breath` defaults to `vivid`). In a [plain document](#plain-documents), `doc/plate.js` mounts the same 3.5 px two-ink proof halftone renderer on every sized `[data-plate]` or `[data-plate-src]` host. Read [texture](texture.md#proof-plates-documents-and-visuals) for light/dark breath rules and no-photo direction.
+Add `@mk/plate` beside the v2 tokens. In React, import `Plate` from `ui/plate`, size it in CSS and pass `src` for a photograph/illustration, `draw` for a custom canvas callback, or `spec` for structure-driven `planes` or `grid` geometry (`breath` defaults to `vivid`). In a [plain document](#plain-documents), `doc/plate.js` mounts the same 3.5 px two-ink proof halftone renderer on every sized `[data-plate]` or `[data-plate-src]` host. For standalone PNG stills and MP4 light-breath loops, run `scripts/plate.ts` from [superthread-visuals](../../superthread-visuals/SKILL.md). Read [texture](texture.md#proof-plates-documents-and-visuals) for light/dark breath rules and no-photo direction.
 
-## weave
+## Weave
 
-Add `@mk/weave` beside the v2 tokens. In React, import `Weave` from `ui/weave` and set its `spec` and height. In a [plain document](#plain-documents), `doc/weave.js` mounts the same renderer on every sized element with a `data-weave` spec. The core has no runtime dependencies. `prepareWeave` and `paintWeave` print the same grammar for still plates and video. Read [texture](texture.md#weave) for the spec and the live rules.
+Legacy: `@mk/weave` remains in the registry for existing installs. In React, import `Weave` from `ui/weave` and set its `spec` and height. In a [plain document](#plain-documents), `doc/weave.js` mounts the same renderer on every sized element with a `data-weave` spec. Prefer `@mk/plate` for new documents and openers.
 
-## field art
+## Field art
 
-Add `@mk/field-art` beside the v2 tokens. In React, import `FieldArt` from `ui/field-art` for concept art and set its `spec` and CSS size. Pass a stable `mask` callback for a custom edge and `playing` for the page’s live field.
-
-On a plain page, give a sized, positioned, overflow-hidden host a `data-field-art` spec. Inline the item’s `doc/field-art.js` in a classic script after the hosts. Set `data-field-art-play` on the host that moves. Use `mountField(host, mask)` from `lib/field-live` for a custom mask.
-
-Read [superthread-visuals](../../superthread-visuals/SKILL.md) for the spec, stills and loops.
+Legacy: `@mk/field-art` (4 CSS px verb fields) remains in the registry for existing installs. In React, import `FieldArt` from `ui/field-art` and set its `spec` and CSS size. On a plain page, inline `doc/field-art.js` after sized hosts carrying `data-field-art`. Prefer `@mk/plate` and `scripts/plate.ts` from [superthread-visuals](../../superthread-visuals/SKILL.md) for all new visuals.
