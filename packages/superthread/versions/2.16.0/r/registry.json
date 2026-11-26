@@ -268,7 +268,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "827774a1f1f17d4f87dc36c79e1f86075cb7170eb87d8925a4350c3e49cfe766",
+        "sha256": "7f81ef251d98460a3a7c0a725866e0550a583ef8643b9de973dc4c053288e40b",
         "tier": "lib",
         "upstream": null
       }
@@ -1576,7 +1576,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "1383ed5afdab122002096f35f7db78013a6fa5159b6ae0c7cb0e46039d002344",
+        "sha256": "3e3ed845d7cf8bd654ab37d4cf763a94a078ac1ef3be75da61b4be1264a52eb9",
         "tier": "brand",
         "upstream": null
       }
