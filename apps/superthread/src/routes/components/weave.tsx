@@ -30,7 +30,10 @@ function WeavePage() {
     <>
       <header id="top" className="st-pagehead">
         <h1 className="st-pagehead-title type-hero text-first">weave</h1>
-        <p className="st-lede type-lede">a solid breaks into a screen, with a plum thread along the break.</p>
+        <p className="st-lede type-lede">
+          a solid breaks into a screen, with a plum thread along the break. new document openers and chapter breaks use{" "}
+          <a href="/components/plate">plate</a> instead.
+        </p>
         <InstallLine items={["weave"]} />
         <div className="relative mt-12">
           <Weave spec={hero} className="h-40 sm:h-60" />

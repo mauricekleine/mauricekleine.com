@@ -8,7 +8,7 @@
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | style | `init`, `tokens`                                                                                                                                                           |
 | lib   | `tokens-plain`, `doc`, `doc-react`, `utils`, `fleet`, `theme`, `time-words`, `use-minute`, `hotkey`                                                                                            |
-| brand | `glyphs`, `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`, `input`, `input-group`, `textarea`, `field`, `select`, `native-select`, `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`, `paper`, `fit-title`, `inline-answers`, `onward`, `source-line`, `source-mark`, `weave`, `field-art`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
+| brand | `glyphs`, `button`, `button-group`, `toggle`, `toggle-group`, `badge`, `kbd`, `checkbox`, `radio-group`, `switch`, `slider`, `input`, `input-group`, `textarea`, `field`, `select`, `native-select`, `dialog`, `alert-dialog`, `dropdown-menu`, `combobox`, `command`, `toast`, `sonner`, `paper`, `fit-title`, `inline-answers`, `onward`, `source-line`, `source-mark`, `plate`, `weave`, `field-art`, `tabs`, `accordion`, `breadcrumb`, `table`, `progress`, `skeleton`, `resizable`, `sidebar`, `fleet-rail` |
 | pass  | `card`, `collapsible`, `label`, `separator`, `sheet`, `tooltip`, `use-mobile` |
 | block | `app-shell`, `page-header`, `section-header`, `collection-toolbar`, `list-rows`, `jump-line`, `item-cards`, `data-table`, `states`, `facts`, `form-section`, `quick-add`, `letter`, `send-bar`, `job-sheet`, `day-line`, `month-grid`, `reader`, `notice`, `search-palette` |
 
@@ -52,13 +52,17 @@ Use [the document specimens](https://superthread.mauricekleine.com/compositions/
 
 ### plain documents
 
-Fetch `/r/v/<version>/doc.json` and `tokens-plain.json` at the same version. Copy the registry's `files[].content` by `target`. Put `doc/mode.js` in a classic inline script in `<head>`, then inline `styles/superthread-plain.css` and `styles/doc.css` in that order. Copy sections from `doc/sections/` into the body. The hero includes the mode button, and `mode-toggle.html` places it on other pages. Inline `doc/weave.js` in a classic script after the sections.
+Fetch `/r/v/<version>/doc.json` and `tokens-plain.json` at the same version. Copy the registry's `files[].content` by `target`. Put `doc/mode.js` in a classic inline script in `<head>`, then inline `styles/superthread-plain.css` and `styles/doc.css` in that order. Compose the body by register rather than cloning a boilerplate document:
 
-The mode starts from `prefers-color-scheme` and the button flips `.dark` on `<html>` for this page. See [texture](texture.md#weave) for the band's ramp and where to put the weave.
+- **Working sheets** (RFCs, audits, dossiers, specs, comparisons): open with `sheet-head` on white stock and separate sections with ruled `section-head` dividers. Skip decorative plates.
+- **Briefs, reports, features and decks**: open with the framed split `opener` (uniform 1 px `border` hairlines, 3.5 px proof halftone plate with `vivid` light breath) and use `section-head` for subsections, reserving `chapter` (40 px plum bar + matching proof halftone plate) for 2 to 4 major act turns.
+- **Draft review notes**: include `notes-toggle` in the top bar and inline `doc/notes.js` after the sections to enable inline text highlighting, margin notes and Markdown export.
+
+Inline `doc/plate.js` in a classic script after the sections whenever `[data-plate]` or `[data-plate-src]` is used. The mode starts from `prefers-color-scheme` and the button flips `.dark` on `<html>` for this page. See [texture](texture.md#proof-plates-documents-and-visuals) for plate rules.
 
 ### react documents
 
-Run `bunx --bun shadcn@latest add @mk/doc-react` and import the sections from `@/components/superthread/ui/doc-react`. Link `styles/superthread-plain.css` then `styles/doc.css` in the document route's head. Run `themeScript` from `lib/theme` before first paint. The React sections mount their own weaves and use the fleet mode. The hero takes `still` when another field moves and `modeToggle={false}` when the page already has a control.
+Run `bunx --bun shadcn@latest add @mk/doc-react` and import `DocOpener`, `DocSheetHead`, `DocChapter`, `DocNotesToggle` and the rest from `@/components/superthread/ui/doc-react`. Link `styles/superthread-plain.css` then `styles/doc.css` in the document route's head. Run `themeScript` from `lib/theme` before first paint. The React sections mount their own proof halftone plates and notes layer, and use the fleet mode. Pass `still` to hold a plate on frame zero, `notesToggle={false}` on final published views, and `modeToggle={false}` when the page already has a control.
 
 ## modes
 
@@ -92,7 +96,7 @@ The tokens load nine faces from `https://superthread.mauricekleine.com/fonts/`. 
 Map `@mk` to a snapshot instead of the latest build:
 
 ```json
-{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.15.1/{name}.json" } }
+{ "registries": { "@mk": "https://superthread.mauricekleine.com/r/v/2.16.0/{name}.json" } }
 ```
 
 Nested dependencies resolve through the same mapping, so every item comes from that version. `/r/versions.json` lists the versions with a snapshot. A snapshot never changes once it is published.
@@ -120,6 +124,10 @@ Brand items hold these rules, and the package's item tests enforce them:
 ## fleet installs
 
 fleet apps install `@mk` v2 from `https://superthread.mauricekleine.com/r/v/<version>/{name}.json`. fleet rails load marks from `https://superthread.mauricekleine.com/marks` by default.
+
+## plate
+
+Add `@mk/plate` beside the v2 tokens. In React, import `Plate` from `ui/plate`, size it in CSS and pass `src` for a photograph/illustration, `draw` for a custom canvas callback, or `spec` for structure-driven `planes` or `grid` geometry (`breath` defaults to `vivid`). In a [plain document](#plain-documents), `doc/plate.js` mounts the same 3.5 px two-ink proof halftone renderer on every sized `[data-plate]` or `[data-plate-src]` host. Read [texture](texture.md#proof-plates-documents-and-visuals) for light/dark breath rules and no-photo direction.
 
 ## weave
 

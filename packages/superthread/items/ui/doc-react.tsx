@@ -1,10 +1,14 @@
-import { Fragment, type ReactNode } from "react";
+import { Fragment, useEffect, type ReactNode } from "react";
+import { mountDocNotes } from "@/components/superthread/lib/doc-notes";
+import type { BreathStrength, PlateDraw } from "@/components/superthread/lib/plate-core";
 import { toggleTheme, useTheme } from "@/components/superthread/lib/theme";
+import { Plate } from "@/components/superthread/ui/plate";
 import { Table } from "@/components/superthread/ui/table";
 import { Weave } from "@/components/superthread/ui/weave";
 
 type Link = { href: string; label: string };
 type IndexEntry = Link & { reference: string; count: string | number };
+type OpenerIndexEntry = Link & { count: string | number };
 type MetaPart = string | { chip: string };
 type Top = {
   brand: Link & { edition: string };
@@ -12,9 +16,16 @@ type Top = {
   links: readonly Link[];
 };
 
-function DocTop({ brand, navLabel, links, modeToggle }: Top & { modeToggle: boolean }) {
+function DocTop({
+  brand,
+  navLabel,
+  links,
+  modeToggle,
+  notesToggle = false,
+  ruled = false,
+}: Top & { modeToggle: boolean; notesToggle?: boolean; ruled?: boolean }) {
   return (
-    <div className="top">
+    <div className={ruled ? "top top-ruled" : "top"}>
       <a className="brand" href={brand.href}>
         {brand.label}
         <span>{brand.edition}</span>
@@ -26,6 +37,11 @@ function DocTop({ brand, navLabel, links, modeToggle }: Top & { modeToggle: bool
               <a href={link.href}>{link.label}</a>
             </li>
           ))}
+          {notesToggle && (
+            <li>
+              <DocNotesToggle />
+            </li>
+          )}
           {modeToggle && (
             <li>
               <DocModeToggle />
@@ -33,6 +49,148 @@ function DocTop({ brand, navLabel, links, modeToggle }: Top & { modeToggle: bool
           )}
         </ul>
       </nav>
+    </div>
+  );
+}
+
+export function DocOpener({
+  kicker,
+  title,
+  lede,
+  meta,
+  index,
+  plate = "planes ratios=42,24,18,16 seed=7",
+  plateSrc,
+  plateDraw,
+  breath,
+  still = false,
+  modeToggle = true,
+  notesToggle = true,
+  ...top
+}: Top & {
+  kicker: ReactNode;
+  title: string;
+  lede: ReactNode;
+  meta: readonly MetaPart[];
+  index?: readonly OpenerIndexEntry[];
+  plate?: string;
+  plateSrc?: string;
+  plateDraw?: PlateDraw;
+  breath?: BreathStrength;
+  still?: boolean;
+  modeToggle?: boolean;
+  notesToggle?: boolean;
+}) {
+  return (
+    <header className="opener">
+      <DocTop {...top} ruled modeToggle={modeToggle} notesToggle={notesToggle} />
+      <div className="opener-grid">
+        <div className="opener-copy">
+          <div>
+            <p className="opener-kicker">
+              <span className="plum-sq" aria-hidden="true" />
+              {kicker}
+            </p>
+            <h1 className="opener-title">{title}</h1>
+            <p className="opener-lede">{lede}</p>
+          </div>
+          <DocMetaLine parts={meta} />
+        </div>
+        <Plate
+          className="opener-plate"
+          spec={plate}
+          src={plateSrc}
+          draw={plateDraw}
+          breath={breath}
+          still={still}
+          aria-hidden="true"
+        />
+      </div>
+      {index && index.length > 0 && (
+        <nav className="opener-index" aria-label="contents">
+          {index.map(({ href, label, count }, i) => (
+            <a href={href} key={i}>
+              <span>{label}</span>
+              <span>{count}</span>
+            </a>
+          ))}
+        </nav>
+      )}
+    </header>
+  );
+}
+
+export function DocSheetHead({
+  kicker,
+  title,
+  lede,
+  meta,
+  modeToggle = true,
+  notesToggle = true,
+  ...top
+}: Top & {
+  kicker: ReactNode;
+  title: string;
+  lede: ReactNode;
+  meta: readonly MetaPart[];
+  modeToggle?: boolean;
+  notesToggle?: boolean;
+}) {
+  return (
+    <header className="sheet-head">
+      <DocTop {...top} ruled modeToggle={modeToggle} notesToggle={notesToggle} />
+      <div className="sheet-head-in">
+        <p className="opener-kicker">{kicker}</p>
+        <h1 className="sheet-head-title">{title}</h1>
+        <p className="opener-lede">{lede}</p>
+        <DocMetaLine parts={meta} />
+      </div>
+    </header>
+  );
+}
+
+export function DocChapter({
+  title,
+  caption,
+  reference,
+  plate = "grid cols=6 rows=4 seed=19",
+  plateSrc,
+  plateDraw,
+  breath,
+  still = false,
+}: {
+  title: string;
+  caption: string;
+  reference: string;
+  plate?: string;
+  plateSrc?: string;
+  plateDraw?: PlateDraw;
+  breath?: BreathStrength;
+  still?: boolean;
+}) {
+  return (
+    <div className="chapter">
+      <div className="chapter-inner">
+        <div className="chapter-copy">
+          <div>
+            <h2 className="chapter-word">{title}</h2>
+            <div className="chapter-bar" aria-hidden="true" />
+          </div>
+          <p className="chapter-cap">
+            <span>{caption}</span>
+            <span>{reference}</span>
+          </p>
+        </div>
+        <Plate
+          className="chapter-plate"
+          spec={plate}
+          src={plateSrc}
+          draw={plateDraw}
+          breath={breath}
+          still={still}
+          aria-hidden="true"
+        />
+      </div>
     </div>
   );
 }
@@ -450,6 +608,21 @@ export function DocModeToggle() {
   return (
     <button className="mode" type="button" data-doc-mode="" aria-label={`switch to ${next} mode`} onClick={toggleTheme}>
       {next}
+    </button>
+  );
+}
+
+export function DocNotesToggle() {
+  useEffect(() => {
+    const controller = mountDocNotes(document);
+    return () => controller?.destroy();
+  }, []);
+  return (
+    <button className="notes-btn" type="button" data-doc-notes="" aria-label="open notes">
+      notes
+      <span className="notes-count" data-doc-notes-count="">
+        0
+      </span>
     </button>
   );
 }

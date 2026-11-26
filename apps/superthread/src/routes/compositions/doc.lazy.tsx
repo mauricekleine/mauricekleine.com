@@ -3,6 +3,8 @@ import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { docSectionGroups } from "@/components/superthread/catalog";
 import modeUrl from "@/components/superthread/doc/mode.js?url&no-inline";
+import notesUrl from "@/components/superthread/doc/notes.js?url&no-inline";
+import plateUrl from "@/components/superthread/doc/plate.js?url&no-inline";
 import weaveUrl from "@/components/superthread/doc/weave.js?url&no-inline";
 import docCss from "@/components/superthread/styles/doc.css?url";
 import tokensCss from "@/components/superthread/styles/superthread-plain.css?url";
@@ -51,7 +53,10 @@ export const Route = createLazyFileRoute("/compositions/doc")({ component: Docum
 function Documents() {
   return (
     <>
-      <PageHead title="documents" lede="compose reports and briefs from the same sections in plain html or react.">
+      <PageHead
+        title="documents"
+        lede="stock-first openers, framed 3.5 px proof halftone plates, draft highlight notes and ruled sections in plain html or react."
+      >
         <div className="st-doc-installs">
           <InstallLine items={["doc"]} />
           <InstallLine items={["doc-react"]} />
@@ -81,7 +86,9 @@ function Specimen({ name }: { name: DocSection }) {
   const html = partial(name);
   const jsx = reactSnippets.get(name);
   if (jsx === undefined) throw new Error(`missing doc react example: ${name}`);
-  const bleed = ["hero", "slim-head", "band", "footer", "draft-strip"].includes(name);
+  const bleed = ["opener", "sheet-head", "chapter", "hero", "slim-head", "band", "footer", "draft-strip"].includes(
+    name,
+  );
   return (
     <div className="st-doc-specimen">
       <h3 className="type-subtitle">{title}</h3>
@@ -107,7 +114,7 @@ function Specimen({ name }: { name: DocSection }) {
 const briefBody = ["lede", "stat-row", "closing-line"] as const;
 
 function DocumentComparison() {
-  const html = `${partial("slim-head")}<main class="frame">${briefBody.map(partial).join("")}</main>${partial("footer")}`;
+  const html = `${partial("sheet-head")}<main class="frame">${briefBody.map(partial).join("")}</main>${partial("footer")}`;
   return (
     <div className="st-doc-panes">
       <div>
@@ -117,7 +124,7 @@ function DocumentComparison() {
       <div>
         <h3 className="type-meta">react</h3>
         <DocPreview title="brief in react" bleed>
-          {docExamples["slim-head"]}
+          {docExamples["sheet-head"]}
           <main className="frame">
             {briefBody.map((name) => (
               <Fragment key={name}>{docExamples[name]}</Fragment>
@@ -203,6 +210,8 @@ function preview(html: string, bleed: boolean) {
 </head>
 <body>
 ${bleed ? html : `<div class="frame">${html}</div>`}
+${html.includes("data-plate") ? `<script src="${plateUrl}"></script>` : ""}
+${html.includes("data-doc-notes") ? `<script src="${notesUrl}"></script>` : ""}
 ${html.includes("data-weave=") ? `<script src="${weaveUrl}"></script>` : ""}
 <script>
   document.addEventListener("click", (event) => {

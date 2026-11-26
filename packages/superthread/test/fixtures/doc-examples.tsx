@@ -1,6 +1,7 @@
 import {
   DocBand,
   DocBeforeAndAfter,
+  DocChapter,
   DocChip,
   DocClaims,
   DocClosingLine,
@@ -13,9 +14,12 @@ import {
   DocLede,
   DocMetaLine,
   DocModeToggle,
+  DocNotesToggle,
   DocNotice,
+  DocOpener,
   DocRows,
   DocSectionHead,
+  DocSheetHead,
   DocSlimHead,
   DocSources,
   DocStatRow,
@@ -27,6 +31,48 @@ import {
 
 // The docs show these JSX regions beside the HTML. The same examples render in the parity test and clean room.
 export const docExamples = {
+  // #region opener
+  opener: (
+    <DocOpener
+      brand={{ href: "#", label: "maurice kleine", edition: "report" }}
+      navLabel="sections"
+      links={[
+        { href: "#findings", label: "findings" },
+        { href: "#plan", label: "plan" },
+      ]}
+      kicker="superthread · report · 26 nov 2026"
+      title="flat where you read, printed where you look."
+      lede="one framed 3.5 px proof halftone plate beside clean typography, separated by uniform 1 px hairlines."
+      meta={["project", "report", { chip: "draft" }, "26 nov 2026"]}
+      plate="planes ratios=42,24,18,16 seed=7"
+      index={[
+        { href: "#findings", label: "findings", count: "03" },
+        { href: "#plan", label: "plan", count: "04" },
+        { href: "#open", label: "open", count: "02" },
+        { href: "#sources", label: "sources", count: "05" },
+      ]}
+    />
+  ),
+  // #endregion
+  // #region sheet-head
+  "sheet-head": (
+    <DocSheetHead
+      brand={{ href: "#", label: "orbit", edition: "rfc 0001" }}
+      navLabel="sections"
+      links={[
+        { href: "#summary", label: "summary" },
+        { href: "#design", label: "design" },
+      ]}
+      kicker="orbit · rfc 0001 · 26 nov 2026"
+      title="units, one runner for every agent, step and workflow."
+      lede="every event lands in one queue, passes one gate, and leaves through one outbox."
+      meta={["rfc", { chip: "draft" }, "26 nov 2026"]}
+    />
+  ),
+  // #endregion
+  // #region chapter
+  chapter: <DocChapter title="findings" caption="what holds" reference="03" plate="grid cols=6 rows=4 seed=19" />,
+  // #endregion
   // #region hero
   hero: (
     <DocHero
@@ -256,5 +302,8 @@ export const docExamples = {
   // #endregion
   // #region mode-toggle
   "mode-toggle": <DocModeToggle />,
+  // #endregion
+  // #region notes-toggle
+  "notes-toggle": <DocNotesToggle />,
   // #endregion
 };

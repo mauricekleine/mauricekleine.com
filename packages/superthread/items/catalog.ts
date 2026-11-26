@@ -78,10 +78,10 @@ const file = (path: string): CatalogFile => ({
 });
 
 export const docSectionGroups = {
-  openers: ["hero", "slim-head", "band"],
+  openers: ["opener", "sheet-head", "chapter", "hero", "slim-head", "band"],
   lines: ["meta-line", "contents", "lede", "section-head", "steps", "rows", "timeline", "sources"],
   blocks: ["claim", "stat-row", "table", "figure", "before-and-after", "notice", "decisions", "transcript"],
-  endings: ["closing-line", "footer", "draft-strip", "chip", "mode-toggle"],
+  endings: ["closing-line", "footer", "draft-strip", "chip", "mode-toggle", "notes-toggle"],
 } as const;
 
 export const catalog: CatalogItem[] = [
@@ -145,11 +145,15 @@ export const catalog: CatalogItem[] = [
     name: "doc",
     type: "registry:item",
     title: "doc",
-    description: "plain html document sections, their stylesheet, a mode control and the weave runtime",
+    description:
+      "plain html document sections, their stylesheet, a mode control, the 3.5 px proof halftone plate runtime, draft highlight notes and the weave runtime",
     files: [
       file("styles/doc.css"),
       file("doc/mode.js"),
+      file("doc/plate.js"),
+      file("doc/notes.js"),
       file("doc/weave.js"),
+      lib("doc-notes"),
       ...Object.values(docSectionGroups)
         .flat()
         .map((name) => file(`doc/sections/${name}.html`)),
@@ -585,6 +589,16 @@ export const catalog: CatalogItem[] = [
     title: "source mark",
     description: "the 96 px frame a third-party mark prints in, in one ink, with a second frame on hover",
     files: [ui("source-mark")],
+    tier: "brand",
+    upstream: null,
+  },
+  {
+    name: "plate",
+    type: "registry:item",
+    title: "plate",
+    description:
+      "a 3.5 px two-ink proof halftone plate (key 45 deg and plum 15 deg) with light breath for document openers, chapter breaks and figures",
+    files: [lib("plate-core"), ui("plate")],
     tier: "brand",
     upstream: null,
   },

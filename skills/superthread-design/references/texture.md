@@ -4,12 +4,12 @@ Flat where you read, screened where you look. Print fields with round dots at a 
 
 | place             | what prints                                                       | how                              |
 | ----------------- | ----------------------------------------------------------------- | -------------------------------- |
-| opener            | one band in the first ink and plum                               | `@mk/field-art`, `@mk/weave` or plates   |
-| figures           | concept art in two inks                                          | `@mk/field-art` or stills                        |
+| document plates   | framed 3.5 px two-ink proof halftone (key 45° and plum 15°) with vivid light breath | `@mk/plate` or `doc/plate.js` |
+| opener            | a band or framed proof plate beside the page head                 | `@mk/plate`, `@mk/field-art` or plates |
+| figures           | screened photography, grids/planes or concept art in two inks     | `@mk/plate` or `@mk/field-art`   |
 | marks             | the ship's spot region at 50 percent                             | the mark SVGs                   |
 | progress edge     | the fill's leading 24 px, from solid to stock                     | `texture-ramp` in `Progress`      |
 | empty and loading | a light wedge of the first ink                                   | plates; `Skeleton` for rows      |
-| weave             | a solid breaking into a screen alongside words                   | `@mk/weave`                     |
 
 ## the six component details
 
@@ -40,36 +40,31 @@ Set 10 px corner ticks 16 px outside a contained field. Drop the ticks when the 
 
 Openers and figures print two binary masks per mode at 2×. CSS sizes them at their native CSS width and height and crops them to fit the box. CSS inks the first and plum plates. The wedge prints an indexed image per mode. Build from `packages/superthread/texture/plates.json` with `packages/superthread/scripts/texture/build.py plates`. The site serves content-hashed files under `/texture/` and `texture/plates.sha256` records their pixel hashes.
 
-## weave
+## proof plates (documents and visuals)
 
-Use [@mk/weave](registry.md#weave) for a hero or a band. Put words on the flat solid or on the stock. A weave prints in the mode of the scope it sits in, so inside a `.dark` block it prints the dark inks. To carry a dark block into a light page, set the weave beside the block, in the page's scope, where its solid is key and its screen thins into the paper. Keep decorative texture inside the field, with a fixed screen and clean type. The thread core is solid. The knot and bloom print as plum dots.
+Use [@mk/plate](registry.md#plate) for framed visuals in documents: the split `opener`, rare `chapter` breaks and editorial figures. Every plate prints on a 3.5 CSS px cosine dot screen in two inks: key at 45° and plum at 15°. In light mode the drifting `light breath` (default `vivid`) opens dark halftone dots toward white paper and warms the 15° plum plate. In dark mode white dots rest calmly on key stock (~48% max) and brighten upward as the light breath sweeps across, with 15° dark plum printing cleanly over the lit pass. Motion pauses offscreen and in hidden tabs, and holds frame zero under reduced motion and in print.
 
-In [plain documents](registry.md#plain-documents), copy the hero, slim head or band from `@mk/doc`. The dark island and its weave are siblings:
+- **With imagery:** pass a photograph or illustration through `src` (`data-plate-src`) or a child `<img>`. Flat reading stays beside the plate, separated by uniform 1 px `border` hairlines (no plum divider and no corner rectangle on the plate).
+- **Without imagery:** skip plates on everyday working sheets (RFCs, audits, dossiers, specs) and use plain `sheet-head` + ruled `section-head` dividers. When a report or chapter break without photography genuinely benefits from a plate, derive a blocky tonal composition from the document's own structure using `planes` (proportional column ratios) or `grid` (density matrix), or supply a custom `draw` callback. Never repeat the same ratios, grid dimensions or seed twice in a document, and never use wavy lines or bouncing orbs.
 
 ```html
-<div class="band">
-  <div class="band-solid island dark">
-    <h2 class="band-word">findings</h2>
-    <p class="band-caption"><span>what holds</span><span>03</span></p>
+<div class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-copy">
+      <div>
+        <h2 class="chapter-word">findings</h2>
+        <div class="chapter-bar" aria-hidden="true"></div>
+      </div>
+      <p class="chapter-cap"><span>what holds</span><span>03</span></p>
+    </div>
+    <div class="chapter-plate" data-mk="plate" data-plate="grid cols=6 rows=4 seed=19" aria-hidden="true"></div>
   </div>
-  <div class="band-weave" data-weave="run=right phone=down fray=.06 ramp=held thread=6" aria-hidden="true"></div>
 </div>
 ```
 
-The script mounts the canvas. The page scope supplies its inks.
+## legacy weave
 
-| spec key | meaning |
-| -------- | ------- |
-| `run=right\|down`, `phone=down` | run beside or below the solid. `phone` overrides the run at 600 px and below |
-| `fray=.06` or `fray=arch apex=.24 sides=.45` | the break as a fraction of the run. an arch sets the middle and the ends |
-| `bow=6`, `waves=2 amp=3`, `wobble=2 period=24 seed=11` | mirrored offsets in cells. bow leans at the middle, waves add lobes, and wobble is capped at two cells |
-| `ramp=held\|steady\|bet\|fade` | choose held for facts and findings, steady for plans and principles, bet for hypotheses and proposals, fade for notes and appendix heads |
-| `thread=4 strength=1` | the plum seam's half-width in cells and its strength. zero width hides it. in `bet` the thread runs at the ramp's break |
-| `knot=.36 knotr=13 live` | a knot at a fraction of the breadth with radius in cells. bare `live` sets it in motion |
-
-One light shades the screen beyond a short hold past the fray. In light it thins key ink on paper. In dark it lights the foreground screen up to 45 percent while the solid prints in the deep ground.
-
-A hero’s weave can carry a knot. App surfaces print still.
+`@mk/weave` remains in the registry for existing installs, but new documents should not use dark island weaves or wavy orb heroes. Prefer `sheet-head` (plain stock), `opener` and `chapter` with `@mk/plate`, or `@mk/field-art` on public site openers.
 
 ## concept art
 

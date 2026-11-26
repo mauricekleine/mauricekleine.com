@@ -234,8 +234,9 @@ function Page() {
 
       <Section id="places" title="field specimens">
         <Copy>
-          crop marks sit 16 px outside a contained field. the <a href="/components/weave">weave</a> shows when a hero
-          can move and when the marks come off.
+          crop marks sit 16 px outside a contained field. <a href="/components/plate">plate</a> prints framed 3.5 px
+          proof-halftone subjects and geometry with light breath for documents; <a href="/components/weave">weave</a>{" "}
+          keeps the legacy solid-to-screen band.
         </Copy>
         <ol className="st-f-places">
           {places.map(({ name, note }) => (

@@ -413,26 +413,27 @@ Every spot stays at least 10 from plum (oklab delta E x 100), and its dithered r
 
 ### Screens
 
-A screen is a 1-bit pattern that stands in for a tint. Fields print round dots at a 4 CSS px pitch. Key and foreground use 45° and plum uses 15°. Tone sets dot area. Each live sample is one device pixel, so the pitch holds through fractional device pixel ratios. Plates carry two samples per CSS pixel and print at their native CSS size. Component details, progress, the empty wedge and marks use a 4 × 4 Bayer tile at one CSS pixel per cell. Bayer coverage comes in steps of 6.25 percent. A tile at 50 percent (`--texture-b50`) fills eight cells and a tile at 18.75 percent (`--texture-b19`) fills three. Half coverage is the in-between state and solid is the settled one.
+A screen is a 1-bit pattern that stands in for a tint. Document plates (`@mk/plate`) print round dots at a 3.5 CSS px pitch, key at 45° and plum at 15°; site fields (`@mk/field-art` and `@mk/weave`) print at a 4 CSS px pitch at the same angles. Tone sets dot area. Each live sample is one device pixel, so the pitch holds through fractional device pixel ratios. Plates carry two samples per CSS pixel and print at their native CSS size. Component details, progress, the empty wedge and marks use a 4 × 4 Bayer tile at one CSS pixel per cell. Bayer coverage comes in steps of 6.25 percent. A tile at 50 percent (`--texture-b50`) fills eight cells and a tile at 18.75 percent (`--texture-b19`) fills three. Half coverage is the in-between state and solid is the settled one.
 
-| place             | what prints                                                | where it ships                            |
-| ----------------- | ---------------------------------------------------------- | ----------------------------------------- |
-| opener            | a band in the first ink and plum beside the page head      | `@mk/field-art`, `@mk/weave` or plates    |
-| figures           | concept art in two inks on the same dot screen             | `@mk/field-art` or stills                 |
-| marks             | the ship's spot region at 50 percent                       | the mark SVGs                             |
-| state fields      | the progress fill's leading 24 px, from solid to the stock | `texture-ramp` in `Progress`              |
-| empty and loading | a light wedge of the first ink                             | empty plates; `Skeleton` for loading rows |
-| weave             | a solid breaking into a screen beside a hero or a band     | `@mk/weave`                               |
+| place             | what prints                                                 | where it ships                            |
+| ----------------- | ----------------------------------------------------------- | ----------------------------------------- |
+| opener            | a framed proof-halftone plate or site field beside the head | `@mk/plate`, `@mk/field-art` or plates    |
+| chapter break     | a framed proof-halftone plate paired with a plum bar        | `@mk/plate`, `@mk/doc`                    |
+| figures           | concept art or framed subjects on the two-ink dot screen    | `@mk/plate`, `@mk/field-art` or stills    |
+| marks             | the ship's spot region at 50 percent                        | the mark SVGs                             |
+| state fields      | the progress fill's leading 24 px, from solid to the stock  | `texture-ramp` in `Progress`              |
+| empty and loading | a light wedge of the first ink                              | empty plates; `Skeleton` for loading rows |
+| weave (legacy)    | a solid breaking into a screen beside a hero or a band      | `@mk/weave`                               |
 
 A chart series prints in its ship's spot as a line screen at the ship's angle, so it reads by colour first and by angle without colour: 1 px lines knocked out to the stock every 4 px, repeated in the legend. The six component details are under Components.
 
 Crop marks are 10 px corner ticks, 16 px outside a contained field. A field that meets the window edge drops its marks. `scripts/texture/build.py plates` builds contained fields as pairs of binary masks per mode. CSS prints the first ink and plum into the masks. The same builder prints the empty wedge as an indexed image per mode. `texture/plates.sha256` holds the pixel hashes.
 
-A public opener sits on a full-bleed dark island in both modes: key on a light page, deep ground on a dark page. Where a field joins the body, its solid takes the page's stock below the plum thread. A boxed page column's side rules rise through the solid and stop at the thread, so the page's stock and its rules reach the field together. A ship's page head takes a slim band.
+`@mk/plate` is the unified screen for document openers, chapter breaks and framed visual plates. It prints at 3.5 CSS px pitch with a slow drifting light breath (vivid by default). In light mode the 45° key plate prints dark ink on white stock while light breath opens dots toward white paper and warms the 15° plum plate across the lit sweep. In dark mode the 45° key plate rests as calm white dots on dark stock (~48 percent density) and light breath illuminates them upward (~88 percent) while overprinting 15° dark plum (`#c074a1`). When a plate has a real subject image, pass `src`; when no image exists, derive blocky proportional `planes` or an architectural `grid` from the document's own structure (or a custom `draw` callback), never reusing one canned preset across documents and never using wavy lines, moving orbs or cut-plane horizons. Light breath pauses offscreen, when the tab hides, under `prefers-reduced-motion: reduce`, and in print.
 
-A weave runs right beside a solid or down beneath it. On a phone a stacked band runs down. Set one spec line with the direction, a mirrored fray (line, bow, waves or arch), and the ramp. `held` keeps its density for findings and facts, `steady` falls evenly for plans and principles, `bet` breaks abruptly for hypotheses and proposals, and `fade` runs softly into the stock for notes and appendix heads. Fray wobble and thread width are in cells. One flat-core plum thread follows the fray, or the density break for `bet`. A hero can tie one knot to the thread.
+A public site opener may sit on a full-bleed dark island in both modes: key on a light page, deep ground on a dark page. Where a field joins the body, its solid takes the page's stock below the plum thread. A boxed page column's side rules rise through the solid and stop at the thread, so the page's stock and its rules reach the field together. A ship's page head takes a slim band.
 
-The fixed light runs down the middle of the weave or follows the knot. It starts past a short hold and shades only the screen. In light the solid is key and the light thins the key screen on paper. In dark the solid is the deep ground, foreground prints up to 45 percent where the light falls. The plum thread prints solid through its core. The knot and bloom print as dots. Words sit on the solid or the stock. A weave prints in the mode of the scope it sits in, so inside a `.dark` block it prints the dark inks. A weave that carries a dark block into a light page sits beside the block, in the page's scope, where its solid is key and its screen thins into the paper.
+`@mk/weave` remains exported for legacy surfaces and existing documents. A weave runs right beside a solid or down beneath it, driven by a spec line (`held`, `steady`, `bet`, `fade`). New documents use `@mk/plate` instead of `@mk/weave`.
 
 A field gives the concept a verb and draws it as a smooth edge. One solid meets the frame, a ramp breaks into stock, and a knot lights one plum thread. Open cells take the stock of the scope. Use [superthread-visuals](../../skills/superthread-visuals/SKILL.md) for concept art in figures and openers.
 
@@ -819,9 +820,15 @@ A meeting brief's blocks are the reader's parts, under the meeting's `ReaderPape
 
 ### Documents
 
-Build documents from `@mk/doc` in plain HTML or `@mk/doc-react` in React. Both print the same sections with `styles/doc.css` on `@mk/tokens-plain`. Use one full-bleed dark island for the opener in either mode. The hero fills the first viewport with a title, lede, meta line and contents. A brief can use the slim head with a still weave. Put the weave beside the island so it takes the page's inks. Only one field moves per page. In React, give the hero `still` when another field moves. The live weave pauses offscreen and prints still under reduced motion and in print.
+Build documents from `@mk/doc` in plain HTML or `@mk/doc-react` in React. Both print the same sections with `styles/doc.css` on `@mk/tokens-plain`. Choose the register that fits the document instead of cloning one heavy opener for every artifact:
 
-Open each section group with a band. Choose its ramp for how settled the words are: `held` for findings, `steady` for plans or principles, `bet` for open proposals, `fade` for notes and appendices. A lede sets up the group. A ruled section head divides the stock into smaller sections, with a muted line when it helps the reader act.
+- **Working sheet** (RFCs, audits, dossiers, specs, comparisons): open with `sheet-head` (`DocSheetHead`), flat on the stock, and divide with ruled `section-head` breaks. No dark slab and no decorative plates.
+- **Brief or report**: open with `opener` (`DocOpener`), a stock-first framed split (`1.15fr` flat typography beside a `0.85fr` 3.5 px two-ink proof halftone `@mk/plate` with vivid light breath). Topbar, vertical split divider, bottom border and optional `.opener-index` contents bar all share a uniform `1px solid var(--border)` hairline, with no plum vertical divider and an 8 px plum square beside the mono kicker. Divide major acts sparingly (at most 2 to 4) with stock-first `chapter` (`DocChapter`) breaks: Unbounded title over a 40 x 2 px plum accent bar, mono caption and ref below, and a matching 3.5 px proof halftone plate on the right with a `1px solid var(--border)` left edge and no corner rectangle on the image. Use ruled `section-head` breaks for subsections.
+- **Feature, manifesto or deck**: use the same framed stock-first language at display scale or slide rhythm, with real photography or custom structure-driven plates where the subject earns them.
+
+For draft artifacts that invite review, include `notes-toggle` (`DocNotesToggle`) and `doc/notes.js`. Selecting text highlights it and opens a note popover; the slide-over drawer collects highlight and general notes and exports clean Markdown (clipboard with fallback textarea and `.md` download, safe in opaque-origin sandboxes).
+
+Legacy `hero`, `slim-head` and `band` stay exported in `@mk/doc` and `@mk/doc-react` for existing documents, while new documents use `sheet-head`, `opener` and `chapter`.
 
 - Use a meta line for the document's identity and date, a chip for one state, and a draft strip for a page-wide draft note. Contents link to sections with their counts.
 - Put one defensible statement beside its reason in a claim. Use a stat row for figures with short labels, a table for comparable values, and a figure for a chart with type outside the drawing and a caption. Use before and after to compare two views.
@@ -866,7 +873,7 @@ Open each section group with a band. Choose its ramp for how settled the words a
 
 ### Motion
 
-Three durations on one ease. `--duration-instant` (120 ms) times hover and press colour on buttons, badges and tabs, and the select list's entry; `--duration-quick` (180 ms) times the rail's cell and tab, the sidebar's items and the dialog's fade; `--duration-travel` (240 ms) times anything that crosses the page: the progress width, the toast stack and the sidebar's collapse. Every brand transition uses `--ease-brand`, `cubic-bezier(0.22, 1, 0.36, 1)`: changes start fast and ease into place. Transitions name their properties (`transition-[color,background-color,border-color]`), so a focus ring snaps on instead of fading. Motion answers an action or an event. One live field per page may move, a weave or a field. It pauses offscreen or when the tab hides and prints a still frame in reduced motion and print. The www sky occupies that slot on www. App screens print still. Under `prefers-reduced-motion: reduce` the three durations become 0 and every transition and animation 0.01 ms: states still change, at once.
+Three durations on one ease. `--duration-instant` (120 ms) times hover and press colour on buttons, badges and tabs, and the select list's entry; `--duration-quick` (180 ms) times the rail's cell and tab, the sidebar's items and the dialog's fade; `--duration-travel` (240 ms) times anything that crosses the page: the progress width, the toast stack and the sidebar's collapse. Every brand transition uses `--ease-brand`, `cubic-bezier(0.22, 1, 0.36, 1)`: changes start fast and ease into place. Transitions name their properties (`transition-[color,background-color,border-color]`), so a focus ring snaps on instead of fading. Motion answers an action or an event. Framed document plates (`@mk/plate`) carry a slow drifting light breath, and site openers may animate one field; both pause offscreen or when the tab hides and print a still frame in reduced motion and print. The www sky occupies that slot on www. App screens print still. Under `prefers-reduced-motion: reduce` the three durations become 0 and every transition and animation 0.01 ms: states still change, at once.
 
 ## Do's and Don'ts
 
@@ -894,7 +901,7 @@ Three durations on one ease. `--duration-instant` (120 ms) times hover and press
 - **Don't** use a stock shadow (`shadow-md`, `shadow-lg`) or a backdrop blur.
 - **Don't** print a screen behind words, numbers, data or code, or give a component a second texture detail.
 - **Don't** grey a component out with dots: a disabled control screens its edge and nothing else.
-- **Don't** set a screen moving on its own, or add noise, a soft glow or misregistered type: one live field moves by itself, and the progress ramp moves with its fill.
+- **Don't** set a screen moving on its own in app chrome, or add noise, a soft glow or misregistered type: only framed `@mk/plate` light breath, one site hero field, and a progress ramp moving with its fill animate.
 - **Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink, or the outline off paper, with the trash glyph and the word.
 - **Don't** print a spot or a status ink as a large flat field.
 - **Don't** fade or screen the cut edge of a scrolling table.
