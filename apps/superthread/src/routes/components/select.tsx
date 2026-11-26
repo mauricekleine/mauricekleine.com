@@ -9,9 +9,9 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/select")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "open", title: "open" },
-      { id: "states", title: "states" },
+      { id: "example", title: "Example" },
+      { id: "open", title: "Open" },
+      { id: "states", title: "States" },
     ],
   },
   component: Page,
@@ -21,34 +21,34 @@ function Page() {
   return (
     <>
       <PageHead
-        title="select"
-        lede="a field that opens a list. the trigger is the box, so focus draws its 2 px frame inside it, and the list floats over the page on a raised layer."
+        title="Select"
+        lede="A field that opens a list. The trigger is the box, so focus draws its 2 px frame inside it, and the list floats over the page on a raised layer."
       >
         <InstallLine items={["select"]} />
       </PageHead>
 
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-a-copy">
-          pick with the pointer, or focus the trigger and use the arrow keys, or type a ship&rsquo;s first letters. the
+          Pick with the pointer, or focus the trigger and use the arrow keys, or type a ship&rsquo;s first letters. The
           second select has no ship yet, so it holds the error ink until you pick one.
         </p>
         <ModePair className="st-a-stack" light={<SelectExample mode="light" />} dark={<SelectExample mode="dark" />} />
       </Section>
 
-      <Section id="open" title="open">
+      <Section id="open" title="Open">
         <p className="st-a-copy">
-          the list, printed open: the row under the pointer takes the raised hover fill, and the chosen ship keeps its
-          tick over the same fill. in light its lift prints as a screen where the list meets the page; in dark it stays
+          The list, printed open: the row under the pointer takes the raised hover fill, and the chosen ship keeps its
+          tick over the same fill. In light its lift prints as a screen where the list meets the page; in dark it stays
           soft.
         </p>
         <ModePair className="st-a-stack" light={<SelectOpen mode="light" />} dark={<SelectOpen mode="dark" />} />
         <Caption detail="contact" />
       </Section>
 
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-a-copy">
-          the trigger draws the input&rsquo;s frame: 1 px at rest and 2 px inside on focus, by tab or by click, in the
-          error ink while nothing is picked. a disabled trigger keeps a flat fill and its full edge.
+          The trigger draws the input&rsquo;s frame: 1 px at rest and 2 px inside on focus, by Tab or by click, in the
+          error ink while nothing is picked. A disabled trigger keeps a flat fill and its full edge.
         </p>
         <ModePair className="st-a-stack" light={<SelectStates mode="light" />} dark={<SelectStates mode="dark" />} />
       </Section>

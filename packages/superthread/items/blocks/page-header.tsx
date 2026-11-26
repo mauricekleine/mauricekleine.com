@@ -25,7 +25,7 @@ function PageHeader({
 }
 
 // The way back: a quiet link with the left arrow, on its own line above the title. Pass the router's link as render.
-function PageHeaderBack({ className, children = "back", render = <a />, ...props }: useRender.ComponentProps<"a">) {
+function PageHeaderBack({ className, children = "Back", render = <a />, ...props }: useRender.ComponentProps<"a">) {
   return useRender({
     props: mergeProps<"a">(
       {

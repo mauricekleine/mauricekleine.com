@@ -166,10 +166,12 @@ function typeUtilities(): string {
         `font-weight: ${step.weight};`,
         `text-transform: ${step.caps ? "uppercase" : "none"};`,
       ];
+      const dark =
+        step.name === "read" || step.name === "lede" ? `\n\n  ${DARK} {\n    letter-spacing: 0.008em;\n  }` : "";
       const phone = step.phone
         ? `\n\n  @media (max-width: ${scale.phone.maxWidth}px) {\n    font-size: ${px(step.phone.size)};\n    line-height: ${px(step.phone.line)};\n  }`
         : "";
-      return `@utility type-${step.name} {\n${body.map((line) => `  ${line}`).join("\n")}${phone}\n}`;
+      return `@utility type-${step.name} {\n${body.map((line) => `  ${line}`).join("\n")}${dark}${phone}\n}`;
     })
     .join("\n\n");
 }
@@ -547,7 +549,7 @@ export function StateWord({ on = false, children, className }: { on?: boolean; c
       >
         <path d={STATE[state]} />
       </svg>
-      {children ?? state}
+      {children ?? (on ? "On" : "Off")}
     </span>
   )
 }

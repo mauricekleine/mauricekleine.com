@@ -7,20 +7,20 @@ import { Section } from "@/site/Section";
 
 export const Route = createFileRoute("/foundations/motion")({
   staticData: {
-    openerLede: "three durations and one ease. interface changes start fast and ease into place.",
+    openerLede: "Three durations and one ease. Interface changes start fast and ease into place.",
     sections: [
-      { id: "durations", title: "durations" },
-      { id: "ease", title: "ease" },
-      { id: "reduced", title: "reduced motion" },
+      { id: "durations", title: "Durations" },
+      { id: "ease", title: "Ease" },
+      { id: "reduced", title: "Reduced motion" },
     ],
   },
   component: Page,
 });
 
 const durations = [
-  { name: "instant", use: "ink changes: buttons, tabs, table rows, the select list" },
-  { name: "quick", use: "layers that appear in place: a dialog, the fleet rail, the sidebar" },
-  { name: "travel", use: "anything that covers distance: a progress fill, a toast, the sidebar sliding" },
+  { name: "instant", use: "Ink changes: buttons, tabs, table rows, the select list" },
+  { name: "quick", use: "Layers that appear in place: a dialog, the fleet rail, the sidebar" },
+  { name: "travel", use: "Anything that covers distance: a progress fill, a toast, the sidebar sliding" },
 ] as const satisfies readonly { name: keyof typeof tokens.motion; use: string }[];
 
 // the four numbers inside cubic-bezier(...)
@@ -41,7 +41,7 @@ function Curve() {
       width={size + 16}
       height={size + 16}
       role="img"
-      aria-label={`the brand ease, ${tokens.motion.ease.value}`}
+      aria-label={`The brand ease, ${tokens.motion.ease.value}`}
     >
       <rect x="0" y="0" width={size} height={size} />
       <path className="st-f-curve-handle" d={`M${at(0, 0)}L${at(x1, y1)}M${at(1, 1)}L${at(x2, y2)}`} />
@@ -56,11 +56,11 @@ function Page() {
   const [played, setPlayed] = useState(false);
   return (
     <>
-      <Section id="durations" title="durations">
-        <Copy>press play to send each bar across its track at its own duration, all on the brand ease.</Copy>
+      <Section id="durations" title="Durations">
+        <Copy>Press play to send each bar across its track at its own duration, all on the brand ease.</Copy>
         <div className="st-f-play">
           <Button variant="outline" size="sm" aria-pressed={played} onClick={() => setPlayed((on) => !on)}>
-            {played ? "play back" : "play"}
+            {played ? "Play back" : "Play"}
           </Button>
         </div>
         <ul className="st-f-durations" data-played={played || undefined}>
@@ -79,9 +79,9 @@ function Page() {
         </ul>
       </Section>
 
-      <Section id="ease" title="ease">
+      <Section id="ease" title="Ease">
         <Copy>
-          one curve for everything that moves: it leaves fast and lands soft, so a change reads at once and still
+          One curve for everything that moves: it leaves fast and lands soft, so a change reads at once and still
           settles.
         </Copy>
         <figure className="st-f-ease">
@@ -92,11 +92,11 @@ function Page() {
         </figure>
       </Section>
 
-      <Section id="reduced" title="reduced motion">
+      <Section id="reduced" title="Reduced motion">
         <Copy>
-          with reduced motion on, every duration is zero, so a change happens at once. turn it on in your system
-          settings and press play again to see the bars jump. these fields stay still. the weave page shows the live
-          hero rule.
+          With reduced motion on, every duration is zero, so a change happens at once. Turn it on in your system
+          settings and press play again to see the bars jump. Framed plates hold frame zero under reduced motion and in
+          print.
         </Copy>
       </Section>
     </>

@@ -19,8 +19,8 @@ function FilterRuns() {
   return (
     <Field
       id={id}
-      label="filter runs"
-      hint="clear is a control in the field: it takes its own ring, and the field stays at 1 px"
+      label="Filter runs"
+      hint="Clear is a control in the field: it takes its own ring, and the field stays at 1 px"
     >
       <InputGroup>
         <InputGroupAddon>
@@ -38,7 +38,7 @@ function FilterRuns() {
           <InputGroupAddon align="inline-end">
             <InputGroupButton
               size="icon-xs"
-              aria-label="clear the filter"
+              aria-label="Clear the filter"
               onClick={() => {
                 setValue("");
                 input.current?.focus();
@@ -59,9 +59,9 @@ const limit = 280;
 // a quantity, so it sets in mono with tabular figures, as the world sets its counts.
 function ReleaseNote() {
   const id = useId();
-  const [value, setValue] = useState("fixed the running head on narrow pages.");
+  const [value, setValue] = useState("Fixed the running head on narrow pages.");
   return (
-    <Field id={id} label="release note" hint="shown on the changelog page">
+    <Field id={id} label="Release note" hint="Shown on the changelog page">
       <InputGroup>
         <InputGroupTextarea
           id={id}
@@ -85,16 +85,16 @@ export function InputGroupExample() {
   const item = useId();
   return (
     <div className="st-a-grid">
-      <Field id={search} label="search">
+      <Field id={search} label="Search">
         <InputGroup>
           <InputGroupAddon>
             <Icon name="search" />
           </InputGroupAddon>
-          <InputGroupInput id={search} placeholder="search the fleet" enterKeyHint="search" />
+          <InputGroupInput id={search} placeholder="Search the fleet" enterKeyHint="search" />
         </InputGroup>
       </Field>
       <FilterRuns />
-      <Field id={item} label="registry item" hint="the name after the namespace">
+      <Field id={item} label="Registry item" hint="The name after the namespace">
         <InputGroup>
           <InputGroupAddon>
             <InputGroupText>@mk/</InputGroupText>
@@ -132,7 +132,7 @@ export function InputGroupStates() {
               defaultValue={state.value}
               tabIndex={-1}
               spellCheck={false}
-              aria-label={`registry item, ${state.label ?? state.name}`}
+              aria-label={`Registry item, ${(state.label ?? state.name).toLowerCase()}`}
               aria-invalid={state.invalid || undefined}
               disabled={state.disabled}
             />

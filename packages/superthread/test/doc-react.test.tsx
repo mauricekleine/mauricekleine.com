@@ -50,11 +50,11 @@ test("the document mode button switches the fleet mode and names the next mode",
   const { body, done } = await client(docExamples["mode-toggle"]);
   try {
     const button = body.querySelector<HTMLButtonElement>("[data-doc-mode]")!;
-    expect(button.getAttribute("aria-label")).toBe("switch to light mode");
+    expect(button.getAttribute("aria-label")).toBe("Switch to light mode");
     await act(async () => button.click());
     expect(root.getAttribute("data-theme-choice")).toBe("light");
     expect(root.classList.contains("light")).toBe(true);
-    expect(button.getAttribute("aria-label")).toBe("switch to dark mode");
+    expect(button.getAttribute("aria-label")).toBe("Switch to dark mode");
     expect(localStorage.getItem(themeKey)).toBe("light");
   } finally {
     await done();

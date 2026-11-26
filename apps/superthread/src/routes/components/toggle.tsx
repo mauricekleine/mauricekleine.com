@@ -7,10 +7,10 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/toggle")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "variants", title: "variants" },
-      { id: "sizes", title: "sizes" },
-      { id: "states", title: "states" },
+      { id: "example", title: "Example" },
+      { id: "variants", title: "Variants" },
+      { id: "sizes", title: "Sizes" },
+      { id: "states", title: "States" },
     ],
   },
   component: Page,
@@ -19,36 +19,36 @@ function Page() {
   return (
     <>
       <PageHead
-        title="toggle"
-        lede="a button that remembers whether it is pressed. pressed prints a foreground edge and a tick, and the words stay put."
+        title="Toggle"
+        lede="A button that remembers whether it is pressed. Pressed prints a foreground edge and a tick, and the words stay put."
       >
         <InstallLine items={["toggle"]} />
       </PageHead>
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-e-copy">
-          pin an orbit run to keep it at the top. click, enter or space changes the pressed state.
+          Pin an Orbit run to keep it at the top. Click, Enter or Space changes the pressed state.
         </p>
         <ModePair>
           <ToggleExample />
         </ModePair>
       </Section>
-      <Section id="variants" title="variants">
+      <Section id="variants" title="Variants">
         <p className="st-e-copy">
-          default rests without a visible edge. outline keeps the input edge. each pair shows rest beside pressed.
+          Default rests without a visible edge. Outline keeps the input edge. Each pair shows rest beside pressed.
         </p>
         <ModePair>
           <ToggleVariants />
         </ModePair>
       </Section>
-      <Section id="sizes" title="sizes">
-        <p className="st-e-copy">small, default and large match the button heights: 32, 40 and 48 px.</p>
+      <Section id="sizes" title="Sizes">
+        <p className="st-e-copy">Small, default and large match the button heights: 32, 40 and 48 px.</p>
         <ModePair className="st-e-wide">
           <ToggleSizes />
         </ModePair>
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-e-copy">
-          hover changes the fill, focus draws an outside ring, and pressed holds its box. invalid uses the error edge;
+          Hover changes the fill, focus draws an outside ring, and pressed holds its box. Invalid uses the error edge;
           disabled dims the label.
         </p>
         <ModePair className="st-e-wide">

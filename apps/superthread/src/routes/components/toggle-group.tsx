@@ -13,11 +13,11 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/toggle-group")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "variants", title: "variants" },
-      { id: "sizes", title: "sizes" },
-      { id: "layout", title: "layout" },
-      { id: "states", title: "states" },
+      { id: "example", title: "Example" },
+      { id: "variants", title: "Variants" },
+      { id: "sizes", title: "Sizes" },
+      { id: "layout", title: "Layout" },
+      { id: "states", title: "States" },
     ],
   },
   component: Page,
@@ -26,45 +26,45 @@ function Page() {
   return (
     <>
       <PageHead
-        title="toggle group"
-        lede="toggles that share a choice and, by default, a 1 px edge. the pressed item keeps all four foreground edges visible."
+        title="Toggle group"
+        lede="Toggles that share a choice and, by default, a 1 px edge. The pressed item keeps all four foreground edges visible."
       >
         <InstallLine items={["toggle-group"]} />
       </PageHead>
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-e-copy">
-          choose one time view, or combine ship filters. arrow keys move between items; space changes the focused item.
+          Choose one time view, or combine ship filters. Arrow keys move between items; Space changes the focused item.
         </p>
         <ModePair>
           <ToggleGroupExample />
         </ModePair>
       </Section>
-      <Section id="variants" title="variants">
+      <Section id="variants" title="Variants">
         <p className="st-e-copy">
-          default and outline keep the standalone toggle looks. the group supplies the same variant to each item.
+          Default and outline keep the standalone toggle looks. The group supplies the same variant to each item.
         </p>
         <ModePair>
           <ToggleGroupVariants />
         </ModePair>
       </Section>
-      <Section id="sizes" title="sizes">
-        <p className="st-e-copy">the group supplies the small, default or large height to all its items.</p>
+      <Section id="sizes" title="Sizes">
+        <p className="st-e-copy">The group supplies the small, default or large height to all its items.</p>
         <ModePair className="st-e-wide">
           <ToggleGroupSizes />
         </ModePair>
       </Section>
-      <Section id="layout" title="layout">
+      <Section id="layout" title="Layout">
         <p className="st-e-copy">
-          spacing 0 joins the edges and puts focus inside. positive spacing separates the items and restores the outside
-          ring. vertical groups join along their horizontal edges.
+          Spacing 0 joins the edges and puts focus inside. Positive spacing separates the items and restores the outside
+          ring. Vertical groups join along their horizontal edges.
         </p>
         <ModePair>
           <ToggleGroupLayout />
         </ModePair>
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-e-copy">
-          the selected edge rises above its neighbour. hover fills the other item, joined focus draws inside it, and
+          The selected edge rises above its neighbour. Hover fills the other item, joined focus draws inside it, and
           disabled dims the labels.
         </p>
         <ModePair className="st-e-wide">

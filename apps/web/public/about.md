@@ -1,55 +1,55 @@
-# about maurice kleine
+# About Maurice Kleine
 
-> build it till you make it
+> Build it till you make it.
 
-this is the markdown mirror of [mauricekleine.com/about](https://www.mauricekleine.com/about). back to [home](https://www.mauricekleine.com/index.md).
+This is the Markdown mirror of [mauricekleine.com/about](https://www.mauricekleine.com/about). Back to [home](https://www.mauricekleine.com/index.md).
 
-## about
+## About
 
-i'm based in amsterdam. started studying psychology, switched to tech when i wanted something more concrete. what began as a late start in coding turned into 14+ years of building software.
+I'm based in Amsterdam. Started studying psychology, switched to tech when I wanted something more concrete. What began as a late start in coding turned into 14+ years of building software.
 
-while at uni, i built a logistics system out of frustration with how data was handled at my part-time job. six years later, i sold it. small exit but i'm proud of it. from there i did frontend, backend, product, and eventually managed teams of devs.
+While at uni, I built a logistics system out of frustration with how data was handled at my part-time job. Six years later, I sold it. Small exit, but I'm proud of it. From there I did frontend, backend, product, and eventually managed teams of devs.
 
-in 2023 i co-founded subthread, where we built dozens of ai products: chatbots, recruitment pipelines, consumer apps. that opened my eyes to how powerful ai can be for businesses of all sizes. these days i'm ai engineering lead at [waimakers](https://waimakers.com), helping organizations put ai to work.
+In 2023 I co-founded Subthread, where we built dozens of AI products: chatbots, recruitment pipelines, consumer apps. That opened my eyes to how powerful AI can be for businesses of all sizes. These days I'm AI Engineering Lead at [Waimakers](https://waimakers.com), helping organizations put AI to work.
 
-i'd freelanced for waimakers for years, and somewhere along the way i started sitting in on scoping calls and checking proposals from the engineering side. nobody asked me to. in august 2026 they turned that habit into a job: i now own engineering there, the pod, the people, and the line from one-off builds to our own products.
+I'd freelanced for Waimakers for years, and somewhere along the way I started sitting in on scoping calls and checking proposals from the engineering side. Nobody asked me to. In August 2026 they turned that habit into a job: I now own engineering there, the pod, the people, and the line from one-off builds to our own products.
 
-## what i build
+## What I build
 
-i treat life as a series of experiments. same goes for products: ship small things, learn from them, keep iterating. even the failed experiments are worth it as long as you keep learning.
+I treat life as a series of experiments. Same goes for products: ship small things, learn from them, keep iterating. Even the failed experiments are worth it as long as you keep learning.
 
-current side quests:
+Current side quests:
 
-- [mockly](https://www.getmockly.com) - fake chat screenshots for 17+ platforms. built it in a weekend, [techcrunch](https://techcrunch.com/2025/07/10/mockly-made-a-fake-dm-generator-thats-actually-user-friendly/) wrote about it, 10k people use it. now i run it with [jasper](https://x.com/jasperdeboer). i still can't believe this is legal
-- [fluncle](https://www.fluncle.com) - drum & bass bangers from another dimension. it has a radio, an api, and an ssh rave terminal
-- [hackadam](https://hackadam.nl) - monthly meetup in amsterdam for indie makers building their own stuff. co-organized with [abner](https://x.com/AbnerHout)
-- [nonobench](https://www.nonobench.com) - benchmark for how well llms solve nonogram puzzles. the top score went from 63% in february to 93% in september
+- [Mockly](https://www.getmockly.com) - Fake chat screenshots for 17+ platforms. Built it in a weekend, [TechCrunch](https://techcrunch.com/2025/07/10/mockly-made-a-fake-dm-generator-thats-actually-user-friendly/) wrote about it, 10k people use it. Now I run it with [Jasper](https://x.com/jasperdeboer). I still can't believe this is legal.
+- [Fluncle](https://www.fluncle.com) - Drum & bass bangers from another dimension. It has a radio, an API, and an SSH rave terminal.
+- [Hackadam](https://hackadam.nl) - Monthly meetup in Amsterdam for indie makers building their own stuff. Co-organized with [Abner](https://x.com/AbnerHout).
+- [Nonobench](https://www.nonobench.com) - Benchmark for how well LLMs solve nonogram puzzles. The top score went from 63% in February to 93% in September.
 
-## community
+## Community
 
-i co-organize [hackadam](https://hackadam.nl) with [abner](https://x.com/AbnerHout), a monthly meetup in amsterdam for indie makers building their own stuff. we meet, share what we're working on, have lunch, do demos, hang out. part of the HACKA* network.
+I co-organize [Hackadam](https://hackadam.nl) with [Abner](https://x.com/AbnerHout), a monthly meetup in Amsterdam for indie makers building their own stuff. We meet, share what we're working on, have lunch, do demos, hang out. Part of the HACKA* network.
 
-building alone can be isolating. having people who get the journey, wins and failures, makes it more sustainable.
+Building alone can be isolating. Having people who get the journey, wins and failures, makes it more sustainable.
 
-## philosophy
+## Philosophy
 
-most of what i do comes down to a few principles: progress is the goal, life is absurdly valuable and needs protecting, and the two shouldn't destroy each other. not progress at all cost, but most things should help us move forward.
+Most of what I do comes down to a few principles: progress is the goal, life is absurdly valuable and needs protecting, and the two shouldn't destroy each other. Not progress at all cost, but most things should help us move forward.
 
-the strategy is to tinker as much as possible. less top-down planning, more trial and error. ship things, see what happens, collect as many black swan opportunities as you can. any experiment is worth it as long as you keep learning.
+The strategy is to tinker as much as possible. Less top-down planning, more trial and error. Ship things, see what happens, collect as many black swan opportunities as you can. Any experiment is worth it as long as you keep learning.
 
-i want the biggest comfort zone possible. growth comes from stepping outside it, but you need a safe base to return to. travel, building, community: they all expand that zone.
+I want the biggest comfort zone possible. Growth comes from stepping outside it, but you need a safe base to return to. Travel, building, community: they all expand that zone.
 
-it's incredibly coincidental that we're here. we need to leverage that. propel things forward lest we fade into obscurity. that's what keeps me building.
+It's incredibly coincidental that we're here. We need to leverage that. Propel things forward lest we fade into obscurity. That's what keeps me building.
 
-## connect
+## Connect
 
-- [github](https://github.com/mauricekleine)
-- [linkedin](https://www.linkedin.com/in/mauricekleine/)
-- [x](https://x.com/mauricekleine)
-- [reddit](https://www.reddit.com/user/mauricekleine/)
-- [email](mailto:hey@mauricekleine.com)
-- [essays](https://www.mauricekleine.com/essays.md)
+- [GitHub](https://github.com/mauricekleine)
+- [LinkedIn](https://www.linkedin.com/in/mauricekleine/)
+- [X](https://x.com/mauricekleine)
+- [Reddit](https://www.reddit.com/user/mauricekleine/)
+- [Email](mailto:hey@mauricekleine.com)
+- [Essays](https://www.mauricekleine.com/essays.md)
 
 ---
 
-amsterdam.
+Amsterdam.

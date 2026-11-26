@@ -8,12 +8,12 @@ export function UseMinuteExample() {
   return (
     <>
       <dl className="st-pass-readout">
-        <dt>now</dt>
-        <dd>{minute ? clockWords(minute.now) : "not read yet"}</dd>
-        <dt>day</dt>
-        <dd>{minute?.day ?? "not read yet"}</dd>
+        <dt>Now</dt>
+        <dd>{minute ? clockWords(minute.now) : "Not read yet"}</dd>
+        <dt>Day</dt>
+        <dd>{minute?.day ?? "Not read yet"}</dd>
       </dl>
-      <p className="st-pass-hint">both copies on this page turn over together, on one timer.</p>
+      <p className="st-pass-hint">Both copies on this page turn over together, on one timer.</p>
     </>
   );
 }

@@ -21,19 +21,19 @@ function EssayPage() {
   return (
     <Shell
       place="essays"
-      crumb="essays"
+      crumb="Essays"
       title={essay.title}
       sections={essayHeadings(essay)}
       opener={
-        <Opener>
+        <Opener kicker="Essay">
           <h1 className="essay-title type-page">{essay.title}</h1>
           <p className="essay-meta">
-            by <a href="/about">maurice kleine</a> · <time dateTime={essay.date}>{essay.dateDisplay}</time> · first
-            posted on <a href={essay.x}>x</a>
+            By <a href="/about">Maurice Kleine</a> · <time dateTime={essay.date}>{essay.dateDisplay}</time> · First
+            posted on <a href={essay.x}>X</a>
             {essay.linkedin && (
               <>
                 {" "}
-                and <a href={essay.linkedin}>linkedin</a>
+                and <a href={essay.linkedin}>LinkedIn</a>
               </>
             )}
           </p>
@@ -45,7 +45,7 @@ function EssayPage() {
       <Footer>
         <EssayNav older={older} newer={newer} />
         <p className="type-meta">
-          <a href="/essays">← all essays</a>
+          <a href="/essays">← All essays</a>
         </p>
       </Footer>
     </Shell>

@@ -32,9 +32,9 @@ export function SliderExample() {
   const [value, setValue] = useState<number | readonly number[]>(4);
   return (
     <div className="st-e-stack">
-      <NamedSlider label="orbit workers" min={1} max={12} value={value} onValueChange={setValue} />
+      <NamedSlider label="Orbit workers" min={1} max={12} value={value} onValueChange={setValue} />
       <p className="st-e-hint" role="status">
-        {value} workers. use the arrow keys to adjust.
+        {value} workers. Use the arrow keys to adjust.
       </p>
     </div>
   );
@@ -42,15 +42,15 @@ export function SliderExample() {
 export function SliderVariants() {
   return (
     <div className="st-e-stack">
-      <State name="single" note="one value, one thumb">
-        <NamedSlider label="quanta reading minutes" min={0} max={60} defaultValue={20} />
+      <State name="Single" note="One value, one thumb">
+        <NamedSlider label="Quanta reading minutes" min={0} max={60} defaultValue={20} />
       </State>
-      <State name="range" note="two bounds, two thumbs">
-        <NamedSlider label="run duration range, minutes" defaultValue={[20, 70]} />
+      <State name="Range" note="Two bounds, two thumbs">
+        <NamedSlider label="Run duration range, minutes" defaultValue={[20, 70]} />
       </State>
-      <State name="vertical" note="same track and thumb dimensions">
+      <State name="Vertical" note="Same track and thumb dimensions">
         <div className="st-e-vertical">
-          <NamedSlider label="worker capacity" orientation="vertical" defaultValue={60} />
+          <NamedSlider label="Worker capacity" orientation="vertical" defaultValue={60} />
         </div>
       </State>
     </div>
@@ -60,17 +60,17 @@ export function SliderStates() {
   return (
     <div className="st-e-states" inert>
       {[
-        { name: "rest", note: "8 px track, 16 px thumb" },
-        { name: "hover", note: "control hover thumb", demo: "hover" },
-        { name: "focus", note: "outside house ring", demo: "focus-visible" },
-        { name: "dragging", note: "control hover thumb", dragging: true },
-        { name: "minimum", note: "thumb stays inside", value: 0 },
-        { name: "maximum", note: "flat foreground range", value: 100 },
-        { name: "disabled", note: "disabled edge and range", disabled: true },
+        { name: "Rest", note: "8 px track, 16 px thumb" },
+        { name: "Hover", note: "Control hover thumb", demo: "hover" },
+        { name: "Focus", note: "Outside house ring", demo: "focus-visible" },
+        { name: "Dragging", note: "Control hover thumb", dragging: true },
+        { name: "Minimum", note: "Thumb stays inside", value: 0 },
+        { name: "Maximum", note: "Flat foreground range", value: 100 },
+        { name: "Disabled", note: "Disabled edge and range", disabled: true },
       ].map((s) => (
         <State key={s.name} name={s.name} note={s.note}>
           <NamedSlider
-            label={`capacity, ${s.name}`}
+            label={`Capacity, ${s.name.toLowerCase()}`}
             value={s.value ?? 40}
             disabled={s.disabled}
             demo={s.demo}

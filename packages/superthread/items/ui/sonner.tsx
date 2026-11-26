@@ -53,8 +53,8 @@ function Toaster({
         mobileOffset={PHONE_OFFSET}
         swipeDirections={swipeDirections ?? (phone ? ["top", "right"] : undefined)}
         gap={12}
-        containerAriaLabel="notifications"
-        customAriaLabel="notifications"
+        containerAriaLabel="Notifications"
+        customAriaLabel="Notifications"
         className={cn(
           "font-sans! transition-[transform]! duration-(--duration-travel)! ease-(--ease-brand)!",
           className,
@@ -71,7 +71,7 @@ function Toaster({
         toastOptions={{
           ...toastOptions,
           unstyled: true,
-          closeButtonAriaLabel: toastOptions?.closeButtonAriaLabel ?? "close toast",
+          closeButtonAriaLabel: toastOptions?.closeButtonAriaLabel ?? "Close toast",
           classNames: {
             toast:
               "isolate flex w-full flex-wrap items-start gap-3 border border-border bg-popover p-4 text-popover-foreground shadow-leaf! texture-contact! [--contact-lift:var(--elevation-leaf-rake)] transition-[transform,opacity,height]! duration-(--duration-travel)! ease-(--ease-brand)! focus-visible:outline-2! focus-visible:outline-offset-2! focus-visible:outline-(--ring)!",

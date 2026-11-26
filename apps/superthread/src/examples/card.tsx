@@ -16,17 +16,17 @@ export function CardExample() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>one photon at a time</CardTitle>
-        <CardDescription>quanta, chapter 7</CardDescription>
+        <CardTitle>One photon at a time</CardTitle>
+        <CardDescription>Quanta, chapter 7</CardDescription>
         <CardAction>
-          <Badge variant="done">published</Badge>
+          <Badge variant="done">Published</Badge>
         </CardAction>
       </CardHeader>
-      <CardContent>why a single photon still draws the bands, and what that says about light.</CardContent>
+      <CardContent>Why a single photon still draws the bands, and what that says about light.</CardContent>
       <CardFooter className="justify-between gap-4">
         <span className="st-pass-note">14 pages, built in 38 s</span>
         <Button variant="outline" size="sm">
-          open chapter
+          Open chapter
         </Button>
       </CardFooter>
     </Card>

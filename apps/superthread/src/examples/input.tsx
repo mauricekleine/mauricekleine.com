@@ -133,9 +133,9 @@ function Slug({ initial }: { initial: string }) {
   return (
     <Field
       id={id}
-      label="slug"
-      hint="lowercase letters, digits and dashes"
-      error={invalid ? "a slug takes lowercase letters, digits and dashes. try one-photon." : undefined}
+      label="Slug"
+      hint="Lowercase letters, digits and dashes"
+      error={invalid ? "A slug takes lowercase letters, digits and dashes. Try one-photon." : undefined}
     >
       <Input
         id={id}
@@ -153,8 +153,8 @@ export function InputExample() {
   const title = useId();
   return (
     <div className="st-a-grid">
-      <Field id={title} label="chapter title" hint="shown in the running head">
-        <Input id={title} defaultValue="one photon at a time" aria-describedby={noteId(title)} />
+      <Field id={title} label="Chapter title" hint="Shown in the running head">
+        <Input id={title} defaultValue="One photon at a time" aria-describedby={noteId(title)} />
       </Field>
       <Slug initial="one-photon" />
       <Slug initial="One Photon!" />
@@ -177,12 +177,12 @@ export type PrintedState = {
 
 export function printedStates(values: { valid: string; typed: string; invalid: string; typedInvalid: string }) {
   const states: PrintedState[] = [
-    { name: "rest", note: "1 px input edge", value: values.valid },
-    { name: "focus", note: "2 px house edge, inside", value: values.valid, demo: true },
-    { name: "typing", note: "same edge, caret in its ink", value: values.typed, demo: true, typing: true },
-    { name: "invalid", note: "1 px error edge", value: values.invalid, invalid: true },
+    { name: "Rest", note: "1 px input edge", value: values.valid },
+    { name: "Focus", note: "2 px house edge, inside", value: values.valid, demo: true },
+    { name: "Typing", note: "Same edge, caret in its ink", value: values.typed, demo: true, typing: true },
+    { name: "Invalid", note: "1 px error edge", value: values.invalid, invalid: true },
     {
-      name: "invalid, focus",
+      name: "Invalid, focus",
       label: "focus, invalid",
       note: "2 px error edge, inside",
       value: values.invalid,
@@ -190,15 +190,15 @@ export function printedStates(values: { valid: string; typed: string; invalid: s
       invalid: true,
     },
     {
-      name: "invalid, typing",
+      name: "Invalid, typing",
       label: "typing, invalid",
-      note: "same edge, caret in its ink",
+      note: "Same edge, caret in its ink",
       value: values.typedInvalid,
       demo: true,
       typing: true,
       invalid: true,
     },
-    { name: "disabled", note: "flat fill, screened edge", value: values.valid, disabled: true },
+    { name: "Disabled", note: "Flat fill, screened edge", value: values.valid, disabled: true },
   ];
   return states;
 }
@@ -222,7 +222,7 @@ export function InputStates() {
           <Input
             defaultValue={state.value}
             tabIndex={-1}
-            aria-label={`slug, ${state.label ?? state.name}`}
+            aria-label={`Slug, ${(state.label ?? state.name).toLowerCase()}`}
             spellCheck={false}
             aria-invalid={state.invalid || undefined}
             disabled={state.disabled}

@@ -20,8 +20,8 @@ def main():
         target.write_bytes(markdown)
 
     intro = (
-        "# essays\n\n"
-        "longer thoughts, first posted on x and linkedin. mirrored on "
+        "# Essays\n\n"
+        "Longer thoughts, first posted on X and LinkedIn. Mirrored on "
         "[mauricekleine.com/essays](https://www.mauricekleine.com/essays) so they have a home.\n\n"
     )
     rows = [
@@ -33,7 +33,7 @@ def main():
     home_path = PUBLIC / "index.md"
     home = home_path.read_text()
     home, count = re.subn(
-        r"(?<=## essays\n\n).*?(?=\n\n\[all essays\])",
+        r"(?<=## Essays\n\n).*?(?=\n\n\[All essays\])",
         "\n".join(rows), home, flags=re.S,
     )
     if count != 1:
@@ -46,7 +46,7 @@ def main():
         f'- [{essay["title"]}]({SITE}/essays/{essay["slug"]}.md): {essay["summary"]}'
         for essay in essays
     ]
-    llms = re.sub(r"(?<=## essays\n\n).*?(?=\n\n## side quests)", "\n".join(llms_rows), llms, flags=re.S)
+    llms = re.sub(r"(?<=## Essays\n\n).*?(?=\n\n## Side quests)", "\n".join(llms_rows), llms, flags=re.S)
     llms_path.write_text(llms)
 
     feed_path = PUBLIC / "feed.xml"

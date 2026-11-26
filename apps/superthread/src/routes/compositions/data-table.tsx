@@ -27,45 +27,45 @@ import { Section } from "@/site/Section";
 
 const serves = catalog
   .find((entry) => entry.name === "data-table")!
-  .serves!.map((app) => (app === "www" ? "the public site" : app))
+  .serves!.map((app) => (app === "www" ? "the public site" : app[0]!.toUpperCase() + app.slice(1)))
   .join(", ");
 export const Route = createFileRoute("/compositions/data-table")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "states", title: "sort and row states" },
-      { id: "titles", title: "titles" },
-      { id: "fold", title: "fold" },
-      { id: "detail", title: "detail" },
-      { id: "sub-entries", title: "sub-entries" },
-      { id: "results", title: "results" },
-      { id: "under-a-head", title: "under a head" },
-      { id: "empty", title: "empty results" },
+      { id: "example", title: "Example" },
+      { id: "states", title: "Sort and row states" },
+      { id: "titles", title: "Titles" },
+      { id: "fold", title: "Fold" },
+      { id: "detail", title: "Detail" },
+      { id: "sub-entries", title: "Sub-entries" },
+      { id: "results", title: "Results" },
+      { id: "under-a-head", title: "Under a head" },
+      { id: "empty", title: "Empty results" },
     ],
   },
   component: Page,
 });
 
 const runs = [
-  { id: "qt-014", ship: "quanta", chapters: 6 },
-  { id: "tr-008", ship: "trisys", chapters: 3 },
-  { id: "ar-021", ship: "artifacts", chapters: 9 },
+  { id: "qt-014", ship: "Quanta", chapters: 6 },
+  { id: "tr-008", ship: "Trisys", chapters: 3 },
+  { id: "ar-021", ship: "Artifacts", chapters: 9 },
 ];
 function RunsTable() {
   const [sort, setSort] = useState<SortDirection>("descending");
   const [selected, setSelected] = useState<string[]>(["qt-014"]);
   const ordered = [...runs].sort((a, b) => (sort === "ascending" ? a.chapters - b.chapters : b.chapters - a.chapters));
   return (
-    <DataTable label="draft collections">
+    <DataTable label="Draft collections">
       <TableHeader>
         <TableRow>
-          <TableHead scope="col">pick</TableHead>
+          <TableHead scope="col">Pick</TableHead>
           <TableHead scope="col" kind="id">
-            id
+            ID
           </TableHead>
-          <TableHead scope="col">ship</TableHead>
+          <TableHead scope="col">Ship</TableHead>
           <SortableHead kind="number" sort={sort} onSort={setSort}>
-            chapters
+            Chapters
           </SortableHead>
         </TableRow>
       </TableHeader>
@@ -74,7 +74,7 @@ function RunsTable() {
           <TableRow key={run.id} aria-selected={selected.includes(run.id)}>
             <TableCell>
               <Checkbox
-                aria-label={`select ${run.id}`}
+                aria-label={`Select ${run.id}`}
                 checked={selected.includes(run.id)}
                 onCheckedChange={(checked) =>
                   setSelected((current) => (checked ? [...current, run.id] : current.filter((id) => id !== run.id)))
@@ -93,29 +93,29 @@ function RunsTable() {
 function PrintedTable() {
   const [sort, setSort] = useState<SortDirection | null>(null);
   return (
-    <DataTable label="printed row states" rows="board">
+    <DataTable label="Printed row states" rows="board">
       <TableHeader>
         <TableRow>
           <SortableHead sort={sort} onSort={setSort}>
-            row
+            Row
           </SortableHead>
-          <TableHead scope="col">status</TableHead>
+          <TableHead scope="col">Status</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         <TableRow>
-          <TableCell>rest</TableCell>
+          <TableCell>Rest</TableCell>
           <TableCell>
             <Badge variant="queued" />
           </TableCell>
         </TableRow>
         <TableRow data-demo="hover">
-          <TableCell>hover</TableCell>
-          <TableCell>half edge</TableCell>
+          <TableCell>Hover</TableCell>
+          <TableCell>Half edge</TableCell>
         </TableRow>
         <TableRow aria-selected="true">
-          <TableCell>selected</TableCell>
-          <TableCell>solid edge</TableCell>
+          <TableCell>Selected</TableCell>
+          <TableCell>Solid edge</TableCell>
         </TableRow>
       </TableBody>
     </DataTable>
@@ -125,11 +125,11 @@ function PrintedTable() {
 function SortState({ initial }: { initial: SortDirection }) {
   const [sort, setSort] = useState<SortDirection>(initial);
   return (
-    <DataTable label={`${initial} sort specimen`}>
+    <DataTable label={`${initial === "ascending" ? "Ascending" : "Descending"} sort specimen`}>
       <TableHeader>
         <TableRow>
           <SortableHead kind="number" sort={sort} onSort={setSort}>
-            chapters
+            Chapters
           </SortableHead>
         </TableRow>
       </TableHeader>
@@ -144,31 +144,31 @@ function SortState({ initial }: { initial: SortDirection }) {
 
 function TitledTable() {
   return (
-    <DataTable label="drafts by title">
+    <DataTable label="Drafts by title">
       <TableHeader>
         <TableRow>
-          <TableHead scope="col">draft</TableHead>
+          <TableHead scope="col">Draft</TableHead>
           <TableHead scope="col" kind="id">
-            id
+            ID
           </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         <TableRow>
           <TableCell>
-            <TableTitle href="#titles">the reading layout</TableTitle>
+            <TableTitle href="#titles">The reading layout</TableTitle>
           </TableCell>
           <TableCell kind="id">qt-014</TableCell>
         </TableRow>
         <TableRow>
           <TableCell>
-            <TableTitle>notes with no page yet</TableTitle>
+            <TableTitle>Notes with no page yet</TableTitle>
           </TableCell>
           <TableCell kind="id">tr-008</TableCell>
         </TableRow>
         <TableRow receding>
           <TableCell>
-            <TableTitle href="#titles">the old chapter plan</TableTitle>
+            <TableTitle href="#titles">The old chapter plan</TableTitle>
           </TableCell>
           <TableCell kind="id">ar-021</TableCell>
         </TableRow>
@@ -180,32 +180,32 @@ function TitledTable() {
 const schedules = [
   {
     next: "07:00",
-    name: "the morning digest",
-    when: "every day at 07:00",
-    source: "mail",
-    last: "ran at 07:00",
+    name: "The morning digest",
+    when: "Every day at 07:00",
+    source: "Mail",
+    last: "Ran at 07:00",
   },
   {
     next: "09:30",
-    name: "sort what came in",
-    when: "when mail arrives",
-    source: "needs a key",
-    last: "ran monday",
+    name: "Sort what came in",
+    when: "When mail arrives",
+    source: "Needs a key",
+    last: "Ran Monday",
     flag: true,
   },
   {
-    next: "friday",
-    name: "a schedule with a long name that runs past its column",
-    when: "every friday at 17:00",
-    source: "calendar",
-    last: "ran last friday",
+    next: "Friday",
+    name: "A schedule with a long name that runs past its column",
+    when: "Every Friday at 17:00",
+    source: "Calendar",
+    last: "Ran last Friday",
   },
   {
-    next: "paused",
-    name: "the old reading list",
-    when: "every sunday at 10:00",
-    source: "notes",
-    last: "ran in october",
+    next: "Paused",
+    name: "The old reading list",
+    when: "Every Sunday at 10:00",
+    source: "Notes",
+    last: "Ran in October",
     receding: true,
   },
 ];
@@ -214,20 +214,20 @@ function SchedulesTable() {
   const [sort, setSort] = useState<SortDirection>("ascending");
   const ordered = sort === "ascending" ? schedules : [...schedules].reverse();
   return (
-    <DataTable label="schedules" fold>
+    <DataTable label="Schedules" fold>
       <TableHeader>
         <TableRow>
           <TableHead scope="col" className="w-[116px]">
-            next
+            Next
           </TableHead>
           <SortableHead sort={sort} onSort={setSort}>
-            schedule
+            Schedule
           </SortableHead>
           <TableHead scope="col" className="w-[168px]">
-            runs
+            Runs
           </TableHead>
           <TableHead scope="col" className="w-[188px]">
-            source
+            Source
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -254,49 +254,49 @@ function SchedulesTable() {
 const events = [
   {
     time: "09:14",
-    title: "sent the morning digest",
-    meta: "the morning digest",
+    title: "Sent the morning digest",
+    meta: "The morning digest",
     took: "2m",
-    detail: "12 items, 3 of them new. nothing needed a decision.",
+    detail: "12 items, 3 of them new. Nothing needed a decision.",
   },
   {
     time: "08:02",
-    title: "sorted what came in",
-    meta: "sort what came in",
+    title: "Sorted what came in",
+    meta: "Sort what came in",
     took: "40s",
     detail: "4 threads filed, 1 left for you to read.",
   },
   {
     time: "07:30",
-    title: "refreshed the reading list",
-    meta: "the old reading list",
+    title: "Refreshed the reading list",
+    meta: "The old reading list",
     took: "1m",
-    detail: "nothing changed since sunday.",
+    detail: "Nothing changed since Sunday.",
   },
 ];
 
 // A log of what ran today. The results still waiting on someone are flagged, so the failure the retry closed at 08:06
 // reads as quietly as the retry.
 const results = [
-  { time: "09:12", title: "wrote the morning brief", result: "done" },
-  { time: "08:40", title: "sorted what came in", result: "needs you", open: true },
-  { time: "08:06", title: "refreshed the calendar", result: "done" },
-  { time: "08:05", title: "refreshed the calendar", result: "failed" },
-  { time: "07:30", title: "refreshed the reading list", result: "skipped" },
-  { time: "07:00", title: "checked the invoices", result: "paused", open: true },
+  { time: "09:12", title: "Wrote the morning brief", result: "Done" },
+  { time: "08:40", title: "Sorted what came in", result: "Needs you", open: true },
+  { time: "08:06", title: "Refreshed the calendar", result: "Done" },
+  { time: "08:05", title: "Refreshed the calendar", result: "Failed" },
+  { time: "07:30", title: "Refreshed the reading list", result: "Skipped" },
+  { time: "07:00", title: "Checked the invoices", result: "Paused", open: true },
 ];
 
 function ResultsTable() {
   return (
-    <DataTable label="what ran today and how each ended" fold className="[--fold-lead:60px]">
+    <DataTable label="What ran today and how each ended" fold className="[--fold-lead:60px]">
       <TableHeader>
         <TableRow>
           <TableHead scope="col" className="w-[116px]">
-            time
+            Time
           </TableHead>
-          <TableHead scope="col">event</TableHead>
+          <TableHead scope="col">Event</TableHead>
           <TableHead scope="col" className="w-[188px]">
-            result
+            Result
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -321,21 +321,21 @@ function ResultsTable() {
 
 // A day's log under each day's head, as an activity page prints it: each fold hangs from its ruled head's rule, and
 // the last day's quiet head has no rule, so its fold keeps its own.
-const days: { day: string; entries: typeof results; quiet?: "subtitle" }[] = [
-  { day: "today", entries: results.slice(0, 3) },
-  { day: "yesterday", entries: results.slice(3, 5) },
-  { day: "monday", entries: results.slice(5), quiet: "subtitle" },
+const days: { day: string; label: string; entries: typeof results; quiet?: "subtitle" }[] = [
+  { day: "Today", label: "today", entries: results.slice(0, 3) },
+  { day: "Yesterday", label: "yesterday", entries: results.slice(3, 5) },
+  { day: "Monday", label: "Monday", entries: results.slice(5), quiet: "subtitle" },
 ];
 
 function DaysTable() {
   return (
     <div>
-      {days.map(({ day, entries, quiet }) => (
+      {days.map(({ day, label, entries, quiet }) => (
         <BlockSection key={day}>
           <SectionHeader quiet={quiet}>
             <SectionTitle>{day}</SectionTitle>
           </SectionHeader>
-          <DataTable label={`what ran ${day}`} fold className="[--fold-lead:60px]">
+          <DataTable label={`What ran ${label}`} fold className="[--fold-lead:60px]">
             <TableBody>
               {entries.map((entry) => (
                 <TableRow key={entry.time}>
@@ -360,18 +360,18 @@ function DaysTable() {
 
 function EventsTable() {
   return (
-    <DataTable label="what ran today" fold className="[--fold-lead:60px]">
+    <DataTable label="What ran today" fold className="[--fold-lead:60px]">
       <TableHeader>
         <TableRow>
           <TableHead scope="col" className="w-[116px]">
-            time
+            Time
           </TableHead>
-          <TableHead scope="col">event</TableHead>
+          <TableHead scope="col">Event</TableHead>
           <TableHead scope="col" className="w-[188px]">
-            schedule
+            Schedule
           </TableHead>
           <TableHead scope="col" kind="number" className="w-[116px]">
-            took
+            Took
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -401,12 +401,12 @@ function EventsTable() {
 // A plain table takes the same rows: no lead column, so the detail starts at the first cell.
 function PlainDetailTable() {
   return (
-    <DataTable label="what ran today, plain">
+    <DataTable label="What ran today, plain">
       <TableHeader>
         <TableRow>
-          <TableHead scope="col">event</TableHead>
+          <TableHead scope="col">Event</TableHead>
           <TableHead scope="col" kind="number">
-            took
+            Took
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -432,24 +432,24 @@ function PlainDetailTable() {
 const batches = [
   {
     time: "10:02",
-    title: "drew the figure plates",
+    title: "Drew the figure plates",
     took: "6m",
-    steps: ["plate 1 of 3", "plate 2 of 3", "plate 3 of 3"],
+    steps: ["Plate 1 of 3", "Plate 2 of 3", "Plate 3 of 3"],
   },
-  { time: "09:40", title: "pinned the font headers", took: "1m", steps: ["checked the headers"] },
+  { time: "09:40", title: "Pinned the font headers", took: "1m", steps: ["Checked the headers"] },
 ];
 
 function SubEntriesTable() {
   return (
-    <DataTable label="runs and their steps" fold className="[--fold-lead:60px]">
+    <DataTable label="Runs and their steps" fold className="[--fold-lead:60px]">
       <TableHeader>
         <TableRow>
           <TableHead scope="col" className="w-[116px]">
-            time
+            Time
           </TableHead>
-          <TableHead scope="col">run</TableHead>
+          <TableHead scope="col">Run</TableHead>
           <TableHead scope="col" kind="number" className="w-[116px]">
-            took
+            Took
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -523,33 +523,37 @@ function Page() {
   return (
     <>
       <PageHead
-        title="data table"
-        lede="a named table with sortable heads, selected rows and an empty result. the app supplies the data and accepts each sort change."
+        title="Data table"
+        lede="A named table with sortable heads, selected rows and an empty result. The app supplies the data and accepts each sort change."
       >
         <InstallLine items={["data-table"]} />
       </PageHead>
-      <p className="st-cb-serves">serves {serves}.</p>
+      <p className="st-cb-serves">Serves {serves}.</p>
 
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-cb-copy">
-          sort the chapter count in either direction. check a row to select it; the selection follows its id when the
-          order changes. a wider table scrolls inside its own box, or folds.
+          Sort the chapter count in either direction. Check a row to select it; the selection follows its ID when the
+          order changes. A wider table scrolls inside its own box, or folds.
         </p>
         <ModePair className="st-cb-stack">
           <RunsTable />
         </ModePair>
       </Section>
-      <Section id="states" title="sort and row states">
+      <Section id="states" title="Sort and row states">
         <p className="st-cb-copy">
-          the first head starts unsorted. its chevron appears under the pointer or keyboard focus; a click chooses
-          ascending, then descending. these board rows use the 56 px measure.
+          The first head starts unsorted. Its chevron appears under the pointer or keyboard focus; a click chooses
+          ascending, then descending. These board rows use the 56 px measure.
         </p>
         <ModePair className="st-cb-stack">
           <div className="st-cb-flow">
             <PrintedTable />
             <div className="st-cb-states">
               {(["ascending", "descending"] as const).map((direction) => (
-                <State key={direction} name={direction} note="click the head to reverse the sort">
+                <State
+                  key={direction}
+                  name={direction === "ascending" ? "Ascending" : "Descending"}
+                  note="Click the head to reverse the sort"
+                >
                   <SortState initial={direction} />
                 </State>
               ))}
@@ -558,90 +562,90 @@ function Page() {
         </ModePair>
         <Caption detail="rowedge" />
       </Section>
-      <Section id="titles" title="titles">
+      <Section id="titles" title="Titles">
         <p className="st-cb-copy">
           <code>TableTitle</code> is a row&rsquo;s name: plain text until it gets an href or the app&rsquo;s router
-          link, then a link that underlines on hover and reaches 44 px on a phone. a <code>receding</code> row is still
+          link, then a link that underlines on hover and reaches 44 px on a phone. A <code>receding</code> row is still
           live and fading, so it prints muted with no strike.
         </p>
         <ModePair className="st-cb-stack">
           <TitledTable />
         </ModePair>
       </Section>
-      <Section id="fold" title="fold">
+      <Section id="fold" title="Fold">
         <p className="st-cb-copy">
-          set <code>fold</code> and the table reaches the panel&rsquo;s edges. above 776&nbsp;px of its own width it is
-          a table of fixed columns. below that each row folds into two lines, with no sideways scroll. a{" "}
+          Set <code>fold</code> and the table reaches the panel&rsquo;s edges. Above 776&nbsp;px of its own width it is
+          a table of fixed columns. Below that each row folds into two lines, with no sideways scroll. A{" "}
           <code>TableTitle</code> link covers its whole row, and a sortable head stays on screen as one line of sort
           buttons. <code>flag</code> lifts a fact that is still open to foreground.
         </p>
-        <PanelPair title="a folding table" height={390} phoneHeight={460}>
+        <PanelPair title="A folding table" height={390} phoneHeight={460}>
           <SchedulesTable />
         </PanelPair>
       </Section>
-      <Section id="detail" title="detail">
+      <Section id="detail" title="Detail">
         <p className="st-cb-copy">
           <code>TableDetail</code> holds the open state, controlled or its own. <code>TableDetailTrigger</code> is the
           row&rsquo;s name as a button: its area covers the row and its chevron turns over while the detail is open.{" "}
-          <code>TableDetailRow</code> lines up with the title and takes the row&rsquo;s rule. it stays mounted while
-          closed, so what you typed in it survives. the first row here starts open; open the others. a plain table takes
+          <code>TableDetailRow</code> lines up with the title and takes the row&rsquo;s rule. It stays mounted while
+          closed, so what you typed in it survives. The first row here starts open; open the others. A plain table takes
           the same rows.
         </p>
-        <PanelPair title="rows that open a detail" height={480} phoneHeight={420}>
+        <PanelPair title="Rows that open a detail" height={480} phoneHeight={420}>
           <EventsTable />
         </PanelPair>
         <ModePair className="st-cb-stack">
           <PlainDetailTable />
         </ModePair>
       </Section>
-      <Section id="sub-entries" title="sub-entries">
+      <Section id="sub-entries" title="Sub-entries">
         <p className="st-cb-copy">
           <code>TableSubRow</code> hangs an entry off the row above, under its title, with a connector in the rule ink.
-          the row keeps its rule for the last entry. <code>lead={"{false}"}</code> on a detail or a sub-entry drops the
+          The row keeps its rule for the last entry. <code>lead={"{false}"}</code> on a detail or a sub-entry drops the
           empty lead cell, for a table with no lead column.
         </p>
-        <PanelPair title="runs and their steps" height={440} phoneHeight={420}>
+        <PanelPair title="Runs and their steps" height={440} phoneHeight={420}>
           <SubEntriesTable />
         </PanelPair>
       </Section>
-      <Section id="results" title="results">
+      <Section id="results" title="Results">
         <p className="st-cb-copy">
-          a log prints how each entry ended as a plain word, with no badge: <code>done</code>, <code>needs you</code>,{" "}
-          <code>failed</code>, <code>skipped</code> or <code>paused</code>. ink follows what is open: <code>flag</code>{" "}
+          A log prints how each entry ended as a plain word, with no badge: <code>done</code>, <code>needs you</code>,{" "}
+          <code>failed</code>, <code>skipped</code> or <code>paused</code>. Ink follows what is open: <code>flag</code>{" "}
           lifts a result that still waits on someone to foreground, and a closed one stays muted, so a failure a retry
-          closed prints as quietly as done. a ship&rsquo;s word is its own.
+          closed prints as quietly as done. A ship&rsquo;s word is its own.
         </p>
-        <PanelPair title="a log of results" height={490} phoneHeight={470}>
+        <PanelPair title="A log of results" height={490} phoneHeight={470}>
           <ResultsTable />
         </PanelPair>
       </Section>
-      <Section id="under-a-head" title="under a head">
+      <Section id="under-a-head" title="Under a head">
         <p className="st-cb-copy">
-          a fold with no head row opens on its own rule. straight under a section header it hangs from the
-          header&rsquo;s rule instead, as list rows do, so the two never print 16&nbsp;px apart. monday&rsquo;s quiet
+          A fold with no head row opens on its own rule. Straight under a section header it hangs from the
+          header&rsquo;s rule instead, as list rows do, so the two never print 16&nbsp;px apart. Monday&rsquo;s quiet
           head prints no rule, so its fold keeps its own.
         </p>
-        <PanelPair title="a day's log under its heads" height={640} phoneHeight={700}>
+        <PanelPair title="A day's log under its heads" height={640} phoneHeight={700}>
           <DaysTable />
         </PanelPair>
       </Section>
-      <Section id="empty" title="empty results">
+      <Section id="empty" title="Empty results">
         <p className="st-cb-copy">
-          one real row spans every column. its status announces the changed result without removing the table or its
+          One real row spans every column. Its status announces the changed result without removing the table or its
           column names.
         </p>
         <ModePair className="st-cb-stack">
-          <DataTable label="waiting collections">
+          <DataTable label="Waiting collections">
             <TableHeader>
               <TableRow>
-                <TableHead scope="col">id</TableHead>
-                <TableHead scope="col">ship</TableHead>
-                <TableHead scope="col">status</TableHead>
+                <TableHead scope="col">ID</TableHead>
+                <TableHead scope="col">Ship</TableHead>
+                <TableHead scope="col">Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableEmpty columns={3} title="no waiting collections">
-                every collection has moved on. change the filter to see more.
+              <TableEmpty columns={3} title="No waiting collections">
+                Every collection has moved on. Change the filter to see more.
               </TableEmpty>
             </TableBody>
           </DataTable>

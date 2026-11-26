@@ -1,8 +1,8 @@
-# marks
+# Marks
 
 A ship's mark is where its colour lives. Every mark is 1-bit, drawn on the same grid, so the fleet reads as one set.
 
-## anatomy
+## Anatomy
 
 - A 16 x 16 grid. The tile is key, with a 1 px notch cut from each corner.
 - A paper silhouette on the tile names the ship.
@@ -12,7 +12,7 @@ A ship's mark is where its colour lives. Every mark is 1-bit, drawn on the same 
 
 The spot pops at rail and fleet-row sizes (32 to 48 px) and in the chart. At 16 px the mark still reads by its silhouette.
 
-## the marks
+## The marks
 
 | ship          | spot         |
 | ------------- | ------------ |
@@ -30,7 +30,7 @@ superthread's own mark is the home mark. Its spot is plum, the house ink, and it
 
 The superthread wordmark sets in Unbounded 400.
 
-## files and URLs
+## Files and URLs
 
 The marks are plain SVG, served to any origin and cached for a day:
 
@@ -51,7 +51,7 @@ https://superthread.mauricekleine.com/marks/superthread-icons.zip
 
 In the mauricekleine.com repo, `packages/superthread/marks/fleet.json` owns fleet membership and new star marks. `apps/superthread/public/marks/` keeps the original master marks as byte copies alongside generated marks. `PROVENANCE.json` records the SVGs' sources and sha256. The site's build and dev generate PNGs and zips with no extra dependency, embedding PNG source metadata and recording derived files in `DOWNLOADS.json`. These files are build output and inherit the marks' CORS and one-day cache headers.
 
-## icons
+## Icons
 
 Interface icons are pixel icons too, from `@mk/glyphs`, drawn as whole-pixel squares:
 
@@ -62,13 +62,13 @@ Interface icons are pixel icons too, from `@mk/glyphs`, drawn as whole-pixel squ
 
 An icon is decorative until it gets an `aria-label`. A surface uses these icons and adds none of its own: a missing icon is drawn the same way, whole pixels on the 12-cell grid, and lands in the glyph source so every app gets it.
 
-## third-party marks
+## Third-party marks
 
 A mark that belongs to someone else prints in one ink, never in its owner's colours and never a spot. A ship prints a real mark only where it names one, and every other source takes a pixel or letter drawing on the same 16 cells.
 
 `@mk/source-mark` is the frame: `SourceMark` knocks a drawing out of a notched 16-cell tile in the first ink, at 96 px, or 80 px on a phone. `d` and `hover` are the drawing's two frames, as path data in whole cells that never overlap and stay inside the tile. The second frame cuts in while the pointer or the focus is on the mark or in a linked tile, and `held` keeps it up. The frame lives in the registry and the drawings stay in the ship, so the public registry holds no one else's mark.
 
-## adding a ship or redrawing a mark
+## Adding a ship or redrawing a mark
 
 Run `bun run --cwd packages/superthread marks new <id> [--target soliton|cloudflare] [--url URL|none]` in the mauricekleine.com repo. It allocates a distinct spot and a free line-screen angle, draws a star in both chromes, and updates the manifest, fleet item and provenance. A star is one dot on a screened hue tile until its glyph is drawn.
 

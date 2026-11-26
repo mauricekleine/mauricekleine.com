@@ -514,7 +514,7 @@ describe("section header", () => {
     expect(sections[1]!.getAttribute("aria-labelledby")).toBe("drafts");
     expect(sections[0]!.getAttribute("aria-labelledby")).not.toBe("drafts");
     expect(one(host, '[data-slot="section-count"]').el.getAttribute("aria-live")).toBe("polite");
-    expect(one(host, 'a[href="/runs"]').el.textContent).toBe("more");
+    expect(one(host, 'a[href="/runs"]').el.textContent).toBe("More");
     expect(one(host, 'a[href="/drafts"]').el.textContent).toBe("all drafts");
     expect(one(host, "a").el.querySelector("svg")).not.toBeNull();
     expect(one(host, "a").classes).toEqual(expect.arrayContaining(CONTROL_RING));
@@ -632,11 +632,11 @@ describe("search palette", () => {
     const host = server(<Palette />);
     expect(host.querySelectorAll('[data-mk="search-palette"]')).toHaveLength(3);
     const trigger = one(host, "button");
-    expect(trigger.el.getAttribute("aria-label")).toBe("search");
+    expect(trigger.el.getAttribute("aria-label")).toBe("Search");
     expect(trigger.el.getAttribute("aria-haspopup")).toBe("dialog");
     expect(trigger.el.getAttribute("type")).toBe("button");
     expect(host.querySelector("input")).toBeNull();
-    expect(trigger.el.textContent).toContain("search everything");
+    expect(trigger.el.textContent).toContain("Search everything");
     expect(host.querySelector("kbd")).toBeNull();
     expect(trigger.classes).toEqual(expect.arrayContaining(["h-10", "border-input", ...CONTROL_RING]));
     expect(detailsUsed(elements(host), "search-palette")).toEqual([]);
@@ -654,9 +654,9 @@ describe("search palette", () => {
       expect(isOpen(view.body)).toBe(true);
       const dialog = one(view.body, '[role="dialog"]').el;
       const labelId = dialog.getAttribute("aria-labelledby")!;
-      expect(document.getElementById(labelId)?.textContent).toBe("search");
-      expect(one(view.body, 'input[role="combobox"]').el.getAttribute("aria-label")).toBe("search");
-      expect(one(view.body, '[role="listbox"]').el.getAttribute("aria-label")).toBe("search results");
+      expect(document.getElementById(labelId)?.textContent).toBe("Search");
+      expect(one(view.body, 'input[role="combobox"]').el.getAttribute("aria-label")).toBe("Search");
+      expect(one(view.body, '[role="listbox"]').el.getAttribute("aria-label")).toBe("Search results");
       expect(one(view.body, '[role="listbox"]').el.getAttribute("aria-live")).toBe("polite");
       const controls = one(view.body, '[data-slot="search-palette-trigger"]').el.getAttribute("aria-controls")!;
       expect(document.getElementById(controls)).not.toBeNull();
@@ -865,7 +865,7 @@ describe("search palette", () => {
         Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!.call(input, "no match");
         input.dispatchEvent(new Event("input", { bubbles: true }));
       });
-      expect(one(view.body, '[cmdk-empty=""]').el.textContent).toBe("nothing by that name");
+      expect(one(view.body, '[cmdk-empty=""]').el.textContent).toBe("Nothing by that name");
       await act(async () => {
         Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!.call(input, "board");
         input.dispatchEvent(new Event("input", { bubbles: true }));

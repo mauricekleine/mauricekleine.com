@@ -7,11 +7,10 @@
 //
 // Transforms, in order: the `cn` package and `@/lib/utils` become our utils; registry hooks and lib paths, then
 // ui paths, move under `@/components/superthread/`; `@/hooks/use-mobile` follows; `IconPlaceholder` becomes
-// `Icon` from our glyphs by the table below; `"use client"` goes; upstream's style hooks become our utilities; served
-// labels (an sr-only element's text, aria labels, titles, alt text, placeholders) go lowercase. `print` also strips
-// the focus classes the stage 0 gate rules off every seeded control (build ruling 2). `regen` also applies each pass
-// item's class table, portal rule and style rule, and fails on a style hook no rule maps. Anything a rule does not cover fails,
-// so a new upstream import, icon, prop or class is a decision, never a silent drop.
+// `Icon` from our glyphs by the table below; `"use client"` goes; upstream's style hooks become our utilities.
+// `print` also strips the focus classes the stage 0 gate rules off every seeded control (build ruling 2). `regen` also
+// applies each pass item's class table, portal rule and style rule, and fails on a style hook no rule maps. Anything a
+// rule does not cover fails, so a new upstream import, icon, prop or class is a decision, never a silent drop.
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -426,21 +425,7 @@ export function styleComponent(src: string, where: string, rule: StyleRule): str
   return `${src.slice(0, at)}import { cn } from "${UTILS}"\n${src.slice(at)}`;
 }
 
-/** Served labels go lowercase: string values of the label attributes, and the text of an sr-only element. */
-function lowercaseLabels(src: string): string {
-  const attribute = new RegExp(`(\\s(?:${LABEL_ATTRIBUTES.join("|")})=)(["'])([^"'\\n]*)\\2`, "g");
-  return src
-    .replace(
-      attribute,
-      (_, name: string, quote: string, text: string) => `${name}${quote}${text.toLowerCase()}${quote}`,
-    )
-    .replace(
-      /(className=(["'])(?:[^"'\n]*\s)?sr-only(?:\s[^"'\n]*)?\2[^<>]*>)([^<{]*)(?=<)/g,
-      (_, open: string, _quote: string, text: string) => `${open}${text.toLowerCase()}`,
-    );
-}
-
-/** Transforms 1 to 8, in order; `seed` adds the seed transform (`print`), `pass` names the pass item `regen` writes. */
+/** Transforms 1 to 7, in order; `seed` adds the seed transform (`print`), `pass` names the pass item `regen` writes. */
 export function transform(content: string, where: string, opts: { seed?: boolean; pass?: string } = {}): string {
   let src = content;
   let usesIcons = false;
@@ -464,7 +449,6 @@ export function transform(content: string, where: string, opts: { seed?: boolean
   if (portal) src = forwardPortalProps(src, where, portal);
   const style = opts.pass ? PASS_STYLES[opts.pass] : undefined;
   if (style) src = styleComponent(src, where, style);
-  src = lowercaseLabels(src);
   if (opts.seed) src = stripFocusClasses(src);
 
   if (opts.pass) {

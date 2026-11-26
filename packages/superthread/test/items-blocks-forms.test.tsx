@@ -141,7 +141,7 @@ describe("quick add", () => {
     expect(input.getAttribute("placeholder")).toBe("what needs doing?");
     expect(one(rendered, "button").el.getAttribute("type")).toBe("submit");
     expect(one(rendered, "button").el.hasAttribute("disabled")).toBe(true);
-    expect(one(rendered, "button").el.textContent).toBe("add");
+    expect(one(rendered, "button").el.textContent).toBe("Add");
     expect(one(rendered, "button svg").el.getAttribute("aria-hidden")).toBe("true");
   });
 
@@ -316,7 +316,7 @@ describe("quick add", () => {
     try {
       await type(one(view.body, "input").el as HTMLInputElement, "task");
       await submit(one(view.body, "form").el as HTMLFormElement);
-      expect(one(view.body, '[role="alert"]').el.textContent).toBe("could not add. try again.");
+      expect(one(view.body, '[role="alert"]').el.textContent).toBe("Could not add. Try again.");
     } finally {
       await view.done();
     }
@@ -393,7 +393,7 @@ describe("the quiet add in a nav", () => {
     const form = one(host, "form");
     expect(trigger.el.getAttribute("popovertarget")).toBe(form.el.id);
     expect(trigger.el.getAttribute("type")).toBe("button");
-    expect(trigger.el.getAttribute("aria-label")).toBe("add");
+    expect(trigger.el.getAttribute("aria-label")).toBe("Add");
     expect(trigger.el.querySelector("svg")).not.toBeNull();
     expect(trigger.classes).toContain("text-muted-foreground");
     expect(form.el.getAttribute("popover")).toBe("auto");

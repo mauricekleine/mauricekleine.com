@@ -10,12 +10,12 @@ export function LabelExample() {
   return (
     <div className="st-pass-stack">
       <div className="st-pass-field">
-        <Label htmlFor={`${id}-title`}>chapter title</Label>
-        <Input id={`${id}-title`} defaultValue="one photon at a time" />
+        <Label htmlFor={`${id}-title`}>Chapter title</Label>
+        <Input id={`${id}-title`} defaultValue="One photon at a time" />
       </div>
       <Label>
         <Checkbox defaultChecked />
-        notify me when a run fails
+        Notify me when a run fails
       </Label>
     </div>
   );

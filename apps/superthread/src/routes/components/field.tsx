@@ -14,12 +14,12 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/field")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "orientations", title: "orientations" },
-      { id: "parts", title: "parts" },
-      { id: "layers", title: "on a layer" },
-      { id: "states", title: "states" },
-      { id: "phone", title: "phone" },
+      { id: "example", title: "Example" },
+      { id: "orientations", title: "Orientations" },
+      { id: "parts", title: "Parts" },
+      { id: "layers", title: "On a layer" },
+      { id: "states", title: "States" },
+      { id: "phone", title: "Phone" },
     ],
   },
   component: Page,
@@ -28,60 +28,60 @@ function Page() {
   return (
     <>
       <PageHead
-        title="field"
-        lede="a label, control and supporting words kept together. fieldsets group related choices, and errors lead with a bang square."
+        title="Field"
+        lede="A label, control and supporting words kept together. Fieldsets group related choices, and errors lead with a bang square."
       >
         <InstallLine items={["field"]} />
       </PageHead>
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-e-copy">
-          edit the run name to see validation change with it. the description names the accepted format; the switch
+          Edit the run name to see validation change with it. The description names the accepted format; the switch
           keeps its own label and description.
         </p>
         <ModePair className="st-e-wide">
           <FieldExample />
         </ModePair>
       </Section>
-      <Section id="orientations" title="orientations">
+      <Section id="orientations" title="Orientations">
         <p className="st-e-copy">
-          vertical stacks label and control; horizontal keeps them in one row. responsive follows the field group width,
-          stacking below its medium container size. the narrow frame shows that change.
+          Vertical stacks label and control; horizontal keeps them in one row. Responsive follows the field group width,
+          stacking below its medium container size. The narrow frame shows that change.
         </p>
         <ModePair className="st-e-wide">
           <FieldOrientations />
         </ModePair>
       </Section>
-      <Section id="parts" title="parts">
+      <Section id="parts" title="Parts">
         <p className="st-e-copy">
-          the label legend uses interface type. choice cards edge the checked field in foreground. a plain separator
+          The label legend uses interface type. Choice cards edge the checked field in foreground. A plain separator
           divides the parts, and an error list removes duplicate messages.
         </p>
         <ModePair className="st-e-wide">
           <FieldParts />
         </ModePair>
       </Section>
-      <Section id="layers" title="on a layer">
+      <Section id="layers" title="On a layer">
         <p className="st-e-copy">
-          a separator&rsquo;s words take the fill beneath them, so in a dialog or a sheet they sit on the layer&rsquo;s
-          own fill, with no box. each frame stands in for the window.
+          A separator&rsquo;s words take the fill beneath them, so in a dialog or a sheet they sit on the layer&rsquo;s
+          own fill, with no box. Each frame stands in for the window.
         </p>
         <ModePair className="st-e-wide">
           <FieldOnLayers />
         </ModePair>
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-e-copy">
-          the label follows invalid and disabled states while the control owns its edge. each error carries its glyph
+          The label follows invalid and disabled states while the control owns its edge. Each error carries its glyph
           and names the next step.
         </p>
         <ModePair className="st-e-wide">
           <FieldStates />
         </ModePair>
       </Section>
-      <Section id="phone" title="phone">
+      <Section id="phone" title="Phone">
         <p className="st-e-copy">
-          at 600 px and below every control that takes text sets 16 px, so ios safari never zooms the page in on focus.
-          a textarea sets 16 on 24 and still opens three lines tall. labels and descriptions keep their steps. these
+          At 600 px and below every control that takes text sets 16 px, so iOS Safari never zooms the page in on focus.
+          A textarea sets 16 on 24 and still opens three lines tall. Labels and descriptions keep their steps. These
           frames have a 390 px viewport.
         </p>
         <ModePair light={<FieldsOnPhone mode="light" />} dark={<FieldsOnPhone mode="dark" />} />

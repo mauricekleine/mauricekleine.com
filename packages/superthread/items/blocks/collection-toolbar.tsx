@@ -6,7 +6,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/superthread/ui/toggle
 // The row above a collection: related controls stay together and wrap before the collection starts.
 function CollectionToolbar({
   className,
-  label = "collection controls",
+  label = "Collection controls",
   ...props
 }: React.ComponentProps<"div"> & { label?: string }) {
   return (
@@ -61,7 +61,7 @@ function FilterChip({
   shown,
   total,
   onClear,
-  clearLabel = "clear filter",
+  clearLabel = "Clear filter",
   ...props
 }: React.ComponentProps<"div"> & { shown?: number; total?: number; onClear: () => void; clearLabel?: string }) {
   return (
@@ -130,7 +130,7 @@ function ViewSwitch({
   value,
   defaultValue,
   onValueChange,
-  label = "view",
+  label = "View",
   disabled,
   ...props
 }: ViewSwitchProps) {

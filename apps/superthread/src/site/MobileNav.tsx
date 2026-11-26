@@ -9,9 +9,9 @@ export function MobileNav() {
   const [open, setOpen] = useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger render={<Button variant="outline" size="sm" className="st-menu" />}>menu</SheetTrigger>
+      <SheetTrigger render={<Button variant="outline" size="sm" className="st-menu" />}>Menu</SheetTrigger>
       <SheetContent side="left" className="st-sheet-nav">
-        <SheetTitle className="sr-only">pages</SheetTitle>
+        <SheetTitle className="sr-only">Pages</SheetTitle>
         <SideNav onNavigate={() => setOpen(false)} />
       </SheetContent>
     </Sheet>

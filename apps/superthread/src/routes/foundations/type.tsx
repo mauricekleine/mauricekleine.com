@@ -8,11 +8,11 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/foundations/type")({
   staticData: {
     openerLede:
-      "four faces, each with one job: unbounded for display, supreme for the interface, erode for reading and fragment mono for ids, times, code and any figure that holds a column.",
+      "Four faces, each with one job: Unbounded for display, Supreme for the interface, Erode for reading and Fragment Mono for IDs, times, code and any figure that holds a column.",
     sections: [
-      { id: "faces", title: "faces" },
-      { id: "steps", title: "steps" },
-      { id: "links", title: "links" },
+      { id: "faces", title: "Faces" },
+      { id: "steps", title: "Steps" },
+      { id: "links", title: "Links" },
     ],
   },
   component: Page,
@@ -25,38 +25,38 @@ const families: readonly { name: string; family: Family; role: string; use: stri
   {
     name: "Unbounded",
     family: "display",
-    role: "display",
-    use: "titles, section heads and the board, at 300 in the first ink; the wordmark at 400",
-    sample: "runs this week",
+    role: "Display",
+    use: "Titles, section heads and the board, at 300 in the first ink; the wordmark at 400",
+    sample: "Runs this week",
   },
   {
     name: "Supreme",
     family: "sans",
-    role: "ui",
-    use: "controls, tables, notes and the body of these pages, at 400 and 500",
+    role: "UI",
+    use: "Controls, tables, notes and the body of these pages, at 400 and 500",
     sample: "3 of 5 runs done, 2 queued",
   },
   {
     name: "Erode",
     family: "serif",
-    role: "reading",
-    use: "the reading page, ledes and page titles, from 400 to 600",
-    sample: "a slow page, set for reading",
+    role: "Reading",
+    use: "The reading page, ledes and page titles, from 400 to 600",
+    sample: "A slow page, set for reading",
   },
   {
     name: "Fragment Mono",
     family: "mono",
-    role: "mono",
-    use: "ids, times, figures that hold a column, code and the caps legends",
+    role: "Mono",
+    use: "IDs, times, figures that hold a column, code and the caps legends",
     sample: "run 7f3a2c · 00:04:12",
   },
 ];
 
 const faceName: Record<Family, string> = {
-  display: "unbounded",
-  sans: "supreme",
-  serif: "erode",
-  mono: "fragment mono",
+  display: "Unbounded",
+  sans: "Supreme",
+  serif: "Erode",
+  mono: "Fragment Mono",
 };
 
 type Step = keyof typeof tokens.type.steps;
@@ -80,20 +80,20 @@ const stepClass = {
 } as const satisfies Record<Step, string>;
 
 const stepSample: Record<Step, string> = {
-  meta: "queued · 3 runs",
-  instrument: "updated four minutes ago",
-  ui: "deploy the board to orbit",
-  summary: "three runs are waiting on review",
-  subtitle: "rename this board",
-  read: "the reading column sets erode at nineteen on thirty-two, about sixty-six characters to the line, so a long page stays easy to follow.",
-  lede: "a page opens with one short paragraph that says what it is for.",
-  title: "fleet status",
-  long: "check whether the deck still matches",
-  section: "ship spots",
-  page: "notes on dithering",
-  headline: "reply to the chapter notes",
-  hero: "runs",
-  display: "fleet",
+  meta: "Queued · 3 runs",
+  instrument: "Updated four minutes ago",
+  ui: "Deploy the board to Orbit",
+  summary: "Three runs are waiting on review",
+  subtitle: "Rename this board",
+  read: "The reading column sets Erode at nineteen on thirty-two, about sixty-six characters to the line, so a long page stays easy to follow.",
+  lede: "A page opens with one short paragraph that says what it is for.",
+  title: "Fleet status",
+  long: "Check whether the deck still matches",
+  section: "Ship spots",
+  page: "Notes on dithering",
+  headline: "Reply to the chapter notes",
+  hero: "Runs",
+  display: "Fleet",
 };
 
 type StepSpec = {
@@ -118,14 +118,14 @@ function spec({ size, line, tracking, caps, family, weight }: StepSpec): string 
 function Page() {
   return (
     <>
-      <Section id="faces" title="faces">
-        <Copy>{tokens.fonts.faces.length} files in all. each line below is set in the cut it names.</Copy>
+      <Section id="faces" title="Faces">
+        <Copy>{tokens.fonts.faces.length} files in all. Each line below is set in the cut it names.</Copy>
         <ul className="st-f-faces">
           {families.map(({ name, family, role, use, sample }) => (
             <li key={name}>
               <div className="st-f-face-head">
                 <span className="type-meta">{role}</span>
-                <b style={{ fontFamily: `var(--font-${family})` }}>{name.toLowerCase()}</b>
+                <b style={{ fontFamily: `var(--font-${family})` }}>{name}</b>
                 <small>{use}</small>
               </div>
               <ul className="st-f-face-cuts">
@@ -160,9 +160,9 @@ function Page() {
         </ul>
       </Section>
 
-      <Section id="steps" title="steps">
+      <Section id="steps" title="Steps">
         <Copy>
-          {steps.length} steps, size over line height in px, from the caps legend to the display line. at{" "}
+          {steps.length} steps, size over line height in px, from the caps legend to the display line. At{" "}
           {tokens.type.phone.maxWidth} px and below {phoneSteps.join(", ")} take the smaller size shown beside them.
         </Copy>
         <ol className="st-f-steps">
@@ -183,25 +183,25 @@ function Page() {
         </ol>
       </Section>
 
-      <Section id="links" title="links">
+      <Section id="links" title="Links">
         <Copy>
-          a link in running text prints in foreground with a 1 px underline at rest. in a working panel the base layer
+          A link in running text prints in foreground with a 1 px underline at rest. In a working panel the base layer
           does this for any anchor no item owns. <code>link-quiet</code> is the one second form: a muted word that turns
-          foreground on hover, for a way onward beside a head or a row. a link in a paragraph rings flush to its sides,
-          so the word space beside it keeps the ring off the words around it. the last line prints keyboard focus.
+          foreground on hover, for a way onward beside a head or a row. A link in a paragraph rings flush to its sides,
+          so the word space beside it keeps the ring off the words around it. The last line prints keyboard focus.
         </Copy>
         <ModePair>
           <AppShellPanel className="grid justify-items-start gap-3">
             <p className="type-summary">
-              the run left <a href="#links">three notes</a> for the morning.
+              The run left <a href="#links">three notes</a> for the morning.
             </p>
             <a className="type-instrument link-quiet" href="#links">
-              all runs
+              All runs
             </a>
             <p className="type-instrument text-muted-foreground">
-              mail needs a sign-in.{" "}
+              Mail needs a sign-in.{" "}
               <a href="#links" data-demo="focus-visible" tabIndex={-1}>
-                see sources
+                See sources
               </a>
             </p>
           </AppShellPanel>

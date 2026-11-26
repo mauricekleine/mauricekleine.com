@@ -69,7 +69,7 @@ describe("the swap", () => {
   test("closed, it prints the line and the word that opens the answers, and holds no answer", () => {
     const host = server(<Answers />);
     expect(one(host, LINE).el.hasAttribute("hidden")).toBe(false);
-    expect(one(host, TRIGGER).el.textContent).toBe("wrong?");
+    expect(one(host, TRIGGER).el.textContent).toBe("Wrong?");
     expect(one(host, TRIGGER).el.getAttribute("aria-expanded")).toBe("false");
     expect(one(host, LIST).el.hasAttribute("hidden")).toBe(true);
     expect(host.querySelector('[data-slot="inline-answer"]')).toBeNull();

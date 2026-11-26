@@ -1,17 +1,17 @@
-# texture
+# Texture
 
-Flat where you read, screened where you look. Print fields with round dots at a 4 CSS px pitch. The first ink runs at 45° and plum runs at 15°. Coverage sets dot size. The live canvas prints one bit per device pixel at any device pixel ratio.
+Flat where you read, screened where you look. Framed imagery, site openers, document openers, chapter breaks and video plates print on a **3.5 CSS px** two-ink cosine halftone screen: the first ink runs at `45°` and plum runs at `15°`, with `vivid` light breath in light and dark mode. Legacy `@mk/field-art` prints round dots at a 4 CSS px pitch.
 
-| place             | what prints                                                       | how                              |
+| Place             | What prints                                                       | How                              |
 | ----------------- | ----------------------------------------------------------------- | -------------------------------- |
-| opener            | one band in the first ink and plum                               | `@mk/field-art`, `@mk/weave` or plates   |
-| figures           | concept art in two inks                                          | `@mk/field-art` or stills                        |
-| marks             | the ship's spot region at 50 percent                             | the mark SVGs                   |
-| progress edge     | the fill's leading 24 px, from solid to stock                     | `texture-ramp` in `Progress`      |
-| empty and loading | a light wedge of the first ink                                   | plates; `Skeleton` for rows      |
-| weave             | a solid breaking into a screen alongside words                   | `@mk/weave`                     |
+| Document plates   | Framed 3.5 px two-ink proof halftone (key 45° and plum 15°) with vivid light breath | `@mk/plate` or `doc/plate.js` |
+| Opener            | Stock-first framed split proof plate beside the page head         | `@mk/plate` (or `scripts/plate.ts`) |
+| Figures and video | Screened photography, grids/planes or editorial imagery in two inks | `@mk/plate` or `scripts/plate.ts` |
+| Marks             | The ship's spot region at 50 percent                              | The mark SVGs                   |
+| Progress edge     | The fill's leading 24 px, from solid to stock                     | `texture-ramp` in `Progress`      |
+| Empty and loading | A light wedge of the first ink                                    | Plates; `Skeleton` for rows      |
 
-## the six component details
+## The six component details
 
 At most one per component. 50 percent, the half, is the in-between state (a hover previewing the solid current bar, a mixed checkbox, a disabled control); solid is the settled one.
 
@@ -26,58 +26,51 @@ At most one per component. 50 percent, the half, is the in-between state (a hove
 
 The items already carry their detail. A raised layer's screen is an edge, never a field, so no dots fall on the words past it.
 
-## levels
+## Levels
 
 Component details, progress, the empty wedge and marks print from a 4 × 4 Bayer matrix at 1 CSS px per cell, in steps of 6.25 percent. 50 percent is 8 of its 16 cells (`--texture-b50`) and 18.75 percent is 3 (`--texture-b19`).
 
-## line screens
+## Line screens
 
 A chart series prints in its ship's spot with 1 px lines knocked out to the stock every 4 px, at the ship's own angle: 75 percent spot, 25 percent stock. The angles are orbit 45, quanta 90, trisys 27, constellation 63, artifacts 135 and soliton 117 degrees. 0, 45, 90 and 135 are exact 1 px lines; 27, 63 and 117 are 2:1 pixel steps. The legend swatch repeats the series' spot and line screen.
 
-## crop marks and plates
+## Crop marks and plates
 
-Set 10 px corner ticks 16 px outside a contained field. Drop the ticks when the weave meets the window edge.
+Set 10 px corner ticks 16 px outside a contained field. Drop the ticks when the plate meets the window edge.
 
-Openers and figures print two binary masks per mode at 2×. CSS sizes them at their native CSS width and height and crops them to fit the box. CSS inks the first and plum plates. The wedge prints an indexed image per mode. Build from `packages/superthread/texture/plates.json` with `packages/superthread/scripts/texture/build.py plates`. The site serves content-hashed files under `/texture/` and `texture/plates.sha256` records their pixel hashes.
+Static site plates print two binary masks per mode at 2×. CSS sizes them at their native CSS width and height and crops them to fit the box. CSS inks the first and plum plates. The wedge prints an indexed image per mode. Build from `packages/superthread/texture/plates.json` with `packages/superthread/scripts/texture/build.py plates`. The site serves content-hashed files under `/texture/` and `texture/plates.sha256` records their pixel hashes.
 
-## weave
+## Proof plates (documents and visuals)
 
-Use [@mk/weave](registry.md#weave) for a hero or a band. Put words on the flat solid or on the stock. A weave prints in the mode of the scope it sits in, so inside a `.dark` block it prints the dark inks. To carry a dark block into a light page, set the weave beside the block, in the page's scope, where its solid is key and its screen thins into the paper. Keep decorative texture inside the field, with a fixed screen and clean type. The thread core is solid. The knot and bloom print as plum dots.
+Use [@mk/plate](registry.md#plate) (and `scripts/plate.ts` in [superthread-visuals](../../superthread-visuals/SKILL.md) for PNG stills and MP4 video loops) for framed visuals across sites, documents, decks and video: the split `opener`, rare `chapter` breaks and editorial figures. Every plate prints on a 3.5 CSS px cosine dot screen in two inks: key at 45° and plum at 15°. In light mode the drifting `light breath` (default `vivid`) opens dark halftone dots toward white paper and warms the 15° plum plate. In dark mode white dots rest calmly on key stock (~48% max) and brighten upward as the light breath sweeps across, with 15° dark plum printing cleanly over the lit pass. Motion pauses offscreen and in hidden tabs, and holds frame zero under reduced motion and in print.
 
-In [plain documents](registry.md#plain-documents), copy the hero, slim head or band from `@mk/doc`. The dark island and its weave are siblings:
+- **With imagery:** pass a photograph or illustration through `src` (`data-plate-src`) or a child `<img>`. Flat reading stays beside the plate, separated by uniform 1 px `border` hairlines (no plum divider and no corner rectangle on the plate).
+- **Without imagery:** skip plates on everyday working sheets (RFCs, audits, dossiers, specs) and use plain `sheet-head` + ruled `section-head` dividers. When a report, opener or chapter break without photography genuinely benefits from a plate, derive a blocky tonal composition from the document's own structure using `planes` (proportional column ratios) or `grid` (density matrix), or supply a custom `draw` callback. Never repeat the same ratios, grid dimensions or seed twice in a document, and never use wavy lines, bouncing orbs or cut-plane horizons.
 
 ```html
-<div class="band">
-  <div class="band-solid island dark">
-    <h2 class="band-word">findings</h2>
-    <p class="band-caption"><span>what holds</span><span>03</span></p>
+<div class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-copy">
+      <div>
+        <h2 class="chapter-word">Findings</h2>
+        <div class="chapter-bar" aria-hidden="true"></div>
+      </div>
+      <p class="chapter-cap"><span>What holds</span><span>03</span></p>
+    </div>
+    <div class="chapter-plate" data-mk="plate" data-plate="grid cols=6 rows=4 seed=19" aria-hidden="true"></div>
   </div>
-  <div class="band-weave" data-weave="run=right phone=down fray=.06 ramp=held thread=6" aria-hidden="true"></div>
 </div>
 ```
 
-The script mounts the canvas. The page scope supplies its inks.
+## Legacy weave
 
-| spec key | meaning |
-| -------- | ------- |
-| `run=right\|down`, `phone=down` | run beside or below the solid. `phone` overrides the run at 600 px and below |
-| `fray=.06` or `fray=arch apex=.24 sides=.45` | the break as a fraction of the run. an arch sets the middle and the ends |
-| `bow=6`, `waves=2 amp=3`, `wobble=2 period=24 seed=11` | mirrored offsets in cells. bow leans at the middle, waves add lobes, and wobble is capped at two cells |
-| `ramp=held\|steady\|bet\|fade` | choose held for facts and findings, steady for plans and principles, bet for hypotheses and proposals, fade for notes and appendix heads |
-| `thread=4 strength=1` | the plum seam's half-width in cells and its strength. zero width hides it. in `bet` the thread runs at the ramp's break |
-| `knot=.36 knotr=13 live` | a knot at a fraction of the breadth with radius in cells. bare `live` sets it in motion |
+`@mk/weave` remains in the registry for existing installs, but new documents and sites should not use dark island weaves or wavy orb heroes. Prefer `sheet-head` (plain stock) or framed `opener` and `chapter` sections with `@mk/plate`.
 
-One light shades the screen beyond a short hold past the fray. In light it thins key ink on paper. In dark it lights the foreground screen up to 45 percent while the solid prints in the deep ground.
+## Legacy field art
 
-A hero’s weave can carry a knot. App surfaces print still.
+`@mk/field-art` (4 CSS px dot screen verb fields) remains in the registry and in [superthread-visuals](../../superthread-visuals/SKILL.md#legacy-field-art) for existing installs. New openers, figures, decks and video plates use `@mk/plate` and `superthread-visuals/scripts/plate.ts`.
 
-## concept art
-
-Use [@mk/field-art](registry.md#field-art) for a concept in a figure or opener. One spec gives a verb its edge, ramp, thread, knot and motion. The host’s stock comes through the open cells. Read [superthread-visuals](../../superthread-visuals/SKILL.md) for the spec and standalone still and loop tools.
-
-One live field may move per page, a weave or a field. It pauses offscreen and in a hidden tab, and prints a still frame under reduced motion and in print. The www sky occupies that slot on www. The progress ramp moves with its fill.
-
-## what a screen never does
+## What a screen never does
 
 A screen never prints behind words, numbers, data or code: text, table cells, the board's rows or a control's label. The rest of the surface stays flat, which rules out:
 

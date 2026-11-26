@@ -29,7 +29,7 @@ bun apps/superthread/tools/shoot.ts --focus --base http://127.0.0.1:3001 --tag <
 
 ## Rules
 
-- Words are lowercase and understated, with no em dashes and synthetic data only. `check-build` fails on an em dash or a private host in any served file.
+- Words use natural sentence case and an understated voice, with no em dashes and synthetic data only. Keep uppercase `Fragment Mono` metadata kickers where appropriate, and keep the `superthread` wordmark lowercase. `check-build` fails on an em dash or a private host in any served file.
 - `.impeccable/surfaces/apps-superthread-src-routes-index-tsx.md` is the surface contract. Read it; never copy its text into source, markup or anything served. `check-build` fails on any 8-word run of its prose.
 - The mode never flashes: the inline script from `@mk/theme` sets the mode class, `data-theme` and `data-theme-choice` on `<html>` before anything paints, and the mode control's pressed look reads `data-theme-choice` from CSS. `packages/superthread/test/theme.test.ts` and `check-build` hold this.
 - A field's box owns its focus: one 2 px edge inside the box, in `--primary` (`--error` when invalid), and no ring on the control. `tools/shoot.ts --focus` with `tools/focus_frames.py` proves it on every field page and the masthead search.

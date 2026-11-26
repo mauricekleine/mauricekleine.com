@@ -88,6 +88,7 @@ import { SourceLine, SourceLineItem } from "@/components/superthread/ui/source-l
 import { Paper } from "@/components/superthread/ui/paper";
 import { SourceMark } from "@/components/superthread/ui/source-mark";
 import { FieldArt } from "@/components/superthread/ui/field-art";
+import { Plate } from "@/components/superthread/ui/plate";
 import { Weave } from "@/components/superthread/ui/weave";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/superthread/ui/progress";
 import {
@@ -831,6 +832,9 @@ function Sink({ mode }: { mode: Mode }) {
       </Part>
       <Part name="field-art">
         <FieldArt spec="edge=crest ramp=fade" className="h-24" />
+      </Part>
+      <Part name="plate">
+        <Plate spec="planes ratios=42,24,18,16 seed=7" className="h-24" />
       </Part>
       <Part name="weave">
         <Weave spec="ramp=bet thread=4.5" className="h-24" />

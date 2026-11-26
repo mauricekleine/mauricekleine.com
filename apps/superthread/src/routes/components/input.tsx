@@ -9,8 +9,8 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/components/input")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "states", title: "states" },
+      { id: "example", title: "Example" },
+      { id: "states", title: "States" },
     ],
   },
   component: Page,
@@ -20,26 +20,26 @@ function Page() {
   return (
     <>
       <PageHead
-        title="input"
-        lede="one line of text in a box with a 1 px edge. focus thickens that edge to 2 px inside the box, so the text never moves."
+        title="Input"
+        lede="One line of text in a box with a 1 px edge. Focus thickens that edge to 2 px inside the box, so the text never moves."
       >
         <InstallLine items={["input"]} />
       </PageHead>
 
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-a-copy">
-          the label sits above the box and the hint below it. mark a field <code>aria-invalid</code> and its edge, its
-          focus and its caret take the error ink. the slugs check themselves as you type.
+          The label sits above the box and the hint below it. Mark a field <code>aria-invalid</code> and its edge, its
+          focus and its caret take the error ink. The slugs check themselves as you type.
         </p>
         <ModePair className="st-a-stack">
           <InputExample />
         </ModePair>
       </Section>
 
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-a-copy">
-          one frame in every state: 1 px at rest, and 2 px in the house ink while the text has focus, with the caret in
-          the same ink. an invalid field swaps the house ink for the error ink. a disabled field skips the tab order,
+          One frame in every state: 1 px at rest, and 2 px in the house ink while the text has focus, with the caret in
+          the same ink. An invalid field swaps the house ink for the error ink. A disabled field skips the tab order,
           keeps a flat fill and screens its edge back.
         </p>
         <ModePair className="st-a-stack">

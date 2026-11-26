@@ -6,21 +6,21 @@ import { State, States, type Mode } from "@/examples/input";
 
 const CONFIRMATIONS = {
   delete: {
-    title: "delete run or-412?",
-    explanation: "the run and its 3 logs are removed. this cannot be undone.",
-    action: "delete run",
+    title: "Delete run or-412?",
+    explanation: "The run and its 3 logs are removed. This cannot be undone.",
+    action: "Delete run",
     variant: "destructive",
   },
   inside: {
-    title: "rerun or-412?",
-    explanation: "the run starts again from its last step.",
-    action: "rerun",
+    title: "Rerun or-412?",
+    explanation: "The run starts again from its last step.",
+    action: "Rerun",
     variant: "default",
   },
   outward: {
-    title: "send the reply to sam?",
-    explanation: "sam gets it by email, so it can't be taken back.",
-    action: "send reply",
+    title: "Send the reply to Sam?",
+    explanation: "Sam gets it by email, so it can't be taken back.",
+    action: "Send reply",
     variant: "key",
   },
 } as const;
@@ -41,7 +41,7 @@ function Confirmation({ confirm, kind = "delete" }: { confirm?: () => void; kind
         <Alert.AlertDialogDescription>{explanation}</Alert.AlertDialogDescription>
       </Alert.AlertDialogHeader>
       <Alert.AlertDialogFooter>
-        <Alert.AlertDialogCancel>cancel</Alert.AlertDialogCancel>
+        <Alert.AlertDialogCancel>Cancel</Alert.AlertDialogCancel>
         <Alert.AlertDialogAction variant={variant} onClick={confirm}>
           {action}
         </Alert.AlertDialogAction>
@@ -55,7 +55,7 @@ export function AlertDialogExample({ mode }: { mode: Mode }) {
   return (
     <div className="st-gl-stack">
       <Alert.AlertDialog open={open} onOpenChange={setOpen}>
-        <Alert.AlertDialogTrigger render={<Button variant="destructive" />}>delete run</Alert.AlertDialogTrigger>
+        <Alert.AlertDialogTrigger render={<Button variant="destructive" />}>Delete run</Alert.AlertDialogTrigger>
         <Alert.AlertDialogContent portalProps={{ className: mode }}>
           <Confirmation
             confirm={() => {
@@ -66,7 +66,7 @@ export function AlertDialogExample({ mode }: { mode: Mode }) {
         </Alert.AlertDialogContent>
       </Alert.AlertDialog>
       <p className="st-gl-note" role="status">
-        {deleted ? "or-412 removed from this example." : "or-412 has 3 logs. cancel keeps them."}
+        {deleted ? "or-412 removed from this example." : "or-412 has 3 logs. Cancel keeps them."}
       </p>
     </div>
   );
@@ -117,10 +117,10 @@ export function AlertDialogSizes() {
 export function AlertDialogActions() {
   return (
     <div className="st-gl-stack">
-      <State name="default" note="house ink on paper, the outline on a dark sheet" className="st-gl-full">
+      <State name="default" note="House ink on paper, the outline on a dark sheet" className="st-gl-full">
         <AlertDialogOpen kind="inside" />
       </State>
-      <State name="key" note="an action that leaves the app" className="st-gl-full">
+      <State name="key" note="An action that leaves the app" className="st-gl-full">
         <AlertDialogOpen kind="outward" />
       </State>
     </div>
@@ -129,16 +129,24 @@ export function AlertDialogActions() {
 export function AlertDialogStates() {
   return (
     <States>
-      {["rest", "hover", "focus-visible", "active", "disabled"].map((state) => (
+      {(
+        [
+          ["rest", "Rest"],
+          ["hover", "Hover"],
+          ["focus-visible", "Focus"],
+          ["active", "Pressed"],
+          ["disabled", "Disabled"],
+        ] as const
+      ).map(([state, name]) => (
         <State
           key={state}
-          name={state === "focus-visible" ? "focus" : state === "active" ? "pressed" : state}
+          name={name}
           note={
             state === "focus-visible"
-              ? "outside house ring"
+              ? "Outside house ring"
               : state === "disabled"
-                ? "disabled action"
-                : "destructive action in key ink"
+                ? "Disabled action"
+                : "Destructive action in key ink"
           }
         >
           <Alert.AlertDialogAction
@@ -147,7 +155,7 @@ export function AlertDialogStates() {
             data-demo={state}
             disabled={state === "disabled"}
           >
-            delete run
+            Delete run
           </Alert.AlertDialogAction>
         </State>
       ))}

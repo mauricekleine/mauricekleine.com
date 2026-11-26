@@ -6,20 +6,24 @@ export type PageSection = { id: string; title: string };
 type Place = "home" | "about" | "essays";
 
 const places: { id: Place; label: string; href: string }[] = [
-  { id: "home", label: "home", href: "/" },
-  { id: "about", label: "about", href: "/about" },
-  { id: "essays", label: "essays", href: "/essays" },
+  { id: "home", label: "Home", href: "/" },
+  { id: "about", label: "About", href: "/about" },
+  { id: "essays", label: "Essays", href: "/essays" },
 ];
-const choices: readonly ThemeChoice[] = ["light", "dark", "auto"];
+const choices: readonly { value: ThemeChoice; label: string }[] = [
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+  { value: "auto", label: "Auto" },
+];
 
-// The light, dark and auto control, the superthread site's: a radio group whose arrow keys move and choose. Before
+// The Light, Dark and Auto control, the superthread site's: a radio group whose arrow keys move and choose. Before
 // hydration its pressed look comes from CSS on html[data-theme-choice], so the prerendered page never shows the wrong
 // one.
 function ModeControl({ compact = false }: { compact?: boolean }) {
   const choice = useThemeChoice();
   const group = useRef<HTMLDivElement>(null);
 
-  // the mode can also change from another tab; keep the focused option in step
+  // The mode can also change from another tab; keep the focused option in step.
   useEffect(() => {
     const focused = group.current?.querySelector<HTMLButtonElement>("button:focus");
     if (focused && choice && focused.dataset.themeOption !== choice)
@@ -30,8 +34,8 @@ function ModeControl({ compact = false }: { compact?: boolean }) {
     const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
     if (step === undefined) return;
     event.preventDefault();
-    const current = choices.indexOf(choice ?? "auto");
-    const next = choices[(current + step + choices.length) % choices.length];
+    const current = choices.findIndex((item) => item.value === (choice ?? "auto"));
+    const next = choices[(current + step + choices.length) % choices.length].value;
     setThemeChoice(next);
     group.current?.querySelector<HTMLButtonElement>(`[data-theme-option="${next}"]`)?.focus();
   }
@@ -40,28 +44,28 @@ function ModeControl({ compact = false }: { compact?: boolean }) {
     <div
       ref={group}
       role="radiogroup"
-      aria-label="mode"
+      aria-label="Color mode"
       onKeyDown={onKeyDown}
       className={cn("mk-mode", compact && "mk-mode-compact")}
     >
-      {choices.map((option) => (
+      {choices.map(({ value, label }) => (
         <button
-          key={option}
+          key={value}
           type="button"
           role="radio"
-          data-theme-option={option}
-          aria-checked={choice === option}
-          tabIndex={choice === null || choice === option ? 0 : -1}
-          onClick={() => setThemeChoice(option)}
+          data-theme-option={value}
+          aria-checked={choice === value}
+          tabIndex={choice === null || choice === value ? 0 : -1}
+          onClick={() => setThemeChoice(value)}
         >
-          {option}
+          {label}
         </button>
       ))}
     </div>
   );
 }
 
-// "on this page": the top, then the page's sections. The current entry follows the scroll.
+// "On this page": the top, then the page's sections. The current entry follows the scroll.
 function OnThisPage({ sections }: { sections: PageSection[] }) {
   const [current, setCurrent] = useState("top");
 
@@ -70,7 +74,7 @@ function OnThisPage({ sections }: { sections: PageSection[] }) {
       .map((section) => document.getElementById(section.id))
       .filter((target): target is HTMLElement => target !== null);
     function onScroll() {
-      // the last section whose top has passed a third of the way down the window
+      // The last section whose top has passed a third of the way down the window.
       const line = window.innerHeight / 3;
       let id = "top";
       for (const target of targets) if (target.getBoundingClientRect().top <= line) id = target.id;
@@ -83,10 +87,10 @@ function OnThisPage({ sections }: { sections: PageSection[] }) {
 
   return (
     <aside className="mk-aside">
-      <nav className="mk-toc" aria-label="on this page">
-        <p className="type-meta">on this page</p>
+      <nav className="mk-toc" aria-label="On this page">
+        <p className="type-meta">On this page</p>
         <ul>
-          {[{ id: "top", title: "top" }, ...sections].map((link) => (
+          {[{ id: "top", title: "Top" }, ...sections].map((link) => (
             <li key={link.id}>
               <a href={`#${link.id}`} aria-current={link.id === current ? "location" : undefined}>
                 {link.title}
@@ -113,7 +117,7 @@ function NavLinks({ place }: { place?: Place }) {
   );
 }
 
-// Pages are plain documents. The links load a fresh sky, and the lost page reads the stored mode without hydrating.
+// Pages are stock-first documents on light or dark ground. The lost page reads the stored mode without hydrating.
 export function Shell({
   place,
   crumb,
@@ -134,12 +138,12 @@ export function Shell({
   return (
     <>
       <a href="#main" className="mk-skip">
-        skip to the page
+        Skip to the page
       </a>
-      <div className={cn("dark mk-island", place === "home" && "mk-island-home", !sections && "mk-island-solo")}>
+      <div className={cn("mk-head", place === "home" && "mk-head-home", !sections && "mk-head-solo")}>
         <header className="mk-mast">
           <a href="/" className="mk-brand">
-            maurice kleine
+            Maurice Kleine
           </a>
           <div className="mk-crumb">
             <span className="type-meta">{crumb}</span>
@@ -149,14 +153,14 @@ export function Shell({
             <b>{title}</b>
           </div>
           <dl className="mk-meta">
-            <dt className="type-meta">status</dt>
+            <dt className="type-meta">Status</dt>
             <dd>
-              <span className="status-dot" aria-hidden="true"></span> operational
+              <span className="status-dot" aria-hidden="true"></span> Operational
             </dd>
-            <dt className="type-meta">sleep</dt>
-            <dd>degraded</dd>
-            <dt className="type-meta">ideas</dt>
-            <dd>backlogged</dd>
+            <dt className="type-meta">Sleep</dt>
+            <dd>Degraded</dd>
+            <dt className="type-meta">Ideas</dt>
+            <dd>Backlogged</dd>
           </dl>
           {interactive && (
             <div className="mk-mast-mode">
@@ -164,13 +168,13 @@ export function Shell({
             </div>
           )}
         </header>
-        <nav className="mk-nav mk-nav-compact" aria-label="site">
+        <nav className="mk-nav mk-nav-compact" aria-label="Site">
           <NavLinks place={place} />
         </nav>
         {opener}
       </div>
       <div className={cn("mk-body", !sections && "mk-body-solo")}>
-        <nav className="mk-nav" aria-label="site">
+        <nav className="mk-nav" aria-label="Site">
           <NavLinks place={place} />
           {interactive && (
             <div className="mk-nav-foot">

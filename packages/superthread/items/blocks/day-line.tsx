@@ -271,7 +271,7 @@ function DayLineBlock({ item, options }: { item: Placed; options: TimeOptions })
             data-slot="day-line-brief"
             className="relative z-1 flex items-center bg-(--ink) px-1 transition-[background-color] duration-(--duration-instant) ease-(--ease-brand) group-data-[form=dotted]/block:bg-(--surface,var(--background)) group-data-[form=outline]/block:bg-(--surface,var(--background))"
           >
-            <span className="hidden [@media(min-width:601px)]:@min-[36px]/block:inline">brief</span>
+            <span className="hidden [@media(min-width:601px)]:@min-[36px]/block:inline">Brief</span>
             <Icon
               name="brief"
               className="hidden @min-[14px]/block:block [@media(min-width:601px)]:@min-[36px]/block:hidden"
@@ -388,7 +388,7 @@ function DayLineStrip({
     >
       <div data-slot="day-line-band" className="relative h-10 type-instrument @max-[560px]/day-line:h-5">
         {waiting ? (
-          <div role="status" aria-label="loading" className="flex gap-6 overflow-hidden">
+          <div role="status" aria-label="Loading" className="flex gap-6 overflow-hidden">
             <Skeleton className="w-24 shrink-0" />
             <Skeleton className="w-32 shrink-0" />
             <Skeleton className="w-20 shrink-0" />
@@ -446,7 +446,7 @@ function DayLineStrip({
             className="absolute top-[5px] -translate-x-1/2 font-mono whitespace-nowrap text-first"
             style={{ left: "clamp(2.5ch, var(--now), calc(100% - 2.5ch))" }}
           >
-            <span className="sr-only">now </span>
+            <span className="sr-only">Now </span>
             <time dateTime={new Date(now).toISOString()}>{clockWords(now, options)}</time>
           </p>
         )}
@@ -532,7 +532,7 @@ function DayLineAllDay({ children, className, ...props }: React.ComponentProps<"
       )}
       {...props}
     >
-      all day: {children}
+      All day: {children}
     </p>
   );
 }

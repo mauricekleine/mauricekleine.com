@@ -13,21 +13,21 @@ export function ProgressExample() {
     <div className="st-b-progress">
       <Progress value={Math.floor((done / ITEMS) * 100)}>
         <ProgressLabel>
-          {finished ? `${ITEMS} of ${ITEMS} items installed` : `installing ${done} of ${ITEMS} items`}
+          {finished ? `${ITEMS} of ${ITEMS} items installed` : `Installing ${done} of ${ITEMS} items`}
         </ProgressLabel>
         <ProgressValue />
       </Progress>
       <Button size="sm" variant="outline" onClick={() => setDone(finished ? 0 : done + 1)}>
-        {finished ? "start over" : "install the next item"}
+        {finished ? "Start over" : "Install the next item"}
       </Button>
     </div>
   );
 }
 
 const bars = [
-  { value: 12, label: "just started" },
-  { value: 62, label: "past half" },
-  { value: 100, label: "finished, no edge" },
+  { value: 12, label: "Just started" },
+  { value: 62, label: "Past half" },
+  { value: 100, label: "Finished, no edge" },
 ] as const;
 
 export function ProgressEdges() {

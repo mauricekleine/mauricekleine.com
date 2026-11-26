@@ -39,7 +39,7 @@ A single operator's fleet identity that agents build and maintain. Values live i
 - The name **superthread** is fixed.
 - The faces are Unbounded, Supreme, Erode and Fragment Mono.
 - The register is quiet and exact. A working page is for operating and a reading page is for reading; neither performs. Flat where you read, screened where you look.
-- Words follow Maurice's voice: lowercase, understated, no em dashes.
+- Words follow Maurice's voice: natural sentence case, understated, no em dashes.
 - Consistency is paramount: one system, applied the same way on every surface, with no per-surface exceptions.
 
 ## Anti-references

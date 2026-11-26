@@ -317,10 +317,10 @@ test("POST /subscribe happy path verifies turnstile, upserts the contact and ema
 
     assert.equal(stub.calls[3].url, "https://api.resend.com/emails");
     const emailBody = JSON.parse(stub.calls[3].init.body);
-    assert.equal(emailBody.from, "maurice kleine <hey@mauricekleine.com>");
+    assert.equal(emailBody.from, "Maurice Kleine <hey@mauricekleine.com>");
     assert.equal(emailBody.to, "person@example.com");
-    assert.equal(emailBody.subject, "confirm: new essays from maurice");
-    assert.match(emailBody.text, /click to confirm/);
+    assert.equal(emailBody.subject, "Confirm: new essays from Maurice");
+    assert.match(emailBody.text, /Click to confirm/);
     assert.match(emailBody.text, /\/subscribe\/confirm\?t=/);
     assert.match(emailBody.html, /\/subscribe\/confirm\?t=/);
   } finally {
@@ -353,8 +353,8 @@ test("GET /subscribe/confirm shows a form carrying the token and changes nothing
     const body = await res.text();
     assert.match(body, /<form method="post" action="\/subscribe\/confirm">/);
     assert.ok(body.includes(`<input type="hidden" name="t" value="${token}" />`));
-    assert.match(body, /<button type="submit"[^>]*>send me new essays<\/button>/);
-    assert.doesNotMatch(body, /you're in/);
+    assert.match(body, /<button type="submit"[^>]*>Send me new essays<\/button>/);
+    assert.doesNotMatch(body, /You're in/);
     assert.equal(stub.calls.length, 0);
   } finally {
     stub.restore();
@@ -374,8 +374,8 @@ test("POST /subscribe/confirm accepts a valid token and confirms the contact", a
     const res = await worker.fetch(confirmPost(token), subscribeSecrets);
     assert.equal(res.status, 200);
     const body = await res.text();
-    assert.match(body, /you're in/);
-    assert.match(body, /next essay lands in your inbox/);
+    assert.match(body, /You're in/);
+    assert.match(body, /Next essay lands in your inbox/);
 
     assert.equal(stub.calls.length, 2);
     assert.equal(stub.calls[0].url, "https://api.resend.com/contacts/confirmed%40example.com");
@@ -410,8 +410,9 @@ test("GET and POST /subscribe/confirm reject a tampered token", async () => {
     const body = await res.text();
     assert.match(body, /essays/);
     assert.match(body, /mk-theme/, "the no-js page follows the fleet's mode");
-    assert.match(body, /src="\/sky\.js\?v=[^"]+"/);
-    assert.match(body, /class="dark mk-island/, "the no-js page opens on the island, like every page");
+    assert.match(body, /class="mk-head mk-head-solo"/, "the no-js page prints stock-first, like every page");
+    assert.match(body, /class="mk-opener mk-sheet-head"/);
+    assert.doesNotMatch(body, /sky\.js/);
     assert.equal(stub.calls.length, 0);
   } finally {
     stub.restore();

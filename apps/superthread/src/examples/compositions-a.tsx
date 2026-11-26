@@ -3,16 +3,16 @@ import { createPortal } from "react-dom";
 import { AppShellGround } from "@/components/superthread/blocks/app-shell";
 import { catalog } from "@/components/superthread/catalog";
 
+function formatApp(app: string) {
+  return app === "www" ? "the public site" : app[0]!.toUpperCase() + app.slice(1);
+}
+
 export function Serves({ name }: { name: string }) {
   const apps = catalog.find((item) => item.name === name)?.serves;
   if (!apps?.length) throw new Error(`no apps listed for ${name}`);
   return (
     <p className="st-ca-serves">
-      serves{" "}
-      {new Intl.ListFormat("en", { type: "conjunction" }).format(
-        apps.map((app) => (app === "www" ? "the public site" : app)),
-      )}
-      .
+      Serves {new Intl.ListFormat("en", { type: "conjunction" }).format(apps.map(formatApp))}.
     </p>
   );
 }

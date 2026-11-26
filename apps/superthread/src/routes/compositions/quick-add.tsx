@@ -20,30 +20,30 @@ import { Section } from "@/site/Section";
 
 const serves = catalog
   .find((entry) => entry.name === "quick-add")!
-  .serves!.map((app) => (app === "www" ? "the public site" : app))
+  .serves!.map((app) => (app === "www" ? "the public site" : app[0]!.toUpperCase() + app.slice(1)))
   .join(", ");
 export const Route = createFileRoute("/compositions/quick-add")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "states", title: "submission states" },
-      { id: "labels", title: "compact label" },
-      { id: "nav", title: "in a nav" },
+      { id: "example", title: "Example" },
+      { id: "states", title: "Submission states" },
+      { id: "labels", title: "Compact label" },
+      { id: "nav", title: "In a nav" },
     ],
   },
   component: Page,
 });
 
 function AddExample() {
-  const [tasks, setTasks] = useState<string[]>(["review the chapter outline"]);
+  const [tasks, setTasks] = useState<string[]>(["Review the chapter outline"]);
   return (
     <div className="st-cb-flow">
       <QuickAdd
-        label="new task"
-        placeholder="what needs doing?"
+        label="New task"
+        placeholder="What needs doing?"
         onAdd={(title) => setTasks((current) => [...current, title])}
       />
-      <ul className="st-cb-preview-rows" aria-label="task queue" aria-live="polite">
+      <ul className="st-cb-preview-rows" aria-label="Task queue" aria-live="polite">
         {tasks.map((title, index) => (
           <li key={index}>{title}</li>
         ))}
@@ -52,6 +52,14 @@ function AddExample() {
   );
 }
 type Fixture = "rest" | "ready" | "focus" | "pending" | "failed" | "disabled";
+const stateNames: Record<Fixture, string> = {
+  rest: "Rest",
+  ready: "Ready",
+  focus: "Focus",
+  pending: "Pending",
+  failed: "Failed",
+  disabled: "Disabled",
+};
 function AddState({ state }: { state: Fixture }) {
   const host = useRef<HTMLDivElement>(null);
   const release = useRef<(() => void) | null>(null);
@@ -66,7 +74,7 @@ function AddState({ state }: { state: Fixture }) {
     if (state !== "ready" && state !== "pending" && state !== "failed") return;
     const input = host.current?.querySelector("input");
     if (!input) return;
-    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!.call(input, "review the chapter notes");
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!.call(input, "Review the chapter notes");
     input.dispatchEvent(new Event("input", { bubbles: true }));
     const frame = requestAnimationFrame(() => {
       if (state !== "ready") host.current?.querySelector("form")?.requestSubmit();
@@ -79,25 +87,25 @@ function AddState({ state }: { state: Fixture }) {
   return (
     <div ref={host} className="st-cb-flow">
       <QuickAdd
-        label={`${state} task`}
-        placeholder="what needs doing?"
+        label={`${stateNames[state]} task`}
+        placeholder="What needs doing?"
         inputProps={{ disabled: state === "disabled" }}
         onAdd={async (title) => {
           attempts.current++;
           if (state === "pending") {
-            setResult("adding task");
+            setResult("Adding task");
             await new Promise<void>((resolve) => {
               release.current = resolve;
             });
             release.current = null;
           }
-          if (state === "failed" && attempts.current === 1) throw new Error("could not add the task. try again.");
-          setResult(`added: ${title}`);
+          if (state === "failed" && attempts.current === 1) throw new Error("Could not add the task. Try again.");
+          setResult(`Added: ${title}`);
         }}
       />
       {state === "pending" && (
         <Button size="sm" variant="outline" onClick={() => release.current?.()} disabled={!release.current}>
-          finish the add
+          Finish the add
         </Button>
       )}
       <p className="st-cb-note" role="status">
@@ -108,16 +116,16 @@ function AddState({ state }: { state: Fixture }) {
 }
 function CompactAdd() {
   const id = useId();
-  const [result, setResult] = useState("the label stays available to screen readers.");
+  const [result, setResult] = useState("The label stays available to screen readers.");
   return (
     <div className="st-cb-flow">
       <QuickAdd
-        label="new chapter"
+        label="New chapter"
         hideLabel
-        placeholder="chapter title"
-        submitLabel="create"
+        placeholder="Chapter title"
+        submitLabel="Create"
         inputProps={{ "aria-describedby": id }}
-        onAdd={(title) => setResult(`created: ${title}`)}
+        onAdd={(title) => setResult(`Created: ${title}`)}
       />
       <p id={id} className="st-cb-note" role="status">
         {result}
@@ -140,11 +148,11 @@ function NavAdd({ hotkey = null }: { hotkey?: string | null }) {
       sidebar={
         <AppShellNav ship="orbit" foot={null}>
           <AppShellNavItem render={<button type="button" />} isActive>
-            now
+            Now
           </AppShellNavItem>
           <QuickAddNav
-            label="add a task"
-            placeholder="add a task"
+            label="Add a task"
+            placeholder="Add a task"
             hotkey={hotkey}
             onAdd={(title) => setTasks((current) => [...current, title])}
           />
@@ -153,9 +161,9 @@ function NavAdd({ hotkey = null }: { hotkey?: string | null }) {
     >
       <AppShellGround render={<div />}>
         <AppShellPanel>
-          <h1 className="type-section text-first">to sort</h1>
-          <ul className="st-cb-preview-rows" aria-label="added tasks" aria-live="polite">
-            {tasks.length > 0 ? tasks.map((title, index) => <li key={index}>{title}</li>) : <li>nothing here yet</li>}
+          <h1 className="type-section text-first">To sort</h1>
+          <ul className="st-cb-preview-rows" aria-label="Added tasks" aria-live="polite">
+            {tasks.length > 0 ? tasks.map((title, index) => <li key={index}>{title}</li>) : <li>Nothing here yet</li>}
           </ul>
         </AppShellPanel>
       </AppShellGround>
@@ -167,41 +175,41 @@ function Page() {
   return (
     <>
       <PageHead
-        title="quick add"
-        lede="one field and its add button. a successful add clears the draft and returns focus; a failed add keeps the words ready to try again."
+        title="Quick add"
+        lede="One field and its add button. A successful add clears the draft and returns focus; a failed add keeps the words ready to try again."
       >
         <InstallLine items={["quick-add"]} />
       </PageHead>
-      <p className="st-cb-serves">serves {serves}.</p>
+      <p className="st-cb-serves">Serves {serves}.</p>
 
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-cb-copy">
-          type a task and press enter, or use add. leading and trailing spaces are trimmed; an empty draft cannot
+          Type a task and press Enter, or use Add. Leading and trailing spaces are trimmed; an empty draft cannot
           submit.
         </p>
         <ModePair className="st-cb-stack">
           <AddExample />
         </ModePair>
       </Section>
-      <Section id="states" title="submission states">
+      <Section id="states" title="Submission states">
         <p className="st-cb-copy">
-          these are real forms. the pending example waits until you finish the add; its field can hold a newer draft
-          meanwhile. the failed example succeeds on retry.
+          These are real forms. The pending example waits until you finish the add; its field can hold a newer draft
+          meanwhile. The failed example succeeds on retry.
         </p>
         <ModePair className="st-cb-stack">
           <div className="st-cb-flow">
             {(["rest", "ready", "focus", "pending", "failed", "disabled"] as const).map((state) => (
               <State
                 key={state}
-                name={state}
+                name={stateNames[state]}
                 note={
                   {
-                    rest: "empty draft, add disabled",
-                    ready: "a nonblank draft enables add",
-                    focus: "one inside edge on the field",
-                    pending: "a second add is blocked",
-                    failed: "the draft stays, the error names recovery",
-                    disabled: "the field and add control stay disabled",
+                    rest: "Empty draft, add disabled",
+                    ready: "A nonblank draft enables add",
+                    focus: "One inside edge on the field",
+                    pending: "A second add is blocked",
+                    failed: "The draft stays, the error names recovery",
+                    disabled: "The field and add control stay disabled",
                   }[state]
                 }
               >
@@ -211,47 +219,47 @@ function Page() {
           </div>
         </ModePair>
       </Section>
-      <Section id="labels" title="compact label">
+      <Section id="labels" title="Compact label">
         <p className="st-cb-copy">
-          hide the visible label when the surrounding page gives enough context. the field still has its own name, and
+          Hide the visible label when the surrounding page gives enough context. The field still has its own name, and
           the submit word can match the task.
         </p>
         <ModePair className="st-cb-stack">
           <CompactAdd />
         </ModePair>
       </Section>
-      <Section id="nav" title="in a nav">
+      <Section id="nav" title="In a nav">
         <p className="st-cb-copy">
-          <code>QuickAddNav</code> goes among a ship&rsquo;s nav items. it prints a muted word above the nav&rsquo;s
-          foot and opens a one-line field over itself. enter adds, clears and stays open for the next one. escape closes
-          it, keeps the draft and hands focus back to where it was, or else to the trigger. press <kbd>n</kbd> away from
+          <code>QuickAddNav</code> goes among a ship&rsquo;s nav items. It prints a muted word above the nav&rsquo;s
+          foot and opens a one-line field over itself. Enter adds, clears and stays open for the next one. Escape closes
+          it, keeps the draft and hands focus back to where it was, or else to the trigger. Press <kbd>n</kbd> away from
           a field and the light copy opens.
         </p>
         <ModePair
           className="st-ca-wide-pair"
           light={
-            <ViewportFrame mode="light" title="quiet add, light" width={1100} height={470}>
+            <ViewportFrame mode="light" title="Quiet add, light" width={1100} height={470}>
               <NavAdd hotkey="n" />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="quiet add, dark" width={1100} height={470}>
+            <ViewportFrame mode="dark" title="Quiet add, dark" width={1100} height={470}>
               <NavAdd />
             </ViewportFrame>
           }
         />
         <p className="st-cb-copy">
-          at 900 px and below the word moves to the end of the nav&rsquo;s row, and the field runs 12 px from each edge
-          with its button. on a phone the trigger is the glyph alone, in a 44 px target.
+          At 900 px and below the word moves to the end of the nav&rsquo;s row, and the field runs 12 px from each edge
+          with its button. On a phone the trigger is the glyph alone, in a 44 px target.
         </p>
         <ModePair
           light={
-            <ViewportFrame mode="light" title="quiet add on a phone, light" height={380}>
+            <ViewportFrame mode="light" title="Quiet add on a phone, light" height={380}>
               <NavAdd />
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="quiet add on a phone, dark" height={380}>
+            <ViewportFrame mode="dark" title="Quiet add on a phone, dark" height={380}>
               <NavAdd />
             </ViewportFrame>
           }

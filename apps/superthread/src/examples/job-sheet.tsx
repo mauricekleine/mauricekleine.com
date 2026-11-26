@@ -30,7 +30,7 @@ function SlipToggle() {
   const [pressed, setPressed] = useState(false);
   return (
     <JobSheetToggle pressed={pressed} onPressedChange={setPressed}>
-      only what can&rsquo;t slip
+      Only what can&rsquo;t slip
     </JobSheetToggle>
   );
 }
@@ -49,11 +49,11 @@ export function JobSheetJob({ title = SHORT_TITLE, open, asked }: { title?: stri
       </JobSheetWhy>
       <JobSheetChanged />
       <JobSheetActions>
-        <JobSheetPrimary reserve="open the draft" render={<a href="#example" />} nativeButton={false}>
-          read the draft
+        <JobSheetPrimary reserve="Open the draft" render={<a href="#example" />} nativeButton={false}>
+          Read the draft
         </JobSheetPrimary>
         <Button size="lg" variant="ghost">
-          not now
+          Not now
         </Button>
         <SlipToggle />
       </JobSheetActions>
@@ -68,16 +68,16 @@ export function JobSheetMeeting() {
     <JobSheet aria-labelledby={id}>
       <JobSheetCue>20 min until the renewal call</JobSheetCue>
       <JobSheetTitle id={id} render={<h2 />}>
-        read the brief for the renewal call
+        Read the brief for the renewal call
       </JobSheetTitle>
-      <JobSheetWhy>the brief is ready, and sam leads.</JobSheetWhy>
-      <JobSheetChanged>sam sent the new numbers an hour ago</JobSheetChanged>
+      <JobSheetWhy>The brief is ready, and Sam leads.</JobSheetWhy>
+      <JobSheetChanged>Sam sent the new numbers an hour ago</JobSheetChanged>
       <JobSheetActions>
         <JobSheetPrimary render={<a href="#states" />} nativeButton={false}>
-          read the brief
+          Read the brief
         </JobSheetPrimary>
         <Button size="lg" variant="ghost">
-          not now
+          Not now
         </Button>
       </JobSheetActions>
     </JobSheet>
@@ -91,14 +91,14 @@ export function JobSheetInMeeting() {
   return (
     <JobSheet aria-labelledby={id}>
       <JobSheetCue>
-        <time>11:00</time> to <time>11:45</time> · teams
+        <time>11:00</time> to <time>11:45</time> · Teams
       </JobSheetCue>
       <JobSheetTitle id={id} render={<h2 />}>
-        renewal call
+        Renewal call
       </JobSheetTitle>
       <JobSheetChanged />
       <JobSheetActions>
-        <JobSheetPrimary variant="outline">read the brief</JobSheetPrimary>
+        <JobSheetPrimary variant="outline">Read the brief</JobSheetPrimary>
       </JobSheetActions>
     </JobSheet>
   );
@@ -134,10 +134,10 @@ export function ClearStateExample() {
     <OnPanel now="15:10">
       <ClearState aria-labelledby={id}>
         <ClearStateTitle id={id} render={<h2 />}>
-          nothing needs you until 16:30.
+          Nothing needs you until 16:30.
         </ClearStateTitle>
-        <ClearStateReason>the draft, the deck check and the kickoff brief are done.</ClearStateReason>
-        <ClearStateDoor href="#clear">the rest is in open</ClearStateDoor>
+        <ClearStateReason>The draft, the deck check and the kickoff brief are done.</ClearStateReason>
+        <ClearStateDoor href="#clear">The rest is in Open</ClearStateDoor>
       </ClearState>
     </OnPanel>
   );

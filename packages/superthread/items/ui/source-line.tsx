@@ -13,7 +13,7 @@ function SourceLine({
   className,
   children,
   end,
-  label = "sources",
+  label = "Sources",
   ...props
 }: React.ComponentProps<"div"> & { end?: React.ReactNode; label?: React.ReactNode }) {
   const labelId = useId();

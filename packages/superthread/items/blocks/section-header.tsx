@@ -82,7 +82,7 @@ function SectionCount({ className, ...props }: React.ComponentProps<"span">) {
 }
 
 // The way onward sits at the end of the head as a quiet link; render lets the app supply its own router link.
-function SectionAction({ className, children = "more", render = <a />, ...props }: useRender.ComponentProps<"a">) {
+function SectionAction({ className, children = "More", render = <a />, ...props }: useRender.ComponentProps<"a">) {
   return useRender({
     render,
     state: { slot: "section-action", mk: "section-header" },

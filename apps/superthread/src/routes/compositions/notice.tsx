@@ -13,11 +13,11 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/compositions/notice")({
   staticData: {
     sections: [
-      { id: "example", title: "example" },
-      { id: "states", title: "states" },
-      { id: "quiet", title: "the quiet line" },
-      { id: "phone", title: "phone" },
-      { id: "parts", title: "parts" },
+      { id: "example", title: "Example" },
+      { id: "states", title: "States" },
+      { id: "quiet", title: "The quiet line" },
+      { id: "phone", title: "Phone" },
+      { id: "parts", title: "Parts" },
     ],
   },
   component: Page,
@@ -28,26 +28,26 @@ function ActionNotice() {
   const [details, setDetails] = useState(false);
   return (
     <Notice state={state}>
-      <NoticeTitle>{state === "failed" ? "failed: run-024 did not finish" : "done: run-024 finished"}</NoticeTitle>
+      <NoticeTitle>{state === "failed" ? "Failed: run-024 did not finish" : "Done: run-024 finished"}</NoticeTitle>
       <NoticeDescription>
         {state === "failed"
-          ? "the sample check timed out. your draft is safe."
-          : "the retry passed. the draft is ready to review."}
-        {details && " the sample run checks three pages in orbit."}
+          ? "The sample check timed out. Your draft is safe."
+          : "The retry passed. The draft is ready to review."}
+        {details && " The sample run checks three pages in Orbit."}
       </NoticeDescription>
       <NoticeActions>
         <Button variant="outline" size="sm" onClick={() => setState(state === "failed" ? "done" : "failed")}>
-          {state === "failed" ? "retry" : "reset"}
+          {state === "failed" ? "Retry" : "Reset"}
         </Button>
         <Button variant="ghost" size="sm" aria-expanded={details} onClick={() => setDetails(!details)}>
-          {details ? "hide details" : "details"}
+          {details ? "Hide details" : "Details"}
         </Button>
       </NoticeActions>
     </Notice>
   );
 }
 
-const newerLine = "a newer version is waiting. it won't replace this one.";
+const newerLine = "A newer version is waiting. It won't replace this one.";
 
 // The line is there from the first paint and reserves its words, so they arrive without moving the button under it,
 // even where they wrap.
@@ -59,42 +59,62 @@ function QuietLine() {
         {newer && newerLine}
       </Notice>
       <Button variant="outline" size="sm" onClick={() => setNewer(!newer)}>
-        {newer ? "clear the line" : "print the line"}
+        {newer ? "Clear the line" : "Print the line"}
       </Button>
     </div>
   );
 }
 
-const notices: { state?: StatusState; title: string; description: string }[] = [
-  { title: "sample data only", description: "these runs reset when you reload the page." },
-  { state: "done", title: "done: draft saved", description: "the latest changes are ready for review." },
-  { state: "running", title: "running: checking the draft", description: "the sample run is checking three pages." },
-  { state: "waiting", title: "waiting: review the draft", description: "the next run starts after your review." },
-  { state: "failed", title: "failed: the check timed out", description: "the draft is safe. retry from the run page." },
-  { state: "queued", title: "queued: run-025", description: "the next free agent picks up this task." },
+const notices: { state?: StatusState; label: string; title: string; description: string }[] = [
+  { label: "No state", title: "Sample data only", description: "These runs reset when you reload the page." },
+  { state: "done", label: "Done", title: "Done: draft saved", description: "The latest changes are ready for review." },
+  {
+    state: "running",
+    label: "Running",
+    title: "Running: checking the draft",
+    description: "The sample run is checking three pages.",
+  },
+  {
+    state: "waiting",
+    label: "Waiting",
+    title: "Waiting: review the draft",
+    description: "The next run starts after your review.",
+  },
+  {
+    state: "failed",
+    label: "Failed",
+    title: "Failed: the check timed out",
+    description: "The draft is safe. Retry from the run page.",
+  },
+  {
+    state: "queued",
+    label: "Queued",
+    title: "Queued: run-025",
+    description: "The next free agent picks up this task.",
+  },
 ];
 function Page() {
   return (
     <>
       <PageHead
-        title="notice"
-        lede="a message in the page's own flow. the small glyph carries the status ink; the words and actions stay on a flat fill."
+        title="Notice"
+        lede="A message in the page's own flow. The small glyph carries the status ink; the words and actions stay on a flat fill."
       >
         <InstallLine items={["notice"]} />
       </PageHead>
       <Serves name="notice" />
-      <Section id="example" title="example">
+      <Section id="example" title="Example">
         <p className="st-ca-copy">
-          retry the sample run to change failed to done, or open its details. a failed notice interrupts as an alert;
+          Retry the sample run to change failed to done, or open its details. A failed notice interrupts as an alert;
           other updates use a status.
         </p>
         <ModePair className="st-ca-wide-pair">
           <ActionNotice />
         </ModePair>
       </Section>
-      <Section id="states" title="states">
+      <Section id="states" title="States">
         <p className="st-ca-copy">
-          without a state, the notice uses the information glyph. each status below keeps its word beside its own glyph.
+          Without a state, the notice uses the information glyph. Each status below keeps its word beside its own glyph.
         </p>
         <ModePair>
           <div className="st-ca-stack">
@@ -102,8 +122,8 @@ function Page() {
               <State
                 className="st-ca-state"
                 key={notice.state ?? "none"}
-                name={notice.state ?? "no state"}
-                note={notice.state === "failed" ? "alert" : "status"}
+                name={notice.label}
+                note={notice.state === "failed" ? "Alert" : "Status"}
               >
                 <Notice state={notice.state}>
                   <NoticeTitle>{notice.title}</NoticeTitle>
@@ -114,31 +134,31 @@ function Page() {
           </div>
         </ModePair>
       </Section>
-      <Section id="quiet" title="the quiet line">
+      <Section id="quiet" title="The quiet line">
         <p className="st-ca-copy">
-          one muted line: no box, no glyph and no state, for a fact that asks for nothing, such as a newer version
-          waiting. it takes its line while it&rsquo;s empty, and it wraps on a phone rather than clip, so it takes the
+          One muted line: no box, no glyph and no state, for a fact that asks for nothing, such as a newer version
+          waiting. It takes its line while it&rsquo;s empty, and it wraps on a phone rather than clip, so it takes the
           longest words it can print as <code>reserve</code> and holds their height, and the button below stays put.
-          it&rsquo;s always a status, so a screen reader hears it without being interrupted.
+          It&rsquo;s always a status, so a screen reader hears it without being interrupted.
         </p>
         <ModePair className="st-ca-wide-pair">
           <QuietLine />
         </ModePair>
       </Section>
-      <Section id="phone" title="phone">
+      <Section id="phone" title="Phone">
         <p className="st-ca-copy">
-          at 600 px the action row moves below the description. both frames use a 390 px viewport.
+          At 600 px the action row moves below the description. Both frames use a 390 px viewport.
         </p>
         <ModePair
           light={
-            <ViewportFrame mode="light" title="notice phone, light" height={250}>
+            <ViewportFrame mode="light" title="Notice phone, light" height={250}>
               <div className="st-ca-inset">
                 <ActionNotice />
               </div>
             </ViewportFrame>
           }
           dark={
-            <ViewportFrame mode="dark" title="notice phone, dark" height={250}>
+            <ViewportFrame mode="dark" title="Notice phone, dark" height={250}>
               <div className="st-ca-inset">
                 <ActionNotice />
               </div>
@@ -146,26 +166,26 @@ function Page() {
           }
         />
       </Section>
-      <Section id="parts" title="parts">
+      <Section id="parts" title="Parts">
         <dl className="st-ca-parts">
           <dt>
             <code>Notice</code>
           </dt>
           <dd>
-            sets the glyph and announcement role from <code>state</code>, or prints one line with{" "}
-            <code>variant=&quot;quiet&quot;</code>. the quiet line takes its words as children, with none of the parts
+            Sets the glyph and announcement role from <code>state</code>, or prints one line with{" "}
+            <code>variant=&quot;quiet&quot;</code>. The quiet line takes its words as children, with none of the parts
             below, and <code>reserve</code> takes the longest words it can print.
           </dd>
           <dt>
             <code>NoticeTitle</code>
           </dt>
           <dd>
-            the first sentence, followed by <code>NoticeDescription</code> for supporting words.
+            The first sentence, followed by <code>NoticeDescription</code> for supporting words.
           </dd>
           <dt>
             <code>NoticeActions</code>
           </dt>
-          <dd>the app's buttons beside the message, then below it on a phone.</dd>
+          <dd>The app's buttons beside the message, then below it on a phone.</dd>
         </dl>
       </Section>
     </>

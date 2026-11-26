@@ -4,18 +4,18 @@ export function TabsExample() {
   return (
     <Tabs defaultValue="overview">
       <TabsList>
-        <TabsTrigger value="overview">overview</TabsTrigger>
-        <TabsTrigger value="runs">runs</TabsTrigger>
-        <TabsTrigger value="settings">settings</TabsTrigger>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="runs">Runs</TabsTrigger>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
       </TabsList>
       <TabsContent value="overview" className="st-b-panel">
         129 runs this week across four ships.
       </TabsContent>
       <TabsContent value="runs" className="st-b-panel">
-        the last run finished 4 minutes ago, on orbit.
+        The last run finished 4 minutes ago, on Orbit.
       </TabsContent>
       <TabsContent value="settings" className="st-b-panel">
-        runs keep their logs for 30 days.
+        Runs keep their logs for 30 days.
       </TabsContent>
     </Tabs>
   );
@@ -26,23 +26,23 @@ export function TabsExample() {
 export function TabsStates() {
   return (
     <Tabs defaultValue="overview">
-      <TabsList aria-label="tab states">
-        <TabsTrigger value="overview">overview</TabsTrigger>
+      <TabsList aria-label="Tab states">
+        <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="runs" data-demo="hover" tabIndex={-1}>
-          runs
+          Runs
         </TabsTrigger>
         <TabsTrigger value="settings" data-demo="focus-visible" tabIndex={-1}>
-          settings
+          Settings
         </TabsTrigger>
         <TabsTrigger value="archive" disabled>
-          archive
+          Archive
         </TabsTrigger>
       </TabsList>
       <p className="st-b-note st-b-legend">
-        <span>overview: current</span>
-        <span>runs: hover</span>
-        <span>settings: focus</span>
-        <span>archive: disabled</span>
+        <span>Overview: current</span>
+        <span>Runs: hover</span>
+        <span>Settings: focus</span>
+        <span>Archive: disabled</span>
       </p>
     </Tabs>
   );
@@ -54,9 +54,9 @@ export function TabsLine() {
     <div className="st-b-onrule">
       <Tabs defaultValue="board">
         <TabsList variant="line">
-          <TabsTrigger value="board">board</TabsTrigger>
-          <TabsTrigger value="list">list</TabsTrigger>
-          <TabsTrigger value="chart">chart</TabsTrigger>
+          <TabsTrigger value="board">Board</TabsTrigger>
+          <TabsTrigger value="list">List</TabsTrigger>
+          <TabsTrigger value="chart">Chart</TabsTrigger>
         </TabsList>
       </Tabs>
     </div>

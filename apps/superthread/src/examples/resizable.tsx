@@ -11,18 +11,21 @@ export function ResizableExample({
 }) {
   return (
     <div className="st-gl-panels">
-      <ResizablePanelGroup orientation={orientation} aria-label={`${orientation} run workspace`}>
+      <ResizablePanelGroup
+        orientation={orientation}
+        aria-label={`${orientation === "horizontal" ? "Horizontal" : "Vertical"} run workspace`}
+      >
         <ResizablePanel defaultSize="40%" minSize="25%">
           <div className="st-gl-panel">
-            <span className="st-gl-note">runs</span>
+            <span className="st-gl-note">Runs</span>
             <span className="font-mono">or-412</span>
           </div>
         </ResizablePanel>
-        <ResizableHandle withHandle={withHandle} disabled={disabled} aria-label="resize runs and log" />
+        <ResizableHandle withHandle={withHandle} disabled={disabled} aria-label="Resize runs and log" />
         <ResizablePanel defaultSize="60%" minSize="25%">
           <div className="st-gl-panel">
-            <span className="st-gl-note">log</span>
-            <span>build finished</span>
+            <span className="st-gl-note">Log</span>
+            <span>Build finished</span>
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
@@ -35,7 +38,7 @@ function PrintedSplit({ state, withHandle = true }: { state: string; withHandle?
   return (
     <div className="st-gl-panels st-gl-split" inert aria-hidden="true">
       <div className="st-gl-panel">
-        <span className="st-gl-note">runs</span>
+        <span className="st-gl-note">Runs</span>
         <span className="font-mono">or-412</span>
       </div>
       <div
@@ -58,8 +61,8 @@ function PrintedSplit({ state, withHandle = true }: { state: string; withHandle?
         )}
       </div>
       <div className="st-gl-panel">
-        <span className="st-gl-note">log</span>
-        <span>build finished</span>
+        <span className="st-gl-note">Log</span>
+        <span>Build finished</span>
       </div>
     </div>
   );
@@ -67,23 +70,17 @@ function PrintedSplit({ state, withHandle = true }: { state: string; withHandle?
 export function ResizableStates() {
   return (
     <States>
-      {["rest", "hover", "dragging", "focus", "plain focus", "disabled"].map((state) => (
-        <State
-          className="st-gl-resize-state"
-          key={state}
-          name={state}
-          note={
-            state === "focus"
-              ? "inside grip ring"
-              : state === "plain focus"
-                ? "zero-offset ring on the rule"
-                : state === "disabled"
-                  ? "fixed split, no keyboard stop"
-                  : state === "rest"
-                    ? "1 px rule, 8 px hit area"
-                    : "rule takes foreground"
-          }
-        >
+      {(
+        [
+          ["rest", "Rest", "1 px rule, 8 px hit area"],
+          ["hover", "Hover", "Rule takes foreground"],
+          ["dragging", "Dragging", "Rule takes foreground"],
+          ["focus", "Focus", "Inside grip ring"],
+          ["plain focus", "Plain focus", "Zero-offset ring on the rule"],
+          ["disabled", "Disabled", "Fixed split, no keyboard stop"],
+        ] as const
+      ).map(([state, name, note]) => (
+        <State className="st-gl-resize-state" key={state} name={name} note={note}>
           {state === "disabled" ? (
             <div inert>
               <ResizableExample disabled />

@@ -83,7 +83,9 @@ const page = () => {
     theme: html.getAttribute("data-theme"),
     choice: html.getAttribute("data-theme-choice"),
     dark: html.classList.contains("dark"),
-    checked: [...container.querySelectorAll('[role="radio"][aria-checked="true"]')].map((radio) => radio.textContent),
+    checked: [...container.querySelectorAll('[role="radio"][aria-checked="true"]')].map((radio) =>
+      radio.getAttribute("data-theme-option"),
+    ),
   };
 };
 

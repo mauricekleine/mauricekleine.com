@@ -220,7 +220,7 @@ describe("the layers rendered", () => {
   test("the fleet rail: every ship and home, the hrefs it is given, one current ship, a name on every cell", () => {
     const dom = server(<FleetRail current="quanta" hrefs={HREFS} markBase="/marks" />);
 
-    const rail = dom.querySelector('nav[aria-label="fleet"]')!;
+    const rail = dom.querySelector('nav[aria-label="Fleet"]')!;
     expect(rail).not.toBeNull();
     const home = rail.querySelector('[data-slot="fleet-rail-home"]')!;
     const cells = [...rail.querySelectorAll('[data-slot="fleet-rail-cell"]')];
@@ -253,7 +253,7 @@ describe("the layers rendered", () => {
     const wrapper = dom.querySelector('[data-mk="fleet-rail"]')!;
     const skip = wrapper.firstElementChild!;
     expect(wrapper.querySelector<Element>("a")).toBe(skip);
-    expect([skip.tagName, skip.getAttribute("href"), skip.textContent]).toEqual(["A", "#main", "skip to content"]);
+    expect([skip.tagName, skip.getAttribute("href"), skip.textContent]).toEqual(["A", "#main", "Skip to content"]);
     expect(classesOf(skip)).toEqual(expect.arrayContaining(["absolute", "top-[-100px]", "focus:top-4"]));
 
     const embedded = server(<FleetRail current="orbit" hrefs={HREFS} skipLink={false} />);
@@ -360,7 +360,7 @@ describe("the layers rendered", () => {
   test("a ship the hrefs leave out links to its fleet url; a ship with no url stays a disabled cell", () => {
     // trisys's own call: only its own ship is given
     const dom = server(<FleetRail current="trisys" hrefs={{ trisys: "/" }} />);
-    const rail = dom.querySelector('nav[aria-label="fleet"]')!;
+    const rail = dom.querySelector('nav[aria-label="Fleet"]')!;
     const links = (el: Element) => [nameOf(el), el.getAttribute("href"), el.getAttribute("aria-disabled")];
     expect(links(rail.querySelector('[data-slot="fleet-rail-home"]')!)).toEqual([
       "superthread",
@@ -542,8 +542,8 @@ describe("the layers rendered", () => {
 
     const close = popup.querySelector('[data-slot="dialog-close"]');
     expect(pathOf(close)).toBe(pathOf(server(<Icon name="close" />)));
-    expect(labelsOf(popup)).toEqual(["close"]);
-    expect(popup.querySelector('[data-slot="dialog-footer"]')?.textContent).toBe("close");
+    expect(labelsOf(popup)).toEqual(["Close"]);
+    expect(popup.querySelector('[data-slot="dialog-footer"]')?.textContent).toBe("Close");
     expect(nullsRing(document.body)).toEqual([]);
   });
 
@@ -581,7 +581,7 @@ describe("the layers rendered", () => {
     const plain = byTitle("plain toast");
     expect(plain.querySelector('[data-slot="toast-icon"]')).toBeNull();
     expect(plain.querySelector('[data-slot="toast-action"]')?.textContent).toBe("undo");
-    expect(plain.querySelector('[data-slot="toast-close"]')?.getAttribute("aria-label")).toBe("close toast");
+    expect(plain.querySelector('[data-slot="toast-close"]')?.getAttribute("aria-label")).toBe("Close toast");
     expect(nullsRing(document.body)).toEqual([]);
   });
 
@@ -854,13 +854,13 @@ describe("the layers rendered", () => {
     }
   });
 
-  test("the toast viewport names its region in lowercase, and an aria-label passed in names it instead", async () => {
+  test("the toast viewport names its region in sentence case, and an aria-label passed in names it instead", async () => {
     const manager = toastItem.createToastManager();
     await client(
       <>
         <toastItem.Toaster toastManager={manager} timeout={0} />
         <toastItem.ToastProvider>
-          <toastItem.ToastViewport data-testid="own" aria-label="fleet alerts" />
+          <toastItem.ToastViewport data-testid="own" aria-label="Fleet alerts" />
         </toastItem.ToastProvider>
       </>,
     );
@@ -872,8 +872,8 @@ describe("the layers rendered", () => {
       [...document.body.querySelectorAll(`[data-slot="toast-viewport"]${selector}`)].map((el) =>
         el.getAttribute("aria-label"),
       );
-    expect(named(":not([data-testid])")).toEqual(["notifications"]);
-    expect(named('[data-testid="own"]')).toEqual(["fleet alerts"]);
+    expect(named(":not([data-testid])")).toEqual(["Notifications"]);
+    expect(named('[data-testid="own"]')).toEqual(["Fleet alerts"]);
   });
 
   test("the rail takes a className on the wrapper that paints the ground, merged with its own", () => {
@@ -985,7 +985,7 @@ describe("the layers rendered", () => {
     }
   });
 
-  test("the sidebar names its trigger, its rail and its mobile sheet in lowercase", async () => {
+  test("the sidebar names its trigger, its rail and its mobile sheet in sentence case", async () => {
     const desktop = server(
       <s.SidebarProvider>
         <s.Sidebar collapsible="icon">
@@ -996,7 +996,7 @@ describe("the layers rendered", () => {
         </s.SidebarInset>
       </s.SidebarProvider>,
     );
-    expect(labelsOf(desktop)).toEqual(["toggle sidebar", "toggle sidebar", "toggle sidebar"]);
+    expect(labelsOf(desktop)).toEqual(["Toggle sidebar", "Toggle sidebar", "Toggle sidebar"]);
 
     // A phone's window: the sidebar opens as a sheet, titled for a reader alone.
     const width = window.innerWidth;
@@ -1014,7 +1014,7 @@ describe("the layers rendered", () => {
       const sheet = document.body.querySelector('[data-slot="sidebar"][data-mobile="true"]');
       expect(sheet).not.toBeNull();
       const header = [...sheet!.querySelectorAll('[data-slot="sheet-title"], [data-slot="sheet-description"]')];
-      expect(header.map((el) => el.textContent)).toEqual(["sidebar", "displays the mobile sidebar."]);
+      expect(header.map((el) => el.textContent)).toEqual(["Sidebar", "Displays the mobile sidebar."]);
     } finally {
       await act(async () => viewport.setViewport({ width }));
     }

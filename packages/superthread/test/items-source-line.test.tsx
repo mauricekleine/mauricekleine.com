@@ -29,7 +29,7 @@ describe("source line", () => {
 
   test("reads as a label, the sources in order, then what closes the line", () => {
     const [label, list, end] = one(cited(), slot("source-line")).el.children;
-    expect(label?.textContent).toBe("sources");
+    expect(label?.textContent).toBe("Sources");
     expect([...(list?.children ?? [])].map((item) => item.textContent)).toEqual([
       "22 sep call recap",
       "sam's mail, mon 2 nov",

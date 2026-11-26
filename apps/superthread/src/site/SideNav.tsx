@@ -27,7 +27,7 @@ export function SideNav({ className, onNavigate }: { className?: string; onNavig
   );
 
   return (
-    <nav aria-label="docs" className={cn("st-sidenav", className)}>
+    <nav aria-label="Docs" className={cn("st-sidenav", className)}>
       <div ref={list} className="st-sidenav-list">
         {navSections.filter((section) => !navPinned.includes(section)).map(group)}
       </div>
@@ -49,7 +49,7 @@ function NavGroup({
   onNavigate?: () => void;
 }) {
   const entries = nav.filter((entry) => entry.section === section);
-  const titled = section !== "overview" && section !== "icons" && section !== "install";
+  const titled = section !== "Overview" && section !== "Icons" && section !== "Install";
   return (
     <div className={cn("st-sidenav-group", !titled && "st-sidenav-plain")}>
       {titled && <h3 className="type-meta">{section}</h3>}

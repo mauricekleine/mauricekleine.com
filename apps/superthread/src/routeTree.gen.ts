@@ -40,6 +40,7 @@ import { Route as ComponentsLabelRouteImport } from './routes/components/label'
 import { Route as ComponentsNativeSelectRouteImport } from './routes/components/native-select'
 import { Route as ComponentsOnwardRouteImport } from './routes/components/onward'
 import { Route as ComponentsPaperRouteImport } from './routes/components/paper'
+import { Route as ComponentsPlateRouteImport } from './routes/components/plate'
 import { Route as ComponentsProgressRouteImport } from './routes/components/progress'
 import { Route as ComponentsRadioGroupRouteImport } from './routes/components/radio-group'
 import { Route as ComponentsResizableRouteImport } from './routes/components/resizable'
@@ -248,6 +249,11 @@ const ComponentsOnwardRoute = ComponentsOnwardRouteImport.update({
 const ComponentsPaperRoute = ComponentsPaperRouteImport.update({
   id: '/components/paper',
   path: '/components/paper',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComponentsPlateRoute = ComponentsPlateRouteImport.update({
+  id: '/components/plate',
+  path: '/components/plate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsProgressRoute = ComponentsProgressRouteImport.update({
@@ -558,6 +564,7 @@ export interface FileRoutesByFullPath {
   '/components/native-select': typeof ComponentsNativeSelectRoute
   '/components/onward': typeof ComponentsOnwardRoute
   '/components/paper': typeof ComponentsPaperRoute
+  '/components/plate': typeof ComponentsPlateRoute
   '/components/progress': typeof ComponentsProgressRoute
   '/components/radio-group': typeof ComponentsRadioGroupRoute
   '/components/resizable': typeof ComponentsResizableRoute
@@ -645,6 +652,7 @@ export interface FileRoutesByTo {
   '/components/native-select': typeof ComponentsNativeSelectRoute
   '/components/onward': typeof ComponentsOnwardRoute
   '/components/paper': typeof ComponentsPaperRoute
+  '/components/plate': typeof ComponentsPlateRoute
   '/components/progress': typeof ComponentsProgressRoute
   '/components/radio-group': typeof ComponentsRadioGroupRoute
   '/components/resizable': typeof ComponentsResizableRoute
@@ -733,6 +741,7 @@ export interface FileRoutesById {
   '/components/native-select': typeof ComponentsNativeSelectRoute
   '/components/onward': typeof ComponentsOnwardRoute
   '/components/paper': typeof ComponentsPaperRoute
+  '/components/plate': typeof ComponentsPlateRoute
   '/components/progress': typeof ComponentsProgressRoute
   '/components/radio-group': typeof ComponentsRadioGroupRoute
   '/components/resizable': typeof ComponentsResizableRoute
@@ -822,6 +831,7 @@ export interface FileRouteTypes {
     | '/components/native-select'
     | '/components/onward'
     | '/components/paper'
+    | '/components/plate'
     | '/components/progress'
     | '/components/radio-group'
     | '/components/resizable'
@@ -909,6 +919,7 @@ export interface FileRouteTypes {
     | '/components/native-select'
     | '/components/onward'
     | '/components/paper'
+    | '/components/plate'
     | '/components/progress'
     | '/components/radio-group'
     | '/components/resizable'
@@ -996,6 +1007,7 @@ export interface FileRouteTypes {
     | '/components/native-select'
     | '/components/onward'
     | '/components/paper'
+    | '/components/plate'
     | '/components/progress'
     | '/components/radio-group'
     | '/components/resizable'
@@ -1084,6 +1096,7 @@ export interface RootRouteChildren {
   ComponentsNativeSelectRoute: typeof ComponentsNativeSelectRoute
   ComponentsOnwardRoute: typeof ComponentsOnwardRoute
   ComponentsPaperRoute: typeof ComponentsPaperRoute
+  ComponentsPlateRoute: typeof ComponentsPlateRoute
   ComponentsProgressRoute: typeof ComponentsProgressRoute
   ComponentsRadioGroupRoute: typeof ComponentsRadioGroupRoute
   ComponentsResizableRoute: typeof ComponentsResizableRoute
@@ -1357,6 +1370,13 @@ declare module '@tanstack/react-router' {
       path: '/components/paper'
       fullPath: '/components/paper'
       preLoaderRoute: typeof ComponentsPaperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/components/plate': {
+      id: '/components/plate'
+      path: '/components/plate'
+      fullPath: '/components/plate'
+      preLoaderRoute: typeof ComponentsPlateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/components/progress': {
@@ -1772,6 +1792,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComponentsNativeSelectRoute: ComponentsNativeSelectRoute,
   ComponentsOnwardRoute: ComponentsOnwardRoute,
   ComponentsPaperRoute: ComponentsPaperRoute,
+  ComponentsPlateRoute: ComponentsPlateRoute,
   ComponentsProgressRoute: ComponentsProgressRoute,
   ComponentsRadioGroupRoute: ComponentsRadioGroupRoute,
   ComponentsResizableRoute: ComponentsResizableRoute,

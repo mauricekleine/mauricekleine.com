@@ -1,9 +1,9 @@
 {
-  "status": "alive",
+  "status": "Alive",
   "hours_per_week": 168,
   "location": "Amsterdam, NL",
-  "incidents": "a few, all educational",
+  "incidents": "A few, all educational",
   "side_quests_running": 4,
   "graveyard_size": 4,
-  "next_maintenance_window": "after dinner"
+  "next_maintenance_window": "After dinner"
 }

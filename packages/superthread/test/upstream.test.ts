@@ -132,18 +132,18 @@ describe("the transforms", () => {
     expect(hits).toEqual([]);
   });
 
-  test("served labels go lowercase and upstream's style hooks become our utilities, in seeds and pass items alike", () => {
+  test("served labels keep their casing and upstream's style hooks become our utilities, in seeds and pass items alike", () => {
     const probe = [
       `const a = <span className="sr-only">Close</span>`,
-      `const b = <button aria-label="Close toast" title="Toggle Sidebar" />`,
-      `const c = <img alt='A Mark' placeholder="Search" />`,
+      `const b = <button aria-label="Close toast" title="Toggle sidebar" />`,
+      `const c = <img alt='A mark' placeholder="Search" />`,
       `const d = "cn-font-heading text-base font-medium"`,
       ``,
     ].join("\n");
     const want = [
-      `const a = <span className="sr-only">close</span>`,
-      `const b = <button aria-label="close toast" title="toggle sidebar" />`,
-      `const c = <img alt='a mark' placeholder="search" />`,
+      `const a = <span className="sr-only">Close</span>`,
+      `const b = <button aria-label="Close toast" title="Toggle sidebar" />`,
+      `const c = <img alt='A mark' placeholder="Search" />`,
       `const d = "font-display text-first text-base font-medium"`,
       ``,
     ].join("\n");

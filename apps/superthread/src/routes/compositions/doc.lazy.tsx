@@ -3,6 +3,8 @@ import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { docSectionGroups } from "@/components/superthread/catalog";
 import modeUrl from "@/components/superthread/doc/mode.js?url&no-inline";
+import notesUrl from "@/components/superthread/doc/notes.js?url&no-inline";
+import plateUrl from "@/components/superthread/doc/plate.js?url&no-inline";
 import weaveUrl from "@/components/superthread/doc/weave.js?url&no-inline";
 import docCss from "@/components/superthread/styles/doc.css?url";
 import tokensCss from "@/components/superthread/styles/superthread-plain.css?url";
@@ -42,7 +44,7 @@ function partial(name: DocSection) {
 
 const groups = Object.entries(docSectionGroups).map(([id, sections]) => ({
   id,
-  title: id === "endings" ? "endings and controls" : id,
+  title: id === "endings" ? "Endings and controls" : id[0]!.toUpperCase() + id.slice(1),
   sections,
 }));
 
@@ -51,17 +53,20 @@ export const Route = createLazyFileRoute("/compositions/doc")({ component: Docum
 function Documents() {
   return (
     <>
-      <PageHead title="documents" lede="compose reports and briefs from the same sections in plain html or react.">
+      <PageHead
+        title="Documents"
+        lede="Stock-first openers, framed 3.5 px proof halftone plates, draft highlight notes and ruled sections in plain HTML or React."
+      >
         <div className="st-doc-installs">
           <InstallLine items={["doc"]} />
           <InstallLine items={["doc-react"]} />
         </div>
       </PageHead>
-      <Section id="example" title="one brief, two ways">
+      <Section id="example" title="One brief, two ways">
         <DocumentComparison />
         <p className="st-doc-setup">
-          for react, link <code>styles/superthread-plain.css</code> then <code>styles/doc.css</code> in the document
-          route's head. run <code>themeScript</code> from <code>lib/theme</code> before first paint and import the
+          For React, link <code>styles/superthread-plain.css</code> then <code>styles/doc.css</code> in the document
+          route's head. Run <code>themeScript</code> from <code>lib/theme</code> before first paint and import the
           sections from <code>ui/doc-react</code>.
         </p>
       </Section>
@@ -77,25 +82,28 @@ function Documents() {
 }
 
 function Specimen({ name }: { name: DocSection }) {
-  const title = name.replaceAll("-", " ");
+  const words = name.replaceAll("-", " ");
+  const title = words[0]!.toUpperCase() + words.slice(1);
   const html = partial(name);
   const jsx = reactSnippets.get(name);
   if (jsx === undefined) throw new Error(`missing doc react example: ${name}`);
-  const bleed = ["hero", "slim-head", "band", "footer", "draft-strip"].includes(name);
+  const bleed = ["opener", "sheet-head", "chapter", "hero", "slim-head", "band", "footer", "draft-strip"].includes(
+    name,
+  );
   return (
     <div className="st-doc-specimen">
       <h3 className="type-subtitle">{title}</h3>
       <DocPreview title={`${title} preview`} html={html} bleed={bleed} lazy />
       <div className="st-doc-panes">
         <div>
-          <h4 className="type-meta">html</h4>
-          <pre className="st-doc-html" tabIndex={0} aria-label={`${title} html`}>
+          <h4 className="type-meta">HTML</h4>
+          <pre className="st-doc-html" tabIndex={0} aria-label={`${title} HTML`}>
             <code>{html}</code>
           </pre>
         </div>
         <div>
-          <h4 className="type-meta">react</h4>
-          <pre className="st-doc-html" tabIndex={0} aria-label={`${title} react`}>
+          <h4 className="type-meta">React</h4>
+          <pre className="st-doc-html" tabIndex={0} aria-label={`${title} React`}>
             <code>{jsx}</code>
           </pre>
         </div>
@@ -107,17 +115,17 @@ function Specimen({ name }: { name: DocSection }) {
 const briefBody = ["lede", "stat-row", "closing-line"] as const;
 
 function DocumentComparison() {
-  const html = `${partial("slim-head")}<main class="frame">${briefBody.map(partial).join("")}</main>${partial("footer")}`;
+  const html = `${partial("sheet-head")}<main class="frame">${briefBody.map(partial).join("")}</main>${partial("footer")}`;
   return (
     <div className="st-doc-panes">
       <div>
-        <h3 className="type-meta">plain html</h3>
-        <DocPreview title="brief in plain html" html={html} bleed />
+        <h3 className="type-meta">Plain HTML</h3>
+        <DocPreview title="Brief in plain HTML" html={html} bleed />
       </div>
       <div>
-        <h3 className="type-meta">react</h3>
-        <DocPreview title="brief in react" bleed>
-          {docExamples["slim-head"]}
+        <h3 className="type-meta">React</h3>
+        <DocPreview title="Brief in React" bleed>
+          {docExamples["sheet-head"]}
           <main className="frame">
             {briefBody.map((name) => (
               <Fragment key={name}>{docExamples[name]}</Fragment>
@@ -203,6 +211,8 @@ function preview(html: string, bleed: boolean) {
 </head>
 <body>
 ${bleed ? html : `<div class="frame">${html}</div>`}
+${html.includes("data-plate") ? `<script src="${plateUrl}"></script>` : ""}
+${html.includes("data-doc-notes") ? `<script src="${notesUrl}"></script>` : ""}
 ${html.includes("data-weave=") ? `<script src="${weaveUrl}"></script>` : ""}
 <script>
   document.addEventListener("click", (event) => {

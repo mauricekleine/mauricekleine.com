@@ -42,11 +42,11 @@ export function FieldExample() {
       className="st-e-stack"
     >
       <FieldSet>
-        <FieldLegend>orbit run</FieldLegend>
+        <FieldLegend>Orbit run</FieldLegend>
         <FieldGroup>
           <Field data-invalid={invalid || undefined} aria-labelledby={`${id}-label`}>
             <FieldLabel id={`${id}-label`} htmlFor={id}>
-              run name
+              Run name
             </FieldLabel>
             <Input
               id={id}
@@ -58,14 +58,14 @@ export function FieldExample() {
               aria-invalid={invalid || undefined}
               aria-describedby={invalid ? `${id}-help ${id}-error` : `${id}-help`}
             />
-            <FieldDescription id={`${id}-help`}>lowercase letters, digits and dashes</FieldDescription>
-            {invalid && <FieldError id={`${id}-error`}>use a name such as run-024.</FieldError>}
+            <FieldDescription id={`${id}-help`}>Lowercase letters, digits and dashes</FieldDescription>
+            {invalid && <FieldError id={`${id}-error`}>Use a name such as run-024.</FieldError>}
           </Field>
-          <FieldSeparator>notifications</FieldSeparator>
-          <Field orientation="horizontal" aria-label="completion notice">
+          <FieldSeparator>Notifications</FieldSeparator>
+          <Field orientation="horizontal" aria-label="Completion notice">
             <FieldContent>
-              <FieldLabel htmlFor={`${id}-notify`}>notify on completion</FieldLabel>
-              <FieldDescription id={`${id}-notify-help`}>send a notice when this run ends</FieldDescription>
+              <FieldLabel htmlFor={`${id}-notify`}>Notify on completion</FieldLabel>
+              <FieldDescription id={`${id}-notify-help`}>Send a notice when this run ends</FieldDescription>
             </FieldContent>
             <Switch id={`${id}-notify`} aria-describedby={`${id}-notify-help`} defaultChecked />
           </Field>
@@ -73,11 +73,11 @@ export function FieldExample() {
       </FieldSet>
       <div className="st-e-row">
         <Button type="submit" disabled={invalid}>
-          save run
+          Save run
         </Button>
       </div>
       <p role="status" className="st-e-hint">
-        {saved ? `saved ${name}` : "edit the run, then save"}
+        {saved ? `Saved ${name}` : "Edit the run, then save"}
       </p>
     </form>
   );
@@ -88,7 +88,7 @@ function Orientation({ orientation }: { orientation: "vertical" | "horizontal" |
     <FieldGroup>
       <Field orientation={orientation} aria-labelledby={`${id}-label`}>
         <FieldLabel className="st-e-fixed-label" htmlFor={id} id={`${id}-label`}>
-          run name
+          Run name
         </FieldLabel>
         <Input id={id} defaultValue="run-024" />
       </Field>
@@ -115,32 +115,32 @@ export function FieldParts() {
   const id = useId();
   return (
     <FieldSet>
-      <FieldLegend variant="label">run options</FieldLegend>
-      <FieldDescription>the label legend uses interface type; the example above uses the mono legend.</FieldDescription>
+      <FieldLegend variant="label">Run options</FieldLegend>
+      <FieldDescription>The label legend uses interface type; the example above uses the mono legend.</FieldDescription>
       <FieldGroup>
         <FieldLabel>
-          <Field orientation="horizontal" aria-label="retain the run log">
+          <Field orientation="horizontal" aria-label="Retain the run log">
             <Checkbox defaultChecked aria-describedby={`${id}-keep`} />
             <FieldContent>
-              <FieldTitle>keep the run log</FieldTitle>
-              <FieldDescription id={`${id}-keep`}>retain output after completion</FieldDescription>
+              <FieldTitle>Keep the run log</FieldTitle>
+              <FieldDescription id={`${id}-keep`}>Retain output after completion</FieldDescription>
             </FieldContent>
           </Field>
         </FieldLabel>
         <FieldLabel>
-          <Field orientation="horizontal" aria-label="include drafts">
+          <Field orientation="horizontal" aria-label="Include drafts">
             <Checkbox />
             <FieldContent>
-              <FieldTitle>include drafts</FieldTitle>
-              <FieldDescription>show unpublished quanta chapters</FieldDescription>
+              <FieldTitle>Include drafts</FieldTitle>
+              <FieldDescription>Show unpublished Quanta chapters</FieldDescription>
             </FieldContent>
           </Field>
         </FieldLabel>
         <FieldSeparator />
-        <Field aria-label="run validation" data-invalid="true">
-          <FieldTitle>check the run</FieldTitle>
+        <Field aria-label="Run validation" data-invalid="true">
+          <FieldTitle>Check the run</FieldTitle>
           <FieldError
-            errors={[{ message: "choose a ship." }, { message: "enter a run name." }, { message: "choose a ship." }]}
+            errors={[{ message: "Choose a ship." }, { message: "Enter a run name." }, { message: "Choose a ship." }]}
           />
         </Field>
       </FieldGroup>
@@ -152,20 +152,20 @@ export function FieldStates() {
   return (
     <div className="st-e-states">
       {[
-        { name: "rest", note: "label, box and description" },
-        { name: "hover", note: "input edge stays quiet", demo: "hover" },
-        { name: "focus", note: "box owns the inside edge", demo: "focus" },
-        { name: "invalid", note: "error label and bang square", invalid: true },
-        { name: "invalid, focus", note: "error edge stays inside", invalid: true, demo: "focus" },
-        { name: "disabled", note: "disabled label and control", disabled: true },
+        { name: "Rest", note: "Label, box and description" },
+        { name: "Hover", note: "Input edge stays quiet", demo: "hover" },
+        { name: "Focus", note: "Box owns the inside edge", demo: "focus" },
+        { name: "Invalid", note: "Error label and bang square", invalid: true },
+        { name: "Invalid, focus", note: "Error edge stays inside", invalid: true, demo: "focus" },
+        { name: "Disabled", note: "Disabled label and control", disabled: true },
       ].map((s, i) => (
         <State key={s.name} name={s.name} note={s.note}>
           <Field
             data-invalid={s.invalid || undefined}
             data-disabled={s.disabled || undefined}
-            aria-label={`run name, ${s.name}`}
+            aria-label={`Run name, ${s.name.toLowerCase()}`}
           >
-            <FieldLabel htmlFor={`${prefix}-${i}`}>run name</FieldLabel>
+            <FieldLabel htmlFor={`${prefix}-${i}`}>Run name</FieldLabel>
             <Input
               id={`${prefix}-${i}`}
               value={s.invalid ? "" : "run-024"}
@@ -177,9 +177,9 @@ export function FieldStates() {
               data-demo={s.demo}
             />
             {s.invalid ? (
-              <FieldError id={`${prefix}-${i}-note`}>enter a run name.</FieldError>
+              <FieldError id={`${prefix}-${i}-note`}>Enter a run name.</FieldError>
             ) : (
-              <FieldDescription id={`${prefix}-${i}-note`}>shown on the board</FieldDescription>
+              <FieldDescription id={`${prefix}-${i}-note`}>Shown on the board</FieldDescription>
             )}
           </Field>
         </State>
@@ -209,16 +209,16 @@ export function FieldOnLayers() {
           <Dialog open modal={false}>
             <DialogContent portalProps={{ container: frame }} initialFocus={false} finalFocus={false}>
               <DialogHeader>
-                <DialogTitle>share the draft</DialogTitle>
-                <DialogDescription>chapter 9, what a measurement does</DialogDescription>
+                <DialogTitle>Share the draft</DialogTitle>
+                <DialogDescription>Chapter 9, What a measurement does</DialogDescription>
               </DialogHeader>
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor={`${id}-invite`}>invite by email</FieldLabel>
+                  <FieldLabel htmlFor={`${id}-invite`}>Invite by email</FieldLabel>
                   <Input id={`${id}-invite`} placeholder="reader@example.com" />
                 </Field>
-                <FieldSeparator>or</FieldSeparator>
-                <Button variant="outline">copy the link</Button>
+                <FieldSeparator>Or</FieldSeparator>
+                <Button variant="outline">Copy the link</Button>
               </FieldGroup>
             </DialogContent>
           </Dialog>
@@ -230,16 +230,16 @@ export function FieldOnLayers() {
             <SheetContent portalProps={{ container: frame }} initialFocus={false} finalFocus={false}>
               <SheetHeader>
                 <SheetTitle>run-024</SheetTitle>
-                <SheetDescription>what the next run starts with</SheetDescription>
+                <SheetDescription>What the next run starts with</SheetDescription>
               </SheetHeader>
               <FieldGroup className="st-e-sheet-fields">
                 <Field>
-                  <FieldLabel htmlFor={`${id}-prefix`}>branch prefix</FieldLabel>
+                  <FieldLabel htmlFor={`${id}-prefix`}>Branch prefix</FieldLabel>
                   <Input id={`${id}-prefix`} defaultValue="agent/" />
                 </Field>
-                <FieldSeparator>notifications</FieldSeparator>
+                <FieldSeparator>Notifications</FieldSeparator>
                 <Field orientation="horizontal">
-                  <FieldLabel htmlFor={`${id}-notify`}>notify on completion</FieldLabel>
+                  <FieldLabel htmlFor={`${id}-notify`}>Notify on completion</FieldLabel>
                   <Switch id={`${id}-notify`} defaultChecked />
                 </Field>
               </FieldGroup>
@@ -258,20 +258,20 @@ function RunSettings() {
     <AppShellPanel>
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor={`${id}-name`}>run name</FieldLabel>
+          <FieldLabel htmlFor={`${id}-name`}>Run name</FieldLabel>
           <Input id={`${id}-name`} defaultValue="run-024" aria-describedby={`${id}-name-help`} />
-          <FieldDescription id={`${id}-name-help`}>shown on the board</FieldDescription>
+          <FieldDescription id={`${id}-name-help`}>Shown on the board</FieldDescription>
         </Field>
         <Field>
-          <FieldLabel htmlFor={`${id}-when`}>starts</FieldLabel>
+          <FieldLabel htmlFor={`${id}-when`}>Starts</FieldLabel>
           <NativeSelect id={`${id}-when`} defaultValue="mail" className="w-full">
-            <NativeSelectOption value="mail">when mail arrives</NativeSelectOption>
-            <NativeSelectOption value="morning">every day at 07:00</NativeSelectOption>
+            <NativeSelectOption value="mail">When mail arrives</NativeSelectOption>
+            <NativeSelectOption value="morning">Every day at 07:00</NativeSelectOption>
           </NativeSelect>
         </Field>
         <Field>
-          <FieldLabel htmlFor={`${id}-notes`}>notes for the agent</FieldLabel>
-          <Textarea id={`${id}-notes`} defaultValue="keep the summary under 120 characters." />
+          <FieldLabel htmlFor={`${id}-notes`}>Notes for the agent</FieldLabel>
+          <Textarea id={`${id}-notes`} defaultValue="Keep the summary under 120 characters." />
         </Field>
       </FieldGroup>
     </AppShellPanel>
@@ -280,7 +280,7 @@ function RunSettings() {
 
 export function FieldsOnPhone({ mode }: { mode: "light" | "dark" }) {
   return (
-    <GroundFrame mode={mode} title={`run settings on a phone, ${mode}`} height={400}>
+    <GroundFrame mode={mode} title={`Run settings on a phone, ${mode}`} height={400}>
       <RunSettings />
     </GroundFrame>
   );

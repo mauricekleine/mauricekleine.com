@@ -3063,69 +3063,69 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "the one chromatic control: plum fill and edge under the stock label, darker on hover and press, the ring snapping on at 2 px. in a dark scope it prints as the outline.",
-      "html": "<button class=\"ds-btn ds-btn-primary\" type=\"button\">save changes</button>",
+      "description": "The one chromatic control: plum fill and edge under the stock label, darker on hover and press, the ring snapping on at 2 px. In a dark scope it prints as the outline.",
+      "html": "<button class=\"ds-btn ds-btn-primary\" type=\"button\">Save changes</button>",
       "css": ".ds-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 40px; padding: 0 18px; border: 1px solid transparent; border-radius: var(--radius); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } .ds-btn .ds-glyph { flex-shrink: 0; } .ds-btn-primary { border-color: var(--primary); background: var(--primary); color: var(--primary-foreground); } .ds-btn-primary:hover { border-color: var(--primary-hover); background: var(--primary-hover); } .ds-btn-primary:active { border-color: var(--primary-press); background: var(--primary-press); box-shadow: inset 0 0 0 1px var(--key); } :host-context(.dark) .ds-btn-primary { border-color: currentColor; background: transparent; color: var(--foreground); } :host-context(.dark) .ds-btn-primary:hover { background: var(--control-hover); } :host-context(.dark) .ds-btn-primary:active { background: var(--control-press); box-shadow: none; }"
     },
     {
       "name": "Outline Button",
       "kind": "button",
       "refersTo": "button-outline",
-      "description": "a quiet action: an edge in the current colour, a key tint under the pointer.",
-      "html": "<button class=\"ds-btn ds-btn-outline\" type=\"button\">cancel</button>",
+      "description": "A quiet action: an edge in the current colour, a key tint under the pointer.",
+      "html": "<button class=\"ds-btn ds-btn-outline\" type=\"button\">Cancel</button>",
       "css": ".ds-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 40px; padding: 0 18px; border: 1px solid transparent; border-radius: var(--radius); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } .ds-btn .ds-glyph { flex-shrink: 0; } .ds-btn-outline { border-color: currentColor; background: transparent; color: var(--foreground); } .ds-btn-outline:hover { background: var(--control-hover); } .ds-btn-outline:active { background: var(--control-press); }"
     },
     {
       "name": "Destructive Button",
       "kind": "button",
       "refersTo": "button-destructive",
-      "description": "a destructive action in the first ink, with the trash glyph and its word; red stays a status colour. in a dark scope it prints as the outline.",
-      "html": "<button class=\"ds-btn ds-btn-destructive\" type=\"button\"><svg class=\"ds-glyph\" viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M4 1h4v1h-4zM1 2h10v1h-10zM2 4h8v1h-8zM2 5h1v1h-1zM4 5h1v1h-1zM7 5h1v1h-1zM9 5h1v1h-1zM2 6h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM9 6h1v1h-1zM2 7h1v1h-1zM4 7h1v1h-1zM7 7h1v1h-1zM9 7h1v1h-1zM2 8h1v1h-1zM4 8h1v1h-1zM7 8h1v1h-1zM9 8h1v1h-1zM2 9h8v1h-8z\"/></svg>delete run</button>",
+      "description": "A destructive action in the first ink, with the trash glyph and its word; red stays a status colour. In a dark scope it prints as the outline.",
+      "html": "<button class=\"ds-btn ds-btn-destructive\" type=\"button\"><svg class=\"ds-glyph\" viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M4 1h4v1h-4zM1 2h10v1h-10zM2 4h8v1h-8zM2 5h1v1h-1zM4 5h1v1h-1zM7 5h1v1h-1zM9 5h1v1h-1zM2 6h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM9 6h1v1h-1zM2 7h1v1h-1zM4 7h1v1h-1zM7 7h1v1h-1zM9 7h1v1h-1zM2 8h1v1h-1zM4 8h1v1h-1zM7 8h1v1h-1zM9 8h1v1h-1zM2 9h8v1h-8z\"/></svg>Delete run</button>",
       "css": ".ds-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 40px; padding: 0 18px; border: 1px solid transparent; border-radius: var(--radius); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } .ds-btn .ds-glyph { flex-shrink: 0; } .ds-btn-destructive { background: var(--destructive); color: var(--destructive-foreground); } .ds-btn-destructive:hover { background: var(--destructive-hover); } .ds-btn-destructive:active { background: var(--destructive-press); } :host-context(.dark) .ds-btn-destructive { border-color: currentColor; background: transparent; color: var(--foreground); } :host-context(.dark) .ds-btn-destructive:hover { background: var(--control-hover); } :host-context(.dark) .ds-btn-destructive:active { background: var(--control-press); }"
     },
     {
       "name": "Text Field",
       "kind": "input",
       "refersTo": "input",
-      "description": "a 40 px box with the field edge, 44 px with its text at 16 px at 600 px and below, so iOS Safari never zooms in on focus; on focus the edge becomes 2 px inside the box and the caret takes the same plum.",
-      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"search runs\" aria-label=\"search runs\">",
+      "description": "A 40 px box with the field edge, 44 px with its text at 16 px at 600 px and below, so iOS Safari never zooms in on focus; on focus the edge becomes 2 px inside the box and the caret takes the same plum.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Search runs\" aria-label=\"Search runs\">",
       "css": ".ds-input { height: 40px; width: 280px; padding: 0 12px; border: 1px solid var(--input); border-radius: var(--radius); background: var(--background); color: var(--foreground); caret-color: var(--primary); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); } .ds-input::placeholder { color: var(--muted-foreground); } .ds-input:focus { border-color: var(--primary); outline: 2px solid var(--primary); outline-offset: -2px; } .ds-input[aria-invalid=\"true\"] { border-color: var(--error); caret-color: var(--error); } .ds-input[aria-invalid=\"true\"]:focus { outline-color: var(--error); } @media (max-width: 600px) { .ds-input { height: 44px; font-size: 16px; } }"
     },
     {
       "name": "Status Badges",
       "kind": "chip",
       "refersTo": "badge-status",
-      "description": "status at badge scale: the glyph square, then the word, on a fill near the stock; failed is the one solid badge.",
-      "html": "<span class=\"ds-badges\"><span class=\"ds-badge ds-badge-done\"><svg class=\"ds-glyph\" viewBox=\"0 0 14 14\" width=\"14\" height=\"14\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M1 0h12v1h-12zM0 1h14v1h-14zM0 2h14v1h-14zM0 3h11v1h-11zM13 3h1v1h-1zM0 4h10v1h-10zM12 4h2v1h-2zM0 5h9v1h-9zM11 5h3v1h-3zM0 6h2v1h-2zM4 6h4v1h-4zM10 6h4v1h-4zM0 7h3v1h-3zM5 7h2v1h-2zM9 7h5v1h-5zM0 8h4v1h-4zM8 8h6v1h-6zM0 9h5v1h-5zM7 9h7v1h-7zM0 10h14v1h-14zM0 11h14v1h-14zM0 12h14v1h-14zM1 13h12v1h-12z\"/></svg>done</span><span class=\"ds-badge ds-badge-running\"><svg class=\"ds-glyph\" viewBox=\"0 0 14 14\" width=\"14\" height=\"14\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M1 0h12v1h-12zM0 1h14v1h-14zM0 2h6v1h-6zM8 2h6v1h-6zM0 3h6v1h-6zM8 3h6v1h-6zM0 4h14v1h-14zM0 5h6v1h-6zM8 5h6v1h-6zM0 6h6v1h-6zM8 6h6v1h-6zM0 7h6v1h-6zM8 7h6v1h-6zM0 8h6v1h-6zM8 8h6v1h-6zM0 9h6v1h-6zM8 9h6v1h-6zM0 10h6v1h-6zM8 10h6v1h-6zM0 11h6v1h-6zM8 11h6v1h-6zM0 12h14v1h-14zM1 13h12v1h-12z\"/></svg>running</span><span class=\"ds-badge ds-badge-failed\"><svg class=\"ds-glyph\" viewBox=\"0 0 14 14\" width=\"14\" height=\"14\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M1 0h12v1h-12zM0 1h14v1h-14zM0 2h14v1h-14zM0 3h3v1h-3zM5 3h4v1h-4zM11 3h3v1h-3zM0 4h4v1h-4zM6 4h2v1h-2zM10 4h4v1h-4zM0 5h5v1h-5zM9 5h5v1h-5zM0 6h6v1h-6zM8 6h6v1h-6zM0 7h5v1h-5zM9 7h5v1h-5zM0 8h4v1h-4zM6 8h2v1h-2zM10 8h4v1h-4zM0 9h3v1h-3zM5 9h4v1h-4zM11 9h3v1h-3zM0 10h14v1h-14zM0 11h14v1h-14zM0 12h14v1h-14zM1 13h12v1h-12z\"/></svg>failed</span></span>",
+      "description": "Status at badge scale: the glyph square, then the word, on a fill near the stock; failed is the one solid badge.",
+      "html": "<span class=\"ds-badges\"><span class=\"ds-badge ds-badge-done\"><svg class=\"ds-glyph\" viewBox=\"0 0 14 14\" width=\"14\" height=\"14\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M1 0h12v1h-12zM0 1h14v1h-14zM0 2h14v1h-14zM0 3h11v1h-11zM13 3h1v1h-1zM0 4h10v1h-10zM12 4h2v1h-2zM0 5h9v1h-9zM11 5h3v1h-3zM0 6h2v1h-2zM4 6h4v1h-4zM10 6h4v1h-4zM0 7h3v1h-3zM5 7h2v1h-2zM9 7h5v1h-5zM0 8h4v1h-4zM8 8h6v1h-6zM0 9h5v1h-5zM7 9h7v1h-7zM0 10h14v1h-14zM0 11h14v1h-14zM0 12h14v1h-14zM1 13h12v1h-12z\"/></svg>Done</span><span class=\"ds-badge ds-badge-running\"><svg class=\"ds-glyph\" viewBox=\"0 0 14 14\" width=\"14\" height=\"14\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M1 0h12v1h-12zM0 1h14v1h-14zM0 2h6v1h-6zM8 2h6v1h-6zM0 3h6v1h-6zM8 3h6v1h-6zM0 4h14v1h-14zM0 5h6v1h-6zM8 5h6v1h-6zM0 6h6v1h-6zM8 6h6v1h-6zM0 7h6v1h-6zM8 7h6v1h-6zM0 8h6v1h-6zM8 8h6v1h-6zM0 9h6v1h-6zM8 9h6v1h-6zM0 10h6v1h-6zM8 10h6v1h-6zM0 11h6v1h-6zM8 11h6v1h-6zM0 12h14v1h-14zM1 13h12v1h-12z\"/></svg>Running</span><span class=\"ds-badge ds-badge-failed\"><svg class=\"ds-glyph\" viewBox=\"0 0 14 14\" width=\"14\" height=\"14\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M1 0h12v1h-12zM0 1h14v1h-14zM0 2h14v1h-14zM0 3h3v1h-3zM5 3h4v1h-4zM11 3h3v1h-3zM0 4h4v1h-4zM6 4h2v1h-2zM10 4h4v1h-4zM0 5h5v1h-5zM9 5h5v1h-5zM0 6h6v1h-6zM8 6h6v1h-6zM0 7h5v1h-5zM9 7h5v1h-5zM0 8h4v1h-4zM6 8h2v1h-2zM10 8h4v1h-4zM0 9h3v1h-3zM5 9h4v1h-4zM11 9h3v1h-3zM0 10h14v1h-14zM0 11h14v1h-14zM0 12h14v1h-14zM1 13h12v1h-12z\"/></svg>Failed</span></span>",
       "css": ".ds-badges { display: inline-flex; flex-wrap: wrap; gap: 8px; } .ds-badge { display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 11px 0 7px; border: 1px solid transparent; border-radius: var(--radius); font-family: var(--font-sans); font-size: var(--text-instrument); line-height: 1; font-weight: 500; white-space: nowrap; } .ds-badge .ds-glyph { flex-shrink: 0; } .ds-badge-done { border-color: var(--success-edge); background: var(--success-wash); color: var(--success-foreground); } .ds-badge-done .ds-glyph { color: var(--success-glyph); } .ds-badge-running { border-color: var(--info-edge); background: var(--info-wash); color: var(--info-foreground); } .ds-badge-running .ds-glyph { color: var(--info-glyph); } .ds-badge-failed { border-color: var(--error-solid); background: var(--error-solid); color: var(--error-solid-foreground); }"
     },
     {
       "name": "Tabs",
       "kind": "nav",
       "refersTo": "tabs",
-      "description": "the current tab over a 2 px foreground bar; a tab that is not current previews that bar at 50 percent on hover.",
-      "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"run\"><button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\" type=\"button\">board</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\" type=\"button\">runs</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\" type=\"button\">logs</button></div>",
+      "description": "The current tab over a 2 px foreground bar; a tab that is not current previews that bar at 50 percent on hover.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"Run\"><button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\" type=\"button\">Board</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\" type=\"button\">Runs</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\" type=\"button\">Logs</button></div>",
       "css": ".ds-tabs { display: flex; align-items: flex-end; gap: 28px; border-bottom: 1px solid var(--border); } .ds-tab { position: relative; padding: 0 0 12px; border: 0; background: none; color: var(--muted-foreground); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); font-weight: 500; white-space: nowrap; cursor: pointer; transition-property: color, background-color, border-color; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-brand); } .ds-tab:hover, .ds-tab[aria-selected=\"true\"] { color: var(--foreground); } .ds-tab[aria-selected=\"true\"]::after, .ds-tab:not([aria-selected=\"true\"]):hover::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--foreground); pointer-events: none; } .ds-tab:not([aria-selected=\"true\"]):hover::after { mask: var(--texture-b50) 0 0 / 4px 4px; } .ds-tab:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }"
     },
     {
       "name": "Select List",
       "kind": "custom",
       "refersTo": "select",
-      "description": "a raised layer on the leaf lift; in light its contact shadow prints as a 50 percent screen at its edge, and the chosen option keeps its check over the raised hover fill.",
-      "html": "<div class=\"ds-list\" role=\"listbox\" aria-label=\"ship\"><div class=\"ds-option\" role=\"option\" aria-selected=\"false\" tabindex=\"0\">orbit</div><div class=\"ds-option\" role=\"option\" aria-selected=\"true\" tabindex=\"0\">quanta<svg class=\"ds-glyph\" viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M10 2h1v1h-1zM9 3h2v1h-2zM8 4h2v1h-2zM1 5h1v1h-1zM7 5h2v1h-2zM1 6h2v1h-2zM6 6h2v1h-2zM2 7h2v1h-2zM5 7h2v1h-2zM3 8h3v1h-3zM4 9h1v1h-1z\"></path></svg></div><div class=\"ds-option\" role=\"option\" aria-selected=\"false\" tabindex=\"0\">trisys</div></div>",
+      "description": "A raised layer on the leaf lift; in light its contact shadow prints as a 50 percent screen at its edge, and the chosen option keeps its check over the raised hover fill.",
+      "html": "<div class=\"ds-list\" role=\"listbox\" aria-label=\"Ship\"><div class=\"ds-option\" role=\"option\" aria-selected=\"false\" tabindex=\"0\">Orbit</div><div class=\"ds-option\" role=\"option\" aria-selected=\"true\" tabindex=\"0\">Quanta<svg class=\"ds-glyph\" viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M10 2h1v1h-1zM9 3h2v1h-2zM8 4h2v1h-2zM1 5h1v1h-1zM7 5h2v1h-2zM1 6h2v1h-2zM6 6h2v1h-2zM2 7h2v1h-2zM5 7h2v1h-2zM3 8h3v1h-3zM4 9h1v1h-1z\"></path></svg></div><div class=\"ds-option\" role=\"option\" aria-selected=\"false\" tabindex=\"0\">Trisys</div></div>",
       "css": ".ds-list { position: relative; width: 220px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--popover); color: var(--popover-foreground); box-shadow: var(--elevation-leaf-rake), inset 0 0 0 1px var(--raised-edge); } .ds-list::after { content: \"\"; position: absolute; left: -1px; top: -1px; width: calc(100% + 2px + var(--contact-x)); height: calc(100% + 2px + var(--contact-y)); background: var(--shadow-ink); pointer-events: none; mask: var(--texture-rake-contact) 0 0 / 4px 4px; clip-path: polygon(calc(100% - var(--contact-x)) var(--contact-y), 100% var(--contact-y), 100% 100%, var(--contact-x) 100%, var(--contact-x) calc(100% - var(--contact-y)), calc(100% - var(--contact-x)) calc(100% - var(--contact-y))); } :host-context(.dark) .ds-list { box-shadow: var(--elevation-leaf); } :host-context(.dark) .ds-list::after { display: none; } .ds-option { position: relative; display: flex; align-items: center; height: 36px; padding: 0 32px 0 10px; border: 1px solid transparent; font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); cursor: default; } .ds-option:hover, .ds-option[aria-selected=\"true\"] { background: var(--raised-hover); } .ds-option .ds-glyph { position: absolute; right: 10px; } .ds-option:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }"
     },
     {
       "name": "Ground Nav",
       "kind": "nav",
       "refersTo": "sidebar",
-      "description": "a ship's nav flat on the deep ground in the dark palette; the current item is neutral, the foreground word in a 1 px edge with its 8 px square before the word.",
-      "html": "<nav class=\"ds-ground\" aria-label=\"orbit\"><a class=\"ds-nav-item\" href=\"#board\" aria-current=\"page\">board</a><a class=\"ds-nav-item\" href=\"#runs\">runs</a><a class=\"ds-nav-item\" href=\"#settings\">settings</a></nav>",
+      "description": "A ship's nav flat on the deep ground in the dark palette; the current item is neutral, the foreground word in a 1 px edge with its 8 px square before the word.",
+      "html": "<nav class=\"ds-ground\" aria-label=\"Orbit\"><a class=\"ds-nav-item\" href=\"#board\" aria-current=\"page\">Board</a><a class=\"ds-nav-item\" href=\"#runs\">Runs</a><a class=\"ds-nav-item\" href=\"#settings\">Settings</a></nav>",
       "css": ".ds-ground { display: flex; flex-direction: column; gap: 2px; width: 220px; padding: 12px; background: var(--sidebar); color: var(--sidebar-foreground); } .ds-nav-item { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border: 1px solid transparent; color: var(--sidebar-foreground); font-family: var(--font-sans); font-size: var(--text-ui); line-height: var(--text-ui--line-height); text-decoration: none; transition-property: background-color, border-color; transition-duration: var(--duration-quick); transition-timing-function: var(--ease-brand); } .ds-nav-item:hover { background: var(--sidebar-hover); } .ds-nav-item[aria-current=\"page\"] { border-color: var(--sidebar-foreground); color: var(--sidebar-foreground); font-weight: 500; } .ds-nav-item[aria-current=\"page\"]::before { content: \"\"; width: 8px; height: 8px; flex-shrink: 0; background: var(--sidebar-foreground); } .ds-nav-item:focus-visible { outline: 2px solid var(--sidebar-foreground); outline-offset: 2px; }"
     }
   ],
   "narrative": {
-    "northStar": "the two-ink proof",
+    "northStar": "The two-ink proof",
     "overview": "Superthread prints every fleet surface the way a two-ink proof prints: key ink on white stock, one plum fill per viewport, and 1-bit screens only where the eye is meant to rest. The master world's own thesis states the rule the rest follows: flat where you read, screened where you look. Words, numbers, data and code always sit on flat ink. Screened fields sit beside content. A component takes at most one small detail.\n\nThe register is quiet and exact. Square corners, 1 px edges and horizontal rules that reach both window edges carry the structure, and the panels and accents stay flat. Dark mode is the same proof printed white on key: every neutral in both modes is a tint of the two inks, mixed in linear light, and most sit on one eleven-step wedge. There are two surfaces. Docs and public pages print on the stock. A ship's working surface prints on the deep ground, with the fleet rail and the ship's nav flat on the ground and the working panel raised on it by a soft rake from the upper left.\n\nEvery value comes from one source, `tokens/master.json`, vendored unchanged from the approved master world. `scripts/generate.ts` emits it as `dist/v2/superthread.css` (Tailwind 4), `dist/v2/superthread-plain.css` (no Tailwind) and `dist/v2/tokens.json`, and the `@mk` registry installs it into apps. The frontmatter above restates the emitted colour, type, radius and space tokens; motion, elevation, breakpoints and texture live in `.impeccable/design.json`, because the format has no place for them.",
     "keyCharacteristics": [
       "Two inks: key `#16181d` on white stock `#ffffff`, and white on key in dark. Every neutral is a tint of the two.",
@@ -3171,8 +3171,8 @@
         "section": "typography"
       },
       {
-        "name": "The Lowercase Chrome Rule",
-        "body": "Nav, labels, headings, buttons and every served label, screen-reader text included, are lowercase. Authored titles keep their own casing.",
+        "name": "The Sentence Case Rule",
+        "body": "Nav, labels, headings, buttons and every served label, screen-reader text included, use natural sentence case. Metadata kickers in Fragment Mono stay uppercase, the superthread wordmark stays lowercase, and authored titles keep their own casing.",
         "section": "typography"
       },
       {
@@ -3247,7 +3247,7 @@
       },
       {
         "name": "The Result Word Rule",
-        "body": "A log prints how each entry ended as a plain word, with no badge: `done`, `needs you`, `failed`, `skipped` or `paused`. Ink follows what is open: a result that still waits on someone prints in foreground through `flag`, and a closed one prints muted, so a failure a retry closed prints as quietly as done. A ship's word is its own: `Badge` prints a state's name only when given no word, so a ship hands it the word it uses.",
+        "body": "A log prints how each entry ended as a plain word, with no badge: `Done`, `Needs you`, `Failed`, `Skipped` or `Paused`. Ink follows what is open: a result that still waits on someone prints in foreground through `flag`, and a closed one prints muted, so a failure a retry closed prints as quietly as done. A ship's word is its own: `Badge` prints a state's name only when given no word, so a ship hands it the word it uses.",
         "section": "components"
       },
       {
@@ -3257,7 +3257,7 @@
       },
       {
         "name": "The Neutral Age Rule",
-        "body": "Age prints neutral and uncoloured: `since friday`, from `@mk/time-words`. It never turns red or counts days past a date.",
+        "body": "Age prints neutral and uncoloured: `since Friday`, from `@mk/time-words`. It never turns red or counts days past a date.",
         "section": "components"
       },
       {
@@ -3277,7 +3277,7 @@
       },
       {
         "name": "The Closing Line Rule",
-        "body": "A reading page ends on one closing line in Erode italic at the lede step, in muted ink: `that's all for today.` It tells the reader the page is finished.",
+        "body": "A reading page ends on one closing line in Erode italic at the lede step, in muted ink: `That's all for today.` It tells the reader the page is finished.",
         "section": "components"
       },
       {
@@ -3287,12 +3287,12 @@
       },
       {
         "name": "The Confirm Rule",
-        "body": "A confirm's title names the action and its reach, its action repeats the verb, and its cancel stays plain: `publish to everyone?`, `publish`, `cancel`.",
+        "body": "A confirm's title names the action and its reach, its action repeats the verb, and its cancel stays plain: `Publish to everyone?`, `Publish`, `Cancel`.",
         "section": "components"
       },
       {
         "name": "The Label Form Rule",
-        "body": "An aria label is a lowercase verb plus the authored title, which keeps its casing: `mark done: <title>`.",
+        "body": "An aria label is a sentence-case verb plus the authored title, which keeps its casing: `Mark done: <title>`.",
         "section": "components"
       },
       {
@@ -3322,7 +3322,7 @@
       },
       {
         "name": "The Named Step Rule",
-        "body": "A button says what happens, and the primary names the step: `open the mail`, `read the draft`. `start` prints only when there is no source to open.",
+        "body": "A button says what happens, and the primary names the step: `Open the mail`, `Read the draft`. `Start` prints only when there is no source to open.",
         "section": "components"
       },
       {
@@ -3361,7 +3361,7 @@
       "**Do** set ids, times, code and any figure that holds a column in Fragment Mono.",
       "**Do** put a ship's spot only in its mark and its chart series, and chart a series as its line screen.",
       "**Do** draw a missing icon on the pixel grid and add it to the glyph source.",
-      "**Do** keep chrome and every served label lowercase, with no em dashes.",
+      "**Do** keep chrome and every served label in natural sentence case, with no em dashes.",
       "**Do** reserve the space a state will need, so a click or a refresh moves nothing.",
       "**Do** print texture as ordered cells. Keep type aligned and other surfaces flat. The weave's plum bloom is screened."
     ],
@@ -3373,7 +3373,7 @@
       "**Don't** use a stock shadow (`shadow-md`, `shadow-lg`) or a backdrop blur.",
       "**Don't** print a screen behind words, numbers, data or code, or give a component a second texture detail.",
       "**Don't** grey a component out with dots: a disabled control screens its edge and nothing else.",
-      "**Don't** set a screen moving on its own, or add noise, a soft glow or misregistered type: one live field moves by itself, and the progress ramp moves with its fill.",
+      "**Don't** set a screen moving on its own in app chrome, or add noise, a soft glow or misregistered type: only framed `@mk/plate` light breath, one site hero field, and a progress ramp moving with its fill animate.",
       "**Don't** colour a control with a ship spot or a status ink, or make a destructive action red: destructive is the key ink, or the outline off paper, with the trash glyph and the word.",
       "**Don't** print a spot or a status ink as a large flat field.",
       "**Don't** fade or screen the cut edge of a scrolling table.",

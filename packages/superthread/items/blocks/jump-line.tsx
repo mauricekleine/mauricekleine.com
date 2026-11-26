@@ -10,7 +10,7 @@ function JumpLine({ className, children, ...props }: React.ComponentProps<"nav">
     <nav
       data-mk="jump-line"
       data-slot="jump-line"
-      aria-label="on this page"
+      aria-label="On this page"
       className={cn("min-w-0", className)}
       {...props}
     >

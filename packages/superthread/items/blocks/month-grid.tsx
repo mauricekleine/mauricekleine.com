@@ -27,13 +27,13 @@ const WEEKS = 6;
 const PLAIN = { timeZone: "UTC" };
 
 const WEEKDAYS = [
-  ["mo", "monday"],
-  ["tu", "tuesday"],
-  ["we", "wednesday"],
-  ["th", "thursday"],
-  ["fr", "friday"],
-  ["sa", "saturday"],
-  ["su", "sunday"],
+  ["Mo", "Monday"],
+  ["Tu", "Tuesday"],
+  ["We", "Wednesday"],
+  ["Th", "Thursday"],
+  ["Fr", "Friday"],
+  ["Sa", "Saturday"],
+  ["Su", "Sunday"],
 ] as const;
 
 const dayNumber = (date: string) => Date.parse(`${date}T00:00:00Z`) / DAY_MS;
@@ -97,7 +97,7 @@ function monthRows(month: string, days: MonthGridEntry[], weeks: MonthGridEntry[
       key: `week-${date}`,
       date,
       figure: weekNumber(monday),
-      words: `week of ${clockWords(date)}`,
+      words: `Week of ${clockWords(date)}`,
       week: true,
       entry: weekEntries.get(monday),
       off: false,
@@ -303,7 +303,7 @@ function MonthGrid({
           <div className="flex shrink-0" onKeyDown={onStepKeyDown}>
             <Button
               ref={backStep}
-              aria-label={`show ${named(earlier)}`}
+              aria-label={`Show ${named(earlier)}`}
               className={STEP}
               data-slot="month-grid-step"
               disabled={!canGoBack}
@@ -316,7 +316,7 @@ function MonthGrid({
             </Button>
             <Button
               ref={onStep}
-              aria-label={`show ${named(later)}`}
+              aria-label={`Show ${named(later)}`}
               className={STEP}
               data-slot="month-grid-step"
               disabled={!canGoOn}
@@ -345,8 +345,8 @@ function MonthGrid({
         <thead>
           <tr>
             {weeks && (
-              <th aria-label="week" className={cn(HEAD, WEEK_COLUMN)} scope="col">
-                wk
+              <th aria-label="Week" className={cn(HEAD, WEEK_COLUMN)} scope="col">
+                Wk
               </th>
             )}
             {WEEKDAYS.map(([short, name]) => (

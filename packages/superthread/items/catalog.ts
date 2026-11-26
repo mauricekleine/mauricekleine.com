@@ -78,10 +78,10 @@ const file = (path: string): CatalogFile => ({
 });
 
 export const docSectionGroups = {
-  openers: ["hero", "slim-head", "band"],
+  openers: ["opener", "sheet-head", "chapter", "hero", "slim-head", "band"],
   lines: ["meta-line", "contents", "lede", "section-head", "steps", "rows", "timeline", "sources"],
   blocks: ["claim", "stat-row", "table", "figure", "before-and-after", "notice", "decisions", "transcript"],
-  endings: ["closing-line", "footer", "draft-strip", "chip", "mode-toggle"],
+  endings: ["closing-line", "footer", "draft-strip", "chip", "mode-toggle", "notes-toggle"],
 } as const;
 
 export const catalog: CatalogItem[] = [
@@ -89,8 +89,8 @@ export const catalog: CatalogItem[] = [
     name: "init",
     type: "registry:base",
     extends: "none",
-    title: "init",
-    description: "sets up an app for @mk: the base-nova style, the tokens, utils and the button",
+    title: "Init",
+    description: "Sets up an app for @mk: the base-nova style, the tokens, utils and the button",
     files: [],
     tier: "style",
     upstream: null,
@@ -107,8 +107,8 @@ export const catalog: CatalogItem[] = [
     name: "tokens",
     type: "registry:style",
     extends: "none",
-    title: "tokens",
-    description: "the superthread theme: colour roles for light and dark, type, motion, shape and the texture tiles",
+    title: "Tokens",
+    description: "The Superthread theme: colour roles for light and dark, type, motion, shape and the texture tiles",
     files: [
       {
         path: "dist/v2/superthread.css",
@@ -128,8 +128,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "tokens-plain",
     type: "registry:item",
-    title: "plain tokens",
-    description: "the same tokens as plain css with no tailwind, and as a typed module",
+    title: "Plain tokens",
+    description: "The same tokens as plain CSS with no Tailwind, and as a typed module",
     files: [
       {
         path: "dist/v2/superthread-plain.css",
@@ -144,12 +144,16 @@ export const catalog: CatalogItem[] = [
   {
     name: "doc",
     type: "registry:item",
-    title: "doc",
-    description: "plain html document sections, their stylesheet, a mode control and the weave runtime",
+    title: "Doc",
+    description:
+      "Plain HTML document sections, their stylesheet, a mode control, the 3.5 px proof halftone plate runtime, draft highlight notes and the weave runtime",
     files: [
       file("styles/doc.css"),
       file("doc/mode.js"),
+      file("doc/plate.js"),
+      file("doc/notes.js"),
       file("doc/weave.js"),
+      lib("doc-notes"),
       ...Object.values(docSectionGroups)
         .flat()
         .map((name) => file(`doc/sections/${name}.html`)),
@@ -161,9 +165,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "doc-react",
     type: "registry:item",
-    title: "documents in react",
+    title: "Documents in React",
     description:
-      "react sections for reports and briefs, with the same markup and stylesheet as the plain html sections",
+      "React sections for reports and briefs, with the same markup and stylesheet as the plain HTML sections",
     files: [ui("doc-react")],
     tier: "lib",
     upstream: null,
@@ -172,8 +176,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "utils",
     type: "registry:lib",
-    title: "utils",
-    description: "cn, with superthread's type steps taught to the class merger",
+    title: "Utils",
+    description: "cn, with Superthread's type steps taught to the class merger",
     files: [lib("utils")],
     tier: "lib",
     upstream: "utils",
@@ -181,8 +185,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "fleet",
     type: "registry:lib",
-    title: "fleet",
-    description: "the ships: ids, names, one-line descriptors, rail membership, line-screen angles and mark file names",
+    title: "Fleet",
+    description: "The ships: IDs, names, one-line descriptors, rail membership, line-screen angles and mark file names",
     files: [lib("fleet")],
     tier: "lib",
     upstream: null,
@@ -190,8 +194,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "theme",
     type: "registry:lib",
-    title: "theme",
-    description: "the fleet's one light and dark choice: the script that sets it before paint, and its store",
+    title: "Theme",
+    description: "The fleet's one light and dark choice: the script that sets it before paint, and its store",
     files: [lib("theme")],
     tier: "lib",
     upstream: null,
@@ -199,8 +203,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "time-words",
     type: "registry:lib",
-    title: "time-words",
-    description: "time in the fleet's words: since friday, before 11:00, 48 min until standup, every day at 07:00",
+    title: "Time words",
+    description: "Time in the fleet's words: since Friday, before 11:00, 48 min until standup, every day at 07:00",
     files: [lib("time-words")],
     tier: "lib",
     upstream: null,
@@ -208,9 +212,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "hotkey",
     type: "registry:lib",
-    title: "hotkey",
+    title: "Hotkey",
     description:
-      "whether a bare key press is the page's to answer, away from typing and from layers that keep their keys",
+      "Whether a bare key press is the page's to answer, away from typing and from layers that keep their keys",
     files: [lib("hotkey")],
     tier: "lib",
     upstream: null,
@@ -218,9 +222,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "glyphs",
     type: "registry:ui",
-    title: "glyphs",
+    title: "Glyphs",
     description:
-      "the pixel icons and status glyphs, drawn as whole-pixel squares in the current colour, and a state word beside its 8 px square",
+      "The pixel icons and status glyphs, drawn as whole-pixel squares in the current colour, and a state word beside its 8 px square",
     files: [ui("glyphs")],
     tier: "brand",
     upstream: null,
@@ -228,9 +232,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "button",
     type: "registry:ui",
-    title: "button",
+    title: "Button",
     description:
-      "a button in the house ink on paper and an outline off it, with secondary, outline, ghost, key, link and destructive variants",
+      "A button in the house ink on paper and an outline off it, with secondary, outline, ghost, key, link and destructive variants",
     files: [ui("button")],
     tier: "brand",
     upstream: "button",
@@ -239,8 +243,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "badge",
     type: "registry:ui",
-    title: "badge",
-    description: "a badge, with a status variant for each state: done, running, waiting, failed and queued",
+    title: "Badge",
+    description: "A badge, with a status variant for each state: done, running, waiting, failed and queued",
     files: [ui("badge")],
     tier: "brand",
     upstream: "badge",
@@ -248,8 +252,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "input",
     type: "registry:ui",
-    title: "input",
-    description: "a text field with the one focus edge",
+    title: "Input",
+    description: "A text field with the one focus edge",
     files: [ui("input")],
     tier: "brand",
     upstream: "input",
@@ -258,8 +262,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "input-group",
     type: "registry:ui",
-    title: "input group",
-    description: "a field box that holds a text control with addons and buttons beside it",
+    title: "Input group",
+    description: "A field box that holds a text control with addons and buttons beside it",
     files: [ui("input-group")],
     tier: "brand",
     upstream: "input-group",
@@ -268,8 +272,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "textarea",
     type: "registry:ui",
-    title: "textarea",
-    description: "a multi-line text field with the one focus edge, and a code form for json and keys",
+    title: "Textarea",
+    description: "A multi-line text field with the one focus edge, and a code form for JSON and keys",
     files: [ui("textarea")],
     tier: "brand",
     upstream: "textarea",
@@ -278,8 +282,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "select",
     type: "registry:ui",
-    title: "select",
-    description: "a select whose trigger is a field and whose list is a raised layer",
+    title: "Select",
+    description: "A select whose trigger is a field and whose list is a raised layer",
     files: [ui("select")],
     tier: "brand",
     upstream: "select",
@@ -288,8 +292,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "dialog",
     type: "registry:ui",
-    title: "dialog",
-    description: "a square dialog on the sheet lift",
+    title: "Dialog",
+    description: "A square dialog on the sheet lift",
     files: [ui("dialog")],
     tier: "brand",
     upstream: "dialog",
@@ -298,8 +302,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "tabs",
     type: "registry:ui",
-    title: "tabs",
-    description: "tabs with a solid current tab",
+    title: "Tabs",
+    description: "Tabs with a solid current tab",
     files: [ui("tabs")],
     tier: "brand",
     upstream: "tabs",
@@ -308,9 +312,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "table",
     type: "registry:ui",
-    title: "table",
+    title: "Table",
     description:
-      "a table with mono ids and tabular numbers, an edge beside the row under the pointer, and a full-bleed form that folds at its own width",
+      "A table with mono IDs and tabular numbers, an edge beside the row under the pointer, and a full-bleed form that folds at its own width",
     files: [ui("table")],
     tier: "brand",
     upstream: "table",
@@ -319,8 +323,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "progress",
     type: "registry:ui",
-    title: "progress",
-    description: "a flat foreground bar with a screened leading edge",
+    title: "Progress",
+    description: "A flat foreground bar with a screened leading edge",
     files: [ui("progress")],
     tier: "brand",
     upstream: "progress",
@@ -328,8 +332,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "toast",
     type: "registry:ui",
-    title: "toast",
-    description: "base ui toasts on the leaf lift, with a status glyph for each kind",
+    title: "Toast",
+    description: "Base UI toasts on the leaf lift, with a status glyph for each kind",
     files: [ui("toast")],
     tier: "brand",
     upstream: "toast",
@@ -338,8 +342,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "sidebar",
     type: "registry:ui",
-    title: "sidebar",
-    description: "the sidebar on the deep ground, with a neutral current item",
+    title: "Sidebar",
+    description: "The sidebar on the deep ground, with a neutral current item",
     files: [ui("sidebar")],
     tier: "brand",
     upstream: "sidebar",
@@ -347,9 +351,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "fleet-rail",
     type: "registry:block",
-    title: "fleet rail",
+    title: "Fleet rail",
     description:
-      "the rail of ship marks for moving between fleet surfaces; each ship links to its fleet url unless you pass an href",
+      "The rail of ship marks for moving between fleet surfaces; each ship links to its fleet URL unless you pass an href",
     files: [ui("fleet-rail")],
     tier: "brand",
     upstream: null,
@@ -357,8 +361,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "checkbox",
     type: "registry:ui",
-    title: "checkbox",
-    description: "a square checkbox with a screened mixed state",
+    title: "Checkbox",
+    description: "A square checkbox with a screened mixed state",
     files: [ui("checkbox")],
     tier: "brand",
     upstream: "checkbox",
@@ -367,8 +371,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "skeleton",
     type: "registry:ui",
-    title: "skeleton",
-    description: "loading rows, screened on whole-pixel bars",
+    title: "Skeleton",
+    description: "Loading rows, screened on whole-pixel bars",
     files: [ui("skeleton")],
     tier: "brand",
     upstream: "skeleton",
@@ -377,8 +381,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "switch",
     type: "registry:ui",
-    title: "switch",
-    description: "a square switch: foreground when on, a stock square that crosses the track",
+    title: "Switch",
+    description: "A square switch: foreground when on, a stock square that crosses the track",
     files: [ui("switch")],
     tier: "brand",
     upstream: "switch",
@@ -386,8 +390,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "radio-group",
     type: "registry:ui",
-    title: "radio group",
-    description: "square radios: the chosen one edged in foreground with its 8 px square",
+    title: "Radio group",
+    description: "Square radios: the chosen one edged in foreground with its 8 px square",
     files: [ui("radio-group")],
     tier: "brand",
     upstream: "radio-group",
@@ -395,8 +399,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "slider",
     type: "registry:ui",
-    title: "slider",
-    description: "a slider on a ruled track, with a flat foreground range and a square thumb",
+    title: "Slider",
+    description: "A slider on a ruled track, with a flat foreground range and a square thumb",
     files: [ui("slider")],
     tier: "brand",
     upstream: "slider",
@@ -404,8 +408,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "toggle",
     type: "registry:ui",
-    title: "toggle",
-    description: "a button that stays pressed, with a foreground edge and a tick while it is on",
+    title: "Toggle",
+    description: "A button that stays pressed, with a foreground edge and a tick while it is on",
     files: [ui("toggle")],
     tier: "brand",
     upstream: "toggle",
@@ -413,8 +417,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "toggle-group",
     type: "registry:ui",
-    title: "toggle group",
-    description: "toggles joined on shared 1 px edges, one or several pressed",
+    title: "Toggle group",
+    description: "Toggles joined on shared 1 px edges, one or several pressed",
     files: [ui("toggle-group")],
     tier: "brand",
     upstream: "toggle-group",
@@ -422,8 +426,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "button-group",
     type: "registry:ui",
-    title: "button group",
-    description: "buttons and fields joined on shared 1 px edges",
+    title: "Button group",
+    description: "Buttons and fields joined on shared 1 px edges",
     files: [ui("button-group")],
     tier: "brand",
     upstream: "button-group",
@@ -431,8 +435,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "kbd",
     type: "registry:ui",
-    title: "kbd",
-    description: "a key, set in mono in a 1 px box",
+    title: "Kbd",
+    description: "A key, set in mono in a 1 px box",
     files: [ui("kbd")],
     tier: "brand",
     upstream: "kbd",
@@ -440,8 +444,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "dropdown-menu",
     type: "registry:ui",
-    title: "dropdown menu",
-    description: "a menu on the leaf lift, with checkbox, radio and sub-menu items",
+    title: "Dropdown menu",
+    description: "A menu on the leaf lift, with checkbox, radio and sub-menu items",
     files: [ui("dropdown-menu")],
     tier: "brand",
     upstream: "dropdown-menu",
@@ -450,8 +454,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "combobox",
     type: "registry:ui",
-    title: "combobox",
-    description: "a field that filters a list on the leaf lift, for one value or several as chips",
+    title: "Combobox",
+    description: "A field that filters a list on the leaf lift, for one value or several as chips",
     files: [ui("combobox")],
     tier: "brand",
     upstream: "combobox",
@@ -460,8 +464,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "command",
     type: "registry:ui",
-    title: "command",
-    description: "a command list with a search field, inline or in a dialog",
+    title: "Command",
+    description: "A command list with a search field, inline or in a dialog",
     files: [ui("command")],
     tier: "brand",
     upstream: "command",
@@ -469,8 +473,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "alert-dialog",
     type: "registry:ui",
-    title: "alert dialog",
-    description: "a dialog that asks before an action, on the sheet lift",
+    title: "Alert dialog",
+    description: "A dialog that asks before an action, on the sheet lift",
     files: [ui("alert-dialog")],
     tier: "brand",
     upstream: "alert-dialog",
@@ -479,8 +483,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "sonner",
     type: "registry:ui",
-    title: "sonner",
-    description: "sonner's toaster in the toast's dress: the leaf lift and a status glyph for each kind",
+    title: "Sonner",
+    description: "Sonner's toaster in the toast's dress: the leaf lift and a status glyph for each kind",
     files: [ui("sonner")],
     tier: "brand",
     upstream: "sonner",
@@ -489,8 +493,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "accordion",
     type: "registry:ui",
-    title: "accordion",
-    description: "sections that open in place, ruled edge to edge",
+    title: "Accordion",
+    description: "Sections that open in place, ruled edge to edge",
     files: [ui("accordion")],
     tier: "brand",
     upstream: "accordion",
@@ -498,8 +502,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "field",
     type: "registry:ui",
-    title: "field",
-    description: "labels, descriptions and errors around any control, with the bang before an error",
+    title: "Field",
+    description: "Labels, descriptions and errors around any control, with the bang before an error",
     files: [ui("field")],
     tier: "brand",
     upstream: "field",
@@ -507,8 +511,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "native-select",
     type: "registry:ui",
-    title: "native select",
-    description: "the browser's own select in a field box",
+    title: "Native select",
+    description: "The browser's own select in a field box",
     files: [ui("native-select")],
     tier: "brand",
     upstream: "native-select",
@@ -516,8 +520,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "breadcrumb",
     type: "registry:ui",
-    title: "breadcrumb",
-    description: "the path to the page, in muted words with the current one in the first ink",
+    title: "Breadcrumb",
+    description: "The path to the page, in muted words with the current one in the first ink",
     files: [ui("breadcrumb")],
     tier: "brand",
     upstream: "breadcrumb",
@@ -525,8 +529,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "resizable",
     type: "registry:ui",
-    title: "resizable",
-    description: "panels split by a 1 px rule you can drag, with an optional grip",
+    title: "Resizable",
+    description: "Panels split by a 1 px rule you can drag, with an optional grip",
     files: [ui("resizable")],
     tier: "brand",
     upstream: "resizable",
@@ -534,8 +538,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "paper",
     type: "registry:ui",
-    title: "paper",
-    description: "the one white block on a page, white in every theme and on the slip lift in light",
+    title: "Paper",
+    description: "The one white block on a page, white in every theme and on the slip lift in light",
     files: [ui("paper")],
     tier: "brand",
     upstream: null,
@@ -544,9 +548,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "fit-title",
     type: "registry:ui",
-    title: "fit title",
+    title: "Fit title",
     description:
-      "a title that steps down until it fits its box, by measurement, and cuts at a word only when the whole title can't",
+      "A title that steps down until it fits its box, by measurement, and cuts at a word only when the whole title can't",
     files: [ui("fit-title")],
     tier: "brand",
     upstream: null,
@@ -554,9 +558,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "inline-answers",
     type: "registry:ui",
-    title: "inline answers",
+    title: "Inline answers",
     description:
-      "a suggestion that takes correction in its own slot: a wrong? control swaps the line for plain answers there",
+      "A suggestion that takes correction in its own slot: a Wrong? control swaps the line for plain answers there",
     files: [ui("inline-answers")],
     tier: "brand",
     upstream: null,
@@ -564,8 +568,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "onward",
     type: "registry:ui",
-    title: "onward",
-    description: "the way onward from a page: a word and its arrow, or a door, one line of words with an arrow",
+    title: "Onward",
+    description: "The way onward from a page: a word and its arrow, or a door, one line of words with an arrow",
     files: [ui("onward")],
     tier: "brand",
     upstream: null,
@@ -573,8 +577,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "source-line",
     type: "registry:ui",
-    title: "source line",
-    description: "a wrapping row of cited sources at the instrument step, and what closes the line at its far side",
+    title: "Source line",
+    description: "A wrapping row of cited sources at the instrument step, and what closes the line at its far side",
     files: [ui("source-line")],
     tier: "brand",
     upstream: null,
@@ -582,17 +586,27 @@ export const catalog: CatalogItem[] = [
   {
     name: "source-mark",
     type: "registry:ui",
-    title: "source mark",
-    description: "the 96 px frame a third-party mark prints in, in one ink, with a second frame on hover",
+    title: "Source mark",
+    description: "The 96 px frame a third-party mark prints in, in one ink, with a second frame on hover",
     files: [ui("source-mark")],
+    tier: "brand",
+    upstream: null,
+  },
+  {
+    name: "plate",
+    type: "registry:item",
+    title: "Plate",
+    description:
+      "A 3.5 px two-ink proof halftone plate (key 45 deg and plum 15 deg) with light breath for document openers, chapter breaks and figures",
+    files: [lib("plate-core"), ui("plate")],
     tier: "brand",
     upstream: null,
   },
   {
     name: "weave",
     type: "registry:item",
-    title: "weave",
-    description: "a screened field for a hero or a band, with four ramps and a plum thread",
+    title: "Weave",
+    description: "A screened field for a hero or a band, with four ramps and a plum thread",
     files: [lib("screen-core"), lib("dot-screen"), lib("weave-core"), ui("weave")],
     tier: "brand",
     upstream: null,
@@ -600,8 +614,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "field-art",
     type: "registry:item",
-    title: "field art",
-    description: "screened concept art for figures and openers",
+    title: "Field art",
+    description: "Screened concept art for figures and openers",
     files: [ui("field-art"), lib("field-core"), lib("field-live"), file("doc/field-art.js")],
     tier: "brand",
     upstream: null,
@@ -609,8 +623,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "collapsible",
     type: "registry:ui",
-    title: "collapsible",
-    description: "base-nova's collapsible, on the superthread tokens",
+    title: "Collapsible",
+    description: "Base-nova's collapsible, on the Superthread tokens",
     files: [ui("collapsible")],
     tier: "pass",
     upstream: "collapsible",
@@ -618,8 +632,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "card",
     type: "registry:ui",
-    title: "card",
-    description: "base-nova's card, on the superthread tokens",
+    title: "Card",
+    description: "Base-nova's card, on the Superthread tokens",
     files: [ui("card")],
     tier: "pass",
     upstream: "card",
@@ -627,8 +641,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "label",
     type: "registry:ui",
-    title: "label",
-    description: "base-nova's label, on the superthread tokens",
+    title: "Label",
+    description: "Base-nova's label, on the Superthread tokens",
     files: [ui("label")],
     tier: "pass",
     upstream: "label",
@@ -636,8 +650,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "separator",
     type: "registry:ui",
-    title: "separator",
-    description: "base-nova's separator, on the superthread tokens",
+    title: "Separator",
+    description: "Base-nova's separator, on the Superthread tokens",
     files: [ui("separator")],
     tier: "pass",
     upstream: "separator",
@@ -645,8 +659,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "sheet",
     type: "registry:ui",
-    title: "sheet",
-    description: "base-nova's sheet, on the superthread tokens",
+    title: "Sheet",
+    description: "Base-nova's sheet, on the Superthread tokens",
     files: [ui("sheet")],
     tier: "pass",
     upstream: "sheet",
@@ -654,8 +668,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "tooltip",
     type: "registry:ui",
-    title: "tooltip",
-    description: "base-nova's tooltip, on the superthread tokens",
+    title: "Tooltip",
+    description: "Base-nova's tooltip, on the Superthread tokens",
     files: [ui("tooltip")],
     tier: "pass",
     upstream: "tooltip",
@@ -663,8 +677,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "use-mobile",
     type: "registry:hook",
-    title: "use mobile",
-    description: "base-nova's hook that tells a phone-width viewport",
+    title: "Use mobile",
+    description: "Base-nova's hook that tells a phone-width viewport",
     files: [
       {
         path: "items/hooks/use-mobile.ts",
@@ -678,8 +692,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "use-minute",
     type: "registry:hook",
-    title: "use minute",
-    description: "the clock's minute and the reader's day, from one shared timer that stops while the page is hidden",
+    title: "Use minute",
+    description: "The clock's minute and the reader's day, from one shared timer that stops while the page is hidden",
     files: [
       {
         path: "items/hooks/use-minute.ts",
@@ -694,8 +708,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "page-header",
     type: "registry:block",
-    title: "page header",
-    description: "a page's title, with a way back, a lede, its meta and its actions",
+    title: "Page header",
+    description: "A page's title, with a way back, a lede, its meta and its actions",
     files: [block("page-header")],
     tier: "block",
     upstream: null,
@@ -704,9 +718,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "states",
     type: "registry:block",
-    title: "states",
+    title: "States",
     description:
-      "what a collection shows while it loads, when it fails and when it is empty, and a page when it's clear",
+      "What a collection shows while it loads, when it fails and when it is empty, and a page when it's clear",
     files: [block("states")],
     tier: "block",
     upstream: null,
@@ -715,9 +729,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "app-shell",
     type: "registry:block",
-    title: "app shell",
+    title: "App shell",
     description:
-      "a ship's frame: the fleet rail, the ship's own nav with a quiet second tier and the working panel on the deep ground",
+      "A ship's frame: the fleet rail, the ship's own nav with a quiet second tier and the working panel on the deep ground",
     files: [block("app-shell")],
     tier: "block",
     upstream: null,
@@ -726,8 +740,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "section-header",
     type: "registry:block",
-    title: "section header",
-    description: "a section's head, with its count and a link to the rest",
+    title: "Section header",
+    description: "A section's head, with its count and a link to the rest",
     files: [block("section-header")],
     tier: "block",
     upstream: null,
@@ -736,8 +750,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "search-palette",
     type: "registry:block",
-    title: "search palette",
-    description: "one search over everything, opened from its button or its key",
+    title: "Search palette",
+    description: "One search over everything, opened from its button or its key",
     files: [block("search-palette")],
     tier: "block",
     upstream: null,
@@ -746,8 +760,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "collection-toolbar",
     type: "registry:block",
-    title: "collection toolbar",
-    description: "the row above a collection: its filters, how many show, and how to view them",
+    title: "Collection toolbar",
+    description: "The row above a collection: its filters, how many show, and how to view them",
     files: [block("collection-toolbar")],
     tier: "block",
     upstream: null,
@@ -756,9 +770,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "list-rows",
     type: "registry:block",
-    title: "list rows",
+    title: "List rows",
     description:
-      "ruled rows, each a title with its time, a meta line and its actions, and plain rows that read as words",
+      "Ruled rows, each a title with its time, a meta line and its actions, and plain rows that read as words",
     files: [block("list-rows")],
     tier: "block",
     upstream: null,
@@ -767,9 +781,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "item-cards",
     type: "registry:block",
-    title: "item cards",
+    title: "Item cards",
     description:
-      "a grid of cards, each a title with its status, meta and actions, full-width cards that collapse to one line once decided, or full-bleed tiles in ruled cells",
+      "A grid of cards, each a title with its status, meta and actions, full-width cards that collapse to one line once decided, or full-bleed tiles in ruled cells",
     files: [block("item-cards")],
     tier: "block",
     upstream: null,
@@ -778,9 +792,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "data-table",
     type: "registry:block",
-    title: "data table",
+    title: "Data table",
     description:
-      "a table its heads sort, with chosen rows, a row that opens a detail, sub-entries and a row for when it is empty",
+      "A table its heads sort, with chosen rows, a row that opens a detail, sub-entries and a row for when it is empty",
     files: [block("data-table")],
     tier: "block",
     upstream: null,
@@ -789,8 +803,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "form-section",
     type: "registry:block",
-    title: "form section",
-    description: "a titled group of fields that saves or discards its changes",
+    title: "Form section",
+    description: "A titled group of fields that saves or discards its changes",
     files: [block("form-section")],
     tier: "block",
     upstream: null,
@@ -799,8 +813,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "quick-add",
     type: "registry:block",
-    title: "quick add",
-    description: "one field and its button, for adding a thing by its name",
+    title: "Quick add",
+    description: "One field and its button, for adding a thing by its name",
     files: [block("quick-add")],
     tier: "block",
     upstream: null,
@@ -809,8 +823,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "facts",
     type: "registry:block",
-    title: "facts",
-    description: "labelled values in a ruled grid",
+    title: "Facts",
+    description: "Labelled values in a ruled grid",
     files: [block("facts")],
     tier: "block",
     upstream: null,
@@ -819,8 +833,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "letter",
     type: "registry:block",
-    title: "letter",
-    description: "a piece of writing read whole: its subject and kind, the body at the reading measure, and its tools",
+    title: "Letter",
+    description: "A piece of writing read whole: its subject and kind, the body at the reading measure, and its tools",
     files: [block("letter")],
     tier: "block",
     upstream: null,
@@ -829,8 +843,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "jump-line",
     type: "registry:block",
-    title: "jump line",
-    description: "a line of anchors to a long page's sections, each with how many it holds",
+    title: "Jump line",
+    description: "A line of anchors to a long page's sections, each with how many it holds",
     files: [block("jump-line")],
     tier: "block",
     upstream: null,
@@ -839,8 +853,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "send-bar",
     type: "registry:block",
-    title: "send bar",
-    description: "the foot of a review: who it goes to, every address and file, the send and a note under it",
+    title: "Send bar",
+    description: "The foot of a review: who it goes to, every address and file, the send and a note under it",
     files: [block("send-bar")],
     tier: "block",
     upstream: null,
@@ -849,8 +863,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "job-sheet",
     type: "registry:block",
-    title: "job sheet",
-    description: "the one job on paper: a cue, its title, why, one quiet line and its actions, each in a held slot",
+    title: "Job sheet",
+    description: "The one job on paper: a cue, its title, why, one quiet line and its actions, each in a held slot",
     files: [block("job-sheet")],
     tier: "block",
     upstream: null,
@@ -859,9 +873,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "day-line",
     type: "registry:block",
-    title: "day line",
+    title: "Day line",
     description:
-      "a day at true scale: the date, names over blocks, ticks and a now mark, with every state a calendar has",
+      "A day at true scale: the date, names over blocks, ticks and a now mark, with every state a calendar has",
     files: [block("day-line")],
     tier: "block",
     upstream: null,
@@ -870,9 +884,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "month-grid",
     type: "registry:block",
-    title: "month grid",
+    title: "Month grid",
     description:
-      "a month as six weeks: a dot on days with content, today's edge, the open day's bar, mono figures and arrow keys that step it",
+      "A month as six weeks: a dot on days with content, today's edge, the open day's bar, mono figures and arrow keys that step it",
     files: [block("month-grid")],
     tier: "block",
     upstream: null,
@@ -881,9 +895,9 @@ export const catalog: CatalogItem[] = [
   {
     name: "reader",
     type: "registry:block",
-    title: "reader",
+    title: "Reader",
     description:
-      "a page of reading: a lead line, the next action on paper, a margin rail, a closing line and a foot, with a meeting brief's who, owed and raised blocks",
+      "A page of reading: a lead line, the next action on paper, a margin rail, a closing line and a foot, with a meeting brief's who, owed and raised blocks",
     files: [block("reader")],
     tier: "block",
     upstream: null,
@@ -892,8 +906,8 @@ export const catalog: CatalogItem[] = [
   {
     name: "notice",
     type: "registry:block",
-    title: "notice",
-    description: "a flat notice in the flow: its status glyph, what happened and what to do, or one quiet line",
+    title: "Notice",
+    description: "A flat notice in the flow: its status glyph, what happened and what to do, or one quiet line",
     files: [block("notice")],
     tier: "block",
     upstream: null,

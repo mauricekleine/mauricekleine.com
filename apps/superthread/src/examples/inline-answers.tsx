@@ -21,14 +21,14 @@ export function WrongLine({
 }) {
   return (
     <InlineAnswers defaultOpen={open}>
-      <InlineAnswersLine>the next draft waits on your answer, and it leads today&rsquo;s brief.</InlineAnswersLine>
+      <InlineAnswersLine>The next draft waits on your answer, and it leads today&rsquo;s brief.</InlineAnswersLine>
       <InlineAnswersTrigger />
       <InlineAnswersList>
-        <InlineAnswer onClick={() => onAnswer?.("already done")}>already done</InlineAnswer>
-        <InlineAnswer onClick={() => onAnswer?.("not mine")}>not mine</InlineAnswer>
-        <InlineAnswersAsk question="wrong day" defaultOpen={asked}>
-          <InlineAnswer onClick={() => onAnswer?.("tomorrow")}>tomorrow</InlineAnswer>
-          <InlineAnswer onClick={() => onAnswer?.("next week")}>next week</InlineAnswer>
+        <InlineAnswer onClick={() => onAnswer?.("already done")}>Already done</InlineAnswer>
+        <InlineAnswer onClick={() => onAnswer?.("not mine")}>Not mine</InlineAnswer>
+        <InlineAnswersAsk question="Wrong day" defaultOpen={asked}>
+          <InlineAnswer onClick={() => onAnswer?.("tomorrow")}>Tomorrow</InlineAnswer>
+          <InlineAnswer onClick={() => onAnswer?.("next week")}>Next week</InlineAnswer>
         </InlineAnswersAsk>
       </InlineAnswersList>
     </InlineAnswers>
@@ -44,7 +44,7 @@ export function InlineAnswersExample() {
         <WrongLine onAnswer={setAnswer} />
       </div>
       <p role="status" className="st-ca-note">
-        {answer ? `the ship heard: ${answer}.` : "the words under the slot stay put."}
+        {answer ? `The ship heard: ${answer}.` : "The words under the slot stay put."}
       </p>
     </div>
   );

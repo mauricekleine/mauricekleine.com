@@ -11,13 +11,13 @@ import { Section } from "@/site/Section";
 export const Route = createFileRoute("/foundations/marks")({
   staticData: {
     openerLede:
-      "every ship has a 16 px mark: a key tile, a paper silhouette and one region in the ship's spot, dithered at 50 percent. the mark is where a ship's colour lives.",
+      "Every ship has a 16 px mark: a key tile, a paper silhouette and one region in the ship's spot, dithered at 50 percent. The mark is where a ship's colour lives.",
     sections: [
-      { id: "drawings", title: "drawings" },
-      { id: "home", title: "home mark" },
-      { id: "dark", title: "on dark chrome" },
-      { id: "third-party", title: "third-party marks" },
-      { id: "files", title: "files" },
+      { id: "drawings", title: "Drawings" },
+      { id: "home", title: "Home mark" },
+      { id: "dark", title: "On dark chrome" },
+      { id: "third-party", title: "Third-party marks" },
+      { id: "files", title: "Files" },
     ],
   },
   component: Page,
@@ -48,7 +48,7 @@ function Drawings({ mode, list = ships }: { mode: Mode; list?: readonly Entry[] 
           <MarkDrawing
             id={mark.id}
             mode={mode}
-            label={`the ${mark.name} mark${mode === "dark" ? " for dark chrome" : ""}`}
+            label={`The ${mark.name} mark${mode === "dark" ? " for dark chrome" : ""}`}
           />
           {mode === "light" && <MarkChromes id={mark.id} />}
           <b>{mark.name}</b>
@@ -65,22 +65,22 @@ function Drawings({ mode, list = ships }: { mode: Mode; list?: readonly Entry[] 
 function Page() {
   return (
     <>
-      <Section id="drawings" title="drawings">
+      <Section id="drawings" title="Drawings">
         <Copy>
-          each mark is drawn on a 16 x 16 grid, shown here with every pixel as one cell. a 1 px notch cuts each corner
-          of the tile, and the spot region is a 1 px checker over the silhouette. under each drawing, the real 16 px
-          file on the browser's light strip, light tab, dark strip and dark tab.
+          Each mark is drawn on a 16 x 16 grid, shown here with every pixel as one cell. A 1 px notch cuts each corner
+          of the tile, and the spot region is a 1 px checker over the silhouette. Under each drawing, the real 16 px
+          file on the browser&apos;s light strip, light tab, dark strip and dark tab.
         </Copy>
         <div className="light st-f-markband">
-          <Legend>light · key tile, paper silhouette</Legend>
+          <Legend>Light · key tile, paper silhouette</Legend>
           <Drawings mode="light" />
         </div>
       </Section>
 
-      <Section id="home" title="home mark">
+      <Section id="home" title="Home mark">
         <Copy>
-          superthread's own mark sits in the fleet rail's home cell and serves as this site's favicon. its spot is plum,
-          the house ink, where a ship's mark carries the ship's spot.
+          Superthread&apos;s own mark sits in the fleet rail&apos;s home cell and serves as this site&apos;s favicon.
+          Its spot is plum, the house ink, where a ship&apos;s mark carries the ship&apos;s spot.
         </Copy>
         <div className="st-f-home">
           <div className="light st-f-markband">
@@ -92,39 +92,39 @@ function Page() {
         </div>
       </Section>
 
-      <Section id="dark" title="on dark chrome">
+      <Section id="dark" title="On dark chrome">
         <Copy>
-          dark chrome takes the -dark drawing: tile and silhouette swap, and the spot moves to its dark value.
+          Dark chrome takes the -dark drawing: tile and silhouette swap, and the spot moves to its dark value.
         </Copy>
         <div className="dark st-f-markband">
-          <Legend>dark · paper tile, key silhouette</Legend>
+          <Legend>Dark · paper tile, key silhouette</Legend>
           <Drawings mode="dark" />
         </div>
       </Section>
 
-      <Section id="third-party" title="third-party marks">
+      <Section id="third-party" title="Third-party marks">
         <Copy>
-          a mark that belongs to someone else prints in one ink, in the source-mark frame: never in its owner&rsquo;s
-          colours and never in a spot. a ship prints a real mark only where it names one, and every other source takes a
-          pixel or letter drawing on the same 16 cells. the frame lives here and the drawings stay in the ship. these
+          A mark that belongs to someone else prints in one ink, in the source-mark frame: never in its owner&rsquo;s
+          colours and never in a spot. A ship prints a real mark only where it names one, and every other source takes a
+          pixel or letter drawing on the same 16 cells. The frame lives here and the drawings stay in the ship. These
           are fictional.
         </Copy>
         <SourceMarksExample />
       </Section>
 
-      <Section id="files" title="files">
+      <Section id="files" title="Files">
         <Copy>
-          the marks are plain svg under {markBase}, served to any origin and cached for a day. the fleet rail reads them
-          from its markBase.
+          The marks are plain SVG under {markBase}, served to any origin and cached for a day. The fleet rail reads them
+          from its <code>markBase</code>.
         </Copy>
         <div className="st-f-scroll">
           <table className="st-f-table st-f-files">
             <thead>
               <tr>
-                <th scope="col">mark</th>
+                <th scope="col">Mark</th>
                 {modes.map((mode) => (
                   <th key={mode} scope="col">
-                    {mode} chrome
+                    {mode === "light" ? "Light" : "Dark"} chrome
                   </th>
                 ))}
               </tr>
