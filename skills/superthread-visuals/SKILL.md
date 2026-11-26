@@ -19,7 +19,7 @@ Every Superthread visual plate prints on a **3.5 CSS px** two-ink cosine halfton
 
 1. **Real imagery first (`--src` / `data-plate-src`).** Pass a photograph, portrait, screenshot, or editorial illustration through the proof screen. The renderer center-crops to fill the frame and maps luminance to the `45°` key plate and midtone/saturation warmth to the `15°` plum plate.
 2. **Structure-driven no-photo plates (`planes` or `grid`).** When a report, deck, video plate, or opener has no photograph, derive a blocky tonal composition from the piece's own structure:
-   - `planes`: proportional vertical bands (`ratios=42,24,18,16`) with a stepped tonal shelf (`shelf=0.56`) and a crisp light window. Vary `ratios`, `seed`, `shelf`, and `flip` so no two plates in a piece repeat.
+   - `planes`: proportional vertical bands (`ratios=42,24,18,16`) with a stepped tonal shelf (`shelf=0.56`) and a crisp light window. Vary `ratios`, `seed`, `shelf`, and `flip` so no two plates in a piece repeat. Set `cutout=0` on narrow horizontal strips (`<= 160 px` tall) and wide horizontal video plates so the cutout rectangle never reads like a redacted placeholder.
    - `grid`: an architectural density matrix (`cols=6 rows=4`) with diagonal tonal weight and per-cell shading. Vary `cols`, `rows`, `seed`, and `flip`.
    - Never use wavy lines, bouncing orbs, cut-plane horizons, or one canned pattern cloned across documents.
 3. **Skip plates on working sheets.** Everyday RFCs, audits, dossiers, specs, and comparisons open flat on stock (`sheet-head`) with ruled `section-head` dividers and zero decorative plates.
@@ -71,7 +71,7 @@ Key flags:
 - `--breath <vivid|balanced|gentle|off>` and `--still`: control light breath strength (default `vivid`).
 - `--positive` / `--negative`: override dark-mode polarity (defaults to positive for `--src`, negative for `--spec`).
 - `--time <sec>`, `--phase <rad>`: sample a specific breath moment in a PNG still.
-- `--duration <sec>`, `--fps <n>`, `--crf <n>`: MP4 loop timing and quality (defaults: cycle length `8s` for `vivid`, `24` fps, CRF `14`).
+- `--duration <sec>`, `--fps <n>`, `--crf <n>`: MP4 loop timing and quality (defaults: cycle length `8s` for `vivid`, `9.5s` for `balanced`, `11s` for `gentle`; `24` fps; CRF `14`). Match `--duration` to the exact breath period (or an integer multiple) so loops wrap with zero seam. When embedding a data-URI MP4 loop inside a self-contained HTML artifact, use `--crf 26 --fps 20` to keep file size lean while preserving crisp halftone dots.
 
 ## Live web and document plates
 
