@@ -1,20 +1,20 @@
 /* TEAM */
-  builder: maurice kleine
-  role: ai engineering lead at waimakers by day, indie hacker after dinner
-  contact: hey@mauricekleine.com
-  github: @mauricekleine
-  x: @mauricekleine
-  location: amsterdam, nl
+  Builder: Maurice Kleine
+  Role: AI Engineering Lead at Waimakers by day, indie hacker after dinner
+  Contact: hey@mauricekleine.com
+  GitHub: @mauricekleine
+  X: @mauricekleine
+  Location: Amsterdam, NL
 
 /* THANKS */
-  everyone who shows up to hackadam
-  the 2022 version of me who had the star field idea. only took four years
+  Everyone who shows up to Hackadam
+  Superthread for keeping the whole fleet on one stock
 
 /* SITE */
-  last update: 2026/07/15
-  language: english (lowercase)
-  doctype: html5
-  standards: tanstack start on cloudflare workers, prerendered to html
-  components: phosphor icons (inline svg), bricolage grotesque + fragment mono
-  software: a text editor and stubbornness
-  note: agents get their own files too. see /llms.txt and /api/
+  Last update: 2026/11/26
+  Language: English
+  Doctype: HTML5
+  Standards: TanStack Start on Cloudflare Workers, prerendered to HTML
+  Components: Superthread v2 (@mk/plate, @mk/badge, @mk/field, @mk/input-group), Phosphor icons (inline SVG)
+  Software: A text editor and stubbornness
+  Note: Agents get their own files too. See /llms.txt and /api/

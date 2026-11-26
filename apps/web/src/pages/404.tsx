@@ -4,28 +4,25 @@ import { Shell } from "../shell";
 export function LostPage() {
   return (
     <Shell
-      crumb="maurice kleine"
-      title="lost"
+      crumb="Maurice Kleine"
+      title="Lost"
       interactive={false}
       opener={
-        <Opener>
-          <h1 className="mk-island-title">lost in space</h1>
-          <p className="err-code type-meta">err_404: trajectory unknown</p>
+        <Opener kicker="ERR_404 · Trajectory unknown">
+          <h1 className="mk-page-title">Lost in space</h1>
           <p className="mk-lede type-lede">
-            this page drifted out of orbit.
-            <br />
-            or it never existed. hard to tell from up here.
+            This page drifted out of orbit. Or it never existed. Hard to tell from up here.
           </p>
         </Opener>
       }
     >
-      <Section id="elsewhere" title="where to go instead" hideTitle className="prose">
+      <Section id="elsewhere" title="Where to go instead" hideTitle className="prose">
         <p>
-          it's not in <a href="/#graveyard">the graveyard</a> either, i checked. the stars are nice though. you could
-          stay a minute.
+          It's not in <a href="/#graveyard">the graveyard</a> either, I checked. No map out here, so home is probably
+          your best bet.
         </p>
         <p className="more-link">
-          <a href="/">← back to earth</a>
+          <a href="/">← Back to Earth</a>
         </p>
       </Section>
     </Shell>

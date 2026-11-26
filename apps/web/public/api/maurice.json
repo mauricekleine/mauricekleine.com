@@ -1,21 +1,21 @@
 {
   "name": "Maurice Kleine",
   "handle": "mauricekleine",
-  "tagline": "i build small internet things and sometimes they work",
-  "motto": "build it till you make it",
+  "tagline": "I build small internet things, and sometimes they work.",
+  "motto": "Build it till you make it.",
   "location": "Amsterdam, NL",
   "timezone": "Europe/Amsterdam",
-  "role": "ai engineering lead",
+  "role": "AI Engineering Lead",
   "company": {
     "name": "Waimakers",
     "url": "https://waimakers.com"
   },
   "years_building_software": "14+",
   "background": [
-    "started in psychology, switched to tech",
-    "frontend, backend, product, engineering management",
-    "co-founded subthread (2023-2025), an ai product studio",
-    "co-organizes hackadam, a monthly indie maker meetup in amsterdam, with abner van den hout"
+    "Started in psychology, switched to tech",
+    "Frontend, backend, product, engineering management",
+    "Co-founded Subthread (2023-2025), an AI product studio",
+    "Co-organizes Hackadam, a monthly indie maker meetup in Amsterdam, with Abner van den Hout"
   ],
   "email": "hey@mauricekleine.com",
   "links": {
@@ -33,28 +33,28 @@
     "https://www.mauricekleine.com/about.md",
     "https://www.mauricekleine.com/essays.md"
   ],
-  "note": "yes, a personal site with an api. it's static json, but so is most of the internet if you squint",
+  "note": "Yes, a personal site with an API. It's static JSON, but so is most of the internet if you squint.",
   "said_out_loud": [
     {
-      "name": "ai tinkerers amsterdam",
+      "name": "AI Tinkerers Amsterdam",
       "url": "https://amsterdam.aitinkerers.org/profile/client_kBU1ebRuvug"
     },
     {
-      "name": "ai, je nieuwe collega (waimakers podcast, dutch)",
+      "name": "AI, je nieuwe collega (Waimakers podcast, Dutch)",
       "url": "https://open.spotify.com/show/6qrTPgmddsRwlreYeKu7Ki"
     },
     {
-      "name": "demystifying ai",
+      "name": "Demystifying AI",
       "url": "https://www.youtube.com/watch?v=RDPkCs7foXs"
     },
     {
-      "name": "startremote (2020)",
+      "name": "StartRemote (2020)",
       "url": "https://startremote.webflow.io/interviews/maurice-kleine"
     }
   ],
   "press": [
     {
-      "outlet": "techcrunch",
+      "outlet": "TechCrunch",
       "date": "2025-07-10",
       "url": "https://techcrunch.com/2025/07/10/mockly-made-a-fake-dm-generator-thats-actually-user-friendly/"
     }

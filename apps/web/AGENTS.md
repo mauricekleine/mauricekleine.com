@@ -1,6 +1,6 @@
 # mauricekleine.com web app
 
-`apps/web/` is the live TanStack Start app. Read `PRODUCT.md` (product brief) and `DESIGN.md` (the site's visual design) in this folder before changing product or design. www prints on superthread v2: `src/styles/site.css` imports `packages/superthread/dist/v2/superthread.css`, and the `@/components/superthread` alias resolves to `packages/superthread/items`, so a registry item is used in place with no copy here. Keep `site.css`'s `@source` list in step with the items www imports.
+`apps/web/` is the live TanStack Start app. Read `PRODUCT.md` (product brief) and `DESIGN.md` (the site's visual design) in this folder before changing product or design. www prints on Superthread v2: `src/styles/site.css` imports `packages/superthread/dist/v2/superthread.css`, and the `@/components/superthread` alias resolves to `packages/superthread/items`, so a registry item is used in place with no copy here. Keep `site.css`'s `@source` list in step with the items www imports.
 
 ## Commands
 
@@ -19,18 +19,18 @@ Workers Builds deploys the Worker in the Superthread account after every merge t
 
 ## Pages and assets
 
-`src/routes/` defines `/`, `/about`, `/essays`, `/essays/$slug`, and `/404`. Vite prerenders all of them to `dist/client/*.html`; essay paths come from `content/essays/*.md`. The 404 HTML is served for unknown paths through Cloudflare static assets. `src/routes/__root.tsx` renders the shared document, canvases, `<main>`, and browser scripts. `src/pages/` holds home, about, essays index, and 404 as JSX. `src/components.tsx` holds the shared page structures. `src/seo.ts` builds route heads from typed data through TanStack Router `head()`. `src/assets.ts` holds the version on the `style.css` and `sky.js` URLs, which browsers keep for a day; change it whenever either file changes.
+`src/routes/` defines `/`, `/about`, `/essays`, `/essays/$slug`, and `/404`. Vite prerenders all of them to `dist/client/*.html`; essay paths come from `content/essays/*.md`. The 404 HTML is served for unknown paths through Cloudflare static assets. `src/routes/__root.tsx` renders the shared document, `<main>`, and browser scripts. `src/pages/` holds home, about, essays index, and 404 as JSX. `src/components.tsx` holds the shared page structures, including the framed split home opener with `@mk/plate` and the stock-first `sheet-head` opener for inner pages. `src/seo.ts` builds route heads from typed data through TanStack Router `head()`. `src/assets.ts` holds the version on the `style.css` URL, which browsers keep for a day; change it whenever the stylesheet changes.
 
 `content/essays/<slug>.md` is the single essay source. Frontmatter contains data such as title, dates, social URLs, cover and image dimensions, and the five historical inline link targets that the public Markdown twin leaves unlinked. The body is the canonical public Markdown, byte for byte. `src/essay-markdown.tsx` renders it with React Markdown and GFM. `src/essay-content.ts` derives essay order from date and applies narrow render-only fixes for legacy Markdown syntax. The same source produces each public essay `.md` twin.
 
-`public/` contains static files at their original URLs, including `_headers`. `tools/sync-essays.py` writes the essay Markdown twins and updates the feed, sitemap, `llms.txt`, and essays index Markdown. `public/index.md` and `public/about.md` remain byte-identical static files. `src/styles/site.css` imports the Superthread v2 theme and builds to `public/style.css` without Tailwind preflight. `public/sky.js` is bundled from `src/sky.js` by `sky:js`. `public/style.css`, `public/sky.js`, `public/buttons.html` and `public/buttons/` are build outputs that git ignores; root `bun run build` and `bun run dev` write them. The browser scripts remain in use. `/superthread` and its subpaths are 301s to superthread.mauricekleine.com, with the prefix removed and queries preserved. The `@mk` registry and fleet marks are served there. `site.css` turns off Tailwind's source detection (`source(none)`) and names its sources with `@source`, so files elsewhere in the repo never change www's CSS; add an `@source` line when a page starts using classes from a new file.
+`public/` contains static files at their original URLs, including `_headers`. `tools/sync-essays.py` writes the essay Markdown twins and updates the feed, sitemap, `llms.txt`, and essays index Markdown. `public/index.md` and `public/about.md` remain static Markdown twins. `src/styles/site.css` imports the Superthread v2 theme and builds to `public/style.css` without Tailwind preflight. `public/style.css`, `public/buttons.html` and `public/buttons/` are build outputs that git ignores; root `bun run build` and `bun run dev` write them. `/superthread` and its subpaths are 301s to superthread.mauricekleine.com, with the prefix removed and queries preserved. The `@mk` registry and fleet marks are served there. `site.css` turns off Tailwind's source detection (`source(none)`) and names its sources with `@source`, so files elsewhere in the repo never change www's CSS; add an `@source` line when a page starts using classes from a new file.
 
 ## Adding an essay
 
 From the root, run:
 
 ```sh
-python3 apps/web/tools/import-x-article.py <status-url> <slug> --summary "one lowercase line" [--linkedin <pulse-url>] [--seo-title "search title"]
+python3 apps/web/tools/import-x-article.py <status-url> <slug> --summary "One sentence summary." [--linkedin <pulse-url>] [--seo-title "Search title"]
 python3 apps/web/tools/link-essays.py
 python3 apps/web/tools/sync-essays.py
 ```

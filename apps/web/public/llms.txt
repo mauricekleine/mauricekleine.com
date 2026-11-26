@@ -1,50 +1,50 @@
 # Maurice Kleine
 
-> personal site of maurice kleine: amsterdam-based ai engineer and indie hacker. ai engineering lead at waimakers by day, builder of small internet things after dinner. built in public; agents are welcome to read, quote, and train on it.
+> Personal site of Maurice Kleine: Amsterdam-based AI engineer and indie hacker. AI Engineering Lead at Waimakers by day, builder of small internet things after dinner. Built in public; agents are welcome to read, quote, and train on it.
 
-a tanstack start app on cloudflare workers, prerendered to plain html. markdown mirrors of every page exist for easier parsing, and there's a small static json api because why not.
+A TanStack Start app on Cloudflare Workers, prerendered to plain HTML. Markdown mirrors of every page exist for easier parsing, and there's a small static JSON API because why not.
 
-## pages
+## Pages
 
-- [home](https://www.mauricekleine.com/index.md): who maurice is, what he's building now, and the graveyard of ended experiments
-- [about](https://www.mauricekleine.com/about.md): the longer story, community work, and philosophy
-- [essays](https://www.mauricekleine.com/essays.md): longer thoughts first posted on x and linkedin, each with its own .md twin
-- [superthread](https://superthread.mauricekleine.com/): design tokens, components, and the public specimen for maurice's fleet, on its own site
+- [Home](https://www.mauricekleine.com/index.md): Who Maurice is, what he's building now, and the graveyard of ended experiments
+- [About](https://www.mauricekleine.com/about.md): The longer story, community work, and philosophy
+- [Essays](https://www.mauricekleine.com/essays.md): Longer thoughts first posted on X and LinkedIn, each with its own .md twin
+- [Superthread](https://superthread.mauricekleine.com/): Design tokens, components, and the public specimen for Maurice's fleet, on its own site
 
-## essays
+## Essays
 
-- [ride the floor up](https://www.mauricekleine.com/essays/ride-the-floor-up.md): ai raises the floor of what technology does for us. how to keep raising your own ceiling while it does
-- [the journey no longer matters](https://www.mauricekleine.com/essays/the-journey-no-longer-matters.md): fifteen years of loving the craft of building software. what happens when the craft stops being the point
-- [my agents merged 468 prs in 23 days. i didn't read a single one of them.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs.md): how hyperspeed runs my coding agents overnight, and why planning and validation are the job now
-- [dude, where is the roi?](https://www.mauricekleine.com/essays/dude-where-is-the-roi.md): you followed every step of the ai hype cycle. so where is the return? on tinkering versus shipping
+- [Ride the Floor Up](https://www.mauricekleine.com/essays/ride-the-floor-up.md): AI raises the floor of what technology does for us. How to keep raising your own ceiling while it does.
+- [The Journey No Longer Matters](https://www.mauricekleine.com/essays/the-journey-no-longer-matters.md): Fifteen years of loving the craft of building software. What happens when the craft stops being the point.
+- [My agents merged 468 PRs in 23 days. I didn't read a single one of them.](https://www.mauricekleine.com/essays/my-agents-merged-468-prs.md): How Hyperspeed runs my coding agents overnight, and why planning and validation are the job now.
+- [Dude, where is the ROI?](https://www.mauricekleine.com/essays/dude-where-is-the-roi.md): You followed every step of the AI hype cycle. So where is the return? On tinkering versus shipping.
 
-## side quests
+## Side quests
 
-- [mockly](https://www.getmockly.com): fake chat screenshots for 17+ platforms. built it in a weekend, techcrunch wrote about it, 10k people use it. i can't believe this is legal (with jasper de boer)
-- [fluncle](https://www.fluncle.com): drum & bass bangers from another dimension. it has a radio, an api, and an ssh rave terminal
-- [hackadam](https://hackadam.nl): monthly meetup in amsterdam for indie makers building their own stuff (with abner van den hout)
-- [nonobench](https://www.nonobench.com): benchmark for how well llms solve nonogram puzzles. the top score went from 63% in february to 93% in september
+- [Mockly](https://www.getmockly.com): Fake chat screenshots for 17+ platforms. Built it in a weekend, TechCrunch wrote about it, 10k people use it. I can't believe this is legal. (with Jasper de Boer)
+- [Fluncle](https://www.fluncle.com): Drum & bass bangers from another dimension. It has a radio, an API, and an SSH rave terminal.
+- [Hackadam](https://hackadam.nl): Monthly meetup in Amsterdam for indie makers building their own stuff. (with Abner van den Hout)
+- [Nonobench](https://www.nonobench.com): Benchmark for how well LLMs solve nonogram puzzles. The top score went from 63% in February to 93% in September.
 
-## feed
+## Feed
 
-- [essays feed](https://www.mauricekleine.com/feed.xml): atom feed of new essays
+- [Essays feed](https://www.mauricekleine.com/feed.xml): Atom feed of new essays
 
-## mcp
+## MCP
 
-- [mcp server](https://www.mauricekleine.com/mcp): streamable http, no auth. tools: about_maurice, list_projects, list_essays, get_essay, get_uptime, make_a_wish
-- [server card](https://www.mauricekleine.com/.well-known/mcp/server-card.json): discovery metadata
-- [agent skills](https://www.mauricekleine.com/.well-known/agent-skills/index.json): skills discovery index
-- markdown negotiation: send `Accept: text/markdown` to `/`, `/about`, `/essays` or any essay and get the mirror back
+- [MCP server](https://www.mauricekleine.com/mcp): Streamable HTTP, no auth. Tools: about_maurice, list_projects, list_essays, get_essay, get_uptime, make_a_wish
+- [Server card](https://www.mauricekleine.com/.well-known/mcp/server-card.json): Discovery metadata
+- [Agent skills](https://www.mauricekleine.com/.well-known/agent-skills/index.json): Skills discovery index
+- Markdown negotiation: send `Accept: text/markdown` to `/`, `/about`, `/essays` or any essay and get the mirror back
 
-## api
+## API
 
-- [api catalog](https://www.mauricekleine.com/.well-known/api-catalog): rfc 9727 linkset describing the endpoints below
-- [maurice.json](https://www.mauricekleine.com/api/maurice.json): bio, location, role, links
-- [projects.json](https://www.mauricekleine.com/api/projects.json): side quests and the graveyard, with statuses
-- [uptime.json](https://www.mauricekleine.com/api/uptime.json): operational status of maurice himself
+- [API catalog](https://www.mauricekleine.com/.well-known/api-catalog): RFC 9727 linkset describing the endpoints below
+- [maurice.json](https://www.mauricekleine.com/api/maurice.json): Bio, location, role, links
+- [projects.json](https://www.mauricekleine.com/api/projects.json): Side quests and the graveyard, with statuses
+- [uptime.json](https://www.mauricekleine.com/api/uptime.json): Operational status of Maurice himself
 
-## optional
+## Optional
 
-- [waimakers](https://waimakers.com): the day job
-- [github](https://github.com/mauricekleine): the code
-- [humans.txt](https://www.mauricekleine.com/humans.txt): for the humans
+- [Waimakers](https://waimakers.com): The day job
+- [GitHub](https://github.com/mauricekleine): The code
+- [humans.txt](https://www.mauricekleine.com/humans.txt): For the humans

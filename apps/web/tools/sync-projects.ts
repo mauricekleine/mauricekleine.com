@@ -31,14 +31,14 @@ sync(
   ) + "\n",
 );
 
-// llms.txt: only the block between "## side quests" and the next heading is ours;
-// sync-essays.py owns the essays block above it
+// llms.txt: only the block between "## Side quests" and the next heading is ours;
+// sync-essays.py owns the essays block above it.
 const llms = readFileSync(new URL("llms.txt", PUBLIC), "utf8");
 const rows = quests.map(({ name, url, description, team }) => {
-  const others = team?.filter((member) => member !== "maurice kleine");
+  const others = team?.filter((member) => member !== "Maurice Kleine");
   return `- [${name}](${url}): ${description}${others?.length ? ` (with ${others.join(", ")})` : ""}`;
 });
-const block = /(?<=## side quests\n\n).*?(?=\n\n## )/s;
+const block = /(?<=## Side quests\n\n).*?(?=\n\n## )/s;
 if (!block.test(llms)) throw new Error("llms.txt has no side quests block");
 sync("llms.txt", llms.replace(block, rows.join("\n")));
 

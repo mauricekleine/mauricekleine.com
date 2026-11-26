@@ -13,17 +13,16 @@
 @source "../../../../packages/superthread/items/ui/input-group.tsx";
 @source "../../../../packages/superthread/items/ui/input.tsx";
 @source "../../../../packages/superthread/items/ui/label.tsx";
+@source "../../../../packages/superthread/items/ui/plate.tsx";
 @source "../../../../packages/superthread/items/ui/separator.tsx";
 @source "../../../../packages/superthread/items/ui/textarea.tsx";
 
-/* www on superthread: the site's frame, the sky's band and the page blocks. Measures follow the superthread site at
-   1440 x 900; the breakpoints are the master's (1279, 1099, 900 and 600). Flat where you read, screened where you
-   look. In the components layer, so an item's own utilities still win inside a block. */
+/* www on superthread: stock-first frame, framed split opener with a 3.5 px proof halftone plate, and page blocks.
+   Measures follow the superthread site at 1440 x 900; breakpoints are 1279, 1099, 900 and 600. Flat where you read,
+   screened where you look. In the components layer, so an item's own utilities still win inside a block. */
 
 @layer components {
   html {
-    --page-stock: var(--background);
-    --page-rule: var(--rule);
     scroll-padding-top: 77px;
     scrollbar-color: var(--muted-foreground) var(--background);
     scrollbar-width: thin;
@@ -51,7 +50,7 @@
     top: 8px;
     z-index: 70;
     padding: 8px 12px;
-    border: 1px solid var(--rule);
+    border: 1px solid var(--border);
     background: var(--background);
   }
   .mk-main:focus {
@@ -78,32 +77,26 @@
     }
   }
 
-  /* Let the masthead stick across the page while the opener and masthead share the island's inks. */
-  .mk-island {
-    --island-stock: var(--background);
-    /* The opener's words sit on the page column's edges, so the title, the lede and the body share one left edge. */
+  /* Stock-first header wrapper: masthead sticks across the page while sharing opener geometry variables. */
+  .mk-head {
     --opener-start: calc(264px + 56px);
     --opener-end: calc(368px + 56px);
+    --opener-home-start: 56px;
     display: contents;
-    color: var(--foreground);
-    color-scheme: dark;
   }
-  html.dark .mk-island {
-    --island-stock: var(--ground);
-  }
-  .mk-island-solo {
+  .mk-head-solo {
     --opener-end: 56px;
   }
 
-  /* the masthead: one row of cells divided by rules, held at the top while the page scrolls */
+  /* the masthead: one row of cells divided by uniform 1 px hairlines, held at the top while the page scrolls */
   .mk-mast {
     position: sticky;
     top: 0;
     z-index: 30;
     display: flex;
     height: 77px;
-    border-bottom: 1px solid var(--rule);
-    background: var(--island-stock);
+    border-bottom: 1px solid var(--border);
+    background: var(--background);
   }
   .mk-brand {
     flex: none;
@@ -111,10 +104,11 @@
     align-items: center;
     width: 264px;
     padding: 0 24px;
-    border-right: 1px solid var(--rule);
+    border-right: 1px solid var(--border);
     color: var(--first);
-    font: 400 21px/1 var(--font-display);
+    font: 400 19px/1 var(--font-display);
     letter-spacing: -0.02em;
+    white-space: nowrap;
   }
   .mk-crumb {
     flex: 1;
@@ -143,7 +137,7 @@
     row-gap: 5px;
     width: 368px;
     padding: 0 24px;
-    border-left: 1px solid var(--rule);
+    border-left: 1px solid var(--border);
   }
   .mk-meta dt {
     line-height: 16px;
@@ -162,13 +156,13 @@
     display: none;
   }
 
-  /* the body: nav, page and aside. The nav's rule belongs to the column, so it runs past the first screen */
+  /* the body: nav, page and aside. The nav's hairline belongs to the column, so it runs past the first screen */
   .mk-body {
     display: grid;
     grid-template-columns: 264px minmax(0, 1fr) 368px;
     align-items: start;
     min-height: calc(100dvh - 77px);
-    background: linear-gradient(var(--rule), var(--rule)) 263px 0 / 1px 100% no-repeat;
+    background: linear-gradient(var(--border), var(--border)) 263px 0 / 1px 100% no-repeat;
   }
   .mk-body-solo {
     grid-template-columns: 264px minmax(0, 1fr);
@@ -215,7 +209,7 @@
   }
   .mk-nav-foot {
     padding: 20px 16px;
-    border-top: 1px solid var(--rule);
+    border-top: 1px solid var(--border);
   }
 
   /* the mode control: three cells in one box; the stored choice prints pressed from <html data-theme-choice> */
@@ -277,7 +271,7 @@
   .mk-aside {
     align-self: stretch;
     min-width: 0;
-    border-left: 1px solid var(--rule);
+    border-left: 1px solid var(--border);
   }
   .mk-toc {
     position: sticky;
@@ -311,59 +305,64 @@
     font-weight: 500;
   }
 
-  /* The title sits on solid stock. The sky fills the band at the island's lower edge. */
+  /* Stock-first openers: framed split opener on home, crisp sheet-head on inner pages, uniform 1 px hairlines */
   .mk-opener {
+    background: var(--background);
+    border-bottom: 1px solid var(--border);
+  }
+  .mk-opener-grid {
     display: grid;
-    grid-template-rows: 1fr auto;
-    background: var(--island-stock);
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   }
-  .mk-opener-home {
-    min-height: calc(100svh - 77px);
-  }
-  .mk-opener-copy {
-    align-self: end;
-    padding: 40px var(--opener-end) 32px var(--opener-start);
-  }
-  /* Home sets the portrait beside the title, top to top, and ends it where the page column ends. */
   .mk-opener-home .mk-opener-copy {
-    --portrait: 196px;
-    --portrait-gap: 32px;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--portrait);
-    column-gap: var(--portrait-gap);
-    padding-block: 48px 36px;
-    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 36px;
+    padding: 56px 48px 40px var(--opener-home-start);
+    border-right: 1px solid var(--border);
   }
-  .mk-opener-home h1 {
-    grid-area: 1 / 1;
+  .mk-sheet-head .mk-opener-copy {
+    padding: 48px var(--opener-end) 36px var(--opener-start);
   }
-  .mk-opener-home .mk-lede {
-    grid-area: 2 / 1;
+  .mk-opener-kicker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted-foreground);
   }
-  .mk-opener-home .mk-opener-meta {
-    grid-area: 3 / 1 / auto / -1;
+  .mk-plum-sq {
+    display: inline-block;
+    flex: none;
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
   }
   .mk-opener h1 {
     color: var(--first);
     overflow-wrap: anywhere;
   }
-  .mk-island-title,
   .mk-opener-home h1 {
+    margin-top: 20px;
     color: var(--first);
     font-family: var(--font-display);
-    font-size: var(--text-hero);
+    font-size: clamp(44px, 5vw, 76px);
     font-weight: 300;
-    line-height: var(--text-hero--line-height);
-    letter-spacing: var(--text-hero--letter-spacing);
-  }
-  .mk-opener-home h1 {
-    width: min-content;
-    max-width: 100%;
-    overflow-wrap: normal;
-    /* "maurice" sets 4.45 em wide, so the title gives way before it reaches the portrait */
-    font-size: min(clamp(52px, 6.2vw, 120px), (100cqi - var(--portrait) - var(--portrait-gap)) / 4.45);
     line-height: 1.05;
     letter-spacing: var(--text-display--letter-spacing);
+    overflow-wrap: normal;
+  }
+  .mk-page-title {
+    margin-top: 14px;
+    color: var(--first);
+    font-family: var(--font-display);
+    font-size: clamp(34px, 3.8vw, 56px);
+    font-weight: 300;
+    line-height: 1.08;
+    letter-spacing: var(--text-hero--letter-spacing);
+  }
+  .mk-opener-kicker + .essay-title {
+    margin-top: 14px;
   }
   .mk-lede,
   .essay-title {
@@ -372,17 +371,17 @@
   }
   .mk-lede {
     margin-top: 16px;
+    color: var(--muted-foreground);
   }
   .mk-opener-home .mk-lede {
-    margin-top: 24px;
+    margin-top: 22px;
+    max-width: 34ch;
   }
   .mk-opener-meta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 0 16px;
-    margin-top: 8px;
+    gap: 16px;
     color: var(--muted-foreground);
   }
   .mk-opener-meta a {
@@ -392,81 +391,30 @@
     min-height: 44px;
     color: var(--first);
     text-decoration: underline;
+    text-decoration-thickness: 1px;
     text-underline-offset: 4px;
   }
-  .err-code,
-  .mk-opener .essay-meta {
-    margin-top: 12px;
+  .mk-opener-plate {
+    position: relative;
+    aspect-ratio: 50 / 47;
+    min-height: 360px;
+    overflow: hidden;
+    background: var(--background);
   }
-  .err-code {
-    color: var(--muted-foreground);
+  .mk-opener .essay-meta {
+    margin-top: 14px;
   }
   .mk-opener .essay-meta a {
     color: var(--foreground);
     text-decoration: underline;
+    text-decoration-thickness: 1px;
     text-underline-offset: 4px;
-  }
-  .mk-field {
-    --sky-plate: url("/sky/plate-slim-desktop.png");
-    --sky-plate-dark: url("/sky/plate-slim-desktop-dark.png");
-    --sky-plate-size: 1440px 120px;
-    position: relative;
-    overflow: hidden;
-    height: 120px;
-  }
-  .mk-opener-home .mk-field {
-    --sky-plate: url("/sky/plate-home-desktop.png");
-    --sky-plate-dark: url("/sky/plate-home-desktop-dark.png");
-    --sky-plate-size: 1440px 324px;
-    height: clamp(220px, 36svh, 440px);
-  }
-  html.dark .mk-field {
-    --sky-plate-current: var(--sky-plate-dark);
-  }
-  #sky {
-    position: absolute;
-    inset: 0 auto auto 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-    background: var(--sky-plate-current, var(--sky-plate)) center bottom / var(--sky-plate-size) repeat-x;
-    image-rendering: pixelated;
-  }
-  #sky[data-live] {
-    background: none;
   }
   .essay-meta {
     color: var(--muted-foreground);
     font-family: var(--font-mono);
     font-size: 12px;
     line-height: 20px;
-  }
-
-  /* The slim band crops the portrait at whole pixels. Home holds the full square beside the title. */
-  .portrait-wrap {
-    position: absolute;
-    top: 0;
-    right: var(--opener-end);
-    width: 196px;
-    height: 100px;
-    overflow: hidden;
-    background: var(--island-stock);
-  }
-  .mk-opener-home .portrait-wrap {
-    position: static;
-    grid-area: 1 / 2 / span 2;
-    width: var(--portrait);
-    height: var(--portrait);
-  }
-  .portrait,
-  .portrait img {
-    display: block;
-    width: 100%;
-    height: auto;
-    image-rendering: pixelated;
-  }
-  .mk-opener:not(.mk-opener-home) .portrait {
-    translate: 0 -12px;
   }
 
   /* a section: 64 px above the rule, 44 below it; the rule runs across the whole column */
@@ -485,7 +433,7 @@
     left: calc(var(--gutter, 0px) * -1);
     width: 100vw;
     height: 1px;
-    background: var(--rule);
+    background: var(--border);
   }
   .mk-page > .mk-section:first-child::before {
     content: none;
@@ -644,7 +592,7 @@
     display: block;
     width: 100%;
     height: auto;
-    border: 1px solid var(--rule);
+    border: 1px solid var(--border);
   }
 
   /* elsewhere: 40 px cells with a 1 px edge */
@@ -749,7 +697,7 @@
     display: block;
     width: 100%;
     height: auto;
-    border: 1px solid var(--rule);
+    border: 1px solid var(--border);
   }
   .essay code {
     font-family: var(--font-mono);
@@ -792,7 +740,7 @@
     max-width: none;
     margin-top: 48px;
     border: 0;
-    border-top: 1px solid var(--rule);
+    border-top: 1px solid var(--border);
   }
 
   /* the signup */
@@ -840,7 +788,7 @@
     left: calc(var(--gutter, 0px) * -1);
     width: 100vw;
     height: 1px;
-    background: var(--rule);
+    background: var(--border);
   }
   .mk-foot > * + * {
     margin-top: 8px;
@@ -881,11 +829,12 @@
     .mk-main {
       --gutter: 40px;
     }
-    .mk-island {
+    .mk-head {
       --opener-start: calc(264px + 40px);
       --opener-end: calc(312px + 40px);
+      --opener-home-start: 40px;
     }
-    .mk-island-solo {
+    .mk-head-solo {
       --opener-end: 40px;
     }
     .mk-meta {
@@ -907,7 +856,7 @@
     .mk-foot-status {
       display: block;
     }
-    .mk-island {
+    .mk-head {
       --opener-end: 40px;
     }
   }
@@ -917,21 +866,11 @@
     html {
       scroll-padding-top: 0;
     }
-    .mk-island,
-    .mk-island-solo {
-      --opener-start: 32px;
-      --opener-end: 16px;
-    }
-    .mk-island {
-      display: flex;
-      flex-direction: column;
-    }
-    .mk-island-home {
-      min-height: 100svh;
-    }
-    .mk-opener-home {
-      flex: 1;
-      min-height: 0;
+    .mk-head,
+    .mk-head-solo {
+      --opener-start: 24px;
+      --opener-end: 24px;
+      --opener-home-start: 24px;
     }
     .mk-mast {
       position: static;
@@ -949,7 +888,7 @@
     }
     .mk-mast-mode {
       display: block;
-      border-left: 1px solid var(--rule);
+      border-left: 1px solid var(--border);
     }
     .mk-body,
     .mk-body-solo {
@@ -961,23 +900,41 @@
       display: block;
       position: static;
       height: auto;
-      border-bottom: 1px solid var(--rule);
-      background: var(--island-stock);
+      border-bottom: 1px solid var(--border);
+      background: var(--background);
     }
     .mk-nav-list {
       display: flex;
       gap: 4px;
       padding: 8px 12px;
     }
+    .mk-opener-grid {
+      grid-template-columns: 1fr;
+    }
+    .mk-opener-home .mk-opener-copy {
+      gap: 24px;
+      padding: 36px var(--opener-end) 28px var(--opener-home-start);
+      border-right: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .mk-opener-plate {
+      min-height: 0;
+    }
     .mk-main {
-      --gutter: 32px;
-      padding: 0 16px 56px 32px;
+      --gutter: 24px;
+      padding: 0 24px 56px;
     }
   }
 
   @media (max-width: 600px) {
+    .mk-head,
+    .mk-head-solo {
+      --opener-start: 20px;
+      --opener-end: 20px;
+      --opener-home-start: 20px;
+    }
     .mk-brand {
-      font-size: clamp(15px, 4.6vw, 18px);
+      font-size: clamp(15px, 4.4vw, 18px);
     }
     .mk-nav-compact a {
       height: 44px;
@@ -1003,48 +960,22 @@
     .icons a {
       height: 44px;
     }
-    .mk-opener-copy {
-      padding-block: 32px 24px;
+    .mk-sheet-head .mk-opener-copy {
+      padding: 32px var(--opener-end) 24px var(--opener-start);
     }
     .mk-opener-home .mk-opener-copy {
-      --portrait: 136px;
-      --portrait-gap: 16px;
-      align-self: center;
-      padding-block: 32px 24px;
+      padding: 32px var(--opener-end) 24px var(--opener-home-start);
     }
-    .mk-island-title {
-      font-size: min(44px, 12vw);
+    .mk-opener-home h1 {
+      font-size: clamp(36px, 10vw, 48px);
+    }
+    .mk-page-title {
+      font-size: min(40px, 10.5vw);
       line-height: 1.08;
     }
-    /* the phone keeps the portrait to the title's row, sets the name on its foot and runs the lede across */
-    .mk-opener-home h1 {
-      align-self: end;
-      font-size: min(52px, 14vw, (100cqi - var(--portrait) - var(--portrait-gap)) / 4.45);
-    }
-    .mk-opener-home .mk-lede {
-      grid-column: 1 / -1;
-    }
-    .mk-opener-home .portrait-wrap {
-      grid-row: 1;
-    }
-    .mk-field {
-      --sky-plate: url("/sky/plate-slim-phone.png");
-      --sky-plate-dark: url("/sky/plate-slim-phone-dark.png");
-      --sky-plate-size: 390px 96px;
-      height: 96px;
-    }
-    .mk-opener-home .mk-field {
-      --sky-plate: url("/sky/plate-home-phone.png");
-      --sky-plate-dark: url("/sky/plate-home-phone-dark.png");
-      --sky-plate-size: 390px 203px;
-      height: clamp(160px, 24svh, 240px);
-    }
-    .portrait-wrap {
-      width: 136px;
-      height: 80px;
-    }
-    .mk-opener:not(.mk-opener-home) .portrait {
-      translate: 0 -4px;
+    .mk-main {
+      --gutter: 20px;
+      padding: 0 20px 56px;
     }
     .waypoint {
       grid-template-columns: minmax(0, 1fr);
@@ -1068,18 +999,16 @@
     .mk-foot {
       display: none;
     }
-    .mk-island {
+    .mk-head {
       display: contents;
-    }
-    .mk-opener-home {
-      min-height: 0;
     }
     .mk-opener {
       break-inside: avoid;
       print-color-adjust: exact;
     }
-    .mk-opener-home .mk-field {
-      height: 196px;
+    .mk-opener-plate canvas {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
     }
     .mk-body {
       display: block;
