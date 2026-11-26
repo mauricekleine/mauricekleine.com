@@ -107,7 +107,7 @@ export function DocOpener({
         />
       </div>
       {index && index.length > 0 && (
-        <nav className="opener-index" aria-label="contents">
+        <nav className="opener-index" aria-label="Contents">
           {index.map(({ href, label, count }, i) => (
             <a href={href} key={i}>
               <span>{label}</span>
@@ -299,7 +299,7 @@ export function DocMetaLine({ parts }: { parts: readonly MetaPart[] }) {
 
 export function DocContents({ entries }: { entries: readonly IndexEntry[] }) {
   return (
-    <nav className="contents" aria-label="contents">
+    <nav className="contents" aria-label="Contents">
       <ol>
         {entries.map(({ href, label, reference, count }, index) => (
           <li key={index}>
@@ -516,7 +516,7 @@ export function DocBeforeAndAfter({ before, after }: { before: Comparison; after
         return (
           <figure className="fig" key={stage}>
             <p className="pair-label">
-              <b>{stage}</b> · {label}
+              <b>{stage === "before" ? "Before" : "After"}</b> · {label}
             </p>
             {swatch ? <div className={`swatch ${swatch.pattern}`} role="img" aria-label={swatch.label} /> : media}
           </figure>
@@ -605,9 +605,10 @@ export function DocChip({ children }: { children: ReactNode }) {
 
 export function DocModeToggle() {
   const next = useTheme() === "dark" ? "light" : "dark";
+  const label = next === "dark" ? "Dark" : "Light";
   return (
-    <button className="mode" type="button" data-doc-mode="" aria-label={`switch to ${next} mode`} onClick={toggleTheme}>
-      {next}
+    <button className="mode" type="button" data-doc-mode="" aria-label={`Switch to ${next} mode`} onClick={toggleTheme}>
+      {label}
     </button>
   );
 }
@@ -618,8 +619,8 @@ export function DocNotesToggle() {
     return () => controller?.destroy();
   }, []);
   return (
-    <button className="notes-btn" type="button" data-doc-notes="" aria-label="open notes">
-      notes
+    <button className="notes-btn" type="button" data-doc-notes="" aria-label="Open notes">
+      Notes
       <span className="notes-count" data-doc-notes-count="">
         0
       </span>

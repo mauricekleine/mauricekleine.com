@@ -25,7 +25,7 @@ function ComboboxTrigger({ className, children, ...props }: ComboboxPrimitive.Tr
     <ComboboxPrimitive.Trigger
       data-slot="combobox-trigger"
       render={<InputGroupButton variant="ghost" size="icon-xs" />}
-      aria-label="show options"
+      aria-label="Show options"
       className={cn(
         "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring)",
         className,
@@ -38,12 +38,12 @@ function ComboboxTrigger({ className, children, ...props }: ComboboxPrimitive.Tr
   );
 }
 
-// Clear is a ghost control beside the text control, with a lowercase name.
+// Clear is a ghost control beside the text control.
 function ComboboxClear({ className, ...props }: ComboboxPrimitive.Clear.Props) {
   return (
     <ComboboxPrimitive.Clear
       data-slot="combobox-clear"
-      aria-label="clear"
+      aria-label="Clear"
       render={<InputGroupButton variant="ghost" size="icon-xs" />}
       className={cn(className)}
       {...props}
@@ -248,7 +248,7 @@ function ComboboxChip({
       {showRemove && (
         <ComboboxPrimitive.ChipRemove
           render={<Button variant="ghost" size="icon-xs" />}
-          aria-label="remove"
+          aria-label="Remove"
           className="size-4 p-0 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring) [&_svg]:size-3"
           data-slot="combobox-chip-remove"
         >

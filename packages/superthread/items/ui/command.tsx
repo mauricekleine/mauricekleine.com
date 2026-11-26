@@ -16,7 +16,7 @@ import { Icon } from "@/components/superthread/ui/glyphs";
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
   return (
     <CommandPrimitive
-      label="commands"
+      label="Commands"
       data-slot="command"
       data-mk="command"
       className={cn("flex size-full flex-col bg-popover text-popover-foreground", className)}
@@ -27,8 +27,8 @@ function Command({ className, ...props }: React.ComponentProps<typeof CommandPri
 
 // The palette uses our dialog sheet; its accessible title and description live inside that sheet.
 function CommandDialog({
-  title = "command palette",
-  description = "search for a command to run",
+  title = "Command palette",
+  description = "Search for a command to run",
   children,
   className,
   showCloseButton = false,
@@ -82,7 +82,7 @@ function CommandInput({ className, ...props }: React.ComponentProps<typeof Comma
 function CommandList({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.List>) {
   return (
     <CommandPrimitive.List
-      label="suggestions"
+      label="Suggestions"
       data-slot="command-list"
       className={cn("no-scrollbar max-h-72 scroll-py-1 overflow-y-auto p-1", className)}
       {...props}

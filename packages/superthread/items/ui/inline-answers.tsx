@@ -92,7 +92,7 @@ function InlineAnswersLine({ ...props }: React.ComponentProps<"span">) {
 // `wrong?` beside the line, a muted word underlined at rest. Open, it leads the answers at their step, and it closes them.
 // It can land under the pointer when an answer closes the row, so the second click of a double click counts for nothing
 // here too.
-function InlineAnswersTrigger({ children = "wrong?", className, onClick, ...props }: React.ComponentProps<"button">) {
+function InlineAnswersTrigger({ children = "Wrong?", className, onClick, ...props }: React.ComponentProps<"button">) {
   const { open, toggle, trigger, triggerId, listId } = useAnswers();
   return (
     <button

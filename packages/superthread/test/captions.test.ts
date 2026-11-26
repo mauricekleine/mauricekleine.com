@@ -23,17 +23,16 @@ test("every place the world screens has a caption key, in the world's order", ()
 });
 
 test("the progress edge takes the key its utility names, texture-ramp", () => {
-  expect(places.find((p) => p.place === "state fields")).toMatchObject({ key: "ramp", detail: "progress edge" });
+  expect(places.find((p) => p.place === "state fields")).toMatchObject({ key: "ramp", detail: "Progress edge" });
 });
 
-test("caption keys are unique across places and details, and every caption is lowercase words", () => {
+test("caption keys are unique across places and details, and every caption is clean non-empty text", () => {
   const all: Caption[] = [...details, ...places];
   const keys = all.map((c) => c.key);
   expect(new Set(keys).size).toBe(keys.length);
   for (const { key, detail, job } of all) {
     expect(key).toMatch(/^[a-z][a-z-]*$/);
-    expect({ key, detail, job }).toEqual({ key, detail: detail.toLowerCase(), job: job.toLowerCase() });
-    expect(detail.length * job.length).toBeGreaterThan(0);
-    expect(`${detail} ${job}`).not.toMatch(/—/);
+    expect(detail.trim().length * job.trim().length).toBeGreaterThan(0);
+    expect(`${detail} ${job}`).not.toMatch(/\u2014/);
   }
 });

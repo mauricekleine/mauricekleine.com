@@ -547,7 +547,7 @@ export function StateWord({ on = false, children, className }: { on?: boolean; c
       >
         <path d={STATE[state]} />
       </svg>
-      {children ?? state}
+      {children ?? (on ? "On" : "Off")}
     </span>
   )
 }

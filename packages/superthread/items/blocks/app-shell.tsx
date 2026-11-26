@@ -224,7 +224,7 @@ function AppShellGround({ className, render, ...props }: useRender.ComponentProp
       {
         id: render ? undefined : "main",
         tabIndex: render ? undefined : -1,
-        "aria-label": render ? undefined : "workspace",
+        "aria-label": render ? undefined : "Workspace",
         className: cn(
           "min-w-0 flex-1 pt-4 pr-12 pb-[72px] pl-8 text-ground-foreground outline-0 [--ring:var(--sidebar-ring)] [--selected:var(--ground-foreground)] [@media(max-width:900px)]:px-3 [@media(max-width:900px)]:pt-0 [@media(max-width:900px)]:pb-10",
           className,

@@ -218,7 +218,7 @@ describe("combobox", () => {
       expect(box.querySelectorAll("[data-slot=combobox-chip]")).toHaveLength(2);
       const chip = has(box, "[data-slot=combobox-chip]", ["h-6", "border-border", "bg-secondary", "type-instrument"]);
       const remove = has(chip, "[data-slot=combobox-chip-remove]", ["size-4"]);
-      expect(remove.getAttribute("aria-label")).toBe("remove");
+      expect(remove.getAttribute("aria-label")).toBe("Remove");
       has(box, "input", ["outline-0"]);
       await act(async () => (remove as HTMLElement).click());
       expect(box.querySelectorAll("[data-slot=combobox-chip]")).toHaveLength(1);
@@ -305,12 +305,12 @@ describe("command", () => {
   test("the scroll list, heading and shortcuts keep the menu hierarchy, with no own detail", () => {
     expect(
       has(body, "[data-slot=command-list]", ["max-h-72", "overflow-y-auto", "p-1"]).getAttribute("aria-label"),
-    ).toBe("suggestions");
+    ).toBe("Suggestions");
     has(body, "[data-slot=command-group]", ["[&_[cmdk-group-heading]]:type-meta"]);
     has(body, "[data-slot=command-shortcut]", KEYS);
     skin(body, "command");
   });
-  test("the palette portals our sheet with p-0 and lowercase accessible text inside it", async () => {
+  test("the palette portals our sheet with p-0 and sentence-case accessible text inside it", async () => {
     const frame = document.createElement("div");
     document.body.append(frame);
     const mounted = await client(
@@ -322,8 +322,8 @@ describe("command", () => {
       const popup = has(frame, "[role=dialog]", ["p-0", "shadow-sheet", "texture-contact"]);
       expect(popup.closest(".dark")).not.toBeNull();
       const title = one(popup, "[data-slot=dialog-title]").el;
-      expect(title.textContent).toBe("command palette");
-      expect(one(popup, "[data-slot=dialog-description]").el.textContent).toBe("search for a command to run");
+      expect(title.textContent).toBe("Command palette");
+      expect(one(popup, "[data-slot=dialog-description]").el.textContent).toBe("Search for a command to run");
       expect(popup.getAttribute("aria-labelledby")).toBe(title.id);
       expect(popup.querySelector("[data-slot=dialog-close]")).toBeNull();
     } finally {
@@ -454,12 +454,12 @@ describe("sonner", () => {
     });
     await done();
   });
-  test("the wrapper marks the item and all supplied notification labels are lowercase", () => {
+  test("the wrapper marks the item and all supplied notification labels use sentence case", () => {
     expect(one(body, "[data-slot=sonner]").el.getAttribute("data-mk")).toBe("sonner");
-    expect(one(body, "section[aria-live=polite]").el.getAttribute("aria-label")).toBe("notifications");
+    expect(one(body, "section[aria-live=polite]").el.getAttribute("aria-label")).toBe("Notifications");
     expect(body.querySelectorAll("[data-sonner-toast]")).toHaveLength(5);
     for (const el of body.querySelectorAll("[data-close-button]"))
-      expect(el.getAttribute("aria-label")).toBe("close toast");
+      expect(el.getAttribute("aria-label")).toBe("Close toast");
   });
   test("the close button takes the hit area on a phone", () => {
     has(body, "[data-close-button]", ["size-6", "[@media(max-width:600px)]:hit-area"]);

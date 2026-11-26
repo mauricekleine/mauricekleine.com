@@ -15,7 +15,7 @@ const WIDTHS = ["w-3/4", "w-1/2", "w-2/3", "w-2/5"] as const;
 function LoadingState({
   className,
   rows = 3,
-  label = "loading",
+  label = "Loading",
   ...props
 }: React.ComponentProps<"div"> & { rows?: number; label?: string }) {
   return (
@@ -39,9 +39,9 @@ function LoadingState({
 // Failed: the failed glyph, what failed, why, and a way to try again. The glyph is the only colour, at badge scale.
 function FailedState({
   className,
-  title = "this did not load",
+  title = "This did not load",
   onRetry,
-  retryLabel = "try again",
+  retryLabel = "Try again",
   children,
   ...props
 }: Omit<React.ComponentProps<"div">, "title"> & {

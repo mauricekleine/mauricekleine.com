@@ -536,12 +536,12 @@ export class ShareStore extends DurableObject<Env> {
       request.headers.get("Content-Type")?.split(";")[0] !== "application/x-www-form-urlencoded" ||
       !(await verify(this.env.COOKIE_KEY, form.get("challenge") || "", `form.${active.id}.${active.version}.`))
     )
-      return reply("invalid form; reload the link", 403);
+      return reply("Invalid form; reload the link.", 403);
     const key = `attempt:${active.id}`;
     const time = Date.now();
     const attempt = (await this.ctx.storage.get<Attempt>(key)) || { failures: [], locked: 0 };
     if (attempt.locked > time)
-      return reply("this link is locked. try again in an hour.", 429, {
+      return reply("This link is locked. Try again in an hour.", 429, {
         "Retry-After": String(Math.ceil((attempt.locked - time) / 1000)),
       });
     attempt.locked = 0;
@@ -554,8 +554,8 @@ export class ShareStore extends DurableObject<Env> {
       await this.ctx.storage.put(key, attempt);
       return reply(
         attempt.locked
-          ? "this link is locked. try again in an hour."
-          : "that PIN did not match. go back and try again.",
+          ? "This link is locked. Try again in an hour."
+          : "That PIN did not match. Go back and try again.",
         attempt.locked ? 429 : 403,
         attempt.locked ? { "Retry-After": "3600" } : {},
       );

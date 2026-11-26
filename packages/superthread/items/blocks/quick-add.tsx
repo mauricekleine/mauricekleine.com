@@ -43,7 +43,7 @@ function useAdd(onAdd: AddProps["onAdd"], disabled: boolean | undefined) {
       input.current?.focus();
     } catch (cause) {
       const message = cause instanceof Error ? cause.message : typeof cause === "string" ? cause : "";
-      setError(message.trim() || "could not add. try again.");
+      setError(message.trim() || "Could not add. Try again.");
     } finally {
       pending.current = false;
       setBusy(false);
@@ -67,7 +67,7 @@ function QuickAdd({
   className,
   label,
   placeholder,
-  submitLabel = "add",
+  submitLabel = "Add",
   hideLabel = false,
   onAdd,
   inputProps = {},
@@ -143,8 +143,8 @@ function QuickAddNav({
   id: formId,
   label,
   placeholder,
-  triggerLabel = "add",
-  submitLabel = "add",
+  triggerLabel = "Add",
+  submitLabel = "Add",
   hotkey = "n",
   onAdd,
   inputProps = {},

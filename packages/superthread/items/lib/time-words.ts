@@ -1,4 +1,4 @@
-// Time in the fleet's words: "since friday", "before 11:00", "09:30", "tue 3 nov", "november 2026", "48 min until
+// Time in the fleet's words: "since Friday", "before 11:00", "09:30", "Tue 3 Nov", "November 2026", "48 min until
 // standup", "every day at 07:00". Every function is pure. Each moment comes in as an argument, so nothing here reads a
 // clock, and the words never judge how long something took.
 //
@@ -16,26 +16,28 @@ export type Schedule = { timeZone?: string } & (
 );
 
 const WEEK = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as const;
+const WEEK_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] as const;
 const WORK_WEEK = WEEK.slice(0, 5);
 const MONTHS = [
-  "january",
-  "february",
-  "march",
-  "april",
-  "may",
-  "june",
-  "july",
-  "august",
-  "september",
-  "october",
-  "november",
-  "december",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const DAY_MS = 86_400_000;
 const CALENDAR_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 const shortMonth = (date: Date) => MONTHS[date.getUTCMonth()]!.slice(0, 3);
+const dayName = (day: Weekday) => WEEK_NAMES[WEEK.indexOf(day)]!;
 
 const readerZone = (options?: TimeOptions) => options?.timeZone ?? new Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -53,7 +55,7 @@ function dayOf(moment: Moment, timeZone: string) {
   return Date.UTC(parts.year!, parts.month! - 1, parts.day!) / DAY_MS;
 }
 
-/** "today", "since yesterday", "since friday" within a week, then "since 9 oct", with the year once it differs. */
+/** "today", "since yesterday", "since Friday" within a week, then "since 9 Oct", with the year once it differs. */
 export function sinceWords(from: Moment, now: Moment, options?: TimeOptions) {
   const timeZone = readerZone(options);
   const start = dayOf(from, timeZone);
@@ -62,13 +64,13 @@ export function sinceWords(from: Moment, now: Moment, options?: TimeOptions) {
   if (days <= 0) return "today";
   if (days === 1) return "since yesterday";
   const date = new Date(start * DAY_MS);
-  // getUTCDay counts from sunday, WEEK from monday
-  if (days < 7) return `since ${WEEK[(date.getUTCDay() + 6) % 7]}`;
+  // getUTCDay counts from Sunday, WEEK_NAMES from Monday
+  if (days < 7) return `since ${WEEK_NAMES[(date.getUTCDay() + 6) % 7]}`;
   const sameYear = date.getUTCFullYear() === new Date(today * DAY_MS).getUTCFullYear();
   return `since ${date.getUTCDate()} ${shortMonth(date)}${sameYear ? "" : ` ${date.getUTCFullYear()}`}`;
 }
 
-/** "09:30", on the 24-hour clock. A calendar date has no clock face, so it reads "2 nov". */
+/** "09:30", on the 24-hour clock. A calendar date has no clock face, so it reads "2 Nov". */
 export function clockWords(at: Moment, options?: TimeOptions) {
   if (isCalendarDate(at)) {
     const date = new Date(dayOf(at, "UTC") * DAY_MS);
@@ -88,20 +90,20 @@ export function calendarDate(moment: Moment, options?: TimeOptions) {
   return new Date(dayOf(moment, readerZone(options)) * DAY_MS).toISOString().slice(0, 10);
 }
 
-/** "before 11:00", on the 24-hour clock. A calendar date has no clock face, so it reads "before 2 nov". */
+/** "before 11:00", on the 24-hour clock. A calendar date has no clock face, so it reads "before 2 Nov". */
 export function beforeWords(at: Moment, options?: TimeOptions) {
   return `before ${clockWords(at, options)}`;
 }
 
-/** "tue 3 nov", the day a moment falls on in the reader's zone. */
+/** "Tue 3 Nov", the day a moment falls on in the reader's zone. */
 export function dateWords(moment: Moment, options?: TimeOptions) {
   const date = new Date(dayOf(moment, readerZone(options)) * DAY_MS);
-  // getUTCDay counts from sunday, WEEK from monday
-  const weekday = WEEK[(date.getUTCDay() + 6) % 7]!.slice(0, 3);
+  // getUTCDay counts from Sunday, WEEK_NAMES from Monday
+  const weekday = WEEK_NAMES[(date.getUTCDay() + 6) % 7]!.slice(0, 3);
   return `${weekday} ${date.getUTCDate()} ${shortMonth(date)}`;
 }
 
-/** "november 2026", the month a moment falls on in the reader's zone. */
+/** "November 2026", the month a moment falls on in the reader's zone. */
 export function monthWords(moment: Moment, options?: TimeOptions) {
   const date = new Date(dayOf(moment, readerZone(options)) * DAY_MS);
   return `${MONTHS[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
@@ -128,18 +130,19 @@ export function untilWords(at: Moment, what: string, now: Moment, options?: Time
 }
 
 const dayWords = (every: Exclude<Schedule["every"], "hour">) => {
-  if (typeof every === "string") return every;
+  if (typeof every === "string") return every === "day" || every === "weekday" ? every : dayName(every);
   const days = WEEK.filter((day) => every.includes(day));
   if (days.length === WEEK.length) return "day";
   if (days.length === 5 && WORK_WEEK.every((day) => days.includes(day))) return "weekday";
-  return days.length > 1 ? `${days.slice(0, -1).join(", ")} and ${days.at(-1)}` : days.join("");
+  const names = days.map(dayName);
+  return names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names.at(-1)}` : names.join("");
 };
 
-const zoneWords = (timeZone: string) => timeZone.split("/").at(-1)!.replaceAll("_", " ").toLowerCase();
+const zoneWords = (timeZone: string) => timeZone.split("/").at(-1)!.replaceAll("_", " ");
 
 /**
- * "every day at 07:00", "every monday and thursday at 07:15", "every hour". A schedule set in another zone than the
- * reader's says so: "every day at 07:00, amsterdam time". A list with no days never runs, so it reads "never".
+ * "every day at 07:00", "every Monday and Thursday at 07:15", "every hour". A schedule set in another zone than the
+ * reader's says so: "every day at 07:00, Amsterdam time". A list with no days never runs, so it reads "never".
  */
 export function scheduleWords(schedule: Schedule, options?: TimeOptions) {
   const days = schedule.every === "hour" ? "hour" : dayWords(schedule.every);

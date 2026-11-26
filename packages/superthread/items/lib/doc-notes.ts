@@ -16,9 +16,9 @@ const activeControllers = new WeakMap<Document, DocNotesController>();
 
 function detectSection(node: Node): string {
   const el = node.nodeType === 1 ? (node as Element) : node.parentElement;
-  if (!el) return "general";
+  if (!el) return "General";
   const header = el.closest("header");
-  if (header) return "opener";
+  if (header) return "Opener";
   const sec = el.closest("section[id], .group[id], .sec[id]");
   if (sec) {
     const heading = sec.querySelector(".chapter-word, .sec-head, .band-word, h2, h3");
@@ -26,17 +26,17 @@ function detectSection(node: Node): string {
     if (title) return title;
     if (sec.id) return sec.id.replaceAll("-", " ");
   }
-  return "general";
+  return "General";
 }
 
 function collectSections(doc: Document): string[] {
-  const seen = new Set<string>(["opener"]);
+  const seen = new Set<string>(["Opener"]);
   for (const el of doc.querySelectorAll("section[id], .group[id], .sec[id]")) {
     const heading = el.querySelector(".chapter-word, .sec-head, .band-word, h2, h3");
     const label = heading?.textContent?.replace(/\s+/g, " ").trim() || el.id.replaceAll("-", " ");
     if (label) seen.add(label);
   }
-  seen.add("general");
+  seen.add("General");
   return [...seen];
 }
 
@@ -62,16 +62,16 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
   pop.className = "doc-note-pop";
   pop.setAttribute("data-doc-notes-ui", "");
   pop.setAttribute("role", "dialog");
-  pop.setAttribute("aria-label", "add note on selection");
+  pop.setAttribute("aria-label", "Add note on selection");
   pop.innerHTML =
-    '<div class="doc-note-pop-top"><span class="doc-note-meta" data-role="sec">opener</span><span class="doc-note-meta">cmd+enter save · esc close</span></div>' +
+    '<div class="doc-note-pop-top"><span class="doc-note-meta" data-role="sec">Opener</span><span class="doc-note-meta">Cmd+Enter save · Esc close</span></div>' +
     '<blockquote class="doc-note-quote" data-role="quote"></blockquote>' +
-    '<textarea class="doc-note-input" data-role="input" placeholder="drop your thought on this..."></textarea>' +
+    '<textarea class="doc-note-input" data-role="input" placeholder="Drop your thought on this..."></textarea>' +
     '<div class="doc-note-actions">' +
-    '<button class="doc-note-btn doc-note-quiet" type="button" data-role="delete" hidden>remove</button>' +
+    '<button class="doc-note-btn doc-note-quiet" type="button" data-role="delete" hidden>Remove</button>' +
     '<div class="doc-note-actions-right">' +
-    '<button class="doc-note-btn" type="button" data-role="cancel">cancel</button>' +
-    '<button class="doc-note-btn doc-note-primary" type="button" data-role="save">save note</button>' +
+    '<button class="doc-note-btn" type="button" data-role="cancel">Cancel</button>' +
+    '<button class="doc-note-btn doc-note-primary" type="button" data-role="save">Save note</button>' +
     "</div></div>";
 
   // Slide-over review & export drawer
@@ -83,31 +83,31 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
   drawer.className = "doc-note-drawer";
   drawer.setAttribute("data-doc-notes-ui", "");
   drawer.setAttribute("role", "dialog");
-  drawer.setAttribute("aria-label", "notes and export");
+  drawer.setAttribute("aria-label", "Notes and export");
   drawer.innerHTML =
     '<div class="doc-note-drawer-head">' +
-    '<h2 class="doc-note-drawer-title">notes</h2>' +
+    '<h2 class="doc-note-drawer-title">Notes</h2>' +
     '<div class="doc-note-actions-right">' +
-    '<button class="doc-note-btn" type="button" data-role="quick-copy">copy export</button>' +
-    '<button class="doc-note-btn" type="button" data-role="close">close</button>' +
+    '<button class="doc-note-btn" type="button" data-role="quick-copy">Copy export</button>' +
+    '<button class="doc-note-btn" type="button" data-role="close">Close</button>' +
     "</div></div>" +
     '<div class="doc-note-tabs" role="tablist">' +
-    '<button class="doc-note-tab is-active" type="button" role="tab" data-tab="list" aria-selected="true">all notes</button>' +
-    '<button class="doc-note-tab" type="button" role="tab" data-tab="export" aria-selected="false">markdown export</button>' +
+    '<button class="doc-note-tab is-active" type="button" role="tab" data-tab="list" aria-selected="true">All notes</button>' +
+    '<button class="doc-note-tab" type="button" role="tab" data-tab="export" aria-selected="false">Markdown export</button>' +
     "</div>" +
     '<div class="doc-note-body" data-pane="list"><div data-role="list"></div></div>' +
     '<div class="doc-note-body" data-pane="export" hidden>' +
     '<div class="doc-note-export-bar">' +
-    '<button class="doc-note-btn doc-note-primary" type="button" data-role="copy-md">copy markdown</button>' +
-    '<button class="doc-note-btn" type="button" data-role="download-md">download .md</button>' +
+    '<button class="doc-note-btn doc-note-primary" type="button" data-role="copy-md">Copy Markdown</button>' +
+    '<button class="doc-note-btn" type="button" data-role="download-md">Download .md</button>' +
     '<span class="doc-note-status" data-role="status" aria-live="polite"></span>' +
     "</div>" +
-    '<textarea class="doc-note-export" data-role="export" readonly aria-label="exported markdown notes"></textarea>' +
+    '<textarea class="doc-note-export" data-role="export" readonly aria-label="Exported Markdown notes"></textarea>' +
     "</div>" +
     '<div class="doc-note-general" data-pane="general">' +
-    '<div class="doc-note-general-row"><span class="doc-note-meta">add a visual or general note</span><select class="doc-note-select" data-role="general-sec" aria-label="section"></select></div>' +
-    '<textarea class="doc-note-input doc-note-input-sm" data-role="general-input" placeholder="leave a note on layout, visuals or direction..."></textarea>' +
-    '<div class="doc-note-actions-right"><button class="doc-note-btn" type="button" data-role="general-add">add note</button></div>' +
+    '<div class="doc-note-general-row"><span class="doc-note-meta">Add a visual or general note</span><select class="doc-note-select" data-role="general-sec" aria-label="Section"></select></div>' +
+    '<textarea class="doc-note-input doc-note-input-sm" data-role="general-input" placeholder="Leave a note on layout, visuals or direction..."></textarea>' +
+    '<div class="doc-note-actions-right"><button class="doc-note-btn" type="button" data-role="general-add">Add note</button></div>' +
     "</div>";
 
   doc.body.append(pop, scrim, drawer);
@@ -179,7 +179,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
       mark.className = "doc-hl";
       mark.dataset.noteId = noteId;
       mark.tabIndex = 0;
-      mark.title = "click to edit note";
+      mark.title = "Click to edit note";
       target.parentNode?.insertBefore(mark, target);
       mark.append(target);
     }
@@ -208,12 +208,12 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
   }
 
   function exportMarkdown(): string {
-    const title = doc.title?.trim() || "document notes";
+    const title = doc.title?.trim() || "Document notes";
     const mode = doc.documentElement.classList.contains("dark") ? "dark" : "light";
     const list = orderedNotes();
-    const lines = [`## notes: ${title}`, "", `- **mode:** ${mode}`, ""];
+    const lines = [`## Notes: ${title}`, "", `- **Mode:** ${mode}`, ""];
     if (list.length === 0) {
-      lines.push("_no notes added yet._");
+      lines.push("_No notes added yet._");
       return `${lines.join("\n")}\n`;
     }
     list.forEach((item, i) => {
@@ -242,7 +242,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     exportArea.value = exportMarkdown();
     if (list.length === 0) {
       listHost.innerHTML =
-        '<p class="doc-note-empty">select any text on the page to highlight it and drop a thought, or add a note below.</p>';
+        '<p class="doc-note-empty">Select any text on the page to highlight it and drop a thought, or add a note below.</p>';
       return;
     }
     listHost.innerHTML = "";
@@ -281,7 +281,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
       actions.className = "doc-note-card-actions";
       const editBtn = doc.createElement("button");
       editBtn.type = "button";
-      editBtn.textContent = "edit";
+      editBtn.textContent = "Edit";
       editBtn.addEventListener("click", () => {
         const mark = doc.querySelector<HTMLElement>(`mark.doc-hl[data-note-id="${item.id}"]`);
         if (mark) {
@@ -289,7 +289,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
           mark.scrollIntoView({ behavior: "smooth", block: "center" });
           win!.setTimeout(() => openEditPopover(item.id, mark), 180);
         } else {
-          const next = win!.prompt("edit note", item.comment);
+          const next = win!.prompt("Edit note", item.comment);
           if (next !== null && next.trim()) {
             item.comment = next.trim();
             renderUI();
@@ -298,7 +298,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
       });
       const removeBtn = doc.createElement("button");
       removeBtn.type = "button";
-      removeBtn.textContent = "remove";
+      removeBtn.textContent = "Remove";
       removeBtn.addEventListener("click", () => deleteNote(item.id));
       actions.append(editBtn, removeBtn);
       card.append(actions);
@@ -327,7 +327,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     popQuote.hidden = false;
     popInput.value = "";
     popDelete.hidden = true;
-    popSave.textContent = "save note";
+    popSave.textContent = "Save note";
     positionPopover(range.getBoundingClientRect());
     popInput.focus();
   }
@@ -342,7 +342,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     popQuote.hidden = !item.quote;
     popInput.value = item.comment;
     popDelete.hidden = false;
-    popSave.textContent = "update";
+    popSave.textContent = "Update";
     positionPopover(anchor.getBoundingClientRect());
     popInput.focus();
   }
@@ -440,17 +440,17 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
       switchTab("export");
       exportArea.focus();
       exportArea.select();
-      statusEl.textContent = "selected · press cmd+c";
+      statusEl.textContent = "Selected · press Cmd+C";
       return;
     }
     if (source === "quick") {
       const prev = quickCopyBtn.textContent;
-      quickCopyBtn.textContent = "copied";
+      quickCopyBtn.textContent = "Copied";
       win!.setTimeout(() => {
         quickCopyBtn.textContent = prev;
       }, 1600);
     } else {
-      statusEl.textContent = "copied";
+      statusEl.textContent = "Copied";
       win!.setTimeout(() => {
         statusEl.textContent = "";
       }, 2000);
@@ -476,7 +476,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
       generalInput.focus();
       return;
     }
-    notes.push({ id: `n${nextId++}`, section: generalSec.value || "general", quote: "", comment });
+    notes.push({ id: `n${nextId++}`, section: generalSec.value || "General", quote: "", comment });
     generalInput.value = "";
     renderUI();
   }

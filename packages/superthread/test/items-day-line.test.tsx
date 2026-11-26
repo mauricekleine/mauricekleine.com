@@ -174,7 +174,7 @@ describe("a block's states", () => {
     expect(ink(host, "renewal call")).toBe("past");
     expect(word(host, "renewal call")).toBe("");
     expect(ink(host, "later")).toBe("rest");
-    expect(word(host, "later")).toBe("brief");
+    expect(word(host, "later")).toBe("Brief");
     const [spent, ahead] = names(host);
     expect(spent?.hasAttribute("data-past")).toBe(true);
     expect(ahead?.hasAttribute("data-past")).toBe(false);
@@ -183,7 +183,7 @@ describe("a block's states", () => {
   test("a meeting underway keeps its brief, since that's when it's read", () => {
     const host = strip([renewal], { now: clock("11:12") });
     expect(ink(host, "renewal call")).toBe("rest");
-    expect(word(host, "renewal call")).toBe("brief");
+    expect(word(host, "renewal call")).toBe("Brief");
   });
 
   test("a brief sits over the mark on the block's own face, so the mark passes behind it and never through it", () => {
@@ -301,7 +301,7 @@ describe("a block's states", () => {
     const mark = one(block(host, "renewal call"), '[data-slot="day-line-brief"]').el;
     expect(mark.closest('[aria-hidden="true"]')).not.toBeNull();
     const [word, glyph] = mark.children;
-    expect(word?.textContent).toBe("brief");
+    expect(word?.textContent).toBe("Brief");
     expect(word?.getAttribute("class")).toContain("[@media(min-width:601px)]:@min-[36px]/block:inline");
     expect(glyph?.getAttribute("class")).toContain("[@media(min-width:601px)]:@min-[36px]/block:hidden");
     expect(glyph?.querySelector("path")?.getAttribute("d")).toBe(pathOf(renderToString(<Icon name="brief" />))!);
@@ -384,7 +384,7 @@ describe("the hour a clock repeats", () => {
     const host = repeated([later], first("01:20"));
     expect(label(host, "later")).toBe("later, 01:05 to 01:15, brief ready");
     expect(block(host, "later").getAttribute("data-ink")).toBe("rest");
-    expect(block(host, "later").textContent).toContain("brief");
+    expect(block(host, "later").textContent).toContain("Brief");
     expect(nextName(host)).toContain("later");
   });
 
@@ -542,7 +542,7 @@ describe("the strip", () => {
     const host = strip([standup], { now: clock("11:12") });
     expect(one(host, '[data-slot="day-line-strip"]').el.getAttribute("style")).toContain("--now:32%");
     const now = one(host, '[data-slot="day-line-now"]');
-    expect(now.el.textContent).toBe("now 11:12");
+    expect(now.el.textContent).toBe("Now 11:12");
     expect(now.classes).toEqual(expect.arrayContaining(["font-mono", "text-first"]));
     expect(now.el.querySelector("time")?.getAttribute("datetime")).toBe("2026-11-03T10:12:00.000Z");
   });
@@ -578,7 +578,7 @@ describe("the strip", () => {
     const host = strip([], { children: "nothing fixed today", loading: true, now: clock("11:12") });
     expect(one(host, '[data-slot="day-line-strip"]').el.getAttribute("aria-busy")).toBe("true");
     const status = one(host, '[role="status"]');
-    expect(status.el.getAttribute("aria-label")).toBe("loading");
+    expect(status.el.getAttribute("aria-label")).toBe("Loading");
     expect(status.el.querySelector('[data-slot="skeleton"]')).not.toBeNull();
     expect(host.querySelector('[data-slot="day-line-message"]')).toBeNull();
     expect(host.querySelector('[data-slot="day-line-track"] [data-slot="skeleton"]')).toBeNull();
@@ -737,7 +737,7 @@ describe("the head", () => {
 
   test("all-day words say what they are, and hang under the date in the gap before the strip", () => {
     const allDay = one(head(), '[data-slot="day-line-all-day"]');
-    expect(allDay.el.textContent).toBe("all day: anna out of office");
+    expect(allDay.el.textContent).toBe("All day: anna out of office");
     expect(allDay.classes).toEqual(
       expect.arrayContaining(["[grid-area:all]", "h-[15px]", "leading-[15px]", "truncate"]),
     );

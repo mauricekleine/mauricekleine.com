@@ -98,7 +98,7 @@ function SearchPalette({
 // keycap.
 function SearchPaletteTrigger({
   className,
-  placeholder = "search everything",
+  placeholder = "Search everything",
   onClick,
   children,
   ...props
@@ -109,7 +109,7 @@ function SearchPaletteTrigger({
       data-mk="search-palette"
       data-slot="search-palette-trigger"
       type="button"
-      aria-label="search"
+      aria-label="Search"
       aria-haspopup="dialog"
       aria-expanded={open}
       aria-controls={open ? contentId : undefined}
@@ -133,10 +133,10 @@ function SearchPaletteTrigger({
 // portalProps reach the dialog's portal, so an app can mount the palette inside a scoped mode.
 function SearchPaletteContent({
   className,
-  placeholder = "search everything",
-  empty = "nothing by that name",
-  title = "search",
-  description = "search for a page or command",
+  placeholder = "Search everything",
+  empty = "Nothing by that name",
+  title = "Search",
+  description = "Search for a page or command",
   onSelect,
   children,
   inputProps,
@@ -167,8 +167,8 @@ function SearchPaletteContent({
         portalProps={portalProps}
       >
         <Command id={contentId} aria-label={title} className={cn(className)} {...props}>
-          <CommandInput aria-label="search" placeholder={placeholder} {...inputProps} />
-          <CommandList label="search results" aria-live="polite">
+          <CommandInput aria-label="Search" placeholder={placeholder} {...inputProps} />
+          <CommandList label="Search results" aria-live="polite">
             <CommandEmpty>{empty}</CommandEmpty>
             {typeof children === "function" ? children(select) : children}
           </CommandList>

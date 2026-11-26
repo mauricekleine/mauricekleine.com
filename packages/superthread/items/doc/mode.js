@@ -6,9 +6,10 @@
   function setMode(dark) {
     root.classList.toggle("dark", dark);
     const next = dark ? "light" : "dark";
+    const label = dark ? "Light" : "Dark";
     for (const button of document.querySelectorAll(selector)) {
-      button.textContent = next;
-      button.setAttribute("aria-label", `switch to ${next} mode`);
+      button.textContent = label;
+      button.setAttribute("aria-label", `Switch to ${next} mode`);
     }
   }
 

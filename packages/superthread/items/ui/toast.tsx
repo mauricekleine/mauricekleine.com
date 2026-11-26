@@ -38,13 +38,13 @@ function ToastPortal({ ...props }: ToastPrimitive.Portal.Props) {
 
 // The stack sits at the bottom right of the window. On a phone it drops from the top, 12 px inside the window's edges
 // and in line with the panel: the foot of a phone's page holds the thumb and the page's last action, such as a send,
-// and the frame scrolls with the page, so nothing sticks at the top for a toast to cover. The region's name is
-// lowercase, as every label here is; pass aria-label to name it otherwise.
+// and the frame scrolls with the page, so nothing sticks at the top for a toast to cover. Pass aria-label to name the
+// region otherwise.
 function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
   return (
     <ToastPrimitive.Viewport
       data-slot="toast-viewport"
-      aria-label="notifications"
+      aria-label="Notifications"
       className={cn(
         "pointer-events-none fixed right-4 bottom-4 z-50 w-full max-w-[420px]",
         "[@media(max-width:600px)]:inset-x-3 [@media(max-width:600px)]:top-[calc(12px+env(safe-area-inset-top,0px))] [@media(max-width:600px)]:bottom-auto [@media(max-width:600px)]:w-auto [@media(max-width:600px)]:max-w-none",
@@ -162,7 +162,7 @@ function ToastClose({
   return (
     <ToastPrimitive.Close
       data-slot="toast-close"
-      aria-label="close toast"
+      aria-label="Close toast"
       render={render}
       className={cn(
         "relative -mt-1 -mr-1 shrink-0 text-muted-foreground after:absolute after:-inset-2 after:content-[''] hover:bg-raised-hover hover:text-foreground",
