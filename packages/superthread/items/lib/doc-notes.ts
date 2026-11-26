@@ -145,7 +145,34 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
   toast.setAttribute("role", "status");
   toast.setAttribute("aria-live", "polite");
 
-  if (showFab) doc.body.append(fab);
+  const headerTrigger = doc.body.querySelector<HTMLElement>("[data-doc-notes]:not([data-doc-notes-ui])");
+  const hasDeck = Boolean(doc.querySelector(".deck"));
+  let fabObserver: IntersectionObserver | undefined;
+
+  const setFabHidden = (hidden: boolean) => {
+    fab.classList.toggle("is-hidden", hidden);
+    fab.setAttribute("aria-hidden", String(hidden));
+    fab.tabIndex = hidden ? -1 : 0;
+  };
+
+  if (showFab) {
+    if (headerTrigger) {
+      setFabHidden(true);
+      if (!hasDeck && typeof win.IntersectionObserver === "function") {
+        fabObserver = new win.IntersectionObserver(
+          (entries) => {
+            const entry = entries[entries.length - 1];
+            if (entry) setFabHidden(entry.isIntersecting);
+          },
+          { threshold: 0 },
+        );
+        fabObserver.observe(headerTrigger);
+      }
+    } else {
+      setFabHidden(false);
+    }
+    doc.body.append(fab);
+  }
   doc.body.append(pop, scrim, drawer, toast);
 
   const popSec = pop.querySelector<HTMLElement>('[data-role="sec"]')!;
@@ -686,6 +713,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     close: closeDrawer,
     exportMarkdown,
     destroy() {
+      fabObserver?.disconnect();
       if (toastTimer !== undefined) win!.clearTimeout(toastTimer);
       if (clearTimer !== undefined) win!.clearTimeout(clearTimer);
       doc.removeEventListener("mouseup", onMouseUp);

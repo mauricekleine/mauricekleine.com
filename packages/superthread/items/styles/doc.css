@@ -577,6 +577,16 @@ body {
   margin-left: -50cqw;
   border-top: 1px solid var(--rule);
 }
+.sheet-head + main .sec:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+.sheet-head + main .sec:first-child::before {
+  display: none;
+}
+.sheet-head + main .sec:first-child .sec-head {
+  padding-top: 40px;
+}
 .sec-head {
   font-family: var(--font-display);
   font-weight: 300;
@@ -863,7 +873,8 @@ body {
   font-size: var(--text-instrument);
   color: var(--muted-foreground);
 }
-.decisions h3 {
+.decisions h3,
+.decisions h4 {
   font-family: var(--font-sans);
   font-weight: 500;
   font-size: var(--text-subtitle);
@@ -1399,6 +1410,24 @@ mark.doc-hl.is-flash {
   letter-spacing: var(--text-meta--letter-spacing);
   text-transform: uppercase;
   cursor: pointer;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    visibility 160ms ease;
+}
+.doc-note-fab.is-hidden {
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .doc-note-fab {
+    transition: none;
+  }
+  .doc-note-fab.is-hidden {
+    transform: none;
+  }
 }
 .doc-note-fab:hover {
   background: var(--destructive-hover);

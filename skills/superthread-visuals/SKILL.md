@@ -12,7 +12,7 @@ Every Superthread visual plate prints on a **3.5 CSS px** two-ink cosine halfton
 - **Screen angles:** key ink at `45°` and plum house ink at `15°`.
 - **Square, hairline frames:** `0px` corners and uniform `1px solid var(--border)` hairlines (`#e7e7e7` light, `#37373a` dark). No plum vertical divider, no corner rectangle stamped on the image, and no dark-island slab on light stock.
 - **Light mode:** key `#16181d` and plum `#aa337a` dots printed on white stock `#ffffff`. A drifting **light breath** (default `vivid`) sweeps gently across the plate, opening dark dots toward white paper and warming the `15°` plum pass.
-- **Dark mode:** calm white `#e7e7e7` dots resting at ~48% max on `#16181d` key stock, illuminated upward as the light breath sweeps across, with `15°` dark plum `#c074a1` printing cleanly over the lit pass.
+- **Dark mode:** calm white `#e7e7e7` dots on `#16181d` key stock, illuminated upward as the light breath sweeps across, with `15°` dark plum `#c074a1` printing cleanly over the lit pass. Real imagery (`--src` / `data-plate-src`) defaults to positive polarity (bright highlights print as white dots, resting up to ~52% and lifting to ~88% under vivid breath), while abstract `planes` and `grid` default to negative ink mapping (~48% max at rest).
 - **Motion discipline:** live plates pause when offscreen or in hidden tabs, and hold frame zero under `prefers-reduced-motion: reduce` and in print. Text, numbers, data, and code stay flat beside the plate, never printed over dots.
 
 ## Choose the subject
@@ -33,6 +33,8 @@ Pass a spec string to `<Plate spec="..." />`, `data-plate="..."`, or `scripts/pl
 | `planes` / `grid` | both | `planes` | Geometry kind |
 | `ratios=a,b,c,...` | `planes` | `42,24,18,16` | Proportional column weights (at least 2 positive numbers) |
 | `shelf=0..0.9` | `planes` | `0.56` | Vertical start of the stepped shadow shelf (`0` disables it) |
+| `cutout=0\|1` | `planes` | `1` | Negative-space cutout rectangle (`0` or `false` skips it on narrow chapter strips) |
+| `positive=0\|1` | both | auto | Dark-mode dot polarity (`1` for real photos by default, `0` for `planes`/`grid`) |
 | `cols=2..16` | `grid` | `6` | Matrix columns |
 | `rows=2..12` | `grid` | `4` | Matrix rows |
 | `seed=<int>` | both | `1` | Deterministic tonal variation seed |
@@ -67,6 +69,7 @@ Key flags:
 - `--mode <light|dark>`: light (`#ffffff` stock, `#16181d` key, `#aa337a` plum) or dark (`#16181d` stock, `#e7e7e7` white, `#c074a1` plum).
 - `--width`, `--height`, `--dpr`: CSS dimensions and pixel ratio multiplier (default `1200 x 630`, `dpr 1`).
 - `--breath <vivid|balanced|gentle|off>` and `--still`: control light breath strength (default `vivid`).
+- `--positive` / `--negative`: override dark-mode polarity (defaults to positive for `--src`, negative for `--spec`).
 - `--time <sec>`, `--phase <rad>`: sample a specific breath moment in a PNG still.
 - `--duration <sec>`, `--fps <n>`, `--crf <n>`: MP4 loop timing and quality (defaults: cycle length `8s` for `vivid`, `24` fps, CRF `14`).
 

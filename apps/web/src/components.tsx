@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type ComponentProps, type ReactNode } from "react";
+import { useEffect, useRef, type ComponentProps, type ReactNode } from "react";
 import { Badge } from "@/components/superthread/ui/badge";
 import { Field, FieldLabel } from "@/components/superthread/ui/field";
 import {
@@ -7,63 +7,11 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/superthread/ui/input-group";
-import type { PlateDraw } from "@/components/superthread/lib/plate-core";
 import { Plate } from "@/components/superthread/ui/plate";
 import { useTheme } from "@/components/superthread/lib/theme";
 import type { Essay } from "./essay-content";
 import { essays } from "./essay-content";
 import { sideQuests } from "./projects";
-
-// In dark mode @mk/plate maps (1 - lum) to white ink on dark stock, which works for abstract plates but turns a
-// portrait into a photographic negative. Pre-inverting the portrait pixels in dark mode keeps highlights bright and
-// shadows dark so the screenprint stays positive in both modes.
-function PortraitPlate({ src, label }: { src: string; label: string }) {
-  const theme = useTheme();
-  const [image, setImage] = useState<HTMLImageElement | null>(null);
-
-  useEffect(() => {
-    let active = true;
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      if (active) setImage(img);
-    };
-    img.src = src;
-    return () => {
-      active = false;
-    };
-  }, [src]);
-
-  const darkDraw = useCallback<PlateDraw>(
-    (ctx, width, height) => {
-      if (!image || !image.naturalWidth) return;
-      const scale = Math.max(width / image.naturalWidth, height / image.naturalHeight);
-      const dw = image.naturalWidth * scale;
-      const dh = image.naturalHeight * scale;
-      ctx.drawImage(image, (width - dw) / 2, (height - dh) / 2, dw, dh);
-      const frame = ctx.getImageData(0, 0, width, height);
-      const data = frame.data;
-      for (let i = 0; i < data.length; i += 4) {
-        data[i] = 255 - data[i];
-        data[i + 1] = 255 - data[i + 1];
-        data[i + 2] = 255 - data[i + 2];
-      }
-      ctx.putImageData(frame, 0, 0);
-    },
-    [image],
-  );
-
-  return (
-    <Plate
-      className="mk-opener-plate"
-      src={src}
-      draw={theme === "dark" && image ? darkDraw : undefined}
-      breath="vivid"
-      role="img"
-      aria-label={label}
-    />
-  );
-}
 
 export function EssayList({ variant }: { variant: "home" | "index" }) {
   const cover = variant === "index";
@@ -109,7 +57,15 @@ export function Opener({
             </div>
             {action && <div className="mk-opener-meta type-meta">{action}</div>}
           </div>
-          {plateSrc && <PortraitPlate src={plateSrc} label={plateLabel ?? "Portrait of Maurice Kleine"} />}
+          {plateSrc && (
+            <Plate
+              className="mk-opener-plate"
+              src={plateSrc}
+              breath="vivid"
+              role="img"
+              aria-label={plateLabel ?? "Portrait of Maurice Kleine"}
+            />
+          )}
         </div>
       </div>
     );
