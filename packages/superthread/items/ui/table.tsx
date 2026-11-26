@@ -253,7 +253,7 @@ function TableCaption({ className, ...props }: React.ComponentProps<"caption">) 
     <caption
       data-slot="table-caption"
       className={cn(
-        "mt-4 text-instrument text-muted-foreground",
+        "mt-4 text-instrument text-pretty text-muted-foreground",
         fold && "px-(--spacing-panel-inset) @max-[776px]/fold:order-last",
         className,
       )}

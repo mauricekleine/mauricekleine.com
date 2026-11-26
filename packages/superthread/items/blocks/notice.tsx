@@ -78,7 +78,10 @@ function NoticeDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
       data-slot="notice-description"
-      className={cn("col-start-1 min-w-0 type-instrument text-muted-foreground [overflow-wrap:anywhere]", className)}
+      className={cn(
+        "col-start-1 min-w-0 type-instrument text-pretty text-muted-foreground [overflow-wrap:anywhere]",
+        className,
+      )}
       {...props}
     />
   );

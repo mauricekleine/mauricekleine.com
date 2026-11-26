@@ -57,7 +57,7 @@ function FailedState({
       className={cn("flex flex-col items-start gap-4 px-4 pt-7", className)}
       {...props}
     >
-      <p className="flex items-start gap-2.5 type-instrument text-muted-foreground">
+      <p className="flex items-start gap-2.5 type-instrument text-pretty text-muted-foreground">
         <StatusGlyph state="failed" className="mt-[3px]" />
         <span>
           <b className="block font-medium text-foreground">{title}</b>
@@ -96,7 +96,11 @@ function EmptyStateText({
   ...props
 }: Omit<React.ComponentProps<"p">, "title"> & { title: React.ReactNode }) {
   return (
-    <p data-slot="empty-state-text" className={cn("type-instrument text-muted-foreground", className)} {...props}>
+    <p
+      data-slot="empty-state-text"
+      className={cn("type-instrument text-pretty text-muted-foreground", className)}
+      {...props}
+    >
       <b className="block font-medium text-foreground">{title}</b>
       {children}
     </p>
@@ -148,7 +152,7 @@ function ClearStateReason({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="clear-state-reason"
       className={cn(
-        "min-w-0 type-lede text-foreground [grid-area:reason] [overflow-wrap:anywhere] [@media(max-width:420px)]:type-read",
+        "min-w-0 type-lede text-pretty text-foreground [grid-area:reason] [overflow-wrap:anywhere] [@media(max-width:420px)]:type-read",
         className,
       )}
       {...props}

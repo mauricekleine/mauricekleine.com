@@ -572,6 +572,10 @@
   font-weight: 400;
   text-transform: none;
 
+  &:is(.dark *):not(.dark .light *) {
+    letter-spacing: 0.008em;
+  }
+
   @media (max-width: 600px) {
     font-size: 18px;
     line-height: 30px;
@@ -585,6 +589,10 @@
   letter-spacing: var(--text-lede--letter-spacing);
   font-weight: 400;
   text-transform: none;
+
+  &:is(.dark *):not(.dark .light *) {
+    letter-spacing: 0.008em;
+  }
 
   @media (max-width: 600px) {
     font-size: 19px;
