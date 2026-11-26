@@ -1,6 +1,10 @@
+export const NOTE_TAGS = ["Note", "Change", "Agree", "Question", "Discuss"] as const;
+export type DocNoteTag = (typeof NOTE_TAGS)[number];
+
 export type DocNote = {
   id: string;
   section: string;
+  tag: DocNoteTag;
   quote: string;
   comment: string;
 };
@@ -56,6 +60,18 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
   let nextId = 1;
   let pendingRange: Range | null = null;
   let editingNoteId: string | null = null;
+  let selectedTag: DocNoteTag = "Note";
+  let generalTag: DocNoteTag = "Note";
+  let toastTimer: number | undefined;
+  let clearArmed = false;
+  let clearTimer: number | undefined;
+
+  let showFab = true;
+  try {
+    if (win.frameElement && !doc.querySelector("main")) showFab = false;
+  } catch {
+    // opaque-origin iframe: treat as a standalone document and show the launcher
+  }
 
   // Floating composer popover
   const pop = doc.createElement("div");
@@ -66,6 +82,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
   pop.innerHTML =
     '<div class="doc-note-pop-top"><span class="doc-note-meta" data-role="sec">Opener</span><span class="doc-note-meta">Cmd+Enter save · Esc close</span></div>' +
     '<blockquote class="doc-note-quote" data-role="quote"></blockquote>' +
+    '<div class="doc-note-tags" data-role="tags" role="group" aria-label="Note tag"></div>' +
     '<textarea class="doc-note-input" data-role="input" placeholder="Drop your thought on this..."></textarea>' +
     '<div class="doc-note-actions">' +
     '<button class="doc-note-btn doc-note-quiet" type="button" data-role="delete" hidden>Remove</button>' +
@@ -94,6 +111,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     '<div class="doc-note-tabs" role="tablist">' +
     '<button class="doc-note-tab is-active" type="button" role="tab" data-tab="list" aria-selected="true">All notes</button>' +
     '<button class="doc-note-tab" type="button" role="tab" data-tab="export" aria-selected="false">Markdown export</button>' +
+    '<button class="doc-note-clear" type="button" data-role="clear-all" hidden>Clear all</button>' +
     "</div>" +
     '<div class="doc-note-body" data-pane="list"><div data-role="list"></div></div>' +
     '<div class="doc-note-body" data-pane="export" hidden>' +
@@ -106,14 +124,33 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     "</div>" +
     '<div class="doc-note-general" data-pane="general">' +
     '<div class="doc-note-general-row"><span class="doc-note-meta">Add a visual or general note</span><select class="doc-note-select" data-role="general-sec" aria-label="Section"></select></div>' +
+    '<div class="doc-note-tags" data-role="general-tags" role="group" aria-label="General note tag"></div>' +
     '<textarea class="doc-note-input doc-note-input-sm" data-role="general-input" placeholder="Leave a note on layout, visuals or direction..."></textarea>' +
     '<div class="doc-note-actions-right"><button class="doc-note-btn" type="button" data-role="general-add">Add note</button></div>' +
     "</div>";
 
-  doc.body.append(pop, scrim, drawer);
+  // Floating bottom-right launcher
+  const fab = doc.createElement("button");
+  fab.type = "button";
+  fab.className = "doc-note-fab";
+  fab.setAttribute("data-doc-notes", "");
+  fab.setAttribute("data-doc-notes-ui", "");
+  fab.setAttribute("aria-label", "Open notes");
+  fab.innerHTML = 'Notes<span class="doc-note-fab-count" data-doc-notes-count="">0</span>';
+
+  // Status toast
+  const toast = doc.createElement("div");
+  toast.className = "doc-note-toast";
+  toast.setAttribute("data-doc-notes-ui", "");
+  toast.setAttribute("role", "status");
+  toast.setAttribute("aria-live", "polite");
+
+  if (showFab) doc.body.append(fab);
+  doc.body.append(pop, scrim, drawer, toast);
 
   const popSec = pop.querySelector<HTMLElement>('[data-role="sec"]')!;
   const popQuote = pop.querySelector<HTMLElement>('[data-role="quote"]')!;
+  const popTags = pop.querySelector<HTMLElement>('[data-role="tags"]')!;
   const popInput = pop.querySelector<HTMLTextAreaElement>('[data-role="input"]')!;
   const popSave = pop.querySelector<HTMLButtonElement>('[data-role="save"]')!;
   const popCancel = pop.querySelector<HTMLButtonElement>('[data-role="cancel"]')!;
@@ -127,11 +164,49 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
   const statusEl = drawer.querySelector<HTMLElement>('[data-role="status"]')!;
   const quickCopyBtn = drawer.querySelector<HTMLButtonElement>('[data-role="quick-copy"]')!;
   const closeBtn = drawer.querySelector<HTMLButtonElement>('[data-role="close"]')!;
+  const clearAllBtn = drawer.querySelector<HTMLButtonElement>('[data-role="clear-all"]')!;
   const copyMdBtn = drawer.querySelector<HTMLButtonElement>('[data-role="copy-md"]')!;
   const downloadBtn = drawer.querySelector<HTMLButtonElement>('[data-role="download-md"]')!;
   const generalSec = drawer.querySelector<HTMLSelectElement>('[data-role="general-sec"]')!;
+  const generalTags = drawer.querySelector<HTMLElement>('[data-role="general-tags"]')!;
   const generalInput = drawer.querySelector<HTMLTextAreaElement>('[data-role="general-input"]')!;
   const generalAddBtn = drawer.querySelector<HTMLButtonElement>('[data-role="general-add"]')!;
+
+  function renderTagPicker(host: HTMLElement, active: DocNoteTag, onPick: (tag: DocNoteTag) => void) {
+    host.innerHTML = "";
+    for (const tag of NOTE_TAGS) {
+      const btn = doc.createElement("button");
+      btn.type = "button";
+      btn.className = tag === active ? "doc-note-tag is-selected" : "doc-note-tag";
+      btn.dataset.tag = tag;
+      btn.setAttribute("aria-pressed", String(tag === active));
+      btn.textContent = tag;
+      btn.addEventListener("click", () => {
+        onPick(tag);
+        renderTagPicker(host, tag, onPick);
+      });
+      host.append(btn);
+    }
+  }
+
+  function showToast(message: string) {
+    toast.textContent = message;
+    toast.classList.add("is-open");
+    if (toastTimer !== undefined) win!.clearTimeout(toastTimer);
+    toastTimer = win!.setTimeout(() => {
+      toast.classList.remove("is-open");
+      toastTimer = undefined;
+    }, 2200);
+  }
+
+  function resetClearArm() {
+    clearArmed = false;
+    clearAllBtn.textContent = "Clear all";
+    if (clearTimer !== undefined) {
+      win!.clearTimeout(clearTimer);
+      clearTimer = undefined;
+    }
+  }
 
   function syncSectionOptions() {
     const current = generalSec.value;
@@ -217,7 +292,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
       return `${lines.join("\n")}\n`;
     }
     list.forEach((item, i) => {
-      lines.push(`### ${i + 1}. ${item.section}`);
+      lines.push(`### ${i + 1}. [${item.tag}] ${item.section}`);
       if (item.quote) {
         lines.push(`> "${item.quote}"`);
         lines.push("");
@@ -234,6 +309,8 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
       badge.textContent = count;
       badge.classList.toggle("has-notes", notes.length > 0);
     }
+    clearAllBtn.hidden = notes.length === 0;
+    if (notes.length === 0) resetClearArm();
   }
 
   function renderUI() {
@@ -250,10 +327,16 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
       const card = doc.createElement("div");
       card.className = "doc-note-card";
 
+      const head = doc.createElement("div");
+      head.className = "doc-note-card-head";
       const meta = doc.createElement("span");
       meta.className = "doc-note-meta";
       meta.textContent = item.section;
-      card.append(meta);
+      const badge = doc.createElement("span");
+      badge.className = "doc-note-tag-badge";
+      badge.textContent = item.tag;
+      head.append(meta, badge);
+      card.append(head);
 
       if (item.quote) {
         const quoteBtn = doc.createElement("button");
@@ -322,6 +405,10 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
   function openNewPopover(range: Range) {
     editingNoteId = null;
     pendingRange = range.cloneRange();
+    selectedTag = "Note";
+    renderTagPicker(popTags, selectedTag, (tag) => {
+      selectedTag = tag;
+    });
     popSec.textContent = detectSection(range.startContainer);
     popQuote.textContent = `“${range.toString().replace(/\s+/g, " ").trim()}”`;
     popQuote.hidden = false;
@@ -337,6 +424,10 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     if (!item) return;
     editingNoteId = noteId;
     pendingRange = null;
+    selectedTag = item.tag;
+    renderTagPicker(popTags, selectedTag, (tag) => {
+      selectedTag = tag;
+    });
     popSec.textContent = item.section;
     popQuote.textContent = item.quote ? `“${item.quote}”` : "";
     popQuote.hidden = !item.quote;
@@ -362,14 +453,19 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     }
     if (editingNoteId) {
       const item = notes.find((n) => n.id === editingNoteId);
-      if (item) item.comment = comment;
+      if (item) {
+        item.comment = comment;
+        item.tag = selectedTag;
+      }
+      showToast("Note updated");
     } else if (pendingRange) {
       const quote = pendingRange.toString().replace(/\s+/g, " ").trim();
       const section = detectSection(pendingRange.startContainer);
       const id = `n${nextId++}`;
       wrapRange(pendingRange, id);
-      notes.push({ id, section, quote, comment });
+      notes.push({ id, section, tag: selectedTag, quote, comment });
       win!.getSelection()?.removeAllRanges();
+      showToast("Highlight and note saved");
     }
     closePopover();
     renderUI();
@@ -381,6 +477,24 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     unwrapMarks(noteId);
     if (editingNoteId === noteId) closePopover();
     renderUI();
+    showToast("Note removed");
+  }
+
+  function clearAllNotes() {
+    if (notes.length === 0) return;
+    if (!clearArmed) {
+      clearArmed = true;
+      clearAllBtn.textContent = "Confirm clear?";
+      if (clearTimer !== undefined) win!.clearTimeout(clearTimer);
+      clearTimer = win!.setTimeout(resetClearArm, 3000);
+      return;
+    }
+    for (const item of [...notes]) unwrapMarks(item.id);
+    notes.length = 0;
+    resetClearArm();
+    closePopover();
+    renderUI();
+    showToast("Cleared all notes");
   }
 
   function switchTab(tab: "list" | "export") {
@@ -443,6 +557,8 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
       statusEl.textContent = "Selected · press Cmd+C";
       return;
     }
+    const label = notes.length === 1 ? "Copied 1 note as Markdown" : `Copied ${notes.length} notes as Markdown`;
+    showToast(label);
     if (source === "quick") {
       const prev = quickCopyBtn.textContent;
       quickCopyBtn.textContent = "Copied";
@@ -468,6 +584,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     a.click();
     a.remove();
     win!.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast("Downloaded notes.md");
   }
 
   function addGeneralNote() {
@@ -476,9 +593,14 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
       generalInput.focus();
       return;
     }
-    notes.push({ id: `n${nextId++}`, section: generalSec.value || "General", quote: "", comment });
+    notes.push({ id: `n${nextId++}`, section: generalSec.value || "General", tag: generalTag, quote: "", comment });
     generalInput.value = "";
+    generalTag = "Note";
+    renderTagPicker(generalTags, generalTag, (tag) => {
+      generalTag = tag;
+    });
     renderUI();
+    showToast("Note saved");
   }
 
   const onMouseUp = (event: MouseEvent) => {
@@ -539,6 +661,7 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
 
   closeBtn.addEventListener("click", closeDrawer);
   scrim.addEventListener("click", closeDrawer);
+  clearAllBtn.addEventListener("click", clearAllNotes);
   quickCopyBtn.addEventListener("click", () => void copyExport("quick"));
   copyMdBtn.addEventListener("click", () => void copyExport("export"));
   downloadBtn.addEventListener("click", downloadExport);
@@ -553,6 +676,9 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     }
   });
 
+  renderTagPicker(generalTags, generalTag, (tag) => {
+    generalTag = tag;
+  });
   renderUI();
 
   const controller: DocNotesController = {
@@ -560,14 +686,18 @@ export function mountDocNotes(doc: Document = document): DocNotesController | un
     close: closeDrawer,
     exportMarkdown,
     destroy() {
+      if (toastTimer !== undefined) win!.clearTimeout(toastTimer);
+      if (clearTimer !== undefined) win!.clearTimeout(clearTimer);
       doc.removeEventListener("mouseup", onMouseUp);
       doc.removeEventListener("mousedown", onMouseDown);
       doc.removeEventListener("click", onClick);
       doc.removeEventListener("keydown", onKeyDown);
       for (const item of [...notes]) unwrapMarks(item.id);
+      fab.remove();
       pop.remove();
       scrim.remove();
       drawer.remove();
+      toast.remove();
       activeControllers.delete(doc);
     },
   };

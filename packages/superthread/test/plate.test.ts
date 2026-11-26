@@ -68,7 +68,7 @@ test("paintProofPlate brightens dark mode with light breath and opens light mode
   expect(avg(litLight)).toBeGreaterThan(avg(restLight));
 });
 
-test("mountDocNotes adds a note and exports markdown", async () => {
+test("mountDocNotes adds a tagged note, shows launcher and toast, exports markdown, and clears", async () => {
   const window = new Window({ width: 1200, height: 800 });
   try {
     const { document } = window;
@@ -78,16 +78,28 @@ test("mountDocNotes adds a note and exports markdown", async () => {
       '<main><section id="findings"><h2 class="chapter-word">Findings</h2><p>First choice holds.</p></section></main>';
     const ctrl = mountDocNotes(document as unknown as Document)!;
     expect(ctrl).toBeDefined();
+    expect(document.querySelector(".doc-note-fab")).not.toBeNull();
 
     ctrl.open("list");
+    (document.querySelector('[data-role="general-tags"] [data-tag="Change"]') as unknown as HTMLButtonElement).click();
     const input = document.querySelector('[data-role="general-input"]') as unknown as HTMLTextAreaElement;
     input.value = "Keep the 3.5 px proof halftone";
     (document.querySelector('[data-role="general-add"]') as unknown as HTMLButtonElement).click();
 
-    expect(document.querySelector("[data-doc-notes-count]")?.textContent).toBe("1");
+    const counts = [...document.querySelectorAll("[data-doc-notes-count]")].map((el) => el.textContent);
+    expect(counts).toEqual(["1", "1"]);
+    expect(document.querySelector(".doc-note-toast")?.textContent).toBe("Note saved");
     const md = ctrl.exportMarkdown();
     expect(md).toContain("## Notes: Direction draft");
+    expect(md).toContain("[Change]");
     expect(md).toContain("Keep the 3.5 px proof halftone");
+
+    const clearBtn = document.querySelector('[data-role="clear-all"]') as unknown as HTMLButtonElement;
+    clearBtn.click();
+    expect(clearBtn.textContent).toBe("Confirm clear?");
+    clearBtn.click();
+    expect(document.querySelector("[data-doc-notes-count]")?.textContent).toBe("0");
+    expect(document.querySelector(".doc-note-toast")?.textContent).toBe("Cleared all notes");
 
     ctrl.destroy();
     expect(document.querySelectorAll("[data-doc-notes-ui]")).toHaveLength(0);

@@ -1323,6 +1323,122 @@ mark.doc-hl.is-flash {
   font-size: 12px;
   line-height: 19px;
 }
+.doc-note-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.doc-note-tag {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: 1;
+  letter-spacing: var(--text-meta--letter-spacing);
+  text-transform: uppercase;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+.doc-note-tag:hover {
+  color: var(--foreground);
+  border-color: var(--foreground);
+}
+.doc-note-tag.is-selected {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+}
+.doc-note-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.doc-note-tag-badge {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: 1;
+  letter-spacing: var(--text-meta--letter-spacing);
+  text-transform: uppercase;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+.doc-note-clear {
+  margin-left: auto;
+  background: none;
+  border: 0;
+  padding: 10px 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--text-meta--letter-spacing);
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.doc-note-clear:hover {
+  color: var(--foreground);
+}
+.doc-note-fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  background: var(--foreground);
+  color: var(--background);
+  border: 1px solid var(--rule);
+  box-shadow: var(--elevation-leaf);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--text-meta--letter-spacing);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.doc-note-fab:hover {
+  background: var(--destructive-hover);
+}
+.doc-note-fab-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border: 1px solid currentColor;
+  font-size: 11px;
+  line-height: 1;
+}
+.doc-note-fab-count.has-notes {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+.doc-note-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 90;
+  transform: translateX(-50%);
+  padding: 9px 14px;
+  background: var(--foreground);
+  color: var(--background);
+  border: 1px solid var(--rule);
+  box-shadow: var(--elevation-leaf);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--text-meta--letter-spacing);
+  text-transform: uppercase;
+  display: none;
+  pointer-events: none;
+}
+.doc-note-toast.is-open {
+  display: block;
+}
 .doc-note-status {
   font-family: var(--font-mono);
   font-size: var(--text-meta);
@@ -1405,6 +1521,11 @@ mark.doc-hl.is-flash {
     margin-left: 0;
     height: 44px;
   }
+  .doc-note-fab {
+    right: 16px;
+    bottom: 16px;
+    height: 44px;
+  }
   .hero-title {
     font-size: 52px;
     line-height: 56px;
@@ -1474,6 +1595,8 @@ mark.doc-hl.is-flash {
   }
   .mode,
   .notes-btn,
+  .doc-note-fab,
+  .doc-note-toast,
   .doc-note-pop,
   .doc-note-scrim,
   .doc-note-drawer,
