@@ -107,7 +107,7 @@ describe("collection toolbar", () => {
       "0 of 40",
       "12 of 40",
     ]);
-    expect(one(host, '[data-slot="view-switch"] [role="group"]').el.getAttribute("aria-label")).toBe("view");
+    expect(one(host, '[data-slot="view-switch"] [role="group"]').el.getAttribute("aria-label")).toBe("View");
   });
 
   test("the chip edges the filter in foreground with no fill, and the clear button has an inside ring and a name", () => {
@@ -115,7 +115,7 @@ describe("collection toolbar", () => {
     const chip = one(host, '[data-slot="filter-chip"]').classes;
     expect(chip).toEqual(expect.arrayContaining(["border-foreground", "min-h-10"]));
     expect(chip.filter((c) => c.startsWith("bg-"))).toEqual([]);
-    const clear = one(host, '[aria-label="clear filter"]');
+    const clear = one(host, '[aria-label="Clear filter"]');
     expect(clear.el.getAttribute("type")).toBe("button");
     expect(clear.classes).toEqual(expect.arrayContaining(insideRing));
     expect(clear.el.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
@@ -142,7 +142,7 @@ describe("collection toolbar", () => {
     }
     const { body, done } = await client(<Example />);
     try {
-      await act(async () => (one(body, '[aria-label="clear filter"]').el as HTMLButtonElement).click());
+      await act(async () => (one(body, '[aria-label="Clear filter"]').el as HTMLButtonElement).click());
       expect(body.querySelector('[data-slot="filter-chip"]')).toBeNull();
       expect(one(body, '[aria-live="polite"]').el.textContent).toBe("12 of 12");
       expect(submits).toBe(0);
@@ -851,7 +851,7 @@ describe("jump line", () => {
 
   test("is a named nav of real list items, each a link to a section", () => {
     const host = line();
-    expect(one(host, "nav").el.getAttribute("aria-label")).toBe("on this page");
+    expect(one(host, "nav").el.getAttribute("aria-label")).toBe("On this page");
     expect(one(host, "nav").el.getAttribute("data-mk")).toBe("jump-line");
     expect(host.querySelectorAll("nav ul > li > a")).toHaveLength(2);
     expect(one(host, "a").el.getAttribute("href")).toBe("#today");

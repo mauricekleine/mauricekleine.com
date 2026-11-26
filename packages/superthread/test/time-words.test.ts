@@ -22,11 +22,11 @@ describe("sinceWords", () => {
     ["later today", "2026-11-01T18:00:00+01:00", "today"],
     ["a day ahead", "2026-11-02T09:00:00+01:00", "today"],
     ["yesterday", "2026-10-31T23:59:00+01:00", "since yesterday"],
-    ["two days back", "2026-10-30T09:00:00+01:00", "since friday"],
-    ["six days back", "2026-10-26T09:00:00+01:00", "since monday"],
-    ["a week back", "2026-10-25T09:00:00+01:00", "since 25 oct"],
-    ["early in the month", "2026-10-09T09:00:00+02:00", "since 9 oct"],
-    ["last year", "2025-10-26T09:00:00+01:00", "since 26 oct 2025"],
+    ["two days back", "2026-10-30T09:00:00+01:00", "since Friday"],
+    ["six days back", "2026-10-26T09:00:00+01:00", "since Monday"],
+    ["a week back", "2026-10-25T09:00:00+01:00", "since 25 Oct"],
+    ["early in the month", "2026-10-09T09:00:00+02:00", "since 9 Oct"],
+    ["last year", "2025-10-26T09:00:00+01:00", "since 26 Oct 2025"],
   ])("%s", (_, from, words) => expect(sinceWords(from, now, amsterdam)).toBe(words));
 
   test("reads the day in the reader's zone, not the server's", () => {
@@ -37,17 +37,17 @@ describe("sinceWords", () => {
 
   test("a calendar date is the same day in every zone", () => {
     for (const timeZone of ["Pacific/Auckland", "America/Los_Angeles"])
-      expect(sinceWords("2026-10-30", "2026-11-01", { timeZone })).toBe("since friday");
+      expect(sinceWords("2026-10-30", "2026-11-01", { timeZone })).toBe("since Friday");
   });
 
   test("counts days across a clock change", () => {
-    // the clocks went back on 25 october, so this span is 169 hours
-    expect(sinceWords("2026-10-24T12:00:00+02:00", "2026-10-31T12:00:00+01:00", amsterdam)).toBe("since 24 oct");
-    expect(sinceWords("2026-10-25T12:00:00+01:00", "2026-10-31T12:00:00+01:00", amsterdam)).toBe("since sunday");
+    // the clocks went back on 25 October, so this span is 169 hours
+    expect(sinceWords("2026-10-24T12:00:00+02:00", "2026-10-31T12:00:00+01:00", amsterdam)).toBe("since 24 Oct");
+    expect(sinceWords("2026-10-25T12:00:00+01:00", "2026-10-31T12:00:00+01:00", amsterdam)).toBe("since Sunday");
   });
 
   test("takes a Date", () => {
-    expect(sinceWords(new Date("2026-10-30T09:00:00Z"), new Date(now), amsterdam)).toBe("since friday");
+    expect(sinceWords(new Date("2026-10-30T09:00:00Z"), new Date(now), amsterdam)).toBe("since Friday");
   });
 });
 
@@ -59,43 +59,43 @@ describe("clockWords", () => {
 
   test("a calendar date has no clock face, so it names the date in every zone", () => {
     for (const timeZone of ["Pacific/Auckland", "America/Los_Angeles"])
-      expect(clockWords("2026-11-02", { timeZone })).toBe("2 nov");
+      expect(clockWords("2026-11-02", { timeZone })).toBe("2 Nov");
   });
 });
 
 describe("dateWords", () => {
   test.each([
-    ["a tuesday", "2026-11-03T09:00:00+01:00", "tue 3 nov"],
-    ["a sunday", "2026-11-01T09:00:00+01:00", "sun 1 nov"],
-    ["a monday", "2026-11-02", "mon 2 nov"],
+    ["a Tuesday", "2026-11-03T09:00:00+01:00", "Tue 3 Nov"],
+    ["a Sunday", "2026-11-01T09:00:00+01:00", "Sun 1 Nov"],
+    ["a Monday", "2026-11-02", "Mon 2 Nov"],
   ])("%s", (_, moment, words) => expect(dateWords(moment, amsterdam)).toBe(words));
 
   test("reads the day in the reader's zone", () => {
-    expect(dateWords("2026-11-02T23:30:00Z", amsterdam)).toBe("tue 3 nov");
-    expect(dateWords("2026-11-02T23:30:00Z", { timeZone: "UTC" })).toBe("mon 2 nov");
+    expect(dateWords("2026-11-02T23:30:00Z", amsterdam)).toBe("Tue 3 Nov");
+    expect(dateWords("2026-11-02T23:30:00Z", { timeZone: "UTC" })).toBe("Mon 2 Nov");
   });
 
   test("a calendar date is the same day in every zone", () => {
     for (const timeZone of ["Pacific/Auckland", "America/Los_Angeles"])
-      expect(dateWords("2026-11-03", { timeZone })).toBe("tue 3 nov");
+      expect(dateWords("2026-11-03", { timeZone })).toBe("Tue 3 Nov");
   });
 });
 
 describe("monthWords", () => {
   test.each([
-    ["a moment", "2026-11-03T09:00:00+01:00", "november 2026"],
-    ["a plain date", "2026-02-01", "february 2026"],
-    ["the year's last", "2026-12-31", "december 2026"],
+    ["a moment", "2026-11-03T09:00:00+01:00", "November 2026"],
+    ["a plain date", "2026-02-01", "February 2026"],
+    ["the year's last", "2026-12-31", "December 2026"],
   ])("%s", (_, moment, words) => expect(monthWords(moment, amsterdam)).toBe(words));
 
   test("reads the month in the reader's zone", () => {
-    expect(monthWords("2026-10-31T23:30:00Z", amsterdam)).toBe("november 2026");
-    expect(monthWords("2026-10-31T23:30:00Z", { timeZone: "UTC" })).toBe("october 2026");
+    expect(monthWords("2026-10-31T23:30:00Z", amsterdam)).toBe("November 2026");
+    expect(monthWords("2026-10-31T23:30:00Z", { timeZone: "UTC" })).toBe("October 2026");
   });
 
   test("a calendar date is the same month in every zone", () => {
     for (const timeZone of ["Pacific/Auckland", "America/Los_Angeles"])
-      expect(monthWords("2026-11-01", { timeZone })).toBe("november 2026");
+      expect(monthWords("2026-11-01", { timeZone })).toBe("November 2026");
   });
 });
 
@@ -127,8 +127,8 @@ describe("beforeWords", () => {
   });
 
   test("a calendar date has no clock face, so it names the date in every zone", () => {
-    expect(beforeWords("2026-11-02", amsterdam)).toBe("before 2 nov");
-    expect(beforeWords("2026-11-02", { timeZone: "America/New_York" })).toBe("before 2 nov");
+    expect(beforeWords("2026-11-02", amsterdam)).toBe("before 2 Nov");
+    expect(beforeWords("2026-11-02", { timeZone: "America/New_York" })).toBe("before 2 Nov");
   });
 });
 
@@ -140,11 +140,11 @@ describe("untilWords", () => {
   });
 
   test.each([
-    ["2026-11-01T10:59:00+01:00", "1 min until 1:1 with sam"],
-    ["2026-11-01T10:00:00+01:00", "1 h until 1:1 with sam"],
-    ["2026-11-01T09:40:00+01:00", "1 h 20 until 1:1 with sam"],
-    ["2026-11-01T08:00:00+01:00", "3 h until 1:1 with sam"],
-  ])("from %s", (from, words) => expect(untilWords(at, "1:1 with sam", from)).toBe(words));
+    ["2026-11-01T10:59:00+01:00", "1 min until 1:1 with Sam"],
+    ["2026-11-01T10:00:00+01:00", "1 h until 1:1 with Sam"],
+    ["2026-11-01T09:40:00+01:00", "1 h 20 until 1:1 with Sam"],
+    ["2026-11-01T08:00:00+01:00", "3 h until 1:1 with Sam"],
+  ])("from %s", (from, words) => expect(untilWords(at, "1:1 with Sam", from)).toBe(words));
 
   test("names the thing once the moment arrives or has passed", () => {
     expect(untilWords(at, "standup", at)).toBe("standup now");
@@ -171,10 +171,10 @@ describe("scheduleWords", () => {
   test.each<[Schedule, string]>([
     [{ every: "day", at: "07:00" }, "every day at 07:00"],
     [{ every: "weekday", at: "18:30" }, "every weekday at 18:30"],
-    [{ every: "monday", at: "07:15" }, "every monday at 07:15"],
-    [{ every: ["thursday", "monday"], at: "07:00" }, "every monday and thursday at 07:00"],
-    [{ every: ["friday", "monday", "wednesday"], at: "07:00" }, "every monday, wednesday and friday at 07:00"],
-    [{ every: ["friday"], at: "07:00" }, "every friday at 07:00"],
+    [{ every: "monday", at: "07:15" }, "every Monday at 07:15"],
+    [{ every: ["thursday", "monday"], at: "07:00" }, "every Monday and Thursday at 07:00"],
+    [{ every: ["friday", "monday", "wednesday"], at: "07:00" }, "every Monday, Wednesday and Friday at 07:00"],
+    [{ every: ["friday"], at: "07:00" }, "every Friday at 07:00"],
     [{ every: ["monday", "tuesday", "wednesday", "thursday", "friday"], at: "09:00" }, "every weekday at 09:00"],
     [
       { every: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"], at: "09:00" },
@@ -182,7 +182,7 @@ describe("scheduleWords", () => {
     ],
     [
       { every: ["tuesday", "wednesday", "thursday", "friday", "saturday"], at: "09:00" },
-      "every tuesday, wednesday, thursday, friday and saturday at 09:00",
+      "every Tuesday, Wednesday, Thursday, Friday and Saturday at 09:00",
     ],
     [{ every: "hour" }, "every hour"],
     [{ every: [], at: "07:00" }, "never"],
@@ -191,9 +191,9 @@ describe("scheduleWords", () => {
   test("names the zone only when it differs from the reader's", () => {
     const schedule: Schedule = { every: "day", at: "07:00", timeZone: "Europe/Amsterdam" };
     expect(scheduleWords(schedule, amsterdam)).toBe("every day at 07:00");
-    expect(scheduleWords(schedule, { timeZone: "America/New_York" })).toBe("every day at 07:00, amsterdam time");
+    expect(scheduleWords(schedule, { timeZone: "America/New_York" })).toBe("every day at 07:00, Amsterdam time");
     expect(scheduleWords({ ...schedule, timeZone: "America/New_York" }, amsterdam)).toBe(
-      "every day at 07:00, new york time",
+      "every day at 07:00, New York time",
     );
   });
 });

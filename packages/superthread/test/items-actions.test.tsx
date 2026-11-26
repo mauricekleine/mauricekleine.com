@@ -411,16 +411,17 @@ describe("state word", () => {
   });
 
   test("the word is the ship's own, names the state when given none, and the square stays out of it", () => {
-    expect(word(<StateWord on />).el.textContent).toBe("on");
-    expect(word(<StateWord />).el.textContent).toBe("off");
-    const paused = word(<StateWord>paused</StateWord>);
-    expect(paused.el.textContent).toBe("paused");
+    expect(word(<StateWord on />).el.textContent).toBe("On");
+    expect(word(<StateWord />).el.textContent).toBe("Off");
+    const paused = word(<StateWord>Paused</StateWord>);
+    expect(paused.el.textContent).toBe("Paused");
     expect(paused.el.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
   });
 });
 
 describe("badge", () => {
   test.each(STATES)("%s renders its glyph square and its word", (state) => {
+    const label = state[0]!.toUpperCase() + state.slice(1);
     const glyph = pathOf(renderToString(<StatusGlyph state={state} />));
     const named = renderToString(<Badge variant={state}>{`${state} 3`}</Badge>);
     expect(pathOf(named)).toBe(glyph);
@@ -428,7 +429,7 @@ describe("badge", () => {
     expect(named.indexOf("<svg")).toBeLessThan(named.indexOf(`${state} 3`));
     const bare = renderToString(<Badge variant={state} />);
     expect(pathOf(bare)).toBe(glyph);
-    expect(bare).toContain(`${state}</span>`);
+    expect(bare).toContain(`${label}</span>`);
     expect(bare).toContain(`data-variant="${state}"`);
   });
 

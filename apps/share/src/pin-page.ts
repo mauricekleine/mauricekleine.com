@@ -15,7 +15,7 @@ const outline = (scope: string) =>
 export type PinMode = "light" | "dark" | null;
 
 export function pinPage(id: string, challenge: string, mode: PinMode = null) {
-  return `<!doctype html><html lang="en"${mode ? ` class="${mode}"` : ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>shared artifact</title><style>${theme}
+  return `<!doctype html><html lang="en"${mode ? ` class="${mode}"` : ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Shared artifact</title><style>${theme}
 ${systemDark}
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--background); color: var(--foreground); font: 400 14px/21px var(--font-sans); -webkit-font-smoothing: antialiased; }
@@ -35,5 +35,5 @@ input:focus-visible { outline-offset: -2px; }
 ::selection { background: var(--selection); color: var(--foreground); }
 small { display: block; margin-top: 24px; color: var(--muted-foreground); font-size: 13px; line-height: 20px; }
 
-</style></head><body><main><h1>shared with you</h1><p>enter the six-digit PIN from the person who sent you this link.</p><form action="/${id}/_unlock" method="post"><input type="hidden" name="challenge" value="${challenge}"><label for="pin">PIN</label><input id="pin" name="pin" type="text" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="off" required autofocus aria-describedby="attempts"><button type="submit">open artifact</button><small id="attempts">five wrong tries lock this link for an hour.</small></form></main></body></html>`;
+</style></head><body><main><h1>Shared with you</h1><p>Enter the six-digit PIN from the person who sent you this link.</p><form action="/${id}/_unlock" method="post"><input type="hidden" name="challenge" value="${challenge}"><label for="pin">PIN</label><input id="pin" name="pin" type="text" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="off" required autofocus aria-describedby="attempts"><button type="submit">Open artifact</button><small id="attempts">Five wrong tries lock this link for an hour.</small></form></main></body></html>`;
 }

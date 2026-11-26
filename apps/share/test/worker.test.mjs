@@ -48,7 +48,7 @@ async function challenge(identity) {
   assert.equal(response.status, 200);
   assert.match(response.headers.get("Content-Security-Policy"), /frame-ancestors 'none'/);
   const html = await response.text();
-  assert.match(html, /shared with you/);
+  assert.match(html, /Shared with you/);
   return html.match(/name="challenge" value="([^"]+)"/)[1];
 }
 function unlock(identity, challenge, pin) {
@@ -142,7 +142,7 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   response = await get(`/${pinId}/`, { Cookie: cookieHeader });
   assert.equal(await response.text(), "protected content");
   headers(response);
-  assert.match(await (await get(`/${pinId}/`, { Cookie: cookieHeader.slice(0, -1) + "z" })).text(), /shared with you/);
+  assert.match(await (await get(`/${pinId}/`, { Cookie: cookieHeader.slice(0, -1) + "z" })).text(), /Shared with you/);
   const darkPin = await get(`/${pinId}/`, { Cookie: "mk-other=1; mk-theme=dark" });
   assert.match(
     darkPin.headers.get("Content-Security-Policy"),
@@ -170,7 +170,7 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   await commit(other, await stage(other, "pin", "other protected"));
   assert.match(
     await (await get(`/${other}/`, { Cookie: cookieHeader.replaceAll(pinId, other) })).text(),
-    /shared with you/,
+    /Shared with you/,
   );
   assert.equal((await unlock(other, form, "482913")).status, 403);
   const wrong = await Promise.all(Array.from({ length: 5 }, () => unlock(pinId, form, "000000")));
@@ -181,7 +181,7 @@ test("real R2/SQLite HTTP contract: uploads, atomic replace, auth, PINs and lock
   headers(response);
   assert.equal(await (await get(`/${pinId}/`, { Cookie: cookieHeader })).text(), "protected content");
   await commit(pinId, await stage(pinId, "pin", "rotated"));
-  assert.match(await (await get(`/${pinId}/`, { Cookie: cookieHeader })).text(), /shared with you/);
+  assert.match(await (await get(`/${pinId}/`, { Cookie: cookieHeader })).text(), /Shared with you/);
   assert.equal((await unlock(pinId, await challenge(pinId), "482913")).status, 429);
   await get("/_test/advance-clock?ms=3600001");
   const expiredForm = await challenge(pinId);
@@ -314,7 +314,7 @@ test("PIN media ranges require the version-bound cookie, including after unlocki
       assert.equal(response.headers.get("Content-Range"), null);
       assert.equal(response.headers.get("Accept-Ranges"), null);
       headers(response);
-      if (method === "GET") assert.match(await response.text(), /shared with you/);
+      if (method === "GET") assert.match(await response.text(), /Shared with you/);
       else assert.equal(await response.text(), "");
     }
   }
@@ -736,7 +736,7 @@ test("a PIN link unlocks when a second cookie of the same name sits before or af
   const stale = `__Secure-artifact-${identity}=not-a-session`;
   for (const cookie of [`${stale}; ${valid}`, `${valid}; ${stale}`])
     assert.equal(await (await get(`/${identity}/`, { Cookie: cookie })).text(), "behind the pin", cookie);
-  assert.match(await (await get(`/${identity}/`, { Cookie: `${stale}; ${stale}x` })).text(), /shared with you/);
+  assert.match(await (await get(`/${identity}/`, { Cookie: `${stale}; ${stale}x` })).text(), /Shared with you/);
 });
 test("a file PUT that finishes after its upload was revoked and reclaimed leaves nothing in R2", async () => {
   const identity = "ReclaimedPut1234";

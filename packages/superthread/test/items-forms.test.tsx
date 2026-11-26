@@ -631,7 +631,7 @@ function breadcrumb() {
 describe("breadcrumb", () => {
   test("names navigation and the current page while custom rendering keeps link props", () => {
     const host = server(breadcrumb());
-    expect(one(host, '[data-mk="breadcrumb"]').el.getAttribute("aria-label")).toBe("breadcrumb");
+    expect(one(host, '[data-mk="breadcrumb"]').el.getAttribute("aria-label")).toBe("Breadcrumb");
     const link = one(host, '[data-slot="breadcrumb-link"]');
     expect(link.el.getAttribute("href")).toBe("/runs");
     expect(link.el.getAttribute("data-custom")).toBe("link");
@@ -658,7 +658,7 @@ describe("breadcrumb", () => {
     expect(one(host, '[data-slot="breadcrumb-separator"] svg').classes).toContain("-rotate-90");
     expect(host.querySelectorAll('[data-slot="breadcrumb-separator"]')[1]!.textContent).toBe("/");
     expect(one(host, '[data-slot="breadcrumb-ellipsis"]').classes).toContain("size-5");
-    expect(one(host, ".sr-only").el.textContent).toBe("more");
+    expect(one(host, ".sr-only").el.textContent).toBe("More");
   });
   test("no texture or forbidden class in the full path", () => {
     clean([server(breadcrumb())], "breadcrumb");

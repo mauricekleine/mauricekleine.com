@@ -34,22 +34,22 @@ export const docExamples = {
   // #region opener
   opener: (
     <DocOpener
-      brand={{ href: "#", label: "maurice kleine", edition: "report" }}
-      navLabel="sections"
+      brand={{ href: "#", label: "Maurice Kleine", edition: "Report" }}
+      navLabel="Sections"
       links={[
-        { href: "#findings", label: "findings" },
-        { href: "#plan", label: "plan" },
+        { href: "#findings", label: "Findings" },
+        { href: "#plan", label: "Plan" },
       ]}
-      kicker="superthread · report · 26 nov 2026"
-      title="flat where you read, printed where you look."
-      lede="one framed 3.5 px proof halftone plate beside clean typography, separated by uniform 1 px hairlines."
-      meta={["project", "report", { chip: "draft" }, "26 nov 2026"]}
+      kicker="superthread · Report · 26 Nov 2026"
+      title="Flat where you read, printed where you look."
+      lede="One framed 3.5 px proof halftone plate beside clean typography, separated by uniform 1 px hairlines."
+      meta={["Project", "Report", { chip: "Draft" }, "26 Nov 2026"]}
       plate="planes ratios=42,24,18,16 seed=7"
       index={[
-        { href: "#findings", label: "findings", count: "03" },
-        { href: "#plan", label: "plan", count: "04" },
-        { href: "#open", label: "open", count: "02" },
-        { href: "#sources", label: "sources", count: "05" },
+        { href: "#findings", label: "Findings", count: "03" },
+        { href: "#plan", label: "Plan", count: "04" },
+        { href: "#open", label: "Open", count: "02" },
+        { href: "#sources", label: "Sources", count: "05" },
       ]}
     />
   ),
@@ -57,41 +57,41 @@ export const docExamples = {
   // #region sheet-head
   "sheet-head": (
     <DocSheetHead
-      brand={{ href: "#", label: "orbit", edition: "rfc 0001" }}
-      navLabel="sections"
+      brand={{ href: "#", label: "Orbit", edition: "RFC 0001" }}
+      navLabel="Sections"
       links={[
-        { href: "#summary", label: "summary" },
-        { href: "#design", label: "design" },
+        { href: "#summary", label: "Summary" },
+        { href: "#design", label: "Design" },
       ]}
-      kicker="orbit · rfc 0001 · 26 nov 2026"
-      title="units, one runner for every agent, step and workflow."
-      lede="every event lands in one queue, passes one gate, and leaves through one outbox."
-      meta={["rfc", { chip: "draft" }, "26 nov 2026"]}
+      kicker="Orbit · RFC 0001 · 26 Nov 2026"
+      title="Units, one runner for every agent, step and workflow."
+      lede="Every event lands in one queue, passes one gate, and leaves through one outbox."
+      meta={["RFC", { chip: "Draft" }, "26 Nov 2026"]}
     />
   ),
   // #endregion
   // #region chapter
-  chapter: <DocChapter title="findings" caption="what holds" reference="03" plate="grid cols=6 rows=4 seed=19" />,
+  chapter: <DocChapter title="Findings" caption="What holds" reference="03" plate="grid cols=6 rows=4 seed=19" />,
   // #endregion
   // #region hero
   hero: (
     <DocHero
-      brand={{ href: "#", label: "maurice kleine", edition: "sections" }}
-      navLabel="groups"
+      brand={{ href: "#", label: "Maurice Kleine", edition: "Sections" }}
+      navLabel="Groups"
       links={[
-        { href: "#openers", label: "openers" },
-        { href: "#lines", label: "lines" },
-        { href: "#blocks", label: "blocks" },
-        { href: "#endings", label: "endings" },
+        { href: "#openers", label: "Openers" },
+        { href: "#lines", label: "Lines" },
+        { href: "#blocks", label: "Blocks" },
+        { href: "#endings", label: "Endings" },
       ]}
-      title="the parts of a page."
-      lede="every section the kit's templates are made of, live in light and dark, each with its markup. copy the markup, keep the classes, change the words."
-      meta={["superthread", "@mk/doc", { chip: "draft" }, "20 nov 2026"]}
+      title="The parts of a page."
+      lede="Every section the kit's templates are made of, live in light and dark, each with its markup. Copy the markup, keep the classes, change the words."
+      meta={["superthread", "@mk/doc", { chip: "Draft" }, "20 Nov 2026"]}
       contents={[
-        { href: "#openers", reference: "[o]", label: "openers", count: "03" },
-        { href: "#lines", reference: "[l]", label: "lines", count: "08" },
-        { href: "#blocks", reference: "[b]", label: "blocks", count: "08" },
-        { href: "#endings", reference: "[e]", label: "endings", count: "03" },
+        { href: "#openers", reference: "[O]", label: "Openers", count: "03" },
+        { href: "#lines", reference: "[L]", label: "Lines", count: "08" },
+        { href: "#blocks", reference: "[B]", label: "Blocks", count: "08" },
+        { href: "#endings", reference: "[E]", label: "Endings", count: "03" },
       ]}
     />
   ),
@@ -99,29 +99,29 @@ export const docExamples = {
   // #region slim-head
   "slim-head": (
     <DocSlimHead
-      brand={{ href: "#", label: "maurice kleine", edition: "brief" }}
-      navLabel="sections"
+      brand={{ href: "#", label: "Maurice Kleine", edition: "Brief" }}
+      navLabel="Sections"
       links={[
-        { href: "#", label: "needs you" },
-        { href: "#", label: "today" },
+        { href: "#", label: "Needs you" },
+        { href: "#", label: "Today" },
       ]}
-      title="friday, 20 november"
-      meta={["brief", "07:00"]}
+      title="Friday, 20 November"
+      meta={["Brief", "07:00"]}
     />
   ),
   // #endregion
   // #region band
-  band: <DocBand title="findings" caption="what holds" reference="03" />,
+  band: <DocBand title="Findings" caption="What holds" reference="03" />,
   // #endregion
   // #region meta-line
-  "meta-line": <DocMetaLine parts={["project", "report", { chip: "draft" }, "20 nov 2026"]} />,
+  "meta-line": <DocMetaLine parts={["Project", "Report", { chip: "Draft" }, "20 Nov 2026"]} />,
   // #endregion
   // #region contents
   contents: (
     <DocContents
       entries={[
-        { href: "#", reference: "[f]", label: "findings", count: "03" },
-        { href: "#", reference: "[p]", label: "plan", count: "04" },
+        { href: "#", reference: "[F]", label: "Findings", count: "03" },
+        { href: "#", reference: "[P]", label: "Plan", count: "04" },
       ]}
     />
   ),
@@ -129,19 +129,19 @@ export const docExamples = {
   // #region lede
   lede: (
     <DocLede>
-      a lede says what the section holds and why it matters, before the first claim. it reads in a breath.
+      A lede says what the section holds and why it matters, before the first claim. It reads in a breath.
     </DocLede>
   ),
   // #endregion
   // #region section-head
-  "section-head": <DocSectionHead title="the work" line="one muted line under the head." />,
+  "section-head": <DocSectionHead title="The work" line="One muted line under the head." />,
   // #endregion
   // #region steps
   steps: (
     <DocSteps
       steps={[
-        "write the spec, so the next change has something to agree with.",
-        "build the part once, where every surface can install it.",
+        "Write the spec, so the next change has something to agree with.",
+        "Build the part once, where every surface can install it.",
       ]}
     />
   ),
@@ -150,11 +150,11 @@ export const docExamples = {
   rows: (
     <DocRows
       rows={[
-        { title: "publish the brief", reason: "one source still needs a link.", status: "failed", open: true },
+        { title: "Publish the brief", reason: "One source still needs a link.", status: "Failed", open: true },
         {
-          title: "back up to the second disk",
-          reason: "the 02:10 run failed and the 02:40 retry closed it.",
-          status: "done",
+          title: "Back up to the second disk",
+          reason: "The 02:10 run failed and the 02:40 retry closed it.",
+          status: "Done",
         },
       ]}
     />
@@ -164,8 +164,8 @@ export const docExamples = {
   timeline: (
     <DocTimeline
       events={[
-        { dateTime: "2026-11-20", date: "20 nov", text: "the first draft lands." },
-        { dateTime: "2026-11-30", date: "30 nov", text: "the report goes out.", open: true },
+        { dateTime: "2026-11-20", date: "20 Nov", text: "The first draft lands." },
+        { dateTime: "2026-11-30", date: "30 Nov", text: "The report goes out.", open: true },
       ]}
     />
   ),
@@ -175,9 +175,9 @@ export const docExamples = {
     <DocSources
       sources={[
         <>
-          <a href="https://superthread.mauricekleine.com/">superthread.mauricekleine.com</a> · the design system
+          <a href="https://superthread.mauricekleine.com/">superthread.mauricekleine.com</a> · The design system
         </>,
-        "packages/superthread/DESIGN.md · the values and rules",
+        "packages/superthread/DESIGN.md · The values and rules",
       ]}
     />
   ),
@@ -188,10 +188,10 @@ export const docExamples = {
       claims={[
         {
           reference: "01",
-          confidence: "high",
-          title: "a claim is one sentence you could defend.",
-          reason: ["the reason beside it says why it holds, in two or three sentences."],
-          source: "where it comes from · path/to/file.ts:42",
+          confidence: "High",
+          title: "A claim is one sentence you could defend.",
+          reason: ["The reason beside it says why it holds, in two or three sentences."],
+          source: "Where it comes from · path/to/file.ts:42",
         },
       ]}
     />
@@ -201,9 +201,9 @@ export const docExamples = {
   "stat-row": (
     <DocStatRow
       stats={[
-        { value: 3, label: "steps", note: "each one ships on its own" },
-        { value: 2, label: "repos", note: "the site and the cli" },
-        { value: 0, label: "new tokens", note: "the values already hold" },
+        { value: 3, label: "Steps", note: "Each one ships on its own" },
+        { value: 2, label: "Repos", note: "The site and the CLI" },
+        { value: 0, label: "New tokens", note: "The values already hold" },
       ]}
     />
   ),
@@ -212,14 +212,14 @@ export const docExamples = {
   table: (
     <DocTable
       columns={[
-        { label: "step" },
-        { label: "what" },
-        { label: "where", kind: "muted" },
-        { label: "days", kind: "number" },
+        { label: "Step" },
+        { label: "What" },
+        { label: "Where", kind: "muted" },
+        { label: "Days", kind: "number" },
       ]}
       rows={[
-        ["spec", "the rules, written as they are", "the design doc", 2],
-        ["part", "one item every surface installs", "the registry", 3],
+        ["Spec", "The rules, written as they are", "The design doc", 2],
+        ["Part", "One item every surface installs", "The registry", 3],
       ]}
     />
   ),
@@ -227,17 +227,17 @@ export const docExamples = {
   // #region figure
   figure: (
     <DocFigure
-      caption="fig. 1 · open items per week"
+      caption="Fig. 1 · Open items per week"
       chart={{
         viewBox: "0 0 800 200",
-        label: "open items per week: 10, 7, 5, and 3 planned",
+        label: "Open items per week: 10, 7, 5, and 3 planned",
         bars: [
           { x: 20, y: 0, width: 140, height: 200 },
           { x: 220, y: 60, width: 140, height: 140 },
           { x: 420, y: 100, width: 140, height: 100 },
           { x: 621, y: 141, width: 138, height: 58, open: true },
         ],
-        axis: ["week 1", "week 2", "week 3", "week 4"],
+        axis: ["Week 1", "Week 2", "Week 3", "Week 4"],
       }}
     />
   ),
@@ -245,16 +245,16 @@ export const docExamples = {
   // #region before-and-after
   "before-and-after": (
     <DocBeforeAndAfter
-      before={{ label: "round dots", swatch: { pattern: "dots", label: "a field of round dots" } }}
+      before={{ label: "Round dots", swatch: { pattern: "dots", label: "A field of round dots" } }}
       after={{
-        label: "square pixels",
-        swatch: { pattern: "pixels", label: "a field of 2 px square pixels in a checker" },
+        label: "Square pixels",
+        swatch: { pattern: "pixels", label: "A field of 2 px square pixels in a checker" },
       }}
     />
   ),
   // #endregion
   // #region notice
-  notice: <DocNotice label="heads up">the count includes open items through friday.</DocNotice>,
+  notice: <DocNotice label="Heads up">The count includes open items through Friday.</DocNotice>,
   // #endregion
   // #region decisions
   decisions: (
@@ -262,17 +262,17 @@ export const docExamples = {
       decisions={[
         {
           reference: "01",
-          status: "open",
-          question: "ship the part before every surface can take it?",
-          answer: "yes.",
-          reason: "the part improves faster with one user than with none.",
+          status: "Open",
+          question: "Ship the part before every surface can take it?",
+          answer: "Yes.",
+          reason: "The part improves faster with one user than with none.",
         },
         {
           reference: "02",
-          status: "decided",
-          question: "keep both drafts in the contents?",
-          answer: "no.",
-          reason: "the contents link to the version readers can use.",
+          status: "Decided",
+          question: "Keep both drafts in the contents?",
+          answer: "No.",
+          reason: "The contents link to the version readers can use.",
         },
       ]}
     />
@@ -282,23 +282,23 @@ export const docExamples = {
   transcript: (
     <DocTranscript
       entries={[
-        { speaker: "alex", dateTime: "PT4M12S", time: "00:04:12", text: "the first week gives us a baseline." },
-        { speaker: "sam", dateTime: "PT4M31S", time: "00:04:31", text: "put that count next to the forecast." },
+        { speaker: "Alex", dateTime: "PT4M12S", time: "00:04:12", text: "The first week gives us a baseline." },
+        { speaker: "Sam", dateTime: "PT4M31S", time: "00:04:31", text: "Put that count next to the forecast." },
       ]}
     />
   ),
   // #endregion
   // #region closing-line
-  "closing-line": <DocClosingLine>that's all for today.</DocClosingLine>,
+  "closing-line": <DocClosingLine>That's all for today.</DocClosingLine>,
   // #endregion
   // #region footer
-  footer: <DocFooter credit="superthread · documents" meta="report · draft · 20 nov 2026" />,
+  footer: <DocFooter credit="superthread · Documents" meta="Report · Draft · 20 Nov 2026" />,
   // #endregion
   // #region draft-strip
-  "draft-strip": <DocDraftStrip label="draft">still being shaped · 20 nov 2026</DocDraftStrip>,
+  "draft-strip": <DocDraftStrip label="Draft">Still being shaped · 20 Nov 2026</DocDraftStrip>,
   // #endregion
   // #region chip
-  chip: <DocChip>draft</DocChip>,
+  chip: <DocChip>Draft</DocChip>,
   // #endregion
   // #region mode-toggle
   "mode-toggle": <DocModeToggle />,

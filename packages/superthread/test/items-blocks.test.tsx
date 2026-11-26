@@ -1,6 +1,6 @@
 // The compositions: the patterns the fleet's apps repeat, built from the @mk items. Every block names the apps it
 // serves, carries data-mk on each root it renders, composes items through the alias consumers install them to, and
-// keeps the items' rules: no detail of its own, no forbidden class, lowercase words (items-scan holds those).
+// keeps the items' rules: no detail of its own, no forbidden class, clean served words (items-scan holds those).
 import { beforeAll, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -198,7 +198,7 @@ describe("states", () => {
     expect(alert.el.querySelector("svg")).not.toBeNull();
     expect(alert.el.textContent).toContain("the runs did not load");
     expect(alert.el.textContent).toContain("the server took too long.");
-    expect(one(failed, "button").el.textContent).toBe("try again");
+    expect(one(failed, "button").el.textContent).toBe("Try again");
     expect(server(<FailedState />).querySelector("button")).toBeNull();
   });
 

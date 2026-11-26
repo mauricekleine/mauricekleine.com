@@ -72,22 +72,22 @@ test("mountDocNotes adds a note and exports markdown", async () => {
   const window = new Window({ width: 1200, height: 800 });
   try {
     const { document } = window;
-    document.title = "direction draft";
+    document.title = "Direction draft";
     document.body.innerHTML =
-      '<header><button data-doc-notes="">notes <span data-doc-notes-count="">0</span></button></header>' +
-      '<main><section id="findings"><h2 class="chapter-word">findings</h2><p>first choice holds.</p></section></main>';
+      '<header><button data-doc-notes="">Notes <span data-doc-notes-count="">0</span></button></header>' +
+      '<main><section id="findings"><h2 class="chapter-word">Findings</h2><p>First choice holds.</p></section></main>';
     const ctrl = mountDocNotes(document as unknown as Document)!;
     expect(ctrl).toBeDefined();
 
     ctrl.open("list");
     const input = document.querySelector('[data-role="general-input"]') as unknown as HTMLTextAreaElement;
-    input.value = "keep the 3.5 px proof halftone";
+    input.value = "Keep the 3.5 px proof halftone";
     (document.querySelector('[data-role="general-add"]') as unknown as HTMLButtonElement).click();
 
     expect(document.querySelector("[data-doc-notes-count]")?.textContent).toBe("1");
     const md = ctrl.exportMarkdown();
-    expect(md).toContain("## notes: direction draft");
-    expect(md).toContain("keep the 3.5 px proof halftone");
+    expect(md).toContain("## Notes: Direction draft");
+    expect(md).toContain("Keep the 3.5 px proof halftone");
 
     ctrl.destroy();
     expect(document.querySelectorAll("[data-doc-notes-ui]")).toHaveLength(0);

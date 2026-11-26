@@ -101,7 +101,7 @@ function TableTitle({ className, href, render, ...props }: useRender.ComponentPr
 function TableEmpty({
   className,
   columns,
-  title = "nothing here",
+  title = "Nothing here",
   children,
   ...props
 }: Omit<React.ComponentProps<typeof TableRow>, "title"> & { columns: number; title?: React.ReactNode }) {

@@ -255,8 +255,11 @@ describe("every shipped item, as served", () => {
       expect(problems).toEqual([]);
     });
 
-    test(`${path}: every word it serves is lowercase`, () => {
-      expect(servedWords(served(path)).filter((words) => /[A-Z]/.test(words))).toEqual([]);
+    test(`${path}: every word it serves is clean, with no em dashes or placeholder text`, () => {
+      const bad = servedWords(served(path)).filter(
+        (words) => words.includes("\u2014") || /\b(?:lorem ipsum|todo|tbd|fixme)\b/i.test(words),
+      );
+      expect(bad).toEqual([]);
     });
 
     test(`${path}: names no style hook, brand item or pass item`, () => {
@@ -277,7 +280,7 @@ describe("every shipped item, as served", () => {
 });
 
 describe("labels a primitive supplies, rendered", () => {
-  test("items/ui/toast.tsx: every label on the viewport and its toasts is lowercase, Base UI's own included", async () => {
+  test("items/ui/toast.tsx: every label on the viewport and its toasts is non-empty and clean, Base UI's own included", async () => {
     // imported here, so a broken toast fails this row alone
     const toast = await import("@/components/superthread/ui/toast");
     const manager = toast.createToastManager();
@@ -288,16 +291,18 @@ describe("labels a primitive supplies, rendered", () => {
       await act(async () => reactRoot.render(createElement(toast.Toaster, { toastManager: manager, timeout: 0 })));
       await act(async () => {
         manager.add({
-          title: "run done",
-          description: "synthetic",
+          title: "Run done",
+          description: "Synthetic",
           type: "success",
-          actionProps: { children: "undo" },
+          actionProps: { children: "Undo" },
         });
       });
       const viewport = document.body.querySelector('[data-slot="toast-viewport"]');
       expect(viewport?.getAttribute("aria-label")).toBeTruthy();
       expect(document.body.querySelector('[data-slot="toast"]')).not.toBeNull();
-      expect(renderedLabels(document.body).filter((label) => /[A-Z]/.test(label))).toEqual([]);
+      const labels = renderedLabels(document.body);
+      expect(labels.length).toBeGreaterThan(0);
+      expect(labels.filter((label) => !label.trim() || label.includes("\u2014"))).toEqual([]);
     } finally {
       await act(async () => reactRoot.unmount());
       host.remove();

@@ -6,6 +6,13 @@ import { cn } from "@/components/superthread/lib/utils";
 import { StatusGlyph, type StatusState } from "@/components/superthread/ui/glyphs";
 
 const STATES = ["done", "running", "waiting", "failed", "queued"] as const satisfies readonly StatusState[];
+const STATE_LABELS: Record<StatusState, string> = {
+  done: "Done",
+  running: "Running",
+  waiting: "Waiting",
+  failed: "Failed",
+  queued: "Queued",
+};
 
 // Square, 1 px edge, 13 px words, in Supreme wherever it lands, a mono row aside included. A status badge is the
 // sanctioned exception to one colour, at badge scale only: a fill near the stock, the edge at about half strength, the
@@ -76,7 +83,7 @@ function Badge({
         children: state ? (
           <>
             <StatusGlyph state={state} className={state === "failed" ? "text-error-solid-foreground" : undefined} />
-            {words(children ?? state)}
+            {words(children ?? STATE_LABELS[state])}
           </>
         ) : (
           words(children)

@@ -9,7 +9,7 @@ import { Icon } from "@/components/superthread/ui/glyphs";
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
-      aria-label="breadcrumb"
+      aria-label="Breadcrumb"
       data-slot="breadcrumb"
       data-mk="breadcrumb"
       className={cn("type-instrument", className)}
@@ -97,7 +97,7 @@ function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<"span"
       {...props}
     >
       <Icon name="more" />
-      <span className="sr-only">more</span>
+      <span className="sr-only">More</span>
     </span>
   );
 }
