@@ -57,7 +57,7 @@
       },
       "meta": {
         "version": "2.16.0",
-        "sha256": "4d8943d9a165875e33399988730bc7b494bbe636b12934d94a95ef8988e1aec1",
+        "sha256": "e3030270a61cf18217859a6fabb62d28fd5f3c1a029c205245601591e6591d9b",
         "tier": "style",
         "upstream": null
       }
@@ -691,7 +691,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "ead4e810a51b0aaf1fb8a22d4acc8dd62679b4ce93d0bc82cc5b7e1669f8337a",
+        "sha256": "1703231f262b7837806a47961e2220cd8669e84df54006fb4ab8789da78e0da2",
         "tier": "brand",
         "upstream": {
           "style": "base-nova",
@@ -1895,7 +1895,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "8b822a67cb0cbedf1a37161bba348c2c237f684acd42924678d31db94917123b",
+        "sha256": "58b277b1e4170e8c11b848478ae2c2d1c48e05b7f66520e965c8491eb3895419",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -1930,7 +1930,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "f500fb11200a1ce9a159d802c79c41b54bff467872c044f0fdb653ce29c2e403",
+        "sha256": "7fb3c6ecfb7a907a4f6018b4e87cf1d7f4d486fad08249e64d74f98646def006",
         "tier": "block",
         "upstream": null,
         "serves": [
@@ -2502,7 +2502,7 @@
       ],
       "meta": {
         "version": "2.16.0",
-        "sha256": "c77dd28b5f34f359fcc5242f01513b555cf70f9e85972f2ffdf2a6c50dc0d562",
+        "sha256": "0a08ed91af4902e7276d22faba34b5778c10ab4bdc4837bc531fa8c2c11f8fca",
         "tier": "block",
         "upstream": null,
         "serves": [
